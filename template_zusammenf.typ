@@ -114,9 +114,6 @@
     q
   }
 
-  // Links
-  show link: underline
-
   // Table of contents, header level 1
  show outline.entry.where(level: 1): entry => {
     v(12pt, weak: true)
