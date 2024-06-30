@@ -16,6 +16,7 @@ Diese werden dann automatisch gefunden.
 ## Zusammenfassungen
 Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer:
 - [AIFo / AI Foundations](AIFo) 
+- [AIAp / AI Applications](AIAp)
 - [AlgDat / Algorithmen und Datenstrukturen](AlgDat)
 - [AutoSpr / Automaten und Sprachen](AutoSpr)
 - [Bsys1 / Betriebssysteme 1](Bsys1)
