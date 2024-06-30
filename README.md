@@ -19,6 +19,7 @@ Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer:
 - [AlgDat / Algorithmen und Datenstrukturen](AlgDat)
 - [AutoSpr / Automaten und Sprachen](AutoSpr)
 - [Bsys1 / Betriebssysteme 1](Bsys1)
+- [Bsys2 / Betriebssysteme 2](Bsys2)
 - [CN1 / Computernetze 1](CN1)
 - [CySec / Cyber Security Foundations](CySec)
 - [Dbs1 / Datenbanksysteme 1](DBS1)
