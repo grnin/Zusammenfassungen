@@ -28,3 +28,4 @@ Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer:
 - [DMI / Diskrete Mathematik für Informatik](DMI)
 - [OOP1 / Objektorientierte Programmierung 1](OOP1)
 - [OOP2 / Objektorientierte Programmierung 2](OOP2)
+- [ParProg / Parallele Programmierung](ParProg)
