@@ -1061,7 +1061,7 @@ GPU that allows the host program to use GPUs for general purpose processing.
 ==== Example: Array addition
 ```cpp
 for (int i = 0; i < N; i++) { C[i] = A[i] + B[i]; } // sequential
-(i = 0 .. N-1): C[i] A[i] + B[i]; // parallel using n threads
+(i = 0 .. N-1): C[i] = A[i] + B[i]; // parallel using n threads
 ```
 
 ==== CUDA Kernel
