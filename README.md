@@ -3,7 +3,7 @@
 ## Einrichtung
 Bitte versichere dich, dass du die nötigen Schriften installiert hast:
 - [JetBrains Mono](https://www.jetbrains.com/de-de/lp/mono/)
-- Calibri
+- Calibri (Linux & MacOS-User können den Calibri-Klon [Carlito](https://fonts.google.com/specimen/Carlito) verwenden)
 
 Die Zusammenfassungen von den Semestern 1-3 wurden mit Word erstellt, die restlichen mit Typst.
 
