@@ -22,6 +22,7 @@ Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer:
 - [Bsys1 / Betriebssysteme 1](Bsys1)
 - [Bsys2 / Betriebssysteme 2](Bsys2)
 - [CN1 / Computernetze 1](CN1)
+- [Combau / Compilerbau](ComBau)
 - [CySec / Cyber Security Foundations](CySec)
 - [Dbs1 / Datenbanksysteme 1](DBS1)
 - [DigCod / Digitale Codierungen](DigCod)
