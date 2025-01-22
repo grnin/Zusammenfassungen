@@ -1,4 +1,8 @@
 # Zusammenfassungen BSc Informatik an der OST
+Die Zusammenfassungen in diesem Repository sind mit [CC BY-NC-SA 4.0](LICENSE) lizenziert, das heisst, du darfst sie unter folgenden Bedingungen beliebig überarbeiten, erweitern und teilen:
+- **Namensnennung:** Bitte gib die Quelle an.
+- **Nicht kommerziell:** Du darst diese Zusammenfassungen oder eigene Zusammenfassungen, die auf diesem Material basieren, nicht *kostenpflichtig* verbreiten.
+- **Weitergabe unter gleichen Bedingungen:** Bitte verwende die gleiche oder eine ähnliche Lizenz. 
 
 ## Einrichtung
 Bitte versichere dich, dass du die nötigen Schriften installiert hast:
