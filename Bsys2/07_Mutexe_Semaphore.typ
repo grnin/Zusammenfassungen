@@ -1,6 +1,6 @@
-// Compiled with Typst 0.11.1
+// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 /*#show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -232,26 +232,38 @@ int pthread_mutex_unlock (pthread_mutex_t *mutex);  // release
 int pthread_mutex_destroy (pthread_mutex_t *mutex)  // cleanup
 ```
 
-```c
-// Beispiel Initialisierung
-pthread_mutex_t mutex; // global variable
-int main() {
-  pthread_mutex_init (&mutex, 0); // 0 = default Attribute
-  // run threads and wait for them to finish
-  pthread_mutex_destroy (&mutex);
-}
-
-// Beispiel Verwendung in Threads
-void * thread_function (void * args) {
-  while (running) {
-    ...
-    pthread_mutex_lock (&mutex); // Enter critical section
-    // Perform critical section, e.g. ++counter
-    pthread_mutex_unlock (&mutex); // Leave critical section
-    ...
-  }
-}
-```
+#grid(
+  columns: (0.9fr, 1fr),
+  gutter: 1em,
+  [
+    ```c
+    // Beispiel Initialisierung
+    pthread_mutex_t mutex; // global variable
+    int main() {
+      // 0 = default Attribute
+      pthread_mutex_init (&mutex, 0); 
+      // run threads and wait for them to finish
+      pthread_mutex_destroy (&mutex);
+    }
+    ```
+  ],
+  [
+    ```c
+    // Beispiel Verwendung in Threads
+    void * thread_function (void * args) {
+      while (running) {
+        ...
+        // Enter critical section
+        pthread_mutex_lock (&mutex); 
+        // Perform atomic action, e.g. ++counter
+        // Leave critical section
+        pthread_mutex_unlock (&mutex); 
+        ...
+      }
+    }
+    ```
+  ],
+)
 
 #wrap-content(
   image("img/bsys_35.png"),

@@ -1,6 +1,6 @@
-// Compiled with Typst 0.11.1
+// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 #show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -172,6 +172,8 @@ if (fd < 0) { /* error handling */ } /* read data; */ close(fd);
 _kopiert_ die nächsten $n$ Bytes am aktuellen Offset _von fd in den Buffer_.\
 *```c ssize_t write(int fd, void * buffer, size_t n)```:*\
 _kopiert_ die nächsten $n$ Byte _vom `buffer` an den aktuellen Offset von `fd`_
+
+#colbreak()
 
 ```c
 #define N 32
@@ -1306,9 +1308,9 @@ berücksichtigen. Standard für Webpages. Echte Erweiterung von ASCII.
     table.header([Zeichen], [Code-Point], [UTF-32BE], [UTF-32LE], [UTF-8], [UTF-16BE], [UTF-16LE]),
     [A],[#hex("41")],[#hex("00 00 00 41")],[#hex("41 00 00 00")],[#hex("41")],[#hex("00 41")],[#hex("41 00")],
     [ä],[#hex("E4")],[#hex("00 00 00 E4")],[#hex("E4 00 00 00")],[#hex("C3 A4")],[#hex("00 E4")],[#hex("E4 00")],
-    [$alpha$],[#hex("3 B1")],[#hex("00 00 03 B1")],[#hex("B1 03 00 00")],[#hex("CE B1")],[#hex("03 B1")],[#hex("B1 03")],
-    [ặ],[#hex("1E B7")],[#hex("00 00 1E B7")],[#hex("B7 1E 00 00")],[#hex("E1 BA B7")],[#hex("1E B7")],[#hex("B7 1E")],
-    [𐌰],[#hex("1 03 30")],[#hex("00 01 03 30")],[#hex("30 03 01 00")],[#hex("F0 90 8C B0")],[#hex("D8 00 DF 30")],[#hex("00 D8 30 DF")],
+    [\u{3B1}],[#hex("3 B1")],[#hex("00 00 03 B1")],[#hex("B1 03 00 00")],[#hex("CE B1")],[#hex("03 B1")],[#hex("B1 03")],
+    [\u{1EB7}],[#hex("1E B7")],[#hex("00 00 1E B7")],[#hex("B7 1E 00 00")],[#hex("E1 BA B7")],[#hex("1E B7")],[#hex("B7 1E")],
+    [\u{10330}],[#hex("1 03 30")],[#hex("00 01 03 30")],[#hex("30 03 01 00")],[#hex("F0 90 8C B0")],[#hex("D8 00 DF 30")],[#hex("00 D8 30 DF")],
   )
 }
 #hinweis[Bei LE / BE werden nur die Zeichen _innerhalb_ eines Code-Points vertauscht,
@@ -1420,7 +1422,7 @@ Beschreiben ein _Intervall physisch konsekutiver Blöcke_. Ist 12 Byte gross
 #hinweis[(4B logische Blocknummer, 6B physische Blocknummer, 2B Anzahl Blöcke)].
 Positive Zahlen = Block initialisiert, Negativ = Block voralloziert. Im Inode hat es in den
 60 Byte für direkte und indirekte Block-Adressierung Platz für 4 Extents und einen Header.\
-*Extent Trees*
+*Extent Trees:*
 _Index-Knoten_ #hinweis[(Innerer Knoten des Baums, besteht aus Index-Eintrag und Index-Block)],
 _Index-Eintrag_ #hinweis[(Enthält Nummer des physischen Index-Blocks und kleinste logische
 Blocknummer aller Kindknoten)],

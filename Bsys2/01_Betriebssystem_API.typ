@@ -1,6 +1,6 @@
-// Compiled with Typst 0.11.1
+// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 /* #show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -166,8 +166,7 @@ _Achtung:_ `argv[0]` ist der Programmname, die Argumente selbst folgen als
   PATH=/home/ost/bin:/home/ost/.local/bin
   ```
 ]
-- Der Teilstring vor dem `=` wird als _Key_ bezeichnet
-- Der Teilstring nach dem `=` wird als _Value_ bezeichnet
+- Der Teilstring vor dem `=` wird als _Key_, der nach dem `=` als _Value_ bezeichnet
 - Jeden Key kann es _höchstens einmal_ geben
 
 Unter POSIX verwaltet das OS die Umgebungsvariablen innerhalb jedes laufenden Prozesses.

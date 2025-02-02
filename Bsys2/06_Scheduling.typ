@@ -1,6 +1,6 @@
-// Compiled with Typst 0.11.1
+// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 /*#show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),

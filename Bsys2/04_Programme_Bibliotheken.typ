@@ -1,6 +1,6 @@
-// Compiled with Typst 0.11.1
+// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 /*#show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -319,7 +319,7 @@ Dynamic Linker verschoben #hinweis[(Load Time Relocation)].
 #wrap-content(
   image("img/bsys_21.png"),
   align: top + right,
-  columns: (60%, 40%),
+  columns: (65%, 35%),
 )[
   Dynamische Bibliotheken sollen _Code zwischen Programmen teilen_.
   Code soll _nicht mehrfach_ im Speicher abgelegt werden, auch wenn mehrere Programme die

@@ -1,6 +1,6 @@
-// Compiled with Typst 0.11.1
+// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 /*#show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -108,6 +108,8 @@ $#hex(1400).#hex(0) arrow.bar #hex("200C"),
 _Extent Trees_ \
 *Header:* $0 arrow.bar (1,0)$\
 *Extent:* $1 arrow.bar (0, #fxcolor("grün", hex(2000)), #fxcolor("rot",hex(400)))$
+
+#pagebreak()
 
 == Journaling
 Wird eine Datei _erweitert_, passiert folgendes:

@@ -1,6 +1,6 @@
-// Compiled with Typst 0.11.1
+// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 /* #show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -131,7 +131,7 @@ In den CUs haben die Bytes #hex("0") - #hex("7F") #hinweis[(7 signifikante Bits)
   $=> U_1 = hex("C0") (= bits("11000000")) + fxcolor("rot", hex("03")) = hex("C3"),
     U_0 = hex("80") (= bits("10000000")) + fxcolor("orange", hex("24")) = hex("A4")$\
   $=> ä = underline(hex("C3 A4"))$
-- _ặ_: $P = hex("1EB7") = fxcolor("grün", #bits("0001", suffix: false)) thin
+- _\u{1EB7}_: $P = hex("1EB7") = fxcolor("grün", #bits("0001", suffix: false)) thin
     fxcolor("gelb", #bits("111010", suffix: false)) thin
     fxcolor("hellblau", bits("110111"))$\
   $=> P_15 ... P_12 = fxcolor("grün", hex("01")),
@@ -149,9 +149,9 @@ In den CUs haben die Bytes #hex("0") - #hex("7F") #hinweis[(7 signifikante Bits)
   table.header([Zeichen], [Code-Point], [UTF-32BE], [UTF-32LE], [UTF-8], [UTF-16BE], [UTF-16LE]),
   [A],[#hex("41")],[#hex("00 00 00 41")],[#hex("41 00 00 00")],[#hex("41")],[#hex("00 41")],[#hex("41 00")],
   [ä],[#hex("E4")],[#hex("00 00 00 E4")],[#hex("E4 00 00 00")],[#hex("C3 A4")],[#hex("00 E4")],[#hex("E4 00")],
-  [$alpha$],[#hex("3 B1")],[#hex("00 00 03 B1")],[#hex("B1 03 00 00")],[#hex("CE B1")],[#hex("03 B1")],[#hex("B1 03")],
-  [ặ],[#hex("1E B7")],[#hex("00 00 1E B7")],[#hex("B7 1E 00 00")],[#hex("E1 BA B7")],[#hex("1E B7")],[#hex("B7 1E")],
-  [𐌰],[#hex("1 03 30")],[#hex("00 01 03 30")],[#hex("30 03 01 00")],[#hex("F0 90 8C B0")],[#hex("D8 00 DF 30")],[#hex("00 D8 30 DF")],
+  [\u{3B1}],[#hex("3 B1")],[#hex("00 00 03 B1")],[#hex("B1 03 00 00")],[#hex("CE B1")],[#hex("03 B1")],[#hex("B1 03")],
+  [\u{1EB7}],[#hex("1E B7")],[#hex("00 00 1E B7")],[#hex("B7 1E 00 00")],[#hex("E1 BA B7")],[#hex("1E B7")],[#hex("B7 1E")],
+  [\u{10330}],[#hex("1 03 30")],[#hex("00 01 03 30")],[#hex("30 03 01 00")],[#hex("F0 90 8C B0")],[#hex("D8 00 DF 30")],[#hex("00 D8 30 DF")],
 )
 #hinweis[Bei LE / BE werden nur die Zeichen _innerhalb_ eines Code-Points vertauscht,
   nicht die Code-Points an sich.]
@@ -233,6 +233,7 @@ Ein Volume wird in _Blockgruppen_ unterteilt. Eine Blockgruppe besteht aus
 _mehreren aufeinanderfolgenden Blöcken_ bis zu 8 mal der Anzahl Bytes in einem Block
 #hinweis[(Bsp. Blockgrösse 4KB sind bis zu 32K Blöcke in einer Gruppe)].
 Anzahl Blöcke je Gruppe ist gleich für alle Gruppen.
+
 === Lage der Blockgruppen
 #wrap-content(
   image("img/bsys_46.png"),

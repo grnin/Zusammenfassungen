@@ -1,6 +1,6 @@
-// Compiled with Typst 0.11.1
+// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 #show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -464,7 +464,8 @@ $(fxcolor("grün", "kernel size") dot fxcolor("orange", "input channels") + fxco
 
 _Output shape:_
 $(fxcolor("grün", "input_width") - fxcolor("orange", "kernel_width")) / fxcolor("rot", "stride") + 1 =>
-  (fxcolor("grün", 32) - fxcolor("orange", 3)) / fxcolor("rot", 1) + 1 = 30$\
+  (fxcolor("grün", 32) - fxcolor("orange", 3)) / fxcolor("rot", 1) + 1 = 30$
+
 Without padding, we can apply the kernel $30$ times over a width of 32px
 #hinweis[(same for height)]. Each of the $32$ kernels outputs one $30 times 30$ feature map.
 Therefore, the output has the shape $underline(30 times 30 times 32)$.\

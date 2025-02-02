@@ -1,6 +1,6 @@
-// Compiled with Typst 0.11.1
+// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 #show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -1651,7 +1651,7 @@ MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 } MPI_Finalize();
 ```
 
-==== Sequential `count_hits` from @pi-approx in OpenMP
+==== Sequential `count_hits` to approximate $pi$ with Monte Carlo Simulation in OpenMP
 ```c
 long count_hits(long trials) {
   long hits = 0; long i; double x,y;

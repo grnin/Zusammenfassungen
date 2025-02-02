@@ -1,6 +1,6 @@
-// Compiled with Typst 0.11.1
+// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 /*#show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -69,6 +69,8 @@ Das Kommando `kill` sendet ein Signal an einen oder mehrere Prozesse
 - _`kill 1234 5678`_ sendet `SIGTERM` an Prozesse `1234` und `5678`
 - _`kill -KILL 1234`_ sendet `SIGKILL` an Prozess `1234`
 - _`kill -l`_ listet alle möglichen Signale auf
+
+#pagebreak()
 
 === Signal-Handler im Programm ändern: `sigaction`
 *```c int sigaction (int signal, struct sigaction *new, struct sigaction *old)```*\
