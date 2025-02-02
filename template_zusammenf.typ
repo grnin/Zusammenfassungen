@@ -5,7 +5,7 @@
 // Global variables
 #let colors = (
   hellblau: rgb("#29769E"),
-  dunkelblau: rgb("#1a4e69"),
+  dunkelblau: rgb("#1A4E69"),
   grün: rgb("#8B9654"),
   hellgrün: rgb("#BFBC8A"),
   gelb: rgb("#F2C12E"),
@@ -15,8 +15,8 @@
 )
 
 #let languages = (
-  de: (page: "Seite"),
-  en: (page: "Page")
+  de: (page: "Seite", chapter: "Kapitel", toc: "Inhaltsverzeichnis"),
+  en: (page: "Page", chapter: "Chapter", toc: "Contents"),
 )
 
 #let dateformat = "[day].[month].[year]"
@@ -33,6 +33,8 @@
   tableofcontents: (enabled: false, depth: "", columns: ""), // (depth: none, columns: 1)
   language: "de",
   font-size: 11pt,
+  display-title-footer: true,
+  appendix: (), // specifiy path to .typ file to add appendix documents
   body,
 ) = {
   // == Document Configuration ==
@@ -51,8 +53,8 @@
     weight: "bold",
     fill: colors.hellblau,
   )
-  
-  let footer = [
+
+  let footer = context [
     #set text(font: font-special.font, size: 0.9em)
     #fach | #semester | #authors.join(" & ")
     #h(1fr)
@@ -62,12 +64,12 @@
   set page(
     flipped: landscape,
     columns: column-count,
-    footer: footer,
+    footer: if (display-title-footer) { footer },
     margin: if (column-count < 2) {
       (top: 2cm, left: 1.5cm, right: 1.5cm, bottom: 2cm)
     } else {
       0.5cm
-    }
+    },
   )
 
   set columns(column-count, gutter: 2em)
@@ -77,7 +79,7 @@
 
   // Style built-in functions
   // Headings formatting
-  set heading(numbering: "1.1.")
+  set heading(numbering: "1.1.1.", supplement: languages.at(language).chapter)
   show heading: hd => block({
     if hd.numbering != none and hd.level <= 3 {
       context counter(heading).display()
@@ -106,7 +108,10 @@
 
   // Table formatting
   set table(
-    stroke: (x, y) => (left: if x > 0 { 0.07em }, top: if y > 0 { 0.07em }),
+    stroke: (x, y) => (
+      left: if x > 0 { 0.07em },
+      top: if y > 0 { 0.07em },
+    ),
     inset: 0.5em,
   )
 
@@ -114,7 +119,7 @@
   show table.cell.where(y: 0): emph
 
   // Unordered list, use with "- " or #list[]
-  show list: set list(marker: "-", body-indent: 0.45em)
+  show list: set list(marker: "–", body-indent: 0.45em)
 
   // "Important" template, use with "_text_" or #emph[]
   show emph: set text(fill: font-special.fill, weight: font-special.weight)
@@ -128,6 +133,19 @@
     set align(left)
     set text(style: "italic")
     q
+  }
+
+  // Reference, show heading name & page number
+  show ref: ref => if ref.element.func() != heading {
+    ref
+  } else {
+    let label = ref.target
+    let heading = ref.element
+    link(
+      label,
+      ["#heading.body"
+        (#languages.at(language).page #heading.location().page())],
+    )
   }
 
   // Table of contents, header level 1
@@ -144,34 +162,53 @@
 
   // == Page Content ==
   // title row
-  align(left)[
-    #text(..font-special, size: 1.8em, fach-long + " | " + fach)
-    #v(1em, weak: true)
-    #subtitle[Zusammenfassung]
-  ]
+  if (display-title-footer) {
+    align(left)[
+      #text(..font-special, size: 1.8em, fach-long + " | " + fach)
+      #v(1em, weak: true)
+      #subtitle[Zusammenfassung]
+    ]
+  }
 
+  // Table of contents
   if (tableofcontents.enabled) {
-    columns(tableofcontents.at("columns", default: 1),
-      outline(depth: tableofcontents.at("depth", default: none)))
+    // Generate language-specific ToC header spanning the whole page
+    heading(outlined: false, numbering: none, languages.at(language).toc)
+    columns(
+      // Set number of columns for ToC
+      tableofcontents.at("columns", default: 1),
+      outline(
+        depth: tableofcontents.at("depth", default: none),
+        title: none,
+      ),
+    )
     pagebreak()
   }
 
   // Main body
   set par(justify: true)
   body
+
+  // Appendix Documents
+  counter(heading).update(0)
+  set heading(numbering: "I.I")
+  for document in appendix {
+    pagebreak()
+    include document
+  }
 }
 
 // Additional formatting templates
 // "Zusätzlicher Hinweis"-Vorlage
-#let hinweis(t) = {
-  set text(style: "italic", size: 0.8em)
+#let hinweis(style: "italic", t) = {
+  set text(style: style, size: 0.8em)
   show raw: set text(font: "JetBrains Mono", size: 1.05em)
   t
 }
 
 // "Definition"-Vorlage
 #let definition(t) = {
-  rect(stroke: 0.13em + colors.hellblau, inset: 0.73em, columns(1, t))
+  rect(stroke: 0.13em + colors.hellblau, inset: 0.73em, columns(1, t), width: 100%)
 }
 
 // Kommentar
@@ -180,9 +217,20 @@
   t
 }
 
+// Small text, #hinweis without italic
+#let small(t) = {
+  hinweis(style: "normal", t)
+}
+
 // Text added by Jannis
 #let jannis(t) = {
-  set text(weight: "bold", fill: colors.orange)
+  set text(fill: colors.orange)
+  t
+}
+
+// Text added by Nina
+#let nina(t) = {
+  set text(weight: "bold", fill: colors.rot)
   t
 }
 
@@ -191,6 +239,7 @@
   text(fill: colors.at(subcolor), $bold(#x)$)
 }
 
+// Set a text color from the color dict for regular text
 #let tcolor(subcolor, x) = {
   text(fill: colors.at(subcolor), style: "italic", strong(x))
 }
