@@ -1,4 +1,3 @@
-// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
@@ -70,12 +69,10 @@ Das Kommando `kill` sendet ein Signal an einen oder mehrere Prozesse
 - _`kill -KILL 1234`_ sendet `SIGKILL` an Prozess `1234`
 - _`kill -l`_ listet alle möglichen Signale auf
 
-#pagebreak()
-
 === Signal-Handler im Programm ändern: `sigaction`
 *```c int sigaction (int signal, struct sigaction *new, struct sigaction *old)```*\
 _`signal`_ ist die _Nummer des Signals_ #hinweis[(`SIGKILL` oder `SIGSTOP` nicht erlaubt)].
-_Definiert_ Signal-Handler für `signal`, wenn `new` $!= 0$.
+_Definiert_ Signal-Handler für `signal`,\ wenn `new` $!= 0$.
 _Gibt_ den _bestehenden_ Signal-Handler für `signal` _zurück_, wenn `old` $!= 0$
 
 *```c struct sigaction { void (*sa_handler)(int); sigset_t sa_mask; int sa_flags;}```*\
@@ -168,6 +165,7 @@ _Lesender Prozess_ muss deshalb sein _Write-End schliessen_, damit schreibender 
   align: top + right,
   columns: (80%, 20%),
 )[
+  Beispiel-Befehl in Shell: `cmda | cmdb`
   ```c
   int fd [2];
   pipe (fd);
@@ -301,8 +299,8 @@ while (running) {
 
 _Senden und Empfangen von Daten_. Puffern der Daten ist Aufgabe des Netzwerkstacks.
 ```c
-send (fd, buf, len, 0) = write (fd, buf, len);
-recv (fd, buf, len, 0) = read (fd, buf, len)
+send (fd, buf, len, 0) == write (fd, buf, len);
+recv (fd, buf, len, 0) == read (fd, buf, len)
 ```
 
 === ```c int close (int socket);```

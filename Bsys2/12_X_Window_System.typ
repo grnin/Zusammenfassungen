@@ -1,4 +1,3 @@
-// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
@@ -30,7 +29,7 @@ _Rechteckiger Bereich des Bildschirms._ Kann beliebig viele weitere Fenster enth
 Der _Bildschirm_ ist die Wurzel.
 
 === Maus und Mauszeiger
-Die _Maus_ ist ein Physisches Gerät, das 2D-Bewegungen in Daten übersetzt.
+Die _Maus_ ist ein physisches Gerät, das 2D-Bewegungen in Daten übersetzt.
 Der _Mauszeiger_ ist eine Rastergrafik, die auf dem Bildschirm angezeigt wird.
 
 Das OS bewegt den Mauszeiger _analog_ zur physischen Bewegung der Maus.
@@ -90,7 +89,7 @@ Scrollbars, Titelleiste usw., indem er hinter jedes Top-level Window ein _Extraf
   columns: (50%, 50%),
 )[
   == Basiskonzepte des X Window System
-  - _Display:_ Rechner mit Tastatur, Zeigegerät und 1..m Bildschirme
+  - _Display:_ Rechner mit Tastatur, Zeigegerät und $1..m$ Bildschirme
   - _X Client:_ Applikation, die einen Display nutzen will.
     Kann lokal oder entfernt laufen.
   - _X Server:_ Softwareteil des X Window System, der ein Display ansteuert.
@@ -163,7 +162,7 @@ Es gibt 4 Typen von Nachrichten:
   #hinweis[(Request Buffer)]. _Ziel:_ möglichst wenige Anforderungsübertragungen
   an X Server. Gruppierung von Anforderungen für bessere _Kommunikationseffizienz_.
 
-  Übertragung an Server nur, wenn _sinnvoll oder zwingend nötig_
+  Übertragung an Server nur, wenn _sinnvoll oder zwingend nötig_\
   #hinweis[(Client beginnt auf Event zu warten und blockiert, Client-Request Reply des
     Servers wird benötigt, Client verlangt explizit Pufferleerung)]
 ]
@@ -200,7 +199,7 @@ Die Verarbeitung der Events erfolgt in einer Programmschleife in der Form:
 while(1) {
   XNextEvent(display, &event);
   switch (event.type) {
-    case Expose: // Typische Event: verlangt Neuzeichnen des Fensters
+    case Expose: // Typisches Event: verlangt Neuzeichnen des Fensters
       ...
       break;
     case KeyPress: // Event: Taste wurde gedrückt

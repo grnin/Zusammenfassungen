@@ -1,4 +1,4 @@
-// Compiled with Typst 0.12
+// Compiled with Typst 0.13.1
 #import "../template_zusammenf.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
@@ -33,24 +33,24 @@ _Concurrency_ #hinweis[(interleaved execution of programs for simpler programs)]
   *Multi-threads:*
   Changes made by one thread to shared resources will be _seen_ by other threads.\
   *Context switch:*
-  Required when changing threads. _Synchronous_ #hinweis[(Thread waiting for condition)] or
+  Required when changing threads. _Synchronous_ #hinweis[(Thread waiting for condition)] or\
   _Asynchronous_ #hinweis[(Thread gets released after defined time)]\
   *Multitasking:*
-  _Cooperative_ #hinweis[(Threads must explicitly initiate context switches, scheduler can't interrupt)] or
+  _Cooperative_ #hinweis[(Threads must explicitly initiate context switches, scheduler can't interrupt)] or\
   _preemptive_ #hinweis[(scheduler can asynchronously interrupt thread via timer interrupt)]\
   *JVM Thread Model:*
   JVM is a _process in the OS_. It runs as long as threads are running #hinweis[(Exception:
   threads marked as daemon with ```java setDaemon(true)``` will not be waited upon)].
-  Threads are realized by the _thread class_ and the _interface Runnable_.
-  Code to be run in a Thread is within a overridden `run()`
+  Threads are realized by the _thread class_ and the _interface `Runnable`_.
+  Code to be run in a Thread is within a overridden `run()`.
 ]
 
 == Starting a thread
-*As a anonymous function (Lambda):*
+*As a anonymous function (Lambda):*\
 ```java var myThread = new Thread(() -> { /* thread behaviour */ }); myThread.start();```\
-*As a named function:*
+*As a named function:*\
 ```java var myThread = new Thread(() -> AssyFunct()); myThread.start();```\
-*With explicit runnable implementation:*
+*With explicit `Runnable` implementation:*
 ```java
 class MyThread implements Runnable {
   @Override
@@ -74,13 +74,15 @@ public class MultiThreadTest {
 }}}
 ```
 #hinweis[The printout of this function varies. It can be all possible combinations of A's and
-  B's due to the non-deterministic scheduler]\
+  B's due to the non-deterministic scheduler]
+
 *Thread Join:*
 Waiting for a thread to finish
-#hinweis[(```java t2.join()``` blocks as long as `t2` is running).]
+#hinweis[(```java thread.join()``` blocks as long as `thread` is running).]
 
 ```java
-var a = new Thread(() -> multiPrint("A")); var b = new Thread(() -> multiPrint("B"));
+var a = new Thread(() -> multiPrint("A"));
+var b = new Thread(() -> multiPrint("B"));
 System.out.println("Threads start"); a.start(); b.start(); // ...
 a.join(); b.join(); System.out.println("Threads joined");
 ```
@@ -136,7 +138,8 @@ class BankAccount {
   _Thread interference_ and _memory consistency errors_.\
   *Critical Section:*
   Part of the code which must be executed by only 1 thread at a time for the values to stay
-  consistent. Implementation with _mutual exclusion_.\
+  consistent. Implementation with _mutual exclusion_.
+
   *```java synchronized```:*
   Body of method with the ```java synchronized``` keyword is a critical section.
   Guarantees _memory consistency_ and a _happens-before relationship_.
@@ -144,7 +147,8 @@ class BankAccount {
   Other threads are _blocked_ until the current thread is done with the object.
   Every object has a _Lock_ #hinweis[(Monitor-Lock)]. Maximum 1 thread can acquire the lock.
   Entry of a `synchronized` method acquires the lock of the object, the exit releases it.
-  ```java public synchronized void deposit(int amount) { this.balance += amount; }```\
+  ```java public synchronized void deposit(int amount) { this.balance += amount; }```
+
   Can also be used within a method, the _object that should be locked_ must be specified.
   ```java synchronized(this) { this.balance += amount; }```\
   *Exit synchronized block:*
@@ -179,8 +183,8 @@ outside synchronized.
 #colbreak()
 
 #grid(
-  columns: (auto, auto),
-  gutter: 1em,
+  columns: (1fr, 1fr),
+  gutter: 0.5em,
   [
     ```java
     // Java
@@ -226,6 +230,7 @@ outside synchronized.
 
 
 = Specific synchronization primitives
+#v(-0.75em)
 == Semaphore
 Allocation of a limited number of free resources. Is in essence a _counter_.
 If a resource is _acquired_, `count--`, if a resource is _released_, `count++`.
@@ -252,7 +257,7 @@ Semaphores are _powerful_, any synchronization can be implemented. But relativel
 ```java
 class BoundedBuffer<T> {
   private Queue<T> queue = new LinkedList<>();
-  private Semaphore upperLimit = new Semaphore(Capacity, true); //how many free?
+  private Semaphore upperLimit = new Semaphore(Capacity, true); // how many free?
   private Semaphore lowerLimit = new Semaphore(0, true); // how many full?
   public void put(T item) throws InterruptedException {
     upperLimit.acquire(); // No. of free places - 1
@@ -278,10 +283,10 @@ thread and supports nested locking #hinweis[(Thread is able to re-enter the same
 *Condition:*
 Factors out the Object monitor methods #hinweis[(`wait`, `notify` and `notifyAll`)] into
 distinct objects to give the effect of having multiple wait-sets per object, by combining them
-with the use of arbitrary Lock implementations. A _Condition replaces the use of the Object
+with the use of arbitrary `Lock` implementations. A _Condition replaces the use of the Object
 monitor methods_. \
 *`condition.await()`:*
-Throws an InterruptedException if the current thread has its interrupted status set on entry to
+Throws an `InterruptedException` if the current thread has its interrupted status set on entry to
 this method or is interrupted while waiting #hinweis[(`finally` frees the lock in case of interrupt)].
 
 ==== Buffer with Lock & Condition
@@ -322,15 +327,15 @@ class BoundedBuffer<T> {
   Mutual exclusion is _unnecessary for read-only_ threads.
   So one should allow parallel reading access, but implement mutual exclusion for write access.
 ]
-
+#v(-0.5em)
 ```java
 ReadWriteLock rwLock = new ReentrantReadWriteLock(true); // true for fairness
 rwLock.readLock().lock(); // shared Lock
-// read-only accesses
-rwLock.readLock().unlock();
+// read-only accesses here
+rwLock.readLock().unlock(); // release shared lock
 rwLock.writeLock().lock(); // exclusive Lock
-// write (and read) accesses
-rwLock.writeLock().unlock();
+// write (and read) accesses here
+rwLock.writeLock().unlock(); // release exclusive lock
 ```
 
 == Count Down Latch
@@ -377,14 +382,16 @@ returns argument `x` of the other thread.
 
 ```java
 var exchanger = new Exchanger<Integer>();
-for (int count = 0; count < 2; count++) { // odd n.of exch.: last one blocks
+for (int count = 0; count < 2; count++) { // odd number of exch.: last one blocks
   new Thread(() -> {
     for (int in = 0; in < 5; in++) {
       try {
         int out = exchanger.exchange(in);
         System.out.println(Thread.currentThread().getName() + " got " + out);
       } catch (InterruptedException e) { }
-    } }).start(); }
+    }
+  }).start();
+}
 ```
 
 #colbreak()
@@ -494,7 +501,7 @@ consume CPU during deadlock.
   Deadlocks can be identified by _cycles in the resource graph_.\
   *Deadlock Avoidance:*
   Introduce _linear blocking order_, lock nested only in ascending order.
-  Or use _coarse granular locks_ #hinweis[(When ordering does not make sense,
+  Or use _coarse granular locks_ #hinweis[(Used when ordering does not make sense,
   e.g. block the whole Bank to block all accounts)]
 ]
 
@@ -507,8 +514,8 @@ synchronization constructs. Monitor and Thread priorities have a fairness proble
 _Safety:_ No race conditions and no deadlocks, _Liveness:_ No starvation
 
 == .NET Synchronization Primitives
-Monitor with sync object: ```cs private object sync = new(); lock(sync){ ... }```.
-Uses `Monitor.Wait(sync)`, `Monitor.PulseAll(sync)`. Uses fair FIFO-Queue.
+Monitor with sync object: ```cs private object sync = new(); lock(sync){ ... }```.\
+Uses ```cs Monitor.Wait(sync)```, ```cs Monitor.PulseAll(sync)```. Uses fair FIFO-Queue.
 _Lacks:_ No fairness flag, no Lock & Condition.
 _Additional:_ `ReadWriteLockSlim` for Upgradeable Read/Write, Semaphores can also be used at
 OS level, Mutex. Collections are _not_ Thread-safe.
@@ -543,9 +550,9 @@ Task must not wait for each other #hinweis[(except sub-tasks)], results in deadl
 // Task Launch
 var threadPool = new ForkJoinPool();
 Future<Integer> future = threadPool.submit(() -> { // submit task into pool
-  int value = ...; /* long calculation */ return value;
-});
+  int value = ...; /* long calculation */ return value; });
 ```
+#v(-0.5em)
 
 === `Future<T>`
 Represents a _future result_ that is to be computed #hinweis[(asynchronous)].
@@ -555,10 +562,12 @@ _`.get()`_ #hinweis[(waits if necessary for computation to complete and then ret
 _`.cancel()`_ #hinweis[(Attempts to cancel execution of this task, removes it from queue)].
 Task ends when a unhandled exception occurs. It is included in the `ExecutionException` thrown
 by `get()`.
+#v(-0.5em)
 
 === Fire and Forget
 Task are started _without retrieving results_ later #hinweis[(`submit()` without `get()`)].
 Task is run, but Exceptions do not get catched.
+#v(-0.5em)
 
 === Count Prime Numbers
 ```java
@@ -567,20 +576,19 @@ int counter = 0; for (int n = 2; n < N; n++) { if (isPrime(n)) { counter++}};
 // Parallel and Recursive
 class CountTask extends RecursiveTask<Integer> { //RecursiveAction: no return value
   private final int lower, upper;
-  public CountTask(int lower, int upper) { this.lower = lower; this.upper = upper;}
+  public CountTask(int lower, int upper)
+    { this.lower = lower; this.upper = upper;}
   protected Integer compute() {
     if (lower == upper) { return 0; }
-    if (lower + 1 == upper) { return isPrime(lower) ? 1 : 0;}
+    if (lower + 1 == upper) { return isPrime(lower) ? 1 : 0; }
     int middle = (lower + upper) / 2;
     var left = new CountTask(lower, middle);
     var right = new CountTask(middle, upper);
     left.fork(); right.fork();
     return right.join() + left.join();
 }}
-int result = new CountTaks(2,N).invoke(); // invokeAll() to start multiple tasks
+int result = new CountTaks(2, N).invoke(); // invokeAll() to start multiple tasks
 ```
-
-#colbreak()
 
 === Pairwise sum (recursive)
 ```java
@@ -626,7 +634,7 @@ Task<int> task = Task.Run(() => {
   int total = ... // some calculation
   return total;
 });
-Console.Write(task.Result); //Blocks until task is done and returns the result
+Console.Write(task.Result); // Blocks until task is done and returns the result
 ```
 
 ```cs
@@ -645,8 +653,8 @@ static Task<int> Count(...part) {...}
   #hinweis[(Start all tasks, implicit barrier at the end)].
   ```cs
   Parallel.Invoke(
-    () => MergeSort(l,m),
-    () => MergeSort(m,r)
+    () => MergeSort(l, m),
+    () => MergeSort(m, r)
   );
   ```
   #colbreak()
@@ -718,7 +726,7 @@ Define task whose start is linked to the end of the predecessor task.
     // Java (there can be multiple Apply/AcceptAsync calls)
     CompletableFuture
       .supplyAsync(() -> longOP) // runAsync for return void
-      .thenApplyAsync(v -> 2*v) // returns value
+      .thenApplyAsync(v -> 2 * v) // returns value
       .thenAcceptAsync(v -> ... .println(v)); // returns void
     ```
   ],
@@ -755,10 +763,12 @@ UI-components)]. The _UI thread_ loops to process the _event queue_.
 _No long operations_ in UI events, or else blocks UI.
 _No access to UI-elements by other threads_, or else incorrect
 #hinweis[(Exception in .NET & Android, Race Condition in Javas Swing)].
+#v(-0.5em)
 
 === Non-Blocking UI Implementation
 #grid(
-  columns: (auto, auto),
+  columns: (0.65fr, 1fr),
+  gutter: 0em,
   [
     ```cs
     // C# .NET
@@ -766,11 +776,11 @@ _No access to UI-elements by other threads_, or else incorrect
       var url = textBox.Text;
       Task.Run(() => {
         var text = Download(url);
-        Dispatcher.InvokeAsync(() => {
+        Dispatcher.InvokeAsync(
+        () => {
           label.Content = text;
         });
-      });
-    }
+      }); }
     ```
   ],
   [
@@ -822,7 +832,7 @@ This is the same code as before.
 _`async` for methods_: Caller may not be blocked during the entire execution of the async method.
 _`await` for tasks_: "Non-blocking wait" on task-end / result.\
 *Execution Model:*
-Async methods run partly _synchronous_ #hinweis[(as long as there is no blocking await)],
+Async methods run partly _synchronous_ #hinweis[(as long as there is no blocking await)],\
 partly _asynchronous_ #hinweis[(until the awaited task is complete)].\
 *Mechanism:*
 Compiler dissects method into _segments_ which are then executed completely synchronously or asynchronously.\
@@ -831,10 +841,10 @@ _Case 1:_ Caller is a "normal" thread #hinweis[(Usual case, Continuation is exec
 _Case 2:_ Caller is a UI-thread #hinweis[(Continuation is dispatched to the UI thread and processed by the UI-Thread as event)]\
 *Async Return Value Types:*
 _`void`_ #hinweis[("fire-and-forget")],
-_`Task`_ #hinweis[(No return value, allows waiting for end)],
-_`Task<T>`_ #hinweis[(For methods having return value of type T)]. \
+_`Task`_ #hinweis[(No return value, allows waiting for end)],\
+_`Task<T>`_ #hinweis[(For methods having return value of type T)].\
 *Async without await:*
-Execute long running operation explicitly in task with `await Task.Run()`.
+Execute long running operation explicitly in task with ```cs await Task.Run()```.
 ```cs
 public async Task<bool> IsPrimeAsync(long number) {
   return await Task.Run(() => {
@@ -856,7 +866,7 @@ system and CPU. Instructions are reordered or eliminated by optimization.\
 *Memory model:*
 Part of language semantics, there exist different models: _sequential consistency (SC)_
 #hinweis[(Order of execution cannot be changed. Too strong a consistency model)]
-and the _Java Memory Model_ #hinweis[(a "weak" memory model)].
+and the _Java Memory Model_\ #hinweis[(a "weak" memory model)].
 
 == Java Memory Model (JMM)
 Interleaving-based semantics. Minimum warranties: _Atomicity, Visibility and Ordering_.
@@ -921,7 +931,7 @@ Primitive attempt to synchronize threads.
 *Spin-Lock with atomic Operation:*
 ```java
 public class SpinLock {
-  private final AtomicBoolean locked = new AtomicBoolean(false);
+  private final AtomicBoolean locked = new AtomicBoolean(false); // unlocked
   public void acquire() { while( locked.getAndSet(true) ) {...} }
   public void release() { locked.set(false); }
 }
@@ -935,6 +945,7 @@ Atomically sets to the given value and returns the previous value.\
 ```java boolean compareAndSet(boolean expect, boolean update)```\
 Sets `update` only when read value is equal to `expect`. Returns true when successful.\
 *Optimistic Synchronization:*
+#hinweis[(Read old value and then compare before writing if value is still the same. If not, retry)]
 ```java
 do { oldV = v.get(); newV = result; } while(!v.compareAndSet(oldV, newV));
 ```
@@ -1007,7 +1018,7 @@ Transfer data from CPU memory to GPU memory ($T_1$ units = #tcolor("grün", "20m
 Execute computation on the device ($T_2$ units = #tcolor("orange", "60ms")). \
 What is the _latency_ (non-pipelined)? $fxcolor("grün", 20) + fxcolor("orange", 60) = underline(80"ms")$.\
 What is the _throughput_ (pipelined)? Every #tcolor("orange", "60ms") an operation is finished.\
-Throughput = $1/60$ operations/ms.
+Throughput = $1\/60$ operations/ms.
 
 == CPU vs GPU
 #table(
@@ -1043,7 +1054,7 @@ and GPU is needed. There is also _no garbage collector_ on the GPU.
 Computer Unified Device Architecture. Is a _parallel computing platform and an API_ for Nvidia
 GPU that allows the host program to use GPUs for general purpose processing.
 
-==== CUDA Execution
+==== CUDA Execution steps
 #grid(
   columns: (auto, 1fr),
   gutter: 3pt,
@@ -1100,7 +1111,7 @@ void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
   The performance is either limited by _memory bandwidth_ or _computation_.
   *Compute Bound:*
   Throughput is limited by calculation #hinweis[(Cores are at the limit, but the memory bus
-  could transfer more data)]. _This is better and reached if AI Kernel > AI GPU_.\
+  could transfer more data)].\ _This is better and reached if AI Kernel > AI GPU_.\
   *Memory Bound:*
   Throughput is limited by data transfer #hinweis[(Memory bus bandwidth is at its limit, but
   cores could process more data)].\
@@ -1126,7 +1137,7 @@ _Peak performance_ is derived from benchmarking FLOPS or GFLOPS #hinweis[(Giga-F
 FLOPS)]. The _peak bandwidth_ from manuals of the memory subsystem. The _ridge point_ is where
 the horizontal and diagonal lines meet = minimum AI required to achieve the peak performance.
 
-#image("img/parprog_9.png", width: 94%)
+#image("img/parprog_9.png", width: 90%)
 
 = GPU Architecture
 Because there are so _many cores_ on GPUs, it is possible to run many threads in parallel
@@ -1205,8 +1216,9 @@ _Max grid size:_ (2'147'483'647, 65'535, 65'535)
 
   If we have $1024$ threads in a block, how many blocks are needed to launch $N$ threads?\
   _`int blocksPerGrid = (N + threadsPerBlock - 1) / threadsPerBlock;`_ \
-  #hinweis[Need to round up because for 1025 threads we need 2 blocks]
+  #hinweis[Rounding up is necessary because for 1025 threads, 2 blocks are required]
 ]
+#v(-0.75em)
 
 == Data Partitioning within threads
 *Data Access:*
@@ -1221,15 +1233,14 @@ void VectorAddKernel(float *A, float *B, float *C) {
   int i = blockIdx.x * blockDim.x + threadIdx.x; //index based on (blockID, threadID)
   if (i < N) {
     C[i] = A[i] + B[i]; // without this if, some threads will be idle
-  }
-}
+  } }
 // kernel invocation
 N = 4097; int blockSize = 1024; int gridSize = (N + blockSize - 1) / blockSize;
 VectorAddKernel<<<gridSize, blockSize>>>(A, B, C);
 ```
 
 *Boundary Check:*
-More threads than necessary work on the data. If N = 4097, 5 Blocks with 1024 Threads are
+More threads than necessary work on the data. If $N = 4097$, 5 Blocks with 1024 Threads are
 needed which results in _1023 unused threads_. Threads with $i >= N$ must _not be allowed_
 to write to array $C$ because they might _corrupt the working memory_ of some other thread.
 
@@ -1279,7 +1290,7 @@ MatrixAddKernel<<<grid,block>>>(A,B,C);
 
 == Matrix Multiplication
 *Parallelization:*
-Every Thread computes one element of the result matrix $C$.
+Every thread computes one element of the result matrix $C$.
 Can be parallelized because results do not depend on each other.
 ```cpp
 __global__
@@ -1340,12 +1351,12 @@ sequence of locations were accessed. \
 *Memory Coalescing:*
 Thread _access patterns_ are critical for performance. If the threads in a warp
 _simultaneously_ access _consecutive memory locations_, their reads can be combined into a
-single access _(burst)_. Else there are _expensive individual accesses_.\
+single access _(burst)_. Otherwise there are _expensive individual accesses_.\
 *Coalesced Accesses:*
 Read/Write the burst in one transaction per warp burst section, swapped read/write within the
 same burst, only individual elements in the burst accessed.\
 *Not Coalesced Accesses:*
-Read/Write in different warp bursts, one action that spans multiple bursts.\
+Read/Write in different warp bursts, one action that spans multiple bursts. _Inperformant, avoid!_\
 *Coalescing in Use:*
 _`data[(Expression without threadId.x) + threadId.x]`_\
 *Coalescing with Matrices:*
@@ -1407,10 +1418,10 @@ __global__ void MatrixMulKernel(float* d_M, float* d_N, float* d_P, int Width) {
 Cluster programming is the _highest possible parallel acceleration_ #hinweis[(Factor 100 and
 more)]. Used for _general purpose programming_, lots of CPU cores. Combination of CPUs and GPUs possible. \
 *Computer Cluster:*
-Network of _powerful_ computing nodes, firmly connected at one location. Very _fast
-interconnect_ #hinweis[(like 100GBit/s)], used for big simulations #hinweis[(Fluids, Weather, Traffic, etc.)]\
+Network of _powerful_ computing nodes, firmly connected at one location.\
+Very _fast interconnect_ #hinweis[(like 100GBit/s)], used for big simulations #hinweis[(Fluids, Weather, Traffic, etc.)]\
 *SPMD:*
-This is the most commonly used programming model, "high level".
+This is the most commonly used programming model, "high level".\
 _Single Program_ #hinweis[(All tasks execute their copy of the same program simultaneously)],
 _Multiple Data_ #hinweis[(all tasks may use different data)].
 The MPI program is started in several processes. All processes start and terminate
@@ -1474,21 +1485,23 @@ _Returns the total number_ of processes in a communicator.\
 *`MPI_Finalize`:*
 Is used to _clean up_ the environment. No more MPI calls after that.\
 *`MPI_Barrier`:*
-Blocks until all processes in the communicator have reached the barrier.
+Blocks until all processes in the communicator have reached the barrier.\
 *Compilation & Execution:* ```sh mpicc HelloCluster.c && mpiexec -c 24 a.out && sbatch -hi.sub```\
 *Process Identification:*
-_Rank_ = number within a group, incremental numbering from 0.
-Unique Identification = (Rank, Communicator)\
-```c MPI_Send(void * data, int count, MPI_Datatype datatype, int destination, int tag, MPI_Comm communicator) // tag: freely selectable number for msg type (>= 0)```
+_Rank_ = number within a group, incremental numbering from 0.\
+_Unique Identification_ = (Rank, Communicator)
 
-```c MPI_Recv(void * data, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm communicator, MPI_Status* status) // status: error information```\
+```c MPI_Send(void * data, int count, MPI_Datatype datatype, int destination, int tag, MPI_Comm communicator) // tag: freely selectable number for msg type (>= 0)```\
+```c MPI_Recv(void * data, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm communicator, MPI_Status* status) // status: error information```
+
 Each _send_ should have a matching _receive_.\
 *Example direct communication:*\
 ```c MPI_Send(&value, 1, MPI_INT, receiverRank, tag, MPI_COMM_WORLD);```\
 ```c MPI_Recv(&value, 1, MPI_INT, senderRank, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);```\
 *Array send:* ```c int array[LENGTH];``` \
 ```c MPI_Send(array, LENGTH, MPI_INT, receiverRank, tag, MPI_COMM_WORLD);``` \
-```c MPI_Recv(array, LENGTH, MPI_INT, senderRank, tag, MPI_COMM_WORLD, MPI_STATUS_IGN);``` \
+```c MPI_Recv(array, LENGTH, MPI_INT, senderRank, tag, MPI_COMM_WORLD, MPI_STATUS_IGN);```
+
 *`MPI_Bcast`:*
 Is _efficient_, because the root node does _not send the signal individually_ to each node,
 the _other nodes help_ spread the message to others. #hinweis[(signal spreads like corona)]:
@@ -1516,16 +1529,16 @@ Gather together multiple values from different processors.\
 
 == Approximation of $bold(pi)$ via Monte Carlo Simulation <pi-approx>
 Draw a circle inside of a square and randomly place dots in the square. The ratio of dots
-inside the circle to the total number of dots will approximately equal $pi / 4$.
-
+inside the circle to the total number of dots will approximately equal $pi \/ 4$.
+#v(-0.5em)
 ```c
 // Sequential
 long count_hits(long trials) { long hits = 0, i; for (i = 0; i < trials; i++) {
     double x = (double)rand()/RAND_MAX; double y = (double)rand()/RAND_MAX;
-    if (x * x + y * y <= 1) { hits++;} // distance to center is bigger than radius=1
+    if (x * x + y * y <= 1) { hits++;} // distance to center bigger than radius=1
   } return hits; }
 
-//Parallel, the trials are split across different nodes
+// Parallel, the trials are split across different nodes
 int rank, size;
 MPI_Comm_rank(MPI_COMM_WORLD, &rank); MPI_Comm_size(MPI_COMM_WORLD, &size);
 srand(rank * 4711); // each process receives a different seed
@@ -1564,8 +1577,8 @@ int main(int argc, char* argv[]) {
   #pragma omp parallel // pragma spawns multiple threads (fork)
   {
     const int np = omp_get_num_threads(); // executed in parallel
-    printf("Hello from thread %d\n", omp_get_thread_num()); // executed in parallel
-  } // order not fixed. after execution, threads synchronize and terminate.
+    printf("Hello from thread %d\n", omp_get_thread_num()); // executed in paral.
+  } // thread order not fixed. after execution, threads synchronize & terminate
   return 0; }
 ```
 
@@ -1620,7 +1633,7 @@ When using `reduction(operator: variable)`, a _copy_ of the reduction variable p
 initialized to the identity of the reduction operator #hinweis[($+ = 0$, $* = 1$)].
 Each thread will then _reduce_ into its local variable. At the end of the `parallel` region, the local
 results are _combined into the global variable_. Only associative operators allowed
-#hinweis[($+, *$ not $-, \/ $)].
+#hinweis[($+, *$ not $-, div $)].
 
 ```c
 // Code using the reduction clause
@@ -1660,8 +1673,10 @@ long count_hits(long trials) {
       for (i = 0; i < trials; i++) {
         double x = random_double(); double y = random_double();
         if (x * x + y * y <= 1) { hits +; }
-      }}
-  return hits; }
+      }
+    }
+  return hits;
+}
 ```
 
 = Performance Scaling

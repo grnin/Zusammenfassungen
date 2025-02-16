@@ -1,4 +1,3 @@
-// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
@@ -43,25 +42,26 @@ Message-Passing mit _variabler Nachrichtengrösse_ ist _aufwändiger zu implemen
 === Direkte Kommunikation - Senden <message-direct>
 Bei direkter Kommunikation werden Nachrichten von einem Prozess $P_1$ an einen Prozess
 $P_2$ adressiert. $P_1$ muss den Empfänger einer Nachricht kennen.
-Kommunikation _nur zwischen genau zwei Prozessen_ #hinweis[`send(P2, message)`].
+Kommunikation _nur zwischen genau zwei Prozessen_: ```c send(P2, message)```.
 
 === Direkte Kommunikation - Empfangen
-- _Symmetrische direkte Kommunikation:_ $P_2$ muss den Sender seiner Nachricht _kennen_
-  #hinweis[`receive(P1, message)`]
-- _Asymmetrische direkte Kommunikation:_ $P_2$ muss den Sender seiner Nachricht _nicht_
-  kennen, sondern erhält die ID in einem Out-Parameter #hinweis[`id receive (id, message)`]
+- _Symmetrische direkte Kommunikation ```c receive(P1, message)```:_
+  $P_2$ muss den Sender seiner Nachricht _kennen_
+- _Asymmetrische direkte Kommunikation ```c receive(id, message)```:_
+  $P_2$ muss den Sender seiner Nachricht _nicht_ kennen, sondern erhält
+  die ID in einem Out-Parameter `id`:
 
 === Indirekte Kommunikation <message-indirect>
 Bei indirekter Kommunikation existieren spezifische OS-Objekte: _Mailboxen, Ports oder Queues_.
-- Prozess $P_1$ _sendet_ Nachrichten _an eine Queue_ $Q$ #hinweis[`send(Q, message)`]
-- Prozess $P_2$ _empfängt_ Nachrichten _aus einer Queue_ $Q$ #hinweis[`receive(Q, message)`]
+- ```c send(Q, message)```: Prozess $P_1$ _sendet_ Nachrichten _an eine Queue_ $Q$
+- ```c receive(Q, message)```: Prozess $P_2$ _empfängt_ Nachrichten _aus einer Queue_ $Q$
 Kommunikation erfordert, dass beide Teilnehmer die _gleiche Mailbox kennen_.
 Es kann _mehr als eine_ Mailbox zwischen zwei Teilnehmern geben.
 
 ==== Mehr als zwei Teilnehmer
 Bei mehr als zwei Teilnehmer müssen Regeln definiert werden, welcher Prozess die Nachricht
 empfängt, wie _Beschränkung_ der Queue auf nur einen Sender und Empfänger,
-Beschränkung des Aufrufs von `receive` auf nur einen Prozess, _zufällige Auswahl_ oder
+Beschränkung des Aufrufs von `receive()` auf nur einen Prozess, _zufällige Auswahl_ oder
 Auswahl nach _Algorithmus_.
 
 ==== Lebenszyklus der Queue
@@ -126,16 +126,16 @@ _synchron und asynchron_ verwendet werden.
 ==== ```c mqd_t mq_open (const char *name, int flags, mode_t mode, struct mq_attr *attr);```
 _Öffnet eine Message-Queue_ mit systemweitem `name` und gibt einen
 _Message-Queue-Descriptor_ zurück.
-- _`name`_ sollte immer mit `/` beginnen und sonst keine `/` enthalten
+- _`name`_ sollte immer mit "`/`" beginnen und sonst keine "`/`" enthalten
 - _`flags`:_
   `O_RDONLY` für read-only,
   `O_RDWR` für lesen und schreiben,
   `O_CREAT` erzeugt Queue, falls sie nicht existiert und
-  `O_NONBLOCK` definiert dass `send` und `receive` nicht blockieren
+  `O_NONBLOCK` definiert, dass `send` und `receive` nicht blockieren
 - _`mode`:_ Legt Zugriffsberechtigungen fest: `S_IRUSR` | `S_IWUSR`
 - _`struct mq_attr`:_ Beinhaltet Flags, maximale Anzahl Nachrichten in Queue,
   maximale Nachrichtengrösse und Anzahl der Nachrichten, die aktuell in der Queue sind.
-  Lesen/Schreiben mit `mq_getatrr`/`mq_setattr`.
+  Lesen/Schreiben mit `mq_getatrr()`/`mq_setattr()`.
 
 ==== ```c int mq_close (mqd_t queue);```
 _Schliesst die Queue_ mit dem Descriptor `queue` für diesen Prozess.
@@ -149,13 +149,13 @@ _Queue_ selber wird _entfernt_, sobald _alle Prozesse sie geschlossen_ haben.
 ==== ```c int mq_send (mqd_t queue, const char *msg, size_t length, unsigned int priority);```
 _Sendet die Nachricht_, die an Adresse `msg` beginnt und `length` Bytes lang ist, in die `queue`.
 _Blockiert_ erst, wenn die _Queue voll_ ist #hinweis[(ausser mit `O_NONBLOCK`, returnt
-dann -1)]. Gibt es auch als Variante mit _Timeout_: `mq_timedsend`.
+dann -1)]. Gibt es auch als Variante mit _Timeout_: `mq_timedsend()`.
 
 ==== ```c int mq_receive (mqd_t queue, const char *msg, size_t length, unsigned int *priority);```
 _Kopiert die nächste Nachricht_ aus der Queue in den Puffer, der an Adresse `msg` beginnt
-und `length` Bytes lang ist #hinweis[(sollte $>=$ max msg size der Queue sein)].
+und `length` Bytes lang ist #hinweis[(sollte $>=$ der maximalen Nachrichtengrösse der Queue sein)].
 _Blockiert_, wenn die Queue _leer_ ist.
-Gibt es auch als Variante mit _Timout_: `mq_timedreceive`.
+Gibt es auch als Variante mit _Timeout_: `mq_timedreceive()`.
 `priority` ist ein Out-Parameter für die Priorität der empfangenen Nachricht.
 Gibt _Grösse_ der empfangenen Nachricht zurück.
 
@@ -184,11 +184,11 @@ verwenden möchte, um die spezifischen Mappings zu speichern #hinweis[(Mapping T
 
 ==== ```c int shm_open (const char *name, int flags, mode_t mode);```
 _Öffnet ein Shared Memory_ mit system-weitem `name` und gibt FD zurück.
-- _`name`_ sollte immer mit `/` beginnen und sonst keine `/` enthalten
+- _`name`_ sollte immer mit "`/`" beginnen und sonst keine "`/`" enthalten
 - _`flags`:_
-  `O_RDONLY` für read-only,
-  `O_RDWR` für lesen und schreiben,
-  `O_CREAT` erzeugt Shared Memory, falls es nicht existiert
+  - `O_RDONLY` für read-only
+  - `O_RDWR` für lesen und schreiben
+  - `O_CREAT` erzeugt Shared Memory, falls es nicht existiert
 - _`mode`:_ Legt Zugriffsberechtigungen fest: `S_IRUSR` | `S_IWUSR`
 
 ```c
@@ -199,7 +199,7 @@ int fd = shm_open ("/mysharedmemory", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
 ==== ```c int ftruncate (int fd, offset_t length);```
 _Setzt Grösse der "Datei"_.
 Gibt 0 zurück wenn alles OK, sonst -1 und Fehlercode in `errno`.
-Muss _zwingend_ nach SM-Erstellung gesetzt werden, um entsprechend viele Frames zu allozieren.
+Muss _zwingend_ nach Shared Memory-Erstellung gesetzt werden, um entsprechend viele Frames zu allozieren.
 Wird für Shared Memory _mit ganzzahligen Vielfachen_ der Page-/Framegrösse verwendet.
 
 ==== ```c int close (int fd);```
@@ -220,7 +220,7 @@ laufenden Prozesses und gibt die (virtuelle) Addresse des ersten Bytes zurück.
 void * address = mmap(
   0,                      // void *hint_address (0 because nobody cares)
   size_of_shared_memory,  // size_t length (same as used in ftruncate)
-  PROT_READ | PROT_WRITE, // never use execute
+  PROT_READ | PROT_WRITE, // int protection (never use execute)
   MAP_SHARED,             // int flags
   fd,                     // int file_descriptor
   0                       // off_t offset (start map from first byte)

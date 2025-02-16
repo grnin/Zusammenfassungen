@@ -1,4 +1,3 @@
-// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
@@ -86,7 +85,7 @@ test_and_set (int * target) { int value = *target; *target = 1; return value; }
 int lock = 0;
 // T1: sets lock = 1 & reads 0, T2 sets lock = 1, but reads 1
 while (tas (&lock) == 1) { /* busy loop */ }
-// critical section
+/* critical section */
 lock = 0;
 ```
 
@@ -102,12 +101,12 @@ compare_and_swap (int *a, int expected, int new_a) {
 }
 
 while (cas (&lock, 0, 1) == 1) { /* busy loop */ }
-// critical section
+/* critical section */
 lock = 0;
 ```
-Kommen zwei Threads $T_1$ und $T_2$ genau gleichzeitig an die while-Schleife, garantiert
-die HW, dass _nur $bold(T_1)$ `test_and_set`_ bzw. _`compare_and_swap`_ ausführt.
-$T_1$ setzt `lock` auf 1, liest aber 0 und _verlässt_ die Schleife sofort.
+Kommen zwei Threads $T_1$ und $T_2$ genau gleichzeitig an die `while`-Schleife, garantiert
+die Hardware, dass _nur $bold(T_1)$ `test_and_set`_ bzw. _`compare_and_swap`_ ausführt.
+$T_1$ setzt `lock` auf 1, liest aber 0 und _verlässt_ die Schleife sofort.\
 $T_2$ sieht `lock` auf jeden Fall als 1 und _bleibt_ in der Schleife.
 
 #pagebreak()
@@ -131,6 +130,7 @@ semaphore used = 0;
 #columns(2)[
   ```c
   // Producer
+  int w = 0; // Index auf zuletzt geschr. Elem.
   while (1) {
     // Warte, falls Customer zu langsam
     WAIT (free); // Hat es Platz in Queue?
@@ -142,11 +142,12 @@ semaphore used = 0;
   #colbreak()
   ```c
   // Consumer
+  int r = 0; // Index auf zu lesendes Elem.
   while (1) {
     // Warte, falls Producer zu langsam
     WAIT (used); // Hat es Elemente in Queue?
     consume (&buffer[r]);
-    POST (free); // 1 Element weniger in Q
+    POST (free); // 1 Element weniger in Queue
     r = (r+1) % BUFFER_SIZE;
   }
   ```
@@ -218,12 +219,12 @@ Acquire und Release müssen immer paarweise durchgeführt werden.
 ==== ```c int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *attr);```
 _Initialisiert_ die opake Daten-Struktur _`pthread_mutex_t`_.
 Attribute sind _optional_, Verwendung analog zu `pthread`-Attributen mit
-`pthread_mutexattr_init, ..._destroy`.
+`pthread_mutexattr_init, ..._destroy`.\
 _Attribute:_
-`protocol`: z.B. `PTHREAD_PRIO_INHERIT`: Mutex verwendet Priority-Inheritance,
-`pshared`: Mutex kann von anderen Prozessen verwendet werden,
-`type`: Mutex kann beliebig oft vom selben Thread aquiriert werden,
-`prioceiling`: Minimale Priorität der Threads, die den Mutex halten.
+- `protocol`: z.B. `PTHREAD_PRIO_INHERIT`: Mutex verwendet Priority-Inheritance,
+- `pshared`: Mutex kann von anderen Prozessen verwendet werden,
+- `type`: Mutex kann beliebig oft vom selben Thread aquiriert werden,
+- `prioceiling`: Minimale Priorität der Threads, die den Mutex halten.
 
 ```c
 int pthread_mutex_lock (pthread_mutex_t *mutex);    // acquire (blocking)
@@ -241,7 +242,7 @@ int pthread_mutex_destroy (pthread_mutex_t *mutex)  // cleanup
     pthread_mutex_t mutex; // global variable
     int main() {
       // 0 = default Attribute
-      pthread_mutex_init (&mutex, 0); 
+      pthread_mutex_init (&mutex, 0);
       // run threads and wait for them to finish
       pthread_mutex_destroy (&mutex);
     }
@@ -254,10 +255,10 @@ int pthread_mutex_destroy (pthread_mutex_t *mutex)  // cleanup
       while (running) {
         ...
         // Enter critical section
-        pthread_mutex_lock (&mutex); 
+        pthread_mutex_lock (&mutex);
         // Perform atomic action, e.g. ++counter
         // Leave critical section
-        pthread_mutex_unlock (&mutex); 
+        pthread_mutex_unlock (&mutex);
         ...
       }
     }

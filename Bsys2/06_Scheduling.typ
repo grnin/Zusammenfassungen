@@ -1,4 +1,3 @@
-// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
@@ -84,7 +83,7 @@ interaktiven Aktivitäten_. #hinweis[(I/O-Thread, UI-Thread etc.)]
 )[
   === Bursts
   - _Prozessor-Burst:_ Intervall, in dem ein Thread den Prozessor in einem parallelen
-    System _voll belegt_, also vom Einrit in _running_ bis zum nächsten _waiting_.
+    System _voll belegt_, also vom Eintritt in _running_ bis zum nächsten _waiting_.
   - _I/O-Burst:_ Intervall, in dem ein Thread den Prozessor _nicht_ benötigt,
     also vom Eintritt in _waiting_ bis zum nächsten _running_.
 ]
@@ -219,7 +218,7 @@ Gibt $n_p$ zurück oder $-1$, wenn Fehler. Da $-1$ aber auch ein gültiger Nice-
 muss man den Fehler wie folgt abfragen:
 ```c
 errno = 0; // reset errno
-if (nice(i) == -1 && errno != 0) { /* Errror */ } else { /* -1 is nice value */ }
+if (nice(i) == -1 && errno != 0) { /* Error */ } else { /* -1 is nice value */ }
 ```
 
 ==== Nice-Wert im Prozess abfragen oder setzen: ```c int getpriority``` / ```c int setpriority```
@@ -245,12 +244,12 @@ werden. Enthält ein Member `sched_priority`, das die _Priorität_ bestimmt.
 ==== Priorität bei Thread-Erzeugung setzen
 ```c
 pthread_attr_t a;
-pthread_attr_init (&a);
+pthread_attr_init (&a); // initialize attributes
 
 struct sched_param p;
 pthread_attr_getschedparam ( &a, &p ); // read parameter
-// set p.sched_priority
-pthread_attr_setschedparam ( &a, &p );
+// set p.sched_priority here... (code cut for brevity)
+pthread_attr_setschedparam ( &a, &p ); // write modified parameters
 pthread_create ( &id, &a, thread_function, argument );
 pthread_attr_destroy ( &a ); // destroy attributes
 ```

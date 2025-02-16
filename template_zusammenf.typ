@@ -148,6 +148,9 @@
     )
   }
 
+  // Table of contents
+  set outline(indent: 0em)
+
   // Table of contents, header level 1
   show outline.entry.where(level: 1): entry => {
     v(1.1em, weak: true)

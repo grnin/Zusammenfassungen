@@ -1,4 +1,3 @@
-// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
@@ -169,12 +168,12 @@ Ein Symbol hat _16 Byte_.
 #wrap-content(
   image("img/bsys_18.png"),
   align: top + right,
-  columns: (70%, 30%),
+  columns: (69%, 31%),
 )[
   === Statische Bibliotheken
   Statische Bibliotheken sind _Archive von Objekt-Dateien_. Archive sind Dateien, die
   andere Dateien enthalten #hinweis[(wie ein ZIP ohne Kompression)], werden mit dem Tool
-  `ar` erzeugt. Per Konvention folgen Bibliotheksnamen dem Muster `lib<name>.a`.\
+  "`ar`" erzeugt. Per Konvention folgen Bibliotheksnamen dem Muster `lib<name>.a`.\
   Referenziert wird dann nur `<name>: clang -lmylib ...`.
 
   Der Linker behandelt statische Bibliotheken wie _mehrere Objekt-Dateien_.
@@ -218,7 +217,7 @@ gibt ein _Handle_ darauf zurück.
 `mode` gibt Art an, wie mit der Bibliothek umgegangen wird:
 - _`RTLD_NOW`:_ Alle Symbole werden beim Laden der Bibliothek gebunden
 - _`RTLD_LAZY`:_ Symbole werden bei Bedarf gebunden
-- _`RTLD_GLOBAL`:_ Symbole können beim Binden anderer Objekt-Dateien verwendet werden 
+- _`RTLD_GLOBAL`:_ Symbole können beim Binden anderer Objekt-Dateien verwendet werden\
   #hinweis[(damit andere Libs diese benutzen können)]
 - _`RTLD_LOCAL`:_ Symbole werden nicht für andere Objekt-Dateien verwendet
 
@@ -241,7 +240,7 @@ exportiert werden.
 
 ```c int dlclose (void * handle)```
 schliesst das durch `handle` bezeichnete, zuvor von `dlopen` geöffnete Objekt.
-Gibt 0 zurück, wenn erfolgreich. Aufgepasst vor offenen Pointer auf Library-Symbole!
+Gibt 0 zurück, wenn erfolgreich. _Aufgepasst vor offenen Pointer auf Library-Symbole!_
 
 ```c char * dlerror()```
 gibt die Fehlermeldung als null-terminierten String zurück, wenn ein Fehler aufgetreten war.
@@ -282,23 +281,23 @@ Falls zusätzlich zu den Befehlen oben `-fPIC` für Position-Independent Code ve
 wird, kann ein spezielles Image erzeugt werden mit
 ```sh clang -shared -Wl, -soname, libmylib.so.2 -o libmylib.so.2.1 f1.o f2.o -lc```,
 wobei _`-shared`_ = Erzeugen eines Shared Objects,
-_`-Wl,`_ = Weitergeben der folgenden Option an den Linker,
+_`-Wl,`_ = Weitergeben der folgenden Option an den Linker,\
 _`-soname`_ = spezifizieren des SO-Namens `libmylib.so.2`,
 _`-lc`_ = Einbinden der Standard C-Bibliothek (`libc.so`).
 
 === Verwenden von Bibliotheken
 - _Statische Bibliothek #hinweis[(Link-time Library)]:_
   ```sh clang main.c -o main -L. -lmylib```\
-  #hinweis[`-L.` fügt "." zum Suchpfad hinzu, `-lmylib` bezieht sich auf die Bibliothek
-    `mylib`, nach Konvention also auf Datei `libmylib.a`]
+  #hinweis[(`-L.` fügt "." zum Suchpfad hinzu, `-lmylib` bezieht sich auf die Bibliothek
+    `mylib`, nach Konvention also auf Datei `libmylib.a`)]
 - _Dynamische Bibliothek, die mit Programm geladen werden soll #hinweis[(Load-time Library)]:_\
   ```sh clang main.c -o main -lmylib```\
-  #hinweis[`-lmylib` bezieht sich auf `libmylib.so`, ohne `-L.` muss `libmylib.so` im OS
-   installiert sein]
+  #hinweis[(`-lmylib` bezieht sich auf `libmylib.so`, ohne `-L.` muss `libmylib.so` im OS
+    installiert sein)]
 - _Dynamische Bibliothek, die mit `dlopen` geladen werden soll #hinweis[(Run-time Library)]:_\
   ```sh clang main.c -o main -ldl```\
-  #hinweis[`-ldl` linkt auf (dynamische) Bibliothek `libdl.so`, die `dlopen` etc zur
-    Verfügung stellt]
+  #hinweis[(`-ldl` linkt auf (dynamische) Bibliothek `libdl.so`, die `dlopen` etc zur
+    Verfügung stellt)]
 
 *Shared Objects:*
 Referenzierte Shared Objects sind im _Executable_ abgelegt. _`readelf -d`_ zeigt den
@@ -314,12 +313,12 @@ Nahezu alle Executeables benötigen _zwei Shared Objects_:
 
 === Implementierung von dynamischen Bibliotheken
 Dynamische Bibliotheken müssen _verschiebbar_ sein und mehrere Bibliotheken müssen in den
-_gleichen Prozess_ geladen werden können. Die Aufgabe des Linkers wird in den Loader bzw.
-Dynamic Linker verschoben #hinweis[(Load Time Relocation)].
+_gleichen Prozess_ geladen werden können. Die Aufgabe des Linkers wird in den
+Loader / Dynamic Linker verschoben #hinweis[(Load Time Relocation)].
 #wrap-content(
   image("img/bsys_21.png"),
   align: top + right,
-  columns: (65%, 35%),
+  columns: (60%, 40%),
 )[
   Dynamische Bibliotheken sollen _Code zwischen Programmen teilen_.
   Code soll _nicht mehrfach_ im Speicher abgelegt werden, auch wenn mehrere Programme die

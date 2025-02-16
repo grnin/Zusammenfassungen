@@ -1,4 +1,5 @@
-// Compiled with Typst 0.12
+
+// Compiled with Typst 0.13.1
 #import "../template_zusammenf.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
@@ -22,16 +23,16 @@ int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoper.
 
 #table(
   columns: (auto,) * 5 + (2.75em,) * 4 + (1fr,) * 4,
-  [$4096$],[$2048$],[$1024$],[$512$],[$256$],[$128$],[$64$],[$32$],[$16$],[$8$],[$4$],[$2$],[$1$],
-  [$2^12$],[$2^11$],[$2^10$],[$2^9$],[$2^8$],[$2^7$],[$2^6$],[$2^5$],[$2^4$],[$2^3$],[$2^2$],[$2^1$],[$2^0$],
-  [#hex("1000")],[#hex("800")],[#hex("400")],[#hex("200")],[#hex("100")],[#hex("80")],[#hex("40")],[#hex("20")],[#hex("10")],[#hex("8")],[#hex("4")],[#hex("2")],[#hex("1")],
+  [*$4096$*], [*$2048$*], [*$1024$*], [*$512$*], [*$256$*], [*$128$*], [*$64$*], [*$32$*], [*$16$*], [*$8$*], [*$4$*], [*$2$*], [*$1$*],
+  [$2^12$], [$2^11$], [$2^10$], [$2^9$], [$2^8$], [$2^7$], [$2^6$], [$2^5$], [$2^4$], [$2^3$], [$2^2$], [$2^1$], [$2^0$],
+  [#hex("1000")], [#hex("800")], [#hex("400")], [#hex("200")], [#hex("100")], [#hex("80")], [#hex("40")], [#hex("20")], [#hex("10")], [#hex("8")], [#hex("4")], [#hex("2")], [#hex("1")],
 )
 
 #table(
   columns: (1fr,) * 6,
-  [$1'048'576$],[$65'536$],[$4'096$],[$256$],[$16$],[$1$],
-  [$16^5$],[$16^4$],[$16^3$],[$16^2$],[$16^1$],[$16^0$],
-  [#hex("10 0000")],[#hex("01 0000")],[#hex("00 1000")],[#hex("00 0100")],[#hex("00 0010")],[#hex("00 0001")],
+  [*$1'048'576$*], [*$65'536$*], [*$4'096$*], [*$256$*], [*$16$*], [*$1$*],
+  [$16^5$], [$16^4$], [$16^3$], [$16^2$], [$16^1$], [$16^0$],
+  [#hex("10 0000")], [#hex("01 0000")], [#hex("00 1000")], [#hex("00 0100")], [#hex("00 0010")], [#hex("00 0001")],
 )
 
 #{
@@ -39,9 +40,9 @@ int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoper.
   table(
     columns: (1fr,) * 16,
     align: (_, y) => if (y == 2) { center } else { left },
-    [$0$],[$1$],[$2$],[$3$],[$4$],[$5$],[$6$],[$7$],[$8$],[$9$],[$A$],[$B$],[$C$],[$D$],[$E$],[$F$],
-    [$0$],[$1$],[$2$],[$3$],[$4$],[$5$],[$6$],[$7$],[$8$],[$9$],[$10$],[$11$],[$12$],[$13$],[$14$],[$15$],
-    [`0000`],[`0001`],[`0010`],[`0011`],[`0100`],[`0101`],[`0110`],[`0111`],[`1000`],[`1001`],[`1010`],[`1011`],[`1100`],[`1101`],[`1110`],[`1111`],
+    [*$0$*], [*$1$*], [*$2$*], [*$3$*], [*$4$*], [*$5$*], [*$6$*], [*$7$*], [*$8$*], [*$9$*], [*$A$*], [*$B$*], [*$C$*], [*$D$*], [*$E$*], [*$F$*],
+    [$0$], [$1$], [$2$], [$3$], [$4$], [$5$], [$6$], [$7$], [$8$], [$9$], [$10$], [$11$], [$12$], [$13$], [$14$], [$15$],
+    [`0000`], [`0001`], [`0010`], [`0011`], [`0100`], [`0101`], [`0110`], [`0111`], [`1000`], [`1001`], [`1010`], [`1011`], [`1100`], [`1101`], [`1110`], [`1111`],
   )
 }
 
@@ -92,32 +93,36 @@ jedem Aufruf gleich sind.
 - *Setzen einer Umgebungsvariable:* ```c int ret = setenv("HOME", "/usr/home", 1);```
 - *Entfernen einer Umgebungsvariable:* ```c int ret = unsetenv("HOME");```
 - *Hinzufügen einer Umgebungsvariable :* ```c int ret = putenv("HOME=/usr/home");```\
-  #hinweis[gefährlich wegen Pointer auf NULL]
+  #hinweis[(gefährlich wegen Pointer auf `NULL`)]
 
 _Grössere Konfigurationsinformationen_ sollten über _Dateien_ übermittelt werden.
 
 = Dateisystem API
 Applikationen dürfen nie annehmen, dass Daten gültig sind.\
 *Arbeitsverzeichnis:*
-Bezugspunkt für relative Pfade, jeder Prozess hat eines
+Bezugspunkt für relative Pfade, jeder Prozess hat eines\
 #hinweis[(`getcwd()`, `chdir()`: nimmt String, `fchdir()`: nimmt File Deskriptor)].\
 *Pfade:*
 Absolut #hinweis[(beginnt mit /)],
 Relativ #hinweis[(beginnt nicht mit /)],
-Kanonisch #hinweis[(Absolut, ohne "." und "..". `realpath()`)]\
+Kanonisch #hinweis[(Absolut, ohne "`.`" und "`..`", `realpath()`)]\
 - _`NAME_MAX`:_ Maximale Länge eines Dateinamens (exklusive terminierender Null)
 - _`PATH_MAX`:_ Maximale Länge eines Pfads (inklusive terminierender Null)
-  #hinweis[(beinhaltet Wert von `NAME_MAX`)]
+  #hinweis[(beinhalt. Wert von `NAME_MAX`)]
 - _`_POSIX_NAME_MAX`:_ Minimaler Wert von `NAME_MAX` nach POSIX #hinweis[(14)]
 - _`_POSIX_PATH_MAX`:_ Minimaler Wert von `PATH_MAX` nach POSIX #hinweis[(256)]
 
-```c int main (int argc, char ** argv) { char *wd = malloc(PATH_MAX); getcwd(wd, PATH_MAX); printf("Current WD is %s", wd); free(wd); return 0; } // Gibt Arbeitsverzeichnis aus```
+```c
+// Gibt Arbeitsverzeichnis aus
+int main (int argc, char ** argv) { char *wd = malloc(PATH_MAX);
+getcwd(wd, PATH_MAX); printf("Current WD is %s", wd); free(wd); return 0; }
+```
 
 *Zugriffsrechte:*
 Je 3 Permission-Bits für Owner, Gruppe und andere Benutzer.
-Bits sind: _`r`_ead, _`w`_rite, e_`x`_ecute. `r=4, w=2, x=1`.
+Bits sind: _`r`_ead, _`w`_rite, e_`x`_ecute: `r=4, w=2, x=1`
 _Beispiel:_ `0740` oder `rwx r-- ---`
-#hinweis[Owner hat alle Rechte, Gruppe kann lesen, andere haben keine Rechte.]
+#hinweis[(Owner hat alle Rechte, Gruppe kann lesen, andere haben keine Rechte)].
 *POSIX:*
 _`S_IRWXU`_ `= 0700`, _`S_IWUSR`_ `= 0200`, _`S_IRGRP`_ `= 0040`, _`S_IXOTH`_ `= 0001`.
 Werden mit | verknüpft.
@@ -144,18 +149,18 @@ auf den Errorstream.
 Files werden in der POSIX-API über FD's repräsentiert. Gilt nur _innerhalb eines Prozesses_.
 Returnt _Index in Tabelle_ aller geöffneter Dateien im Prozess #sym.arrow
 Enthält _Index in systemweite Tabelle_ #sym.arrow Enthält Daten zur Identifikation der Datei.
-_`STDIN_FILENO = 0`:_ standard input,
+_`STDIN_FILENO = 0`:_ standard input,\
 _`STDOUT_FILENO = 1`:_ standard output,
 _`STDERR_FILENO = 2`:_ standard error
 
 *```c int open (char *path, int flags, ...)```:*
-_öffnet_ eine Datei. Erzeugt FD auf Datei an `path`.
-`flags` gibt an, *wie* die Datei geöffnet werden soll.
-_`O_RDONLY`:_ nur lesen,
-_`O_RDWR`:_ lesen und schreiben,
-_`O_CREAT`:_ Erzeuge Datei, wenn sie nicht existiert,
-_`O_APPEND`:_ Setze Offset ans Ende der Datei vor jedem Schreibzugriff,
-_`O_TRUNC`:_ Setze Länge der Datei auf 0
+_öffnet_ eine Datei. Erzeugt FD auf Datei an `path`.\
+`flags` gibt an, *wie* die Datei geöffnet werden soll:\
+- _`O_RDONLY`:_ nur lesen,
+- _`O_RDWR`:_ lesen und schreiben,
+- _`O_CREAT`:_ Erzeuge Datei, wenn sie nicht existiert,
+- _`O_APPEND`:_ Setze Offset ans Ende der Datei vor jedem Schreibzugriff,
+- _`O_TRUNC`:_ Setze Länge der Datei auf 0
 
 *```c int close (int fd)```:*
 _schliesst_ Datei bzw. _dealloziert_ den FD. Kann dann wieder für andere Dateien verwendet
@@ -184,8 +189,8 @@ char dpath[PATH_MAX]; // destination path
 int src = open(spath, O_RDONLY);
 int dst = open(dpath, O_WRONLY | O_CREAT, S_IRWXU);
 ssize_t read_bytes = read(src, buf, N);
-write(dst, buf, read_bytes); //if file gets closed early, use return value of "read_bytes"
-close(src);
+write(dst, buf, read_bytes); // if file closed early, use return value
+close(src);                  // of "read_bytes"
 close(dst);
 ```
 
@@ -215,7 +220,7 @@ werden, sondern nur über von C-API erzeugte Pointer.
 *```c FILE * fopen(char const *path, char const *mode)```:*
 _Öffnen eine Datei._ Erzeugt `FILE`-Objekt für Datei an `path`. Flags für `mode`:
 _`"r"`_ #hinweis[(Datei lesen)],
-_`"w"`_ #hinweis[(in neue oder bestehende geleerte Datei schreiben)],
+_`"w"`_ #hinweis[(in neue oder bestehende geleerte Datei schreiben)],\
 _`"a"`:_ #hinweis[(in neue oder bestehende Datei anfügen)],
 _`"r+`:_ #hinweis[(Datei lesen & schreiben)],
 _`"w+"`_ #hinweis[(neue oder geleerte bestehende Datei lesen & überschreiben)],
@@ -259,18 +264,18 @@ alle Daten, die das OS benötigt, um die Ausführung des Prozesses ins Gesamtsys
 integrieren, u.a.: Diverse IDs, Speicher für Zustand, Scheduling-Informationen, Daten zur
 Synchronisation, Security-Informationen etc.\
 *Interrupts:*
-_Kontext_ des aktuellen Prozesses muss im dazugehörigen PCB gespeichert werden #hinweis[(context save)]:
+_Kontext_ des aktuellen Prozesses muss im dazugehörigen PCB gespeichert werden\ #hinweis[(context save)]:
 Register, Flags, Instruction Pointer, MMU-Konfiguration. _Interrupt-Handler_ überschreibt
 den Kontext. Anschliessend wird Kontext aus PCB wiederhergestellt #hinweis[(context restore)].\
 *Prozess-Erstellung:*
-Das OS erzeugt den Prozess und lädt das Programm in den Prozess.
+Das OS erzeugt den Prozess und lädt das Programm in den Prozess.\
 Unter POSIX getrennt, unter Windows eine einzige Funktion.\
 *Prozess-Hierarchie:*
 Baumstruktur, startet bei Prozess 1.
 
 == Prozess-API
 *```c pid_t fork(void)```*
-erzeugt _exakte Kopie_ ($C$) als Kind des Prozesses ($P$), mit eigener Prozess-ID (>0).
+erzeugt _exakte Kopie_ ($C$) als Kind des Prozesses ($P$), mit eigener Prozess-ID ($>0$).
 Die Funktion führt in _beiden_ Prozessen den Code an derselben Stelle fort.\
 *```c void exit(int code)```:* Beendet das Programm und gibt `code` zurück.\
 *```c pid_t wait(int *status)```:* unterbricht Prozess, bis Child beendet wurde.\
@@ -284,7 +289,7 @@ void spawn_worker (...) {
 }
 for (int i = 0; i < n; ++i) { spawn_worker(...); }
 // ... do something in parent process
-do { pid = wait(0); } while (pid > 0 || errno != ECHILD); // wait for all children
+do { pid = wait(0); } while (pid > 0 || errno != ECHILD); //wait for all children
 ```
 
 *`exec()`-Funktionen:*
@@ -336,7 +341,7 @@ _Loader_ lädt Executables und eventuelle dynamische Bibliotheken dieser in den 
 == ELF (Executable and Linking Format)
 _Binär-Format_, das Kompilate spezifiziert. Besteht aus #tcolor("grün", "Linking View")
 #hinweis[(wichtig für Linker, für Object-Files und Shared Objects)] und
-#tcolor("orange", "Execution View") #hinweis[(wichtig für Loader, für Programme und Shared Objects)].
+#tcolor("orange", "Execution View") #hinweis[(wichtig für Loader, für Programme und Shared Objects)].\
 *Struktur:*
 Besteht aus _Header_,
 #tcolor("orange", "Programm Header Table") #hinweis[(execution view)],
@@ -382,12 +387,12 @@ Schnellere Ladezeiten durch Lazy Loading, Flexibler Funktionsumfang.
 
 == POSIX Shared Objects API
 *```c void * dlopen (char * filename, int mode)```:*
-_öffnet_ eine dynamische Bibliothek und gibt ein Handle darauf zurück. `mode`:
-_`RTLD_NOW`:_ #hinweis[(Alle Symbole werden beim Laden gebunden)]
-_`RTLD_LAZY`:_ #hinweis[(Symbole werden bei Bedarf gebunden)],
-_`RTLD_GLOBAL`:_ #hinweis[(Symbole können beim Binden anderer Objekt-Dateien verwendet
-werden)],
-_`RTLD_LOCAL`:_ #hinweis[(Symbole werden nicht für andere OD verwendet)]\
+_öffnet_ eine dynamische Bibliothek und gibt ein Handle darauf zurück.
+`mode` ist einer der folgenden Werte:
+- _`RTLD_NOW`:_ Alle Symbole werden beim Laden gebunden
+- _`RTLD_LAZY`:_ Symbole werden bei Bedarf gebunden
+- _`RTLD_GLOBAL`:_ Symbole können beim Binden anderer Objektdateien verwendet werden
+- _`RTLD_LOCAL`:_ Symbole werden nicht für andere Objektdateien verwendet\
 *```c void * dlsym (void * handle, char * name)```:*
 gibt die _Adresse des Symbols_ `name` aus der mit `handle` bezeichneten _Bibliothek_ zurück.
 Keine Typinformationen #hinweis[(Variabel? Funktion?)]
@@ -396,7 +401,7 @@ Keine Typinformationen #hinweis[(Variabel? Funktion?)]
 // type "func_t" is a address of a function with a int param and int return type
 typedef int (*func_t)(int);
 handle = dlopen("libmylib.so", RTLD_NOW); // open library
-func_t f = dlsym(handle, "my_function"); // write "my_function" addr into a func_t
+func_t f = dlsym(handle, "my_function"); // write my_function addr. into a func_t
 int *i = dlsym(handle, "my_int"); // get address of "my_int"
 (*f)(*i); // call "my_function" with "my_int" as parameter
 ```
@@ -409,9 +414,9 @@ gibt Fehlermeldung als null-terminierten String zurück.
 *Konventionen:*
 Shared Objects können _automatisch_ bei Bedarf geladen werden.
 Der Linker verwendet den Linker-Namen, der Loader verwendet den SO-Namen.
-_Linker-Name:_ `lib + Bibliotheksname + .so` #hinweis[(z.B. libmylib.so)],
-_SO-Name:_ `Linker-Name + . + Versionsnummer` #hinweis[(z.B. libmylib.so.2)],
-_Real-Name:_ `SO-name + . + Unterversionsnummer` #hinweis[(z.B. libmylib.so.2.1)]\
+- _Linker-Name:_ `lib + Bibliotheksname + .so` #hinweis[(z.B. libmylib.so)],
+- _SO-Name:_ `Linker-Name + . + Versionsnummer` #hinweis[(z.B. libmylib.so.2)],
+- _Real-Name:_ `SO-name + . + Unterversionsnummer` #hinweis[(z.B. libmylib.so.2.1)]\
 *Shared Objects:*
 Nahezu alle Executeables benötigen _zwei Shared Objects_:
 _`libc.so`:_ Standard C library,
@@ -453,38 +458,38 @@ Informationen werden in einem _Thread-Control-Block_ abgelegt.
 == Amdahls Regel
 Nur bestimmte Teile eines Algorithmus können parallelisiert werden.
 / $T$: Ausführungszeit, wenn _komplett seriell_ durchgeführt
-  #hinweis[Im Bild: $T = T_0 + T_1 + T_2 + T_3 + T_4 $]
+  #hinweis[(Im Bild: $T = T_0 + T_1 + T_2 + T_3 + T_4 $)]
 / $n$: Anzahl der Prozessoren
 / $T'$: Ausführungszeit, wenn _maximal parallelisiert_
   #hinweis[gesuchte Grösse]
 / $T_s$: Ausführungszeit für den Anteil, der _seriell_ ausgeführt werden _muss_
-  #hinweis[Im Bild: $T_s = T_0 + T_2 + T_4$]
+  #hinweis[(Im Bild: $T_s = T_0 + T_2 + T_4$)]
 / $T - T_s$: Ausführungszeit für den Anteil, der _parallel_ ausgeführt werden _kann_
-  #hinweis[Im Bild: $T_1 + T_3$]
+  #hinweis[(Im Bild: $T_1 + T_3$)]
 
 #wrap-content(
   image("img/bsys_25.png"),
   align: top + right,
   columns: (54%, 46%),
 )[
-  / $(T - T_s) / n$: Parallel-Anteil verteilt auf alle $n$ Prozessoren, Im Bild: $(T_1 + T_3) / n$
+  / $(T - T_s) \/ n$: Parallel-Anteil verteilt auf alle $n$ Prozessoren. #hinweis[(Im Bild: $(T_1 + T_3) \/ n$)]
 
   / $T_s + (T - T_s) / n$: Serieller Teil + Paralleler Teil #hinweis[$= T^'$]
 
   Die _serielle Variante_ benötigt also höchstens _$f$ mal mehr Zeit_ als die _parallele Variante_:
 ]
 
-#block($ f <= T / T^' = T / (T_s + (T - T_s) / n) $)
+$ f <= T / T^' = T / (T_s + (T - T_s) / n) $
 $f$ heisst auch _Speedup-Faktor_, weil die parallele Variante max. $f$-mal schneller ist als
 die serielle.
 
-Definiert man $s = T_s/T$, also den seriellen Anteil am Algorithmus, dann ist
+Definiert man $s = T_s\/T$, also den seriellen Anteil am Algorithmus, dann ist
 $s dot T = T_s$. Dadurch erhält man $f$ unabhängig von der Zeit:
 
-#block($
+$
   f <= T / (T_s + (T - T_s) / n) = T / (s dot T + (T - s dot T) / n)
-  = T / (s dot T + (1 - s) / n dot T) => f <= 1 / (s + (1 - s) / n)
-$)
+  = T / (s dot T + (1 - s) / n dot T) quad => quad f <= 1 / (s + (1 - s) / n)
+$
 
 #wrap-content(
   image("img/bsys_26.png"),
@@ -493,7 +498,7 @@ $)
 )[
   === Bedeutung
   - Abschätzung einer _oberen Schranke_ für den maximalen Geschwindigkeitsgewinn
-  - Nur wenn _alles_ parallelisierbar ist, ist der Speedup _proportional_ und _maximal_
+  - Nur wenn _alles_ parallelisierbar ist, ist der Speedup\ _proportional_ und _maximal_
     #hinweis[$f(0,n) = n$]
   - Sonst ist der Speedup mit _höherer Prozessor-Anzahl_ immer _geringer_
     #hinweis[(Kurve flacht ab)]
@@ -510,7 +515,8 @@ $)
 )
 
 == POSIX THREAD API
-*```c int pthread_create(
+*```c
+int pthread_create(
     pthread_t * thread_id, pthread_attr_t const *attributes,
     void * (*start_function) (void *), void *argument)
 ```*
@@ -525,8 +531,8 @@ Argumente für `start_function`.
   gutter: 11pt,
   [
     ```c
-    //Erstellung
-    struct T {
+    // Erstellung
+    struct T { // params of function
       int value;
     };
     void * my_start (void * arg) {
@@ -539,10 +545,10 @@ Argumente für `start_function`.
   ],
   [
     ```c
-    //Verwendung
+    // Verwendung
     void start_my_thread (void) {
       struct T * t = malloc (sizeof (struct T));
-      t->value = 109;
+      t->value = 109; // set argument
       pthread_t tid;
       pthread_create (
         &tid,
@@ -554,6 +560,7 @@ Argumente für `start_function`.
 )
 
 *Thread-Attribute:*
+#v(-0.5em)
 ```c
 pthread_attr_t attr; // Variabel erstellen
 pthread_attr_init (&attr); // Variabel initialisieren
@@ -595,12 +602,12 @@ _Auslesen / Schreiben_ des Werts anhand des Keys.
 *```c int pthread_key_create(pthread_key_t *key, void (*destructor) (void*))```:*
 Erzeugt einen _neuen Key_ im Out-Parameter `key`. _Opake Datenstruktur_.
 Am Thread-Ende Call auf `destructor`.\
-*```c int pthread_key_delete (pthread_key_t key)```:*
+*```c int pthread_key_delete(pthread_key_t key)```:*
 _Entfernt den Key_ und die entsprechenden Values aus allen Threads. Der Key darf nach diesem
 Aufruf _nicht mehr verwendet_ werden. Sollte erst aufgerufen werden, wenn alle dazugehörende
 Threads beendet sind.\
 *```c int pthread_setspecific(pthread_key_t key, const void * value)```\
-```c void * pthread_getspecific( pthread_key_t key )```*
+```c void * pthread_getspecific(pthread_key_t key)```*
 _schreibt_ bzw. _liest_ den Wert, der mit dem Key in diesem Thread assoziiert ist.
 Oft als _Pointer auf einen Speicherbereich_ verwendet.
 
@@ -619,7 +626,7 @@ Oft als _Pointer auf einen Speicherbereich_ verwendet.
       pthread_setspecific(
        error, malloc(sizeof(error_t)))}
     ```
-  ],[
+  ], [
     ```c
     // Lesen und Schreiben im Thread
     void print_error (void) {
@@ -632,7 +639,8 @@ Oft als _Pointer auf einen Speicherbereich_ verwendet.
       e->message = "file not found";
       return -1;}
     ```
-  ])
+  ]
+)
 
 ```c
 // Main und Thread
@@ -656,10 +664,10 @@ int main (int argc, char **argv) {
 )[
   Auf einem Prozessor läuft zu einem Zeitpunkt immer _höchstens ein Thread_.
   Es gibt folgende Zustände:
-  _Running_ #hinweis[(der Thread, der gerade läuft)],
-  _Ready_ #hinweis[(Threads die laufen können, es aber gerade nicht tun)],
-  _Waiting:_ #hinweis[(Threads, die auf ein Ereignis warten, können nicht direkt in den
-  Running State wechseln)].
+  - _Running_ #hinweis[(der Thread, der gerade läuft)]
+  - _Ready_ #hinweis[(Threads die laufen können, es aber gerade nicht tun)]
+  - _Waiting:_ #hinweis[(Threads, die auf ein Ereignis warten, können nicht direkt in den
+    Running State wechseln)]
   _Übergänge_ von einem Status zum anderen werden _immer vom OS_ vorgenommen.
   Dieser Teil vom OS heisst _Scheduler_.
 ]
@@ -668,9 +676,9 @@ int main (int argc, char **argv) {
   align: top + right,
   columns: (40%, 60%),
 )[
-  Das OS _registriert Threads_ auf ein Ereignis und setzt sie in den Zustant "waiting".
-  Tritt das Ereignis auf, ändert das OS den Zustand auf _ready_.
-  #hinweis[(Es laufen nur Threads auf dem Prozessor, die _nicht warten_.)] \
+  Das OS _registriert Threads_ auf ein Ereignis und setzt sie in den Zustand "waiting".
+  Tritt das Ereignis auf, ändert das OS den Zustand auf _ready_.\
+  #hinweis[(Es laufen nur Threads auf dem Prozessor, die _nicht warten_.)]\
   *Ready-Queue:*
   In der Ready-Queue #hinweis[(kann auch ein Tree sein)] befinden sich alle Threads, die
   _bereit sind zu laufen_.\
@@ -722,7 +730,7 @@ entfernt wurde. Um die Antwortzeit zu verringern, muss jeder Thread öfters ausg
 werden, was jedoch zu mehr Thread-Wechsel und somit zu mehr Overhead führt.
 _Die Utilization nimmt also ab, wenn die Antwortzeit verringert wird._
 
-*Idealfall: Parallele Ausführung* #hinweis[(Dient als _idealisierte Schranke_)]
+*Idealfall: Parallele Ausführung* #hinweis[(Dient als _idealisierte Schranke_, besser geht nicht)]
 #image("img/bsys_30.png", width: 80%)
 
 *FCFS-Strategie* #hinweis[(First Come, First Served)]\
@@ -771,22 +779,20 @@ Nice-Wert im Prozess erhöhen oder verringern. #hinweis[(Addiert `i` zum Wert da
 *```c int getpriority (int which, id_t who)```:*
 gibt den Nice-Wert von $p$ zurück\
 *```c int setpriority (int which, id_t who, int prio)```:*
-setzt den Nice-Wert.\
-#hinweis[(_`which`:_ `PRIO_PROCESS`, `PRIO_PGRP` oder `PRIO_USER`,
-  _`who`:_ ID des Prozesses, der Gruppe oder des Users)]
+setzt den Nice-Wert.
+- _`which`:_ `PRIO_PROCESS`, `PRIO_PGRP` oder `PRIO_USER`
+- _`who`:_ ID des Prozesses, der Gruppe oder des Users)
 
 ==== Priorität bei Thread-Erzeugung setzen
 Funktionen ohne `attr` bevor Thread gestartet wird:\
-```c int pthread_getschedparam(pthread_t thread, int * policy, struct sched_param * param)```
-bzw. ```c int pthread_setschedparam(pthread_t thread, int policy, const struct sched_param * param)```
+- ```c int pthread_getschedparam(pthread_t thread, int * policy, struct sched_param * param)```
+- ```c int pthread_setschedparam(pthread_t thread, int policy, const struct sched_param * param)```
 ```c
-pthread_attr_t a;
-pthread_attr_init (&a);
-
+pthread_attr_t a; pthread_attr_init (&a); // initialize attributes
 struct sched_param p;
 pthread_attr_getschedparam ( &a, &p ); // read parameter
-// set p.sched_priority
-pthread_attr_setschedparam ( &a, &p );
+// set p.sched_priority here... (code cut for brevity)
+pthread_attr_setschedparam ( &a, &p ); // write modified parameters
 pthread_create ( &id, &a, thread_function, argument );
 pthread_attr_destroy ( &a ); // destroy attributes
 ```
@@ -799,13 +805,13 @@ Code-Bereich, in dem Daten mit anderen Threads _geteilt_ werden. Muss unbedingt
 synchronisiert werden.\
 *Atomare Instruktionen:*
 Eine atomare Instruktion kann vom Prozessor _unterbrechungsfrei_ ausgeführt werden.
-#hinweis[*Achtung:* Selbst einzelne Assembly-Instruktionen nicht immer atomar]\
+#hinweis[*Achtung:* Selbst einzelne Assembly-Instruktionen nicht immer atomar!]\
 *Anforderungen an Synchronisations-Mechanismen:*
 _Gegenseitiger Ausschluss_ #hinweis[(Nur ein Thread darf in Critical Section sein)],
 _Fortschritt_ #hinweis[(Entscheidung, wer in die Critical Section darf, muss in endlicher Zeit getroffen werden)],
 _Begrenztes Warten_ #hinweis[(Thread wird nur $n$ mal übergangen, bevor er in die Critical Section darf)].\
 *Implementierung:*
-Nur _mit HW-Unterstützung_ möglich. Es gibt zwei atomare Instruktionen,
+Nur _mit HW-Unterstützung_ möglich. Es gibt zwei atomare Instruktionen:\
 _Test-And-Set_ #hinweis[(Setzt einen `int` auf 1 und returnt den vorherigen Wert:
 ```c test_and_set(int * target) {int value = *target; *target = 1; return value;}```)] und
 _Compare-and-Swap_ #hinweis[(Überschreibt einen `int` mit einem spezifizierten Wert, wenn
@@ -814,8 +820,9 @@ dieser dem erwarteten Wert entspricht:
 
 == Semaphore
 Enthält Zähler $z >= 0$. Wird nur über _`Post(v)`_ #hinweis[(Erhöht $z$ um 1)] und
-_`Wait(v)`_ zugegriffen #hinweis[(Wenn $z > 0$, verringert $z$ um $1$ und fährt fort.
-Wenn $z = 0$, setzt den Thread in waiting, bis anderer Thread $z$ erhöht)].\
+_`Wait(v)`_ zugegriffen\ #hinweis[(Wenn $z > 0$, verringert $z$ um $1$ und fährt fort.
+Wenn $z = 0$, setzt den Thread in waiting, bis anderer Thread $z$ erhöht)].
+
 *```c int sem_init (sem_t *sem, int pshared, unsigned int value)```:*
 _Initialisiert_ den Semaphor, typischerweise als _globale Variable_.
 `pshared = 1`: Verwendung über mehrere Prozesse: ```c sem_t sem; int main ( int argc, char ** argv ) { sem_init (&sem, 0, 4); }```
@@ -831,8 +838,7 @@ Sind wie `sem_wait`, aber _brechen ab_, falls Dekrement _nicht_ durchgeführt we
 _Entfernt Speicher_, den das OS mit `sem` _assoziiert_ hat.
 
 ```c
-semaphore free = n;
-semaphore used = 0;
+semaphore free = n; semaphore used = 0;
 ```
 #grid(
   columns: (auto, auto),
@@ -853,7 +859,7 @@ semaphore used = 0;
     // Consumer
     while (1) {
       // Warte, falls Producer zu langsam
-      WAIT (used); // Hat es Elemente in Queue?
+      WAIT (used); // Hat es Elem. in Queue?
       consume (&buffer[r]);
       POST (free); // 1 Element weniger in Q
       r = (r+1) % BUFFER_SIZE;
@@ -877,9 +883,8 @@ _Release_ #hinweis[(Setzt $z = 0$)]. Auch als non-blocking-Funktion:
       pthread_mutex_t mutex; // global
       int main() {
         pthread_mutex_init (&mutex, 0);
-        // run threads & wait for them to finish
-        pthread_mutex_destroy (&mutex);
-    }
+      // run threads & wait for them to finish
+        pthread_mutex_destroy (&mutex); }
     ```
   ],
   [
@@ -903,6 +908,7 @@ von $A$ wird temporär auf die Priorität von $C$ gesetzt, damit der Mutex schne
 freigegeben wird.
 
 = Signale, Pipes und Sockets
+#v(-0.5em)
 == Signale
 Signale ermöglichen es, einen Prozess _von aussen_ zu unterbrechen, wie ein _Interrupt_.
 _Unterbrechen_ des gerade laufenden Prozesses/Threads, Auswahl und Ausführen der
@@ -946,13 +952,14 @@ Bei `fork()` wird die FDT auch kopiert.\
 *```c int dup (int source_fd); int dup2 (int source_fd, int destination_fd)```:*
 _Duplizieren_ den File-Descriptor `source_fd`. _`dup`_ alloziert einen neuen FD,
 _`dup2`_ überschreibt `destination_fd`.
+#v(-0.5em)
 
 === Umleiten des Ausgabestreams
 ```c
-int fd = open ("log.txt", ...);
-int id = fork ();
+int fd = open("log.txt", ...);
+int id = fork();
 if (id == 0) { // child
-  dup2 (fd, 1); // duplicate fd for log.txt as standard output
+  dup2(fd, 1); // duplicate fd for log.txt as standard output
   // e.g. load new image with exec*, fd's remain
 } else { /* parent */ close (fd); }
 ```
@@ -963,11 +970,11 @@ _read end_ und _write end_. Daten, die in _write end_ geschrieben werden, könne
 _read end_ genau _einmal_ und als _FIFO_ gelesen werden. Pipes erlauben _Kommunikation über
 Prozess-Grenzen hinweg_. Ist unidirektional.
 #grid(
-  columns: (50%, auto),
+  columns: (0.95fr, 1fr),
   gutter: 0.5em,
   [
     ```c
-    int fd [2]; // 0 = read, 1 = write
+    int fd[2]; // 0 = read, 1 = write
     pipe (fd);
     int id = fork();
     ```
@@ -977,21 +984,21 @@ Prozess-Grenzen hinweg_. Ist unidirektional.
   ],
   [
     ```c
-    if (id == 0) { // Child
+    if (id == 0) { // Child thread
       close (fd [1]); // don't use write end
       char buffer [BSIZE];
       int n = read (fd[0], buffer, BSIZE);
-    } else {
+    } else { // Parent thread
       close (fd[0]); // don't use read end
-      char * text = "La li lu";
-      write (fd [1], text, strlen(text) + 1);
+      char * text = "I <3 segfaults";
+      write (fd[1], text, strlen(text) + 1);
     }
     ```
   ],
 )
 
 *```c int mkfifo (const char *path, mode_t mode)```:*
-Erzeugt eine Pipe _mit Namen und Pfad_ im Dateisystem. Hat via `mode` permission bits wie
+Erzeugt eine Pipe _mit Namen und Pfad_ im Dateisystem. Hat via `mode` Permission Bits wie
 normale Datei. Lebt unabhängig vom erzeugenden Prozess, je nach System auch über Reboots
 hinweg. Muss explizit mit `unlink` gelöscht werden.
 
@@ -999,7 +1006,7 @@ hinweg. Muss explizit mit `unlink` gelöscht werden.
 Ein Socket _repräsentiert einen Endpunkt auf einer Maschine_.
 Kommunikation findet im Regelfall zwischen zwei Sockets statt
 #hinweis[(UDP, TCP über IP sowie Unix-Domain-Sockets)].
-Sockets benötigen für Kommunikation einen Namen: #hinweis[(IP: IP-Adresse, Portnr.)]\
+Sockets benötigen für Kommunikation einen Namen: #hinweis[(IP: IP-Adresse & Portnr.)]\
 *```c int socket(int domain, int type, int protocol)```: *
 _Erzeugt_ einen neuen Socket als "Datei". Socket sind nach Erzeugung zunächst _unbenannt_.
 Alle Operationen blockieren per default.\
@@ -1027,10 +1034,10 @@ inet_pton (AF_INET, "192.168.0.1", &ip_addr.sin_addr.s_addr);
 // addr in memory: 0xC0 0xA8 0x00 0x01
 ```
 
-_`htons`_ konvertiert 16 Bit von Host-Byte-order #hinweis[(LE)] zu Network-Byte-Order
-#hinweis[(BE)], _`htonl`_ 32 Bit. _`ntohs`_ und _`ntohl`_ sind Gegenstücke
-_`inet_pton`_ konvertiert protokoll-spezifische Adresse von String zu Network-BO.
-_`inet_ntop`_ ist das Gegenstück #hinweis[(network-to-presentation)].\
+_`htons()`_ konvertiert 16 Bit von Host-Byte-order #hinweis[(LE)] zu Network-Byte-Order
+#hinweis[(BE)], _`htonl()`_ 32 Bit. _`ntohs()`_ und _`ntohl()`_ sind Gegenstücke.
+_`inet_pton()`_ konvertiert protokoll-spezifische Adresse von String zu Network-BO.
+_`inet_ntop()`_ ist das Gegenstück #hinweis[(network-to-presentation)].\
 *```c int bind (int socket, const struct sockaddr *local_address, socklen_t addr_len)```:*
 _Bindet_ den Socket an die angegebene, unbenutze lokale Adresse, wenn noch nicht gebunden.
 Blockiert, bis der Vorgang abgeschlossen ist.\
@@ -1041,7 +1048,7 @@ noch nicht gebunden. Blockiert, bis Verbindung steht oder ein Timeout eintritt.\
 _Markiert_ den Socket als "bereit zum Empfang von Verbindungen". Erzeugt eine Warteschlange,
 die so viele Verbindungsanfragen aufnehmen kann, wie `backlog` angibt.\
 *```c int accept (int socket, struct sockaddr *remote_address, socklen_t address_len)```:*
-_Wartet_ bis eine Verbindungsanfrage in der Warteschlange eintrifft.
+_Wartet_, bis Verbindungsanfrage in der Warteschlange eintrifft.
 Erzeugt einen neuen Socket und bindet ihn an eine neue lokale Adresse. Die Adresse des
 Clients wird in `remote_address` geschrieben. Der neue Socket kann keine weiteren
 Verbindungen annehmen, der bestehende schon.
@@ -1055,11 +1062,12 @@ while (running) {
 }
 ```
 
-*```c send (fd, buf, len, 0) = write (fd, buf, len); recv (fd, buf, len, 0) = read (fd, buf, len)```:*
+*```c send (fd, buf, len, 0) == write (fd, buf, len);```\
+```c recv (fd, buf, len, 0) == read (fd, buf, len)```:*\
 _Senden und Empfangen von Daten_. Puffern der Daten ist Aufgabe des Netzwerkstacks.\
 *```c int close (int socket)```:*
 _Schliesst_ den Socket für den aufrufenden Prozess. Hat ein anderer Prozess den Socket noch
-geöffnet, bleibt die Verbindung bestehen. Die Gegenseite wird nicht benachrichtigt.
+geöffnet, bleibt die Verbindung bestehen. Die Gegenseite wird nicht benachrichtigt.\
 *```c int shutdown (int socket, int mode)```:*
 _Schliesst_ den Socket für alle Prozesse und baut die entsprechende Verbindung ab. `mode`:
 _`SHUT_RD`_ #hinweis[(Keine Lese-Zugriffe mehr)],
@@ -1104,10 +1112,10 @@ ihren Aufruf getätigt haben. _Impliziter Synchronisationsmechanismus_.
     ```c
     // Producer
     message msg;
-    open (Q);
-    while (1) {
-      produce_next (&msg);
-      send (Q, &msg); // blocked until sent
+    open(Q);
+    while(1) {
+      produce_next(&msg);
+      send(Q, &msg); // blocked until sent
     }
     ```
   ],
@@ -1115,10 +1123,10 @@ ihren Aufruf getätigt haben. _Impliziter Synchronisationsmechanismus_.
     ```c
     // Consumer
     message msg;
-    open (Q);
-    while (1) {
-      receive (Q, &msg); // blocked until rec.
-      consume_next (&msg);
+    open(Q);
+    while(1) {
+      receive(Q, &msg); // blocked until rec.
+      consume_next(&msg);
     }
     ```
   ],
@@ -1137,7 +1145,7 @@ OS-Message-Queues mit _variabler Länge_, haben mind. 32 Prioritäten und könne
 _synchron und asynchron_ verwendet werden.\
 *```c mqd_t mq_open (const char *name, int flags, mode_t mode, struct mq_attr *attr)```:*
 _Öffnet_ eine Message-Queue mit systemweitem `name`, returnt Message-Queue-Descriptor.
-#hinweis[(`name` mit `/` beginnen, `flags` & `mode` wie bei Dateien,
+#hinweis[(`name` mit "`/`" beginnen, `flags` & `mode` wie bei Dateien,
   `mq_attr`: Div. Konfigs & Queue-Status, R/W mit `mp_getattr`/`mq_setattr`)]\
 *```c int mq_close (mqd_t queue)```:*
 _Schliesst_ die Queue mit dem Descriptor `queue` für diesen Prozess.\
@@ -1158,12 +1166,14 @@ gemacht. In $P_1$ wird Page $V_1$ auf einen Frame $F$ abgebildet. In $P_2$ wird 
 auf _denselben_ Frame $F$ abgebildet. Beide Prozesse können _beliebig_ auf dieselben Daten
 zugreifen. Im Shared Memory müssen _relative Adressen_ verwendet werden.
 
+#colbreak()
+
 === POSIX API
 Das OS benötigt eine "Datei" _$bold(S)$_, das Informationen über den gemeinsamen Speicher
 verwaltet und eine _Mapping Table_ je Prozess.
 
 *```c int fd = shm_open ("/mysharedmemory", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR)```:*\
-Erzeugt falls nötig und öffnet Shared Memory /mysharedmemory zum Lesen und Schreiben.\
+Erzeugt (falls nötig) und öffnet Shared Memory `/mysharedmemory` zum Lesen und Schreiben.\
 *```c int ftruncate (int fd, offset_t length)```:*
 _Setzt_ Grösse der "Datei". Muss _zwingend_ nach SM-Erstellung gesetzt werden, um
 entsprechend viele Frames zu allozieren.
@@ -1176,10 +1186,10 @@ _Löscht_ das Shared Memory mit dem `name`.
 *```c int munmap (void *address, size_t length)```:*
 _Entfernt_ das Mapping.
 ```c
-void * address = mmap( // maps the shared memory into virt. address space of process
+void * address = mmap( // maps shared memory into virt. address space of process
   0,                      // void *hint_address (0 because nobody cares)
   size_of_shared_memory,  // size_t length (same as used in ftruncate)
-  PROT_READ | PROT_WRITE, // never use execute
+  PROT_READ | PROT_WRITE, // int protection (never use execute)
   MAP_SHARED,             // int flags
   fd,                     // int file_descriptor
   0                       // off_t offset (start map from first byte)
@@ -1199,6 +1209,7 @@ Mehr-Prozessor-Systemen bald performanter.
     [Message-Queues],
     [Pipes],
   ),
+
   [
     - bidirektional
     - Daten sind in einzelnen Messages organisiert
@@ -1253,17 +1264,17 @@ Encoding von U+10'437 (\u{10437})
 #hinweis[#fxcolor("grün", bits("00 0100 0001", suffix: false))
 #fxcolor("gelb", bits("00 0011 0111"))]:
 
-1. Code-Point $P$ minus #hex("10000") rechnen und in Binär umwandlen\
-  $P = hex("10437"), Q = hex("10437") - hex("10000") = hex("0437")
++ Code-Point $P$ minus #hex("10000") rechnen und in Binär umwandlen\
+  $P = hex("10437"), quad Q = hex("10437") - hex("10000") = hex("0437")
     = fxcolor("grün", #bits("00 0000 0001", suffix: false)) fxcolor("gelb", bits("00 0011 0111"))$
-2. Obere & untere 10 Bits in Hex umwandlen\
++ Obere & untere 10 Bits in Hex umwandlen\
   $fxcolor("grün", #hex("0001", suffix: false)) fxcolor("gelb", hex("0137"))$\
-3. Oberer Wert mit #hex("D800") und unterer Wert mit #hex("DC00") addieren, um Code-Units zu erhalten\
-  $U_1 = fxcolor("grün", hex("0001")) + hex("D800") = fxcolor("orange", hex("D801")),
++ Oberer Wert mit #hex("D800") und unterer Wert mit #hex("DC00") addieren, um Code-Units zu erhalten\
+  $U_1 = fxcolor("grün", hex("0001")) + hex("D800") = fxcolor("orange", hex("D801")), quad
     U_2 = fxcolor("gelb", hex("0137")) + hex("DC00") = fxcolor("hellblau", hex("DD37"))$\
-4. Zu BE/LE zusammensetzen\
++ Zu BE/LE zusammensetzen\
   $"BE" = underline(fxcolor("orange", #hex("D801", suffix: false)) thin
-  fxcolor("hellblau", hex("DD37"))), thick
+  fxcolor("hellblau", hex("DD37"))), quad
     "LE" = underline(fxcolor("orange", #hex("01D8", suffix: false)) thin
   fxcolor("hellblau", hex("37DD")))$
 
@@ -1284,18 +1295,18 @@ berücksichtigen. Standard für Webpages. Echte Erweiterung von ASCII.
 ==== Beispiele
 - _ä_: $P = hex("E4") = fxcolor("grün", #bits("00011", suffix: false)) thin
   fxcolor("gelb", bits("10 0110"))$\
-  $=> P_10 ... P_6 = fxcolor("grün", bits("00011")) = fxcolor("rot", hex("03")),
+  $=> P_10 ... P_6 = fxcolor("grün", bits("00011")) = fxcolor("rot", hex("03")), quad
     P_5 ... P_0 = fxcolor("gelb", bits("100100")) = fxcolor("orange", hex("24"))$\
-  $=> U_1 = hex("C0") (= bits("11000000")) + fxcolor("rot", hex("03")) = hex("C3"),
+  $=> U_1 = hex("C0") (= bits("11000000")) + fxcolor("rot", hex("03")) = hex("C3"), quad
     U_0 = hex("80") (= bits("10000000")) + fxcolor("orange", hex("24")) = hex("A4")$\
   $=> ä = underline(hex("C3 A4"))$
 - _ặ_: $P = hex("1EB7") = fxcolor("grün", #bits("0001", suffix: false)) thin
     fxcolor("gelb", #bits("111010", suffix: false)) thin fxcolor("hellblau", bits("110111"))$\
-  $=> P_15 ... P_12 = fxcolor("grün", hex("01")),
-    P_11 ... P_6 = fxcolor("gelb", hex("3A")),
+  $=> P_15 ... P_12 = fxcolor("grün", hex("01")), quad
+    P_11 ... P_6 = fxcolor("gelb", hex("3A")), quad
     P_5 ... P_0 = fxcolor("hellblau", hex("37"))$\
-  $=> U_2 = hex("E0") (= #bits("11100000")) + fxcolor("grün", hex("01")) = hex("E1"),
-    U_1 = hex("80") + fxcolor("gelb", hex("3A")) = hex("BA"),
+  $=> U_2 = hex("E0") (= #bits("11100000")) + fxcolor("grün", hex("01")) = hex("E1"), quad
+    U_1 = hex("80") + fxcolor("gelb", hex("3A")) = hex("BA"), space
     U_0 = hex("80") + fxcolor("hellblau", hex("37")) = hex("B7")$\
   $=> ặ = underline(hex("E1 BA B7"))$
 
@@ -1306,11 +1317,11 @@ berücksichtigen. Standard für Webpages. Echte Erweiterung von ASCII.
     align: (_, y) => if (y == 0) { left } else { right },
     columns: (auto,) + (1fr,) * 6,
     table.header([Zeichen], [Code-Point], [UTF-32BE], [UTF-32LE], [UTF-8], [UTF-16BE], [UTF-16LE]),
-    [A],[#hex("41")],[#hex("00 00 00 41")],[#hex("41 00 00 00")],[#hex("41")],[#hex("00 41")],[#hex("41 00")],
-    [ä],[#hex("E4")],[#hex("00 00 00 E4")],[#hex("E4 00 00 00")],[#hex("C3 A4")],[#hex("00 E4")],[#hex("E4 00")],
-    [\u{3B1}],[#hex("3 B1")],[#hex("00 00 03 B1")],[#hex("B1 03 00 00")],[#hex("CE B1")],[#hex("03 B1")],[#hex("B1 03")],
-    [\u{1EB7}],[#hex("1E B7")],[#hex("00 00 1E B7")],[#hex("B7 1E 00 00")],[#hex("E1 BA B7")],[#hex("1E B7")],[#hex("B7 1E")],
-    [\u{10330}],[#hex("1 03 30")],[#hex("00 01 03 30")],[#hex("30 03 01 00")],[#hex("F0 90 8C B0")],[#hex("D8 00 DF 30")],[#hex("00 D8 30 DF")],
+    [A], [#hex("41")], [#hex("00 00 00 41")], [#hex("41 00 00 00")], [#hex("41")], [#hex("00 41")], [#hex("41 00")],
+    [ä], [#hex("E4")], [#hex("00 00 00 E4")], [#hex("E4 00 00 00")], [#hex("C3 A4")], [#hex("00 E4")], [#hex("E4 00")],
+    [\u{3B1}], [#hex("3 B1")], [#hex("00 00 03 B1")], [#hex("B1 03 00 00")], [#hex("CE B1")], [#hex("03 B1")], [#hex("B1 03")],
+    [\u{1EB7}], [#hex("1E B7")], [#hex("00 00 1E B7")], [#hex("B7 1E 00 00")], [#hex("E1 BA B7")], [#hex("1E B7")], [#hex("B7 1E")],
+    [\u{10330}], [#hex("1 03 30")], [#hex("00 01 03 30")], [#hex("30 03 01 00")], [#hex("F0 90 8C B0")], [#hex("D8 00 DF 30")], [#hex("00 D8 30 DF")],
   )
 }
 #hinweis[Bei LE / BE werden nur die Zeichen _innerhalb_ eines Code-Points vertauscht,
@@ -1377,7 +1388,7 @@ Blocknummer des Inode-Usage-Bitmaps, Nummer des ersten Blocks der Inode-Tabelle,
 Anzahl freier Blöcke und Inodes in der Gruppe, Anzahl der Verzeichnisse in der Gruppe)]\
 *Gruppendeskriptortabelle:*
 Tabelle mit Gruppendeskriptor pro Blockgruppe im Volume. Folgt direkt auf Superblock(-kopie).
-$32 dot n$ Bytes gross. Anzahl Sektoren $= (32 dot n)/"Sektorgrösse"$\
+$32 dot n$ Bytes gross. Anzahl Sektoren $= (32 dot n)\/"Sektorgrösse"$\
 *Verzeichnisse:*
 Enthält _Dateieinträge_ mit variabler Länge von 8 - 263 Byte
 #hinweis[(4B Inode, 2B Eintraglänge, 1B Dateinamenlänge, 1B Dateityp, 0 - 255B Dateiname
@@ -1423,15 +1434,15 @@ Beschreiben ein _Intervall physisch konsekutiver Blöcke_. Ist 12 Byte gross
 Positive Zahlen = Block initialisiert, Negativ = Block voralloziert. Im Inode hat es in den
 60 Byte für direkte und indirekte Block-Adressierung Platz für 4 Extents und einen Header.\
 *Extent Trees:*
-_Index-Knoten_ #hinweis[(Innerer Knoten des Baums, besteht aus Index-Eintrag und Index-Block)],
+_Index-Knoten_ #hinweis[(Innerer Knoten des Baums, besteht aus Index-Eintrag und Index-Block)],\
 _Index-Eintrag_ #hinweis[(Enthält Nummer des physischen Index-Blocks und kleinste logische
 Blocknummer aller Kindknoten)],
 _Index-Block_ #hinweis[(Enthält eigenen Tree-Header und Referenz auf Kindknoten)]\
 *Extent Tree Header:*
 Benötigt ab 4 Extents, weil zusätzlicher Block.
 Magic Number #hex("F30A") #hinweis[(2B)],
-Anzahl Einträge, die direkt auf den Header folgen #hinweis[(2B)],
-Anzahl Einträge, die maximal auf den Header folgen können #hinweis[(2B)],
+Anzahl Einträge, die _direkt_ auf den Header folgen #hinweis[(2B)],
+Anzahl Einträge, die _maximal_ auf den Header folgen können #hinweis[(2B)],
 Tiefe des Baums #hinweis[(2B)] - #hinweis[(0: Einträge sind Extents, $>=$1: Einträge sind Index Nodes)],
 Reserviert #hinweis[(4B)]\
 *Index Node:*
@@ -1457,15 +1468,16 @@ Nodes nötig.
 
 ==== Beispiel Berechnung 2MB grosse, konsekutiv gespeicherte Datei, 2KB Blöcke ab Block #hex("2000")
 _(In-)direkte Block-Adressierung_\
-2 MB = $2^21$B, 2 KB = $2^11$B, $ 2^(21-11) = 2^10 = #fxcolor("rot", hex("400"))$
+2 MB = $2^21$B, #math.quad 2 KB = $2^11$B, #math.quad $ 2^(21-11) = 2^10 = #fxcolor("rot", hex("400"))$
 Blöcke von #fxcolor("grün", hex("2000")) bis #fxcolor("orange", hex("23FF"))\
-$0 arrow.bar #fxcolor("grün", hex("2000")), 1 arrow.bar #hex("2002"), ... , #hex("B")
-arrow.bar #hex("200B")$
-$#hex("C") arrow.bar #hex("2400")$ #hinweis[(indirekter Block)]\
-$#hex("1400").#hex("0") arrow.bar #hex("200C"),
-#hex("1400").#hex("1") arrow.bar #hex("200D"),
-...,
-#hex("1400").#hex("3F3") arrow.bar #fxcolor("orange", hex("23FF"))$
+$0 arrow.bar #fxcolor("grün", hex("2000")), quad
+  1 arrow.bar #hex("2002"), space ..., space
+  #hex("B") arrow.bar #hex("200B"), quad
+  #hex("C") arrow.bar #hex("2400")$ #hinweis[(indirekter Block)]\
+$#hex("1400").#hex("0") arrow.bar #hex("200C"), quad
+  #hex("1400").#hex("1") arrow.bar #hex("200D"), space
+  ..., space
+  #hex("1400").#hex("3F3") arrow.bar #fxcolor("orange", hex("23FF"))$
 
 _Extent Trees_\
 *Header:* $0 arrow.bar (1,0)$\
@@ -1479,7 +1491,7 @@ Datei, in die Daten schnell geschrieben werden können. Bestenfalls 1 Extent.\
 *Transaktion:*
 Folge von Einzelschritten, die gesamtheitlich vorgenommen werden sollten.\
 *Journaling:*
-Daten als Transaktion ins Journal, dann an finale Position schreiben #hinweis[(committing)],
+Daten als Transaktion ins Journal, dann an finale Position schreiben #hinweis[(committing)],\
 Transaktion aus dem Journal entfernen.\
 *Journal Replay:*
 Transaktionen im Journal werden nach Neustart noch einmal ausgeführt.\
@@ -1496,7 +1508,7 @@ Plattformunabhängig, legt die GUI-Gestaltung nicht fest.\
 *Fenster:*
 Rechteckiger Bereich des Bildschirms. Es gibt eine Baumstruktur aller Fenster,
 der Bildschirm ist die Wurzel #hinweis[(z.B. Dialogbox, Scrollbar, Button...)].\
-*Display:* Rechner mit Tastatur, Zeigegerät und 1..m Bildschirme\
+*Display:* Rechner mit Tastatur, Zeigegerät und $1..m$ Bildschirme\
 *X Client:* Applikation, die einen Display nutzen will. Kann lokal oder entfernt laufen.\
 *X Server:* Softwareteil des X Window System, der ein Display ansteuert. Beim Nutzer.
 
@@ -1526,7 +1538,7 @@ _Replies_ #hinweis[( Antworten auf Requests, Client #sym.arrow.l Server)],
 _Events_ #hinweis[(Ereignismeldungen, Client #sym.arrow.l Server)],
 _Errors_ #hinweis[(Fehlermeldungen auf vorangegangene Requests, Client #sym.arrow.l Server)]\
 *Request Buffer:*
-Nachrichtenpufferung auf der Client Seite. Für _Effizienz_.
+Nachrichtenpufferung auf der Client Seite. Für _Effizienz_.\
 *Pufferung bei Ereignissen:*
 Werden beim X Server und beim Client gepuffert.
 _Server-Seitig_ berücksichtigt Netzwerkverfügbarkeit, _Client-Seitige_ hält Events bereit.\

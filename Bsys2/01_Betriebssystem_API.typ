@@ -1,4 +1,3 @@
-// Compiled with Typst 0.12
 #import "../template_zusammenf.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
@@ -178,7 +177,7 @@ dieses Array. _`environ`_ sollte nicht direkt verwendet werden, sondern nur übe
 Funktionen manipuliert werden: _`getenv()`_, _`putenv()`_, _`setenv()`_ und _`unsetenv()`_.
 
 ==== Abfragen einer Umgebungsvariable: ```c char * getenv (const char * key)```
-durchsucht die Umgebungsvariablen nach dem Key `key` und gibt die Adresse des ersten
+Durchsucht die Umgebungsvariablen nach dem Key `key` und gibt die Adresse des ersten
 Zeichens des entsprechenden Values zurück falls vorhanden, ansonsten `0`.
 
 ```c
@@ -188,14 +187,14 @@ char *value = getenv("PATH");
 
 ==== Setzen einer Umgebungsvariable:\ ```c int setenv (const char *key, const char *value, int overwrite)```
 Wenn `key` schon in einer Umgebungsvariable `v` enthalten ist _und_ `overwrite != 0`:
-überschreibt den Wert von `v` mit `value`. Wenn `key` noch nicht in einer 
+überschreibt den Wert von `v` mit `value`. Wenn `key` noch nicht in einer
 Umgebungsvariable enthalten ist: fügt eine neue Umgebungsvariable hinzu und kopiert `key`
 und `value` dort hinein. Gibt `0` zurück wenn alles OK, ansonsten Fehlercode in `errno`.
 
 ```c int ret = setenv("HOME", "/usr/home", 1);```
 
 ==== Entfernen einer Umgebungsvariable: ```c int unsetenv (const char *key)```
-entfernt die Umgebungsvariable mit dem Key `key`. Gibt `0` zurück wenn alles OK, ansonsten
+Entfernt die Umgebungsvariable mit dem Key `key`. Gibt `0` zurück wenn alles OK, ansonsten
 Fehlercode in `errno`.
 
 ```c int ret = unsetenv("HOME");```
