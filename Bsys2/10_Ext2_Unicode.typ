@@ -1,6 +1,5 @@
-// Compiled with Typst 0.11.1
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 /* #show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -12,10 +11,11 @@
 ) */
 
 = Unicode
-== ASCII - American Standard Code for Information Interchange
-Hat _128 definierte Zeichen_ #hinweis[(7 Bit, #hex("00") bis #hex("7F"))].
-33 Kontrollzeichen, viele davon obsolet, 10 Ziffern, 33 Interpunktionszeichen,
-26 Grossbuchstaben und 26 Kleinbuchstaben.
+== ASCII
+ASCII #hinweis[(American Standard Code for Information Interchange)] hat
+_128 definierte Zeichen_ #hinweis[(7 Bit, #hex("00") bis #hex("7F"))].
+33 Kontrollzeichen, #hinweis[(viele davon obsolet)], 10 Ziffern, 33 Interpunktionszeichen,
+26 Grossbuchstaben und 26 Kleinbuchstaben.\
 #hinweis[(erste Hexzahl = Zeile, zweite Hexzahl = Spalte, d.h. #hex("41") = `A`)]
 #image("img/bsys_40.png")
 
@@ -34,9 +34,9 @@ Hat Platz für 1'112'064 Code-Points #hinweis[(21 bits)], davon 149'813 verwende
 Man unterscheidet _Code-Points_ #hinweis[(Nummer eines Zeichen - "welches Zeichen")] und
 _Code-Units_ #hinweis[(Einheit, um Zeichen in einem Encoding darzustellen - bietet den
 Speicherplatz für das Zeichen)].\
-#hinweis[_$bold(P_i) =$_ $i$-tes Bit des unkodierten CPs,
-  _$bold(U_i) =$_ $i$-tes Code-Unit des kodierten CPs,
-  _$bold(B_i) =$_ $i$-tes Byte des kodierten CPs]
+_$bold(P_i) =$_ $i$-tes Bit des unkodierten CPs,
+_$bold(U_i) =$_ $i$-tes Code-Unit des kodierten CPs,
+_$bold(B_i) =$_ $i$-tes Byte des kodierten CPs
 
 - #link(<utf-32>)[_UTF-32:_] Jede CU umfasst _32 Bit_, jeder CP kann mit _einer CU_
   dargestellt werden.
@@ -55,11 +55,11 @@ Speicherplatz für das Zeichen)].\
 ]
 
 === UTF-16 <utf-16>
-Encoding muss Endianness berücksichtigen. Die 2 CUs werden Surrogate Pair genannt,
+Encoding muss Endianness berücksichtigen. Die 2 CUs werden Surrogate Pair genannt.\
 $U_0$: high surrogate, $U_1$: low surrogate.
-- _UTF-16BE:_ Big Endian, CP mit 1 CU: $U_0 = B_1B_0$,
+- _UTF-16BE:_ Big Endian, CP mit 1 CU: $U_0 = B_1B_0$, #math.space.hair
   CP mit 2 CUs: $U_1U_0 = B_3B_2B_1B_0$
-- _UTF-16LE:_ Little Endian, CP mit 1 CU: $U_0 = B_0B_1$,
+- _UTF-16LE:_ Little Endian, CP mit 1 CU: $U_0 = B_0B_1$, #math.space.hair
   CP mit 2 CUs: $U_1U_0 = B_2B_3B_0B_1$
 
 Bei _2 Bytes_ #hinweis[(1 CU)] wird direkt gemappt und vorne mit Nullen aufgefüllt.
@@ -68,7 +68,7 @@ Bei _4 Bytes_, wenn CP in #hex("10000") bis #hex("10FFFF") sind
 #hex("D800") bis #hex("DFFF") #hinweis[(Bits 17-21)] wegen dem Separator _ungültig_ und
 müssen "umgerechnet" werden:
 - $Q = P - #hex("10000")$, also ist $Q$ in #hex("0") bis #hex("FFFFF")
-- $U_1 = bits("1101 10xx xxx") + hex("D800"),
+- $U_1 = bits("1101 10xx xxx") + hex("D800"), quad
     U_0 = bits("1101 11xx xxxx xxxx") + hex("DC00")$
 
 #image("img/bsys_45.png")
@@ -78,21 +78,19 @@ Encoding von U+10'437 (\u{10437})
 #hinweis[#fxcolor("grün", bits("00 0100 0001", suffix: false))
   #fxcolor("gelb", bits("00 0011 0111"))]:
 
-1. Code-Point $P$ minus #hex("10000") rechnen und in Binär umwandlen\
-  $P = hex("10437"), Q = hex("10437") - hex("10000") = hex("0437")
-    = fxcolor("grün", #bits("00 0000 0001", suffix: false))
-    fxcolor("gelb", bits("00 0011 0111"))$
-2. Obere & untere 10 Bits in Hex umwandlen\
++ Code-Point $P$ minus #hex("10000") rechnen und in Binär umwandlen\
+  $P = hex("10437"), quad Q = hex("10437") - hex("10000") = hex("0437")
+    = fxcolor("grün", #bits("00 0000 0001", suffix: false)) fxcolor("gelb", bits("00 0011 0111"))$
++ Obere & untere 10 Bits in Hex umwandlen\
   $fxcolor("grün", #hex("0001", suffix: false)) fxcolor("gelb", hex("0137"))$\
-3. Oberer Wert mit #hex("D800") und unterer Wert mit #hex("DC00") addieren,
-  um Code-Units zu erhalten\
-  $U_1 = fxcolor("grün", hex("0001")) + hex("D800") = fxcolor("orange", hex("D801")),
++ Oberer Wert mit #hex("D800") und unterer Wert mit #hex("DC00") addieren, um Code-Units zu erhalten\
+  $U_1 = fxcolor("grün", hex("0001")) + hex("D800") = fxcolor("orange", hex("D801")), quad
     U_2 = fxcolor("gelb", hex("0137")) + hex("DC00") = fxcolor("hellblau", hex("DD37"))$\
-4. Zu BE/LE zusammensetzen\
++ Zu BE/LE zusammensetzen\
   $"BE" = underline(fxcolor("orange", #hex("D801", suffix: false)) thin
-    fxcolor("hellblau", hex("DD37"))), thick
+  fxcolor("hellblau", hex("DD37"))), quad
     "LE" = underline(fxcolor("orange", #hex("01D8", suffix: false)) thin
-    fxcolor("hellblau", hex("37DD")))$
+  fxcolor("hellblau", hex("37DD")))$
 
 #pagebreak()
 
@@ -107,7 +105,7 @@ Echte Erweiterung von ASCII.
   [#hex("0") - #hex("7F")], [], [], [], [#bits("0xxx xxxx")], [7 bits],
   [#hex("80") - #hex("7FF")], [], [], [#bits("110x xxxx")], [#nextCU], [11 bits],
   [#hex("800") - #hex("FFFF")], [], [#bits("1110 xxxx")], [#nextCU], [#nextCU], [16 bits],
-  [#hex("10000") - #hex("10FFFF")], [#bits("1111 0xxx")], [#nextCU], [#nextCU],[#nextCU], [21 bits],
+  [#hex("10000") - #hex("10FFFF")], [#bits("1111 0xxx")], [#nextCU], [#nextCU], [#nextCU], [21 bits],
 )
 Die most significant Bits einer CU werden als Delimiter verwendet:
 #bits("0") = nur 1 CU,
@@ -126,32 +124,31 @@ In den CUs haben die Bytes #hex("0") - #hex("7F") #hinweis[(7 signifikante Bits)
 ==== Beispiele
 - _ä_: $P = hex("E4") = fxcolor("grün", #bits("00011", suffix: false)) thin
     fxcolor("gelb", bits("10 0110"))$\
-  $=> P_10 ... P_6 = fxcolor("grün", bits("00011")) = fxcolor("rot", hex("03")),
+  $=> P_10 ... P_6 = fxcolor("grün", bits("00011")) = fxcolor("rot", hex("03")), quad
     P_5 ... P_0 = fxcolor("gelb", bits("100100")) = fxcolor("orange", hex("24"))$\
-  $=> U_1 = hex("C0") (= bits("11000000")) + fxcolor("rot", hex("03")) = hex("C3"),
+  $=> U_1 = hex("C0") (= bits("11000000")) + fxcolor("rot", hex("03")) = hex("C3"), quad
     U_0 = hex("80") (= bits("10000000")) + fxcolor("orange", hex("24")) = hex("A4")$\
   $=> ä = underline(hex("C3 A4"))$
 - _ặ_: $P = hex("1EB7") = fxcolor("grün", #bits("0001", suffix: false)) thin
-    fxcolor("gelb", #bits("111010", suffix: false)) thin
-    fxcolor("hellblau", bits("110111"))$\
-  $=> P_15 ... P_12 = fxcolor("grün", hex("01")),
-    P_11 ... P_6 = fxcolor("gelb", hex("3A")),
+    fxcolor("gelb", #bits("111010", suffix: false)) thin fxcolor("hellblau", bits("110111"))$\
+  $=> P_15 ... P_12 = fxcolor("grün", hex("01")), quad
+    P_11 ... P_6 = fxcolor("gelb", hex("3A")), quad
     P_5 ... P_0 = fxcolor("hellblau", hex("37"))$\
-  $=> U_2 = hex("E0") (= #bits("11100000")) + fxcolor("grün", hex("01")) = hex("E1"),
-    U_1 = hex("80") + fxcolor("gelb", hex("3A")) = hex("BA"),
+  $=> U_2 = hex("E0") (= #bits("11100000")) + fxcolor("grün", hex("01")) = hex("E1"), quad
+    U_1 = hex("80") + fxcolor("gelb", hex("3A")) = hex("BA"), space
     U_0 = hex("80") + fxcolor("hellblau", hex("37")) = hex("B7")$\
   $=> ặ = underline(hex("E1 BA B7"))$
 
 === Encoding-Beispiele
 #table(
-  align: (_, y) => if(y == 0) { left } else { right },
+  align: (_, y) => if (y == 0) { left } else { right },
   columns: (auto,) + (1fr,) * 6,
   table.header([Zeichen], [Code-Point], [UTF-32BE], [UTF-32LE], [UTF-8], [UTF-16BE], [UTF-16LE]),
-  [A],[#hex("41")],[#hex("00 00 00 41")],[#hex("41 00 00 00")],[#hex("41")],[#hex("00 41")],[#hex("41 00")],
-  [ä],[#hex("E4")],[#hex("00 00 00 E4")],[#hex("E4 00 00 00")],[#hex("C3 A4")],[#hex("00 E4")],[#hex("E4 00")],
-  [$alpha$],[#hex("3 B1")],[#hex("00 00 03 B1")],[#hex("B1 03 00 00")],[#hex("CE B1")],[#hex("03 B1")],[#hex("B1 03")],
-  [ặ],[#hex("1E B7")],[#hex("00 00 1E B7")],[#hex("B7 1E 00 00")],[#hex("E1 BA B7")],[#hex("1E B7")],[#hex("B7 1E")],
-  [𐌰],[#hex("1 03 30")],[#hex("00 01 03 30")],[#hex("30 03 01 00")],[#hex("F0 90 8C B0")],[#hex("D8 00 DF 30")],[#hex("00 D8 30 DF")],
+  [A], [#hex("41")], [#hex("00 00 00 41")], [#hex("41 00 00 00")], [#hex("41")], [#hex("00 41")], [#hex("41 00")],
+  [ä], [#hex("E4")], [#hex("00 00 00 E4")], [#hex("E4 00 00 00")], [#hex("C3 A4")], [#hex("00 E4")], [#hex("E4 00")],
+  [\u{3B1}], [#hex("3 B1")], [#hex("00 00 03 B1")], [#hex("B1 03 00 00")], [#hex("CE B1")], [#hex("03 B1")], [#hex("B1 03")],
+  [\u{1EB7}], [#hex("1E B7")], [#hex("00 00 1E B7")], [#hex("B7 1E 00 00")], [#hex("E1 BA B7")], [#hex("1E B7")], [#hex("B7 1E")],
+  [\u{10330}], [#hex("1 03 30")], [#hex("00 01 03 30")], [#hex("30 03 01 00")], [#hex("F0 90 8C B0")], [#hex("D8 00 DF 30")], [#hex("00 D8 30 DF")],
 )
 #hinweis[Bei LE / BE werden nur die Zeichen _innerhalb_ eines Code-Points vertauscht,
   nicht die Code-Points an sich.]
@@ -175,7 +172,7 @@ In den CUs haben die Bytes #hex("0") - #hex("7F") #hinweis[(7 signifikante Bits)
   columns: (85%, 15%),
 )[
   Ein Block besteht aus _mehreren aufeinanderfolgenden Sektoren_ #hinweis[(1 KB, 2 KB oder
-  4 KB (normal))]. Das gesamte Volume ist in _Blöcke aufgeteilt_ und Speicher wird
+  4 KB (normal))].\ Das gesamte Volume ist in _Blöcke aufgeteilt_ und Speicher wird
   _nur in Form von Blöcken_ alloziert. Ein Block enthält nur Daten einer _einzigen Datei_.
   - _Logische Blocknummer:_ Blocknummer vom Anfang der Datei aus gesehen, wenn Datei eine
     ununterbrochene Abfolge von Blöcken wäre #hinweis[(innerhalb Datei)]
@@ -211,8 +208,8 @@ Jeder verwendete Block einer Datei hat einen direkten oder indirekten _Verweis_.
 === Lokalisierung
 Alle Inodes aller Blockgruppen gelten als _eine grosse Tabelle_.
 Zählung der Inodes startet mit 1.
-- Blockgruppe $= ("Inode" - 1) / "Anzahl Inodes pro Gruppe"$
-- Index des Inodes in Blockgruppe $ = ("Inode" - 1) %$ Anzahl Inodes pro Gruppe
+- Blockgruppe $= ("Inode" - 1) \/ "Anzahl Inodes pro Gruppe"$
+- Index des Inodes in Blockgruppe $ = ("Inode" - 1) mod "Anzahl Inodes pro Gruppe"$
 - Sektor und Offset können anhand der Daten aus dem Superblock bestimmt werden.
 
 === Erzeugung
@@ -233,6 +230,7 @@ Ein Volume wird in _Blockgruppen_ unterteilt. Eine Blockgruppe besteht aus
 _mehreren aufeinanderfolgenden Blöcken_ bis zu 8 mal der Anzahl Bytes in einem Block
 #hinweis[(Bsp. Blockgrösse 4KB sind bis zu 32K Blöcke in einer Gruppe)].
 Anzahl Blöcke je Gruppe ist gleich für alle Gruppen.
+
 === Lage der Blockgruppen
 #wrap-content(
   image("img/bsys_46.png"),
@@ -283,7 +281,7 @@ Wiederherstellungsgrad_ möglich, obwohl deutlich weniger Platz verwendet wird.
 
 ==== Gruppendeskriptortabelle
 Eine _Tabelle mit $bold(n)$ Gruppendeskriptoren_ für alle $n$ Blockgruppen im Volume.
-Benötigt selbst $32 dot n$ Anzahl Bytes; Anzahl Sektoren $= (32 dot n) / "Sektorgrösse"$.
+Benötigt selbst $32 dot n$ Anzahl Bytes; Anzahl Sektoren $= (32 dot n) \/"Sektorgrösse"$.
 Folgt _direkt_ auf Superblock. Kopie der Tabelle direkt nach jeder Kopie des Superblocks.
 
 == Verzeichnisse
@@ -304,7 +302,7 @@ Ein _Dateieintrag_ hat eine variable Länge von 8 - 263 Bytes:
 == Links
 - _Hard-Link:_ gleicher Inode, verschiedene Pfade
   #hinweis[(Inode wird von verschiedenen Dateieinträgen referenziert)]
-- _Symbolischer Link:_ Wie eine Datei, Datei enthält Pfad anderer Datei.
+- _Symbolischer Link:_ Wie eine Datei, Datei enthält Pfad anderer Datei.\
   #hinweis[(Pfad $<$ 60 Zeichen: Wird in Blockreferenzen-Array gespeichert,
     Pfad $>=$ 60: Pfad wird in eigenem Block gespeichert)]
 

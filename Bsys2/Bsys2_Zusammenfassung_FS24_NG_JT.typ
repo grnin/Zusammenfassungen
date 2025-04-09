@@ -1,4 +1,4 @@
-// Compiled with Typst 0.11.1
+// Compiled with Typst 0.13.1
 #import "../template_zusammenf.typ": *
 
 #show: project.with(

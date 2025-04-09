@@ -1,6 +1,5 @@
-// Compiled with Typst 0.11.1
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 /*#show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -25,7 +24,7 @@ verwaltet und _Journaling_ wird verwendet.
 )[
   == Extents
   Ein _Extent_ beschreibt ein _Intervall physisch konsekutiver Blöcke_. Ist 12 Byte gross
-  #hinweis[(4B logische Blocknummer, 6B physische Blocknummer, 2B Anzahl Blöcke)].
+  #hinweis[(4B logische Blocknummer, 6B physische Blocknummer, 2B Anzahl Blöcke)].\
   Positive Zahlen = Block initialisiert, Negativ = Block voralloziert.
 
   Da eine Einschränkung auf ausschliesslich konsekutive Dateien nicht praktikabel ist,
@@ -41,7 +40,6 @@ verwaltet und _Journaling_ wird verwendet.
 === Extent Tree Header
 Für mehr als 4 Extents braucht man einen zusätzlichen Block. Deshalb sind die ersten
 12 Byte kein Extent, sondern der Extent Tree Header:
-
 - 2 Byte _Magic Number_ #hex("F30A")
 - 2 Byte _Anzahl Einträge_, die _direkt_ auf den Header folgen
   #hinweis[(Wie viele Extents folgen dem Header?)]
@@ -91,23 +89,24 @@ Inode bis auf _5_ gesetzt werden.
 
 ==== Beispiel Berechnung 2MB grosse, konsekutiv gespeicherte Datei, 2KB Blöcke ab Block #hex("2000")
 _(In-)direkte Block-Adressierung_\
-2 MB = $2^21$B, 2 KB = $2^11$B, $ 2^(21-11) = 2^10 = #fxcolor("rot", hex(400))$
-Blöcke von #fxcolor("grün", hex(2000)) bis #fxcolor("orange", hex("23FF"))
+2 MB = $2^21$B, #math.quad 2 KB = $2^11$B, #math.quad $ 2^(21-11) = 2^10 = #fxcolor("rot", hex("400"))$
+Blöcke von #fxcolor("grün", hex("2000")) bis #fxcolor("orange", hex("23FF"))
 
-$0 arrow.bar #fxcolor("grün", hex(2000)),
-1 arrow.bar #hex(2002),
-...,
-#hex("B") arrow.bar #hex("200B")$
+$0 arrow.bar #fxcolor("grün", hex("2000")), quad
+  1 arrow.bar #hex("2002"), space ..., space
+  #hex("B") arrow.bar #hex("200B"), quad
+  #hex("C") arrow.bar #hex("2400")$ #hinweis[(indirekter Block)]
 
-$#hex("C") arrow.bar #hex(2400)$ #hinweis[(indirekter Block)]\
-$#hex(1400).#hex(0) arrow.bar #hex("200C"),
-#hex(1400).#hex(1) arrow.bar #hex("200D"),
-...,
-#hex(1400).#hex("3F3") arrow.bar #fxcolor("orange", hex("23FF"))$
+$#hex("1400").#hex("0") arrow.bar #hex("200C"), quad
+  #hex("1400").#hex("1") arrow.bar #hex("200D"), space
+  ..., space
+  #hex("1400").#hex("3F3") arrow.bar #fxcolor("orange", hex("23FF"))$
 
 _Extent Trees_ \
 *Header:* $0 arrow.bar (1,0)$\
 *Extent:* $1 arrow.bar (0, #fxcolor("grün", hex(2000)), #fxcolor("rot",hex(400)))$
+
+#pagebreak()
 
 == Journaling
 Wird eine Datei _erweitert_, passiert folgendes:

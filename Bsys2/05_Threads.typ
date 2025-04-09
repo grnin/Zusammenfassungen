@@ -1,6 +1,5 @@
-// Compiled with Typst 0.11.1
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 /*#show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -52,39 +51,40 @@
   weil sie _voneinander abhängen_. Man kann für jeden Teil eines Algorithmus
   angeben, ob dieser _parallelisiert_ werden kann oder nicht.
 ]
+#v(-0.5em)
 #wrap-content(
   image("img/bsys_25.png"),
   align: top + right,
   columns: (65%, 35%),
 )[
   / $T$: Ausführungszeit, wenn _komplett seriell_ durchgeführt\
-    #hinweis[Im Bild: $T = T_0 + T_1 + T_2 + T_3 + T_4 $]
+    #hinweis[(Im Bild: $T = T_0 + T_1 + T_2 + T_3 + T_4 $)]
   / $n$: Anzahl der Prozessoren
-  / $T'$: Ausführungszeit, wenn _maximal parallelisiert_ #hinweis[gesuchte Grösse]
+  / $T'$: Ausführungszeit, wenn _maximal parallelisiert_ #hinweis[(gesuchte Grösse)]
   / $T_s$: Ausführungszeit für den Anteil, der _seriell_ ausgeführt werden _muss_\
-    #hinweis[Im Bild: $T_s = T_0 + T_2 + T_4$]
+    #hinweis[(Im Bild: $T_s = T_0 + T_2 + T_4$)]
   / $T - T_s$: Ausführungszeit für den Anteil, der _parallel_ ausgeführt werden _kann_\
-    #hinweis[Im Bild: $T - T_s = T_1 + T_3$]
+    #hinweis[(Im Bild: $T - T_s = T_1 + T_3$)]
   / $(T - T_s) / n$: Parallel-Anteil verteilt auf alle $n$ Prozessoren\
-    #hinweis[Im Bild: $(T_1 + T_3) / n$]
+    #hinweis[(Im Bild: $(T_1 + T_3) \/ n$)]
   / $T_s + (T - T_s) / n$: Serieller Teil + Paralleler Teil
-    #hinweis[$= T'$]
+    #hinweis[($= T'$)]
 
   Die _serielle Variante_ benötigt also höchstens _$f$ mal mehr Zeit_ als
   die _parallele Variante_ #hinweis[(wegen Overhead nur $<=$)]:
 ]
 
-#block($ f <= T / T^' = T / (T_s + (T - T_s) / n) $)
+$ f <= T / T^' = T / (T_s + (T - T_s) / n) $
 $f$ heisst auch _Speedup-Faktor_, weil man sagen kann, dass die parallele
 Variante maximal $f$-mal schneller ist als die serielle.
 
-Definiert man $s = T_s/T$, also den seriellen Anteil am Algorithmus,
+Definiert man $s = T_s\/T$, also den seriellen Anteil am Algorithmus,
 dann ist $s dot T = T_s$. Dadurch erhält man $f$ unabhängig von der Zeit:
 
-#block($
+$
   f <= T / (T_s + (T - T_s) / n) = T / (s dot T + (T - s dot T) / n)
-  = T / (s dot T + (1 - s) / n dot T) => f <= 1 / (s + (1 - s) / n)
-$)
+  = T / (s dot T + (1 - s) / n dot T) quad => quad f <= 1 / (s + (1 - s) / n)
+$
 
 #wrap-content(
   image("img/bsys_26.png"),
@@ -126,17 +126,17 @@ Die _erste Instruktion_, die der neue Thread ausführen soll, ist ein
 _Aufruf der Funktion_, deren Adresse in _`start_function`_ übergeben wird.
 Diese Funktion muss ebendiese Signatur haben. Zusätzlich übergibt der Thread
 das Argument `argument` an diese Funktion. Dies ist typischerweise ein Pointer
-auf eine Datenstruktur auf dem Heap. #hinweis[(*Achtung:* Legt man diese Struktur
-auf dem Stack an, muss man sicherstellen, dass man während der Lebensdauer
-des Threads den Stack nicht abbaut.)]
+auf eine Datenstruktur auf dem Heap. #hinweis[(*Achtung:* Wird diese Struktur
+auf dem Stack angelegt, muss sichergestellt werden, dass während der Lebensdauer
+des Threads der Stack nicht abgebaut wird.)]
 
 #grid(
   columns: (50%, 60%),
   gutter: 11pt,
   [
     ```c
-    //Erstellung
-    struct T {
+    // Erstellung
+    struct T { // params of function
       int value;
     };
     void * my_start (void * arg) {
@@ -149,11 +149,10 @@ des Threads den Stack nicht abbaut.)]
   ],
   [
     ```c
-    //Verwendung
+    // Verwendung
     void start_my_thread (void) {
-      struct T * t = malloc (
-       sizeof (struct T));
-      t->value = 109;
+      struct T * t = malloc (sizeof (struct T));
+      t->value = 109; // set argument
       pthread_t tid;
       pthread_create (
         &tid,
@@ -177,6 +176,8 @@ pthread_attr_setstacksize (&attr, 1 << 16); // 64kb Stackgrösse
 pthread_create (..., &attr, ...); // Thread erstellen
 pthread_attr_destroy (&attr); // Attribute löschen
 ```
+
+#pagebreak()
 
 === Lebensdauer eines Threads
 Ein Thread _lebt_ solange, bis eine der folgenden Bedingungen eintritt:
@@ -220,8 +221,8 @@ void f (void) {
   }
 }
 ```
-TLS ist ein Mechanismus, der _globale Variablen per Thread_ zur Verfügung stellt.
-Dies benötigt mehrere explizite Einzelschritte:\
+Thread-Local Storage (TLS) ist ein Mechanismus, der _globale Variablen per Thread_
+zur Verfügung stellt. Dies benötigt mehrere explizite Einzelschritte:\
 *Bevor Threads erzeugt werden:*
 - Anlegen eines _Keys_, der die TLS-Variable _identifiziert_
 - _Speichern_ des Keys in einer _globalen Variable_
@@ -257,18 +258,20 @@ typedef struct {
   int code;
   char *message;
 } error_t;
-pthread_key_t error;
+pthread_key_t error; // globale Variabel
+
 void set_up_error (void) { // wird am Anfang des Threads aufgerufen
-  pthread_setspecific( error, malloc( sizeof( error_t )))
+  pthread_setspecific( error, malloc( sizeof( error_t ))) // speichert error_t-Pointer in error
 }
 
 // Lesen und Schreiben im Thread
 void print_error (void) {
-  error_t * e = pthread_getspecific (error);
-  printf("Error %d: %s\n", e->code, e->message);
+  error_t * e = pthread_getspecific (error); // error_t-Pointer aus TLS Key lesen
+  printf("Error %d: %s\n", e->code, e->message); // error_t-Werte aus Pointer auslesen
 }
 int force_error (void) {
-  error_t * e = pthread_getspecific (error);
+  error_t * e = pthread_getspecific (error); // error_t-Pointer aus TLS Key lesen
+  // Durch Pointer Werte in error_t schreiben
   e->code = 98;
   e->message = "file not found";
   return -1;

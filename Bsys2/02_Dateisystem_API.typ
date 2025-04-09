@@ -1,6 +1,5 @@
-// Compiled with Typst 0.11.1
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 /*#show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -17,6 +16,8 @@ File System (FS) und OS _(fast) keine Relevanz_. Bestimmte Programme deuten Date
 als Typ. Häufig wird der Typ aber durch _Magic Numbers_ oder Strings innerhalb der Datei
 gekennzeichnet.
 
+== Dateisystem-Grundlagen
+#v(-0.5em)
 === Schutz gegen falsche Datentypen
 Es liegt an der Applikation, den Dateityp richtig zu bestimmen.
 Applikationen müssen sich gegen "Datenmüll" (bzw. Fehlinterpretation) schützen.
@@ -34,12 +35,12 @@ auf Grenzverletzungen überprüfen.
 
 === Besondere Verzeichnisse
 Jedes Verzeichnis enthält zwei implizite Referenzen auf Verzeichnisse:
-- _`.`_ Referenz auf sich selbst
-- _`..`_ Referenz auf das Elternverzeichnis
+- _`.`_ #hinweis[(ein Punkt)]: Referenz auf sich selbst
+- _`..`_ #hinweis[(zwei Punkte)]: Referenz auf das Elternverzeichnis
 Jeder Prozess hat ein _Arbeitsverzeichnis (working directory)_, welches den Bezugspunkt
 für relative Pfade darstellt. Dieses wird beim Prozessstart von aussen festgelegt.
 Wird mit ```c getcwd()``` ermittelt und mit
-```c chdir()``` #hinweis[(nimmt Pfad als String)] bzw
+```c chdir()``` #hinweis[(nimmt Pfad als String)] bzw.
 ```c fchdir()``` #hinweis[(nimmt file descriptor)] geändert.
 
 === Pfade
@@ -81,8 +82,8 @@ Hat je 3 Permission-Bits für _Owner_, _Gruppe_, und _andere Benutzer_.
 - _Write-Bits:_ Darf schreiben
 - _Execute/Search-Bits:_ Darf ausführen (Datei) bzw. durchsuchen (Verzeichnis)
 
-Es gibt eine feste Reihenfolge der 9 Permission Bits: `owner rwx - group rwx - other rwx`.
-Schreibweise: `r=4, w=2, x=1` `0740` oder `rwx r-- ---` bedeutet
+Es gibt eine feste Reihenfolge der 9 Permission Bits: `owner rwx - group rwx - other rwx`.\
+Schreibweise: `r=4, w=2, x=1`\ `0740` oder `rwx r-- ---` bedeutet
 owner hat alle Rechte, Gruppe kann nur lesen, andere haben keine Rechte.
 
 ==== POSIX
@@ -97,10 +98,10 @@ Können mit `|` verknüpft werden, z.B. `S_IRWXU | S_IRGRP`
 #wrap-content(
   image("img/bsys_5.png"),
   align: top + right,
-  columns: (62%, 38%),
+  columns: (64%, 36%),
 )[
   == Überblick APIs
-  - _POSIX-API:_ für direkten Zugriff, alle Dateien sind rohe Binärdaten
+  - _POSIX-API:_ für direkten Zugriff, alle Dateien sind rohe Binärdaten\
     #hinweis[(so wie sie in der Datei gespeichert sind)]
   - _C-API:_ für direkten Zugriff auf Streams #hinweis[(Textdateien)], Abstraktion
     über Dateien, Pipes, etc. Für formatierte Ein- und Ausgabe, OS leitet alle
@@ -116,14 +117,14 @@ Können mit `|` verknüpft werden, z.B. `S_IRWXU | S_IRGRP`
 
 === `errno`
 - _Makro oder globale Variable vom Typ `int`_
-  #hinweis[verhält sich immer wie eine globale Variable]
+  #hinweis[(verhält sich immer wie eine globale Variable)]
 - Wird von vielen Funktionen gesetzt.
 - Sollte _unmittelbar nach Auftreten eines Fehlers_ aufgerufen werden
   #hinweis[damit Wert nicht von anderer Funktion überschrieben wird]
 
 ```c
 if (chdir("docs") < 0) {
-  // hier nichts anderes machen damit Fehlercode nicht überschrieben wird
+  // hier nichts anderes machen, damit Fehlercode nicht überschrieben wird
   if (errno == EACCESS) {
     printf("Error: Access denied");
   }
@@ -163,7 +164,7 @@ Gilt immer nur innerhalb eines Prozesses. Ein neu erstellter FD returnt einen In
 #wrap-content(
   image("img/bsys_6.png"),
   align: top + right,
-  columns: (70%, 30%),
+  columns: (60%, 40%),
 )[
   In jedem Prozess sind drei Standard File-Deskriptoren definiert:
   - _`STDIN_FILENO = 0`:_ standard input
@@ -173,9 +174,9 @@ Gilt immer nur innerhalb eines Prozesses. Ein neu erstellter FD returnt einen In
 
 === Öffnen und Schliessen von Dateien: ```c int open (char *path, int flags, ...)```
 erzeugt einen File-Deskriptor auf die Datei, die an `path` liegt.
-`flags` gibt an, wie die Datei geöffnet werden soll.
+`flags` gibt an, wie die Datei geöffnet werden soll.\
 #hinweis[(können über Pipe kombiniert werden. Sollen noch Berechtigungs-Flags verwendet
-werden, werden diese als eigener Parameter angegeben)]
+  werden, werden diese als eigener Parameter angegeben)]
 
 - _`O_RDONLY`:_ nur lesen
 - _`O_RDWR`:_ lesen und schreiben
@@ -201,7 +202,7 @@ if (fd < 0) {
   // error handling, -1 means error
 }
 // read data
-close(fd); //gets written on the disc and the resources (and the file) can be used again
+close(fd); //gets written on the disk and the resources (and the file) can be used again
 ```
 
 === Lesen und Schreiben von Dateien: ```c ssize_t read(int fd, void * buffer, size_t n)```
@@ -232,7 +233,7 @@ char dpath[PATH_MAX]; // destination path
 int src = open(spath, O_RDONLY);
 int dst = open(dpath, O_WRONLY | O_CREAT, S_IRWXU);
 ssize_t read_bytes = read(src, buf, N);
-write(dst, buf, read_bytes); //if file gets closed early, use return value of "read_bytes"
+write(dst, buf, read_bytes); // if file gets closed early, use return value of "read_bytes"
 close(src);
 close(dst);
 ```
@@ -253,8 +254,8 @@ close(dst);
   Weitere Anwendungsmöglichkeiten:
   - _`lseek(fd, 0, SEEK_CUR)`:_ gibt aktuellen Offset zurück
   - _`lseek(fd, 0, SEEK_END)`:_ gibt die Grösse der Datei zurück
-  - _`lseek(fd, n, SEEK_END)`:_ hängt bei nachfolgendem `write` $n$ Nullen an Datei
-    #hinweis[(Padding um Datei auf bestimmte Grösse zu setzen)]
+  - _`lseek(fd, n, SEEK_END)`:_ hängt bei nachfolgendem `write` $n$ Nullen an Datei\
+    #hinweis[(Padding, um Datei auf bestimmte Grösse zu setzen)]
 ]
 
 === Lesen und Schreiben ohne Offsetänderung:
@@ -268,15 +269,15 @@ Wie `read` bzw. `write`. Statt des Offsets von `fd` wird der zusätzliche Parame
 #hinweis[(`off_t >= signed int`)] Der Offset von `fd` wird _nicht_ verändert.
 
 === Unterschiede Windows und POSIX
-- Bestandteile von Pfaden werden durch _Backslash_ (`\`) getrennt.
+- Bestandteile von Pfaden werden durch _Backslash_ (`\`) getrennt.\
   #hinweis[(müssen darum in C-Strings doppelt geschrieben werden, da `\` Escape-Character ist)]
 - Ein _Wurzelverzeichnis pro_ Datenträger/Partition
-- Andere File-Handling-Funktionen #hinweis[CreateFile, ReadFile, WriteFile,
-  SetFilePointer, CloseHandle]
+- Andere File-Handling-Funktionen #hinweis[(CreateFile, ReadFile, WriteFile,
+  SetFilePointer, CloseHandle)]
 
 == C Stream API
 - _Unabhängig vom Betriebssystem:_ für POSIX und Windows gleich
-- _Stream-basiert:_ zeichen-orientiert #hinweis[Ist dafür da, mit Text zu arbeiten]
+- _Stream-basiert:_ zeichen-orientiert #hinweis[(Ist dafür da, mit Text zu arbeiten)]
 - Kann _gepuffert_ oder _ungepuffert_ sein. Für Dateien im Normalfall _gepuffert_.
   Transferiert selbstständig grössere Daten-Blöcke zwischen Datei und Puffer.
 - Hat einen eigenen _File-Position-Indicator_: Bei gepufferten Streams bestimmte Position
@@ -284,8 +285,8 @@ Wie `read` bzw. `write`. Statt des Offsets von `fd` wird der zusätzliche Parame
 
 === Streams
 Datenstruktur `FILE` enthält _Informationen über einen Stream_.
-Soll _nicht direkt verwendet werden_, sondern nur über von C-API erzeugte Pointer 
-_`(FILE *)`_. Soll nicht kopiert werden, Pointer an sich kann von API als ID 
+Soll _nicht direkt verwendet werden_, sondern nur über von C-API erzeugte Pointer
+_`(FILE *)`_. Soll nicht kopiert werden, Pointer an sich kann von API als ID
 verwendet werden.
 
 Drei definierte Standard-Streams analog zu den Standard-FDs:\
@@ -316,20 +317,20 @@ wird direkt der File-Deskriptor übergeben.
 bezieht, oder -1 bei Fehler.
 
 Da die POSIX- & Stream-API _unterschiedliche Offsets_ haben, sollte man nach dem Umwandlen
-mit den obigen Funktionen die "vorherige" API _nicht mehr verwenden_, da es wie bei 
+mit den obigen Funktionen die "vorherige" API _nicht mehr verwenden_, da es wie bei
 mehreren FDs auf diesselbe Datei zu _Konflikten_ kommen kann.
 
 === Schliessen einer Datei: ```c int fclose(FILE *file)```
-ruft ```c fflush()``` auf, schliesst den durch `file` bezeichneten Stream, entfernt `file`
+Ruft ```c fflush()``` auf, schliesst den durch `file` bezeichneten Stream, entfernt `file`
 aus Speicher und gibt 0 zurück wenn OK, andernfalls `EOF`.
 
 === Flushen einer Datei: ```c int fflush(FILE *file)```
-schreibt eventuell zu schreibenden Inhalt aus dem Hauptspeicher in die Datei.
+Schreibt eventuell zu schreibenden Inhalt aus dem Hauptspeicher in die Datei.
 Wird automatisch aufgerufen, wenn der Puffer voll ist oder die Datei geschlossen wird.
 Gibt 0 zurück wenn OK, andernfalls `EOF`.
 
 === Lesen aus einer Datei: ```c int fgetc(FILE *stream)```
-liest das nächste Byte vom `stream` als _unsigned char_ und gibt es als _int_ zurück
+Liest das nächste Byte vom `stream` als _unsigned char_ und gibt es als _int_ zurück
 #hinweis[(weil man den nächstgrösseren Dateityp `int` benötigt, um Fehlercodes abzubilden)].
 Erhöht den _File-Position-Indicator_ um 1.
 
@@ -339,15 +340,15 @@ null-terminierten String. Gibt `buf` zurück, oder 0 wenn ein Fehler auftrat.
 Erhöht den File-Position-Indicator entsprechend der gelesenen Zeichen.
 
 ==== Lesen rückgängig machen: ```c int ungetc(int c, FILE *stream)```
-schiebt `c` zurück in den `stream` auf den _Unget-Stack_.
+Schiebt `c` zurück in den `stream` auf den _Unget-Stack_.
 `fgetc` bevorzugt immer den Unget-Stack: `c` wird bei der nächsten Leseoperation so
 zurückgegeben, als ob es an der Stelle gestanden hätte.
 Die Datei selbst wird _nicht_ verändert.
-Der Unget-Stack hat _mindestens Grösse 1: Funktioniert mindestens einmal_
+Der Unget-Stack hat _mindestens Grösse 1: Funktioniert mindestens einmal_.
 Gibt `c` zurück, oder `EOF` im Fehlerfall.
 
 === Schreiben in eine Datei: ```c int fputc(int c, FILE *stream)```
-konvertiert `c` in _unsigned char_ und schreibt diesen auf `stream`.
+Konvertiert `c` in _unsigned char_ und schreibt diesen auf `stream`.
 Gibt entweder `c` zurück oder `EOF`. Erhöht den File-Position-Indicator um 1.
 
 ```c int fputs(char *s, FILE *stream)``` schreibt die Zeichen vom String `s` bis
@@ -366,18 +367,18 @@ if (return_value == EOF) {
   if (feof(stream) != 0) {
     // EOF reached
   } else if (ferror(stream) != 0) {
-    // Error Occured, check errno
-  } // feof and ferror need to be checked separately
+    // Error occured, check errno
+  } // feof() and ferror() need to be checked separately
 }
 ```
 
 === Manipulation des File-Position-Indicator:
 - *```c long ftell(FILE *stream)```*
   gibt den gegenwärtigen FPI zurück.\
-  #hinweis[POSIX-Erweiterung von C: `ftello` mit Rückgabetyp `off_t`]
+  #hinweis[(POSIX-Erweiterung von C: `ftello` mit Rückgabetyp `off_t`)]
 - *```c int fseek (FILE *stream, long offset, int origin)```*
   setzt den FPI, analog zu `lseek`.\
-  #hinweis[POSIX-Erweiterung von C: `fseeko` mit `off_t` als Typ für `offset`]
+  #hinweis[(POSIX-Erweiterung von C: `fseeko` mit `off_t` als Typ für `offset`)]
 - *```c int rewind (FILE *stream)```*
-  setzt den Stream zurück.
+  setzt den Stream zurück.\
   Äquivalent zu ```c fseek(stream, 0, SEEK_SET)``` und Löschen des Fehlerzustands.

@@ -1,6 +1,5 @@
-// Compiled with Typst 0.11.1
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 /* #show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -19,11 +18,11 @@ _anderer_ Prozesse lesen.
 Folgende _Eigenschaften_ müssen für diese Sicherheitslücke gegeben sein:
 
 Der Prozessor muss dazu gebracht werden können:
-1. aus dem _geschützten Speicher_ an Adresse $a$ das Byte $m_a$ zu _lesen_
-2. die Information $m_a$ in irgendeiner Form $f_a$ _zwischenzuspeichern_
-3. _binäre Fragen_ der Form "$f_a eq.quest i$" zu beantworten
-4. Von $i = 0$ bis $i = 255$ _iterieren_: $f_a eq.quest i$
-5. Über alle $a$ _iterieren_
++ aus dem _geschützten Speicher_ an Adresse $a$ das Byte $m_a$ zu _lesen_
++ die Information $m_a$ in irgendeiner Form $f_a$ _zwischenzuspeichern_
++ _binäre Fragen_ der Form "$f_a eq.quest i$" zu beantworten
++ Von $i = 0$ bis $i = 255$ _iterieren_: $f_a eq.quest i$
++ Über alle $a$ _iterieren_
 
 == Performance-Optimierungen in realen Systemen
 Moderne HW und OS verwenden zahlreiche und nicht immer intuitive "Tricks" für
@@ -71,12 +70,12 @@ char * sec_addr = 0x1234;
 char sec_data = *sec_addr; // Exception, no permission
 char dummy = dummy_array[sec_data]; // speculative
 ```
-Schritt 2 ist damit erfüllt, da im Cache $m_a$ als Teil des Tags gespeichert wird.
+Schritt 2 ist damit erfüllt, da im Cache $m_a$ als Teil des Tags gespeichert wird.\
 #hinweis[(`dummy_array` + `sec_data` #sym.arrow `sec_data` = Tag - `dummy_array`).]
 
 === Cache auslesen
 Jedoch kann _die Zeit gemessen_ werden, die ein Speicherzugriff benötigt:
-_Lange Zugriffszeit:_ Adresse war nicht im Cache
+_Lange Zugriffszeit:_ Adresse war nicht im Cache,
 _Kurze Zugriffszeit:_ Adresse war im Cache.
 Dies nennt man auch _Timing Side Channel Attack_.
 Mit der Assembly-Instruktion ```asm clflush p``` werden alle Zeilen, die die Adresse `p`

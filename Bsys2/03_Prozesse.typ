@@ -1,6 +1,5 @@
-// Compiled with Typst 0.11.1
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 /*#show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -18,7 +17,7 @@ Wenn ein Prozessor nur ein einziges Programm ausführt, laufen auf ihm _nur zwei
 Software-Akteure:_ Das _Programm_ und das _Betriebssystem_.
 
 Dieses System nennt man Monoprogrammierung: _Kommunikation_ vom Programm zum OS auf
-SW-Ebene über _C-Funktionsaufrufe_. Das Programm _kennt nur sich selbst_ und das OS.
+SW-Ebene über\ _C-Funktionsaufrufe_. Das Programm _kennt nur sich selbst_ und das OS.
 
 Moderne Prozessoren bieten _genügend Rechenleistung_, um _viele Programme_ gleichzeitig
 ausführen zu können. All diese Programme müssen _gleichzeitig_ im Hauptspeicher sein.

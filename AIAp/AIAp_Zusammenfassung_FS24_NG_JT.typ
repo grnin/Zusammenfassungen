@@ -1,6 +1,6 @@
-// Compiled with Typst 0.11.1
+// Compiled with Typst 0.13.1
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.0": wrap-content
+#import "@preview/wrap-it:0.1.1": wrap-content
 
 #show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -128,50 +128,44 @@ _The Care Ethics Lens_ #hinweis[(Prioritizes empathy and compassion in relations
 
 
 /*
-#grid(
-  columns: (1fr, 1fr),
-  gutter: 1em,
-  [
-    === The Rights Lens
-    The rights lens focuses on _protecting and respecting the moral rights of individuals_,
-    which are grounded in _human dignity and autonomy_. It emphasizes treating people as ends in
-    themselves, not merely as means to an end. _Moral rights_ include making one's own life
-    choices, being told the truth, and having privacy.
+#grid(columns: (1fr, 1fr), gutter: 1em, [
+  === The Rights Lens
+  The rights lens focuses on _protecting and respecting the moral rights of individuals_,
+  which are grounded in _human dignity and autonomy_. It emphasizes treating people as ends in
+  themselves, not merely as means to an end. _Moral rights_ include making one's own life
+  choices, being told the truth, and having privacy.
 
-    === The Justice Lens
-    The justice lens is about giving each person their due based on _fair and equal treatment_,
-    which can vary by merit or need. Different types of justice include social, distributive,
-    corrective, retributive, and restorative justice, addressing various contexts of _fairness_.
-    It aims to ensure everyone receives what they are rightfully entitled to.
+  === The Justice Lens
+  The justice lens is about giving each person their due based on _fair and equal treatment_,
+  which can vary by merit or need. Different types of justice include social, distributive,
+  corrective, retributive, and restorative justice, addressing various contexts of _fairness_.
+  It aims to ensure everyone receives what they are rightfully entitled to.
 
-    === The Utilitarian Lens
-    Utilitarianism evaluates the ethicality of actions based on their _consequences_, aiming to
-    produce the _greatest balance of good over harm_ for the _most people_. It involves careful
-    analysis of the impacts on all stakeholders, such as customers, employees, and the community.
-    This lens often uses _cost/benefit analysis_ to guide decisions.
-  ],
-  [
-    === The Common Good Lens
-    The common good lens asserts that ethical actions contribute to the _welfare and interlocking
+  === The Utilitarian Lens
+  Utilitarianism evaluates the ethicality of actions based on their _consequences_, aiming to
+  produce the _greatest balance of good over harm_ for the _most people_. It involves careful
+  analysis of the impacts on all stakeholders, such as customers, employees, and the community.
+  This lens often uses _cost/benefit analysis_ to guide decisions.
+],[
+  === The Common Good Lens
+  The common good lens asserts that ethical actions contribute to the _welfare and interlocking
   relationships of society_. It stresses mutual concern for shared interests and the importance
-    of common conditions like clean air, public health, and education. This approach values
-    _community life and the well-being of all members_.
+  of common conditions like clean air, public health, and education. This approach values
+  _community life and the well-being of all members_.
 
-    === The Virtue Lens
-    Virtue ethics emphasizes actions consistent with ideal virtues that foster human development,
-    such as _honesty, courage, and integrity_. It asks what kind of person one will become by
-    performing certain actions, focusing on _acting according to the highest potential_ of one's
-    character. This lens is about _aligning actions with virtuous traits_.
+  === The Virtue Lens
+  Virtue ethics emphasizes actions consistent with ideal virtues that foster human development,
+  such as _honesty, courage, and integrity_. It asks what kind of person one will become by
+  performing certain actions, focusing on _acting according to the highest potential_ of one's
+  character. This lens is about _aligning actions with virtuous traits_.
 
-    === The Care Ethics Lens
-    Care ethics prioritizes _relationships_ and responding to individuals' specific circumstances
-    with _empathy_ and _compassion_. It values interdependence and seeks to understand the
-    _feelings and viewpoints_ of all stakeholders. This lens advocates for resolutions that
-    consider the relational context and societal duties, promoting a holistic approach to ethical conflicts.
-  ],
-)
+  === The Care Ethics Lens
+  Care ethics prioritizes _relationships_ and responding to individuals' specific circumstances
+  with _empathy_ and _compassion_. It values interdependence and seeks to understand the
+  _feelings and viewpoints_ of all stakeholders. This lens advocates for resolutions that
+  consider the relational context and societal duties, promoting a holistic approach to ethical conflicts.
+])
 */
-
 *Problems in using the lenses:*
 We may _not agree_ on the _content_ of these lenses, not everyone has the same set of civil
 rights for example. _Different lenses_ may lead to _different answers_ to the question
@@ -257,6 +251,7 @@ model = tf.keras.Sequential([
   tf.keras.layers.Dense(10)
 ])
 ```
+
 - _First Layer: `tf.keras.layers.Flatten`:_
   Transforms images from 2D (28x28 pixels) to 1D (784 pixels),
   unstacks rows of pixels and lines them up. No parameters, only reformats data.
@@ -271,6 +266,7 @@ model.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 ```
+
 - _Optimizer:_ This is how the model is updated based on the data it sees and its loss function.
 - _Loss function:_ This measures how accurate the model is during training.
   You want to minimize this function to "steer" the model in the right direction.
@@ -290,7 +286,7 @@ Training the neural network model requires the following steps:
 + _Verify_ that the predictions match the labels from the `test_labels` array.
 
 ==== Evaluation
-```py test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)```\
+```py test_loss, test_acc = model.evaluate(test_images, test_labels, verbose=2)```\
 Compare how the model performs on the test dataset.
 
 ==== Make predictions
@@ -299,7 +295,7 @@ Attach a _softmax layer_ to convert the model's linear outputs (logits) to proba
 which should be easier to interpret.
 
 ```py
-probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()]);
+probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
 predictions = probability_model.predict(test_images)
 ```
 
@@ -355,8 +351,8 @@ _"same"_ #hinweis[(evenly padded with zeroes horizontally & vertically)].
 
 == Feeding Feature Maps into the next Conv-Layer
 The output of a convolutional layer looks like a _new image_. We can _apply multiple kernels_
-to the same input. This produces _multiple feature maps_ which can be _stacked_ #hinweis[(like
-an RGB image is stacked from 3 Channels)].
+to the same input. This produces _multiple feature maps_ which can be _stacked_
+#hinweis[(like an RGB image is stacked from 3 Channels)].
 This output can be fed into the next convolutional layer to _find more complex patterns_.
 
 == Pooling
@@ -406,7 +402,6 @@ model = Sequential([
   *Example:* Channel 1 returns $158$, Channel 2 returns $hyph.minus 14$, Channel 3 $653$.
   Bias is $1$. $=> 158 + hyph.minus 14 + 653 + 1 = underline(798)$
 ]
-
 #wrap-content(
   image("img/aiap_6.png"),
   align: top + right,
@@ -414,7 +409,7 @@ model = Sequential([
 )[
   === Apply the max pooling operation
   Using a $2 times 2$ kernel-size, stride = kernel-size (default).
-  This means get the _max value_ of every $2 times 2$ square.\
+  This means get the _max value_ of every\ $2 times 2$ square.\
   _Size of the feature map after pooling:_ $1 times 2$
 ]
 
@@ -426,9 +421,8 @@ model = Sequential([
   === Shape of output of one Conv-Layer
   After all Kernels are applied, what will be the shape of the output of one Conv-Layer with
   these four kernels, followed by max pooling?
-  _Output tensor of rank=3 with shape= (1,2,4)_
+  _Output tensor of rank=3 with shape=(1, 2, 4)_
 ]
-
 #wrap-content(
   image("img/aiap_8.png"),
   align: top + right,
@@ -456,72 +450,65 @@ model.add(layers.Dense(10))
 ```
 ==== Layer 1, Conv2D
 _The number of weights/trainable parameters_ in this layer is calculated as\
-$(fxcolor("grün", "kernel size") dot fxcolor("orange", "input channels") + fxcolor("rot", "bias"))
-  dot fxcolor("gelb", "amount of kernels in this layer") =>
-  (fxcolor("grün", (3 dot 3)) dot fxcolor("orange", 3) + fxcolor("rot", 1)) dot fxcolor("gelb", 32) = 896$\
+$(fxcolor("grün", "kernel size") dot fxcolor("orange", "input channels") +
+    fxcolor("rot", "bias")) dot fxcolor("gelb", "amount of kernels in this layer") =>
+  (fxcolor("grün", (3 dot 3)) dot fxcolor("orange", 3) + fxcolor("rot", 1)) dot
+  fxcolor("gelb", 32) = 896$ \
 #hinweis[Note that the number of parameters in a ConvLayer does *not* depend on
   the width and height of the input]
 
 _Output shape:_
-$(fxcolor("grün", "input_width") - fxcolor("orange", "kernel_width")) / fxcolor("rot", "stride") + 1 =>
-  (fxcolor("grün", 32) - fxcolor("orange", 3)) / fxcolor("rot", 1) + 1 = 30$\
+$(fxcolor("grün", "input_width") - fxcolor("orange", "kernel_width")) \/fxcolor("rot", "stride") + 1
+  => (fxcolor("grün", 32) - fxcolor("orange", 3)) \/ fxcolor("rot", 1) + 1 = 30$ \
 Without padding, we can apply the kernel $30$ times over a width of 32px
 #hinweis[(same for height)]. Each of the $32$ kernels outputs one $30 times 30$ feature map.
-Therefore, the output has the shape $underline(30 times 30 times 32)$.\
+Therefore, the output has the shape $underline(30 times 30 times 32)$. \
 #hinweis[Default values are `strides=(1,1), padding="valid"`]
 
 ==== Layer 2, MaxPooling
 MaxPooling Layers do not have weights and therefore no trainable parameters.\
-_Output shape:_
-$(fxcolor("grün", "input_width") - fxcolor("orange", "pool_width")) /
-  fxcolor("rot", "stride") + 1 =>
-  (fxcolor("grün", 30) - fxcolor("orange", 2)) / fxcolor("rot", 2) + 1 = underline(15)$,
+_Output shape:_ $(fxcolor("grün", "input_width") - fxcolor("orange", "pool_width")) \/fxcolor("rot", "stride") + 1
+=> (fxcolor("grün", 30) - fxcolor("orange", 2)) \/ fxcolor("rot", 2) + 1 = underline(15)$,
 shape is therefore $underline(15 times 15 times 32)$\
-#hinweis[Default values are `strides=None, padding="valid"`.
-  When `strides=None`, it will default to `pool_size`.]
+#hinweis[Default values are `strides=None, padding="valid"`. When `strides=None`, it will default to `pool_size`.]
 
 ==== Layer 3, Conv2D
 Number of _trainable parameters:_
 $(fxcolor("grün", (3 dot 3)) dot fxcolor("orange", 32) + fxcolor("rot", 1)) dot
   fxcolor("gelb", 64) = underline(18'496)$
 
-_Output shape:_
-Note the `padding='same'` hyper-parameter. This adds rows and columns of 0s to
+_Output shape:_ Note the `padding='same'` hyper-parameter. This adds rows and columns of 0s to
 the input, evenly to the left/right or up/down when `'same'` so that the output feature map
 will have the _same_ dimensions as the input tensor.\
 *Calculation:*
 The input size is _increased by 1_ at the left and at the right:
 #fxcolor("hellblau", $(+(2 dot 1)$)\
 $(fxcolor("grün", 15) + #fxcolor("hellblau", $(+(2 dot 1)$) - fxcolor("orange", 3)) \/
-  fxcolor("rot", 2) - 1 = underline(8)$.
+fxcolor("rot", 2) - 1 = underline(8)$.
 So the resulting shape is $underline(8 times 8 times 64)$
 
 ==== Layer 4, MaxPooling
 No trainable parameters.\
-_Output shape:_
-$(fxcolor("grün", 8) - fxcolor("orange", 2)) \/ fxcolor("rot", 2) + 1
-  = underline(4)$,
+_Output shape:_ $(fxcolor("grün", 8) - fxcolor("orange", 2)) \/ fxcolor("rot", 2) + 1
+= underline(4)$,
 Shape is $underline(4 times 4 times 64)$\
 
 ==== Layer 5, Flatten
 Does not have any trainable parameters.\
-_Output shape:_
-Flatten takes the $4 times 4 times 64$ input tensor and reshapes it into a
+_Output shape:_ Flatten takes the $4 times 4 times 64$ input tensor and reshapes it into a
 "flat" $1024 times 1$ vector.
 
 ==== Layer 6, Dense
-_Trainable weights:_
-Each of the $10$ neurons is fully connected, plus $1$ bias:
-$10 dot (1024 + 1) = underline(10'250)$\
-_Output shape:_
-$10 times 1$ or simply $10$.
+_Trainable weights:_ Each of the $10$ neurons is fully connected, plus $1$ bias:
+$10 dot (1024 + 1) = underline(10'250)$ \
+_Output shape:_ $10 times 1$ or simply $10$.
 
 ==== Hoy many trainable parameters does the network have?
 $896 + 18'496 + 10'250 = underline(29'642)$ trainable Parameters.
 
 ==== What would happen if the input image is 2-times wider?
 The number of trainable parameters in the ConvLayers does not change, but the output feature
-maps are larger. The Dense Layer would have $approx 2 times$ more parameters.
+maps are larger.\ The Dense Layer would have $approx 2 times$ more parameters.
 
 
 = Deep learning architectures
@@ -633,8 +620,8 @@ autoencoder.compile(optimizer='adam', loss=losses.MeanSquaredError())
 autoencoder.fit(x_train, x_train, epochs=10, shuffle=True, validation_data=(x_test, x_test))
 encoded_imgs = autoencoder.encoder(x_test).numpy() # apply encoder
 decoded_imgs = autoencoder.decoder(encoded_imgs).numpy() # apply decoder
-
 ```
+
 === Denoising
 ```py
 class Denoise(Model):
@@ -684,7 +671,7 @@ This is repeated multiple times until the weights converge to a point where the 
   + _Compute the error_
   #colbreak()
   4. _Backward propagate the error_ through the network to compute the gradient
-  + _Update the weights_ in the opposite direction of the gradient using SGD or something similar
+  + _Update the weights_ in the opposite direction of the\ gradient using SGD or something similar
   + _Repeat_ steps 2-5 for multiple iterations
 ]
 
@@ -705,8 +692,7 @@ A classifier can only classify data that is _similar to the training data_. If w
 enough training data, we need to artificially create more by applying different transformations
 #hinweis[(De-texturized, de-colorized, edge enhanced, salient edge map, flip, rotate, ...)].
 
-```py
-layers.Resizing(IMG_SIZE, IMG_SIZE), layers.Rescaling(1./255),
+```py layers.Resizing(IMG_SIZE, IMG_SIZE), layers.Rescaling(1./255),
 layers.RandomFlip("horizontal_and_vertical"), layers.RandomRotation(0.2),
 skimage.color.rgb2gray(imgs)
 ```
@@ -779,8 +765,7 @@ An RL agent tries to solve an RL-problem by learning the actions that maximize r
   Through this, the agent learns what "good" and "bad" actions are.
 - _Policy $bold(pi)$:_ Fully defines the behavior of the agent. Maps states to action-selection
   probabilities. Normally an agent starts with a random policy and then tries to improve it.
-  #hinweis[("At state S53, go left with probability 76% and right with 24%" is noted as
-    $pi(s=53, a="left") = 0.76$)]
+  #hinweis[("At state S53, go left with probability 76% and right with 24%" is noted as $pi(s=53, a="left") = 0.76$)]
 
 == Markov Decision Process (MDP)
 Composed of 4 entities:
@@ -803,7 +788,7 @@ variety of problems.
   _terminal state_ is reached.
 ]
 === Goal of an RL
-"Find the optimal policy $pi^*$" by trial-and-error. $pi^*$ is: At each state $S_t$, take the
+"Find the _optimal policy $bold(pi^*)$_" by trial-and-error. $pi^*$ is: At each state $S_t$, take the
 action $A_t$ which returns the _largest sum of (discounted) rewards_.
 
 === Different policies, different sum of rewards <rl-map>
@@ -815,7 +800,7 @@ action $A_t$ which returns the _largest sum of (discounted) rewards_.
     *Optimal policy $bold(pi^*)$*
     #table(
       columns: (1fr, 1fr, 1fr),
-      table.header([State], [`a0`], [`a1`]),
+      [State], [`a0`], [`a1`],
       [_`S0`_], [1], [0],
       [_`S1`_], [0], [1],
       [_`S2`_], [1], [0],
@@ -830,7 +815,7 @@ action $A_t$ which returns the _largest sum of (discounted) rewards_.
     *Random policy $bold(pi^"random")$*
     #table(
       columns: (1fr, 1fr, 1fr),
-      table.header([State], [`a0`], [`a1`]),
+      [State], [`a0`], [`a1`],
       [_`S0`_], [0.5], [0.5],
       [_`S1`_], [0.5], [0.5],
       [_`S2`_], [0.5], [0.5],
@@ -850,10 +835,10 @@ action $A_t$ which returns the _largest sum of (discounted) rewards_.
   columns: (1fr, 2fr),
   gutter: 1em,
   [
-    *Assume the agent starts in state `x` and follows $bold(pi^*)$. Total reward?*
+    *Assume the agent starts in state `x` and follows  $bold(pi^*)$. Total reward?*
     #table(
       columns: (auto, 1fr),
-      table.header([State], [Total Reward]),
+      [State], [Total Reward],
       [_`S0`_], [$V^pi^*("S0") = hyph.minus 1 + 4 + 5 = 8$],
       [_`S1`_], [$V^pi^*("S1") = 4 + 5 = 9$],
       [_`S2`_], [$V^pi^*("S2") = 7$],
@@ -864,7 +849,7 @@ action $A_t$ which returns the _largest sum of (discounted) rewards_.
     *Same for Random Policy. What does the agent collect on average? Work backwards.*
     #table(
       columns: (auto, 1fr),
-      table.header([State], [Total Reward]),
+      [State], [Total Reward],
       [_`S7`_], [$V^pi^*("S7") = 0$],
       [_`S4`_], [$V^pi^*("S4") = pi("S4", "a0") dot 5 + pi("S4", "a1") dot 5 = 0.5 dot 5 + 0.5 dot 5= 5$],
       [_`S1`_], [$V^pi^*("S1") = 0.5 dot hyph.minus 10 + 0.5 dot (4+5) = hyph.minus 5 + 4.5 = hyph.minus 0.5$],
@@ -882,7 +867,7 @@ If this is a terminal state, this is zero.
 A _far away reward is less attractive_. In a discrete-time RL, it is common to apply a
 _constant discount factor $bold(gamma)$_ at each time-step to steer the agent away from far
 away rewards towards nearer ones with the same or a similar reward. The value of $gamma$
-depends on the problem, but typical values are 0.95, 0.98, 0.99, 0.999.
+depends on the problem, but typical values are 0.95, 0.98, 0.99 and 0.999.
 Discounting is a simple and efficient strategy to lump together all kinds of risks.
 
 #image("img/aiap_15.png", width: 80%)
@@ -902,43 +887,46 @@ $tau_2$: `S0-S2-S6` $= 0 dot fxcolor("grün", (0.95)^0) + 7 dot fxcolor("grün",
 The trajectory $tau_1$ has a _higher discounted reward_ and gets therefore chosen.
 
 *Reward $bold(R)$* is the _quantity an agent receives immediately_ when landing in a state.
-Usually described with $r_t$\
+Usually described with $r_t$ \
 #hinweis[($r_t$ is used for the actual value that has been received by the agent,
   $R_t$ is used for the random variable before observing the actual outcome)]\
 *Return $bold(G)$:* is the _discounted sum of future rewards_. Is a sum of random variables and
-therefore a random variable itself. Usually the symbol $G_t$ is used.\
+therefore a random variable itself.\ Usually the symbol $G_t$ is used.
 
-#block($
-  G_t eq.def R_(t+1) + gamma R_(t+2) + gamma^2 R_(t+3) + ... = sum_(k=0)^infinity gamma^k R_(t+k+1)
-$)
+$ G_t eq.def R_(t+1) + gamma R_(t+2) + gamma^2 R_(t+3) + ... = sum_(k=0)^infinity gamma^k R_(t+k+1) $
+#v(-0.5em)
 
 === State-action value $bold(Q(s,a))$
 The state-action value $Q^pi (s,a)$ is defined as the expected Return $G$, when starting in
 state $s$, taking action $a$, and following the policy $pi$ thereafter.
-#block($
+
+$
   q_pi (s,a) eq.def EE_pi [#fxcolor("grün", $G_t$) | S_t = s, A_t = a] =
-  #fxcolor("orange", $EE_pi$) [sum_(k=0)^infinity gamma^k R_(t+k+1) #fxcolor("rot", "|") S_t =s, A_t = a]
-$)
-#hinweis[#tcolor("grün", "expected Return G"),
+  #fxcolor("orange", $EE_pi$) [sum_(k=0)^infinity gamma^k R_(t+k+1) #fxcolor("rot", $divides$) S_t =s, A_t = a]
+$
+
+#hinweis[
+  #tcolor("grün", "expected Return G"),
   #tcolor("orange", "Expected return when following policy " + $pi$),
-  #tcolor("rot", "Reward we get when we are in this state")]
+  #tcolor("rot", "Reward we get when we are in this state")
+]
 
 The goal of many RL algorithms is to estimate these $q$-values. $Q$-values are expectations and
 depend on the policy and on $gamma$. To calculate a Q-value, you only need the next state/action values.
 A simple method to approximate expectations is _sampling:_ simulate many trajectories,
 observe the rewards and calculate the mean reward. _The sample mean is an approximation of the expectation._
-This is called _Monte-Carlo_ Method.
+This is called _Monte-Carlo Method_.
 
 == Temporal Difference Learning
 In state $s_t$, taking action $a_t$, the agent expects the future reward $q(s_t, a_t)$.
 After taking a step, the agent observes the next state and reward:
-$q(s_t, a_t) eq.quest r_(t+1) + gamma q(s_(t+1), a_(t+1))$
-#hinweis[($q(s_t, a_t)$ is the expected future reward before taking a step,
-  $r$ is an actual observation and $q(s_(t+1), a_(t+1))$ is the expected return from here on)]\
+$q(s_t, a_t) eq.quest r_(t+1) + gamma q(s_(t+1), a_(t+1))$ #hinweis[($q(s_t, a_t)$ is the
+  expected future reward before taking a step, $r$ is an actual observation and
+  $q(s_(t+1), a_(t+1))$ is the expected return from here on)]\
 This equation _does not hold_.
 We need to add a _difference $bold(delta_t)$_ to make both sides equal:
 
-$q(s_t, a_t) fxcolor("rot", + delta_t) eq.quest r_(t+1) + gamma q(s_(t+1), a_(t+1))$
+$ q(s_t, a_t) fxcolor("rot", + delta_t) eq.quest r_(t+1) + gamma q(s_(t+1), a_(t+1)) $
 
 $delta$ is needed because of the difference between the expected value and the actual value.
 #hinweis[(i.e. the average expected value of a dice roll is 3.5, but the actual value can never be 3.5)]
@@ -962,31 +950,31 @@ $fxcolor("grün", Q(S,A)) arrow.l fxcolor("grün", Q(S,A)) + fxcolor("orange", a
   [fxcolor("hellgrün", R) + fxcolor("rot", gamma) fxcolor("dunkelblau" , Q(S', A')) - fxcolor("grün", Q(S,A))]$\
 $arrow.l.r.double "Immediate reward" + "discounted" ["prediction in" S', A' - Q"-value of prediction when we started"]$
 
-#let salsatable = table(
-  columns: (1fr, 1fr, 1fr, 1fr),
-  table.header([], [`S1`], [`S2`], [`S3`]),
-  [_`a1`_], [$1.1$], [$hyph.minus 0.9$], [$1.3$],
-  [_`a2`_], [$0$], [$1.1$], [$1.2$],
-  [_`a3`_], [$fxcolor("grün", 2.1)$], [$1.5$], [$fxcolor("dunkelblau" , hyph.minus 1.4)$],
-)
-
 #grid(
   columns: (7fr, 2fr),
   gutter: 1em,
   [
+    ==== Exercise
     Assume $fxcolor("orange", alpha = 0.1)$ and $fxcolor("rot", gamma = 0.9)$.
     An agent performs the following state-action sequence:\
     `S1 - a3 - S3 - a3`.
     *Which entry of the Q-Table gets updated?*
-    The $fxcolor("grün", 2.1)$\
+    `S1, a3`: $fxcolor("grün", 2.1)$\
     *When landing in `S3`, it receives a $fxcolor("hellgrün", bold(+4))$ reward.
     Calculate the updated $Q$-value with SARSA:*\
     $"RPE" = fxcolor("hellgrün", 4) + fxcolor("rot", 0.9)
       dot (fxcolor("dunkelblau" , hyph.minus 1.4)) - fxcolor("grün", 2.1) = underline(0.64)$\
-    $fxcolor("grün", 2.1) arrow.l fxcolor("grün", 2.1) + fxcolor("orange", 0.1) dot 0.64
-      = underline(2.164)$
+    $fxcolor("grün", 2.1) arrow.l fxcolor("grün", 2.1) + fxcolor("orange", 0.1) dot 0.64 = underline(2.164)$
   ],
-  [#salsatable],
+  [
+    #table(
+      columns: (1fr,) * 4,
+      [], [`S1`], [`S2`], [`S3`],
+      [_`a1`_], [$1.1$], [$hyph.minus 0.9$], [$1.3$],
+      [_`a2`_], [$0$], [$1.1$], [$1.2$],
+      [_`a3`_], [$fxcolor("grün", 2.1)$], [$1.5$], [$fxcolor("dunkelblau" , hyph.minus 1.4)$],
+    )
+  ],
 )
 
 *Q-Learning:*
@@ -995,7 +983,7 @@ and _the $Q$-value of "best" action in $S'$_:
 $fxcolor("grün", Q(S,A)) arrow.l fxcolor("grün", Q(S,A)) + fxcolor("orange", alpha)
   [fxcolor("hellgrün", R) + fxcolor("rot", gamma) max_a Q(S', a) - fxcolor("grün", Q(S,A))]$
 
-The next action $a'$ can differ from the best action. That means, in the next step, the agent
+The next action $a'$ can _differ_ from the best action. That means, in the next step, the agent
 can take one action $a'$, but use another action $max_a$ for the Q-Update.
 Algorithms that learn from actions that differ from the actual taken action are called
 _off-policy_. SARSA = on-policy #hinweis[(takes this action in the next step)],
@@ -1015,10 +1003,11 @@ following Q-Table #hinweis[(state $times$ action)]:
     Q^pi (s_t, a_t) arrow.l Q^pi (s,a) + alpha "RPE"_t$ \
   *Q-learning:* \
   $"RPE"_t = r_(t+1) + gamma max_(tilde(a)) Q^pi (s_(t+1), tilde(a)) - Q^pi (s_t, a_t), space.quad
-    Q^pi (s_t, a_t) arrow.l Q^pi (s,a) + alpha "RPE"_t$ \
+    Q^pi (s_t, a_t) arrow.l Q^pi (s,a) + alpha "RPE"_t$
+
   *When moving form `S0` to `S2`, the RPE is always 0 because when landing in stat `S2` the reward is 0:*\
   This is wrong because the RPE depends not only on the immediate reward.\
-  *The agent is in state `S0` and follows the trajectory $tau =$ `S0 - a0 - S1 - a0 - S3`.
+  *The agent is in state `S0` and follows the trajectory $tau =$ `S0 - a0 - S1 - a0 - S3`.\
   Assume $bold(#fxcolor("hellgrün", $gamma = 0.95$))$ and
   $bold(#fxcolor("dunkelblau", $alpha = 0.05$))$*
 ]
@@ -1032,44 +1021,46 @@ $#fxcolor("orange", $Q("s1","a0")$) = #fxcolor("orange", $hyph.minus 8.5$)
   = hyph.minus 8.075 arrow.double #fxcolor("gelb", $r$)
   + #fxcolor("hellgrün", $gamma$) #fxcolor("orange", $Q("s1","a0")$)
   = #fxcolor("gelb", $hyph.minus 1$) + hyph.minus 8.075
-  = hyph.minus 9.075$ \
+  = hyph.minus 9.075$
+
 *RPE SARSA:*
 $#fxcolor("gelb", $r$) + #fxcolor("hellgrün", $gamma$) #fxcolor("orange", $Q("s1","a0")$)
   - #fxcolor("grün", $Q("s0","a0")$)
   = #fxcolor("gelb", $hyph.minus 1$) + hyph.minus 8.075 - #fxcolor("grün", $4$)
-  = hyph.minus 13.075$ \
+  = hyph.minus 13.075$\
 *$bold(#fxcolor("grün", $Q("s0","a0")$))$ after SARSA update:*
 $#fxcolor("grün", $Q("s0","a0")$) + #fxcolor("dunkelblau", $alpha$) ("RPE")
   = #fxcolor("grün", $4$) + #fxcolor("dunkelblau", $0.05$) dot hyph.minus 13.075
   = underline(3.34625)$\
 
 $#fxcolor("rot", $max_tilde(a) Q("s1", "a")$)
-  = #fxcolor("rot", $6.5$) arrow.double #fxcolor("hellgrün", $gamma$)
+= #fxcolor("rot", $6.5$) arrow.double #fxcolor("hellgrün", $gamma$)
   #fxcolor("rot", $max_tilde(a) Q("s1", tilde(a))$)
-  = #fxcolor("hellgrün", $0.95$) dot #fxcolor("rot", $6.5$) = 6.175\
-  arrow.double #fxcolor("gelb", $r$) + #fxcolor("hellgrün", $gamma$)
+= #fxcolor("hellgrün", $0.95$) dot #fxcolor("rot", $6.5$) = 6.175\
+arrow.double #fxcolor("gelb", $r$) + #fxcolor("hellgrün", $gamma$)
   #fxcolor("rot", $max_tilde(a) Q("s1", tilde(a))$)
-  = #fxcolor("gelb", $hyph.minus 1$) + 6.175 = 5.175$\
+= #fxcolor("gelb", $hyph.minus 1$) + 6.175 = 5.175$
+
 *RPE Q:*
 $#fxcolor("gelb", $r$) + #fxcolor("hellgrün", $gamma$) #fxcolor("rot", $max_tilde(a)
   Q("s1", tilde(a))$) - #fxcolor("grün", $Q("s0","a0")$)
-  = #fxcolor("gelb", $hyph.minus 1$) + 6.175 - #fxcolor("grün", $4$) = 1.175$\
+= #fxcolor("gelb", $hyph.minus 1$) + 6.175 - #fxcolor("grün", $4$) = 1.175$\
 *$bold(#fxcolor("grün", $Q("s0","a0")$))$ after Q-Value update:*
 $#fxcolor("grün", $Q("s0","a0")$) + #fxcolor("dunkelblau", $alpha$) ("RPE")
-  = #fxcolor("grün", $4$) + #fxcolor("dunkelblau", $0.05$) dot 1.175
-  = underline(4.05875)$\
+= #fxcolor("grün", $4$) + #fxcolor("dunkelblau", $0.05$)  dot 1.175
+= underline(4.05875)$\
 
 === Epsilon-Greedy-Policy
 In order to discover the best available options, an agent needs to _explore_ the _entire_
 state-action-space. In contrast, in order to _maximize the return_, the agent wants to follow
-the _best trajectory_. Therefore, we need a way to describe a _flexible behavior_.\
+the _best trajectory_. Therefore, we need a way to describe a _flexible behavior_. \
 If the agent just follows the _most promising path_ based on its learned knowledge,
 he _stops exploring_ and _starts exploiting_, thus always taking the "best" known action:
 a _greedy policy_. This way he might _miss the best trajectory_.
 We need to _balance_ between exploration and exploitation with the epsilon-greedy-policy:\
 `at each state:
   with probability 1-`#math.epsilon`: Take the action that has the highest value (greedy exploit)
-  with probability` #math.epsilon`: Take a random action (explore)`\
+  with probability` #math.epsilon`: Take a random action (explore)` \
 _Finding a good value for #math.epsilon is key. Possible strategies:_
 fixed at for example $0.1$ or starting at $0.95$ #hinweis[(high exploration)] and reducing/
 _annealing_ it over time to $0.05$ #hinweis[(greedy). $epsilon = 1$ means random behavior.]
@@ -1077,7 +1068,7 @@ _annealing_ it over time to $0.05$ #hinweis[(greedy). $epsilon = 1$ means random
 
 = Deep Reinforcement Learning
 *Disadvantages of Q-tables:* The Q-Table maps $(s,a)$ #hinweis[(state-action pairs)] to
-$Q(s,a)$ #hinweis[(expected reward of (s,a))]. Since it is a table, it does _not scale well_.
+$Q(s,a)$ #hinweis[(expected reward of $(s,a)$)]. Since it is a table, it does _not scale well_.
 It is _limited to discrete states and discrete actions_. There is also _lack of
 generalization_, there is no relation to neighboring states and actions.
 In real life, nearby/similar states often have similar Q-Values and it is reasonable to apply
@@ -1101,10 +1092,7 @@ every iteration but once in a while to _stabilize_ the learning process.\
 *Epsilon-greedy Policy:*
 Given $Q$-values, which actions should be taken? Epsilon-greedy is simple to implement and
 often works well enough for a DQN.
-If two actions are _almost equally good_, it is better to use Softmax.
-
-#pagebreak(weak: true)
-
+If two actions are _almost equally good_, it is better to use Softmax.\
 *Softmax:*
 T or $tau$ is the _temperature_. It gives us control over the _exploration/exploitation_ balance.
 _High $bold(tau)$:_ all actions have almost the same probability
@@ -1139,6 +1127,7 @@ in the weather forecast.
 
 
 = Recurrent Neural Network (RNN)
+#v(-0.5em)
 == Models
 _One-to-one_ #hinweis[(Sequence has only one time step (static).
 One input is fed and one output is generated. This is the case in traditional ANNs.)],\
@@ -1160,8 +1149,13 @@ the next. This allows the RNNs to _maintain internal memory_ and utilize informa
 previous step for the current step and therefore _learn temporal dependencies_. \
 
 == Architecture
-#image("img/aiap_16.png", width: 89%)
-#hinweis[Note, this is the same cell, but unfolded through time.]\
+#v(-0.5em)
+#figure(
+  image("img/aiap_16.png", width: 75%),
+  supplement: none,
+  caption: hinweis[*Note:* This is the same cell, but unfolded through time.],
+)
+
 *Input:*
 $x_t$, could be a one-hot vector corresponding to a word.\
 *Hidden state:*
@@ -1187,7 +1181,7 @@ calculate gradient, update weights in backward pass.\
 The error is propagated backward through time until the initial timestep.\
 *Loss Function:*
 _Binary cross entropy_ for binary classification, _categorical cross entropy_ for
-multi-class classification. For regression, use _RMSE_.\
+multi-class classification.\ For regression, use _RMSE_.\
 *Keras:* ```py model = Sequential() # 3 timesteps, 1 feature, 32 neurons```\
 ```py model.add(SimpleRNN(units=32, input_shape=(3,1), activation = "tanh"))```
 
@@ -1200,7 +1194,7 @@ _Gradient Clipping_ and _proper weight initialization_ can help.\
 As the algorithm advances backwards, the gradient can get _smaller and smaller_ and approach
 zero, therefore _never converges_ on the optimum. It is harder and harder to propagate errors
 from the loss back to distant past. As a result, it might just learn _short term dependencies_.
-Fix with _batch normalization_, _Long short-term memory_, _weight initialization_.
+Fix with _batch normalization_, _long short-term memory_, _weight initialization_.
 
 
 = Transformers and the attention mechanism
@@ -1249,7 +1243,7 @@ This layer performs a nonlinear transformation. The output is fed into the next 
 
 *Decoders:*
 A stack of _Decoders_ map the embeddings to the _desired target sequence_.
-The Output generation is (usually) word-by-word. Each decoder consists of a _self-attention
+The Output generation is (usually)\ word-by-word. Each decoder consists of a _self-attention
 layer_, an _encoder-decoder attention layer_ which combines the vectors from the decoder below,
 with the embeddings from the encoder, and a _feed forward network_.
 
@@ -1290,12 +1284,13 @@ Data, Versioning, CI/CD, Monitoring, Reproducibility, Time/Budget constraints, .
 *CI / CD / CD:*
 Continuous integration, Continuous delivery, Continuous Deployment.\
 *Training pipeline:*
-_Data Collection_ #hinweis[(Provided by customer, generated using models or collected from company experts)],
-_Data Preparation_ #hinweis[(augmentation, sampling)],
-_Model (Re-)Training_ #hinweis[(infrastructure, consistent versioning, optimization)],
-_Model Evaluation_ #hinweis[(acceptance testing, performance evaluation, reproducibility)],
-_Model Deployment_ #hinweis[(manage rollout of different networks, track and document)],
-_Model Monitoring_ #hinweis[(monitor performance, identify problematic cases, collect feedback and re-train)].\
++ _Data Collection_ #hinweis[(Provided by customer, generated using models or collected from company experts)]
++ _Data Preparation_ #hinweis[(augmentation, sampling)]
++ _Model (Re-)Training_ #hinweis[(infrastructure, consistent versioning, optimization)]
++ _Model Evaluation_ #hinweis[(acceptance testing, performance evaluation, reproducibility)]
++ _Model Deployment_ #hinweis[(manage rollout of different networks, track and document)]
++ _Model Monitoring_ #hinweis[(monitor performance, identify problematic cases, collect feedback and re-train)]
+
 *Data Engineer:*
 Understands _general workflows_ and data flows with all specific requirements.\
 *DevOps:*
