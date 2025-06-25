@@ -29,6 +29,7 @@ Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer:
 - [CN1 / Computernetze 1](CN1)
 - [ComBau / Compilerbau](ComBau)
 - [CPl / C++](CPl)
+- [CPlA / C++ Advanced](CPlA)
 - [CySec / Cyber Security Foundations](CySec)
 - [Dbs1 / Datenbanksysteme 1](DBS1)
 - [DigCod / Digitale Codierungen](DigCod)
