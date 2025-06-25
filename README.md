@@ -39,4 +39,5 @@ Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer:
 - [OOP1 / Objektorientierte Programmierung 1](OOP1)
 - [OOP2 / Objektorientierte Programmierung 2](OOP2)
 - [ParProg / Parallele Programmierung](ParProg)
+- [VwlTg / Volkswirtschaft und Technikgeschichte](VWL-TG)
 - [WrStat / Wahrscheinlichkeitsrechnung und Statistik](WrStat)
