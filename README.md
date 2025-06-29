@@ -1,7 +1,7 @@
 # Zusammenfassungen BSc Informatik an der OST
 Die Zusammenfassungen in diesem Repository sind mit [CC BY-NC-SA 4.0](LICENSE) lizenziert, das heisst, du darfst sie unter folgenden Bedingungen beliebig überarbeiten, erweitern und teilen:
 - **Namensnennung:** Bitte gib die Quelle an.
-- **Nicht kommerziell:** Du darst diese Zusammenfassungen oder eigene Zusammenfassungen, die auf diesem Material basieren, nicht *kostenpflichtig* verbreiten.
+- **Nicht kommerziell:** Du darfst diese Zusammenfassungen oder eigene Zusammenfassungen, die auf diesem Material basieren, nicht *kostenpflichtig* verbreiten.
 - **Weitergabe unter gleichen Bedingungen:** Bitte verwende die gleiche oder eine ähnliche Lizenz. 
 
 ## Einrichtung
@@ -17,6 +17,15 @@ Du kannst Typst entweder via die Web App [typst.app](https://typst.app/) verwend
 Solltest du die Web App verwenden, musst du den Ordner des Moduls, die `.typ`-Dateien im Root des Repos und
 die oben genannten Schriftarten aus `C:\Windows\Fonts` in dein Typst Projekt hochladen.
 Diese werden dann automatisch gefunden.
+
+Da das Repository ziemlich gross ist, und du wahrscheinlich nicht alle Module benötigst, empfiehlt sich ein Sparse Checkout
+```sh
+# Repo mit ausschliesslich Dateien im Rootverzeichnis klonen (Download kann trotzdem etwas dauern)
+git clone --sparse https://github.com/grnin/Zusammenfassungen.git
+cd Zusammenfassungen
+git sparse-checkout set "ComBau"
+# Der entsprechende Ordner ist nun auf deinem Dateisystem! :)
+```
 
 ## Zusammenfassungen
 Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer:
