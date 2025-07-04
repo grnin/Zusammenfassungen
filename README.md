@@ -43,6 +43,7 @@ Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer:
 - [Dbs1 / Datenbanksysteme 1](DBS1)
 - [DigCod / Digitale Codierungen](DigCod)
 - [DMI / Diskrete Mathematik für Informatik](DMI)
+- [Dsy / Distributed Systems](Dsy)
 - [ExEv / Experimentieren und Evaluieren](ExEv)
 - [MsTe / .NET Technologien](MsTe)
 - [OOP1 / Objektorientierte Programmierung 1](OOP1)
