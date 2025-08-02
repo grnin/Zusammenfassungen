@@ -308,7 +308,7 @@ _Vorteile:_ Erlaubt Release-Zyklen unabhängig von .NET/Sprachreleases, Erhöht 
         [`public`], [`-`],
         [`-`], [`-`],
       )
-    ]
+    ],
   )
 ]
 
@@ -847,7 +847,7 @@ Schreiben von "normalem" Code wenig verwendet.
   [
     - _`goto` case:_ Sprung zu Case innerhalb eines `switch`
     - _`goto` label:_ Sprung zum Label #hinweis[(Keine Sprünge in Methoden hinein oder aus `finally`-Block heraus)]
-  ]
+  ],
 )
 
 
@@ -875,7 +875,7 @@ Schreiben von "normalem" Code wenig verwendet.
       public void MoveY(int y) { /* ... */ }
     }
     ```
-  ]
+  ],
 )
 
 #grid(
@@ -1257,7 +1257,7 @@ In anderen Sprachen _"Funktionen"_ genannt.
     // A(3); nimmt Overload ohne optionale Params
     int A(int x){...} int A(int x, int y = 0){...}
     ```
-  ]
+  ],
 )
 
 == Properties
@@ -1350,7 +1350,7 @@ In anderen Sprachen _"Funktionen"_ genannt.
     int Four => Sum(2, 2);
     int x { get => _value; set => _value = value; }
     ```
-  ]
+  ],
 )
 
 
@@ -1433,7 +1433,7 @@ Ein Default Constructor hat keine Parameter. Er hat in Klassen und Structs ander
 #grid(
   [
     Werden für statische _Initialisierungsarbeiten_ verwendet. Identisch bei Klasse & Struct.
-    
+
     *Regeln*\
     Zwingend Parameterlos, Sichtbarkeit darf nicht angegeben werden. Es ist nur _ein_ statischer Konstruktor erlaubt.
     Wird genau _einmal_ ausgeführt: Entweder bei erster Instanzierung des Typen oder bei erstem Zugriff auf
@@ -1471,7 +1471,7 @@ Ein Default Constructor hat keine Parameter. Er hat in Klassen und Structs ander
       public Base() {}                         // 4.
     }
     ```
-  ]
+  ],
 )
 === Initalisierungsreihenfolge mit Vererbung
 #grid(
@@ -1490,7 +1490,7 @@ Ein Default Constructor hat keine Parameter. Er hat in Klassen und Structs ander
       public Sub() {}                         // 8. / 7.
     }
     ```
-  ]
+  ],
 )
 
 === Konstruktoren in Base- und Subklasse
@@ -1565,8 +1565,8 @@ Ein Default Constructor hat keine Parameter. Er hat in Klassen und Structs ander
   [
     Finalizer ermöglichten _Abschlussarbeiten_ beim Abbau eines Objekts. Nur bei _Klassen_.
     Zwingend _parameterlos_ und ohne Visibility. Nur _1 Finalizer_ pro Klasse erlaubt.
-    
-     Wird nicht-deterministisch vom Garbage Collector aufgerufen,
+
+    Wird nicht-deterministisch vom Garbage Collector aufgerufen,
     _kein expliziter Aufruf_ möglich. Danach Aufruf von Finalizer der Basisklasse.
     Vergleiche Kapitel @deterministic-finalization.
   ],
@@ -1581,7 +1581,7 @@ Ein Default Constructor hat keine Parameter. Er hat in Klassen und Structs ander
     // in diesen Code umgewandelt
     override void Finalize() { try {/*Code in Finalizer*/} finally { base.Finalize(); } }
     ```
-  ]
+  ],
 )
 
 == Operatoren
@@ -1609,7 +1609,7 @@ Ein Default Constructor hat keine Parameter. Er hat in Klassen und Structs ander
         ```cs f(x)```, ```cs as```, ```cs await```, ```cs checked```, ```cs unchecked```, ```cs default```, ```cs delegate```, ```cs is```, ```cs name```,
         ```cs nameof```, ```cs new```, ```cs sizeof```, ```cs stackalloc```, ```cs switch```, ```cs typeof```]
     ]
-  ]
+  ],
 )
 
 === Operator Overloading
@@ -1671,7 +1671,7 @@ Es können nur Unäre und Binäre Operatoren überladen werden, Index- und Type 
       public string this[int i1, int i2] { ... } }
     string location = words["Hello There"];
     ```
-  ]
+  ],
 )
 
 == Partielle Klassen & Methoden
@@ -1693,7 +1693,7 @@ Es können nur Unäre und Binäre Operatoren überladen werden, Index- und Type 
     partial class MyClass
       { public void Test2() {} }
     ```
-  ]
+  ],
 )
 
 *Regeln*\
@@ -1724,7 +1724,7 @@ alle Teile müssen zusammen die Voraussetzungen der implementierten Interfaces e
       partial void OnClick() { ... }
     }
     ```
-  ]
+  ],
 )
 
 
@@ -1759,7 +1759,7 @@ können mit dieser Klasse Boxing/Unboxing betreiben.
       Sub s = new Base();  // Compilerfehler
     }
     ```
-  ]
+  ],
 )
 
 === Type Check: ```cs obj is T```
@@ -1777,7 +1777,7 @@ können mit dieser Klasse Boxing/Unboxing betreiben.
     if (a is Base) {...}   // true
     a = null; if (a is SubSub) {...} // false
     ```
-  ]
+  ],
 )
 
 === Type Casts: ```cs (T)obj```
@@ -1794,7 +1794,7 @@ können mit dieser Klasse Boxing/Unboxing betreiben.
     string str = (string)s // Compilerfehler
     object o = "Hi"; b = (Base)o; //InvalidCastException
     ```
-  ]
+  ],
 )
 === Type Casts mit `as` Operator
 #grid(
@@ -1811,7 +1811,7 @@ können mit dieser Klasse Boxing/Unboxing betreiben.
     string str = s as string // Compilerfehler
     object o = "Hi"; b = o as Base; // o = null
     ```
-  ]
+  ],
 )
 
 === Type Check mit Type Cast: ```cs obj is T result```
@@ -1828,7 +1828,7 @@ können mit dieser Klasse Boxing/Unboxing betreiben.
       Console.WriteLine(casted);
     }
     ```
-  ]
+  ],
 )
 
 == Vererbung in Methoden
@@ -1849,7 +1849,7 @@ können mit dieser Klasse Boxing/Unboxing betreiben.
     class SubSub : Sub {
       public override void G() { ... } }
     ```
-  ]
+  ],
 )
 ==== Regeln
 - Members sind _per Default weder `virtual` noch `override`_, auch dann nicht, wenn Basis-Member `virtual` ist.
@@ -1873,7 +1873,7 @@ können mit dieser Klasse Boxing/Unboxing betreiben.
     Sub s = new SubSub();
     s.G(); // SubSub.G();
     ```
-  ]
+  ],
 )
 
 === Methoden überdecken
@@ -1902,7 +1902,7 @@ können mit dieser Klasse Boxing/Unboxing betreiben.
       public void G() { ... } // kein Override!
     }
     ```
-  ]
+  ],
 )
 
 #pagebreak()
@@ -1924,7 +1924,7 @@ können mit dieser Klasse Boxing/Unboxing betreiben.
       public new void G() {...} // bewusst überdeckt
       public new void G2() { ... } } // Compilerwarnung
     ```
-  ]
+  ],
 )
 
 === Komplexes Beispiel
@@ -1980,7 +1980,7 @@ können mit dieser Klasse Boxing/Unboxing betreiben.
     #v(-0.5em)
     *Eselsbrücke:*\
     _`virtual`:_ Kette starten, _`override`:_ Kette fortführen,\ _`new`:_ Kette beenden, _`new virtual`:_ Neue Kette starten
-  ]
+  ],
 )
 
 == Abstrakte Klassen
@@ -1989,7 +1989,7 @@ können mit dieser Klasse Boxing/Unboxing betreiben.
     _Mischung aus Klasse und Interface, muss überschrieben werden._ Im Gegensatz zu `virtual` ist aber keine
     Implementation in der Basisklasse möglich. Mit `abstract` deklariert. Für alle Klassenmember-Arten möglich
 
-    *Regeln:* Keine direkte Instanzierung, beliebig viele Interfaces implementierbar, von abstrakten Klassen 
+    *Regeln:* Keine direkte Instanzierung, beliebig viele Interfaces implementierbar, von abstrakten Klassen
     abgeleitete Klassen _müssen_ alle abstrakten Member implementieren, abstrakte Member nur innerhalb abstrakter Klassen,
     Klasse darf nicht `sealed` sein, Methoden nicht `static` oder `virtual` #hinweis[(Methoden sind selbst implizit `virtual`)].
   ],
@@ -2008,7 +2008,7 @@ können mit dieser Klasse Boxing/Unboxing betreiben.
       public override object this[int i] { ... }
     /* ToString muss nicht implementiert werden */ }
     ```
-  ]
+  ],
 )
 
 == Interfaces
@@ -2037,7 +2037,7 @@ können mit dieser Klasse Boxing/Unboxing betreiben.
       public event EventHandler OnAdd;
     }
     ```
-  ]
+  ],
 )
 
 === Verwendung
@@ -2170,7 +2170,7 @@ Mehrere Interfaces können gleiche Member definieren, was zu Kollisionen führt.
     Person p1 = new(); p1.Print(); // Compilerfehler
     IPerson p2 = p1;   p2.Print(); // Funktioniert
     ```
-  ]
+  ],
 )
 
 == Sealed Klassen
@@ -2186,7 +2186,7 @@ Mehrere Interfaces können gleiche Member definieren, was zu Kollisionen führt.
     }
     class List : Sequence { ... } // Compilerfehler
     ```
-  ]
+  ],
 )
 #pagebreak()
 #grid(
@@ -2210,7 +2210,7 @@ Mehrere Interfaces können gleiche Member definieren, was zu Kollisionen führt.
       public new virtual void Add(object x) {} // OK
     }
     ```
-  ]
+  ],
 )
 
 == Deterministic Finalization: Dispose() <deterministic-finalization>
@@ -2240,7 +2240,7 @@ Mehrere Interfaces können gleiche Member definieren, was zu Kollisionen führt.
     // Verwendung, bad practice, besser mit `using`
     var da = new DataAccess(); ...; da.Dispose();
     ```
-  ]
+  ],
 )
 
 === Was sollte ein Dispose erledigen?
@@ -2256,7 +2256,7 @@ Mehrere Interfaces können gleiche Member definieren, was zu Kollisionen führt.
     - Vererbung, Ressourcen in Basisklassen
     - Synchrone/Asynchrone Ausführung
     - Unterscheidung Finalizer vs. Deterministic Finalization
-  ]
+  ],
 )
 
 === `using`-Statement
@@ -2274,7 +2274,7 @@ Mehrere Interfaces können gleiche Member definieren, was zu Kollisionen führt.
     } // `da2` hier disposed
     da1.Fetch();// Methodenende, `da1` danach disposed
     ```
-  ]
+  ],
 )
 
 === Dispose Pattern
@@ -2368,7 +2368,7 @@ Mehrere Interfaces können gleiche Member definieren, was zu Kollisionen führt.
       { void Notifier(string sender); }
     List<INotifier> greeter; // Liste der Funktionen
     ```
-  ]
+  ],
 )
 
 #table(
@@ -2423,7 +2423,7 @@ genau wie die Handhabung des Rückgabewerts. `delegateVar` sollte vor dem Aufruf
       Console.WriteLine($"Bye {sender}");
     }
     ```
-  ]
+  ],
 )
 
 === Beispiel: Funktionsparameter <funktionsparams-delegates>
@@ -2461,7 +2461,7 @@ genau wie die Handhabung des Rückgabewerts. `delegateVar` sollte vor dem Aufruf
           action(t);
     } } }
     ```
-  ]
+  ],
 )
 
 === Beispiel: Callback mit Delegates
@@ -2550,7 +2550,7 @@ genau wie die Handhabung des Rückgabewerts. `delegateVar` sollte vor dem Aufruf
     }
     // Code für ClockObserver bleibt unverändert
     ```
-  ]
+  ],
 )
 === Event Syntax
 ```cs public delegate void AnyHandler(object sender, AnyEventArgs e)```;\
@@ -2620,7 +2620,7 @@ der Aufruf des Clients auf das Event nicht angepasst werden muss.
           i => Console.WriteLine(i));
         list.ForEach(/* SumUp */ i => sum += 1); } }
     ```
-  ]
+  ],
 )
 
 === Syntax
@@ -2648,14 +2648,14 @@ der Aufruf des Clients auf das Event nicht angepasst werden muss.
       return rest == 0;
     }
     ```
-  ]
+  ],
 )
 === Parameter & Type Inference
 #grid(
   [
     _Lambdas_ können $0$ bis $n$ Parameter haben. Sie können als _`Func`_ oder _`Action`_ definiert sein
     #hinweis[(mit/ohne Rückgabetyp)]
-    
+
     *Regeln:*
     Klammern um Parameter #hinweis[(ausser bei genau einem Parameter oder wenn Parametertyp aus Delegate abgeleitet werden kann)],
     `ref` / `out` sind erlaubt. Jeder Parameter muss implizit in jeweiligen Delegate-Parameter konvertierbar sein.
@@ -2677,7 +2677,7 @@ der Aufruf des Clients auf das Event nicht angepasst werden muss.
     p2 = (int a) => true;
     p3 = (int a, int b) => true;
     ```
-  ]
+  ],
 )
 
 #pagebreak()
@@ -2713,7 +2713,7 @@ der Aufruf des Clients auf das Event nicht angepasst werden muss.
       }
     }
     ```
-  ]
+  ],
 )
 
 == Zusammenfassung Delegates & Lambda
@@ -2747,7 +2747,7 @@ der Aufruf des Clients auf das Event nicht angepasst werden muss.
     // Statement Lambda
     x1 = sender => { Console.WriteLine(sender); }
     ```
-  ]
+  ],
 )
 
 = Generics, Nullability & Records
@@ -2775,7 +2775,7 @@ der Aufruf des Clients auf das Event nicht angepasst werden muss.
     buffer.Put(1);
     int i = buffer.Get();
     ```
-  ]
+  ],
 )
 === Regeln für Generics
 #grid(
@@ -2802,7 +2802,7 @@ der Aufruf des Clients auf das Event nicht angepasst werden muss.
     b.Put("Hello", 0.3f);
     b.Put("World", 0.2f);
     ```
-  ]
+  ],
 )
 
 #pagebreak()
@@ -2823,7 +2823,7 @@ der Aufruf des Clients auf das Event nicht angepasst werden muss.
       int i1 = Get<int>(); // OK
       int i2 = Get(); /* Compilerfehler */ }
     ```
-  ]
+  ],
 )
 
 === Type Constraints
@@ -2851,7 +2851,7 @@ der Aufruf des Clients auf das Event nicht angepasst werden muss.
         data[i + 1] = x; _prio[i + 1] = p;
     } }
     ```
-  ]
+  ],
 )
 #table(
   columns: (auto, 1fr),
@@ -3117,7 +3117,7 @@ Diese Typen werden _Nullable Types_ gennant.
       T x4 = default;    // OK
     }
     ```
-  ]
+  ],
 )
 
 == Nullable Value Types (Structs)
@@ -3139,7 +3139,7 @@ Diese Typen werden _Nullable Types_ gennant.
       public T Value { get; }
     }
     ```
-  ]
+  ],
 )
 
 === `T?` Syntax
@@ -3152,7 +3152,7 @@ Diese Typen werden _Nullable Types_ gennant.
     int? x = 123;  // new System.Nullable<int>(123);
     int? y = null; // new System.Nullable<int>();
     ```
-  ]
+  ],
 )
 
 === Sicheres Lesen & Type Casts von Value Types
@@ -3183,7 +3183,7 @@ Diese Typen werden _Nullable Types_ gennant.
     int? x = i;      // Kein Problem
     int j = x.Value; // Schlecht, wenn x null ist
     ```
-  ]
+  ],
 )
 #grid(
   [
@@ -3206,7 +3206,7 @@ Diese Typen werden _Nullable Types_ gennant.
       [`x + null == z`], [`bool`], [`true`],
       [`x + null >= z`], [`bool`], [`false`],
     )
-  ]
+  ],
 )
 
 
@@ -3265,7 +3265,7 @@ Um den Umgang mit Nullable Types zu erleichtern, gibt es _eigene Operatoren_ fü
     bool b2a = object.ReferenceEquals(x, null);
     bool b2b = !object.ReferenceEquals(x, null);
     ```
-  ]
+  ],
 )
 
 === Null-coalescing operator: `??`
@@ -3284,7 +3284,7 @@ Um den Umgang mit Nullable Types zu erleichtern, gibt es _eigene Operatoren_ fü
       ? x.GetValueOrDefault()
       : -1;
     ```
-  ]
+  ],
 )
 
 === Null-coalescing assignment operator: `??=`
@@ -3299,7 +3299,7 @@ Um den Umgang mit Nullable Types zu erleichtern, gibt es _eigene Operatoren_ fü
     // Compiler Output:
     if (i is null) { i = -1; }
     ```
-  ]
+  ],
 )
 
 === Null-conditional operator: `?.`
@@ -3317,7 +3317,7 @@ Um den Umgang mit Nullable Types zu erleichtern, gibt es _eigene Operatoren_ fü
     string s = o is not null ? o.ToString() : default;
     if (a is not null) { a(); }
     ```
-  ]
+  ],
 )
 
 == Record Types
@@ -3355,7 +3355,7 @@ Ein Record kann nur initialisiert werden, wenn alle Properties angegeben werden.
       public string Name { get; init; }
     }
     ```
-  ]
+  ],
 )
 
 === Gemischte Deklaration mit Positional Syntax
@@ -3377,7 +3377,7 @@ Ein Record kann nur initialisiert werden, wenn alle Properties angegeben werden.
     p1.Id; p1.Name = ""; // 2x Compilerfehler
     Person p2 = new(0) { Name = "" }; // OK
     ```
-  ]
+  ],
 )
 
 === Deklaration mit Vererbung
@@ -3395,7 +3395,7 @@ Ein Record kann nur initialisiert werden, wenn alle Properties angegeben werden.
     SpecialPerson p1 = new(1, "Nina");
     Person p2 = p1;
     ```
-  ]
+  ],
 )
 
 === Value Equality
@@ -3415,7 +3415,7 @@ Ein Record kann nur initialisiert werden, wenn alle Properties angegeben werden.
     bool eq2 = p1.Equals(p2); // true
     bool eq3 = ReferenceEquals(p2); // false
     ```
-  ]
+  ],
 )
 
 == Verändern von Records
@@ -3434,7 +3434,7 @@ Ein Record kann nur initialisiert werden, wenn alle Properties angegeben werden.
     Person p3 = p1 with { }; // exakte Kopie
     bool eq3 = p1 == p3; // true
     ```
-  ]
+  ],
 )
 
 
@@ -3477,7 +3477,7 @@ Dies ist zwar kürzer und bequemer, aber auch weniger sicher und robust.
       if (s != null) { s.Close(); }
     }
     ```
-  ]
+  ],
 )
 
 *Regeln*\
@@ -3515,7 +3515,7 @@ Dies ist zwar kürzer und bequemer, aber auch weniger sicher und robust.
       public override string ToString();
     }
     ```
-  ]
+  ],
 )
 
 === `throw` Keyword
@@ -3536,7 +3536,7 @@ Dies ist zwar kürzer und bequemer, aber auch weniger sicher und robust.
     object o = null; string x3 = o.ToString();
     throw new Exception("An Error occured");
     ```
-  ]
+  ],
 )
 
 === Exception Filters
@@ -3553,7 +3553,7 @@ Dies ist zwar kürzer und bequemer, aber auch weniger sicher und robust.
     catch (Exception e)
       when (DateTime.Now.Hour >= 18) { ... }
     ```
-  ]
+  ],
 )
 
 === `catch`-`throw`-Block
@@ -3596,7 +3596,7 @@ Dies ist zwar kürzer und bequemer, aber auch weniger sicher und robust.
     #image("img/dotnet_14.png")
     #v(-1em)
     #image("img/dotnet_15.png")
-  ]
+  ],
 )
 
 === `catch` mit Multicast Delegates
@@ -3613,7 +3613,7 @@ Dies ist zwar kürzer und bequemer, aber auch weniger sicher und robust.
     - Kein `catch` für `Exc2` gefunden
     - `catch` für `Exc2` in `Main()` behandelt\ #hinweis[(Delegate-Ausführung beendet)]
   ],
-  image("img/dotnet_16.png")
+  image("img/dotnet_16.png"),
 )
 
 === Beispiel: Argumente prüfen
@@ -3679,7 +3679,7 @@ Dies ist zwar kürzer und bequemer, aber auch weniger sicher und robust.
       if (disp != null) disp.Dispose();
     }
     ```
-  ]
+  ],
 )
 === Iteratoren-Interface
 #table(
@@ -3746,7 +3746,7 @@ Soll das geschehen, muss eine zweite Collection angelegt werden.
     // Returnt bei mehrmaligem Aufruf: 1 3
     // (ohne 6, wegen `yield break`)
     ```
-  ]
+  ],
 )
 
 Nun muss nur noch die `GetEnumerator()`-Methode #hinweis[(generisch oder nicht-generisch)] implementiert werden,
@@ -3794,7 +3794,7 @@ welche mindestens ein `yield return` beinhaltet. Die Implementation von `IEnumer
             yield return _x[i];
           } } } }
     ```
-  ]
+  ],
 )
 === Anleitung: Normale Methode zu Iterator Methode umschreiben
 + Verwendeter Collection-Typ in Signatur zu _`IEnumerable`_ umändern
@@ -3830,7 +3830,7 @@ welche mindestens ein `yield return` beinhaltet. Die Implementation von `IEnumer
       }
     }
     ```
-  ]
+  ],
 )
 *Regeln:*
 _Kein Zugriff auf interne Member_ aus Extension Method heraus,
@@ -3871,7 +3871,7 @@ Erst der Aufruf von ```cs IEnumerator<T>.MoveNext()``` tut dies. Im `foreach`-Lo
           yield return i;
       } }
     ```
-  ]
+  ],
 )
 #pagebreak()
 === Extension Methods und Iteratoren <query-operator>
@@ -3921,7 +3921,7 @@ damit mehrere davon mit dem "`.`"-Operator aneinandergehängt werden können. Si
           if (item is T) { yield return (T)item; }
     } } }
     ```
-  ]
+  ],
 )
 
 #align(center)[#image("img/dotnet_17.png", width: 50%, fit: "contain")]
@@ -3965,7 +3965,7 @@ das heisst, für jeden Datentyp gibt es einen eigenen LINQ-Provider #hinweis[(LI
       .Where(c => c.StartsWith("B"))
       .OrderBy(c => c).Select(c => c);
     ```
-  ]
+  ],
 )
 
 == LINQ Extension Methods
@@ -3990,7 +3990,7 @@ das heisst, für jeden Datentyp gibt es einen eigenen LINQ-Provider #hinweis[(LI
     // Run 2: iteriert nur durch 1 Stadt (Basel)
     foreach (string c in citiesB) { ... }
     ```
-  ]
+  ],
 )
 
 === Immediate Evaluation <immediate-evaluation>
@@ -4006,16 +4006,16 @@ das heisst, für jeden Datentyp gibt es einen eigenen LINQ-Provider #hinweis[(LI
   [
     ```cs
     string[] cities = { "Bern", "Basel", "Zürich", "Rapperswil", "Genf" };
-    
+
     List<string> citiesB = cities
       .Where(c => c.StartsWith("B"))
       .ToList(); // Ausführung
-    
+
     int citiesEndLCount = cities
       .Where(c => c.EndsWith("l"))
       .Count(); // Ausführung
     ```
-  ]
+  ],
 )
 
 === Wichtigste Query Operatoren
@@ -4089,7 +4089,7 @@ das heisst, für jeden Datentyp gibt es einen eigenen LINQ-Provider #hinweis[(LI
     IEnumerable<Student> students = ids
       .Select(n => new Student { Id = n });
     ```
-  ]
+  ],
 )
 
 == Collection Initializers
@@ -4130,7 +4130,7 @@ das heisst, für jeden Datentyp gibt es einen eigenen LINQ-Provider #hinweis[(LI
       [3] = "c"
     };
     ```
-  ]
+  ],
 )
 
 == Type Inference
@@ -4179,7 +4179,7 @@ Es macht keinen Sinn, dafür eine eigene Klasse bzw. Typ zu erstellen, aber es m
         Count = grp.Count() // Anzahl
       });
     ```
-  ]
+  ],
 )
 
 *Regeln:*
@@ -4218,7 +4218,7 @@ kann nur einer Variable vom Typ `var` zugewiesen werden.
         .OrderBy(s => s.Name)
         .Select(s => new { s.Id, s.Name });
     ```
-  ]
+  ],
 )
 
 Eine Query _beginnt_ immer mit _`from`_ und _endet_ mit _`select`_ oder _`group`_.
@@ -4241,7 +4241,7 @@ Die Query Expressions werden vom Compiler wieder in die Extension Method Syntax 
     group s by s.Subject into g
     select g;
     ```
-  ]
+  ],
 )
 
 #v(-0.25em)
@@ -4274,7 +4274,7 @@ Die Query Expressions werden vom Compiler wieder in die Extension Method Syntax 
     foreach (var in q2)
       { Console.WriteLine($"{x.Field}: {x.N}") }
     ```
-  ]
+  ],
 )
 #v(-0.5em)
 === Explizite Inner Joins
@@ -4291,7 +4291,7 @@ Die Query Expressions werden vom Compiler wieder in die Extension Method Syntax 
             select s.Name + ", " + m.Course
                           + ", " + m.Mark;
     ```
-  ]
+  ],
 )
 
 #v(-1.25em)
@@ -4309,7 +4309,7 @@ Die Query Expressions werden vom Compiler wieder in die Extension Method Syntax 
             select s.Name + ", " + m.Course
                           + ", " + m.Mark;
     ```
-  ]
+  ],
 )
 
 #v(-0.5em)
@@ -4419,7 +4419,7 @@ Die Query Expressions werden vom Compiler wieder in die Extension Method Syntax 
 
     task.Wait();
     ```
-  ]
+  ],
 )
 
 #table(
@@ -4452,7 +4452,7 @@ Die Query Expressions werden vom Compiler wieder in die Extension Method Syntax 
 
     *Achtung:*
     Synchrone Waits sind gefährlich, weil sie den aktuellen Thread blockieren #hinweis[(z.B. den UI Thread in GUI Applikationen)].\
-    
+
     _Blockierende Task-APIs:_ `Task.Result`, `Task.Wait()``, Task.WaitAll(),` etc.
   ],
   [
@@ -4471,7 +4471,7 @@ Die Query Expressions werden vom Compiler wieder in die Extension Method Syntax 
     // Using awaiter
     int result3 = t1.GetAwaiter().GetResult();
     ```
-  ]
+  ],
 )
 
 === Synchrone waits vs. Continuations
@@ -4504,7 +4504,7 @@ Die Query Expressions werden vom Compiler wieder in die Extension Method Syntax 
       );
     });
     ```
-  ]
+  ],
 )
 
 == Async / Await
@@ -4556,7 +4556,7 @@ Console.WriteLine(t1.Result); Console.WriteLine(t2.Result); // Zugriff wäre auc
   [
     *Continuations (nicht blockierend)*
     #v(-0.5em)
-    ```cs 
+    ```cs
     Task<int> t1 = GetSomeCustomerIdAsync();
     t1.ContinueWith(id => {
       // Resultat schon vorhanden, nicht blockierend
@@ -4565,8 +4565,8 @@ Console.WriteLine(t1.Result); Console.WriteLine(t2.Result); // Zugriff wäre auc
         // Resultat schon vorhanden, nicht blockierend
         Console.WriteLine(order.Result)
       ); });
-      ```
-  ]
+    ```
+  ],
 )
 
 === Beurteilung
@@ -4610,7 +4610,7 @@ Console.WriteLine(t1.Result); Console.WriteLine(t2.Result); // Zugriff wäre auc
         ct.ThrowIfCancellationRequested(); // Exception
       } }
     ```
-  ]
+  ],
 )
 
 === Cancellation Token Source
@@ -4630,7 +4630,7 @@ Es sollte ein Token pro "Unit of Work" generiert werden #hinweis[(alles was zusa
 
     await Task.Delay(2_000, ct);
 
-    Console.WriteLine("Cancelling");       // Abbruch von `t1` & `t2` 
+    Console.WriteLine("Cancelling");       // Abbruch von `t1` & `t2`
     cts.Cancel();                          // aber `t1` ist schon fertig,
     Console.WriteLine("Canceled");         // darum wird nur `t2` abgebrochen
 
@@ -4710,7 +4710,7 @@ Folgende Elemente werden gemapped:
   [
     - Entity Key $<=>$ Primary Key
     - Relationship $<=>$ Foreign Key
-  ]
+  ],
 )
 
 === Include/Exclude von Entities
@@ -5027,7 +5027,7 @@ Folgende Elemente werden gemapped:
     ```cs
     internal class CategoryTypeConfig
       : IEntityTypeConfiguration<Category> {
-      
+
       public void Configure(
         EntityTypeBuilder<Category> builder)
       {
@@ -5191,7 +5191,7 @@ Im Model Builder bzw. der Fluent API gibt es zusätzliche Extension Methods nur 
       .HasComputedColumnSql(
         "[Id] + ' ' + [Name]");
     ```
-  ]
+  ],
 )
 
 
@@ -5449,7 +5449,7 @@ await context.Categories.SingleAsync(c => MyHelper.DoSomeShitWithThis(c.Name) ==
       { Console.WriteLine(c.Name); }
     // 5. End of Method
     ```
-  ]
+  ],
 )
 
 === CUD-Operationen
@@ -5537,7 +5537,7 @@ Die Änderungen werden _aufgezeichnet_ und beim Speichern werden alle in einer _
     c3.Name = "Gaming Chairs";
     await context.SaveChangesAsync();
     ```
-  ]
+  ],
 )
 
 ==== Batch-Operationen
@@ -5677,7 +5677,7 @@ Es gibt immer mindestens 3 Varianten mit dem gleichen Effekt.
     Console.WriteLine(en.OriginalValue); // Nickelback
     Console.WriteLine(en.CurrentValue);  // Nirvana
     ```
-  ]
+  ],
 )
 ==== Beispiel State Transition
 ```cs
@@ -5792,7 +5792,7 @@ Bei Lazy Loading zusätzlich, wenn auf Referenzen / andere Entities zugegriffen 
     public class OrderProxy : Order {
       public override Customer Customer { ... } }
     ```
-  ]
+  ],
 )
 
 == Optimistic Concurrency
@@ -5870,7 +5870,7 @@ ob mittlerweile veränderte Werte auf der DB liegen. Für die Konflikterkennung 
     context2.SaveChanges(); // Fails
     // DbUpdateConcurrencyException
     ```
-  ]
+  ],
 )
 
 == Database Migration
@@ -5888,7 +5888,7 @@ _vorhandene Daten abgeändert_ werden müssen. Mit den Database Migrations von E
     _Deployment_
     + Änderungen gemäss Migrations-Reihenfolge auf DB deployen
     + Rollback auf älteren Stand via Down-Migration möglich
-  ]
+  ],
 )
 
 Jede Migration wird anhand ihres Namens und ihres Erstellungs-Timestamps identifiziert.
@@ -5904,7 +5904,7 @@ Jede Migration wird anhand ihres Namens und ihres Erstellungs-Timestamps identif
   [
     *Migrationstabellen auf der DB*\
     _`dbo._EFMigrationsHistory`_\ #hinweis[Liste aller auf die DB angewendeten Migrationen]
-  ]
+  ],
 )
 
 *Workflow einer Migration*
@@ -5938,7 +5938,7 @@ Jede Migration wird anhand ihres Namens und ihres Erstellungs-Timestamps identif
     IMigrator m = context.GetService<Migrator>();
     await m.MigrateAsync("MigrationName");
     ```
-  ]
+  ],
 )
 
 = gRPC - Google Remote Procedure Call
@@ -5954,7 +5954,7 @@ Löst Probleme wie Security, Synchronisierung, Data Flow Handling etc.
     Integrierte Authentisierungsmechanismen.
 
     Verwendet _HTTP/2_ als Kommunikationsprotokoll #hinweis[(Unterstützt Multiplexing und bidirektionales Streaming,
-    HTTPS und Header Compression, weniger Overhead weil ACK nicht mehr pro Request sondern einmalig für alle Ressourcen)] und
+      HTTPS und Header Compression, weniger Overhead, weil ACK nicht mehr pro Request, sondern einmalig für alle Ressourcen)] und
     _Google Protocol Buffers_ #hinweis[(Protobuf)] als Interface Definition Language #hinweis[(IDL)].
   ],
   [
@@ -5970,7 +5970,7 @@ gRPC ist ein _Software Development Kit_. Es ist plattformneutral und eine Visual
 #grid(
   columns: (1fr, 1.3fr),
   figure(image("img/dotnet_19.png"), caption: [Ohne Kommunikation]),
-  figure(image("img/dotnet_20.png"), caption: [Mit Kommunikation])
+  figure(image("img/dotnet_20.png"), caption: [Mit Kommunikation]),
 )
 
 === Beispiel: Service
@@ -6021,7 +6021,7 @@ gRPC ist ein _Software Development Kit_. Es ist plattformneutral und eine Visual
         );
     }
     ```
-  ]
+  ],
 )
 
 === Beispiel: Client
@@ -6227,7 +6227,7 @@ app.Run();
     - RPC `GetOrders`
       - Input: Customer ID
       - Output: Liste der Bestellungen des Kunden
-  ]
+  ],
 )
 
 == Streams
@@ -6333,7 +6333,7 @@ Garantiert sowohl _Auslieferung_ als auch _Reihenfolge_ der Auslieferung.\
     await call.RequestStream.CompleteAsync(); // No more messages to come (server exits foreach-Loop)
     await readTask; // Wait until service method is terminated / all messages are received by client
   }
-  ```
+  ```,
 )
 
 #pagebreak()
@@ -6393,7 +6393,7 @@ Garantiert sowohl _Auslieferung_ als auch _Reihenfolge_ der Auslieferung.\
           }
       }
   }
-  ```
+  ```,
 )
 
 ==== Proto
@@ -6415,7 +6415,7 @@ Garantiert sowohl _Auslieferung_ als auch _Reihenfolge_ der Auslieferung.\
     int32 line = 2;
     string content = 3;
   }
-  ```
+  ```,
 )
 
 #pagebreak()
@@ -6604,7 +6604,7 @@ _Status Codes:_ `OK`, `Cancelled`, `Unknown`, `InvalidArgument`, `DeadlineExceed
       "AllowedHosts": "*",
     }
     ```
-  ]
+  ],
 )
 
 === Client-side
@@ -6664,7 +6664,7 @@ GrpcChannel channel = GrpcChannel.ForAddress(
   [
     Unvorhersehbar, Zufällig, Durch unberechenbaren Interrupt ausgelöst
     #hinweis[(Abbruch durch User, nicht mehr an Resultat interessiert)]
-  ]
+  ],
 )
 
 
