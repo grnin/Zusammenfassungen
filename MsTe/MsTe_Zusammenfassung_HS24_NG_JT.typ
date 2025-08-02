@@ -6944,10 +6944,11 @@ _komma-separiert_ #hinweis[(`[DataContract, Serializable]`)]. Je nach Implementa
 angewandt werden.
 
 _Parameter / Werte_ müssen vom Compiler berechenbar sein:
-`[Datacontract]`, `[Datacontract(Name = "AutoClass")]`, `[Obsolete("Alt!", true)]`, `[Obsolete("Alt!", IsError = true)]`
+```cs [Datacontract]```, ```cs [Datacontract(Name = "AutoClass")]```, ```cs [Obsolete("Alt!", true)]```,
+```cs [Obsolete("Alt!", IsError = true)]```
 
 === Custom Attribute <custom-attribute>
-Im Beispiel wird ein `[BugfixAttribute]` für Dokumentation implementiert. Die Klasse hat selbst das Attribut `[AttributeUsage]`,
+Im Beispiel wird ein ```cs [BugfixAttribute]``` für Dokumentation implementiert. Die Klasse hat selbst das Attribut ```cs [AttributeUsage]```,
 welches bestimmt, wo ein Attribut verwendet werden kann. Durch `AllowMultiple` kann es mehrfach am selben Member angebracht werden.
 
 #grid(
@@ -6974,7 +6975,8 @@ welches bestimmt, wo ein Attribut verwendet werden kann. Durch `AllowMultiple` k
     ```
   ],
   [
-    ```cs // Verwendung
+    ```cs
+    // Verwendung
     [Bugfix(121, "Nina Grässli", "16/01/2025")]
     [Bugfix(107, "Jannis Tschan", "17/01/2025",
       Comment = "Some major changes!")]
@@ -6987,7 +6989,6 @@ welches bestimmt, wo ein Attribut verwendet werden kann. Durch `AllowMultiple` k
       public event Action CalculationDone;
       /* ... */
     }
-
     ```
   ],
 )
