@@ -2400,7 +2400,8 @@ genau wie die Handhabung des Rückgabewerts. `delegateVar` sollte vor dem Aufruf
 
     Wird eine _Delegate-Variable aufgerufen_, werden die Methoden in _Hinzufügungsreihenfolge_ ausgeführt.
     Beim _Entfernen_ wird die zuletzt hinzugefügte Instanz dieser Methode entfernt.
-    Der Rückgabewert eines Multicast Delegates entspricht dem letzten Funktionsaufruf #hinweis[(Gilt auch für `out`/`ref` Parameter)].
+    Der Rückgabewert eines Multicast Delegates entspricht dem letzten Funktionsaufruf
+    #hinweis[(Gilt auch für `out`/`ref` Parameter)].
 
     Delegates können mit dem `+` Operator auch _kombiniert_ werden.
   ],
@@ -2470,7 +2471,8 @@ genau wie die Handhabung des Rückgabewerts. `delegateVar` sollte vor dem Aufruf
     Tickende Uhr mit _dynamisch wählbarem Intervall_. Bei _jedem Tick_ wird eine Benachrichtigung ausgegeben
     und _Instanzen_ #hinweis[(hier `ClockObserver`)] können sich _registrieren_, um eine Funktion jeden Tick laufen zu lassen.
     Diese _Subscriber_ werden im `EventTickHandler` registriert und bei jedem Tick werden alle Funktionen in
-    diesem _Delegate_ aufgeführt #hinweis[(Code in `Tick()`)]. Im Beispiel unten registrieren wir die Funktion `OnTickEvent` des `ClockObserver`, welche alle 1'000 bzw. 300ms aufgerufen wird.\
+    diesem _Delegate_ aufgeführt #hinweis[(Code in `Tick()`)].
+    Im Beispiel unten registrieren wir die Funktion `OnTickEvent` des `ClockObserver`, welche alle 1'000 bzw. 300ms aufgerufen wird.\
     *Aufruf der Uhr*
     #v(-0.6em)
     ```cs
@@ -6941,7 +6943,7 @@ Es sind _beliebig viele_ Attribute möglich, Deklaration entweder _separat_ #hin
 _komma-separiert_ #hinweis[(`[DataContract, Serializable]`)]. Je nach Implementation eines Attributes kann es _mehrfach_
 angewandt werden.
 
-_Parameter / Werte_ müssen vom Compiler berechnebar sein:
+_Parameter / Werte_ müssen vom Compiler berechenbar sein:
 `[Datacontract]`, `[Datacontract(Name = "AutoClass")]`, `[Obsolete("Alt!", true)]`, `[Obsolete("Alt!", IsError = true)]`
 
 === Custom Attribute <custom-attribute>
