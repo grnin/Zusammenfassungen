@@ -248,3 +248,7 @@
 #let tcolor(subcolor, x) = {
   text(fill: colors.at(subcolor), style: "italic", strong(x))
 }
+
+// Table cells with a cross/checkmark
+#let cell-check = table.cell(align: center, text(fill: colors.grün, weight: "bold", sym.checkmark))
+#let cell-cross = table.cell(align: center, text(fill: colors.rot, weight: "bold", sym.crossmark))
