@@ -34,7 +34,7 @@
   language: "de",
   font-size: 11pt,
   display-title-footer: true,
-  heading-page-number: true,
+  heading-page-number-in-ref: true,
   appendix: (), // specifiy path to .typ file to add appendix documents
   body,
 ) = {
@@ -144,9 +144,11 @@
   } else {
     let label = ref.target
     let header = ref.element
-    if heading-page-number {
+    if heading-page-number-in-ref {
+      // "Heading Name" (Page X)
       link(label, ["#header.body" (#languages.at(language).page #header.location().page())])
     } else {
+      // Chapter 1.1.1 "Heading Name"
       let chapter-numbering = counter(heading).at(header.label)
       link(label, [#header.supplement #numbering(header.numbering, ..chapter-numbering) "#header.body"])
     }

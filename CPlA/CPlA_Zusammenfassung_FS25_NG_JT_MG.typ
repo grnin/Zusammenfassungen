@@ -10,7 +10,7 @@
   column-count: 6,
   font-size: 3pt,
   landscape: true,
-  heading-page-number: false,
+  heading-page-number-in-ref: false,
 )
 
 // Set this to true to enable access to the offline copy of CPP Reference
