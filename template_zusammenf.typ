@@ -34,6 +34,7 @@
   language: "de",
   font-size: 11pt,
   display-title-footer: true,
+  heading-page-number: true,
   appendix: (), // specifiy path to .typ file to add appendix documents
   body,
 ) = {
@@ -142,12 +143,13 @@
     ref
   } else {
     let label = ref.target
-    let heading = ref.element
-    link(
-      label,
-      ["#heading.body"
-        (#languages.at(language).page #heading.location().page())],
-    )
+    let header = ref.element
+    if heading-page-number {
+      link(label, ["#header.body" (#languages.at(language).page #header.location().page())])
+    } else {
+      let chapter-numbering = counter(heading).at(header.label)
+      link(label, [#header.supplement #numbering(header.numbering, ..chapter-numbering) "#header.body"])
+    }
   }
 
   // Table of contents
