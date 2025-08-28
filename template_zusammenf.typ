@@ -256,3 +256,18 @@
 // Table cells with a cross/checkmark
 #let cell-check = table.cell(align: center, text(fill: colors.grün, weight: "bold", sym.checkmark))
 #let cell-cross = table.cell(align: center, text(fill: colors.rot, weight: "bold", sym.crossmark))
+
+// Plus/minus signs
+#let plus = text(fill: colors.grün, weight: "bold", sym.plus)
+#let minus = text(fill: colors.rot, weight: "bold", sym.minus)
+
+// List with plus/minus signs
+#let plus-list(content) = {
+  set enum(numbering: x => plus)
+  content
+}
+
+#let minus-list(content) = {
+  set enum(numbering: x => minus)
+  content
+}
