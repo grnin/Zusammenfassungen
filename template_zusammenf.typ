@@ -258,16 +258,16 @@
 #let cell-cross = table.cell(align: center, text(fill: colors.rot, weight: "bold", sym.crossmark))
 
 // Plus/minus signs
-#let plus = text(fill: colors.grün, weight: "bold", sym.plus)
-#let minus = text(fill: colors.rot, weight: "bold", sym.minus)
+#let plus-green = text(fill: colors.grün, weight: "bold", sym.plus)
+#let minus-red = text(fill: colors.rot, weight: "bold", sym.minus)
 
 // List with plus/minus signs
 #let plus-list(content) = {
-  set enum(numbering: x => plus)
+  set enum(numbering: x => plus-green)
   content
 }
 
 #let minus-list(content) = {
-  set enum(numbering: x => minus)
+  set enum(numbering: x => minus-red)
   content
 }
