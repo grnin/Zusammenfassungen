@@ -31,5 +31,5 @@ jobs:
         run: |
           find -regex '.*\(Zusammenfassung\|Spick\).*.typ' | while read file; do
             echo "Compiling $file"
-            typst compile --root "./" --diagnostic-format short "$file" "$(basename "${file%.typ}.pdf")
+            typst compile --root "./" --diagnostic-format short "$file" "$(basename "${file%.typ}.pdf")"
           done
