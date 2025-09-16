@@ -1,5 +1,5 @@
 // Compiled with Typst 0.13.1
-#import "../template_zusammenf.typ": *
+//#import "../template_zusammenf.typ": *
 
 #show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
