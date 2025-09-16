@@ -163,7 +163,7 @@ _Beispiele:_
 
   Eine Skiverleihfirma besitzt 6 Paare weisser und 7 Paare schwarzer Skis einer bestimmten Grösse. Die Skis sind
   asymmetrisch, man kann linke und rechte Skis unterscheiden. Nach dem Sommer werden die Skis aus dem Lagercontainer
-  geholt, wo sie ziemlich durcheinander geraten sind.
+  geholt, wo sie ziemlich durcheinandergeraten sind.
 
   + _Auf wie viele Arten können die Skis zu Paaren zusammengefügt werden?_
     $ n_"schwarz" ! dot n_"weiss" ! = 7! dot 6! = 5040 dot 720 = underline(3'628'800) $
@@ -172,7 +172,7 @@ _Beispiele:_
     Paarungen gibt es in diesem Fall?_
     $ (n_"schwarz" + n_"weiss")! = (7 + 6)! = 13! = underline(6'227'020'800) $
 
-  + _Bei der Revision stellt sich heraus, das zwei schwarze linke Skis und eine linker weisser Ski nicht mehr zu reparieren
+  + _Bei der Revision stellt sich heraus, dass zwei schwarze linke Skis und eine linker weisser Ski nicht mehr zu reparieren
     sind. Wieviele mögliche Paarungen gibt es jetzt noch?_
 
     Hat man nur $n$ linke und $m$ rechte Skis einer gewissen Farbe, mit $n < m$, muss man zuerst aus den $m$ Skis davon
@@ -775,7 +775,7 @@ Unabhängige Zufallsvariablen sind immer auch unkorreliert. Das umgekehrte muss 
 = Wahrscheinlichkeitsverteilung <verteilung>
 #hinweis[
   Meist Aufgaben 4, 6 und 7 - kann also in bis zu 3 Aufgaben vorkommen. Normalverteilung fast immer,
-  Binomial & Possion sind sehr häufig\
+  Binomial & Poisson sind sehr häufig\
   *Punkteverteilung:* Korrekter Verteilung verwendet (1), Standardisierung (1), Werte korrekt aus Tabelle ablesen (1),
   Korrekte Gleichung für $mu$ / $sigma$ (1), $mu$ und $sigma$ korrekt berechnet
 ]
@@ -793,7 +793,7 @@ Unabhängige Zufallsvariablen sind immer auch unkorreliert. Das umgekehrte muss 
   + Erkennen, welche Verteilung verwendet werden sollte
     - _Exponentialverteilung:_ Etwas geht kaputt, Radioaktiver Zerfall, Warteschlangen
     - _Normalverteilung:_ Messungen weichen von einem Mittelwert ab
-    - _Binomalverteilung:_ Ereignis tritt ein oder nicht, Person ist X $=>$ ja/nein
+    - _Binomialverteilung:_ Ereignis tritt ein oder nicht, Person ist X $=>$ ja/nein
     - _Poissonverteilung:_ In der Aufgabenstellung steht das Wort "selten"
   + Ähnlichstes Beispiel verwenden, Formeln entsprechend aufschreiben und ausrechnen
 ]
@@ -974,7 +974,7 @@ Jeder Wert innerhalb eines Intervalls ist gleich wahrscheinlich.\
 
 == Normalverteilung
 Modellierung vieler kleiner Einflüsse, Messwerte, wiederholte Experimente.\
-*Anwendungen:* Messwerte, Summe vieler kleiner Einfüsse mit vergleichbar grosser Varianz, Approximation der Binomialverteilung.
+*Anwendungen:* Messwerte, Summe vieler kleiner Einflüsse mit vergleichbar grosser Varianz, Approximation der Binomialverteilung.
 
 #definition[
   #grid(
@@ -1056,7 +1056,7 @@ $
     Wahrscheinlichkeiten standardisieren:
     $ Rho((X - mu)/sigma < (22 - mu)/sigma) = 0.05, quad Rho((X - mu)/sigma < (25 - mu)/sigma) = 0.75 $
 
-    Da wir die Wahrscheinlichkeiten schon haben, müssen wir die Werte aus der Quantilstabelle herauslesen oder
+    Da wir die Wahrscheinlichkeiten schon haben, müssen wir die Werte aus der Quantiltabelle herauslesen oder
     mit TR $"invNorm"(p, 0, 1)$ erhalten.
     $ Phi^(-1)(0.75) = 0.6745, quad Phi^(-1)(0.05) = 1 - Phi^(-1)(0.95) = 1 - 1.6449 = -1.6449 $
 
@@ -1134,7 +1134,7 @@ Bei einem Zufallsexperiment mit zwei möglichen Ausgängen sind die verschiedene
   )
 
   #hinweis[
-    TR Binominalkoeffizient $binom(n,k)$: menu-5-3 / $"nCr"(n, k)$,
+    TR Binomialkoeffizient $binom(n,k)$: menu-5-3 / $"nCr"(n, k)$,
     TR Binomialverteilung: menu-5-5-A / $"binomPdf"(n, p, k)$
   ]
 ]
@@ -1339,7 +1339,7 @@ Die Stichproben $X_1, .... , X_n$ und $Y_1, ... , Y_m$ mit gleicher Varianz habe
 + Beiblatt _"T-Test"_ verwenden
 + Falls 2 Listen an Datenwerten gegeben: TR-Skript _"tverttest"_ verwenden:
   $ "tverttest"(mat(X_1; X_2; dots.v; X_n), mat(Y_1; Y_2; dots.v; Y_m), alpha) $
-+ Falls zwei Datengruppen mit Anzahl Messpunkte, Durchschnittswert und Standardabweichung gebenen:
++ Falls zwei Datengruppen mit Anzahl Messpunkte, Durchschnittswert und Standardabweichung gegeben:
   TR-Skript _"tverttest2"_ verwenden #hinweis[(Der obere Teil des Beiblattes mit den Messdaten bleibt in diesem Fall leer)]
   $ "tverttest2"(n, m x, s x, m, m y, s y, alpha) $
   #hinweis[
@@ -1369,7 +1369,7 @@ feststellen, ob sie sich signifikant unterscheiden
 - Auf Prüfung schreiben, dass der $chi^2$-Test auf dem Beiblatt steht
 
 
-== Komolgorov-Smirnov-Test
+== Kolmogorov-Smirnov-Test
 *Wann verwenden?* Wenn mehrere Zufallsvariablen und Grenzen angegeben sind.
 
 *Was macht der Test?* Testet, ob eine gegebene Zufallsvariable einer _Gleichverteilung_ folgt.
@@ -1602,14 +1602,14 @@ $A$ und $B$ heissen _unabhängig_, wenn $Rho(A inter B) = Rho(A) dot Rho(B)$\
   [
     *Abhängig*\
     $Rho(A|B) < Rho(A|dash(B))$\
-    #hinweis[$B$ beinflusst $A$, W'keit mit $B$ ist darum anderst als ohne. $B$ verändert also die Form von $A$.]
+    #hinweis[$B$ beeinflusst $A$, W'keit mit $B$ ist darum anders als ohne. $B$ verändert also die Form von $A$.]
     #v(-0.75em)
     #image("img/wrstat_04.png", width: 57%)
   ],
   [
     *Unabhängig*\
     $Rho(A|B) = Rho(A|dash(B))$\
-    #hinweis[$B$ beinflusst $A$ nicht, W'keit ist gleich. Der Anteil von $A$ ist bei $B$ und $dash(B)$ gleich.]
+    #hinweis[$B$ beeinflusst $A$ nicht, W'keit ist gleich. Der Anteil von $A$ ist bei $B$ und $dash(B)$ gleich.]
     #v(-0.75em)
     #image("img/wrstat_05.png", width: 57%)
   ]
@@ -1665,7 +1665,7 @@ Wie gross ist die Wahrscheinlichkeit $Rho(T)$, auf der Enterprise umzukommen?
     === Versuche
     - $omega =$ _Elementarereignis_, ein (möglicher) Versuchsausgang
     - $Omega =$ Menge aller Elementarereignisse
-    - $A =$ Ereignis 1 #hinweis[(Alle Versuchtsausgänge, bei denen der Würfel 1 zeigt)]
+    - $A =$ Ereignis 1 #hinweis[(Alle Versuchsausgänge, bei denen der Würfel 1 zeigt)]
     - $B =$ Ereignis $>=$ 4
 
     === Spezielle Ereignisse
