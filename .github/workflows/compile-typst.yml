@@ -29,7 +29,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Compile Zusammenfassungen
         run: |
-          find -regextype posix-extended -regex '.*(Zusammenfassung|Spick).*.typ' | while read file; do
+          find -regex '.*\(Zusammenfassung\|Spick\).*.typ' | while read file; do
             echo "Compiling $file"
             typst compile --root "./" "$file" "$(basename "${file%.typ}.pdf")"
           done
