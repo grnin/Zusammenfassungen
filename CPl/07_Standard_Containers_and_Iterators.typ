@@ -221,9 +221,7 @@ All containers have a similar basic interface.
     q.pop(); // Remove value without returning it
     ```
   ],
-  [
-    #image("img/cpl_12.png")
-  ],
+  image("img/cpl_12.png"),
 )
 
 === Example: Stack and Queue

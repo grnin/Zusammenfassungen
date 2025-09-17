@@ -98,7 +98,7 @@ Scrollbars, Titelleiste usw., indem er hinter jedes Top-level Window ein _Extraf
 
 === Xlib
 Ist das _C Interface_ für das X Protocol. Header wird in C Files eingebunden über
-```c #include <X11/Xlib.h>```. Kompiliertes Executable muss mit X11 Libray gelinkt werden:
+```c #include <X11/Xlib.h>```. Kompiliertes Executable muss mit X11 Library gelinkt werden:
 `-lX11`. Hat zahlreiche Funktionen und Datentypen, wird aber meist _nicht direkt
 verwendet_, sondern über X-Toolkits, welche eine _Software-Schicht oberhalb der Xlib_
 darstellen. Diese stellen _Standardbedienelemente_ fertig zur Verfügung,
@@ -123,7 +123,7 @@ Es gibt Funktionen, um bestimmte Eigenschaften des Displays anzuzeigen
 _`XCreateSimpleWindow`_ ist eine einfachere Variante von _`XCreateWindow`_ mit folgenden
 Parametern: Display, Parent Window, Koordinaten der oberen linken Ecke, Breite und Höhe,
 Breite des Rands, Stil des Rands, Stil des Fensterhintergrunds.
-_`XDestroyWindow`_ enfernt es und alle seine Unterfenster.
+_`XDestroyWindow`_ entfernt es und alle seine Unterfenster.
 
 ==== Anzeigen von Fenstern
 - *```c XMapWindow (Display *, Window)```* bestimmt, dass ein Fenster auf dem Display

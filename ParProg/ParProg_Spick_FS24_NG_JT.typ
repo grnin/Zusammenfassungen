@@ -49,7 +49,7 @@ _Concurrency_ #hinweis[(interleaved execution of programs for simpler programs)]
 *As a anonymous function (Lambda):*\
 ```java var myThread = new Thread(() -> { /* thread behaviour */ }); myThread.start();```\
 *As a named function:*\
-```java var myThread = new Thread(() -> AssyFunct()); myThread.start();```\
+```java var myThread = new Thread(() -> AssyFunction()); myThread.start();```\
 *With explicit `Runnable` implementation:*
 ```java
 class MyThread implements Runnable {
@@ -306,7 +306,7 @@ class BoundedBuffer<T> {
     monitor.lock(); // wait for queue to be filled & signal to other queue
     try { while (queue.size() == 0) { nonEmpty.await(); }
       T item = queue.remove(); nonFull.signal(); return item;
-    } finally { monitor.unlock(); } // always release lock, even after Execption
+    } finally { monitor.unlock(); } // always release lock, even after Exception
 }}
 ```
 
@@ -318,6 +318,7 @@ class BoundedBuffer<T> {
     [_Write_], [No], [No],
   )
 }
+
 #wrap-content(
   rw-lock-table,
   align: top + right,
@@ -327,6 +328,7 @@ class BoundedBuffer<T> {
   Mutual exclusion is _unnecessary for read-only_ threads.
   So one should allow parallel reading access, but implement mutual exclusion for write access.
 ]
+
 #v(-0.5em)
 ```java
 ReadWriteLock rwLock = new ReentrantReadWriteLock(true); // true for fairness
@@ -566,7 +568,7 @@ by `get()`.
 
 === Fire and Forget
 Task are started _without retrieving results_ later #hinweis[(`submit()` without `get()`)].
-Task is run, but Exceptions do not get catched.
+Task is run, but Exceptions will not get caught.
 #v(-0.5em)
 
 === Count Prime Numbers
@@ -574,10 +576,10 @@ Task is run, but Exceptions do not get catched.
 // Sequential
 int counter = 0; for (int n = 2; n < N; n++) { if (isPrime(n)) { counter++}};
 // Parallel and Recursive
-class CountTask extends RecursiveTask<Integer> { //RecursiveAction: no return value
+class CountTask extends RecursiveTask<Integer> { //RecursiveAction: void function
   private final int lower, upper;
   public CountTask(int lower, int upper)
-    { this.lower = lower; this.upper = upper;}
+    { this.lower = lower; this.upper = upper; }
   protected Integer compute() {
     if (lower == upper) { return 0; }
     if (lower + 1 == upper) { return isPrime(lower) ? 1 : 0; }
@@ -587,7 +589,7 @@ class CountTask extends RecursiveTask<Integer> { //RecursiveAction: no return va
     left.fork(); right.fork();
     return right.join() + left.join();
 }}
-int result = new CountTaks(2, N).invoke(); // invokeAll() to start multiple tasks
+int result = new CountTask(2, N).invoke(); // invokeAll() to start multiple tasks
 ```
 
 === Pairwise sum (recursive)
@@ -936,6 +938,7 @@ public class SpinLock {
   public void release() { locked.set(false); }
 }
 ```
+
 *Java Atomic Classes:*
 Classes for boolean, Integer, Long, References and Array-Elements.
 Different kinds of atomic operations, _`addAndGet()`_, _`getAndAdd()`_ etc.\
@@ -949,6 +952,7 @@ Sets `update` only when read value is equal to `expect`. Returns true when succe
 ```java
 do { oldV = v.get(); newV = result; } while(!v.compareAndSet(oldV, newV));
 ```
+
 *Lambda-Variants:*
 ```java AtomicInteger s = new AtomicInteger(2); s.updateAndGet(x -> x * x);```
 
@@ -1001,6 +1005,7 @@ Single Instruction Single Data. Purely _sequential_ calculations.\
 *SIMT:*
 Single Instruction Multiple Threads. The same instruction is executed in different threads over different data.
 #image("img/parprog_7.png")
+
 == Latency vs. Throughput
 *Latency:*
 _Elapsed time_ of an event
@@ -1120,12 +1125,12 @@ void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
   The higher, the better.\
   #box($ "Number of operations" / "Number of transferred bytes" = "FLOPS" / "Bytes" $)
 
-  *Example*
+  *Example:*
   ```cpp for(i=0; i<N, i++) { z[i] = x[i] + y[i] * x[i]; }```\
-  Read `x` and `y` from memory, write `z` to memory. That's 2 reads and 1 write
-  #hinweis[(`x` is used twice but read only once)]. In case `x`, `y` and `z` are ints,
-  we have #fxcolor("grün", "12") #hinweis($(3 dot 4)$) bytes transferred and
-  $#fxcolor("orange", "2")$ arithmetic ops ($+$, $*$).
+  Read `x` and `y` from memory, write `z` to memory.
+  That's 2 reads and 1 write #hinweis[(`x` is used twice but read only once)].
+  In case `x`, `y` and `z` are `int`s, we have #fxcolor("grün", "12") #hinweis($(3 dot 4)$) bytes
+  transferred and $#fxcolor("orange", "2")$ arithmetic ops ($+$, $*$).
   The arithmetic intensity is therefore $#fxcolor("orange", "2") / #fxcolor("grün", "12") =
   #fxcolor("orange", "1") / #fxcolor("grün", "6")$.
 ]
@@ -1152,7 +1157,7 @@ The assembly of PTX code is _postponed until application runtime_, at which time
 GPU is known. The _disadvantage_ of this is the _increased application startup delay_.
 However, thanks to cache this only happens once #hinweis[(warmup)].\
 *Programming Interface:*
-_Runtime_ #hinweis[(The cudart library provides functions that execute on the host to
+_Runtime_ #hinweis[(The `cudart` library provides functions that execute on the host to
 (de-)allocate device memory, transfer data etc.)] or _driver API_ #hinweis[(The CUDA driver API
 is implemented in the `cuda.dll` or `cuda.so` which is copied on the system during installation
 of the driver. This provides an additional level of control by exposing lower-level concepts
@@ -1275,7 +1280,7 @@ When thread blocks _terminate_, new blocks are launched on the free multiprocess
 == Matrix Addition
 ```cpp
 __global__
-void MatrixAddKernel(float *A, floa *B, float *C) {
+void MatrixAddKernel(float *A, float *B, float *C) {
   int column = blockIdx.x * blockDim.x + threadIdx.x;
   int row = blockIdx.y * blockDim.y + threadIdx.y;
   if (row < A_ROWS && col < A_COLS) { // boundary checking
@@ -1294,7 +1299,7 @@ Every thread computes one element of the result matrix $C$.
 Can be parallelized because results do not depend on each other.
 ```cpp
 __global__
-void multiply(float *A, floa *B, float *C) {
+void multiply(float *A, float *B, float *C) {
   int i = blockIdx.x * blockDim.x + threadIdx.x;
   int j = blockIdx.y * blockDim.y + threadIdx.y;
   if (i < N && j < M) { // boundary checking
@@ -1410,8 +1415,10 @@ __global__ void MatrixMulKernel(float* d_M, float* d_N, float* d_P, int Width) {
   d_P[Row*Width + Col] = Pvalue;
 }
 ```
-#hinweis[```cpp __syncThreads()``` is only allowed in `if`/`else` if all threads of a block
-  choose the same branch, otherwise undefined behavior.]
+#hinweis[
+  ```cpp __syncThreads()``` is only allowed in `if`/`else` if all threads of a block
+  choose the same branch, otherwise undefined behavior.
+]
 
 
 = High Performance Computing (HPC) Cluster Parallelization
@@ -1513,11 +1520,13 @@ function #hinweis[(e.g. `[1,2,3,4,5] => sum => 15`)]. Each process contains one 
 The four numbers are added and stored on the root process.
 Job is done in a _distributed manner_.\
 ```c MPI_Reduce(void* send_data, void* recv_data, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm)```
-#hinweis[(_`send_data`_: array of elements of type `datatype` to reduce from each process,
+#hinweis[
+  (_`send_data`_: array of elements of type `datatype` to reduce from each process,
   _`recv_data`_: relevant on the root process. contains the reduced result and has a size of `sizeof(datatype) * count`.
-  _`op`_ the operation you wish to apply to your data: `MPI_MAX`, `MPI_MIN`, `MPI_SUM`,
+  _`op`_: the operation you wish to apply to your data: `MPI_MAX`, `MPI_MIN`, `MPI_SUM`,
   `MPI_PROD`: multiplies all, `MPI_BAND`/`MPI_LAND`: Bitwise/Logical AND, `MPI_LOR`: Logical OR,
-  `MPI_MAXLOC`: Same as max plus rank of process that owns it)] \
+  `MPI_MAXLOC`: Same as max plus rank of process that owns it)
+]\
 *`MPI_AllReduce`:*
 Many parallel applications require accessing the reduced results _across all processes_.
 This function reduces the values and distributes the result to all processes.
@@ -1530,6 +1539,7 @@ Gather together multiple values from different processors.\
 == Approximation of $bold(pi)$ via Monte Carlo Simulation <pi-approx>
 Draw a circle inside of a square and randomly place dots in the square. The ratio of dots
 inside the circle to the total number of dots will approximately equal $pi \/ 4$.
+
 #v(-0.5em)
 ```c
 // Sequential
@@ -1594,7 +1604,7 @@ The iteration variable #hinweis[(i.e. `i`)] is implicitly made private for the d
 
 ==== Memory Model
 ```c
-int A, B, C //automatically global because outside of pragma
+int A, B, C // automatically global because outside of pragma
 #pragma omp parallel for private (A) shared (B) firstprivate (C)
   for(...)
 ```

@@ -48,7 +48,7 @@ mit dem Ziel Verbesserungen zu erreichen.
 Hypothese formulieren #sym.arrow Daten im Experiment gewinnen #sym.arrow Hypothese prüfen #sym.arrow ggf. Modell anpassen
 
 == Versuchsplanung
-Hindernisse im Erkentnisgewinn: Komplexität, Kompliziertheit, Rauschen/Dynamik
+Hindernisse im Erkenntnisgewinn: Komplexität, Kompliziertheit, Rauschen/Dynamik
 
 == Prozessmodell
 Einflussgrössen: Einstellgrössen, Störgrössen #sym.arrow Prozess/Experiment #sym.arrow Zielgrössen\
@@ -75,7 +75,7 @@ Methodik zur systematischen Planung und statistischen Auswertung von Experimente
   grid(
     [
       + Ausgangssituation und Problem beschreiben
-      + Untersuchungssziel festlegen
+      + Untersuchungsziel festlegen
       + Zielgrössen und Faktoren festlegen
       + Entscheidung treffen, ob das Problem _analytisch-mathematisch_ oder _experimentell_ gelöst werden soll
       Falls das Problem _experimentell_ gelöst wird:
@@ -709,7 +709,7 @@ muss $(3n)\/4$ gerechnet werden.
 
 === Arithmetisches Mittel (Durchschnitt) <arith-mittel>
 De Durchschnitt halt, de söttsch kenne Kolleg. Häufig benutzt, kann aber zu starken Verzerrungen und Fehlschlüssen führen,
-da Aussreisser den Durchschnitt stark verändern können. Darum nicht geeignet für schiefe Verteilungen, sondern nur
+da Ausreisser den Durchschnitt stark verändern können. Darum nicht geeignet für schiefe Verteilungen, sondern nur
 für eingipflige, symmetrische Verteilungen #hinweis[(z.B. Bell Curve, Normalverteilung)]
 
 #hinweis[Auf TR: Menü $->$ 6 $->$ 3 $->$ 3: Mittelwert. Werte in geschwungene Klammer schreiben (CTRL + "`)`")]
@@ -850,7 +850,7 @@ Streumasse sind Kennzahlen, die die _Verteilung_ der Messwerte _um ein Zentrum_ 
 === Spannweite
 _Differenz aus dem grössten und kleinsten Merkmalswert._ Ist als Streumass geeignet, wenn allein die Länge
 des Streubereiches interessiert, da es keine Information über die Streuung an sich liefert.
-Äusserst empfindlich auf Aussreisser. Merkmale müssen mindestens _Intervallskaliert_ sein.
+Äusserst empfindlich auf Ausreisser. Merkmale müssen mindestens _Intervallskaliert_ sein.
 #hinweis[($v$ = Grösster Wert der Klasse)]
 
 #table(
@@ -904,7 +904,7 @@ $ "ZQA" = Q_3 - Q_1 $
 )
 
 === Mittlere absolute Abweichung
-_Durchschittliche Entfernung der Merkmalswerte vom arithmetischen Mittel._ Ist Einheitenbehaftet.
+_Durchschnittliche Entfernung der Merkmalswerte vom arithmetischen Mittel._ Ist Einheitenbehaftet.
 Wird häufig bei der Beschreibung der erfassten Datenmenge mit angegeben. Besser geeignet als Varianz/Standardabweichung.
 Ausreisser werden erfasst, Gefahr einer verzerrten Beschreibung entsteht.
 
@@ -984,7 +984,7 @@ für konkrete Aussagen verwendet werden #hinweis[(z.B. $"Jahre"^2$)].
 
 _Die Standardabweichung $bold(sigma)$ ist die durchschnittliche Entfernung aller Werte vom arithmetischen Mittel_ und
 die Quadratwurzel der Varianz. Dadurch ist die Standardabweichung wieder in derselben Einheit wie die Messwerte und
-kann konkrete Angaben lieferen #hinweis[(z.B. die Länge weicht durchschnittlich 5.2cm vom Mittelwert 25cm ab.)]
+kann konkrete Angaben liefern #hinweis[(z.B. die Länge weicht durchschnittlich 5.2cm vom Mittelwert 25cm ab.)]
 
 Beide Kennzahlen sind _nur Vergleichswerte_ und liefern nur Informationen über mehr/weniger Streuung.
 Sind empfindlich auf Ausreisser.
@@ -1035,7 +1035,7 @@ $ sigma = sqrt(10'031.2) = underline(100.15) $
 
 === Variationskoeffizient
 _Misst die relative Streuung in Relation zur Lage der Häufigkeitsverteilung._ Wird aus der Standardabweichung und
-dem arithmetischem Mittel berechnet. Dient aufgrunddessen ebenfalls nur als _Vergleichswert_.
+dem arithmetischem Mittel berechnet. Dient aufgrund dessen ebenfalls nur als _Vergleichswert_.
 Kann zum Vergleich unterschiedlicher Mittelwerte und Dimensionen verwendet werden.
 
 #definition[
@@ -1096,7 +1096,7 @@ Bei der _Untersuchung des Zusammenhangs_ zwischen zwei Merkmalen $X$ und $Y$ int
 == Zeitreihen
 Eine Zeitreihe ist eine _zeitlich geordnete Folge_ von Merkmalswerten. Es besteht ein Zusammenhang zwischen
 dem Merkmalsträger $x$ und den diskreten Zeitpunkten $t_i$. Alle Datensätze, die als $x$-Achse die Zeit besitzen,
-sind Zeitreihen. Mithilfe der _Zeitreihenanalyse_ können Stukturen und Gesetzmässigkeiten einer Zeitreihe erkannt werden.
+sind Zeitreihen. Mithilfe der _Zeitreihenanalyse_ können Strukturen und Gesetzmässigkeiten einer Zeitreihe erkannt werden.
 
 Ein _Trend_ beschreibt die langfristige Grundrichtung einer Zeitreihe, er erlaubt einen #hinweis[(vorsichtigen)] Blick
 in die Zukunft. Trends können linear, exponentiell, polynomial oder logistisch sein.
@@ -1187,7 +1187,7 @@ Je nach Abhängigkeit der Parameter voneinander wird für die Regression eine an
 
   [Regressionsparameter $b_1$],
   [
-    Steigungsmass, um wie viele Einheiten sich $Y$ tendentiell ändert, wenn $X$ um eine Einheit grösser wird.
+    Steigungsmass, um wie viele Einheiten sich $Y$ tendenziell ändert, wenn $X$ um eine Einheit grösser wird.
     Entspricht bei der linearen Regression der Geradensteigung.
   ],
 
@@ -1319,7 +1319,7 @@ Der Grad des Polynoms kann ebenfalls festgelegt werden, allerdings wird in der P
 Für die polynomiale Regression ist die Berechnung des Korrelationskoeffizienten nicht sinnvoll.
 $ f(x) = a_0 + a_1(x-x_1) + a_2(x-x_1)(x-x_2) + ... + a_n (x-1)...(x-x_n) $
 
-Um die Werte für die polynomiale Regression zu bestimmen, wird der _Newton-Algorhitmus_ angewendet.
+Um die Werte für die polynomiale Regression zu bestimmen, wird der _Newton-Algorithmus_ angewendet.
 Dieser berechnet rekursiv die Koeffizienten $a$ des Polynoms. In jedem Schritt werden die $x$ und $y$-Werte des momentanen und
 des vorherigen Wertes durch die Spanne der x-Werte dividiert.
 
@@ -1394,7 +1394,7 @@ da sie direkt von einem Polynom 3. Grades stammen)]
     Die Output-Werte liegen immer _zwischen 0 und 1_. Dazwischen muss ein Wert für die _Entscheidungsschwelle_ festgelegt werden, also die Grenze, bei der zwischen `true/false` gewechselt wird.
 
     Sie wird nicht mit der kleinsten-Quadrate-Methode #hinweis[(Mean Squared Error)], sondern mit der Maximum-Likelihood-Methode oder der Sigmoid-Funktion berechnet.
-    Ist die Grundlage für Klassifizierungs-Algorhitmen und neuronale Netze.
+    Ist die Grundlage für Klassifizierungs-Algorithmen und neuronale Netze.
   ],
   image("img/ExEv_04.png"),
 )
@@ -1762,7 +1762,7 @@ Man unterscheidet zwei Arten der Auswahlverfahren einer Reihenfolge:
 Es gibt drei verschiedene Techniken, um Elemente anzuordnen:
 
 == Permutation <permutation>
-_"Auf wieviele Arten lassen sich $n$ verschiedene Objekte anordnen?"_\
+_"Auf wie viele Arten lassen sich $n$ verschiedene Objekte anordnen?"_\
 Bei der Permutation wird die ganze Menge angeordnet, jedes Element der Menge wird also genau einmal in die Anordnung gelegt.
 
 #table(
@@ -2215,8 +2215,8 @@ $
 )
 
 *Beispiel:*\
-An einer Hotline rufen in einer Stunde durchschnittlich $5$ Kunden an. Sie kann $9$ Anfrufe gleichzeitig bearbeiten.\
-#hinweis[(Nicht diesselbe Aufgabe wie bei der Exponential-Verteilung, es hängt von der Fragestellung ab!)]
+An einer Hotline rufen in einer Stunde durchschnittlich $5$ Kunden an. Sie kann $9$ Anrufe gleichzeitig bearbeiten.\
+#hinweis[(Nicht dieselbe Aufgabe wie bei der Exponential-Verteilung, es hängt von der Fragestellung ab!)]
 
 Wie gross ist die Wahrscheinlichkeit, dass genau $3$ Kunden anrufen?
 $ Rho(3) = mu^x/x! dot e^(-mu) = 5^3/(3!) dot e^(-5) = underline(0.14) $
@@ -2413,7 +2413,7 @@ Empirische Untersuchungen zeigen nämlich bei vielen Anlagen:
 
 + In der _ersten Phase_ eine zunächst hohe, dann sinkende Ausfallwahrscheinlichkeit,
   etwa bis die optimale Einrichtung und Einstellung erfolgt ist
-+ In der _zweiten Phase_ eine gleichleibend niedrige Ausfallrate
++ In der _zweiten Phase_ eine gleichbleibend niedrige Ausfallrate
 + Mit zunehmendem Alter in der_ dritten Phase_ altersbedingt eine ansteigende Ausfallrate.
 
 _Die Verteilung hat zwei Parameter:_ Den _Skalenparameter $bold(lambda)$_ und den _Formparameter $bold(k)$_.
@@ -2615,7 +2615,7 @@ Um Simulationsexperimente durchzuführen, müssen Zufallszahlen erzeugt werden.
 - Diese müssen _eindeutig in ihrer Reihenfolge wiederholbar sein_\
   #hinweis[(damit Experiment unter gleichen Bedingungen wiederholbar ist)]
 - Es müssen _beliebig viele Zufallszahlenfolgen erzeugbar sein_\
-  #hinweis[(um verschiedenen Prozessen verschiedenenes Verhalten zu geben und unterschiedliche Experimente durchzuführen)]
+  #hinweis[(um verschiedenen Prozessen verschiedenes Verhalten zu geben und unterschiedliche Experimente durchzuführen)]
 
 "Echte" Zufallszahlen sind aufgrund von fehlender Reproduzierbarkeit und schlechten statistischen Eigenschaften ungeeignet,
 deshalb verwendet man _Pseudo-Zufallszahlen_.
@@ -2716,7 +2716,7 @@ Der Konfidenzintervall ist selbst wieder eine Zufallsvariable und streut um den 
   )
 ]
 
-==== Satz 1: Wenn der Stichprobenmittelwert diesselbe Verteilung wie $X$ hat, gilt
+==== Satz 1: Wenn der Stichprobenmittelwert dieselbe Verteilung wie $X$ hat, gilt
 - Die Summe der Zufallsvariablen #hinweis[(einzelne Mittelwerte)] ist wieder eine Zufallsvariable
 - Der Erwartungswert der Stichprobe ist gleich dem Erwartungswert der Grundgesamtheit\
 $ dash(X) = mu_#x- = 1/n sum^n_(i=1) X_i = mu $
@@ -2977,7 +2977,7 @@ Ist $E(hat(T) - T) = 0$, ist die Schätzung _erwartungstreu_, hat also keine Abw
 Die durch obenstehende Schätzfunktionen erzeugten Parameter sind normalverteilt ($mu$) bzw. Chi-Quadrat-verteilt ($sigma$)
 
 == Intervallschätzung des Erwartungswertes
-Die Intervallschätzung zielt darauf ab, einen Bereich anzugeben, der mit einer gewissen #hinweis[(selbstgewählten)]
+Die Intervallschätzung zielt darauf ab, einen Bereich anzugeben, der mit einer gewissen #hinweis[(selbst gewählten)]
 Wahrscheinlichkeit den wahren Wert enthält. Dieser Bereich  wird auch _Konfidenzintervall_ genannt.
 Häufige Konfidenzintervalle sind $90%$, $95%$ und $99%$.
 
@@ -3070,7 +3070,7 @@ Die Konfidenzgrenzen ergeben sich durch Addition/Subtraktion des max. Schätzfeh
 #pagebreak()
 
 == Stichprobenumfangberechnung
-Für die Intervallschätzung muss manchmal die _Stichprobengrösse_ bestummen werden, also wie viele Proben mindestens
+Für die Intervallschätzung muss manchmal die _Stichprobengrösse_ bestimmt werden, also wie viele Proben mindestens
 in der Stichprobe enthalten sein müssen, um eine bestimmte _Genauigkeit $alpha$_ erreichen zu können.
 Für die Bestimmung des $Z$-Wertes aus der Standardnormalverteilung muss die Wahrscheinlichkeit $1-alpha$ angewendet werden.
 
@@ -3209,7 +3209,7 @@ _Fragestellung_: Hilft das neue Medikament dem Patienten, schneller gesund zu we
 
   + Kann man an dieser Behauptung mit einer Irrtumswahrscheinlichkeit von $0.05$ festhalten?
     + Werte aus Text herausschreiben
-    $ X = 1550, quad "Mittelwert" mu = 1500, quad "Standardabweichug" sigma = 50, quad n = 60, quad alpha = 0.05 $
+    $ X = 1550, quad "Mittelwert" mu = 1500, quad "Standardabweichung" sigma = 50, quad n = 60, quad alpha = 0.05 $
 
     2. Hypothesen definieren:
       - $H_0$: Das neue Verfahren hat keine Veränderung der Zugstärke ergeben, $mu = 1500 N$
@@ -3246,7 +3246,7 @@ ist die Stichprobe _abhängig_.
     [
       _*$Z$*:_ Aus Tabelle Normalverteilung \
       _*$sigma_1^2, sigma_2^2$*:_ Varianz der Stichproben 1 und 2\
-      _*$n_1, n_2$*:_ Gesamtanzahlen der Stichproben 1 und 2 \
+      _*$n_1, n_2$*:_ Gesamt-Anzahlen der Stichproben 1 und 2 \
     ],
   )
 ]
@@ -3265,7 +3265,7 @@ Bei einer unabhängigen Stichprobe muss die Varianz für jede Probe einzeln gesc
 5. Nullhypothese wird angenommen, wenn Differenz $d_i = mu_1 - mu_2$ in den Annahmebereich fällt
 
 == Chi-Quadrat-Test
-Mit _Verteilungstests_ können Hypotesen über die Wahrscheinlichkeitsverteilung einer Stichprobe überprüft werden.
+Mit _Verteilungstests_ können Hypothesen über die Wahrscheinlichkeitsverteilung einer Stichprobe überprüft werden.
 Wir verwenden in unserem Fall den _Chi-Quadrat-Test_: Bei ihm werden die Häufigkeiten von empirisch ermittelten Verteilungen
 #hinweis[(Messwerte)] mit der theoretischen Verteilung verglichen. Dabei werden die Differenzen der Häufigkeitswerte quadriert,
 normiert und aufaddiert.
@@ -3302,7 +3302,3 @@ $ D = 0.9 + 0.4 + 0.9 + 0.4 + 0.1 + 2.5 = underline(5.2) $
 
 6. $D_"krit"$ aus $chi^2$-Tabelle ablesen oder von TR und mit $D$ vergleichen. Ist $D > D_"krit"$: Nullhypothese verwerfen.\
   $5.2 < 11.0705$, das heisst, die Null-Hypothese kann nicht verworfen werden.
-
-
-
-

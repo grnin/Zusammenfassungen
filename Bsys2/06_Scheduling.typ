@@ -47,7 +47,7 @@ So wird erheblich _Energie gespart_. _Busy-Waits_ sind verpönt, weil sie das Um
 ins Standby verhindern.
 
 === Arten von Threads
-- _I/O-lastig:_ Kommuniziert sehr häuftig mit I/O-Geräten und rechnet relativ wenig
+- _I/O-lastig:_ Kommuniziert sehr häufig mit I/O-Geräten und rechnet relativ wenig
   #hinweis[(USB, Tastatur, Speicher)]. Priorisieren _kurze Latenz_.
 - _Prozessor-lastig:_ Kommuniziert kaum oder gar nicht mit I/O-Geräten und rechnet fast
   ausschliesslich. Priorisieren _mehr CPU-Zeit_.
@@ -226,7 +226,7 @@ if (nice(i) == -1 && errno != 0) { /* Error */ } else { /* -1 is nice value */ }
 ```c int setpriority (int which, id_t who, int prio)``` setzt den Nice-Wert
 von $p$ auf $n$. Gibt 0 zurück wenn OK, sonst -1 und Fehlercode in `errno`.
 
-Spezifiziert Prioriät für einzelnen Prozess, Prozessgruppe oder alle Prozesse eines Users.
+Spezifiziert Priorität für einzelnen Prozess, Prozessgruppe oder alle Prozesse eines Users.
 - _`which`:_ `PRIO_PROCESS`, `PRIO_PGRP` oder `PRIO_USER`
 - _`who`:_ ID des Prozesses, der Gruppe oder des Users
 

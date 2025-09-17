@@ -9,7 +9,7 @@ und der Output _(Virtual) Maschine Code_ in einem _Assembly- bzw. Object File_.
 - _Backend:_ x64 Assembly, Java Bytecode, .NET CLI, ...
 
 AST & Symboltabelle trennt das _Frontend_ vom _Backend_. Diese Trennung erlaubt _Mehrsprachen-_ und
-_Mehrplattformenkompatibilität_ im Compiler, da alle Sprachen auf _diesselbe Intermediate Language_ #hinweis[(IL)]
+_Mehrplattformenkompatibilität_ im Compiler, da alle Sprachen auf _dieselbe Intermediate Language_ #hinweis[(IL)]
 kompiliert werden und aus diesem der Maschinencode für die entsprechende Platform generiert werden kann.
 
 == Stack-Prozessor
@@ -90,14 +90,12 @@ Jede Methode hat ihren _eigenen Evaluation Stack_, dieser muss zu Beginn und am 
       ... }
     ```
   ],
-  [
-    #image("img/combau_16.png")
-  ],
+  image("img/combau_16.png"),
 )
 
 == Metadaten
 Durch die Metadaten kann die _Speicher-_ und _Typensicherheit_ zur Runtime _verifiziert_ werden.
-Dies ist insbesondere beim _Laden von Libraries_ wichtig, um Kompabilität zu garantieren.\
+Dies ist insbesondere beim _Laden von Libraries_ wichtig, um Kompatibilität zu garantieren.\
 Die Zwischensprache kennt alle Informationen zu
 - _Klassen:_ Namen, Typen der Fields und Methoden
 - _Methoden:_ Namen, Parametertypen und Rückgabetyp
@@ -161,7 +159,7 @@ _Postorder-Traversierung:_ Kinder zuerst besuchen und jeweils Template für erka
     // store <varNum> wird ohne Rekursion angewendet, y hat Wert 2
     ```
   ],
-  [#image("img/combau_18.png", width: 70%)],
+  image("img/combau_18.png", width: 70%),
 )
 
 #pagebreak()

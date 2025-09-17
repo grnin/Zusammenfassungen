@@ -326,7 +326,7 @@ durch Stau an der Kasse zunichte gemacht.
 *Was ist das Thema der Quelle?*\
 Stellungnahme des Migros-Genossenschafts-Bunds: Experiment geriet unter öffentlichen Druck (1966);
 Presse vermeldete Auflösung; Verteidigung des Experiments und Verkündung der Einführung von Kontrollen;
-Von der Presse kritisierters international verfolgtes Projekt; Ruf der Migros als Rationalisierungsweltmeister im
+Von der Presse kritisiertes international verfolgtes Projekt; Ruf der Migros als Rationalisierungsweltmeister im
 Detailhandel steht auf dem Spiel
 
 *Wie ist die Quelle aufgebaut?*\
@@ -759,7 +759,7 @@ durch den Verkaufsdrang des Personals bedrängt fühlen könnten.
 #hinweis[SRF, Der Taktfahrplan in Basel, CH-Magazin vom 25.5.1982]
 
 *Was bedeutete der Taktfahrplan für die Mitarbeiter:innen der SBB?*\
-Es gab einen _bedeutenden Mehraufwand für das Personal_ durch das höhere Zugsaufkommen. Der Bericht erzählt indirekt,
+Es gab einen _bedeutenden Mehraufwand für das Personal_ durch das höhere Zugaufkommen. Der Bericht erzählt indirekt,
 dass nicht viel neues Personal eingestellt wurde, sondern das Bestehende mit diesen Änderungen und Aufgaben
 klar kommen musste. Die Umstellung von Arbeitsroutinen, die fehlenden Erfahrungswerte und der Leistungsdruck,
 dass diese Umstellung auch den Ansprüchen gerecht wird. Erhöhte Abstimmungsschwierigkeiten mit
@@ -914,7 +914,7 @@ in der Gesellschaft typisiert. In der Schweiz wollte sich IBM auch in der staatl
 #definition[*Forschungsfrage:* Wie würden Sie die Werbestrategie der IBM Schweiz beschreiben? Was ist besonders auffällig?]
 
 *Wie lässt sich die Quelle näher bestimmen?*\
-Werbung, also nicht neutraler Text, aufmerksamkeitshaschend
+Werbung, also kein neutraler Text, aufmerksamkeitshaschend
 
 *Sich keinen Computer anzuschaffen, muss gar nicht so dumm sein (1966)*\
 Grosse Freifläche, wo man ein Bild erwarten würde; Überraschungseffekt. Kritische Punkte, welche sich die Bevölkerung
@@ -974,12 +974,12 @@ führend, abgeschlagen war die Banken & Versicherungen (8) und öffentliche Verw
 1974 ist die Maschinenindustrie immer noch führend in der Anzahl Computer mit 384, doch auf den nächsten Plätzen finden
 sich die Banken (383) und die öffentliche Verwaltung (313). IBM weiter Marktführer.
 
-Es gibt keine Schweizer Computerhersteller, da es kein Investorenmilleu oder staatliche Forderung für solche Firmen existierten.
+Es gibt keine Schweizer Computerhersteller, da es kein Investorenmilieu oder staatliche Forderung für solche Firmen existierten.
 Erst Mitte der 80er gab es staatliches Interesse, die Informatikbranche zu fördern.
 
 == Die Helvetische Malaise
 In den 1960ern breitete sich eine allgemeine Unzufriedenheit in der Bevölkerung aus. Die traditionellen Verfahren wie
-direkte Demokratie passten nicht mehr in die Zeit: Geringe Abstimmungsqoten, langsame Verwaltung, Reformstau.
+direkte Demokratie passten nicht mehr in die Zeit: Geringe Abstimmungsquoten, langsame Verwaltung, Reformstau.
 Das Vertrauen bröckelte. Diesen Zustand der "Anti-Reform" fasste der Schriftsteller Max Imboden mit dem Begriff
 _"Helvetische Malaise"_ zusammen. Irgendwas scheint nicht mehr zu stimmen, es lässt sich aber nicht genau sagen was.
 
@@ -1003,8 +1003,8 @@ Durch die Hochschule und Textilindustrie stieg die Stadt St. Gallen früh in den
 die hierarchisch organisiert war. Man stellte eigene Programmierer ein und arbeitete mit der lokalen Industrie zusammen.
 Die Einsparungen wurden genau protokolliert. Es wurden immer mehr und mehr Aufgaben in den Rechner verlegt, um diesen optimal auszulasten.
 
-10 Jahre später musste eine Nachfolgerechner angeschafft werden. Um Budgetierungsfragen auszuweichen, gründete die
-Stadt zusammen mit dem Kanton die Verwaltungsrechenzentrum AG St. Gallen. Die ganze Computerabteilung der Stadt zog
+10 Jahre später musste ein Nachfolgerechner angeschafft werden. Um Budgetierungsfragen auszuweichen, gründete die
+Stadt zusammen mit dem Kanton die "Verwaltungsrechenzentrum AG St. Gallen". Die ganze Computerabteilung der Stadt zog
 in diese Aktiengesellschaft. Dadurch konnte Rechenleistung für andere Gemeinden im Kanton vermietet werden.
 Die Gemeinden wurden zu Aktionären und es waren keine Abstimmungen in den Gemeinden nötig, ob teuer Computer angeschafft
 werden sollten.
@@ -1026,9 +1026,10 @@ Also prüften sie drei Optionen:
 - _Rechenzeit mieten_: Die Lösung, für die sich entschieden wurde
 
 Chur griff auf das kommerzielle Rechenzentrum von IBM zurück und wollte Rechenzeit mieten. IBM hatte ihr Geschäftsmodell
-angepasst und Chur erhielt Terminals (neue Erfindung von IBM, um Einspeisung der Daten auf Kunden zu verschieben).
-Mutationen in der Datenbank wurden im Rechenzentrum zwischengespeichert. Um das Zwischenspeichern so kostengünstig
-wie möglich zu halten, kauften sie bei Kodak Mikrofilm. Diese Mikrofilme konnten dann in Chur ausgelesen werden.
+angepasst und Chur erhielt Terminals #hinweis[(neue Erfindung von IBM, um Einspeisung der Daten auf von IBM auf den Kunden
+zu verschieben)]. Mutationen in der Datenbank wurden im Rechenzentrum zwischengespeichert.
+Um das Zwischenspeichern so kostengünstig wie möglich zu halten, kauften sie bei Kodak Mikrofilm.
+Diese Mikrofilme konnten dann in Chur ausgelesen werden.
 Alle 14 Tage wurde die Daten aktualisiert und von Chur zum Rechenzentrum in Zürich gesendet.
 Diese wurde dann von Zürich an Kodak gesendet, wobei die Daten im Rechenzentrum gelöscht wurden.
 Kodak wandelte diese Daten dann in Mikrofilm um und sendete sie zurück nach Chur.
@@ -1079,7 +1080,7 @@ bieten zu können. Sie wird halbjährlich im Juni und November veröffentlicht.
 
 Diese basieren auf dem LINPACK-Benchmark, welcher ein festes Problem darstellt, welches auf jedem Supercomputer
 laufen gelassen wird. Basierend auf der Anzahl Rechenoperationen #hinweis[(FLOPS: Floating Point Operations per Second,
-  Anzahl Kommazahlenberechnungen pro Sekunde)], welche in diesem Benchmark erzielt werden wird der Computer in die
+  Anzahl Kommazahlberechnungen pro Sekunde)], welche in diesem Benchmark erzielt werden wird der Computer in die
 Liste eingeordnet.
 
 In den ersten Jahren war diese Liste _stark amerikanisch und japanisch geprägt_, in den Folgejahren kamen auch
@@ -1092,7 +1093,7 @@ Analog zum Top 500 gibt es auch eine Green 500, bei der nicht reine Rechenleistu
 gemessen wird. Die erste Top Green 500 wurde 2007 von Wu-chun Feng und Kirk Cameron veröffentlicht und misst die FLOPS pro Watt,
 meist auch über den LINPACK-Benchmark. Die Motivation hinter der Liste war der wachsende Energieverbrauch der Supercomputer.
 Durch die Veröffentlichung einer solchen Liste wollte man die Gestaltung _energieeffizienterer Systeme_ fördern,
-u.a. durch Paralellisierung, was durch Grafikkarten ermöglicht wird.
+u.a. durch Parallelisierung, was durch Grafikkarten ermöglicht wird.
 
 Im Juni 2014 schaffte es das CSCS als erstes Rechenzentrum, sich gleichzeitig in den ersten Zehn der Top 500 und
 der Top Green 500 zu platzieren.
@@ -1111,7 +1112,7 @@ welches die Rechenleistung des Zentrums den Universitäten zur Verfügung stellt
 Die Standortwahl in Lugano war aussergewöhnlich, denn eigentlich befanden sich alle Nutzer eines Supercomputers
 in der Nord- und Westschweiz. Die grossen Universitäten und Branchen hatten alle schon ihre eigenen Supercomputer und
 grundsätzlich gar _keinen Bedarf an einem neuen Rechenzentrum_. Durch Standortpolitik fiel die Wahl dann auf Lugano, um auch eine
-wissenschaftliche Institution im wirtschaftlich schwachen Tessin anzusieden. Doch niemand in Lugano wollte dieses Rechenzentrum:
+wissenschaftliche Institution im wirtschaftlich schwachen Tessin anzusiedeln. Doch niemand in Lugano wollte dieses Rechenzentrum:
 Sie hatten keine Universität, also keine lokalen Forschungsprojekte und Fachkräfte, die dieses Zentrum bedienen konnten.
 Die einheimischen Talente wollten nicht ins Tessin ziehen und ausländische Fachkräfte konnten mangels eines nahe
 gelegenen Flughafens auch nicht leicht eingeflogen werden.

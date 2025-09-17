@@ -37,7 +37,7 @@ Die _Kontextabhängigkeit_ wird später im _semantic Checker_ geprüft.
 )
 
 == Aufgabe des Parsers
-Der Parser _analysiert_ die gesante Syntaxdefinition #hinweis[(mit oder ohne rekursive Regeln)].
+Der Parser _analysiert_ die gesamte Syntaxdefinition #hinweis[(mit oder ohne rekursive Regeln)].
 Er erkennt, ob der Eingabetext _die Syntax erfüllt_ oder nicht. Hier ist eine _eindeutige Ableitung_ gewünscht,
 weil es sonst in der Syntaxdefinition ein Problem gibt. Er _erzeugt_ den Syntaxbaum für weitere Compiler-Schritte.
 
@@ -56,7 +56,8 @@ Die _Ableitung der Syntaxregeln_ wird als Baum widerspiegelt.
     _Unwichtige Details_ werden _weggelassen_, Struktur wird _vereinfacht_ und für Weiterverarbeitung optimiert.\
     Selbst implementierter Parser kann direkt Abstract Syntax Tree liefern.
   ],
-  [#image("img/combau_07.png", width: 40%)], [#image("img/combau_08.png", width: 50%)],
+  image("img/combau_07.png", width: 40%),
+  image("img/combau_08.png", width: 50%),
 )
 
 == Parsing-Strategien
@@ -91,7 +92,7 @@ Die Notation besteht aus zwei Buchstaben und einer Zahl.
     `Expr <- Term + Term <- ... <- 1 + ( 2 - 3 )`
   ],
 
-  [#image("img/combau_09.png")], [#image("img/combau_10.png")],
+  image("img/combau_09.png"), image("img/combau_10.png"),
 )
 
 == Top-Down Parsing
@@ -102,7 +103,7 @@ _Pro Nicht-Terminalsymbol_ wird _eine Methode_ implementiert. Wenn ein Nicht-Ter
 entsprechende Methode _aufgerufen_. Diese Methode funktioniert bei rekursiven und nicht-rekursiven Syntaxen.
 Der _Stack_ ist _implizit_ durch Methodenaufrufe gegeben.
 Die bevorzugte Vorgehensweise ist die _zielorientierte Satzzerlegung_ #hinweis[(direct prediction)]:
-Die Syntax wird _analysiert_ und _systematische Kritierien_ für das Parsen _bestimmt_, damit immer klar ist,
+Die Syntax wird _analysiert_ und _systematische Kriterien_ für das Parsen _bestimmt_, damit immer klar ist,
 welche Produktion als nächstes angewendet wird. Ist dies nicht möglich, muss mit _Backtracking_ gearbeitet werden:
 Bei einem Syntaxfehler wird der letzte Schritt rückgängig gemacht und ein anderer Pfad gewählt.
 Wird ein Pfad gefunden, ist die Syntax _valide_.
@@ -191,8 +192,12 @@ verwendet werden: #tcolor("grün", `Sequence`) `= {"s"}`
     void ParseSequence() {
       ParseSequence(); // Recursion Error
       if (!AtEnd) {
-        if (Current == 's') { Next(); }
-        else { Error(); } } }
+        if (Current == 's') {
+          Next();
+        }
+        else {
+          Error();
+        } } }
     ```
   ],
   [
@@ -200,8 +205,13 @@ verwendet werden: #tcolor("grün", `Sequence`) `= {"s"}`
     // Sequence = {"s"} Parse
     void ParseSequence() {
       while (!AtEnd) {
-        if (Current == 's') { Next(); }
-        else { Error(); break; } } }
+        if (Current == 's') {
+          Next();
+        }
+        else {
+          Error();
+          break;
+        } } }
     ```
   ]
 )

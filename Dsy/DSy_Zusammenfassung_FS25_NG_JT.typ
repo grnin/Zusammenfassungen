@@ -76,7 +76,7 @@ There are more classifications.
 - _Classifications based on communication model:_ Synchronous or asynchronous
 - _Other Classification:_ Degree of transparency #hinweis[(The degree to which the distribution is concealed from the user)],
   fault tolerance, scalability, degree of consistency, data replication #hinweis[(how and where data copies are stored)],
-  data partitioning, heterogenity.
+  data partitioning, heterogeneity.
 
 #pagebreak()
 
@@ -1241,9 +1241,7 @@ to authenticate.
     _Refresh Token_ can have a _longer lifetime_ #hinweis[(e.g. 6 months)]. A refresh token is used to get a new access token.
     IAM service #hinweis[(Identity & Access management)] or a Auth server creates access tokens.
   ],
-  [
-    #image("img/dsy_07.png")
-  ],
+  image("img/dsy_07.png"),
 )
 
 *Why are both access and refresh token needed?*
@@ -1376,8 +1374,7 @@ This would _increase the amount of traffic_ on the network between client and se
 
     There are _different algorithms_ for congestion control.
   ],
-
-  [#image("img/dsy_10.png")],
+  image("img/dsy_10.png"),
 )
 
 *Difference Flow Control/Congestion Control:*\

@@ -69,7 +69,7 @@
     - Thread Management
     - Base Class Library
   ],
-  [#image("img/dotnet_01.png")],
+  image("img/dotnet_01.png"),
 )
 
 === Common Intermediate Language (CIL)
@@ -107,7 +107,7 @@ Aktuell umfasst .NET ca. 30 Sprachen #hinweis[(C\#, F\#, VB.NET, C++, J\#, IronP
 
 === Kompilierung
 Der _Source Code_ wird während der Design Time #hinweis[(Build-Prozess)] mit dem _Language Compiler_ in den _IL-Code_
-umgewandet. Dieser wird dann mit dem _JIT-Compiler_ während der Runtime in _Native Code_ #hinweis[(Assembler-Code der Platform)]
+umgewandelt. Dieser wird dann mit dem _JIT-Compiler_ während der Runtime in _Native Code_ #hinweis[(Assembler-Code der Platform)]
 übersetzt. Alternativ kann der Source Code auch _direkt via Native AOT_ #hinweis[(Ahead-of-time compilation)] in Native Code
 übersetzt werden.
 
@@ -818,7 +818,7 @@ Schreiben von "normalem" Code wenig verwendet.
   [
     Möglich mit Ganzzahlen #hinweis[(`[s]byte`, `[u]short`, ` [u]int` `[u]long`)], `char`, `string` und `enum`.
     Die Cases sind _fall-through_, ist ein Case also nicht mit `break`, `throw`, `return` oder `goto` abgeschlossen,
-    wird der Code im nächsten Case ausgeführt, ohne dass die Case-Kondition nocheinmal geprüft wird.
+    wird der Code im nächsten Case ausgeführt, ohne dass die Case-Kondition noch einmal geprüft wird.
 
     Der `default`-Case ist optional und wird ausgeführt, wenn kein anderer Case zutrifft. `null`-case ist erlaubt.
   ],
@@ -1473,7 +1473,8 @@ Ein Default Constructor hat keine Parameter. Er hat in Klassen und Structs ander
     ```
   ],
 )
-=== Initalisierungsreihenfolge mit Vererbung
+
+=== Initialisierungsreihenfolge mit Vererbung
 #grid(
   [
     _Zuerst in Subklasse:_ Statische Klassenvariablen $->$ Statische Konstruktoren $->$ normale Klassenvariablen,
@@ -1639,8 +1640,8 @@ Ein Default Constructor hat keine Parameter. Er hat in Klassen und Structs ander
 )
 
 *Regeln*\
-Methode muss `static` sein, Schlüsselwort `operator` gefolgt von z.B. `+`, Unäre Operatoren haben 1 Parameter, Binäre 2 Parameter,
-Rückgabetyp ist frei wählbar, mindestens 1 Parameter muss vom Typ der enthaltenden Klasse sein,
+Methode muss `static` sein, Schlüsselwort `operator` gefolgt von z.B. `+`, Unäre Operatoren haben 1 Parameter,
+Binäre 2 Parameter, Rückgabetyp ist frei wählbar, mindestens 1 Parameter muss vom Typ der enthaltenden Klasse sein,
 müssen teilweise als Paar überladen werden #hinweis[(`== !=`, `< >`, `<= >=`, `true false`)].
 Es können nur Unäre und Binäre Operatoren überladen werden, Index- und Type Cast-Operator verfügen aber über Alternativen
 #hinweis[(Indexer, user-defined conversion operators)].
@@ -2284,7 +2285,7 @@ Mehrere Interfaces können gleiche Member definieren, was zu Kollisionen führt.
     Aus Performancegründen sollte unterschieden werden, ob ein ```cs Dispose()``` aus einem Finalizer
     #hinweis[(also vom Garbage Collector)] oder von einem manuellen ```cs Dispose()```-Aufruf stammt.\
     Der Code rechts erweitert die oben definierte Klasse `DataAccess` um ein einfaches Beispiel eines Dispose-Patterns:
-    Wird manuell disposed, macht der GC dies nicht nocheinmal. Mehrmaliges manuelles Disposen wird ebenfalls verhindert.
+    Wird manuell disposed, macht der GC dies nicht noch einmal. Mehrmaliges manuelles Disposen wird ebenfalls verhindert.
     Die neue ```cs Dispose(bool)```-Methode kann von Subklassen überschrieben werden.
   ],
   [
@@ -2340,7 +2341,7 @@ Mehrere Interfaces können gleiche Member definieren, was zu Kollisionen führt.
   [
     Ein Delegate ist ein Typ, welcher _Referenzen auf $0$ bis $n$ Methoden_ enthält. Die Typsicherheit wird vom Compiler garantiert.
     _Vereinfacht gesagt ist ein Delegate ein Interface mit einer Methode, ohne das Interface aussen herum._
-    Delagates werden auf Namespace-Ebene definiert #hinweis[(ausserhalb von Klassen/Interfaces)].
+    Delegates werden auf Namespace-Ebene definiert #hinweis[(ausserhalb von Klassen/Interfaces)].
     Sie verwenden intern eine Linked List, um die Referenzen zu speichern.\
     *Verwendung:* _Methoden als Parameter übergeben_, Definition von Callback-Methoden.
 
@@ -3099,7 +3100,7 @@ Häufig verwendet man auch nur die generischen Varianten.\
 
 == Nullability
 Es gibt spezielle Typen, welche `null` als eine Art _"unbekannter"_ bzw. "nicht existenter" _Wert_ zulassen.
-Diese Typen werden _Nullable Types_ gennant.
+Diese Typen werden _Nullable Types_ genannt.
 
 === `default` Operator
 #grid(
@@ -3534,7 +3535,7 @@ Dies ist zwar kürzer und bequemer, aber auch weniger sicher und robust.
     int[] arr = new int[5]; int x2 = arr[12];
     // null-Zugriff
     object o = null; string x3 = o.ToString();
-    throw new Exception("An Error occured");
+    throw new Exception("An Error occurred");
     ```
   ],
 )
@@ -3924,7 +3925,7 @@ damit mehrere davon mit dem "`.`"-Operator aneinandergehängt werden können. Si
   ],
 )
 
-#align(center)[#image("img/dotnet_17.png", width: 50%, fit: "contain")]
+#align(center, image("img/dotnet_17.png", width: 50%, fit: "contain"))
 
 = LINQ (Language Integrated Query)
 Mit LINQ können von beliebigen Datenstrukturen mit SQL-ähnlichen Queries Daten _typsicher bearbeitet_ werden.
@@ -5057,7 +5058,7 @@ Im Model Builder bzw. der Fluent API gibt es zusätzliche Extension Methods nur 
 
     *`(2)` Fluent API*\
     In ```cs OnModelCreating()``` durch ```cs Entity<T>()```\ ```cs .ToTable(table, schema: schema)```\
-    Tabellename zwingend, Schema optional.
+    Tabellenname zwingend, Schema optional.
 
     *`(3)` Data Annotations*\
     ```cs [Table(name, Schema = schema)]``` Annotation an Klasse.\
@@ -5462,7 +5463,7 @@ Die Änderungen werden _aufgezeichnet_ und beim Speichern werden alle in einer _
 - _Modified_: Entity wird getracked, existiert in der DB, und mindestens ein Property-Wert wurde verändert.
 - _Deleted:_ Entity wird getracked, existiert in der DB, wurde zum Löschen markiert.
   Wird deshalb gelöscht, wenn `SaveChanges()` zum nächsten Mal ausgeführt wird
-- _Detatched:_ Entity wird nicht vom `DbContext` getracked
+- _Detached:_ Entity wird nicht vom `DbContext` getracked
 
 
 #grid(
@@ -6150,7 +6151,7 @@ _Null-Werte_ können mit `import "google/protobuf/empty.proto"; ... google.proto
     Für _Versionierung_ gedacht. Wiederverwendung wird vom Protocol Buffer Compiler verhindert.
     Schlüsselwort `reserved` _verfügbar für Unique Field Name und Unique Field Number_
     #hinweis[(Falls in einer neuen Version ein Feld entfernt wird, wird zukünftige Überschreibung so verhindert und
-    somit Rückwärtskompabilität garantiert)].
+    somit Rückwärtskompatibilität garantiert)].
 
     Ranges können mit `"to"` reserviert werden:\
     ```proto reserved 1 to 3```
@@ -6368,7 +6369,7 @@ Garantiert sowohl _Auslieferung_ als auch _Reihenfolge_ der Auslieferung.\
           }
       }
 
-      // Recieve files that the client sends
+      // Receive files that the client sends
       public override async Task<Empty> SendFiles(
         IAsyncStreamReader<FileDto> requestStream,
         ServerCallContext context)
@@ -6421,7 +6422,7 @@ Garantiert sowohl _Auslieferung_ als auch _Reihenfolge_ der Auslieferung.\
 #pagebreak()
 
 == Exception Handling
-Grundsätzlich immer via _RpcException_. Basierned auf StatusCodes, Details über "Trailers" möglich.\
+Grundsätzlich immer via _RpcException_. Basierend auf StatusCodes, Details über "Trailers" möglich.\
 _Status Codes:_ `OK`, `Cancelled`, `Unknown`, `InvalidArgument`, `DeadlineExceeded`, `NotFound`, `AlreadyExists`,
 `PermissionDenied`, `Unauthenticated`, `ResourceExhausted`, `FailedPrecondition`, `Aborted`, `OutOfRange`, `Unimplemented`,
 `Internal`, `Unavailable`, `DataLoss`.
@@ -6559,7 +6560,7 @@ _Status Codes:_ `OK`, `Cancelled`, `Unknown`, `InvalidArgument`, `DeadlineExceed
   table.header([Option], [Default], [Beschreibung]),
   [`MaxSendMessageSize`], [`null`], [Maximale Message-Grösse beim Senden #hinweis[(Exception wenn grösser)]],
   [`MaxReceiveMessageSize`], [4 MB], [Maximale Message-Grösse beim Empfangen #hinweis[(Exception wenn grösser)]],
-  [`EnableDetailedErrors`], [`false`], [Wenn `true` werden Exception-Details an Client übermittelt #hinweis[(Mögliches Sicherheitsrisko!)]],
+  [`EnableDetailedErrors`], [`false`], [Wenn `true` werden Exception-Details an Client übermittelt #hinweis[(Mögliches Sicherheitsrisiko!)]],
   [`CompressionProviders`], [gzip], [Kompressions-Algorithmus für Messages]
 )
 
@@ -6855,7 +6856,7 @@ Klassen befinden sich im Assembly "`mscorlib`" im Namespace "`System.Reflection`
   [
     ```cs
     Type type = typeof(Counter); Counter c = new(1);
-    // All methodes
+    // All methods
     MethodInfo[] miAll = type.GetMethods();
     // Specific Method
     MethodInfo mi = type.GetMethod("Increment");
@@ -6933,8 +6934,8 @@ Klassen befinden sich im Assembly "`mscorlib`" im Namespace "`System.Reflection`
 )
 
 *Anwendungsfälle:*
-Object-relational Mapping, Serialisierung, Security und Zugriffssteuerung, Dokumentation, etc. \
-*Arten von Atributen:*
+Object-relational Mapping, Serialisierung, Security und Zugriffssteuerung, Dokumentation, etc.\
+*Arten von Attributen:*
 _"Intrinsic" Attribute_ #hinweis[(In CLR definiert und integriert, teilweise vom Compiler berücksichtigt, wie z.B. "obsolete")]
 und _"Custom" Attribute_ #hinweis[(In Framework Class Library, Selbst definierte Attribute)]
 

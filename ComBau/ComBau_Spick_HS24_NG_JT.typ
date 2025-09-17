@@ -23,7 +23,7 @@ Source Code $arrow$ Compiler $arrow$ Maschinencode $arrow$ Laufzeitsystem
 #grid(
   columns: (1.4fr, 2fr),
   gutter: 1em,
-  [#image("img/combau_01.png")], [#image("img/combau_02.png")],
+  image("img/combau_01.png"), image("img/combau_02.png"),
 )
 
 *Syntax:* Struktur des Programms\
@@ -52,7 +52,7 @@ Kann _kontextfreie Grammatiken_ #hinweis[(Extended Backus-Naur Form)] darstellen
 #grid(
   columns: (1fr, 1fr),
   rows: 4em,
-  [#image("img/combau_03.png")], [#image("img/combau_04.png")],
+  image("img/combau_03.png"), image("img/combau_04.png"),
 )
 
 Darf nicht _mehrdeutig_ sein:
@@ -115,7 +115,7 @@ _Abstract Syntax Tree:_ Minimale Ableitung.
 #grid(
   columns: (1fr, 1fr),
   rows: 6.5em,
-  [#image("img/combau_07.png")], [#image("img/combau_08.png")],
+  image("img/combau_07.png"), image("img/combau_08.png"),
 )
 
 ==== Parser-Klassen
@@ -246,7 +246,7 @@ Methoden können _überschrieben_ werden, Inhalt der bestehenden Methode wird er
 Jeder _Klassendeskriptor_ hat eine _vTable_ mit den Methoden
 #hinweis[(zu oberst von Basisklasse, bei Overriding wird nicht ersetzt, sondern ergänzt).]\
 
-*Typdekriptoren:*
+*Typdeskriptoren:*
 Werden vom Loader generiert. Nützlich für Type Checking, Ancestor Table, vTables #hinweis[(im Bild)].
 #image("img/combau_28.png", width: 90%)
 
@@ -309,7 +309,7 @@ Instruktionen benutzen _Register_ #hinweis[(`RSP`: Stack Pointer, `RBP`: Base Po
 ]
 
 *Lokale Register-Allokation:*
-Jeder Eintrag des Eval. Stack wird auf ein Register abgebildet.
+Jeder Eintrag des Evaluation Stack wird auf ein Register abgebildet.
 
 *Globale Register-Allokation:*
-Zusätzlich auch lokale Variablen und Params.
+Zusätzlich auch lokale Variablen und Parameter.
