@@ -58,9 +58,7 @@ immer statisch vom Compiler determiniert werden. ```java null instanceof Car``` 
     }
     ```
   ],
-  [
-    #image("img/combau_26.png");
-  ],
+  image("img/combau_26.png"),
 )
 
 Type Casts _verändern_ den _Typ_ des Objektes _nicht_. Es reicht nicht aus, nur zu überprüfen, ob der dynamische
@@ -78,9 +76,7 @@ Deshalb gibt es _fixe Stufen_ für die Vererbung.
     auch die _aktuelle Klasse_. So lassen sich die Basisklassen _viel effizienter_ überprüfen. Die _Anzahl_ der
     Vererbungsstufen ist jedoch typischerweise _begrenzt_. Dieses System funktioniert nur bei _single Inheritance_.
   ],
-  [
-    #image("img/combau_27.png")
-  ],
+  image("img/combau_27.png"),
 )
 
 ```cs
@@ -159,9 +155,7 @@ v.drive();        // ruft Car.drive() auf
     _ursprüngliche Implementierung_. Da `drive()` in `Car` überschrieben wurde, zeigt dieser Eintrag der vTable von
     `Car` nun _nicht mehr_ auf `vehicle.drive()`, sondern auf die _neue_ `drive()`-Logik in `Car`.
   ],
-  [
-    #image("img/combau_28.png")
-  ],
+  image("img/combau_28.png"),
 )
 
 ==== Lineare Erweiterung

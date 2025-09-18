@@ -29,7 +29,7 @@ bereits vorher im Kompilationsprozess vom Linker mit Executable oder dynamischer
 Bibliothek verknüpft.
 
 === Linux Loader
-Eine Funktion der `exec*`-Familile erhält `syscall`. Diese wird auf `sys_execve`
+Eine Funktion der `exec*`-Familie erhält `syscall`. Diese wird auf `sys_execve`
 übersetzt. _Sucht_ Datei, _prüft_ Rechte (x-Bits) und _öffnet_ die spezifizierte Datei.
 _Zählt und kopiert_ die Argumente und Umgebungsvariablen #hinweis[(weil execv#emph[e])].
 _Übergibt den Request_ an jeden registrierten "Binary Handler" #hinweis[(für verschiedene
@@ -160,7 +160,7 @@ Die Symboltabelle enthält jeweils _einen Eintrag je Symbol_.
 Ein Symbol hat _16 Byte_.
 - 4 Byte _Name_: Referenz in String-Tabelle
 - 4 Byte _Wert_: Je nach Symboltyp, kann z.B. Adresse sein
-- 4 Byte _Grösse_: Grösse des Symbold #hinweis[(z.B. Länge einer Funktion)]
+- 4 Byte _Grösse_: Grösse des Symbols #hinweis[(z.B. Länge einer Funktion)]
 - 4 Byte _Info_: Typ #hinweis[(Objekt, Funktion, Sektion...)],
   Binding-Attribute, Referenz auf Sektions-Header
 
@@ -196,7 +196,7 @@ Ein Symbol hat _16 Byte_.
 
   *Entkoppelter Lebenszyklus:*
   Das Programm kann _Updates erhalten_, ohne das Binary zu ändern.
-  Funktionalität kann unabhängig voneinander _geupdatet_ werden.
+  Funktionalität kann unabhängig voneinander _geupdated_ werden.
   Bugfixes können _direkt_ zur Anwenderin gebracht werden.
 ]
 
@@ -260,7 +260,7 @@ Sind in POSIX meist gelinkt im Dateisystem: Linker #sym.arrow SO #sym.arrow Real
 #hinweis[(libmylib.so #sym.arrow libmylib.so.2 #sym.arrow libmylib.so.2.1)]\
 _Real-Name_ wird beim _Erstellen des Shared Objects_ verwendet.
 Die _Versionsnummer_ wird erhöht, wenn sich die Schnittstelle _ändert_.
-Die _Unterversionsnummer_ wird erhöht, wenn die Schnittstelle gleichbleibt
+Die _Unterversionsnummer_ wird erhöht, wenn die Schnittstelle gleich bleibt
 #hinweis[(Bugfixes)]. Der Linker verwendet den Linker-Namen, der Loader verwendet
 den SO-Namen.
 
@@ -305,7 +305,7 @@ _Inhalt der dynamischen Sektion_. Typ der entsprechenden Einträge ist _`NEEDED`
 Das Tool _`ldd`_ zeigt _alle, auch indirekt_ benötigten Shared Objects an.
 Dazu führt es die Executable aus, sollte deshalb nur auf _vertrauenswürdigen Executables_
 ausgeführt werden.
-Nahezu alle Executeables benötigen _zwei Shared Objects_:
+Nahezu alle Executables benötigen _zwei Shared Objects_:
 - _`libc.so`:_ Standard C library
 - _`ld-linux.so`:_ ELF Shared Object loader. Wird indirekt vom OS aufgerufen, wenn ein
   Shared Object geladen werden soll. Findet und lädt nacheinander alle benötigten

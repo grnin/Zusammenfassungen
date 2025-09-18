@@ -323,7 +323,7 @@ its pre-wired structure requires less data to be trained. This form of bias is c
 
 == Feature Detector
 For example, one part of the brain detects faces, another objects, another shapes and another lines.
-Together, these informations form an image.
+Together, these information form an image.
 
 === Mathematical Model
 - _The Input:_ An image #hinweis[(width #sym.times height (#sym.times 3 if RGB))] and
@@ -402,6 +402,7 @@ model = Sequential([
   *Example:* Channel 1 returns $158$, Channel 2 returns $hyph.minus 14$, Channel 3 $653$.
   Bias is $1$. $=> 158 + hyph.minus 14 + 653 + 1 = underline(798)$
 ]
+
 #wrap-content(
   image("img/aiap_6.png"),
   align: top + right,
@@ -423,6 +424,7 @@ model = Sequential([
   these four kernels, followed by max pooling?
   _Output tensor of rank=3 with shape=(1, 2, 4)_
 ]
+
 #wrap-content(
   image("img/aiap_8.png"),
   align: top + right,
@@ -735,7 +737,7 @@ x = layers.concatenate([x, skip1])
 Each output layer can have its own Loss Function.
 
 
-= Reinforcment Learning (RL)
+= Reinforcement Learning (RL)
 *Behavioral Learning:* Learning is the _change in behavior_ that occurs as a _result of experience_.\
 In RL, an _agent interacts with its environment_. The agent _selects from available actions_.
 The agent's goal is to select those actions which maximize the (long term) reward.
@@ -826,9 +828,7 @@ action $A_t$ which returns the _largest sum of (discounted) rewards_.
       [_`S7`_], [-], [-],
     )
   ],
-  [
-    #image("img/aiap_14.png")
-  ],
+  image("img/aiap_14.png"),
 )
 
 #grid(
@@ -1118,7 +1118,7 @@ evolution. The _quality_ depends on many factors #hinweis[(quality of measuremen
 the model, nature of the dynamic system)]. For most time-series, we _do not have a causal
 model_. Therefore, predictions need to be made _based on historical data_.
 This is done by looking for _structure/patterns_ #hinweis[(Seasonality, Trends)].\
-*Feature Engineeering:*
+*Feature Engineering:*
 Assuming some function and optimize the free parameters.\
 *Learning from Data:*
 Make very few assumptions about the structure (low bias), machine learning algorithms
@@ -1215,7 +1215,7 @@ We need to give this "clueless" network a clue: _Inductive Bias_ aka _attention_
 == Attention
 Attention assigns varying _levels of importance_ to different words in a sentence,
 by calculating "soft" weights #hinweis[(its embedding)], within a specific section of the
-entence called the _context window_ to determine its _importance_.
+sentence called the _context window_ to determine its _importance_.
 Attention "looks" at all words #hinweis[(all tokens)] in the input sequence.
 Each attention head has its own weights $W_q$, $W_k$, $W_v$.
 Therefore, different heads look for different patterns, but all heads look at all words.
@@ -1258,7 +1258,8 @@ Both are vectors, the dot-product is used to calculate how strongly they match.
 _Strong match_: #hinweis[(cosine similarity close to 1)] "most" of the value $V$ is returned
 #hinweis[($V *$ cosine similarity)]. _No strong match:_ a close to 0 vector is returned.
 _The result of this softmax-lookup is the sum of all values, weighted according to the key/value similarity._
-#image("img/aiap_18.png", width: 80%)
+
+#align(center, image("img/aiap_18.png", width: 80%))
 
 More compact representation: $"Attention"(Q,K,V) = "softmax"((Q K^T) / sqrt(d_k)) V$
 #hinweis[(The $sqrt(d_k)$ stabilizes the calculation)]

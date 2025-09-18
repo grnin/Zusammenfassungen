@@ -14,9 +14,7 @@
 
     #hinweis[*Beispiel:* Bei Erkennung des Syntaxteils wird das entsprechende Zeichen ausgegeben]
   ],
-  [
-    #image("img/combau_11.png");
-  ],
+  image("img/combau_11.png"),
 )
 
 #grid(
@@ -30,9 +28,7 @@
 
     #hinweis[*Beispiel:* Weise Symbole Attribute zu und verwende sie in semantischen Regeln (hier als Type Checks)]
   ],
-  [
-    #image("img/combau_19.png");
-  ],
+  image("img/combau_19.png"),
 )
 
 #grid(
@@ -48,9 +44,7 @@
     === Vereinfachte Parsing-Strategie
     Lässt sich mit einer Tabelle abbilden. _Probleme:_ Performance, keine Zustandsabhängigkeit.
   ],
-  [
-    #image("img/combau_12.png")
-  ],
+  image("img/combau_12.png"),
 )
 
 == LR-Parser

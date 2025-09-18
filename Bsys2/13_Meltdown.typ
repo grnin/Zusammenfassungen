@@ -79,8 +79,8 @@ _Lange Zugriffszeit:_ Adresse war nicht im Cache,
 _Kurze Zugriffszeit:_ Adresse war im Cache.
 Dies nennt man auch _Timing Side Channel Attack_.
 Mit der Assembly-Instruktion ```asm clflush p``` werden alle Zeilen, die die Adresse `p`
-enthalten gelöscht. Das ermöglicht "Flush & Reload": Über das gesammte Array iterieren und
-`clflush` ausführen, damit wird sichergestellt dass das gesamte Array nicht im Cache ist.
+enthalten gelöscht. Das ermöglicht "Flush & Reload": Über das gesamte Array iterieren und
+`clflush` ausführen, damit wird sichergestellt dass das komplette Array nicht im Cache ist.
 Schritt 3 ist somit auch erfüllt: Die Zugriffszeit verrät, ob $f_a$ im Cache.
 
 == Tests von Meltdown

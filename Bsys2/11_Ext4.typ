@@ -76,9 +76,9 @@ Inode bis auf _5_ gesetzt werden.
 === Notation
 #table(
   columns: (1fr, 1fr),
-  table.header([(in)direkte Addressierung], [Extent-Trees]),
-  [_direkte Blöcke:_ Index $|->$ Blocknr.],
-  [_Indexknoten:_ Index $|->$ (Kindblocknr, kleinste Nummer der 1. logischen Blöcke aller Kinder)],
+  table.header([(in)direkte Adressierung], [Extent-Trees]),
+  [_direkte Blöcke:_ Index $|->$ Blocknummer],
+  [_Indexknoten:_ Index $|->$ (Kindblocknummer, kleinste Nummer der 1. logischen Blöcke aller Kinder)],
 
   [_indirekte Blöcke:_ indirekter Block.Index $|->$ direkter Block],
   [_Blattknoten:_ Index $|->$ (1. logisch. Block, 1. phy. Block, Anz. Blöcke)],
@@ -113,7 +113,7 @@ Wird eine Datei _erweitert_, passiert folgendes:
 - _Neue Blöcke_ werden für die Daten _alloziert_
 - Der _Inode_ der Datei wird _angepasst_, um die Blöcke zu referenzieren
 - Die _Block-Usage-Bitmaps_ werden _angepasst_
-- Die _Counter_ freier und benutzer Blöcke werden _angepasst_
+- Die _Counter_ freier und benutzter Blöcke werden _angepasst_
 - Die _Daten_ werden in die Datei geschrieben
 
 Wenn das Dateisystem dabei _unterbrochen_ wird, kann es zu _Inkonsistenzen_ kommen.

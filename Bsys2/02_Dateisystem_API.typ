@@ -142,8 +142,8 @@ if (chdir("docs") < 0) {
 ```
 
 ==== `void perror (const char *text)`
-`perror` #hinweis[(präfix error)] schreibt `text` gefolgt von einem Doppelpunkt und vom
-Ergebnis von `strerror(errno)` auf den Errorstream.
+`perror` #hinweis[(prefix error)] schreibt `text` gefolgt von einem Doppelpunkt und vom
+Ergebnis von `strerror(errno)` auf den Error-stream.
 
 ```c
 if (chdir("docs") < 0) {
@@ -192,7 +192,7 @@ Dieser kann später von `open` für eine andere Datei verwendet werden
 Gibt `0` #hinweis[(OK)] oder `-1` #hinweis[(Fehler, z.B. FD existiert nicht)] zurück.
 Wird die Datei _nicht geschlossen_, kann es sein, dass das _FD-Limit_ des Prozesses
 erreicht wird und _keine weiteren Dateien_ mehr geöffnet werden können.
-Es können auch _mehrere FDs diesselbe Datei öffnen_, da diese aber _verschiedene Offsets_
+Es können auch _mehrere FDs dieselbe Datei öffnen_, da diese aber _verschiedene Offsets_
 haben können, besteht die Gefahr, dass sie sich _gegenseitig Daten überschreiben_ -
 nicht empfehlenswert.
 
@@ -316,9 +316,9 @@ wird direkt der File-Deskriptor übergeben.
 ```c int fileno (FILE *stream)``` gibt File-Deskriptor zurück, auf den sich der Stream
 bezieht, oder -1 bei Fehler.
 
-Da die POSIX- & Stream-API _unterschiedliche Offsets_ haben, sollte man nach dem Umwandlen
+Da die POSIX- & Stream-API _unterschiedliche Offsets_ haben, sollte man nach dem Umwandeln
 mit den obigen Funktionen die "vorherige" API _nicht mehr verwenden_, da es wie bei
-mehreren FDs auf diesselbe Datei zu _Konflikten_ kommen kann.
+mehreren FDs auf dieselbe Datei zu _Konflikten_ kommen kann.
 
 === Schliessen einer Datei: ```c int fclose(FILE *file)```
 Ruft ```c fflush()``` auf, schliesst den durch `file` bezeichneten Stream, entfernt `file`
@@ -367,7 +367,7 @@ if (return_value == EOF) {
   if (feof(stream) != 0) {
     // EOF reached
   } else if (ferror(stream) != 0) {
-    // Error occured, check errno
+    // Error occurred, check errno
   } // feof() and ferror() need to be checked separately
 }
 ```

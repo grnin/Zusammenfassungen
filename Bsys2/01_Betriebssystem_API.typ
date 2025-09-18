@@ -14,7 +14,7 @@
 Aufgaben eines Betriebssystems:
 - _Abstraktion_ und damit _Portabilität_
   #hinweis[(von Hardware, Protokollen, Software-Services)]
-- _Resourcenmanagement_ und _Isolation_ der Anwendungen
+- _Ressourcenmanagement_ und _Isolation_ der Anwendungen
   #hinweis[(Rechenzeit, RAM- & Speicherverwendung etc.)]
 - _Benutzerverwaltung_ und Sicherheit
 
@@ -91,7 +91,7 @@ in einem Register.
   ],
 )
 
-Linux-Kernels sind API-, aber nicht ABI-kompatibel. Die API-Kompabilität ist dadurch
+Linux-Kernels sind API-, aber nicht ABI-kompatibel. Die API-Kompatibilität ist dadurch
 gegeben, dass Applikationen nicht direkt Syscalls aufrufen, sondern C-Wrapper-Funktionen
 verwenden. Diese verwenden zum Kernel passenden Binärcode.
 

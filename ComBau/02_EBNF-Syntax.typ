@@ -2,6 +2,7 @@
 
 = EBNF-Syntax
 Die EBNF-Syntax #hinweis[(Extended Backus-Naur Form)] kann _kontextfreie Grammatiken_ darstellen.
+
 #table(
   columns: (1fr,) * 3,
   table.header([Begriff], [Beispiel], [Sätze]),
@@ -10,9 +11,10 @@ Die EBNF-Syntax #hinweis[(Extended Backus-Naur Form)] kann _kontextfreie Grammat
   [Option], [`["A"]`], [leer oder "`A`" #hinweis[(gleich wie `"A" | ""`)]],
   [Wiederholung], [`{"A"}`], [leer, "`A`", "`AA`", "`AAA`", etc.],
 )
-Für stärkere Bindung können runde Klammern verwendet werden. Ein "|" bindet schwächer als andere Konstrukte.
 
-Mit der EBNF-Syntax kann das Rekursionsbeispiel von oben anderst dargestellt werden.\
+Für stärkere Bindung können runde Klammern verwendet werden. Ein "`|`" bindet schwächer als andere Konstrukte.
+
+Mit der EBNF-Syntax kann das Rekursionsbeispiel von oben anders dargestellt werden.\
 Aus `Expression = "(" ")" | "(" Expression ")"` wird so `Expression = "(" [Expression] ")"`.
 
 == Beispiel $bold(a*b+c)$
@@ -25,12 +27,8 @@ Aus `Expression = "(" ")" | "(" Expression ")"` wird so `Expression = "(" [Expre
     #tcolor("orange", `Term`) `=` #tcolor("rot", `Variable`) `|` #tcolor("orange", `Term`) `"*"` #tcolor("rot", `Variable`).\
     #tcolor("rot", `Variable`) `= "a" | "b" | "c" | "d"`.
   ],
-  [
-    #image("img/combau_03.png")
-  ],
-  [
-    #image("img/combau_04.png")
-  ],
+  image("img/combau_03.png"),
+  image("img/combau_04.png"),
 )
 
 == Mehrdeutigkeit
@@ -43,9 +41,7 @@ Aus `Expression = "(" ")" | "(" Expression ")"` wird so `Expression = "(" [Expre
     #tcolor("grün", `Expression`) `=` #tcolor("rot", `Number`) `|` #tcolor("grün", `Expression`) `"-"` #tcolor("grün", `Expression`).\
     #tcolor("rot", `Number`) `= "1" | "2" | "3"`.
   ],
-  [
-    #image("img/combau_05.png")
-  ],
+  image("img/combau_05.png"),
 )
 
 Mit der Formel $1-2-3$ können aufgrund der Rekursion von #tcolor("grün", `Expression`)

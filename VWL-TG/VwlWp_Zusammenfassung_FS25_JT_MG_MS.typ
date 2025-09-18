@@ -15,7 +15,7 @@
 #show figure.caption: set text(hyphenate: false)
 
 = Wohlstand
-*Ziele der Wirtschaftspoltik*\
+*Ziele der Wirtschaftspolitik*\
 Die verschiedenen Ziele der Wirtschaftspolitik besitzen untereinander entweder Zielharmonie
 #hinweis[(Profitieren voneinander, wenn erfüllt)], Zielneutralität #hinweis[(nicht voneinander abhängig)] oder
 Zielkonflikte #hinweis[(Können nicht gleichzeitig erfüllt werden)].
@@ -132,7 +132,7 @@ Die volkswirtschaftlichen Aspekte können den BIP-Perspektiven zugeordnet werden
 
 Die VGR misst die Wertschöpfung nicht zuverlässig:
 Nicht erfasste Tätigkeiten #hinweis[(Hausarbeit, Schwarzarbeit, Kriminalität)],
-Probleme bei der Erfassungsgenauigkeit #hinweis[(Herausrechen der Vorleistung)],
+Probleme bei der Erfassungsgenauigkeit #hinweis[(Herausrechnen der Vorleistung)],
 Fehlen von Marktpreisen #hinweis[(v.a. bei öffentlichen Gütern)]
 
 === Produktionsseite
@@ -945,7 +945,7 @@ eintreten würden. Hinter dem Inflationsanstieg könnten entweder ein _"cost-pus
 #hinweis[(teurere Rohstoffe und knappere Arbeitskräfte -- angebotsseitige Inflation)] oder ein _"demand-pull"_ der Konsumenten
 #hinweis[(gestiegene Kauflust nach Corona -- nachfrageseitige Inflation)].
 
-=== Quantitätssgleichung <quantitätsgleichung>
+=== Quantitätsgleichung <quantitätsgleichung>
 Wie sieht der theoretische Zusammenhang zwischen der Geldpolitik der Zentralbanken und der Inflation aus?
 
 #definition[
@@ -1114,7 +1114,7 @@ Ein Markt repräsentiert das _Zusammentreffen von Angebot und Nachfrage_.
 )
 
 In Knappheitssituationen muss die _volkswirtschaftliche Ausgangslage_ #hinweis[(Unbeschränkten Bedürfnissen stehen knappe
-Resourcen gegenüber)] analysiert werden und eine _notwendige Entscheidung_ getroffen werden
+Ressourcen gegenüber)] analysiert werden und eine _notwendige Entscheidung_ getroffen werden
 #hinweis[(Wie wird das verfügbare Zeit-/Finanzbudget aufgeteilt?)].
 
 Die Konsequenz: _Oppurtunitätskosten_ sind die Kosten, welche bei einer Entscheidung anfallen, dass die Vorteile einer
@@ -1190,7 +1190,7 @@ Bei steigendem Preis steigen die Opportunitätskosten für den Konsum des Gutes 
       Herstellung des Gutes entstanden sind
     - _Wohlfahrt:_ Gesamte Rente, welche auf dem Markt entsteht ($"KR" + "PR"$)
   ],
-  figure(caption: [Markttransaktioneneffizienz], image("img/vwl/markt-effizienz.png")),
+  figure(caption: [Markttransaktionen-Effizienz], image("img/vwl/markt-effizienz.png")),
 )
 
 #pagebreak()
@@ -1245,7 +1245,7 @@ Die Preiselastizität der Nachfrage ist umso geringer (unelastisch), desto wenig
 desto wichtiger und lebensnotwendiger das Gut ist, geringer der Anteil der Ausgaben für dieses Gut ist und
 kurzfristiger der Effekt betrachtet wird.
 
-#figure(caption: [Effekte einer Angebotsänderung bei verschiedener Elastizität der Nachrfrage], image(
+#figure(caption: [Effekte einer Angebotsänderung bei verschiedener Elastizität der Nachfrage], image(
   "img/vwl/markt-und-preise-preiselastizität.png",
   width: 60%,
 ))
@@ -1395,6 +1395,7 @@ _restriktivere Geldpolitik der SNB_ #hinweis[(Geldpolitik)], Höhere Sparneigung
 eine _Rezession_ erfasste die Schweiz.
 
 #grid(
+  columns: (1fr, 0.93fr),
   [
     Sockelarbeitslosigkeit teilt sich in zwei Kategorien auf:
 
@@ -1464,7 +1465,7 @@ keinen Einfluss auf diese.
 Vordergründig sieht der amerikanische Arbeitsmarkt gut aus:
 Seit der Rezession 2008 übertraf die Arbeitslosenquote die Erwartungen und fiel von 10% auf 5.5% in 2015.
 Laufend werden der Wirtschaft neue Jobs hinzugefügt.
-Doch das ist nicht das ganze Bild: Die _Nichterwerbsbevölkerung steigt stetig,_ darunter vorallem 25-54-jährige.
+Doch das ist nicht das ganze Bild: Die _Nichterwerbsbevölkerung steigt stetig,_ darunter vor allem 25-54-jährige.
 Daran Schuld ist vor allem die Opioid- und Fentanyl-Krise, welche vor allem Weisse getroffen hat.
 
 === Frankreich
@@ -1525,7 +1526,7 @@ Der Reingewinn der SNB geht zu mindestens $2/3$ an die Kantone. #hinweis[(Bundes
     Dazu kommen 14 Agenturen, die von Kantonalbanken geführt werden und der Geldversorgung des Landes dienen.
     Die Nationalbank ist eine spezialgesetzliche Aktiengesellschaft des Bundesrechts.
     Sie wird unter _Mitwirkung und Aufsicht des Bundes_ nach den Vorschriften des Nationalbankgesetzes verwaltet.
-    Die Aktien sind als  Namenpapiere ausgestaltet und an der Börse kotiert.
+    Die Aktien sind als Namenpapiere ausgestaltet und an der Börse kotiert.
     Das Aktienkapital beträgt 25 Millionen Franken und ist zu rund 55 Prozent im Besitz der öffentlichen Hand
     #hinweis[(Kantone, Kantonalbanken etc.)]. Die übrigen Aktien befinden sich grösstenteils im Besitz von Privatpersonen.
     Der Bund besitzt keine Aktien. Bei der Nationalbank arbeiten rund 600 Personen.
@@ -1547,9 +1548,9 @@ Der Geldschöpfungsprozess funktioniert über die drei Akteure _Zentralbank_, _G
 #hinweis[(Unternehmen, Haushalte, Staat)].
 Das Geld im Umlauf wird in drei Kategorien eingeteilt, sogenannte _Geldmengenaggregate_:
 
-- _$bold(M 0)$:_ Geld kreiert durch die Zentralbank für Austausch mit Geschäftsbanken. Theorethisch unbeschränkt.
+- _$bold(M 0)$:_ Geld kreiert durch die Zentralbank für Austausch mit Geschäftsbanken. Theoretisch unbeschränkt.
 - _$bold(M 1)$:_ Geld innerhalb der Wirtschaft: Bargeld, Sichteinlagen
-  #hinweis[(auch Sichtguthaben gennant, kurzfristige Einlagen z.B. Geld auf Lohnkonto)] und
+  #hinweis[(auch Sichtguthaben genannt, kurzfristige Einlagen z.B. Geld auf Lohnkonto)] und
   Transaktionskonti #hinweis[(Konten für Geldaustausch, um z.B. Aktien zu kaufen)]
 - _$bold(M 2)$:_ $"M1"$ plus Spareinlagen #hinweis[(ohne Vorsorgegeld in z.B. 3. Säule)]
 - _$bold(M 3)$:_ $"M2"$ plus Termineinlagen #hinweis[(Investment mit Fälligkeitsdatum)]
@@ -1562,7 +1563,7 @@ Das Geld im Umlauf wird in drei Kategorien eingeteilt, sogenannte _Geldmengenagg
 
     Möchte die SNB die Geldmenge wieder verkleinern, verkauft sie die Wertpapiere wieder an die Geschäftsbanken.
     Diese sind verpflichtet, die Wertpapiere wieder zurückzunehmen, ein sogenanntes _Repogeschäft_.
-    Das erhaltene Geld wird dann von der SNB "gelöscht". Dieser Kreislauf wird auch _Offenmarktpolitik_ gennant.
+    Das erhaltene Geld wird dann von der SNB "gelöscht". Dieser Kreislauf wird auch _Offenmarktpolitik_ genannt.
   ],
   figure(caption: [Überblick Geldschöpfung], image("img/vwl/geldschöpfung.png")),
 )
@@ -1586,7 +1587,7 @@ In den USA liegt der Mindestreservesatz bei 10%, China 20% und bei der Europäis
     Damit beeinflusst die SNB das Zinsniveau am Geldmarkt.
   ],
   [
-    Repogeschäfte, Emissionen, Devisengeschäfte, (Ver)kauf eigener Schuldverschreibungen #hinweis[(sogenannte SNB Bills)]
+    Repogeschäfte, Emissionen, Devisengeschäfte, (Ver-)kauf eigener Schuldverschreibungen #hinweis[(sogenannte SNB Bills)]
     sind die Hauptinstrumente der SNB zur Lenkung des Schweizer Frankens.
   ],
   [
@@ -1920,7 +1921,7 @@ Es gibt drei Hauptformen von Staatseinnamen:
   table.header([Steuern], [Verschuldung], [Inflationssteuer]),
   [
     - _Direkte Steuern_ auf Einkommen/Gewinn oder Vermögen/Kapital #hinweis[(oft mit Umverteilung verbunden)]
-    - _Indirekte Steuern_ auf Markttransaktionen #hinweis[(MWST, Energiesteuer, Finanztransaktionen)]
+    - _Indirekte Steuern_ auf Markttransaktionen #hinweis[(Mehrwertsteuer, Energiesteuer, Finanztransaktionen)]
   ],
   [
     Zur Deckung von Investitionen und des laufenden Staatsaufwandes #hinweis[(Staatskonsum)]
@@ -1936,7 +1937,7 @@ Politisch-ökonomische Gründe für zunehmende Staatsverschuldung:
 - Trennung von Ausgabenbeschluss und Einnahmenentscheid
   #hinweis[(keine Sicherung der Finanzierung von Ausgabenbeschlüssen, z.B. Initiativen ohne Finanzierungsplan)]
 - Stimmentausch aka Korruption
-  #hinweis[(gegenseitige Unterstützung von Parlamentarier, um Vorteile für die eigene Interessensgruppe sicherzustellen)]
+  #hinweis[(gegenseitige Unterstützung von Parlamentarier, um Vorteile für die eigene Interessengruppe sicherzustellen)]
 
 Die staatliche Verschuldung führt in der Regel zu einem Rückgang der gesamtwirtschaftlichen Nachfrage $"AN"$.
 #table(
@@ -1965,7 +1966,7 @@ Die staatliche Verschuldung führt in der Regel zu einem Rückgang der gesamtwir
 
 *Vorteile von Staatsschulden:*
 - _Staatliche Investitionen:_ Finanzierung von langfristigen Innovationen durch die zukünftigen Generationen,
-  _intertemportaler Finanzausgleich_ #hinweis[(Projekte, welche mehrere Generationen nutzen können werden zB. beim Bau
+  _intertemporaler Finanzausgleich_ #hinweis[(Projekte, welche mehrere Generationen nutzen können werden zB. beim Bau
   zu $1/4$ durch Steuern und $3/4$ durch Schulden verschiedener Länge, welche spätere Generationen bezahlen müssen)]
 - _Steuerglättung:_ Jährliche Anpassung der Steuersätze kaum vorstellbar, um jederzeit Budgeteinhaltungen zu garantieren --
   Schulden sind flexibler
@@ -1974,8 +1975,8 @@ Die staatliche Verschuldung führt in der Regel zu einem Rückgang der gesamtwir
 
 == Steuersystem Schweiz
 Die Staatseinnahmen in der Schweiz werden zu _$bold(2/3)$ aus direkten Steuern_
-#hinweis[(Einkommenssteuer der Haushalte, Vermögensteuer der Haushalte, Kapitalsteuer der Unternehmen)] und
-_$bold(1/3)$ aus indirekten Steuern_ #hinweis[(Mehrwertssteuer, Strassensteuer)] erhoben.
+#hinweis[(Einkommenssteuer der Haushalte, Vermögenssteuer der Haushalte, Kapitalsteuer der Unternehmen)] und
+_$bold(1/3)$ aus indirekten Steuern_ #hinweis[(Mehrwertsteuer, Strassensteuer)] erhoben.
 Von diesen Staatseinnahmen erhalten Kantone und Gemeinden _$bold(2/3)$_, weil die Steuern auch durch sie erhoben werden.
 
 In der Schweiz herrscht _Finanzföderalismus_ in Form von _Steuerwettbewerb:_ Jede Gemeinde und Kanton hat ihren eigenen
@@ -2058,7 +2059,7 @@ Die _Verschuldung_ des Bundes hat seit einführung der Schuldenbremse 2003 stark
 Die Bruttoschuldquote sank bis 2024 von ca. 55% auf 30%, die Nettoschuldenquote von 30% auf 15%.
 Die totale Verschuldung der Kantone blieb seit 2000 ungefähr stabil.
 2016 lag die öffentliche _Gesamtverschuldung_ bei etwa _300 Milliarden CHF_, davon 130 Milliarden beim Bund,
-80 Milliarden bei den Kantonen und 70 Milliarden bei den Gemeinden
+80 Milliarden bei den Kantonen und 70 Milliarden bei den Gemeinden.
 
 == Internationale Staatsverschuldung
 #grid(
@@ -2095,7 +2096,7 @@ Die totale Verschuldung der Kantone blieb seit 2000 ungefähr stabil.
 Als _implizite Staatsschulden_ werden alle "versteckten" Staatsschulden bezeichnet.
 Hierzu zählen insbesondere die Schulden, die eine in der Zukunft liegende Verpflichtung darstellen
 (z.B. Pensionsverpflichtungen). Die amtliche Schuldenstatistik deckt die impliziten Staatsschulden nicht ab.
-In der Schweiz ist vorallem _die AHV_ für die hohe implizite Staatsverschuldung verantwortlich.
+In der Schweiz ist vor allem _die AHV_ für die hohe implizite Staatsverschuldung verantwortlich.
 Der AHV droht eine Finanzierungslücke im Volumen von 173.4% des Schweizer Bruttoinlandprodukts (BIP) oder 1'000 Mrd. Fr.
 
 
@@ -2142,7 +2143,7 @@ Der Markt der Autarkie kennt keine Importe oder Exporte und ist somit gleich dem
 ==== Szenario: Weltmarktpreis für das Gut > Heimmarktpreis
 #grid(
   [
-    - Weltmarktpreis liegt über Gleichtgewichtspreis bei Autarkie
+    - Weltmarktpreis liegt über Gleichgewichtspreis bei Autarkie
     - Überschuss wird exportiert
     - Konsumentenrente (jetzt 1) sinkt
     - Produzentenrente (jetzt 2, 3, 4) steigt
@@ -2155,7 +2156,7 @@ Der Markt der Autarkie kennt keine Importe oder Exporte und ist somit gleich dem
   figure(caption: [Wohlfahrt beim Freihandel mit höherem Weltmarktpreis], image("img/vwl/wohlfahrt-freihandel.png")),
 )
 
-==== Szenario: Weltmarktpreis für das Gut < Heimmarktpreis
+==== Szenario: Weltmarktpreis für das Gut \< Heimmarktpreis
 #grid(
   [
     - Weltmarktpreis liegt unterhalb vom Gleichgewichtspreis bei Autarkie
@@ -2221,8 +2222,8 @@ Dadurch ergeben sich zwei Effekte: _Handelsschaffung_ und _Handelsumlenkung_.
 === Regionale Integrationsräume
 #grid(
   [
-    - Ware aus Land C wäre ohne Zölle billiger als die aus Land B. Da Land B jedoch ein Freihandelsabkommen hat, wird von
-      dort importiert.
+    - Ware aus Land C wäre für Land A ohne Zölle billiger als die aus Land B.
+      Da Land B jedoch ein Freihandelsabkommen mit Land A abgeschlossen hat, wird von dort importiert.
     - Land C wird diskriminiert
     - Handelsumlenkung von Land C zu Land B
     - Handelsschaffung von $q_C$ zu $q_B$
@@ -2253,7 +2254,7 @@ Dadurch ergeben sich zwei Effekte: _Handelsschaffung_ und _Handelsumlenkung_.
 
 === Formen der regionalen Integration
 #table(
-  columns: (1.05fr,) + (1fr, 0.8fr, 1fr, 0.8fr, 1.1fr),
+  columns: (0.97fr, 1fr, 0.8fr, 1fr, 0.8fr, 1.05fr),
   [],
   [Keine Zölle zwischen den Mitgliedern],
   [Gemeinsame Außenzölle],
@@ -2308,7 +2309,7 @@ Dadurch ergeben sich zwei Effekte: _Handelsschaffung_ und _Handelsumlenkung_.
   mit Endziel vom kompletten internationalen Freihandel
 - 164 Mitglieder: seit 1995 USA, Japan, Brasilien, Indien, EU, ab 2001 China, ab 2012 Russland
 - Mitglieder sind zur Einhaltung einiger Grundregeln bei Ausgestaltung ihrer Aussenhandelsbeziehungen verpflichtet:
-  Diskriminerung im Handel beseitigen, Heben des allgemeinen Lebensstandarts
+  Diskriminierung im Handel beseitigen, Heben des allgemeinen Lebensstandards
 - _Prinzip der Meistbegünstigung:_ Sämtliche Vorteile und Begünstigungen von einem Mitgliedsstaat sollen mit allen
   anderen Mitgliedern geteilt werden
 - _Prinzip der Inländergleichbehandlung:_ Inländische und ausländische Produkte sollten gleichbehandelt werden
@@ -2329,13 +2330,13 @@ Dadurch ergeben sich zwei Effekte: _Handelsschaffung_ und _Handelsumlenkung_.
   Nordhalbkugel verbessern, Neue Weltwirtschaftsordnung (NWO) erarbeiten
 - NWO ist ein Plan zur Reformierung internationaler Wirtschaftsbeziehungen zwischen Entwicklungsländern und Industrienationen
   zu Gunsten der Entwicklungsländer
-- Jedes Land hat eine Stimme, wird also praktisch gesehen durch Entwicklungsländer bestummen
+- Jedes Land hat eine Stimme, Vorgehen wird also praktisch gesehen durch Entwicklungsländer bestimmt
 
 === G7
 - Zusammenschluss zu ihrem Gründungszeitpunkt bedeutendsten Industrienationen der westlichen Welt mit regelmässigen Treffen
 - _Ziel:_ Fragen der Weltwirtschaft zu erörtern
 - Deutschland, Frankreich, Italien, Japan, Kanada, Vereinigtes Königreich, USA
-- 1998 Erweiterung durch Russland (G8), 25.März 2024: Ausschluss Russland wegen Annexion Krim
+- 1998 Erweiterung durch Russland (G8), 25.März 2024: Ausschluss Russland wegen Annexion der Krim
 
 #pagebreak()
 
@@ -2346,7 +2347,7 @@ Neuordnung der Weltwirtschaft im Anschluss des 2. Weltkrieg (Bretton Woods-Konfe
 Gründung des Internationaler Währungsfond (IWF) und der Weltbank (World Bank).
 Auch in Europa bewegte sich etwas -- _Start der Europäischen Integration_ im Spannungsfeld zwischen _Vertiefung_
 #hinweis[(Von der Zollunion hin zur Europäischen Verfassung)] und der _Erweiterung_
-#hinweis[(Hinzufügen von osteuropäischen Ländern, Osterweiterung)]
+#hinweis[(Hinzufügen von osteuropäischen Ländern, Osterweiterung)].
 
 Verhindern eines weiteren grossen Krieges in Europa mittels wirtschaftlicher Verknüpfung:
 - _1951 (EGKS der 6):_ Belgien, Deutschland, Frankreich, Italien, Luxemburg, Niederlande
@@ -2367,7 +2368,7 @@ Türkei #hinweis[(Autoritär, viele Kriege)], Ukraine #hinweis[(im Krieg)]
 Potentielle Beitrittskandidaten: Georgien #hinweis[(Stabilitätsprobleme)],
 Kosovo #hinweis[(Fehlende internationale Anerkennung der Unabhängigkeit)]
 
-== Kopenhagener Kritierien
+== Kopenhagener Kriterien
 1993 in Kopenhagen von der EU formulierte Kriterien, beschreiben Voraussetzungen um der EU beizutreten.
 
 1. _Politisches Kriterium:_ Institutionelle Stabilität als Garantie für demokratische und rechtsstaatliche Ordnung,
@@ -2475,7 +2476,7 @@ Der Ratifizierungsprozess lief zwar in mehreren Ländern erfolgreich durch, _sch
 Die Gründungsländer der EU konnten nie über einen Beitritt zu dieser abstimmen.
 Die Volksabstimmungen zur EU-Verfassung waren Teil des Wahlkampfs in Frankreich und der Niederlande, es war eine freiwillige
 Entscheidung durch die regierenden Parteien. Es war der erste Moment, in welchem das Volk über die EU entscheiden konnte.
-Die EU als "Projekt Einheitsheitsstaat" steht im direkten Widerspruch mit Nationalismus.
+Die EU als "Projekt Einheitsstaat" steht im direkten Widerspruch mit Nationalismus.
 Mit dem Scheitern war die weitere Zukunft der EU-Verfassung unklar, nur wenn alle Staaten ratifizierten, konnte er in Kraft treten.
 
 Der Vertrag von Lissabon (2009) wurde als Alternative zur Verfassung entwickelt.
@@ -2538,7 +2539,7 @@ Damit waren für die EU Schweizer Aktionen im europäischen Raum nicht mehr halt
 Die EU erlaubte der Schweiz nicht mehr mit EU-Ländern einzeln zu verhandeln, sondern nur noch mit der EU als Ganzes.
 Die EU war nicht mehr bereit, weitere bilaterale Verträge mit der Schweiz abzuschliessen, bis nicht ein entsprechendes
 _Rahmenabkommen_ abgeschlossen wird. Diese Verhandlungen hat der Bundesrat einseitig am 26. Mai 2021 abgebrochen.
-Damit wurde die Schweizer Teilnahme an EU-Projekten wie Horizon #hinweis[(europäische Forschungprojekte)] oder
+Damit wurde die Schweizer Teilnahme an EU-Projekten wie Horizon #hinweis[(europäische Forschungsprojekte)] oder
 Erasmus #hinweis[(europäischer Studentenaustausch)] gestrichen.
 
 Die _Konfliktpunkte_: Unionsbürgerrichtlinie #hinweis[(Einwanderung auch ohne Arbeit)],
@@ -2620,10 +2621,10 @@ Sie haben jedoch einen Überschuss bei der Dienstleistungsbilanz. Trump müsste 
 )
 
 === Kapitalbilanz
-Erklärt was mit dem Geld des Leistungsbilanzüberschusses gemacht wird.
+Erklärt, was mit dem Geld des Leistungsbilanzüberschusses gemacht wird.
 
-- _Direktinvestition_: Firmen im Ausland auskaufen
-- _Portfolioinvestition_: Im Ausland Aktien kaufen #hinweis[(zur Spekulation, nicht um Firmen zu übernehmen)]
+- _Direktinvestition_: Mehr als 10% einer Firma im Ausland aufkaufen #hinweis[(Mitbestimmung bei Firmengeschäften)]
+- _Portfolioinvestition_: Im Ausland Wertpapiere ohne Stimmrecht kaufen #hinweis[(zur Spekulation, nicht um Firmen zu übernehmen)]
 - _Übriger Kapitalverkehr_: Im Ausland Kredite gewähren
 - _Devisenbilanz_: Währungsreserven erhöhen
 
@@ -2660,7 +2661,7 @@ Soll die so entstehende _Nachfrage nach Franken_ diesen nicht zu weiteren Höhen
 Die Schweiz hat im vergangenen Jahr einen _Leistungsbilanzüberschuss von 69.5 Mrd. Fr._ erwirtschaftet.
 Das entspricht -- im internationalen Vergleich sehr hohen -- knapp 11% des Bruttoinlandsprodukts.
 Dazu beigetragen haben sowohl der Waren- wie auch der Dienstleistungshandel, doch rund die Hälfte des Saldos steuerten alleine
-schon die _Kapitaleinkommen_ aus den grossen Auslandvermögen bei.
+schon die _Kapitaleinkommen_ aus den grossen Auslandsvermögen bei.
 
 #grid(
   align: horizon,
@@ -2701,7 +2702,7 @@ ausserhalb der EFTA abzuschliessen, wie beispielsweise im Fall Japans oder China
 === Freihandelsabkommen Mercosur - Schweiz (EFTA)
 Freihandelsabkommen mit südamerikanischen Mercosur-Staaten #hinweis[(Argentinien, Bolivien, Brasilien, Paraguay, Uruguay, Venezuela)].
 Dagegen sind Vertreter indigener Bevölkerungen wegen Angst vor Umweltschäden, Schweizer Bauern wegen Angst vor Konkurrenz
-#hinweis[(laxere Standarts bezüglich Tierhaltung, Nachhaltigkeit & Pflanzenschutz)] und auch linke Organisation wegen Sorgen
+#hinweis[(laxere Standards bezüglich Tierhaltung, Nachhaltigkeit & Pflanzenschutz)] und auch linke Organisation wegen Sorgen
 ums Arbeitsrecht usw. Das Abkommen wurde bereits unterzeichnet, ist aber noch nicht in Kraft getreten.
 
 #pagebreak()
