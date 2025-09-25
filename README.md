@@ -28,14 +28,18 @@ git sparse-checkout set "ComBau"
 ```
 
 ## Zusammenfassungen
+
 Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer:
-- [AIFo / AI Foundations](AIFo) 
+
+- [AIFo / AI Foundations](AIFo)
 - [AIAp / AI Applications](AIAp)
 - [AlgDat / Algorithmen und Datenstrukturen](AlgDat)
+- [BlCh / Blockchain](BlCh)
 - [AutoSpr / Automaten und Sprachen](AutoSpr)
 - [Bsys1 / Betriebssysteme 1](Bsys1)
 - [Bsys2 / Betriebssysteme 2](Bsys2)
 - [CN1 / Computernetze 1](CN1)
+- [CN2 / Computernetze 2](CN2)
 - [ComBau / Compilerbau](ComBau)
 - [CPl / C++](CPl)
 - [CPlA / C++ Advanced](CPlA)
@@ -46,6 +50,7 @@ Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer:
 - [Dsy / Distributed Systems](Dsy)
 - [ExEv / Experimentieren und Evaluieren](ExEv)
 - [MsTe / .NET Technologien](MsTe)
+- [NiSec / Network and IoT Security](NiSec)
 - [OOP1 / Objektorientierte Programmierung 1](OOP1)
 - [OOP2 / Objektorientierte Programmierung 2](OOP2)
 - [ParProg / Parallele Programmierung](ParProg)
