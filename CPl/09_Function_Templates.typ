@@ -26,7 +26,7 @@ The template parameter list contains one or more template parameters.
 
 == Template Definition
 #hinweis[#cppr("language/template_parameters")[CPPReference: Template parameters]]\
-Templates are usually _defined_ #hinweis[(not just declarated)] in a header file, because a compiler needs to see
+Templates are usually _defined_ #hinweis[(not just declared)] in a header file, because a compiler needs to see
 the whole template definition to create an instance. They are implicitly `inline`.\
 _Type checking_ happens twice:
 - _During definition:_ Only basic checks are performed: Syntax and resolution of names independent of the template parameters.

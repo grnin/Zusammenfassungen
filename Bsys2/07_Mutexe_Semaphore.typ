@@ -278,10 +278,10 @@ int pthread_mutex_destroy (pthread_mutex_t *mutex)  // cleanup
     Nach 10ms benötigt Thread $C$ den Mutex $M$.
 
   Ein _hoch-priorisierter_ Thread wartet auf eine Ressource, die von einem _niedriger
-  priorisierten_ Thread _gehalten_ wird. Ein Thread mit Prioriät zwischen diesen beiden
+  priorisierten_ Thread _gehalten_ wird. Ein Thread mit Priorität zwischen diesen beiden
   Threads erhält den Prozessor. Die effektiven Prioritäten des hoch-priorisierten und des
   mittel-priorisierten Threads sind _invertiert_ gegenüber den zugewiesenen Prioritäten.
-  _Gemeinsam verwendete Ressourcen werden bei Prioritiy Inversion im schlimmsten Fall mit
+  _Gemeinsam verwendete Ressourcen werden bei Priority Inversion im schlimmsten Fall mit
   der niedrigsten Priorität aller beteiligten Threads gehalten._
 ]
 #wrap-content(

@@ -214,7 +214,7 @@ wie eine normale Datei. Lebt _unabhängig vom erzeugenden Prozess_, je nach Syst
   Berkeley Sockets sind eine Abstraktion über Kommunikationsmechanismen.
   Beispiele: UDP, TCP über IP sowie Unix-Domain-Sockets. Ein Socket _repräsentiert einen
   Endpunkt auf einer Maschine_. Kommunikation findet im Regelfall zwischen zwei Sockets statt.
-  Sockets benötigen für Kommunikation einen Namen: #hinweis[(IP: IP-Adresse, Portnr.)]
+  Sockets benötigen für Kommunikation einen Namen: #hinweis[(IP: IP-Adresse, Portnummer)]
 ]
 
 === ```c int socket(int domain, int type, int protocol);```
@@ -261,12 +261,12 @@ _`inet_pton`_ konvertiert protokoll-spezifische Adresse von String zu Network-BO
 _`inet_ntop`_ ist das Gegenstück #hinweis[(network-to-presentation)].
 
 === ```c int bind (int socket, const struct sockaddr *local_address, socklen_t addr_len);```
-_Bindet_ den Socket an die _angegebene_, unbenutze _lokale Adresse_, wenn noch nicht gebunden.
+_Bindet_ den Socket an die _angegebene_, unbenutzte _lokale Adresse_, wenn noch nicht gebunden.
 _Blockiert_, bis der Vorgang abgeschlossen ist.
 Gibt 0 zurück, wenn alles OK, sonst -1 und Fehlercode in `errno`.
 
 === ```c int connect (int socket, const struct sockaddr *remote_addr, socklen_t addr_len);```
-_Aufbau einer Verbindung_. _Bindet_ den Socket an eine _neue_, unbenutzte _lokale Addresse_,
+_Aufbau einer Verbindung_. _Bindet_ den Socket an eine _neue_, unbenutzte _lokale Adresse_,
 wenn noch nicht gebunden. _Blockiert_, bis Verbindung steht oder ein Timeout eintritt.
 Gibt 0 zurück, wenn alles OK, sonst -1 und Fehlercode in `errno`.
 

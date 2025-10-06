@@ -18,7 +18,7 @@
 
 ```c
 int *px = &x; // &x = Adresse des ints, * = Pointer-Bezeichner
-int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoper.
+int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
 ```
 
 #table(
@@ -67,7 +67,7 @@ Application Programming Interface, Konkrete Schnittstellen, Calling Convention, 
 von Datenstrukturen. _Linux-Kernels_ sind API-, aber nicht ABI-kompatibel.
 #hinweis[(C-Wrapper-Funktionen)]\
 *POSIX:*
-Portable Operating System Interface. Sammlung von IEEE Standards, welche die Kombatibilität
+Portable Operating System Interface. Sammlung von IEEE Standards, welche die Kompatibilität
 zwischen OS gewährleistet. Windows ist nicht POSIX-konform.
 
 == Programmargumente
@@ -367,7 +367,7 @@ Segmente werden vom _Loader_ dynamisch _zur Laufzeit_ verwendet.\
 #tcolor("grün", "Section Header Table und Sektionen:") Tabelle mit $m$ Einträgen ($!=n$).
 Jeder Eintrag #hinweis[(je 40 Byte)] beschreibt eine Sektion #hinweis[(Name, Section-Typ,
 Flags, Offset und Grösse, ...)].
-Werden vom _Linker_ verwendet: Verschmilzt Sektionen und erzeugt auführbares Executable.\
+Werden vom _Linker_ verwendet: Verschmilzt Sektionen und erzeugt ausführbares Executable.\
 *String-Tabelle:*
 Bereich in der Datei, der nacheinander _null-terminierte Strings enthält_.
 Strings werden relativ zum Beginn der Tabelle referenziert.\
@@ -418,7 +418,7 @@ Der Linker verwendet den Linker-Namen, der Loader verwendet den SO-Namen.
 - _SO-Name:_ `Linker-Name + . + Versionsnummer` #hinweis[(z.B. libmylib.so.2)],
 - _Real-Name:_ `SO-name + . + Unterversionsnummer` #hinweis[(z.B. libmylib.so.2.1)]\
 *Shared Objects:*
-Nahezu alle Executeables benötigen _zwei Shared Objects_:
+Nahezu alle Executables benötigen _zwei Shared Objects_:
 _`libc.so`:_ Standard C library,
 _`ld-linux.so`:_ ELF Shared Object loader #hinweis[(Lädt Shared Objects und rekursiv alle
 Dependencies)].\
@@ -431,7 +431,7 @@ Die Aufgabe des Linkers wird in den Loader bzw. Dynamic Linker verschoben
 Dynamische Bibliotheken sollen _Code zwischen Programmen teilen_. Code soll _nicht mehrfach_
 im Speicher abgelegt werden. Mit Shared Memory kann jedes Programm eine _eigene virtuelle
 Page_ für den Code definieren. Diese werden auf denselben Frame im RAM gemappt.
-Benötigt _Position-Independendent Code_ #hinweis[(Adressen nur relativ zum Instruction
+Benötigt _Position-Independent Code_ #hinweis[(Adressen nur relativ zum Instruction
 Pointer, Prozessor muss relative Instruktionen anbieten)].\
 *Relative Moves via Relative Calls:*
 Mittels Hilfsfunktion wird Rücksprungadresse in Register abgelegt, somit kann relativ dazu
@@ -645,7 +645,7 @@ Oft als _Pointer auf einen Speicherbereich_ verwendet.
 ```c
 // Main und Thread
 void *thread_function (void *) {
-  setu_up_error();
+  set_up_error();
   if (force_error () == -1) { print_error (); }
 }
 int main (int argc, char **argv) {
@@ -759,7 +759,7 @@ Thread mit niedriger Priorität wird immer _übergangen_ und kann nie laufen.
 Abhilfe z.B. mit _Aging:_ in bestimmten Abständen wird die Priorität um 1 erhöht.\
 *Multi-Level Scheduling:*
 Threads werden in _Level_ aufgeteilt #hinweis[(Priorität, Prozesstyp, Hinter-/Vordergrund)],
-jedes Level hat eigene Ready-Queue und kann individuell geschedulet werden.
+jedes Level hat eigene Ready-Queue und kann individuell gescheduled werden.
 #hinweis[(zB. Timeslice/Queue)]\
 *Multi-Level Scheduling mit Feedback:*
 Erschöpft ein Thread seine Zeitscheibe, wird seine Priorität um 1 verringert.
@@ -902,7 +902,7 @@ _Release_ #hinweis[(Setzt $z = 0$)]. Auch als non-blocking-Funktion:
 
 *Priority Inversion:*
 Ein _hoch-priorisierter_ Thread $C$ wartet auf eine Ressource, die von einem _niedriger
-priorisierten_ Thread $A$ _gehalten_ wird. Ein Thread mit Prioriät zwischen diesen beiden
+priorisierten_ Thread $A$ _gehalten_ wird. Ein Thread mit Priorität zwischen diesen beiden
 Threads erhält den Prozessor. Kann mit *Priority Inheritance* gelöst werden: Die Priorität
 von $A$ wird temporär auf die Priorität von $C$ gesetzt, damit der Mutex schnell wieder
 freigegeben wird.
@@ -1006,7 +1006,7 @@ hinweg. Muss explizit mit `unlink` gelöscht werden.
 Ein Socket _repräsentiert einen Endpunkt auf einer Maschine_.
 Kommunikation findet im Regelfall zwischen zwei Sockets statt
 #hinweis[(UDP, TCP über IP sowie Unix-Domain-Sockets)].
-Sockets benötigen für Kommunikation einen Namen: #hinweis[(IP: IP-Adresse & Portnr.)]\
+Sockets benötigen für Kommunikation einen Namen: #hinweis[(IP: IP-Adresse & Portnummer)]\
 *```c int socket(int domain, int type, int protocol)```: *
 _Erzeugt_ einen neuen Socket als "Datei". Socket sind nach Erzeugung zunächst _unbenannt_.
 Alle Operationen blockieren per default.\
@@ -1039,10 +1039,10 @@ _`htons()`_ konvertiert 16 Bit von Host-Byte-order #hinweis[(LE)] zu Network-Byt
 _`inet_pton()`_ konvertiert protokoll-spezifische Adresse von String zu Network-BO.
 _`inet_ntop()`_ ist das Gegenstück #hinweis[(network-to-presentation)].\
 *```c int bind (int socket, const struct sockaddr *local_address, socklen_t addr_len)```:*
-_Bindet_ den Socket an die angegebene, unbenutze lokale Adresse, wenn noch nicht gebunden.
+_Bindet_ den Socket an die angegebene, unbenutzte lokale Adresse, wenn noch nicht gebunden.
 Blockiert, bis der Vorgang abgeschlossen ist.\
 *```c int connect (int socket, const struct sockaddr *remote_addr, socklen_t addr_len)```:*
-_Aufbau_ einer Verbindung. Bindet den Socket an eine neue, unbenutzte lokale Addresse, wenn
+_Aufbau_ einer Verbindung. Bindet den Socket an eine neue, unbenutzte lokale Adresse, wenn
 noch nicht gebunden. Blockiert, bis Verbindung steht oder ein Timeout eintritt.\
 *```c int listen (int socket, int backlog)```:*
 _Markiert_ den Socket als "bereit zum Empfang von Verbindungen". Erzeugt eine Warteschlange,
@@ -1082,7 +1082,7 @@ _Send_ #hinweis[(Kopiert die Nachricht _aus_ dem Prozess: ```c send (message)```
 _Receive:_ #hinweis[(Kopiert die Nachricht _in_ den Prozess: ```c receive (message)```)].
 Dabei können Implementierungen nach verschiedenen Kriterien unterschieden werden
 #hinweis[(Feste oder Variable Nachrichtengrösse, direkte oder indirekte / synchrone oder
-  asynchrone Kommunikation, puffering, mit oder ohne Prioriäten für Nachrichten)]\
+  asynchrone Kommunikation, Pufferung, mit oder ohne Prioritäten für Nachrichten)]\
 *Feste oder variable Nachrichtengrösse:*
 feste Nachrichtengrösse ist einfacher zu implementieren, aber umständlicher zu verwenden als
 variable Nachrichtengrösse.\
@@ -1136,7 +1136,7 @@ ihren Aufruf getätigt haben. _Impliziter Synchronisationsmechanismus_.
 _Keine_ #hinweis[(Queue-Länge ist 0, Sender muss blockieren)],
 _Beschränkte_ #hinweis[(Maximal $n$ Nachrichten, Sender blockiert, wenn Queue voll ist.)],
 _Unbeschränkte_ #hinweis[(Beliebig viele Nachrichten, Sender blockiert nie)].\
-*Prioriäten:*
+*Prioritäten:*
 In manchen Systemen können Nachrichten mit _Prioritäten_ versehen werden.
 Der Empfänger holt die Nachricht mit der _höchsten Priorität zuerst_ aus der Queue.
 
@@ -1264,10 +1264,10 @@ Encoding von U+10'437 (\u{10437})
 #hinweis[#fxcolor("grün", bits("00 0100 0001", suffix: false))
 #fxcolor("gelb", bits("00 0011 0111"))]:
 
-+ Code-Point $P$ minus #hex("10000") rechnen und in Binär umwandlen\
++ Code-Point $P$ minus #hex("10000") rechnen und in Binär umwandeln\
   $P = hex("10437"), quad Q = hex("10437") - hex("10000") = hex("0437")
     = fxcolor("grün", #bits("00 0000 0001", suffix: false)) fxcolor("gelb", bits("00 0011 0111"))$
-+ Obere & untere 10 Bits in Hex umwandlen\
++ Obere & untere 10 Bits in Hex umwandeln\
   $fxcolor("grün", #hex("0001", suffix: false)) fxcolor("gelb", hex("0137"))$\
 + Oberer Wert mit #hex("D800") und unterer Wert mit #hex("DC00") addieren, um Code-Units zu erhalten\
   $U_1 = fxcolor("grün", hex("0001")) + hex("D800") = fxcolor("orange", hex("D801")), quad
@@ -1412,7 +1412,7 @@ _Symbolische Links_ #hinweis[(Wie eine Datei, Datei enthält Pfad anderer Datei)
     ],
     [
       - Dateien werden durch Inodes beschrieben
-      - Kein Link von der Datei zurück zum Verzeischnis
+      - Kein Link von der Datei zurück zum Verzeichnis
       - Hard-Links möglich
     ],
     [
@@ -1455,9 +1455,9 @@ Nodes nötig.
   set text(size: 0.8em)
   table(
     columns: (1fr, 1fr),
-    table.header([(in)direkte Addressierung], [Extent-Trees]),
-    [_direkte Blöcke:_ Index $|->$ Blocknr.],
-    [_Indexknoten:_ Index $|->$ (Kindblocknr, kleinste Nummer der 1. logischen Blöcke aller Kinder)],
+    table.header([(in)direkte Adressierung], [Extent-Trees]),
+    [_direkte Blöcke:_ Index $|->$ Blocknummer],
+    [_Indexknoten:_ Index $|->$ (Kindblocknummer, kleinste Nummer der 1. logischen Blöcke aller Kinder)],
 
     [_indirekte Blöcke:_ indirekter Block.Index $|->$ direkter Block],
     [_Blattknoten:_ Index $|->$ (1. logisch. Block, 1. phy. Block, Anz. Blöcke)],
@@ -1545,7 +1545,7 @@ _Server-Seitig_ berücksichtigt Netzwerkverfügbarkeit, _Client-Seitige_ hält E
 *X Event Handling:*
 Ereignisse werden vom Client verarbeitet oder weitergeleitet.
 Muss _festlegen, welche_ Typen er empfangen will.
-```c XSelectInput()``` #hinweis[legt fest, welche Events via Event-Masken emfpangen werden,
+```c XSelectInput()``` #hinweis[legt fest, welche Events via Event-Masken empfangen werden,
 z.B. `ExposureMask`],
 ```c XNextEvent()``` #hinweis[kopiert den nächsten Event aus dem Buffer].
 

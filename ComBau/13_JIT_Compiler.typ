@@ -42,9 +42,7 @@
     den Code eingefügt. Die Technik, zusätzliche Logik zum kompilierten Code hinzuzufügen, nennt sich _Code Instrumentation_.
     Wir implementieren einen JIT-Compiler, welcher nur auf Methoden-Ebene arbeitet.
   ],
-  [
-    #image("img/combau_33.png")
-  ],
+  image("img/combau_33.png"),
 )
 
 #grid(
@@ -53,16 +51,14 @@
   [
     == Intel 64 Architektur
     Instruktionen auf der x64-Prozessorarchitektur benutzen _Register_, im Gegensatz zu unserer Stack-basierender VM.
-    Es gibt _14 allgemeine Register_ für Ganzahlen, wir verwenden diese aber auch, um Booleans zu speichern:\
+    Es gibt _14 allgemeine Register_ für Ganzzahlen, wir verwenden diese aber auch, um Booleans zu speichern:\
     `RAX, RBX, RCX, RDX, RSI, RDI, R8, R9, ..., R15`
 
     ==== Spezielle Register
     _`RSP`:_ Stack Pointer, _`RBP`:_ Base Pointer, _`RIP`:_ Instruction Pointer
     #hinweis[(kann nicht explizit geschrieben / gelesen werden)], diverse Floating Point Register
   ],
-  [
-    #image("img/combau_30.png")
-  ],
+  image("img/combau_30.png"),
 )
 Die Intel x64-Architektur unterstützt auch _Zugriffe auf die kleineren Register_, welche Teil der grösseren sind
 #hinweis[(`RAX` 64-bit, `EAX`, 32-bit, `AX` 16-bit, `AH`/`AL` obere/untere 8-bit)]. Es wäre sogar performanter,
@@ -154,7 +150,7 @@ JIT-Compiler nur auf die vollen 64-bit Register zu.
 
 === Register-Allokation
 Um die _passenden Register_ für die Code-Fragmente zu bestimmen, müssen _zwei Aspekte_ berücksichtigt werden:
-- Die Reigsterwahl hängt von _vorherigen Instruktionen_ ab und davon, wo diese Instruktionen die Werte platziert haben.
+- Die Registerwahl hängt von _vorherigen Instruktionen_ ab und davon, wo diese Instruktionen die Werte platziert haben.
 - Instruktionen können Register _belegen_ und _freigeben_.
 
 ==== Die Register-Allokation kann auf zwei Ebenen erfolgen:
@@ -244,7 +240,7 @@ Es wird nur der Speicherort innerhalb des Allocation Records geändert. Dadurch 
 ebenfalls hinfällig.
 #grid(
   columns: (1fr, 1fr),
-  [#image("img/combau_36.png")], [#image("img/combau_37.png")],
+  image("img/combau_36.png"), image("img/combau_37.png"),
 )
 
 
@@ -299,14 +295,14 @@ switch (opCode) {
 Der Code des JIT-Compilers muss sich in einer speziellen _Virtual Page_ befinden, welche eine explizite
 _Code-Ausführungserlaubnis_ besitzt. Diese ist nicht Teil des .NET-Heaps. Der JIT-Compiler umgeht einen
 _Sicherheitsmechanismus_, dass Code in Pages nicht vom Prozessor ausgeführt werden darf
-#hinweis[(erschwert Remote Code Execution)]. In .NET wird der Code in einen Delegat verpackt
+#hinweis[(erschwert Remote Code Execution)]. In .NET wird der Code in einen Delegate verpackt
 #hinweis[(```cs Marshal.GetDelegateForFunctionPointer<>()```)]. Dieser führt den Code dann ausserhalb der .NET Runtime
-aus, was auch bedeutet, dass der JIT-Code _nicht_ mit Standard-IDE-Mittel debuggt werden kann.
+aus, was auch bedeutet, dass der JIT-Code _nicht_ mit Standard-IDE-Mittel debugged werden kann.
 
 
 === Inkonsistente Allokation bei Branches
 Wenn _mehrere Branches_ zum _gleichen Ziel_ führen, kann es passieren, dass verschiedene Registerzuweisungen
-verwendet werden. Diese _nicht eindeutige Allokation_ kann _schwerwiegende Probleme_ verusachen.
+verwendet werden. Diese _nicht eindeutige Allokation_ kann _schwerwiegende Probleme_ verursachen.
 Deshalb müssen die Allokationen mit _`MatchAllocation()` vor jedem Branch abgeglichen_ werden.
 Die _Speicherorte_ der Werte werden damit an die Orte angepasst, die von der Location nach dem Sprung erwartet werden.\
 Diese Verschiebung soll ausgeführt werden, wenn...
@@ -321,14 +317,15 @@ Um den _maximalen Nutzen_ der globalen Register-Allokation zu erhalten, sollten 
 Die _Anzahl Aufrufe_ einer Variable sowie ihre _Lifetime_. Ersteres lässt sich leicht mit einem Usage Counter feststellen,
 so werden z.B. Variablen in Loops eher ausgewählt.
 
-Für zweiteres benötigen wir einen _Register Interference Graph_, um festzustellen, ob eine Variable noch gültig ist.
+Für die Erkennung der Lifetime benötigen wir einen _Register Interference Graph_, um festzustellen, ob eine Variable noch gültig ist.
 Falls nicht, kann sie durch eine andere lebende Variable ersetzt werden. Der Graph stellt alle Variablen dar und zieht
 jeweils eine Kante zwischen zwei Variablen, wenn sie zum selben Zeitpunkt leben, also überlappende Lifetimes besitzen.
+
 #grid(
   columns: (1.2fr, 1fr),
   gutter: 1em,
   align: horizon,
-  [#image("img/combau_38.png")], [#image("img/combau_39.png")],
+  image("img/combau_38.png"), image("img/combau_39.png"),
 )
 
 Sobald zwei Variablen _keine Kante_ haben, können sie sich ein Register teilen, da sie nie zum selben Zeitpunkt leben.
@@ -342,8 +339,8 @@ der Algorithmus fährt weiter.
 
 == JIT Assembler & Linker
 Der JIT benötigt ebenfalls einen _Assembler_ und einen _Linker_. In unserem JIT-Compiler werden die Instruktionen
-nach der Intel 64 Architektur-Spezifikation encodiert. Der Linker patcht die _Adressen im Instruktionscode_,
-z.B. das Linken von Addressen zu statischen Variablen oder Methodenaufrufziele, die bereits zur JIT-Kompilierzeit bekannt sind.
+nach der Intel 64 Architektur-Spezifikation encodiert. Der Linker patched die _Adressen im Instruktionscode_,
+z.B. das Linken von Adressen zu statischen Variablen oder Methodenaufrufziele, die bereits zur JIT-Kompilierzeit bekannt sind.
 Diese _statischen Adressen_ können dann direkt in die entsprechenden Instruktions-Operanden eingefügt werden.
 Ebenfalls fügt der Linker aneinanderliegende JIT-Blöcke zusammen, damit nicht mehr unnötig zum Interpreter zurückgesprungen werden muss.
 
@@ -368,7 +365,7 @@ Diese Technik wird _On-Stack-Replacement (OSR)_ genannt.
   columns: (1.2fr, 1fr),
   gutter: 1em,
   align: horizon,
-  [#image("img/combau_40.png")], [#image("img/combau_41.png")],
+  image("img/combau_40.png"), image("img/combau_41.png"),
 )
 
 == Zusätzliche JIT-Funktionen

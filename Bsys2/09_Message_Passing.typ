@@ -27,8 +27,8 @@ Dabei können Implementierungen nach verschiedenen Kriterien unterschieden werde
 - #link(<message-direct>)[_Direkte_] oder
   #link(<message-indirect>)[_indirekte_] Kommunikation
 - #link(<message-sync>)[_Synchrone_ oder _asynchrone_ Kommunikation]
-- #link(<message-buffer>)[_Puffering_]
-- #link(<message-prio>)[Mit oder ohne _Prioriäten_ für Nachrichten]
+- #link(<message-buffer>)[_Pufferung_]
+- #link(<message-prio>)[Mit oder ohne _Prioritäten_ für Nachrichten]
 
 #pagebreak()
 
@@ -215,7 +215,7 @@ void * mmap(void *hint_address, size_t length, int protection, int flags,
 int file_descriptor, off_t offset)
 ```
 Mapped das Shared Memory, das mit `fd` geöffnet wurde, in den virtuellen Adressraum des
-laufenden Prozesses und gibt die (virtuelle) Addresse des ersten Bytes zurück.
+laufenden Prozesses und gibt die (virtuelle) Adresse des ersten Bytes zurück.
 ```c
 void * address = mmap(
   0,                      // void *hint_address (0 because nobody cares)

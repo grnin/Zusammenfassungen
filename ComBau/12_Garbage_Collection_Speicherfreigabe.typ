@@ -245,7 +245,7 @@ _wieder_ in die Free List _eingetragen_.
 Viele der oben beschriebenen _Nachteile_ können aber durch einen _einfachen Trick mitigiert_ werden.
 Wenn die Heap-Blöcke _ihre Grösse_ am Anfang und Ende _speichern_, kann der benachbarte Block trivial bestimmt werden,
 der Heap ist dann quasi eine _Double-Linked-List_ an Blöcken. So können Blockreste schnell mit potenziell freien
-benachbarten Blöcken _verschmolzen_ werden #hinweis[(der Vorgänger- und/oder Nachfolgerblock)] und von ihrer momentanen
+benachbarten Blöcken _verschmolzen_ werden #hinweis[(der Vorgänger- und/oder Nachfolgeblock)] und von ihrer momentanen
 Free List in eine neue Grössenklasse verschoben werden.
 
 === Heap Fragmentierung
@@ -294,7 +294,7 @@ Es gibt ein _finalizer Set_ #hinweis[(Registrierte Finalizer von allen lebenden 
 _pending queue_ #hinweis[(Alle Finalizer von Objekten, welche als Garbage identifiziert wurden
 und so schnell wie möglich laufen sollten)].
 
-Garbage mit Finalizer wird im die _Pending Queue_ eingetragen. Die Pending Queue zählt als _zusäzliches Root Set_
+Garbage mit Finalizer wird im die _Pending Queue_ eingetragen. Die Pending Queue zählt als _zusätzliches Root Set_
 und somit wird das Element und alle seine Referenzen _wiederbelebt_. Dies ist nötig, weil das Objekt für die Finalization
 _erhalten bleiben muss_. Es ist also aus der Sicht des GCs eine _zweite Mark-Phase_ innerhalb des selben Durchlaufs nötig.
 #hinweis[(*Erste Phase:* Markiere und erkenne Garbage mit Finalizer, welche in die Pending Queue eingefügt werden.
@@ -366,7 +366,7 @@ kann es so sein, dass ein neues Objekt _keinen Platz_ mehr hat, weil alle Lücke
 Der _Compacting GC_ #hinweis[(auch _Mark & Copy GC_ oder _Moving GC_ genannt)] _schiebt die Objekte wieder zusammen_,
 sodass sich der gesamte freie Platz am Ende des Heaps befindet. Hier genügt wieder ein simpler Free Pointer,
 eine Free List wird nicht benötigt. Allokationen werden am _Heap-Ende_ gemacht, bei Verschiebungen müssen alle Referenzen
-_nachgetragen_ werden. Da dies im gesamten System geschehen muss, wird seperat der gesamte Speicherplatz nach zu
+_nachgetragen_ werden. Da dies im gesamten System geschehen muss, wird separat der gesamte Speicherplatz nach zu
 verschiebenden Referenzen durchsucht. Dies kann auf verschiedene Arten geschehen:
 - _Remembered Set:_ Speichert die Adressen aller eingehenden Pointer pro Objekt
 - _Forwarding Pointer:_ Ein zweiter Pointer zeigt auf die momentane Objektadresse.
@@ -389,7 +389,7 @@ ihre Arbeit _inkrementell verrichten_.
   gutter: 1em,
   [
     _Junge Objekte_ werden _schneller freigegeben_, weil diese tendenziell eine _kurze Lebenserwartung_ haben
-    #hinweis[(Zeitspigelungsheuristik)]. Es gibt 3 Generationen, deren Grenzen jeweils durch einen Pointer markiert werden:
+    #hinweis[(Zeitspiegelungsheuristik)]. Es gibt 3 Generationen, deren Grenzen jeweils durch einen Pointer markiert werden:
     #table(
       columns: (1fr,) * 4,
       table.header([Alter], [Generation], [GC-\ Frequenz], [GC-Pause]),
@@ -398,9 +398,7 @@ ihre Arbeit _inkrementell verrichten_.
       [alt], [G2], [tief], [lang],
     )
   ],
-  [
-    #image("img/combau_29.png")
-  ],
+  image("img/combau_29.png"),
 )
 
 Wird nun G0 aufgeräumt, werden alle _nicht-markierten Elemente in G0 aufgeräumt_, und zusätzlich alle Referenzen
@@ -411,7 +409,7 @@ welcher mehrere Generationen umspannt, zu erfassen. Dazu muss das System _Refere
 erkennen können. Dazu müssen _Write Barriers_ in G1/G2 erstellt werden.
 - _Software-based write barriers:_ (JIT) Compiler, Loader, und/oder Interpreter fügen mit jedem Schreiben eines
   Pointers zusätzlichen Code ein, um potentielle Root Set-Kandidaten zu registrieren
-- _Hardware-based write barriers:_ Virtual Memory Managment. Die betroffenen Memory Pages sind read-only, dadurch gibt es
+- _Hardware-based write barriers:_ Virtual Memory Management. Die betroffenen Memory Pages sind read-only, dadurch gibt es
   beim Schreiben einen Page Fault. Der Interrupt-Handler prüft dann auf das Schreiben von Referenzen
 
 ==== Partitioned GC

@@ -78,10 +78,10 @@ Encoding von U+10'437 (\u{10437})
 #hinweis[#fxcolor("grün", bits("00 0100 0001", suffix: false))
   #fxcolor("gelb", bits("00 0011 0111"))]:
 
-+ Code-Point $P$ minus #hex("10000") rechnen und in Binär umwandlen\
++ Code-Point $P$ minus #hex("10000") rechnen und in Binär umwandeln\
   $P = hex("10437"), quad Q = hex("10437") - hex("10000") = hex("0437")
     = fxcolor("grün", #bits("00 0000 0001", suffix: false)) fxcolor("gelb", bits("00 0011 0111"))$
-+ Obere & untere 10 Bits in Hex umwandlen\
++ Obere & untere 10 Bits in Hex umwandeln\
   $fxcolor("grün", #hex("0001", suffix: false)) fxcolor("gelb", hex("0137"))$\
 + Oberer Wert mit #hex("D800") und unterer Wert mit #hex("DC00") addieren, um Code-Units zu erhalten\
   $U_1 = fxcolor("grün", hex("0001")) + hex("D800") = fxcolor("orange", hex("D801")), quad
@@ -317,7 +317,7 @@ Ein _Dateieintrag_ hat eine variable Länge von 8 - 263 Bytes:
   ],
   [
     - Dateien werden durch Inodes beschrieben
-    - Kein Link von der Datei zurück zum Verzeischnis
+    - Kein Link von der Datei zurück zum Verzeichnis
     - Hard-Links möglich #hinweis[(Mehrere Links zum Inode möglich)]
   ],
   [

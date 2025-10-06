@@ -25,12 +25,12 @@ Element Access Designators_, die _`this`-Referenz_ und auch Typen für die _Obje
 _Methodenaufrufe_, _Type Casts_ und _Type Tests_. Eine _spezielle Prüfung_ stellt fest, dass _`this`_ ein
 _reserviertes Schlüsselwort_ ist, dass nur _gelesen_ werden kann.
 
-Auch im _Semantic Checker_ sind bereits _OO-Features implementiert_: Zuweisungs-Kompabilität der Typen,
+Auch im _Semantic Checker_ sind bereits _OO-Features implementiert_: Zuweisungs-Kompatibilität der Typen,
 `null` kann jedem Referenztyp zugewiesen werden, Subklasse kann zu Basisklasse zugewiesen werden #hinweis[(impliziter Upcast)],
 Interface-Typ passt auf Klassen, welche Interface implementieren, Typüberprüfungen bei `a == b`.
 
 Ebenfalls wird auf zyklische Vererbungen geprüft: ```java class A extends B {} class B extends A {}``` ist nicht erlaubt.
-`extends` darf nur bei Klassen, `implements` nur bei Interfaces verwendet werden. Beim Overriding muss diesselbe Signatur
+`extends` darf nur bei Klassen, `implements` nur bei Interfaces verwendet werden. Beim Overriding muss dieselbe Signatur
 und Rückgabetyp verwendet werden. Overloading ist in SmallJ nicht erlaubt.
 
 #grid(
@@ -54,7 +54,7 @@ und Rückgabetyp verwendet werden. Overloading ist in SmallJ nicht erlaubt.
 
 ==== Code Generator
 Im Code Generator sind _mehrere Opcodes_ für die OO-Unterstützung nötig: _`getfield`_ und _`readfield`_ lesen
-bzw. schreiben Felder einer Klasse, _`new`_ initalisiert neue Instanzen und _`ldc null`_ lädt die `null`-Referenz.
+bzw. schreiben Felder einer Klasse, _`new`_ initialisiert neue Instanzen und _`ldc null`_ lädt die `null`-Referenz.
 
 #table(
   columns: (1fr,) * 4,
@@ -84,7 +84,7 @@ bzw. schreiben Felder einer Klasse, _`new`_ initalisiert neue Instanzen und _`ld
     // Points/Rectangles live longer than their creating method
     ```
   ],
-  [#image("img/combau_23.png")],
+  image("img/combau_23.png"),
 )
 
 === Allokation
@@ -110,7 +110,7 @@ Referenzen können statisch sein oder vom Stack oder Heap kommen.
 
 == Native Memory Access
 Die VM verwendet einen _unmanaged Heap_, damit die .NET Runtime bei diesem nicht selbst die Garbage Collection ausführt.
-Der Heap wird mit 64-Bit Pointern addressiert und darf keine .NET-Referenzen speichern. Stattdessen findet das Mapping
+Der Heap wird mit 64-Bit Pointern adressiert und darf keine .NET-Referenzen speichern. Stattdessen findet das Mapping
 über ein ```cs Dictionary<long, object>``` statt.
 
 ```cs
@@ -130,5 +130,5 @@ einen eigenen Eintrag im Array repräsentiert, jeder Eintrag ist 8 Byte gross.
 #grid(
   columns: (1fr, 1fr),
   gutter: 1em,
-  [#image("img/combau_24.png")], [#image("img/combau_25.png")],
+  image("img/combau_24.png"), image("img/combau_25.png"),
 )

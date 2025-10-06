@@ -44,7 +44,7 @@ corresponding class name as a prefix: _`xy::`_
       Date(int year, int month, int day);
       // Member Functions 1 & 2
       static auto isLeapYear(int year) -> bool;
-      auto tomorow() const -> Date;
+      auto tomorrow() const -> Date;
 
     private: // access specifier: Private members
       // Member Function 3

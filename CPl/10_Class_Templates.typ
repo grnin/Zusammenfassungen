@@ -430,7 +430,7 @@ respective `std::vector` constructor.
   ],
   [
     ```cpp
-    TEST_CASE("suprisingDeduction") {
+    TEST_CASE("surprisingDeduction") {
       std::vector values{1, 2, 3, 4, 5, 6};
       Sack sack{begin(values), end(values)};
       REQUIRE(sack.size() == values.size());

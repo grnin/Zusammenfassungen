@@ -20,9 +20,7 @@ Source Code $arrow.r$ Compiler $arrow.r$ Maschinencode $arrow.r$ Laufzeitsystem
     - _Code Generation:_ Erzeugt ausführbaren Maschinencode
     - _Zwischendarstellung:_ Beschreibt Programm als Datenstruktur
   ],
-  [
-    #image("img/combau_01.png", width: 60%)
-  ],
+  image("img/combau_01.png", width: 60%),
 )
 
 #grid(
@@ -37,16 +35,14 @@ Source Code $arrow.r$ Compiler $arrow.r$ Maschinencode $arrow.r$ Laufzeitsystem
     - _Metadaten, Heap & Stacks:_ Verwaltung von Programminfos, Objekten und Prozeduraufrufen
     - _Garbage Collection:_ Automatische Freigabe von nicht erreichbaren Objekten
   ],
-  [
-    #image("img/combau_02.png")
-  ],
+  image("img/combau_02.png"),
 )
 
 == Definition einer Programmiersprache
 - _Syntax:_ definiert Struktur des Programms #hinweis[(Bewährte Formalismen für Syntax)]
 - _Semantik:_ definiert Bedeutung des Programms #hinweis[(Meist in Prosa beschrieben)]
 
-Eine Sprache ist die _Menge von Folgen von Terminalsysmbolen_, die mit der Syntax herleitbar sind.\
+Eine Sprache ist die _Menge von Folgen von Terminalsymbolen_, die mit der Syntax herleitbar sind.\
 Die _Syntax_ einer Sprache ist formal definiert durch:
 - _Menge von Terminalsymbolen_ #hinweis[(Können nicht weiter ersetzt werden: `"1"`, `"Hallo"`)]
 - _Menge von Nicht-Terminalsymbolen_ #hinweis[(Können in der Syntax weiter ersetzt werden: `Term`, `Expression`)]

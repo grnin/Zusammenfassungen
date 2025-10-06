@@ -72,7 +72,7 @@ _Array Typen:_ Sind im Source _nicht_ mit eigenem Namen definiert. Haben eine _S
 #grid(
   columns: (1fr, 1fr),
   gutter: 1em,
-  [#image("img/combau_14.png")], [#image("img/combau_15.png")],
+  image("img/combau_14.png"), image("img/combau_15.png"),
 )
 
 == Vorgehen
@@ -86,7 +86,7 @@ Die Symbole werden zuerst durch eine _Registrierung aller Deklarationen im Progr
 Anschliessend wird der AST von _oben nach unten traversiert_, ausgehend vom Global Scope.
 Pro Klasse, Interface, Methode, Parameter und Variable wird das _entsprechende Symbol_ in den _richtigen Bereich eingefügt_.
 
-In dieser Phase werden die Deklarationen _nur gesammelt und registiert_, die Typen werden _noch nicht aufgelöst_.
+In dieser Phase werden die Deklarationen _nur gesammelt und registriert_, die Typen werden _noch nicht aufgelöst_.
 
 === Typen aller Deklarationen auflösen
 In dieser Phase _löst_ der Semantic Checker _alle Typen_ der in der ersten Phase hinzugefügten Deklarationen _auf_
@@ -94,7 +94,7 @@ In dieser Phase _löst_ der Semantic Checker _alle Typen_ der in der ersten Phas
 in der Symboltabelle gesucht. "Welches Symbol deklariert den Identifier?" Dies geschieht von _innen nach aussen_.
 
 === Verwendung der Deklarationen in AST auflösen
-In disem Schritt werden die Anweisungen aller Methoden im AST traversiert und _jeder Designator aufgelöst_. Ein _Designator_
+In diesem Schritt werden die Anweisungen aller Methoden im AST traversiert und _jeder Designator aufgelöst_. Ein _Designator_
 ist entweder eine _Variable_, ein _Arrayelement_ oder eine _Methode_. Bei einfachen Designatoren kann in der _Symboltabelle_
 nach dem Namen gesucht werden. Bei einem _Member Access_ #hinweis[(z.B `car.seats`)], muss zuerst das Feld #hinweis[(`seats`)]
 im Scope der Klasse #hinweis[(`car`)] nachgeschlagen werden. Bei einem _Arrayzugriff_ #hinweis[(z.B. `a[3]`)] wird nach der

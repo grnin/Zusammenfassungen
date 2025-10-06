@@ -360,7 +360,7 @@ It is possible to mix and match these types:\
 )
 
 == Failing Functions / Error Handling
-Functions can fail when _a contract cannot be fullfilled:_
+Functions can fail when _a contract cannot be fulfilled:_
 - _Precondition is violated: _ Negative index, divisor is zero, etc. Usually caller provided wrong arguments.
 - _Postcondition could not be satisfied:_ Resources for computation not available, cannot open a file, ...
 

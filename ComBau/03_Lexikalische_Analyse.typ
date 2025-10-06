@@ -71,9 +71,7 @@ _Kontextsensitive Sprache_ #hinweis[(Bounded Turing Maschine, für Semantic Chec
     Der Lexer absorbiert _so viele Zeichen wie möglich_ in einem Token, er ist also _greedy_.
     #hinweis[(`my1234Name` wird als einziges Token gelesen und nicht als drei einzelne Token)].
   ],
-  [
-    #image("img/combau_06.png")
-  ],
+  image("img/combau_06.png"),
 )
 
 == Whitespaces und Kommentare
@@ -111,10 +109,10 @@ Die Trennung erfolgt aber manchmal auch _ohne Whitespace_. #hinweis[(z.B `1234na
     _Kommentare_ und werden bis zur nächsten Newline #hinweis[(Zeilenkommentar)] oder `*/` #hinweis[(Blockkommentar)]
     ignoriert. Folgt keines dieser Zeichen, wird ein _Divisions-`FixToken`_ ausgegeben.
 
-    In anderen Sprachen gibt es _Spezialfälle_, welche seperat behandelt werden müssen: `char`-Literale, String/Char-Escaping,
+    In anderen Sprachen gibt es _Spezialfälle_, welche separat behandelt werden müssen: `char`-Literale, String/Char-Escaping,
     Hexadezimale Integers und Kommazahlen. Ebenfalls wird Error Handling für nicht geschlossene Blöcke
     #hinweis[(Kommentare, Loops, Strings)], zu grosse/kleine Zahlen und ungültige Zeichen implementiert.
-    Diese Fehlermeldungen sollen dem Nutzer mit der ensprechenden Zeilenposition angegeben werden.
+    Diese Fehlermeldungen sollen dem Nutzer mit der entsprechenden Zeilenposition angegeben werden.
     Speziell soll im Lexer bei fehlerhaftem Input _kein Infinite Loop_ ausgelöst werden.
   ],
   [

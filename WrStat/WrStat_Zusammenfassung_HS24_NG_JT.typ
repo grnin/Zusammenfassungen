@@ -142,7 +142,7 @@ _Beispiele:_
 
 
 == Permutationen/Reihenfolge
-_"Auf wieviele Arten lassen sich $n$ verschiedene Objekte anordnen?"_\
+_"Auf wie viele Arten lassen sich $n$ verschiedene Objekte anordnen?"_\
 Für das erste Objekt stehen $n$ Plätze zur Verfügung. Für das zweite Objekt muss einer der $n-1$ verbleibenden Plätze
 gewählt werden. Bisher sind nun $n dot (n-1)$ Möglichkeiten gefunden. Führt man diese Reihenfolge fort, ergeben
 sich $n!$ Möglichkeiten.
@@ -173,7 +173,7 @@ _Beispiele:_
     $ (n_"schwarz" + n_"weiss")! = (7 + 6)! = 13! = underline(6'227'020'800) $
 
   + _Bei der Revision stellt sich heraus, dass zwei schwarze linke Skis und eine linker weisser Ski nicht mehr zu reparieren
-    sind. Wieviele mögliche Paarungen gibt es jetzt noch?_
+    sind. Wie viele mögliche Paarungen gibt es jetzt noch?_
 
     Hat man nur $n$ linke und $m$ rechte Skis einer gewissen Farbe, mit $n < m$, muss man zuerst aus den $m$ Skis davon
     $n$ auswählen, die man verwenden will. Das geht auf $binom(m, n)$ Arten. Davon kann man wieder $n!$ Anordnungen bilden.
@@ -206,7 +206,7 @@ _Beispiele:_
 #v(-0.5em)
 #example-block[
   + _In einem Wald mit 1'000 Bäumen schlägt fünfmal der Blitz ein. Wir dürfen annehmen, dass kein Baum zweimal getroffen wird.
-    Auf wieviele Arten können die getroffenen Bäume im Wald verteilt sein?_
+    Auf wie viele Arten können die getroffenen Bäume im Wald verteilt sein?_
 
     Es müssen 5 von 1'000 Bäumen ausgewählt werden:
     $ binom(1000,5) = 1000! / (5!(1000-5)!) = underline(8'250'291'250'200) $
@@ -400,7 +400,7 @@ $ r = "cov"(X, Y) / sqrt("var"(X) dot "var"(Y)) $
     *TR-Tipps:*
     - Integral: #tr-constructs-button -Taste (Betrag und Cases-Icon) drücken, Integral-Symbol auswählen
     - Solve-Funktion: Menu-3-1
-    - Wenn Solve beim Lösen eines Integrals ein Integral zurückgibt, auszurechnende Variabel aus dem Integral herausnehmen
+    - Wenn Solve beim Lösen eines Integrals ein Integral zurück gibt, auszurechnende Variabel aus dem Integral herausnehmen
     - Zahlen in Brüche umwandeln: Menu-Zahl-Brüche approximieren
   ]
 ]
@@ -619,7 +619,7 @@ ist ${X = a}$ nur beschränkt von Nutzen, da selten das exakt selbe Ereignis ein
       $ Rho(a < X <= b) = integral^b_a phi(x) dif x $
     ]
   ],
-  [#image("img/wrstat_08.png")],
+  image("img/wrstat_08.png"),
 )
 
 #v(-0.5em)
@@ -718,7 +718,7 @@ $display(
       )
     ]
   ],
-  [#image("img/wrstat_10.png")],
+  image("img/wrstat_10.png"),
 )
 
 $ "var"(X) = E(X^2) - E(X)^2 = 91 / 6 - 21^2 / 6^2 = (91 dot 6 - 21^2) / 6^2 = 105 / 6^2 = 35 / 12 approx 2.9166 $
@@ -1161,7 +1161,7 @@ Für eine genauere Approximation kann folgende Korrektur eingefügt werden:
       = Phi((b fxcolor("orange",+ 1/2) - n p)/sqrt(n p (1-p))) - Phi((a fxcolor("grün", - 1/2) - n p)/sqrt(n p (1-p)))
     $
   ],
-  [#image("img/wrstat_11.png")],
+  image("img/wrstat_11.png"),
 )
 
 
@@ -1327,7 +1327,7 @@ Approximation der Binomialverteilung für seltene Ereignisse, die mit Rate $lamb
 ]
 
 == T-Test
-- *Wann verwenden?* Beim Vergleich der Mittwelwerte zweier _kontinuierlicher_ Datengruppen,
+- *Wann verwenden?* Beim Vergleich der Mittelwerte zweier _kontinuierlicher_ Datengruppen,
   Daten sind _Normalverteilt_ und weisen die gleiche Varianz auf. Die Beobachtungen sind _unabhängig_.
 - *Was macht der Test?* Testet, ob sich zwei Stichproben _nicht_ signifikant voneinander unterscheiden.
 - *Gegeben:* 2 Listen an Datenwerten oder Anzahl Stichproben, Mittelwert und Varianz
@@ -1538,7 +1538,7 @@ Wie gross ist die Wahrscheinlichkeit zu sterben, wenn man ein Redshirt auf der E
     - $S = {"Security"}$
     - $T = {"kommt um"}$
   ],
-  [#image("img/wrstat_03.png")],
+  image("img/wrstat_03.png"),
 )
 
 *$Rho(R|T)$: Wahrscheinlichkeit, dass ein Toter ein rotes Shirt trägt.*
@@ -1646,9 +1646,7 @@ Wie gross ist die Wahrscheinlichkeit $Rho(T)$, auf der Enterprise umzukommen?
      #place(line(length: 4.5cm, stroke: 0.075em), dy: -3.4mm)
      &Rho(T)$
   ],
-  [
-    #image("img/wrstat_03.png");
-  ],
+  image("img/wrstat_03.png"),
 )
 
 == Weitere Theorie
@@ -1673,9 +1671,7 @@ Wie gross ist die Wahrscheinlichkeit $Rho(T)$, auf der Enterprise umzukommen?
     - _$bold(B = emptyset = {} subset Omega)$:_ Das _unmögliche_ Ereignis #hinweis[(Tritt nie ein, z.B. das Würfeln einer 7)].
     - Haben zwei Ereignisse keine Überschneidungen, sind sie _paarweise disjunkt_.
   ],
-  [
-    #image("img/wrstat_01.png")
-  ],
+  image("img/wrstat_01.png"),
 )
 
 
@@ -1740,7 +1736,7 @@ Die Wahrscheinlichkeit eines Ereignisses $A subset Omega$ ist eine Zahl $Rho(A)$
     - $Rho(A_1 union A_2 union ... union A_n union ...) = Rho(A_1) + Rho(A_2) + ... + Rho(A_n) + ...$
       #hinweis[Diskunkte Vereinigung, Ereignisse nicht gleichzeitig möglich ($A_j inter A_i = emptyset$ für $i != j$)]
   ],
-  [#image("img/wrstat_02.png")],
+  image("img/wrstat_02.png"),
 )
 
 === Laplace-Experiment

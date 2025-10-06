@@ -211,7 +211,7 @@ Gibt die _ID_ des _gerade laufenden_ Threads zurück.
 == Thread-Local Storage (TLS)
 In C geben viele System-Funktionen den Fehlercode nicht direkt zurück,
 sondern über `errno`, z.B. die `exec`-Funktionen. Wäre `errno` eine _globale Variable_,
-würde folgender Code bei mehreren Threads _unerwartetes Verhalten_ aufeisen:
+würde folgender Code bei mehreren Threads _unerwartetes Verhalten_ aufweisen:
 ```c
 void f (void) {
   int result = execl (...);
@@ -250,7 +250,7 @@ Gibt 0 zurück wenn alles OK, sonst Fehlercode.
 ```c int pthread_setspecific( pthread_key_t key, const void * value )```\
 ```c void * pthread_getspecific( pthread_key_t key )```
 _schreibt_ bzw. _liest_ den Wert, der mit dem Key in diesem Thread assoziiert ist.
-Typischerweise verwendet man den Wert als _Pointer auf einen Speicherbereich_, bspw:
+Typischerweise verwendet man den Wert als _Pointer auf einen Speicherbereich_, bspw.:
 
 ```c
 // Setup

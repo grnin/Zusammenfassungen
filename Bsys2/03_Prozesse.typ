@@ -153,9 +153,9 @@ Gibt -1 zurück, wenn ein Fehler auftritt, Fehlercode in `errno`.
 bestimmt, auf welchen Child-Prozess man warten will.
 - _`pid > 0`:_ Wartet nur auf den Child-Prozess mit dieser `pid`
 - _`pid == -1`:_ Wartet auf irgendeinen Child-Prozess (= #wait)
-- _`pid == 0`:_ wartet auf alle Child-Prozesse welche diesselbe Prozessgruppen-ID wie der
+- _`pid == 0`:_ wartet auf alle Child-Prozesse welche dieselbe Prozessgruppen-ID wie der
   Parent haben
-- _`pid < -1`:_ wartet auf alle Child-Prozesse welche diesselbe Prozessgruppen-ID wie der
+- _`pid < -1`:_ wartet auf alle Child-Prozesse welche dieselbe Prozessgruppen-ID wie der
   absolute `pid`-Wert haben
 
 Gibt -1 zurück, wenn ein Fehler auftritt, Fehlercode in `errno`.

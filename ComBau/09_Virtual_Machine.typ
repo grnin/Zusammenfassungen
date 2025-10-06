@@ -171,7 +171,7 @@ Bei einem _Rücksprung_ durch den Opcode _`return`_ aus der Methode `g()` wird d
   gutter: 1em,
   [
     Wird eine Methode _beendet_, wird im aktuellen Method Descriptor geprüft, ob sie einen _Return Type_ hat
-    oder `void` ist. Hat sie einen, wird dieser Wert vom Stack gepoppt und nach der Enfernung des Activation Frames
+    oder `void` ist. Hat sie einen, wird dieser Wert vom Stack gepoppt und nach der Entfernung des Activation Frames
     auf den Evaluation Stack des Callers gepusht.
   ],
   [
@@ -188,7 +188,7 @@ Bei einem _Rücksprung_ durch den Opcode _`return`_ aus der Methode `g()` wird d
 === Design
 Ein Call Stack kann auf _zwei Arten_ aufgebaut werden:
 - _Managed Call Stack:_ Im Interpreter, Objekt-orientierte Darstellung #hinweis[(Fokus auf Komfort)]
-- _Unmanaged Call Stack:_ Bei HW-Execution #hinweis[(JIT)], Kontiniuierlicher Speicherblock #hinweis[(Fokus auf Effizienz)]
+- _Unmanaged Call Stack:_ Bei HW-Execution #hinweis[(JIT)], Kontinuierlicher Speicherblock #hinweis[(Fokus auf Effizienz)]
 
 ==== Managed Call Stack
 Wird mit _Klassen_ modelliert. Ein Aktivierungsframe ist eine _Instanz einer Klasse_, die einen Verweis auf den
@@ -224,7 +224,7 @@ class CallStack {
     der _Evaluation Stack_ der _aktiven Methode_ gespeichert. Unterhalb des BPs befinden sich die _Parameter_ der
     aktiven Methode und der SP und BP des Callers, zu letzterem wird bei _Return zurückgesprungen_.
   ],
-  [#image("img/combau_21.png")],
+  image("img/combau_21.png"),
 )
 
 #grid(
@@ -238,7 +238,7 @@ class CallStack {
     Wenn die VM _Multi-Threading_ unterstützen würde, müsste das Laufzeitsystem über mehrere Call Stacks verfügen,
     für jeden _aktiven Thread_ einen.
   ],
-  [#image("img/combau_22.png")],
+  image("img/combau_22.png"),
 )
 
 == Verifikation
@@ -270,7 +270,7 @@ _Erkenne_ und _verhindere_ falschen Byte-Code, die durch _Fehler im Compiler_ od
 ==== Weitere Sicherheitsmassnahmen
 - Variablen immer _initialisieren_
 - _Null-dereference_ und index-out-of-bounds Checks
-- _Kompabilität_ von externen Verweisen
+- _Kompatibilität_ von externen Verweisen
 - _Garbage Collection_
 
 == Interpretation vs. Kompilation
@@ -278,7 +278,7 @@ _Erkenne_ und _verhindere_ falschen Byte-Code, die durch _Fehler im Compiler_ od
   columns: (1fr, 1fr),
   table.header([Interpretation], [Kompilation]),
   [
-    _Ineffizient_, dafür _flexibel_ und _einfach_ zu entwickeln. Aktzeptabel für selten ausgeführten Code.
+    _Ineffizient_, dafür _flexibel_ und _einfach_ zu entwickeln. Akzeptabel für selten ausgeführten Code.
   ],
   [
     Kompilierter HW-Prozessor Code ist _schneller_, JIT-Compilation für Hot Spots für noch mehr Performance.

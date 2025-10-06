@@ -18,9 +18,7 @@ Code-Optimierungen können an _verschiedenen Orten im Compiler_ angewendet werde
     - _Bytecode_
     - _Three-Address-Code mit Registern_ #hinweis[(Zwei Operanden und ein Resultat)]
   ],
-  [
-    #image("img/combau_31.png")
-  ],
+  image("img/combau_31.png"),
 )
 
 == Optimierte Arithmetik
@@ -44,13 +42,13 @@ Multiplikation, Division oder Modulo mit einer _Zweierpotenz_ können in eine _B
 === Algebraische Vereinfachung
 - Entfernung von _redundanten Operatoren_ #hinweis[(`Expr / 1 => Expr, Expr * 0 => 0`)]
 - AST-Bäume, die nur aus _konstanten Literalen_ bestehen, können _zusammengefasst_ werden #hinweis[(`1 + 3 => ldc 4`)]
-- Sonstige _redundaten_ AST-Bäume #hinweis[(Doppel-Minus: `--Expr => Expr`)]
+- Sonstige _redundanten_ AST-Bäume #hinweis[(Doppel-Minus: `--Expr => Expr`)]
 
 Diese Expressions dürfen aber nur vereinfacht werden, wenn sie _keine Seiteneffekte_ besitzen\
 #hinweis[(Keine Exceptions, kein Schreiben von Variablen, keine I/O-Operationen)]
 
 === Loop-Invariant Code
-Code in einer _Schlaufe_, welcher sich jedoch nicht verändert, kann aus der Schlaufe _rausgenommen_ werden.
+Code in einer _Schlaufe_, welcher sich jedoch nicht verändert, kann aus der Schlaufe _herausgenommen_ werden.
 So muss er _nicht_ bei jedem Durchlauf _neu evaluiert_ werden. Dies nennt man _Code Motion_.
 
 #grid(
@@ -256,7 +254,7 @@ So wird sie in beiden Pfaden _nur jeweils einmal_ evaluiert. Dafür gibt es in d
 Es ist immer ein _Abwägen_, welche Optimierung am sinnvollsten ist. Eine Optimierung kann wiederum ein anderes
 Optimierungspotential auslösen.
 
-Es gibt verschiedene _Techniken_, um Optimierunspotential zu erkennen:
+Es gibt verschiedene _Techniken_, um Optimierungspotential zu erkennen:
 - Static Single Assignment
 - Peephole Optimization
 - Dataflow Analysis #hinweis[(Wird in ComBau nicht behandelt)]
@@ -324,16 +322,14 @@ gewünscht, wie zum Beispiel die _Peephole Optimization_.
     Die Technik verwendet ein _"Sliding Window"_ mit z.B. jeweils 3 Instruktionen. Es werden _nur_ diese 3
     Instruktionen angesehen und _mögliche Optimierungen angewendet_. Anschliessend wird das Fenster um 1 weitergeschoben.
   ],
-  [
-    #image("img/combau_32.png")
-  ],
+  image("img/combau_32.png"),
 )
 
 == Zusammenfassung
 #table(
   columns: (0.4fr, 1fr),
   table.header([Techniken], [Optimierung, die die Technik ermöglicht]),
-  [Teplate-Based Code Gen,\ Peephole Optimization], [Optimierte Arithmetik, Algebraische Vereinfachung],
+  [Template-Based Code Gen,\ Peephole Optimization], [Optimierte Arithmetik, Algebraische Vereinfachung],
   [Static Single Assignment (SSA)],
   [
     Common Subexpression Elimination, Dead Code Elimination, Copy Propagation,
