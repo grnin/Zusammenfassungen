@@ -3803,7 +3803,7 @@ welche mindestens ein `yield return` beinhaltet. Die Implementation von `IEnumer
       }
       // Spezifische Iterator-Methode
       public IEnumerable<int> Range(int from, int to) {
-        for (int i = from, i < to, i++) {
+        for (int i = from; i < to; i++) {
           yield return _x[i];
         }
       }
