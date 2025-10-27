@@ -3,10 +3,10 @@
 #import "@preview/codelst:2.0.2": sourcecode
 
 #show: project.with(
-  authors: ("Nina Grässli", "Jannis Tschan"),
+  // authors: ("Nina Grässli", "Jannis Tschan"),
   fach: "MsTe",
   fach-long: ".NET Technologien",
-  semester: "HS24",
+  semester: "HS25",
   tableofcontents: (enabled: true, depth: 2, columns: 2),
   font-size: 10pt,
 )
@@ -28,52 +28,6 @@
 !TODO im Dokument beachten
 
 = Überblick & Architektur
-== Vergleich .NET, .NET Core und .NET Framework
-#table(
-  columns: (1fr,) * 3,
-  table.header([.NET Framework (2002-2019)], [.NET Core (2016-2019)], [.NET (ab 2020)]),
-  [
-    Für Windows entwickelt & eng mit OS verzahnt, letzte Version 4.8 erhält nur noch Security-Updates
-    #hinweis[(kein End-of-Life)]
-  ],
-  [
-    Cross-Platform-Implementation welche neben .NET FW entwickelt wurde, limitierte Anzahl Features
-    im Vergleich zu .NET FW, keine Updates mehr
-  ],
-  [
-    Vereint .NET Framework & .NET Core-Features, jedes Jahr eine neue Version #hinweis[(18 Monate Support)],
-    jedes zweite Jahr eine LTS-Version #hinweis[(3 Jahre Support)]
-  ],
-)
-
-== .NET Plattform Grundstruktur
-- _Common Language Runtime (CLR):_ Mächtige Laufzeitumgebung für verschiedene Sprachen, ähnlich Java Virtual Machine.
-  - *Common Type System (CTS):* Gemeinsames Typensystem für alle .NET-Sprachen.
-  - *Common Language Specification (CLS):* Gemeinsame Sprach-Eigenschaften für alle .NET-Sprachen.
-- _.NET Base Class Library (BCL):_ Basis-Klassen für alle .NET-Sprachen
-  - *ADO.NET / Entity Framework Core:* Klassen für DB-Zugriff
-  - *ASP.NET Core:* Web-Programmierung
-  - Umfangreiche Klassen für XML, JSON, Zugriff auf Dateisystem
-  - *Windows Presentation Foundation (WPF) / Windows Forms:* Klassen für Windows-GUIs
-
-== Common Language Runtime (CLR)
-#grid(
-  columns: (1.1fr, 1fr),
-  [
-    _Laufzeitumgebung_ für .NET-Code #hinweis[("managed code")]. Umfasst:
-    - JIT-Compiler #hinweis[(Intermediate Language Code zu Maschinencode)]
-    - Class Loader #hinweis[(für das Laden von Klassen-Code zur Laufzeit)]
-    - Speicherverwaltung / Garbage Collection
-    - Sprachübergreifendes Debugging
-    - Exception Handling
-    - Type Checking
-    - IL Code Verification
-    - Thread Management
-    - Base Class Library
-  ],
-  image("img/dotnet_01.png"),
-)
-
 === Common Intermediate Language (CIL)
 Ist eine _vorkompilierte Zwischensprache_. Prozessor-unabhängig, Assembler-ähnlich, Sprach-unabhängig.
 CLS-kompatible Bibliotheken können von allen .NET-Sprachen verwendet werden.\
@@ -85,6 +39,7 @@ Datentypen / Objekte und Boxing / Unboxing. Früher Microsoft Intermediate Langu
     *Vorteile*\
     - _Portabilität_ #hinweis[(auf andere OS und Prozessorarchitekturen)]
     - _Typsicherheit_
+    - Cross-Language Development
   ],
   [
     *Nachteile*\
@@ -102,40 +57,16 @@ Build produziert ein _Assembly_ #hinweis[(\*.dll oder \*.exe)] und ein _Symbol-F
 #hinweis[(\*.pdb - Programm Database für Debugging-Zwecke)] pro Projekt.
 
 ==== Cross-Language Development
-Objekt-Modell und Bibliotheken sind in Plattform integriert. Die _Sprachwahl ist sekundär_, _Konzepte sind allgemeingültig_.
-Die _Common Language Specification (CLS)_ bietet allgemeine _Regeln_ für Cross-Language Development.
-Debugging wird von allen Sprachen unterstützt, auch Cross-Language Debugging möglich.
 Aktuell umfasst .NET ca. 30 Sprachen #hinweis[(C\#, F\#, VB.NET, C++, J\#, IronPython, IronRuby, ...)].
 
 === Kompilierung
-Der _Source Code_ wird während der Design Time #hinweis[(Build-Prozess)] mit dem _Language Compiler_ in den _IL-Code_
-umgewandelt. Dieser wird dann mit dem _JIT-Compiler_ während der Runtime in _Native Code_ #hinweis[(Assembler-Code der Platform)]
-übersetzt. Alternativ kann der Source Code auch _direkt via Native AOT_ #hinweis[(Ahead-of-time compilation)] in Native Code
-übersetzt werden.
+Bild einfügen
 
-==== Just-in-Time (JIT) Kompilierung
-Nach der Kompilierung #hinweis[(ohne Native AOT)] liegen die Methoden im Assembly als IL-Code vor.
-Beim Aufruf einer Methode wird erkannt, dass dieser Code noch nicht ersetzt wurde und der JIT-Compiler ersetzt diese Methode
-an dieser physischen Stelle im RAM den IL- durch Assembler-Code. Der nächste Aufruf erfolgt direkt auf
-den #hinweis[(gecachten)] Assembler-Code.
 
 === Assemblies
 Die _Kompilation_ erzeugt Assemblies. Diese entsprechen ungefähr einem JAR-File in Java.\
 #hinweis[(Assembly = selbstbeschreibende Komponente mit definierter Schnittstelle.)]
 
-#grid(
-  [
-    - Deployment- und Ausführungs-Einheit
-    - Executable oder Library #hinweis[(\*.exe bzw. \*.dll)]
-    - Dynamisch ladbar
-    - Selbstbeschreibende Software-Komponente\ #hinweis[(enthält Metadaten)]
-  ],
-  [
-    - Definiert Typ-Scope #hinweis[(Sichtbarkeit)]
-    - Kleinste versionierte Einheit
-    - Einheit für Security-Überprüfung\ #hinweis[(Code Access Security / Role-Based Security)]
-  ],
-)
 
 Ein _Assembly_ besteht aus dem _Manifest_ #hinweis[(Header-Informationen wie Referenzen auf alle Dateien des Assemblies,
 Referenzen auf andere Assemblies, Metadaten wie Name & Versionsnummer etc.)],
@@ -184,9 +115,8 @@ _Beispiele:_ `dotnet publish my_app.csproj` oder `dotnet build --output /build_o
 == Projekte & Referenzen
 #v(-0.5em)
 === Projekt-Dateien
-Im XML Format mit `.csproj` Endung. _Build-Engines:_ Microsoft Build Engine "MSBuild" oder .NET Core CLI (`dotnet build`).
-Einfache, dynamische Grobstruktur #hinweis[(Property\*: Projekteinstellungen, Item\*: Zu kompilierende Items,
-  Target\*: Sequenz auszuführender Schritte)]
+Im XML Format mit `.csproj` Endung.
+Einfache, dynamische Grobstruktur 
 
 === Referenzen
 - _Vorkompiliertes Assembly_ #hinweis[(Im File System, Debugging nicht verfügbar, Navigation nur auf Metadaten-Ebene)]
@@ -202,20 +132,6 @@ _Vorteile:_ Erlaubt Release-Zyklen unabhängig von .NET/Sprachreleases, Erhöht 
 - _Deployment:_ Lokales NuGet Repository auf Entwicklungsrechner, Self-hosted NuGet Repository oder Hosted NuGet Repository.
 
 = Memory Layout
-
-=== Reference- & Value Types
-#table(
-  columns: (1fr,) * 3,
-  table.header([], [Reference (`class`, Objekte)], [Value (`struct`, Primitive Typen)]),
-  [_Speicherort_], [Heap], [Stack],
-  [_Variable enthält_], [Objekt-Referenz], [Wert],
-  [_Nullwerte_], [Möglich], [Nie],
-  [_Default value_], [`null`], [`0 | false | '\0'`],
-  [_Zuweisung / Methodenaufruf_], [Kopiert Referenz], [Kopiert Wert],
-  [_Ableitung möglich_ #hinweis[(Vererbbarkeit)]], [Ja], [Nein #hinweis[(sealed)]],
-  [_Garbage Collected_], [Ja], [Nicht benötigt],
-)
-
 
 !TODO hier Beispiele Memory Layout ergänzen
 
@@ -296,6 +212,7 @@ namespace B {}
 Namespaces in anderen Namespaces importieren ```cs using System```.\
 Alias-Name ```cs using F = System.Windows.Forms ... F.Button b;```
 
+
 === File-Scoped Namespaces
 - Ohne  `{}` nach Deklaration (reduziert Einrückung)
 - Dann nur _ein Namespace pro File_ 
@@ -335,12 +252,8 @@ Welche Usings verwendet werden, ist abhängig von gewählten SDK.
 
 #pagebreak()
 
-== Main-Methode
-Ist der _Einstiegspunkt_ eines Programms. Ist zwingend für Executables und klassischerweise genau 1x erlaubt.
-Das Programm _beginnt_ mit der ersten Anweisung in der Main-Methode und _endet_ mit der letzten Anweisung in der Main-Methode.
-Befindet sich meist in der Datei `Program.cs`.
 
-=== Anforderungen
+=== Anforderungen Main-Methode
 #grid(
   columns: (1.2fr, 1fr),
   [
@@ -348,6 +261,8 @@ Befindet sich meist in der Datei `Program.cs`.
     - Die Main-Methode muss _`static`_ sein, beinhaltende Klasse nicht
     - _Gültige Rückgabetypen:_ ```cs void, int, Task, Task<int>```
     - _Gültige Parametertypen:_ Keine Parameter oder ```cs string[]```
+    - kann Main-Methode Entry-Point ersetzen mit "Top-level Statements"
+    - mehrere Main-Methoden möglich
   ],
   [
     ```cs // Examples (some missing for brevity)``` \
@@ -358,7 +273,7 @@ Befindet sich meist in der Datei `Program.cs`.
   ],
 )
 
-=== Argumente
+=== Argumente Main-Methode
 #grid(
   columns: (1.2fr, 1fr),
   [
@@ -380,29 +295,6 @@ Befindet sich meist in der Datei `Program.cs`.
     Arg 0 = alpha
     Arg 1 = beta
     Arg 2 = gamma`
-  ],
-)
-
-=== Top-level Statements
-#grid(
-  columns: (1fr, 1fr),
-  [
-    - Erlaubt _Weglassen der Main-Methode_ als Entry Point.
-    - _Regeln:_ Nur 1x pro Assembly erlaubt, Argumente heissen fix `args`, Exit Codes sind erlaubt, _vor_ den top-level Statements
-    können `using`s definiert werden, _nach_ den top-level Statements können Typen/Klassen definiert werden.
-  ],
-  [
-    ```cs
-    using System; // main() code start
-    for (int i = 0; i < args.Length, i++) {
-      ConsoleWriter.Write(args, i);
-    } // main() code end
-    class ConsoleWriter {
-      public static void Write(string[] args, int i) {
-        console.WriteLine($"Arg {i} = {args[i]}");
-      }
-    }
-    ```
   ],
 )
 
@@ -441,9 +333,11 @@ bool success3 = Enum.TryParse("Monday", out Days day3) // Generic, initializes n
 
 #pagebreak()
 
-== Object
+== object = System.Object
+
 _Basisklasse aller Typen._ Einer `object`-Variable kann jeder Typ zugewiesen werden, siehe @boxing-unboxing.
-Methoden mit `object`-Parameter können ebenfalls alle Typen annehmen, erlaubt dynamische Methoden.
+Methoden mit `object`-Parameter können ebenfalls alle Typen annehmen, erlaubt dynamische Methoden.   
+
 ```cs
 public class Object {
   public Object() { };
@@ -538,7 +432,208 @@ bool result5 = string.Equals(s1, s3);          // True
 bool result6 = string.ReferenceEquals(s1, s3); // False
 ```
 
-== Arrays
+
+
+== Symbole
+#v(-0.5em)
+=== Identifiers
+Sind _Case-sensitive_, Unicode kann verwendet werden. Wenn ein _Schlüsselwort_ als Identifier verwendet werden soll,
+muss ein `@` vor das Schlüsselwort gestellt werden.\
+_Syntax:_ `(letter | '_' | '@' ){ letter | digit | '_' }`\
+```cs string someName; int sum_of3; int _10percent; int @while; double 🍆; double \u03c0; int f\u0061ck;```
+
+=== Schlüsselwörter
+Im Vergleich zu anderen Sprachen hat C\# relativ viele Schlüsselwörter. Viele sind aber kontextabhängig und werden beim
+Schreiben von "normalem" Code wenig verwendet.
+#small[
+  ```
+  abstract         as               base              bool                    break                    byte
+  case             catch            char              checked                 class                    const
+  continue         decimal          default           delegate                do                       double
+  else             enum             event             explicit                extern                   false
+  finally          fixed            float             for                     foreach                  goto
+  if               implicit         in                in (generic modifier)   int                      interface
+  internal         is               lock              long                    namespace                new
+  null             object           operator          out                     out (generic modifier)   override
+  params           private          protected         public                  readonly                 ref
+  return           sbyte            sealed            short                   sizeof                   stackalloc
+  static           string           struct            switch                  this                     throw
+  true             try              typeof            uint                    ulong                    unchecked
+  unsafe           ushort           using             virtual                 void                     volatile
+  while
+  ```
+]
+
+=== Kommentare
+- _Single-Line:_ ```cs // ...```
+- _Multi-Line:_ ```cs /* ... */```
+- _Dokumentation von Methoden, Feldern, Properties:_
+  ```cs /// <summary>...</summary> <returns>...</returns>```
+
+== Primitivtypen
+#v(-0.5em)
+=== Ganzzahlen
+#grid(
+  columns: (1.5fr, 1fr),
+  [
+    - _Ohne Suffix:_ Kleinster Typ aus `int | uint | long | ulong`
+    - _Suffix `u | U`:_ Kleinster Typ aus `uint | ulong`
+    - _Suffix `l | L`:_ Kleinster Typ aus `long | ulong`\
+    *Syntax*
+    - _Regulär:_ `digit{digit}{Suffix}`
+    - _Hexadezimal:_ `"0x" hexDigit{hexDigit}{Suffix}`
+    - _Binär:_ `"0b" [0|1]{[0|1]}{Suffix}`
+  ],
+  [
+    ```cs
+    object number;
+    number = 17;         // int
+    number = 9876543210; // long
+    number = 17L;        // long
+    number = 17u;        // uint
+    number = 0x3e;       // int
+    number = 0x3eL;      // long
+    number = 0b11101011; // int
+    ```
+  ],
+)
+
+=== Fliesskommazahlen
+#grid(
+  columns: (1.5fr, 1fr),
+  [
+    - _Ohne Suffix oder `d | D`:_ `double`
+    - _Suffix `f | F`:_ `float`
+    - _Suffix `m | M`:_ `decimal` \
+    *Syntax* \
+    `[Digits] ["." [Digits]] [Exp] [Suffix]`\
+    *`Digits:`* `digit {digit}` \
+    *`Exp:`* `("e" | "E") ["+" | "-"] [Digits]` \
+    *`Suffix:`* `"f" | "F" | "d" | "D" | "m" | "M"`
+  ],
+  [
+    ```cs
+    object number;
+    number = 3.14; // double
+    number = 1E-2; // double
+    number = .1;   // double
+    number = 10f;  // float
+    
+    ```
+  ],
+)
+
+==== Lesbarkeit von numerischen Werten
+#grid(
+  columns: (3fr, 2fr),
+  [
+    _`"_"`_ für _bessere optische Strukturierung_. Hat keine eigentliche Funktion, funktioniert mit allen numerischen Werten.
+    Ist überall erlaubt, ausser am Anfang oder Ende einer Zahl. Wird vom Compiler einfach entfernt.
+    
+    *Escape-Sequenzen*
+    - `\'`, `\"`, `\\`: für den jeweiligen Char
+    - `\n`: newline
+    - `\t`, `\v`: horizontal/vertical tab
+  ],
+  [
+    ```cs
+    object number;
+    number = 9_876_543_210; // 987654321§
+    number = 0x1000_0000;   // 0x10000000
+    number = 0b1110_1011;   // 0b11101011
+    number = 1_23_456789_0; // 1234567890
+    number = 10__0E-2_2     // 100E-22
+    ```
+  ],
+)
+
+=== Zeichen / Zeichenketten
+#grid(
+  columns: (3fr, 2fr),
+  [
+    - _String:_ `"{char}"` #hinweis[(Nicht erlaubt: `"`, `|end-of-line|` und `\`)]
+    - _Char:_ `'char'` #hinweis[(Nicht erlaubt: `'`, `|end-of-line|` und `\`)]
+  ],
+  [
+    ```cs
+    string str;
+    // file "C:\sample.txt"
+    str = "file \"C:\\sample.txt\"";
+    ```
+  ],
+)
+
+=== Typkompatibilität
+#figure(
+  image("img/dotnet_07.png"),
+  caption: [#hinweis[Typen mit validem Pfad werden implizit konvertiert, bei anderen ist ein expliziter Type Cast nötig]],
+)
+
+Übersicht einiger Beispiel-Casts. Links: Typ der Zielvariable, Rechts: Typ des Quellvariable
+#table(
+  columns: (1fr, 1fr),
+  table.header([Erlaubt], [Nicht erlaubt ohne Cast]),
+  [
+    ```
+    int = short;       decimal = (decimal)double;
+    float = char;      byte = (byte)long;
+    decimal = long;    uint = (uint)int;
+    double = byte;     decimal = char; (!)
+    ```
+  ],
+  [
+    ```
+    short = int;
+    char = int;
+    char = float;
+    decimal = float;
+    ```
+  ],
+)
+
+== Statements
+#v(-0.5em)
+=== Switch case
+#grid(
+  columns: (1.1fr, 1fr),
+  [
+    Möglich mit Ganzzahlen #hinweis[(`[s]byte`, `[u]short`, ` [u]int` `[u]long`)], `char`, `string` und `enum`.
+    Die Cases sind _fall-through_, ist ein Case also nicht mit `break`, `throw`, `return` oder `goto` abgeschlossen,
+    wird der Code im nächsten Case ausgeführt, ohne dass die Case-Kondition noch einmal geprüft wird.
+    
+    Der `default`-Case ist optional und wird ausgeführt, wenn kein anderer Case zutrifft. `null`-case ist erlaubt.
+  ],
+  [
+    ```cs
+    string country = "Germany"; string lang;
+    switch (country) {
+      case "Germany":
+      case "Switzerland":
+        lang = "German"; break;
+      case null:
+        Console.WriteLine("Country null"); break;
+      default: Console.WriteLine("Error"); break;
+    }
+    ```
+  ],
+)
+
+=== Jumps
+#grid(
+  columns: (1fr,) * 2,
+  [
+    - _`break`:_ Aktuellen Loop beenden
+    - _`continue`:_ Zur nächsten Loop-Iteration #hinweis[(z.B. nächstes Item in `foreach`)]
+  ],
+  [
+    - _`goto` case:_ Sprung zu Case innerhalb eines `switch`
+    - _`goto` label:_ Sprung zum Label #hinweis[(Keine Sprünge in Methoden hinein oder aus `finally`-Block heraus)]
+  ],
+)
+
+
+
+= Arrays
 Einfachste Datenstruktur für _Listen_. Können _eindimensional_, _mehrdimensional_ und _rechteckig_ oder _ausgefranst/jagged_ sein.
 Die Länge _aller Dimensionen_ ist bei der Instanzierung bekannt. _Alle Werte_ sind nach der Instanzierung initialisiert
 #hinweis[(`false, 0, null,` etc.)]. Arrays sind _zero-based_ und immer auf dem _Heap_.
@@ -621,204 +716,6 @@ int length1 = a[1].Length; // returns 1 - Länge des zweiten Arrays
 Der _Zugriff_ ist jedoch _nicht schneller_, weil der _Boundary-Check_ nur bei 1-dimensionalen Arrays optimiert wird.
 
 
-== Symbole
-#v(-0.5em)
-=== Identifiers
-Sind _Case-sensitive_, Unicode kann verwendet werden. Wenn ein _Schlüsselwort_ als Identifier verwendet werden soll,
-muss ein `@` vor das Schlüsselwort gestellt werden.\
-_Syntax:_ `(letter | '_' | '@' ){ letter | digit | '_' }`\
-```cs string someName; int sum_of3; int _10percent; int @while; double 🍆; double \u03c0; int f\u0061ck;```
-
-=== Schlüsselwörter
-Im Vergleich zu anderen Sprachen hat C\# relativ viele Schlüsselwörter. Viele sind aber kontextabhängig und werden beim
-Schreiben von "normalem" Code wenig verwendet. 
-#small[
-  ```
-  abstract         as               base              bool                    break                    byte
-  case             catch            char              checked                 class                    const
-  continue         decimal          default           delegate                do                       double
-  else             enum             event             explicit                extern                   false
-  finally          fixed            float             for                     foreach                  goto
-  if               implicit         in                in (generic modifier)   int                      interface
-  internal         is               lock              long                    namespace                new
-  null             object           operator          out                     out (generic modifier)   override
-  params           private          protected         public                  readonly                 ref
-  return           sbyte            sealed            short                   sizeof                   stackalloc
-  static           string           struct            switch                  this                     throw
-  true             try              typeof            uint                    ulong                    unchecked
-  unsafe           ushort           using             virtual                 void                     volatile
-  while
-  ```
-]
-
-=== Kommentare
-- _Single-Line:_ ```cs // ...```
-- _Multi-Line:_ ```cs /* ... */```
-- _Dokumentation von Methoden, Feldern, Properties:_
-  ```cs /// <summary>...</summary> <returns>...</returns>```
-
-== Primitivtypen
-#v(-0.5em)
-=== Ganzzahlen
-#grid(
-  columns: (1.5fr, 1fr),
-  [
-    - _Ohne Suffix:_ Kleinster Typ aus `int | uint | long | ulong`
-    - _Suffix `u | U`:_ Kleinster Typ aus `uint | ulong`
-    - _Suffix `l | L`:_ Kleinster Typ aus `long | ulong`\
-    *Syntax*
-    - _Regulär:_ `digit{digit}{Suffix}`
-    - _Hexadezimal:_ `"0x" hexDigit{hexDigit}{Suffix}`
-    - _Binär:_ `"0b" [0|1]{[0|1]}{Suffix}`
-  ],
-  [
-    ```cs
-    object number;
-    number = 17;         // int
-    number = 9876543210; // long
-    number = 17L;        // long
-    number = 17u;        // uint
-    number = 0x3e;       // int
-    number = 0x3eL;      // long
-    number = 0b11101011; // int
-    ```
-  ],
-)
-
-=== Fliesskommazahlen
-#grid(
-  columns: (1.5fr, 1fr),
-  [
-    - _Ohne Suffix oder `d | D`:_ `double`
-    - _Suffix `f | F`:_ `float`
-    - _Suffix `m | M`:_ `decimal` \
-    *Syntax* \
-    `[Digits] ["." [Digits]] [Exp] [Suffix]`\
-    *`Digits:`* `digit {digit}` \
-    *`Exp:`* `("e" | "E") ["+" | "-"] [Digits]` \
-    *`Suffix:`* `"f" | "F" | "d" | "D" | "m" | "M"`
-  ],
-  [
-    ```cs
-    object number;
-    number = 3.14; // double
-    number = 1E-2; // double
-    number = .1;   // double
-    number = 10f;  // float
-
-    ```
-  ],
-)
-
-==== Lesbarkeit von numerischen Werten
-#grid(
-  columns: (3fr, 2fr),
-  [
-    _`"_"`_ für _bessere optische Strukturierung_. Hat keine eigentliche Funktion, funktioniert mit allen numerischen Werten.
-    Ist überall erlaubt, ausser am Anfang oder Ende einer Zahl. Wird vom Compiler einfach entfernt.
-
-    *Escape-Sequenzen*
-    - `\'`, `\"`, `\\`: für den jeweiligen Char
-    - `\n`: newline
-    - `\t`, `\v`: horizontal/vertical tab
-  ],
-  [
-    ```cs
-    object number;
-    number = 9_876_543_210; // 987654321§
-    number = 0x1000_0000;   // 0x10000000
-    number = 0b1110_1011;   // 0b11101011
-    number = 1_23_456789_0; // 1234567890
-    number = 10__0E-2_2     // 100E-22
-    ```
-  ],
-)
-
-=== Zeichen / Zeichenketten
-#grid(
-  columns: (3fr, 2fr),
-  [
-    - _String:_ `"{char}"` #hinweis[(Nicht erlaubt: `"`, `|end-of-line|` und `\`)]
-    - _Char:_ `'char'` #hinweis[(Nicht erlaubt: `'`, `|end-of-line|` und `\`)]
-  ],
-  [
-    ```cs
-    string str;
-    // file "C:\sample.txt"
-    str = "file \"C:\\sample.txt\"";
-    ```
-  ],
-)
-
-=== Typkompatibilität
-#figure(
-  image("img/dotnet_07.png"),
-  caption: [#hinweis[Typen mit validem Pfad werden implizit konvertiert, bei anderen ist ein expliziter Type Cast nötig]],
-)
-
-Übersicht einiger Beispiel-Casts. Links: Typ der Zielvariable, Rechts: Typ des Quellvariable
-#table(
-  columns: (1fr, 1fr),
-  table.header([Erlaubt], [Nicht erlaubt ohne Cast]),
-  [
-    ```
-    int = short;       decimal = (decimal)double;
-    float = char;      byte = (byte)long;
-    decimal = long;    uint = (uint)int;
-    double = byte;     decimal = char; (!)
-    ```
-  ],
-  [
-    ```
-    short = int;
-    char = int;
-    char = float;
-    decimal = float;
-    ```
-  ],
-)
-
-== Statements
-#v(-0.5em)
-=== Switch case
-#grid(
-  columns: (1.1fr, 1fr),
-  [
-    Möglich mit Ganzzahlen #hinweis[(`[s]byte`, `[u]short`, ` [u]int` `[u]long`)], `char`, `string` und `enum`.
-    Die Cases sind _fall-through_, ist ein Case also nicht mit `break`, `throw`, `return` oder `goto` abgeschlossen,
-    wird der Code im nächsten Case ausgeführt, ohne dass die Case-Kondition noch einmal geprüft wird.
-
-    Der `default`-Case ist optional und wird ausgeführt, wenn kein anderer Case zutrifft. `null`-case ist erlaubt.
-  ],
-  [
-    ```cs
-    string country = "Germany"; string lang;
-    switch (country) {
-      case "Germany":
-      case "Switzerland":
-        lang = "German"; break;
-      case null:
-        Console.WriteLine("Country null"); break;
-      default: Console.WriteLine("Error"); break;
-    }
-    ```
-  ],
-)
-
-=== Jumps
-#grid(
-  columns: (1fr,) * 2,
-  [
-    - _`break`:_ Aktuellen Loop beenden
-    - _`continue`:_ Zur nächsten Loop-Iteration #hinweis[(z.B. nächstes Item in `foreach`)]
-  ],
-  [
-    - _`goto` case:_ Sprung zu Case innerhalb eines `switch`
-    - _`goto` label:_ Sprung zum Label #hinweis[(Keine Sprünge in Methoden hinein oder aus `finally`-Block heraus)]
-  ],
-)
-
-
 = Klassen & Structs
 #v(-0.5em)
 == Structs
@@ -859,7 +756,7 @@ Schreiben von "normalem" Code wenig verwendet.
   ],
   [
     === Instanzierung von Klassen/Structs
-    Erzeugt aus Klasse/Struct ein Object. Dabei wird:
+    Erzeugt aus Klasse/Struct ein object. Dabei wird:
     + Speicherplatz im RAM alloziert
     + Speicher initialisiert #hinweis[(`default` oder mitgegebene Werte)]
 
@@ -1634,6 +1531,7 @@ Ein Default Constructor hat keine Parameter. Er hat in Klassen und Structs ander
 )
 
 === Operator Overloading
+
 #grid(
   [
     Die _Funktionsweise von einem Operator_ kann für eine Klasse _definiert/geändert_ werden, indem er overloaded wird.
