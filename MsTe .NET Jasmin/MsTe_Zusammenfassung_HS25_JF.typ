@@ -1647,7 +1647,7 @@ alle Teile müssen zusammen die Voraussetzungen der implementierten Interfaces e
 )
 
 
-= Vererbung & Deterministic Finalization
+= Vererbung
 == Vererbung und Type Checks
 Konstruktoren werden nicht vererbt. Nur eine Basisklasse, aber beliebig viele Interfaces erlaubt.
 Structs haben nur Vererbung via Interfaces. Klassen sind (in)direkt von `System.Object` abgeleitet und
@@ -2132,126 +2132,212 @@ Mehrere Interfaces können gleiche Member definieren, was zu Kollisionen führt.
   ],
 )
 
-== Deterministic Finalization: Dispose() <deterministic-finalization>
+
+
+= Exceptions
+Exceptions behandeln _unerwartete Programmzustände_ oder _Ausnahmeverhalten_ zur Laufzeit.
+Keine "throws" Anmerkung im Header/Signatur
+- Ablauf gleich wie in Java, oben nach unten, nach Exception geht es nicht mehr zurück, am Schluss immer finally
+
+*Best Practices:*
+- Exceptions sollten _Ausnahmen_ sein (nicht für den "normalen" Programmfluss verwenden)
+- _Vorbedingungen prüfen_, um Exceptions zu _vermeiden_
+- Exceptions sind _"Fehlercodes" vorzuziehen_
+- _Konkrete Fehlerbeschreibung_ #hinweis[(Möglichst konkrete Exception-Klasse verwenden, detaillierte Exception Message)]
+- _Nie_ Fehler über _Web-Schnittstelle_ übermitteln #hinweis[(offenbart Internas & erhöht Verletzbarkeit des Systems)]
+- _Aufräumen_ bei Exceptions #hinweis[(Sockets, File Handles, Transaktionen schliessen/beenden)]
+
 #grid(
   [
-    Beim Entfernen eines Objekt vom Heap sollen deren _unmananged Ressourcen_
-    #hinweis[(nicht von .NET Runtime verwaltet, z.B. File Handles, DB-Verbindungen etc.)] _manuell freigegeben_ werden,
-    es muss also nicht wie beim Finalizer das ganze Objekt gelöscht werden.
-    Dafür kann das _Interface `IDisposable` implementiert_ werden. In der ```cs Dispose()```-Methode können diese
-    spezifiziert werden #hinweis[(z.B. offene File Handles/Verbindungen schliessen)].
-    In der Standard-Variante muss aber ```cs Dispose()``` jedes Mal manuell aufgerufen werden und es gibt kein Exception Handling.\
-    $->$ Fehleranfällig!
+    Exception Handling:
+    - _`try`:_ Anweisungsblock, welcher Exception verursachen kann
+    - _`catch`:_ Anweisungsblock, welcher eine bestimmte Exception behandelt
+    - _`finally`:_ Anweisungsblock, welcher nach try und nach catch garantiert einmalig ausgeführt wird
+    - _`throw`:_ Statement löst Exception aus
+    `try-catch`-Blöcke sind relativ _performanceintensiv_.
   ],
   [
     ```cs
-    public class DataAccess : IDisposable {
-      private DBConnection _con;
-      public DBAccess()
-        { _conn = new SqlConnection(); }
-      // Finalizer, aufräumen beim Löschen durch GC
-      ~DataAccess() => _con?.Dispose();
-      public void Dispose() { // Manuelles Löschen
-        _con?.Dispose();
-        // GC muss Finalizer nicht erneut aufrufen
-        GC.SuppressFinalize(this);
-      } }
-    // Verwendung, bad practice, besser mit `using`
-    var da = new DataAccess(); ...; da.Dispose();
-    ```
-  ],
-)
-
-=== Was sollte ein Dispose erledigen?
-#grid(
-  [
-    - Aufräumen von Unmanaged Ressourcen
-    - Fehlerfreie Ausführung #hinweis[(keine Exceptions)]
-    - Sicherstellung einmalige Ausführung
-    - Sicherstellung vollständiger Cleanup
-  ],
-  [
-    - Aufräumen von Managed Ressourcen
-    - Vererbung, Ressourcen in Basisklassen
-    - Synchrone/Asynchrone Ausführung
-    - Unterscheidung Finalizer vs. Deterministic Finalization
-  ],
-)
-
-=== `using`-Statement
-#grid(
-  [
-    Syntactic Sugar für Finalization, stellt _Aufruf von ```cs Dispose()``` sicher_. Kann mehrere Ressourcen gleichzeitig disposen.
-    Kann als Scope-Block oder als einzelne Ressource definiert werden, welche bis Methodenende gültig ist.
-    Auch als `async`-Variante möglich.
-  ],
-  [
-    ```cs
-    using DataAccess da1 = new(); // einzelne Resource
-    using (DataAccess da2 = new()) { // Scope-Block
-      da1.Fetch(); da2.Fetch();
-    } // `da2` hier disposed
-    da1.Fetch();// Methodenende, `da1` danach disposed
-    ```
-  ],
-)
-
-=== Dispose Pattern
-#grid(
-  columns: (0.8fr, 1fr),
-  [
-    Aus Performancegründen sollte unterschieden werden, ob ein ```cs Dispose()``` aus einem Finalizer
-    #hinweis[(also vom Garbage Collector)] oder von einem manuellen ```cs Dispose()```-Aufruf stammt.\
-    Der Code rechts erweitert die oben definierte Klasse `DataAccess` um ein einfaches Beispiel eines Dispose-Patterns:
-    Wird manuell disposed, macht der GC dies nicht noch einmal. Mehrmaliges manuelles Disposen wird ebenfalls verhindert.
-    Die neue ```cs Dispose(bool)```-Methode kann von Subklassen überschrieben werden.
-  ],
-  [
-    ```cs
-    private bool _disposed; // Dispose() bereits gecallt?
-    ~DataAccess() => Dispose(false); // Finalizer-Aufruf
-    public void Dispose() { // Manueller Dispose-Aufruf
-      Dispose(true);
-      GC.SuppressFinalize(this); //Finalizer nicht mehr nötig
-    }
-    protected virtual void Dispose(bool disposing) {
-      if (_disposed) { return; } // bereits Disposed
-      // GC disposed `_con` selber, nur bei manuellem nötig
-      if (disposing) { _con?.Dispose(); }
-      _disposed = true;
+    FileStream s = null;
+    try {
+      s = new(@"C:\u.mp4", FileMode.Open); ...;
+    } catch (FileNotFoundException ex) {
+      Console.WriteLine($"{ex.FileName} not found");
+    } catch (IOException ex) {
+      // 
+      Console.WriteLine($"{ex.GetType().FullName} occured.");
+    } catch {
+      Console.WriteLine($"Unknown Exception occured.");
+    } finally {
+      if (s != null) { s.Close(); }
     }
     ```
-
   ],
 )
 
 
+=== Unchecked Exceptions
+Aufrufer von myMethod() können Exception behandeln, müssen aber nicht. (Exception wird dann einfach weiter zurückgegeben)
+- Kürzer und bequemer aber Weniger sicher und robust
+
+=== Exception Typen
+#image("exception-typen.png")
+
+#pagebreak()
+
+=== Klasse `System.Exception` - eigene Exception ableiten
+#grid(
+  [
+    _Basisklasse für alle Exceptions._ Hat Konstruktoren für Fehlerbeschreibung und allfällige Inner Exceptions.\
+    *Properties & Methoden:*
+    - _`InnerException`:_ Verschachtelte Exceptions
+    - _`Message`:_ Menschenlesbare Fehlerbeschreibung
+    - _`Source`:_ Name des Objekts, Frameworks etc., welches den Fehler verursachte
+    - _`StackTrace`:_ Aktueller Call Stack als String
+    - _`TargetSite`:_ Ausgeführter Code-Teil, der Fehler verursacht
+    - _`ToString()`:_ Fehlermeldung & Stack Trace als String
+  ],
+  [
+    ```cs
+    public class Exception : ISerializable, ... {
+      public Exception() { ... }
+      public Exception(string message) { ... }
+      public Exception(string message,
+        Exception innerException){ ... }
+      public Exception InnerException { get; }
+      public virtual string Message { get; }
+      public virtual string Source { get; set; }
+      public virtual string StackTrace {get; set; }
+      public MethodBase TargetSite { get; }
+      public override string ToString();
+    }
+    ```
+  ],
+)
+```cs
+public class MyStackOverflowException : ApplicationException {
+    public MyStackOverflowException(int maxSize)     {
+        MaxSize = maxSize;
+    }
+    public int MaxSize { get; }
+}
+// in anderer class
+throw new MyStackOverflowException(_maxSize);
+```
+
+=== `throw` Keyword
+#grid(
+  [
+    Kann _implizit_ aufgerufen werden, wenn ungültige Operation durchgeführt wird oder Methode aufgerufen wird,
+    welche eine _unbehandelte Exception_ wirft.
+    
+    _Explizite Aufrufe_ können in _eigenen Methoden_ implementiert werden.
+  ],
+  [
+    ```cs
+    // Division durch 0
+    int i = 0; int x1 = 12 / i;
+    // ungültiger Indexzugriff
+    int[] arr = new int[5]; int x2 = arr[12];
+    // null-Zugriff
+    object o = null; string x3 = o.ToString();
+    throw new Exception("An Error occurred");
+    ```
+  ],
+)
+=== Exception Filters
+
+```cs
+catch (Exception e) when (DateTime.Now.Hour < 18)
+```
+
+=== `catch`-`throw`-Block
 #table(
   columns: (1fr, 1fr),
-  table.header([Destructor & Finalizer], [Deterministic Finalization]),
+  table.header([Klassisch mit `throw e`], [Rethrowing mit `throw`]),
   [
-    #grid(
-      columns: (1.2fr, 1fr),
-      gutter: 0em,
-      [
-        Kann nur bei Entfernen eines Objekts vom Garbage Collector aufgerufen werden. Nur für unmanaged Ressourcen.
-        GC entfernt Ressourcen in zufälliger Reihenfolge, Abhängigkeiten werden nicht berücksichtigt.
-      ],
-      image("img/dotnet_08.png"),
-    )
+    Neuer Stack Trace wird begonnen
+    ```cs
+    try {
+      throw new Exception("Blöd gloffe");
+    } catch (Exception e) {
+      throw e; // mit Weitergabe von e
+    }
+    ```
   ],
   [
-    #grid(
-      columns: (1.1fr, 1fr),
-      gutter: 0em,
-      [
-        Kann manuell auch vor Entfernen eines Objekts aufgerufen werden. Auch geeignet für Managed Ressourcen.
-        Jede Methode räumt ihre Ressourcen in festgelegter Reihenfolge auf.
-      ],
-      image("img/dotnet_09.png"),
-    )
+    Stack Trace bleibt erhalten
+    ```cs
+    try {
+      throw new Exception("Blöd gloffe");
+    } catch (Exception e) {
+      throw; // ohne Weitergabe von e
+    }
+    ```
   ],
 )
+
+== Suche nach catch-Klausel
+#grid(
+  [
+    Call Stack wird _rückwärts_ nach passender `catch`-Klausel durchsucht.
+    Programm wird mit Fehlermeldung und Stack Trace _abgebrochen_, falls keine gefunden.
+    
+    Das selbe Prinzip gilt auch für _Delegates:_ Sie werden wie normale Methoden behandelt.
+    Etwas komplizierter wird das Finden bei Multicast Delegates.
+  ],
+  [
+    #v(-1em)
+    #image("img/dotnet_14.png")
+    #v(-1em)
+    #image("img/dotnet_15.png")
+  ],
+)
+
+=== `catch` mit Multicast Delegates
+#grid(
+  align: horizon,
+  [
+    *Szenario 1:*
+    - `Exc1` wird in `G()` ausgelöst
+    - `catch` für `Exc1` in `F1()` behandelt Ausnahme
+    - `F2()` wird aufgerufen #hinweis[(nächste Delegate-Methode)]
+    #v(-0.5em)
+    *Szenario 2:*
+    - `Exc2` wird in `G()` ausgelöst
+    - Kein `catch` für `Exc2` gefunden
+    - `catch` für `Exc2` in `Main()` behandelt\ #hinweis[(Delegate-Ausführung beendet)]
+  ],
+  image("img/dotnet_16.png"),
+)
+
+=== Beispiel: Argumente prüfen
+#grid(
+  columns: (0.5fr, 1fr),
+  [
+    Zwei verschiedene Exception-Typen
+    - _ArgumentNullException_\ bei `null`-Werten
+    - _ArgumentOutOfRangeException_\ bei ungültigen Wertebereichen
+    `nameof` wird zum Auslesen des Parameternamens verwendet und ist _Refactoring-stabil._\
+    #hinweis[(Namensänderungen werden "übernommen")]
+  ],
+  [
+    ```cs
+    string Replicate(string s, int nTimes) {
+      if (s is null) {
+        throw new ArgumentNullException(nameof(s));
+      } if (s.Length == 0) {
+        throw new ArgumentOutOfRangeException(nameof(s));
+      } if (nTimes <= 1) {
+        throw new ArgumentOutOfRangeException(nameof(nTimes));
+      }
+      return new StringBuilder().Insert(0, s, nTimes).ToString();
+    }
+    ```
+  ],
+)
+
+
 
 = Delegates & Events
 == Delegates
@@ -3357,216 +3443,188 @@ Ein Record kann nur initialisiert werden, wenn alle Properties angegeben werden.
 )
 
 
-= Exceptions & Iteratoren
-== Exceptions
-Exceptions behandeln _unerwartete Programmzustände_ oder _Ausnahmeverhalten_ zur Laufzeit.
-Keine "throws" Anmerkung im Header/Signatur 
-- Ablauf gleich wie in Java, oben nach unten, nach Exception geht es nicht mehr zurück, am Schluss immer finally
-
-*Best Practices:*
-- Exceptions sollten _Ausnahmen_ sein (nicht für den "normalen" Programmfluss verwenden)
-- _Vorbedingungen prüfen_, um Exceptions zu _vermeiden_
-- Exceptions sind _"Fehlercodes" vorzuziehen_
-- _Konkrete Fehlerbeschreibung_ #hinweis[(Möglichst konkrete Exception-Klasse verwenden, detaillierte Exception Message)]
-- _Nie_ Fehler über _Web-Schnittstelle_ übermitteln #hinweis[(offenbart Internas & erhöht Verletzbarkeit des Systems)]
-- _Aufräumen_ bei Exceptions #hinweis[(Sockets, File Handles, Transaktionen schliessen/beenden)]
-
-#grid(
-  [
-    Exception Handling:
-    - _`try`:_ Anweisungsblock, welcher Exception verursachen kann
-    - _`catch`:_ Anweisungsblock, welcher eine bestimmte Exception behandelt
-    - _`finally`:_ Anweisungsblock, welcher nach try und nach catch garantiert einmalig ausgeführt wird
-    - _`throw`:_ Statement löst Exception aus
-    `try-catch`-Blöcke sind relativ _performanceintensiv_.
-  ],
-  [
-    ```cs
-    FileStream s = null;
-    try {
-      s = new(@"C:\u.mp4", FileMode.Open); ...;
-    } catch (FileNotFoundException ex) {
-      Console.WriteLine($"{ex.FileName} not found");
-    } catch (IOException ex) {
-      // 
-      Console.WriteLine($"{ex.GetType().FullName} occured.");
-    } catch {
-      Console.WriteLine($"Unknown Exception occured.");
-    } finally {
-      if (s != null) { s.Close(); }
-    }
-    ```
-  ],
-)
+= Deterministic Finalization: Dispose() <deterministic-finalization>
 
 
-=== Unchecked Exceptions
-Aufrufer von myMethod() können Exception behandeln, müssen aber nicht. (Exception wird dann einfach weiter zurückgegeben)
-- Kürzer und bequemer aber Weniger sicher und robust
-
-=== Exception Typen
-#image("exception-typen.png")
-
-#pagebreak()
-
-=== Klasse `System.Exception` - eigene Exception ableiten
-#grid(
-  [
-    _Basisklasse für alle Exceptions._ Hat Konstruktoren für Fehlerbeschreibung und allfällige Inner Exceptions.\
-    *Properties & Methoden:*
-    - _`InnerException`:_ Verschachtelte Exceptions
-    - _`Message`:_ Menschenlesbare Fehlerbeschreibung
-    - _`Source`:_ Name des Objekts, Frameworks etc., welches den Fehler verursachte
-    - _`StackTrace`:_ Aktueller Call Stack als String
-    - _`TargetSite`:_ Ausgeführter Code-Teil, der Fehler verursacht
-    - _`ToString()`:_ Fehlermeldung & Stack Trace als String
-  ],
-  [
-  ```cs
-    public class Exception : ISerializable, ... {
-      public Exception() { ... }
-      public Exception(string message) { ... }
-      public Exception(string message,
-        Exception innerException){ ... }
-      public Exception InnerException { get; }
-      public virtual string Message { get; }
-      public virtual string Source { get; set; }
-      public virtual string StackTrace {get; set; }
-      public MethodBase TargetSite { get; }
-      public override string ToString();
-    }
-    ```
-  ],
-)
-```cs
-public class MyStackOverflowException : ApplicationException {
-    public MyStackOverflowException(int maxSize)     {
-        MaxSize = maxSize;
-    }
-    public int MaxSize { get; }
-}
-// in anderer class
-throw new MyStackOverflowException(_maxSize);
-```
-
-=== `throw` Keyword
-#grid(
-  [
-    Kann _implizit_ aufgerufen werden, wenn ungültige Operation durchgeführt wird oder Methode aufgerufen wird,
-    welche eine _unbehandelte Exception_ wirft.
-
-    _Explizite Aufrufe_ können in _eigenen Methoden_ implementiert werden.
-  ],
-  [
-    ```cs
-    // Division durch 0
-    int i = 0; int x1 = 12 / i;
-    // ungültiger Indexzugriff
-    int[] arr = new int[5]; int x2 = arr[12];
-    // null-Zugriff
-    object o = null; string x3 = o.ToString();
-    throw new Exception("An Error occurred");
-    ```
-  ],
-)
-=== Exception Filters
-
-```cs
-catch (Exception e) when (DateTime.Now.Hour < 18)
-```
-
-=== `catch`-`throw`-Block
 #table(
   columns: (1fr, 1fr),
-  table.header([Klassisch mit `throw e`], [Rethrowing mit `throw`]),
+  table.header([Destructor & Finalizer], [Deterministic Finalization]),
   [
-    Neuer Stack Trace wird begonnen
-    ```cs
-    try {
-      throw new Exception("Blöd gloffe");
-    } catch (Exception e) {
-      throw e; // mit Weitergabe von e
-    }
+    #grid(
+      columns: (1.2fr, 1fr),
+      gutter: 0em,
+      [
+        Kann nur bei Entfernen eines Objekts vom Garbage Collector aufgerufen werden. Nur für unmanaged Ressourcen.
+        GC entfernt Ressourcen in zufälliger Reihenfolge, Abhängigkeiten werden nicht berücksichtigt.
+      ],
+      image("img/dotnet_08.png"),
+    )
+  ],
+  [
+    #grid(
+      columns: (1.1fr, 1fr),
+      gutter: 0em,
+      [
+        Kann manuell auch vor Entfernen eines Objekts aufgerufen werden. Auch geeignet für Managed Ressourcen.
+        Jede Methode räumt ihre Ressourcen in festgelegter Reihenfolge auf.
+      ],
+      image("img/dotnet_09.png"),
+    )
+  ],
+)
+== Wann nötig
+DB-Verbindungen, geöffnete Dateien (file handles),... die das Interface öffnet, sauber schliessen
+
+=== Finalizer / Destruktor
+- Random Cleanup
+  - Garbage collector schiesst auf alle nicht mehr benötigten Resourcen, das ganze Objekt wird gelöscht
+- so komplex, dass es für Programmierer nicht deterministisch ist
+
+== Deterministic Finalization
+- Cleanup via verwendete Resource
+- In Reihenfolge (von root resource aus)
+
+// Mit Interface IDisposable die Dispose() Methode implementieren.
+// - fehleranfällig -> muss korrekt implementiert werden
+// - Dispose() muss ausgeführt werden
+
+#grid(
+  align: right,
+  [
+    Erklärung
+    ```
+    
+    Behandlung "Finalizer"
+    
+    
+    Behandle Dispose
+    GC=Garbage Collector
+    
+    
+    gewährleistet 1Malige Ausführung
     ```
   ],
   [
-    Stack Trace bleibt erhalten
+    
+    C\# Dispose Pattern Basic
     ```cs
-    try {
-      throw new Exception("Blöd gloffe");
-    } catch (Exception e) {
-      throw; // ohne Weitergabe von e
+    private bool _disposed;
+    ~DataAccess() => Dispose(false);
+    
+    public void Dispose() {
+      Dispose(true);
+      GC.SuppressFinalize(this);
+    }
+    protected virtual void Dispose(bool disposing) {
+      if (_disposed) { return; }
+      if (disposing) {
+        if (_connection != null) { 
+          _connection.Dispose(); 
+      } }
+      // Dispose unmanaged resources
+      _disposed = true;
+    }
+    
+    ```
+    
+    // ```cs
+    // public class DataAccess : IDisposable {
+    //   private DBConnection _con;
+    //   public DBAccess()
+    //     { _conn = new SqlConnection(); }
+    //   // Finalizer, aufräumen beim Löschen durch GC
+    //   ~DataAccess() => _con?.Dispose();
+    //   public void Dispose() { // Manuelles Löschen
+    //     _con?.Dispose();
+    //     // GC muss Finalizer nicht erneut aufrufen
+    //     GC.SuppressFinalize(this);
+    //   } }
+    // // Verwendung, bad practice, besser mit `using`
+    // var da = new DataAccess(); ...; da.Dispose();
+    // ```
+  ],
+)
+
+=== Was sollte ein Dispose erledigen?
+#grid(
+  [
+    - Aufräumen von Unmanaged Ressourcen
+    - Fehlerfreie Ausführung #hinweis[(keine Exceptions)]
+    - Sicherstellung einmalige Ausführung
+    - Sicherstellung vollständiger Cleanup
+  ],
+  [
+    - Aufräumen von Managed Ressourcen
+    - Vererbung, Ressourcen in Basisklassen
+    - Synchrone/Asynchrone Ausführung
+    - Unterscheidung Finalizer vs. Deterministic Finalization
+  ],
+)
+
+=== `using`-Statement
+#grid(
+  [
+    Syntactic Sugar für Finalization, stellt _Aufruf von ```cs Dispose()``` sicher_. Kann mehrere Ressourcen gleichzeitig disposen (async Variante möglich).
+    Kann als Scope-Block oder als einzelne Ressource definiert werden, welche bis Methodenende gültig ist.
+  ],
+  [
+    ```cs
+    using DataAccess da1 = new(); // einzelne Resource
+    using (DataAccess da2 = new()) { // Scope-Block
+      da1.Fetch();
+      da2.Fetch();
+    } // `da2` hier disposed (im compiler output: finally block da2.Dispose())
+    da1.Fetch();// Methodenende, `da1` danach disposed
+    
+    ```
+    //   // Compiler-Output
+    // DataAccess dataAccess = new();
+    //   try { /* ... */ }
+    //   finally { 
+    //     if (dataAccess != null) {
+    //     dataAccess.Dispose();
+    //   } }
+  ],
+)
+
+=== Dispose Pattern
+#grid(
+  columns: (0.8fr, 1fr),
+  [
+    Aus Performancegründen sollte unterschieden werden, ob ein ```cs Dispose()``` aus einem Finalizer
+    #hinweis[(also vom Garbage Collector)] oder von einem manuellen ```cs Dispose()```-Aufruf stammt.\
+    Der Code rechts erweitert die oben definierte Klasse `DataAccess` um ein einfaches Beispiel eines Dispose-Patterns:
+    Wird manuell disposed, macht der GC dies nicht noch einmal. Mehrmaliges manuelles Disposen wird ebenfalls verhindert.
+    Die neue ```cs Dispose(bool)```-Methode kann von Subklassen überschrieben werden.
+  ],
+  [
+    ```cs
+    private bool _disposed; // Dispose() bereits gecallt?
+    ~DataAccess() => Dispose(false); // Finalizer-Aufruf
+    public void Dispose() { // Manueller Dispose-Aufruf
+      Dispose(true);
+      GC.SuppressFinalize(this); //Finalizer nicht mehr nötig
+    }
+    protected virtual void Dispose(bool disposing) {
+      if (_disposed) { return; } // bereits Disposed
+      // GC disposed `_con` selber, nur bei manuellem nötig
+      if (disposing) { _con?.Dispose(); }
+      _disposed = true;
     }
     ```
+  
   ],
 )
 
-== Suche nach catch-Klausel
-#grid(
-  [
-    Call Stack wird _rückwärts_ nach passender `catch`-Klausel durchsucht.
-    Programm wird mit Fehlermeldung und Stack Trace _abgebrochen_, falls keine gefunden.
 
-    Das selbe Prinzip gilt auch für _Delegates:_ Sie werden wie normale Methoden behandelt.
-    Etwas komplizierter wird das Finden bei Multicast Delegates.
-  ],
-  [
-    #v(-1em)
-    #image("img/dotnet_14.png")
-    #v(-1em)
-    #image("img/dotnet_15.png")
-  ],
-)
 
-=== `catch` mit Multicast Delegates
-#grid(
-  align: horizon,
-  [
-    *Szenario 1:*
-    - `Exc1` wird in `G()` ausgelöst
-    - `catch` für `Exc1` in `F1()` behandelt Ausnahme
-    - `F2()` wird aufgerufen #hinweis[(nächste Delegate-Methode)]
-    #v(-0.5em)
-    *Szenario 2:*
-    - `Exc2` wird in `G()` ausgelöst
-    - Kein `catch` für `Exc2` gefunden
-    - `catch` für `Exc2` in `Main()` behandelt\ #hinweis[(Delegate-Ausführung beendet)]
-  ],
-  image("img/dotnet_16.png"),
-)
-
-=== Beispiel: Argumente prüfen
-#grid(
-  columns: (0.5fr, 1fr),
-  [
-    Zwei verschiedene Exception-Typen
-    - _ArgumentNullException_\ bei `null`-Werten
-    - _ArgumentOutOfRangeException_\ bei ungültigen Wertebereichen
-    `nameof` wird zum Auslesen des Parameternamens verwendet und ist _Refactoring-stabil._\
-    #hinweis[(Namensänderungen werden "übernommen")]
-  ],
-  [
-    ```cs
-    string Replicate(string s, int nTimes) {
-      if (s is null) {
-        throw new ArgumentNullException(nameof(s));
-      } if (s.Length == 0) {
-        throw new ArgumentOutOfRangeException(nameof(s));
-      } if (nTimes <= 1) {
-        throw new ArgumentOutOfRangeException(nameof(nTimes));
-      }
-      return new StringBuilder().Insert(0, s, nTimes).ToString();
-    }
-    ```
-  ],
-)
-
-== Iteratoren <iteratoren>
+= Iteratoren <iteratoren>
 === `foreach` Loop
 #grid(
   [
-    Wird für das _Iterieren über Collections_ verwendet. Mit ```cs continue``` wird zur nächsten Iteration fortgefahren,
-    mit ```cs break``` wird der gesamte Loop beendet.
+    ```cs continue``` fährt zur nächsten Iteration weiter.  
+
+    ```cs break``` beendet gesamten Loop.
 
     *Syntax:*
     #v(-0.5em)
@@ -3603,7 +3661,7 @@ catch (Exception e) when (DateTime.Now.Hour < 18)
 === Iteratoren-Interface
 #table(
   columns: (1fr, 1fr),
-  table.header([Non-generic #hinweis[(eher nicht verwenden)]], [Generic #hinweis[(Best Practice)]]),
+  table.header([Non-generic #hinweis[(mit object: foreach (object e in ..)]], [Generic #hinweis[(Best Practice)]]),
   [
     #small[
       ```cs
@@ -3625,22 +3683,26 @@ catch (Exception e) when (DateTime.Now.Hour < 18)
       public interface IEnumerable<out T> : IEnumerable {
         IEnumerator<T> GetEnumerator();
       }
-
       public interface IEnumerator<out T>
         : IDisposable, IEnumerator {
           T current { get; }
-          // Member von IEnumerator geerbt
+          // Namenskonflikt mit GetEnumerator weil gleiche Signatur ausser Generic
+          // Weitere members werden vererbt
         }
       ```
     ]
   ],
 )
 
-=== Iteratoren-Zugriff
-Es sind mehrere aktive Iteratoren auf denselben Objekt erlaubt. Das Enumerator-Objekt muss den Zustand
-der zu iterierenden Collection vollständig kapseln, ansonsten passieren unerwünschte Seiteneffekte.
-_Implikation: Collection darf während Iteration nicht verändert werden._
-Soll das geschehen, muss eine zweite Collection angelegt werden.
+=== Information
+// === Iteratoren-Zugriff
+// Es sind mehrere aktive Iteratoren auf denselben Objekt erlaubt. Das Enumerator-Objekt muss den Zustand
+// der zu iterierenden Collection vollständig kapseln, ansonsten passieren unerwünschte Seiteneffekte.
+// _Implikation: Collection darf während Iteration nicht verändert werden._
+// Soll das geschehen, muss eine zweite Collection angelegt werden.
+- Collection während Iteration nicht verändern (2. Collection)!
+- GetEnumerator() von IEnumerator ist die wichtige Methode mit normaler Iteration. Wird implizit im foreach() aufgerufen.
+- GetEnumerable() von IEnumerable ist optional für spezielle Iterationen. Diese müssen explizit aufgerufen werden.
 
 == yield
 #grid(
@@ -3669,7 +3731,7 @@ Soll das geschehen, muss eine zweite Collection angelegt werden.
 )
 
 Nun muss nur noch die `GetEnumerator()`-Methode #hinweis[(generisch oder nicht-generisch)] implementiert werden,
-welche mindestens ein `yield return` beinhaltet. Die Implementation von `IEnumerable` ist optional, aber empfohlen.
+welche mindestens ein `yield return` beinhaltet. Implementation von `IEnumerable` empfohlen.
 
 == Spezifische Iteratoren
 #grid(
@@ -3680,9 +3742,10 @@ welche mindestens ein `yield return` beinhaltet. Die Implementation von `IEnumer
     ```cs MyIntList l = new();```\ ```cs foreach(int e in l) { ... }```
 
     *Spezifische Iterator-Methode*\
-    Mit der _`Range`-Methode_ kann über einen Teil der Collection iteriert werden.
-    Der Return Type ändert sich von `IEnumerator<T>` zu `IEnumerable<T>`.
-    Um diesen Iterator im `foreach` zu erhalten, muss die spezifische Methode aufgerufen werden.\
+    // Mit der _`Range`-Methode_ kann über einen Teil der Collection iteriert werden.
+    // Der Return Type ändert sich von `IEnumerator<T>` zu `IEnumerable<T>`.
+    // Um diesen Iterator im `foreach` zu erhalten, muss die spezifische Methode aufgerufen werden.\
+    Return Type = IEnumerable<T>
     ```cs foreach (int e in l.Range(2, 7)) { ... }```
 
     *Spezifisches Iterator-Property*\
@@ -3717,8 +3780,7 @@ welche mindestens ein `yield return` beinhaltet. Die Implementation von `IEnumer
 )
 === Anleitung: Normale Methode zu Iterator Methode umschreiben
 + Verwendeter Collection-Typ in Signatur zu _`IEnumerable`_ umändern
-+ Variable der Liste und _`return`-Statements_ entfernen, stattdessen überall, wo `Add()` o.ä. verwendet wird,
-  durch ein _`yield return`_ ersetzen.
++ Variable der Liste und _`return`-Statements_ entfernen, stattdessen überall, wo `Add()` o.ä. verwendet wird, durch ein _`yield return`_ ersetzen.
 
 == Extension Methods <extension-methods>
 #grid(
@@ -3786,7 +3848,7 @@ Erst der Aufruf von ```cs IEnumerator<T>.MoveNext()``` tut dies. Im `foreach`-Lo
       }
 
       public IEnumerable<int> Range(int from, int to) {
-        for (int i = from, i < to, i++) {
+        for (int i = from; i < to; i++) {
           yield return i;
       } }
     ```
