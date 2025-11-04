@@ -3762,15 +3762,21 @@ welche mindestens ein `yield return` beinhaltet. Implementation von `IEnumerable
           yield return _x[i];
         } // yield break ist implizit
       }
+
+
       // Spezifische Iterator-Methode
       public IEnumerable<int> Range(int from, int to) {
         for (int i = from, i < to, i++) {
           yield return _x[i];
         }
       }
+
+
+
       // Spezifisches Iterator-Property
-      public IEnumerable<int> Reverse {
-        get {
+
+      public IEnumerable<int> Reverse { // ohne ()
+        get { // get nicht vergessen
           for (int i = _x.Length - 1; i >= 0; i--)
           {
             yield return _x[i];
