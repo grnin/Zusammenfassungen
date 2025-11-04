@@ -635,6 +635,10 @@ ist ${X = a}$ nur beschränkt von Nutzen, da selten das exakt selbe Ereignis ein
     = display(sum^k_(i=1) X(A_i) dot P(A_i))
   $
   wobei $X$ konstant auf $A_i$ und $A_i = Omega$ sein muss.
+
+  // $ 
+  //   E(X) = x dot phi(x) dx 
+  // $
 ]
 
 Wenn die Wahrscheinlichkeit in allen Fällen _gleich_ ist #hinweis[(Laplace-Experiment)], entspricht der Erwartungswert dem
@@ -642,6 +646,12 @@ _Durchschnitt_, dieser muss kein annehmbarer Wert der Zufallsvariable sein.
 
 Der _empirische Erwartungswert_ entspricht dem gewichteten Mittelwert #hinweis[(arithmetisches Mittel)].
 $ E(X) = sum_i X(i) dot Rho(X = x_i) $
+
+
+------
+Bei einer stetigen Funktion ist der Erwartungswert dann :??
+$ E(X) = sum_i X(i) dot phi(X = x_i) $
+-----
 
 #v(-0.5em)
 ==== Beispiel Würfelspiel
@@ -984,7 +994,13 @@ Modellierung vieler kleiner Einflüsse, Messwerte, wiederholte Experimente.\
   #grid(
     row-gutter: 1em,
     align: horizon,
+
+    // wieso so 
     [$ phi(x) = 1 / (sqrt(2pi) sigma) dot e^(-x^2 / (2 sigma^2)) $],
+    
+    // // und nicht so????
+    // [$ phi(x) = 1 / (sqrt(2pi) sigma) dot e^(-(x-mu)^2 / (2 sigma^2)) $],
+
     [*$sigma$*: Standardabweichung],
   )
 
@@ -1045,8 +1061,10 @@ $
   Rho(fxcolor("grün", a) < X <= fxcolor("orange", b))
   &= Rho((fxcolor("grün", a) - mu)/sigma < (X - mu)/sigma <= (fxcolor("orange", b) - mu)/sigma)\
   &= Rho((fxcolor("grün", a) - mu)/sigma < Z <= (fxcolor("orange", b) - mu)/sigma)\
-  &= Phi((fxcolor("orange", b) - mu)/sigma) - Phi((fxcolor("grün", a) - mu)/sigma)
-$
+  &= Phi((fxcolor("orange", b) - mu)/sigma) - Phi((fxcolor("grün", a) - mu)/sigma)$
+  
+  Dann $Phi(X)$ in Tabelle nachschauen oder TR?
+
 
 #example-block[
   === Beispiel 1: Feuerwerk
