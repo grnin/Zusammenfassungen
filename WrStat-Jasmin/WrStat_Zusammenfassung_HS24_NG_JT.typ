@@ -1063,7 +1063,7 @@ $
   &= Rho((fxcolor("grün", a) - mu)/sigma < Z <= (fxcolor("orange", b) - mu)/sigma)\
   &= Phi((fxcolor("orange", b) - mu)/sigma) - Phi((fxcolor("grün", a) - mu)/sigma)$
   
-  Dann $Phi(X)$ in Tabelle nachschauen oder TR?
+  Dann $Phi(x)$ in Tabelle nachschauen.
 
 
 #example-block[
@@ -1079,7 +1079,7 @@ $
     $ Rho((X - mu)/sigma < (22 - mu)/sigma) = 0.05, quad Rho((X - mu)/sigma < (25 - mu)/sigma) = 0.75 $
 
     Da wir die Wahrscheinlichkeiten schon haben, müssen wir die Werte aus der Quantiltabelle herauslesen oder
-    mit TR $"invNorm"(p, 0, 1)$ erhalten.
+    mit TR /*"invNorm"(p, 0, 1)*/ $"NORMALD_ICDF"([0, 1,] p)$ erhalten.
     $ Phi^(-1)(0.75) = 0.6745, quad Phi^(-1)(0.05) = 1 - Phi^(-1)(0.95) = 1 - 1.6449 = -1.6449 $
 
     Gleichungssystem aufstellen, mit TR #tr-constructs-button -Taste rechts neben "9" $->$
@@ -1125,9 +1125,44 @@ $
   Das kritische Gewicht $x$ mithilfe der Standardnormalverteilungsformel berechnen:
   $ Z = (x - mu) / sigma quad => quad 1.644 = (x - 3.5) / (0.7184) quad => quad x = underline(4.682"kg") $
 
-]
 
-Sollte eine Frage zur Varianz bei $n$ Stichproben kommen, muss die Varianz einfach durch $n$ geteilt werden.
+  === Beispiel 3: Spaghetti
+  In einer Numb3rs Folge bemerkt Charlie, dass trockene Spaghetti beim Biegen jeweils in mindestens   drei Teile brechen. Nachmessen der dazu nötigen Kräfte ergibt, dass *bei 1N 95% der Spaghetti gebrochen sind, dass aber 90% der Spaghetti eine Kraft von 0.5N tragen können*. Wie gross dürfte die Kraft sein, bei der der Spaghetto bricht? Wie gross ist ihre Varianz?
+
+  Lösung. Die Kraft, bei der der Spaghetto bricht, ist eine normalverteilte Zufallsvariable X, wir müssen μ und σ dieser Verteilung bestimmen. (Kraft N = X, μ und σ unbekannt). Aus der Aufgabenstellung wissen wir
+  $P(X <= 1) = 0.95$
+  $P(X < 1) = 0.1$
+
+  Standardisierung ergibt  
+
+  $P((X-mu) / sigma <= (1-mu) / sigma) = 0.95$  
+
+  $P((X-mu) / sigma <= (0.5-mu) / sigma) = 0.1$
+
+  Aus der Tabelle der Standardnormalverteilung weiss man
+  
+  Φ(1.6449) = 0.95
+  
+  Φ(−1.2816) = 0.1
+
+  also folgt das Gleichungssystem
+  
+  $ 1 − μ / σ = 1.6449 $
+  $ 0.5 − μ / σ = −1.2816 $  
+  welches gleichbedeutend ist mit
+
+  $ 1 = μ + 1.6449σ $
+  $ 0.5 = μ − 1.2816σ $
+  
+  Die Differenz ergibt
+  0.5 = 2.9265σ ⇒ σ = 0.17085
+  Daraus kann man jetzt auch μ bestimmen:
+  μ = 1 − 1.6449σ = 0.71896.
+
+  ]
+
+
+  Sollte eine Frage zur Varianz bei$n$ Stichproben kommen, muss die Varianz einfach durch $n$ geteilt werden.
 $ "var"(M_n) = "var"(X) / n = sigma^2 / n, sigma_1 = sqrt("var"(M_n)) $
 
 #pagebreak()
