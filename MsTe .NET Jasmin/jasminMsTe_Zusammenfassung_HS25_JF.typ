@@ -4444,6 +4444,7 @@ Die Query Expressions werden vom Compiler wieder in die Extension Method Syntax 
   ],
   [
     ```cs
+    // So nicht (wait)
     Task<int> t1 = Task.Factory.StartNew(
       () => { Thread.Sleep(2000); return 1; }
     );
@@ -4453,10 +4454,13 @@ Die Query Expressions werden vom Compiler wieder in die Extension Method Syntax 
     // Busy wait for result (bad idea!)
     while (!t1.IsCompleted) { /* Do other stuff */ }
     int result1 = t1.Result;
-    // Explicit wait
+    // Explicit wait (blockiert Thread)
     t1.Wait(); int result2 = t1.Result;
     // Using awaiter
     int result3 = t1.GetAwaiter().GetResult();
+    ```
+    ```cs
+    
     ```
   ],
 )
@@ -4518,12 +4522,19 @@ Alles nach `"await"` wird vom Compiler zu einer "Continuation" umgewandelt. _Nur
 === Beispiel: Auslesen von Files
 Liest zwei Dateien parallel aus, wartet nicht blockierend, verwendet Resultate.
 ```cs
-Task<string> t1 = File.ReadAllTextAsync(@"C:\DotNetPrüfungLösungen.txt");
-Task<string> t2 = File.ReadAllTextAsync(@"C:\BreathOfTheWildStrats.txt");
-// do other stuff...
-string[] allResults = await Task.WhenAll(t1, t2); // Blockiert aktuellen Thread nicht
-// Resultate auslesen
-Console.WriteLine(t1.Result); Console.WriteLine(t2.Result); // Zugriff wäre auch via `allResults` möglich
+// gutes Beispiel:
+
+public static async Task TestAsync() {
+
+  Task<string> t1 = File.ReadAllTextAsync(@"C:\2.txt");
+  Task<string> t2 = File.ReadAllTextAsync(@"C:\3.txt");
+  // do other stuff...
+  string[] allResults = await Task.WhenAll(t1, t2); // Blockiert aktuellen Thread nicht
+  // Resultate auslesen
+  Console.WriteLine(t1.Result);
+  Console.WriteLine(t2.Result); // Zugriff wäre auch via `allResults` möglich
+
+}
 ```
 
 === async / await vs. Continuation
