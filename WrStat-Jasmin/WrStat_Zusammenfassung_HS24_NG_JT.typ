@@ -1,6 +1,27 @@
 // Compiled with Typst 0.13.1
 #import "../template_zusammenf.typ": *
 
+
+TR Funktionen ersetzen:
+"invNorm"(p, 0, 1) >> "NORMALD_ICDF"([0, 1,] p)
+"invNorm"(0.082, 0, 1) >> "NORMALD_ICDF"([0, 1,] 0.082)
+
+"invNorm"(x,0,1), x = "Fläche" >>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
   fach: "WrStat",
@@ -995,13 +1016,14 @@ Modellierung vieler kleiner Einflüsse, Messwerte, wiederholte Experimente.\
     row-gutter: 1em,
     align: horizon,
 
-    // wieso so 
-    [$ phi(x) = 1 / (sqrt(2pi) sigma) dot e^(-x^2 / (2 sigma^2)) $],
+    // Vorher:
+    // [$ phi(x) = 1 / (sqrt(2pi) sigma) dot e^(-x^2 / (2 sigma^2)) $],
     
-    // // und nicht so????
-    // [$ phi(x) = 1 / (sqrt(2pi) sigma) dot e^(-(x-mu)^2 / (2 sigma^2)) $],
+    // Neu:
+    [$ phi(x) = 1 / (sqrt(2pi) sigma) dot e^(-(x-mu)^2 / (2 sigma^2)) $],
 
-    [*$sigma$*: Standardabweichung],
+    [*$sigma$*: Standardabweichung \
+    *$mu$*: Median],
   )
 
   #table(
