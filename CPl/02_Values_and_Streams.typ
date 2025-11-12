@@ -208,7 +208,7 @@ Should _only_ be used in the ```cpp main()``` function.
     auto inputAge(std::istream & in) -> int {
       std::string line{};
       while (getline(in, line)) {
-        std::isstringstream iss{line};
+        std::istringstream iss{line};
         int age{-1};
         if (iss >> age) { return age; }
       }
