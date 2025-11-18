@@ -24,6 +24,18 @@
   sourcecode(lang: "cs", body)
 }
 
+// Table formatting
+#set table(
+  stroke: (x, y) => (
+  left: if x > 0 { 0.07em + rgb("#b2b2b2") },
+  top: if y > 0 { 0.07em + rgb("#b2b2b2") },
+  ),
+  inset: 0.5em,
+)
+
+
+
+
 
 !TODO im Dokument beachten
 
@@ -60,10 +72,15 @@ Build produziert ein _Assembly_ #hinweis[(\*.dll oder \*.exe)] und ein _Symbol-F
 Aktuell umfasst .NET ca. 30 Sprachen #hinweis[(C\#, F\#, VB.NET, C++, J\#, IronPython, IronRuby, ...)].
 
 === Kompilierung
-Bild einfügen
-
-
+Nach der Kompilierung (ohne Native AOT) liegen die Methoden im Assembly als IL-Code vor. Beim Aufruf einer Methode wird
+erkannt, dass dieser Code noch nicht ersetzt wurde und der JIT-Compiler ersetzt diese Methode an dieser physischen Stelle im
+RAM den IL- durch Assembler-Code. Der nächste Aufruf erfolgt direkt auf den (gecachten) Assembler-Code.
+#image("image-1.png", width: 350pt)
+#image("image.png", width: 350pt)
+JIT Kompilierung
+#image("jit-kompilierung.png", width: 350pt)
 === Assemblies
+#image("image-2.png", width: 350pt)
 Die _Kompilation_ erzeugt Assemblies. Diese entsprechen ungefähr einem JAR-File in Java.\
 #hinweis[(Assembly = selbstbeschreibende Komponente mit definierter Schnittstelle.)]
 
@@ -89,6 +106,57 @@ _Reflection:_ Programmatisches Abfragen des Typensystems. Ist für alle Typen ve
 #hinweis[(ausser Security-Einschränkungen vorhanden)], erweiterbar über "Custom Attributes" (siehe @custom-attribute).
 
 
+
+// finde ich weniger wichtig:
+== Vergleich .NET, .NET Core und .NET Framework
+#table(
+  columns: (1fr,) * 3,
+  table.header([.NET Framework (2002-2019)], [.NET Core (2016-2019)], [.NET (ab 2020)]),
+  [
+    Für Windows entwickelt & eng mit OS verzahnt, letzte Version 4.8 erhält nur noch Security-Updates
+    #hinweis[(kein End-of-Life)]
+  ],
+  [
+    Cross-Platform-Implementation welche neben .NET FW entwickelt wurde, limitierte Anzahl Features
+    im Vergleich zu .NET FW, keine Updates mehr
+  ],
+  [
+    Vereint .NET Framework & .NET Core-Features, jedes Jahr eine neue Version #hinweis[(18 Monate Support)],
+    jedes zweite Jahr eine LTS-Version #hinweis[(3 Jahre Support)]
+  ],
+)
+
+== .NET Plattform Grundstruktur
+- _Common Language Runtime (CLR):_ Mächtige Laufzeitumgebung für verschiedene Sprachen, ähnlich Java Virtual Machine.
+  - *Common Type System (CTS):* Gemeinsames Typensystem für alle .NET-Sprachen.
+  - *Common Language Specification (CLS):* Gemeinsame Sprach-Eigenschaften für alle .NET-Sprachen.
+- _.NET Base Class Library (BCL):_ Basis-Klassen für alle .NET-Sprachen
+  - *ADO.NET / Entity Framework Core:* Klassen für DB-Zugriff
+  - *ASP.NET Core:* Web-Programmierung
+  - Umfangreiche Klassen für XML, JSON, Zugriff auf Dateisystem
+  - *Windows Presentation Foundation (WPF) / Windows Forms:* Klassen für Windows-GUIs
+
+== Common Language Runtime (CLR)
+#grid(
+  columns: (1.1fr, 1fr),
+  [
+    _Laufzeitumgebung_ für .NET-Code #hinweis[("managed code")]. Umfasst:
+    - JIT-Compiler #hinweis[(Intermediate Language Code zu Maschinencode)]
+    - Class Loader #hinweis[(für das Laden von Klassen-Code zur Laufzeit)]
+    - Speicherverwaltung / Garbage Collection
+    - Sprachübergreifendes Debugging
+    - Exception Handling
+    - Type Checking
+    - IL Code Verification
+    - Thread Management
+    - Base Class Library
+  ],
+  image("img/dotnet_01.png"),
+)
+
+
+
+// wieder wichtig
 #grid(
   columns: (1fr, 1fr),
   [
@@ -132,10 +200,93 @@ _Vorteile:_ Erlaubt Release-Zyklen unabhängig von .NET/Sprachreleases, Erhöht 
 - _Deployment:_ Lokales NuGet Repository auf Entwicklungsrechner, Self-hosted NuGet Repository oder Hosted NuGet Repository.
 
 = Memory Layout
-einfaches Beispiel bei @memory-modell
-boxing Beispiel bei @boxing-unboxing
+- siehe @spezielle-arrays
+- einfaches Beispiel bei @memory-modell
+- Boxing Beispiel bei @boxing-unboxing
 
-!TODO hier Beispiele Memory Layout ergänzen
+
+#grid(
+  columns: (0.3fr, 0.6fr),
+  [
+    *Value Types*
+    ```cs
+    int[] a = { 1, 3, 5 };
+    ```
+  ],
+  [
+    #image("memory-layout-value-type.png", width: 250pt)
+  ],
+)
+#grid(
+  columns: (0.3fr, 0.6fr),
+  [
+    *Reference Types*
+    ```cs
+    object[] a = new object[3];
+    a[1] = new object();
+    a[2] = 5; // boxing
+    ```
+  ],
+  [
+    #image("memory-layout-reference-type.png", width: 250pt)
+  ],
+)
+
+*Boxing / Unboxing*
+```cs
+System.Int32 i1 = 123;
+System.Object obj = i1; // Boxing
+System.Int32 i2 = (System.Int32)obj; // Unboxing
+```
+#image("img/dotnet_04.png", width: 60%)
+
+
+\ _Übung_
+#grid(
+  columns: (0.5fr, 0.8fr),
+  [
+    // #image("memory-layout-example-1.png", width: 50%)
+    // #image("memory-layout-example-2.png", width: 50%)
+    ```cs
+    // Example im Memory Layout
+    public static void Test()
+    {
+      Beer b1 = new Beer();
+      b1.Size = 3;
+      Guest g1 = new Guest();
+      Guest g2 = g1;
+      g1.Drink = b1;
+      b1.Size = 5;
+    }
+    
+    // Example 1
+    public struct Guest
+    {
+      public Beer Drink;
+    }
+    public class Beer
+    {
+      public int Size;
+    }
+    
+    // Example 2
+    public class Guest
+    {
+      public Beer Drink;
+    }
+    public struct Beer
+    {
+      public int Size;
+    }
+    ```
+  ],
+  [
+    \
+    \ \  \
+    #image("memory-layout-uebung-loesung.png", width: 300pt)
+  ],
+)
+\
 
 = C\# Grundlagen
 ==== Naming Guidelines
@@ -152,6 +303,21 @@ boxing Beispiel bei @boxing-unboxing
   [`_name` \ `orderId` \ `orderId`],
 
   [Properties \ Events], [PascalCase], [`OrderId` \ `MouseClick`],
+)
+
+==== Reference & Value Types
+
+
+
+#table(
+  columns: (auto, 1fr, 1fr),
+  table.header([], [Reference (Class)], [Value (Struct)]),
+  [Speicherort], [Heap], [Stack],
+  [Variable enthält], [Objekt-Referenz Wert],
+  [Nullwerte], [Möglich], [Nie],
+  [Default], [value], [null 0 | false | ‘\0’],
+  [Zuweisung / Methodenaufruf], [Kopiert Referenz Kopiert Wert],
+  [Ableitung möglich], [Ja Nein (sealed)],
 )
 
 #pagebreak()
@@ -667,6 +833,7 @@ array5 = { 1, 2, 3, 4, 5, 6 };          // Compilerfehler, Zuweisung ohne new un
 ```
 
 === Mehrdimensionale Arrays (rechteckig)
+<spezielle-arrays>
 #grid(
   columns: (2fr, 1fr),
   [
