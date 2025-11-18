@@ -28,26 +28,43 @@ git sparse-checkout set "ComBau"
 ```
 
 ## Zusammenfassungen
-Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer:
-- [AIFo / AI Foundations](AIFo) 
+Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer.
+
+Von mir bearbeitete Zusammenfassungen
+
+- [WrStat / Wahrscheinlichkeitsrechnung und Statistik](WrStat)
+- [MsTe / .NET Technologien](MsTe)
+
+Weitere
+
+- [AIFo / AI Foundations](AIFo)  
 - [AIAp / AI Applications](AIAp)
-- [AlgDat / Algorithmen und Datenstrukturen](AlgDat)
+
+\1.-2. Semester
+
 - [AutoSpr / Automaten und Sprachen](AutoSpr)
-- [Bsys1 / Betriebssysteme 1](Bsys1)
-- [Bsys2 / Betriebssysteme 2](Bsys2)
 - [CN1 / Computernetze 1](CN1)
-- [ComBau / Compilerbau](ComBau)
-- [CPl / C++](CPl)
-- [CPlA / C++ Advanced](CPlA)
 - [CySec / Cyber Security Foundations](CySec)
 - [Dbs1 / Datenbanksysteme 1](DBS1)
 - [DigCod / Digitale Codierungen](DigCod)
 - [DMI / Diskrete Mathematik für Informatik](DMI)
-- [Dsy / Distributed Systems](Dsy)
-- [ExEv / Experimentieren und Evaluieren](ExEv)
-- [MsTe / .NET Technologien](MsTe)
 - [OOP1 / Objektorientierte Programmierung 1](OOP1)
 - [OOP2 / Objektorientierte Programmierung 2](OOP2)
+
+\3. Semester
+
+- [AlgDat / Algorithmen und Datenstrukturen](AlgDat)
+- [Bsys1 / Betriebssysteme 1](Bsys1)
+- [CPl / C++](CPl)
+- [MsTe / .NET Technologien](MsTe)
+- [WrStat / Wahrscheinlichkeitsrechnung und Statistik](WrStat)
+- [ExEv / Experimentieren und Evaluieren](ExEv)
+
+\ab 4. Semester
+
 - [ParProg / Parallele Programmierung](ParProg)
 - [VwlTg / Volkswirtschaft und Technikgeschichte](VWL-TG)
-- [WrStat / Wahrscheinlichkeitsrechnung und Statistik](WrStat)
+- [CPlA / C++ Advanced](CPlA)
+- [Dsy / Distributed Systems](Dsy)
+- [Bsys2 / Betriebssysteme 2](Bsys2)
+- [ComBau / Compilerbau](ComBau)
