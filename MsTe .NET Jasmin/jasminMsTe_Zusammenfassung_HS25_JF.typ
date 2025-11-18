@@ -2898,7 +2898,7 @@ der Aufruf des Clients auf das Event nicht angepasst werden muss.
     #hinweis[(siehe @nullable-reference-types)]
   ],
 
-  [```cs where T : not null```],
+  [```cs where T : notnull```],
   [`T` muss ein Non-Nullable Value/Reference Type sein],
 )
 
@@ -2911,8 +2911,8 @@ der Aufruf des Clients auf das Event nicht angepasst werden muss.
   [
     ```cs
     class MultiConstraints<T1, T2>
-      where T1 : struct
-      where T2 : Buffer, IEnumerable<T1>, new()
+      where T1 : Buffer, IEnumerable<T1>, new()
+      where T2 : struct
       {
         /* ... */
       }
@@ -3103,23 +3103,86 @@ Häufig verwendet man auch nur die generischen Varianten.\
 
 
 == Nullability
-Es gibt spezielle Typen, welche `null` als eine Art _"unbekannter"_ bzw. "nicht existenter" _Wert_ zulassen.
-Diese Typen werden _Nullable Types_ genannt.
+=== Nullability Kurz
+#grid(
+  columns: (0.8fr, 0pt, 1fr),
+  [
+    *Default Operator* \
+    speichert null bei Reference Type und default Wert bei Value Type.
+    ```cs
+    public void NullExamples<T>() {
+      T x3 = default(T); // OK, default operator
+      T x4 = default;    // OK, default literal
+    }
+    ```
+    
+    
+    *Reference Types* \
+    Null mit `is null` prüfen, da == Operator überschrieben werden kann. \
+    
+    *Value Types*
+    Normalen (not nullable) Value Type mit `is null` prüfen ist immer false (Compilerfehler bei `T : struct`).
+    
+    *T? Syntax*
+    Value Types null zuweisen, im Hintergrund `System.Nullable<T>` Klasse.
+    ```cs
+      int? x = 123;
+      int? y = null;
+    ```
+  ],
+  grid.vline(stroke: 0.5pt),
+  block(),
+  [
+    ```cs
+    public void NullExamples<T>() {
+      T x3 = default(T); // OK, default operator
+      T x4 = default;    // OK, default literal
+    
+      // Nullwerte prüfen
+      if (x1 is null)
+      {
+        /* ... */
+      }
+    }
+    ```
+  ],
+)
+
+
+
+=== Nullability Vollständig
+Structs / Nullable Value Types: Null-Zustand musst quasi erzwungen werden, weil keine Referenz/Zustand existiert.
+Klassen / Nullable Reference Types: Null-Zustand (Null Reference) ist in Runtime abgebildet. Zugriff auf Null References führt zu "NullReferenceException"
+- In Runtime nicht mehr eliminierbar (Basiskonzept)
+- Vermeidung von Zugriff auf Null Referenzen wird seit C\# 8 durch Compiler unterstützt
 
 === `default` Operator
 #grid(
   [
     Der Default Operator liefert den Default-Wert für den angegebenen Typen
     #hinweis[(Referenz-Typen: `null`, Zahlentypen: `0`, Bool: `false`, Enum: `0` zu Enum gecastet)].
-    Dies ist vor allem _für Generics nützlich_, da so für jeden Typ automatisch der entsprechende Default-Typ gefunden werden kann.
+    
+    Den entsprechenden Default-Typ für Generics finden mit default operator/literal. \
+
+    *Reference Types*  
+    Null mit "is null" prüfen, da == Operator überschrieben/overloaded werden kann. \
+
+    *Value Types* sind beim Check immer false. Compilerfehler null-check bei «T : struct»
   ],
   [
     ```cs
     public void NullExamples<T>() {
       T x1 = null;       // 2x Compilerfehler, er weiss
       T x2 = 0;          // nicht, ob Typ kompatibel ist
-      T x3 = default(T); // OK
-      T x4 = default;    // OK
+      T x3 = default(T); // OK, default operator
+      T x4 = default;    // OK, default literal
+
+
+      // Nullwerte prüfen
+      if (x1 is null)
+      {
+        /* ... */
+      }
     }
     ```
   ],
@@ -3128,20 +3191,35 @@ Diese Typen werden _Nullable Types_ genannt.
 == Nullable Value Types (Structs)
 #grid(
   [
-    _Value Types_ kann dank Generics _`null` zugewiesen werden_. Dazu kann der Typ in die Wrapper-Klasse `System.Nullable<T>`
-    gepackt werden. Diese besitzt ein _Property `value`_, welches den tatsächlichen Wert enthält und _`HasNull`_, welches angibt,
-    ob der Wert `null` ist. Ist der Wert `null`, ist der Wert in `value` undefiniert.\
-    Wird im Status `null` auf `Value` zugegriffen, erhält man eine `InvalidOperationException`.
+    Value Types kann dank Generics `null` zugewiesen werden. Dazu den Typ in die Wrapper-Klasse `System.Nullable<T>` packen. 
+    
+    Property `value`: tatsächlicher Wert, oder *`HasNull`*.
+    
+    Zugriff auf Value in Status "null" → System.InvalidOperationException
+
+    wichtig für Datenbank *Records*
+
+    Wenn Status "null", dann ist HasValue "false" und es hat keine Value.
+    // #table(
+    //   columns: (1fr, 1fr, 1fr),
+    //   [Status], [HasValue], [Value],
+    //   [`null`], [`false`], [`?, fehlt`],
+    //   [`not null`], [`true`], [`123`],
+    // )
+
   ],
   [
     ```cs
+    // Wrapperklasse System.Nullable<T>:
     public struct Nullable<T>
       where T : struct
     {
       public Nullable(T value);
+      // Nullable<int> num1 = new Nullable<int>(10);
 
       public bool HasValue { get; }
       public T Value { get; }
+
     }
     ```
   ],
@@ -3150,7 +3228,8 @@ Diese Typen werden _Nullable Types_ genannt.
 === `T?` Syntax
 #grid(
   [
-    Syntactic Sugar, um die Lesbarkeit von Nullable Types zu erhöhen. Direkte Zuweisung von `null` möglich.
+    // Syntactic Sugar, um die Lesbarkeit von Nullable Types zu erhöhen. Direkte Zuweisung von `null` möglich.
+    Syntactic sugar für System.Nullable\<T\>
   ],
   [
     ```cs
@@ -3161,8 +3240,21 @@ Diese Typen werden _Nullable Types_ genannt.
 )
 
 === Sicheres Lesen & Type Casts von Value Types
+
+// Vertikale Trennlinie
+// #grid( 
+//   // https://forum.typst.app/t/how-to-draw-a-vertical-line-between-two-grid-columns/1123
+//   columns: (1fr, 0pt, 1fr),
+//   [ content1 ],
+//   grid.vline(stroke: 0.5pt),
+//   block(),
+//   [ content2 ],
+// )
+
+
 #v(0.1em)
 #grid(
+  columns: (0.8fr, 0pt, 1fr),
   [
     *Lesen*
     #v(-0.5em)
@@ -3170,12 +3262,14 @@ Diese Typen werden _Nullable Types_ genannt.
     int? x = null;
     // Klassisch
     int x1 = x.HasValue ? x.Value : default;
-    // Via Methode
+    // Via Methode die in C# immer vorhanden ist
     int x2 = x.GetValueOrDefault();
     // Via Methode & eigenem Default
     int x3 = x.GetValueOrDefault(-1);
     ```
   ],
+  grid.vline(stroke: 0.5pt),
+  block(),
   [
     *Type Casts*
     #v(-0.5em)
@@ -3208,8 +3302,8 @@ Diese Typen werden _Nullable Types_ genannt.
       [`x + z`], [`int?`], [`null`],
       [`x + null`], [`int?`], [`null`],
       [`x + null < y`], [`bool`], [`false`],
-      [`x + null == z`], [`bool`], [`true`],
       [`x + null >= z`], [`bool`], [`false`],
+      [`x + null == z`], [`bool`], [`true`],
     )
   ],
 )
@@ -3226,10 +3320,15 @@ welches bereits mit null-state analysis geprüft wurde oder die Referenz wurde i
 
 #grid(
   [
+    *? Nullable Annotation* \
     Der _Typ einer Reference Variable_ kann wie bei den Value Types mit einem _Fragezeichen_ versehen werden: _`string?`_.\
-    Ebenfalls möglich ist der _Null-forgiving Operator `!`_ hinter einem Wert oder einer Variable, welche explizit erlaubt,
-    eine non-nullable Variable auf `null` zu setzen. _Extrem gefährlich_, sollte nur mit Bedacht eingesetzt werden,
-    da damit Compiletime und Runtime inkonsistent werden.
+    Markiert Variable als Nullable.
+    // Ebenfalls möglich ist der _Null-forgiving Operator `!`_ hinter einem Wert oder einer Variable, welche explizit erlaubt,
+    // eine non-nullable Variable auf `null` zu setzen. _Extrem gefährlich_, sollte nur mit Bedacht eingesetzt werden,
+    // da damit Compiletime und Runtime inkonsistent werden.
+    \ 
+    *! Null-forgiving Operator* \
+    Null-forgiving Operator ! übersteuert den null-state explizit. Kann non-nullable Variable auf null setzen. Gefährlich.
 
   ],
   [
@@ -3257,8 +3356,7 @@ Um den Umgang mit Nullable Types zu erleichtern, gibt es _eigene Operatoren_ fü
     Mit den ```cs is null``` / ```cs is not null``` Operatoren kann auf `null` überprüft werden.
     _Bei Value Types_ wird `HasValue` abgefragt, _bei Reference Types_ #hinweis[(auch ohne `?`)]
     mit `ReferenceEquals()`, ob es sich um eine Null-Referenz handelt.
-    _`obj is null`_ ist _`obj == null`_ vorzuziehen, da #no-ligature[`==`] manuell überschrieben worden sein könnte und
-    dadurch evtl. abweichende Logik besitzt.
+    _`obj is null`_ ist _`obj == null`_ vorzuziehen, da #no-ligature[`==`] manuell überschrieben worden sein könnte.
   ],
   [
     ```cs
