@@ -7,6 +7,7 @@
   fach: "MsTe",
   fach-long: ".NET Technologien",
   semester: "HS25",
+  language: "de",
   tableofcontents: (enabled: true, depth: 2, columns: 2),
   font-size: 10pt,
 )
@@ -36,8 +37,19 @@
 
 
 
+!TODO im Dokument beachten, lösen
 
-!TODO im Dokument beachten
+
+=== Wichtige Inhalte
+@init-reihenfolge
+@lambda-func-action
+
+#include "mste-kurz.typ"
+
+#pagebreak()
+
+
+
 
 = Überblick & Architektur
 === Common Intermediate Language (CIL)
@@ -105,10 +117,10 @@ Es gibt 2 Kategorien, _Reference- und Value-Typen_. Auch wird _Boxing/Unboxing_ 
 _Reflection:_ Programmatisches Abfragen des Typensystems. Ist für alle Typen verfügbar
 #hinweis[(ausser Security-Einschränkungen vorhanden)], erweiterbar über "Custom Attributes" (siehe @custom-attribute).
 
+// finde ich weniger wichtig, eher unwichtig:
+== Weitere Informationen
+=== Vergleich .NET, .NET Core und .NET Framework
 
-
-// finde ich weniger wichtig:
-== Vergleich .NET, .NET Core und .NET Framework
 #table(
   columns: (1fr,) * 3,
   table.header([.NET Framework (2002-2019)], [.NET Core (2016-2019)], [.NET (ab 2020)]),
@@ -126,7 +138,7 @@ _Reflection:_ Programmatisches Abfragen des Typensystems. Ist für alle Typen ve
   ],
 )
 
-== .NET Plattform Grundstruktur
+=== .NET Plattform Grundstruktur
 - _Common Language Runtime (CLR):_ Mächtige Laufzeitumgebung für verschiedene Sprachen, ähnlich Java Virtual Machine.
   - *Common Type System (CTS):* Gemeinsames Typensystem für alle .NET-Sprachen.
   - *Common Language Specification (CLS):* Gemeinsame Sprach-Eigenschaften für alle .NET-Sprachen.
@@ -136,7 +148,7 @@ _Reflection:_ Programmatisches Abfragen des Typensystems. Ist für alle Typen ve
   - Umfangreiche Klassen für XML, JSON, Zugriff auf Dateisystem
   - *Windows Presentation Foundation (WPF) / Windows Forms:* Klassen für Windows-GUIs
 
-== Common Language Runtime (CLR)
+=== Common Language Runtime (CLR)
 #grid(
   columns: (1.1fr, 1fr),
   [
@@ -153,8 +165,6 @@ _Reflection:_ Programmatisches Abfragen des Typensystems. Ist für alle Typen ve
   ],
   image("img/dotnet_01.png"),
 )
-
-
 
 // wieder wichtig
 #grid(
@@ -1121,8 +1131,6 @@ Der _Zugriff_ ist jedoch _nicht schneller_, weil der _Boundary-Check_ nur bei 1-
 )
 
 == Methoden
-In anderen Sprachen _"Funktionen"_ genannt.
-
 === Statische Methoden
 #grid(
   [
@@ -1381,7 +1389,7 @@ In anderen Sprachen _"Funktionen"_ genannt.
   ],
 )
 
-== (Info) 
+=== (Info) 
 #grid(
   [
      Property kann sich ändern 
@@ -1419,7 +1427,7 @@ In anderen Sprachen _"Funktionen"_ genannt.
 )
 
 
-== Expression-Bodied Members
+=== Expression-Bodied Members
 #grid(
   [
     Methoden #hinweis[(und Operatoren, Konstruktoren, Properties)] mit genau einem Statement.
@@ -1545,6 +1553,7 @@ Ein Default Constructor hat keine Parameter. Er hat in Klassen und Structs ander
 #grid(
   [
     === Initialisierungsreihenfolge ohne Vererbung
+    <init-reihenfolge>
     Statische Klassenvariablen $->$ Statische Konstruktoren\ $->$ normale Klassenvariablen $->$ normaler Konstruktor.
 
     Beim _zweiten Aufruf_ der Klasse wird der _statische Teil weggelassen_.
@@ -2826,6 +2835,7 @@ der Aufruf des Clients auf das Event nicht angepasst werden muss.
   ],
 )
 === Parameter & Type Inference
+<lambda-func-action>
 #grid(
   [
     _Lambdas_ können $0$ bis $n$ Parameter haben. Sie können als _`Func`_ oder _`Action`_ definiert sein
@@ -3270,271 +3280,6 @@ Die meisten Klassen und Interfaces aus `System.Collections` haben eine _generisc
 Häufig verwendet man auch nur die generischen Varianten.\
 *Häufig verwendet:* `List<T>`, `SortedList<T>`, `Dictionary<TKey, TValue>` #hinweis[(Hashtable)], `SortedDictionary<T>`,
 `LinkedList<T>`, `Stack<T>`, `Queue<T>`, `IEnumerable<T>`, `ICollection`
-
-
-== Kurzzusammengefasst
-=== Nullability Kurz
-siehe @nullability\
-
-#grid(
-  columns: (1fr, 0pt, 1fr),
-  [
-    _Reference Types_ \
-    Generic Reference Type mit `is null / is not null` prüfen, da == Operator überschrieben werden kann. \
-    
-    *Nullable Reference Types* 
-    ```cs
-    string s1; // Non-nullable
-    string? s2; // Nullable
-    ```
-
-    _Warnungen_
-    ```cs
-    // Activate Compiler "null" Warnings
-      #nullable enable 
-    // Deactivate Compiler "null" Warnings
-      #nullable disable
-    // Restore project default
-      #nullable restore 
-    ```
-    ```cs
-    // Null-forgiving Operator ! : keine null Warnung bei non nullable Typ = null!
-    string s3 = null!;
-    ```
-
-  ],
-  grid.vline(stroke: 0.5pt),
-  block(),
-  [
-    _Value Types_
-    Normalen (not nullable) Value Type mit `is null` zu prüfen gibt immer false (Compilerfehler wenn `T : struct`).
-    
-  
-    _Nullable Value Types_ \
-    // Grosser Unterschied zu Nullable Reference Types!\
-    Mit *T? Syntax* Value Types null zuweisen, im Hintergrund `System.Nullable<T>` Klasse. Check `is null` möglich.
-    ```cs
-    int? x = 123;
-    int? n = null;
-
-    // Klassisches lesen
-    int x1 = n.HasValue ? n.Value : default;
-    // Via Methode die in C# immer vorhanden ist
-    int x2 = n.GetValueOrDefault();
-    // Via Methode & eigenem Default
-    int x3 = n.GetValueOrDefault(-1);
-    // mit null-coalescing operator
-    int x3 = n ?? -1;
-    ```
-  ],
-
-)
-
-\
-
-#grid(
-  [
-    _Default Operator_ \
-    speichert null bei Reference Type und default Wert bei Value Type.
-    ```cs
-    public void NullExamples<T>() {
-      T x3 = default(T); // OK, default operator
-      T x4 = default;    // OK, default literal
-    }
-    ```  
-  ],
-  [
-    
-    _? null-coalescing Operatoren_\
-    Anstelle von -1 könnte auch eine throw Anweisung stehen.
-    - ?? null-coalescing operator
-    - ??= null-coalescing assignment operator
-    - ?. null-conditional operator
-    ```cs
-      int? n = null;
-      int i = n ?? -1; // output : -1
-    
-      // null-coalescing assignment operator
-      int? i = null;
-      i ??= -1
-    
-      // null-conditional
-      object o = null;
-      Action a = null;
-      string s = o?.ToString();
-      a?.Invoke(); // gesehen bei Delegates 
-    ```
-  ],
-)
-
-  
-
-\
-=== Record Types Kurz
-siehe @record-types\
-
-#grid(
-  [
-    *Record* \
-    Um in einer Klasse nur Daten zu speichern "Datenrepräsentationsklasse".
-    - immutable
-      - mit "with" einfach leicht modifizierte Kopien erzeugen
-    - readonly (initialisieren).
-    - vererbbar
-  
-   
-  ],
-  [
-     *Generierte Members*
-     - Konstruktor
-     - Properties (immutable, init only)
-     - Value equality
-       - \== und p1.Equals(p2)
-       - kein Reference-Vergleich
-       - auch Basisklassen-Properties werden beachtet)
-     - Darstellung (ToString-Methode, etc.)
-     - Vererbung wird berücksichtigt (z.B. Equality)
-  
-  ],
-)
-
-\
-\
-\
-
-#grid(
-  [ 
-    
-    *positional Syntax (mit Parametern)*
-    ```cs
-    public record [class|struct] Person (
-      int Id, 
-      string Name
-    );
-    ```
-    \
-    *Anwendungsbeispiel*
-    ```cs
-    Person p1 = new();
-    Person p2 = new(1, "Mary");
-    
-    Person p3 = p1 with { Id = 3 };
-    bool eq2 = p1 == p3; // false
-    Person p4 = p1 with { };
-    bool eq3 = p1 == p4; // true
-    ```
-  ],
-  [
-    *manuelle Deklaration (nicht empfohlen)*
-    ```cs
-    public record Person
-    {
-      // muss dann manuell den Konstruktor erstellen
-      public Person() : this(0, "") { }
-      public Person(int id, string name)
-      {
-        Id = id;
-        Name = name;
-      }
-    
-      public int Id { get; init; }
-      // mutable wäre theoretisch möglich?
-      public string Name { get; set; }
-    };
-    ```
-    
-  ],
-)
-
-
-#grid(
-  [
-      
-    *Vererbung*
-    ```cs
-    public abstract record Person(int Id);
-    public record SpecialPerson(
-      int Id,
-      string Name
-    ) : Person(Id);
-
-    // Anwendungsbeispiel
-    SpecialPerson p1 = new(1 , "Mary");
-    Person p2 = p1;
-    ```
-  ],
-  [
-    *Mixed Deklaration*
-    ```cs
-    public record Person(int Id)
-    {
-      public string Name { get; init; } 
-      public void DoSomething() { }
-    } // non-nullable Warnung
-
-    Person p1 = new(0);
-    p1.Name = ""; // Compilerfehler
-    Person p2 = new(0) { Name = "Hallo"}; // Ok
-    ```
-  ],
-)
-
-
-/*
-
-\ _Vorlage Tabelle mit Trennlinie anders_
-#grid(
-  columns: (0.9fr, 0pt, 1.1fr),
-  [
-    Spalte 1  
-  ],
-  grid.vline(stroke: 0.5pt),
-  block(),
-  [
-    Spalte 2
-  ],
-)
-
-
-
-
-
-\ _Vorlage Tabelle mit Trennlinie_
-// Vertikale Trennlinie
-// #grid( 
-//   // https://forum.typst.app/t/how-to-draw-a-vertical-line-between-two-grid-columns/1123
-//   columns: (1fr, 0pt, 1fr),
-//   [ content1 ],
-//   grid.vline(stroke: 0.5pt),
-//   block(),
-//   [ content2 ],
-// )
-
-\ _Vorlage Tabelle mit Trennlinie_
-
-#grid(
-  columns: (1fr, 0pt, 1fr),
-  [
-    Spalte 1  
-  ],
-  grid.vline(stroke: 0.5pt),
-  block(),
-  [
-    Spalte 2
-  ],
-)
-\ _Vorlage Tabelle ohne Trennlinie_
-#grid(
-  [
-    Spalte 1  
-  ],
-  [
-    Spalte 2
-  ],
-)
-// */
-\
-
 
 == Nullability Vollständig
 <nullability>
