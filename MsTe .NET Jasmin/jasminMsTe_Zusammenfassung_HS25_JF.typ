@@ -132,6 +132,8 @@ _Vorteile:_ Erlaubt Release-Zyklen unabhängig von .NET/Sprachreleases, Erhöht 
 - _Deployment:_ Lokales NuGet Repository auf Entwicklungsrechner, Self-hosted NuGet Repository oder Hosted NuGet Repository.
 
 = Memory Layout
+einfaches Beispiel bei @memory-modell
+boxing Beispiel bei @boxing-unboxing
 
 !TODO hier Beispiele Memory Layout ergänzen
 
@@ -903,6 +905,7 @@ Der _Zugriff_ ist jedoch _nicht schneller_, weil der _Boundary-Check_ nur bei 1-
 )
 
 == Memory Modell
+<memory-modell>
 #v(-0.5em)
 === Beispiel Klasse (Call by Reference)
 #grid(
@@ -3102,54 +3105,272 @@ Häufig verwendet man auch nur die generischen Varianten.\
 `LinkedList<T>`, `Stack<T>`, `Queue<T>`, `IEnumerable<T>`, `ICollection`
 
 
-== Nullability
+== Kurzzusammengefasst
 === Nullability Kurz
+siehe @nullability\
+
 #grid(
-  columns: (0.8fr, 0pt, 1fr),
+  columns: (1fr, 0pt, 1fr),
   [
-    *Default Operator* \
+    _Reference Types_ \
+    Generic Reference Type mit `is null / is not null` prüfen, da == Operator überschrieben werden kann. \
+    
+    *Nullable Reference Types* 
+    ```cs
+    string s1; // Non-nullable
+    string? s2; // Nullable
+    ```
+
+    _Warnungen_
+    ```cs
+    // Activate Compiler "null" Warnings
+      #nullable enable 
+    // Deactivate Compiler "null" Warnings
+      #nullable disable
+    // Restore project default
+      #nullable restore 
+    ```
+    ```cs
+    // Null-forgiving Operator ! : keine null Warnung bei non nullable Typ = null!
+    string s3 = null!;
+    ```
+
+  ],
+  grid.vline(stroke: 0.5pt),
+  block(),
+  [
+    _Value Types_
+    Normalen (not nullable) Value Type mit `is null` zu prüfen gibt immer false (Compilerfehler wenn `T : struct`).
+    
+  
+    _Nullable Value Types_ \
+    // Grosser Unterschied zu Nullable Reference Types!\
+    Mit *T? Syntax* Value Types null zuweisen, im Hintergrund `System.Nullable<T>` Klasse. Check `is null` möglich.
+    ```cs
+    int? x = 123;
+    int? n = null;
+
+    // Klassisches lesen
+    int x1 = n.HasValue ? n.Value : default;
+    // Via Methode die in C# immer vorhanden ist
+    int x2 = n.GetValueOrDefault();
+    // Via Methode & eigenem Default
+    int x3 = n.GetValueOrDefault(-1);
+    // mit null-coalescing operator
+    int x3 = n ?? -1;
+    ```
+  ],
+
+)
+
+\
+
+#grid(
+  [
+    _Default Operator_ \
     speichert null bei Reference Type und default Wert bei Value Type.
     ```cs
     public void NullExamples<T>() {
       T x3 = default(T); // OK, default operator
       T x4 = default;    // OK, default literal
     }
-    ```
+    ```  
+  ],
+  [
     
-    
-    *Reference Types* \
-    Null mit `is null` prüfen, da == Operator überschrieben werden kann. \
-    
-    *Value Types*
-    Normalen (not nullable) Value Type mit `is null` prüfen ist immer false (Compilerfehler bei `T : struct`).
-    
-    *T? Syntax*
-    Value Types null zuweisen, im Hintergrund `System.Nullable<T>` Klasse.
+    _? null-coalescing Operatoren_\
+    Anstelle von -1 könnte auch eine throw Anweisung stehen.
+    - ?? null-coalescing operator
+    - ??= null-coalescing assignment operator
+    - ?. null-conditional operator
     ```cs
-      int? x = 123;
-      int? y = null;
+      int? n = null;
+      int i = n ?? -1; // output : -1
+    
+      // null-coalescing assignment operator
+      int? i = null;
+      i ??= -1
+    
+      // null-conditional
+      object o = null;
+      Action a = null;
+      string s = o?.ToString();
+      a?.Invoke(); // gesehen bei Delegates 
     ```
   ],
-  grid.vline(stroke: 0.5pt),
-  block(),
+)
+
+  
+
+\
+=== Record Types Kurz
+siehe @record-types\
+
+#grid(
   [
-    ```cs
-    public void NullExamples<T>() {
-      T x3 = default(T); // OK, default operator
-      T x4 = default;    // OK, default literal
+    *Record* \
+    Um in einer Klasse nur Daten zu speichern "Datenrepräsentationsklasse".
+    - immutable
+      - mit "with" einfach leicht modifizierte Kopien erzeugen
+    - readonly (initialisieren).
+    - vererbbar
+  
+   
+  ],
+  [
+     *Generierte Members*
+     - Konstruktor
+     - Properties (immutable, init only)
+     - Value equality
+       - \== und p1.Equals(p2)
+       - kein Reference-Vergleich
+       - auch Basisklassen-Properties werden beachtet)
+     - Darstellung (ToString-Methode, etc.)
+     - Vererbung wird berücksichtigt (z.B. Equality)
+  
+  ],
+)
+
+\
+\
+\
+
+#grid(
+  [ 
     
-      // Nullwerte prüfen
-      if (x1 is null)
+    *positional Syntax (mit Parametern)*
+    ```cs
+    public record [class|struct] Person (
+      int Id, 
+      string Name
+    );
+    ```
+    \
+    *Anwendungsbeispiel*
+    ```cs
+    Person p1 = new();
+    Person p2 = new(1, "Mary");
+    
+    Person p3 = p1 with { Id = 3 };
+    bool eq2 = p1 == p3; // false
+    Person p4 = p1 with { };
+    bool eq3 = p1 == p4; // true
+    ```
+  ],
+  [
+    *manuelle Deklaration (nicht empfohlen)*
+    ```cs
+    public record Person
+    {
+      // muss dann manuell den Konstruktor erstellen
+      public Person() : this(0, "") { }
+      public Person(int id, string name)
       {
-        /* ... */
+        Id = id;
+        Name = name;
       }
-    }
+    
+      public int Id { get; init; }
+      // mutable wäre theoretisch möglich?
+      public string Name { get; set; }
+    };
+    ```
+    
+  ],
+)
+
+
+#grid(
+  [
+      
+    *Vererbung*
+    ```cs
+    public abstract record Person(int Id);
+    public record SpecialPerson(
+      int Id,
+      string Name
+    ) : Person(Id);
+
+    // Anwendungsbeispiel
+    SpecialPerson p1 = new(1 , "Mary");
+    Person p2 = p1;
+    ```
+  ],
+  [
+    *Mixed Deklaration*
+    ```cs
+    public record Person(int Id)
+    {
+      public string Name { get; init; } 
+      public void DoSomething() { }
+    } // non-nullable Warnung
+
+    Person p1 = new(0);
+    p1.Name = ""; // Compilerfehler
+    Person p2 = new(0) { Name = "Hallo"}; // Ok
     ```
   ],
 )
 
 
+/*
 
+\ _Vorlage Tabelle mit Trennlinie anders_
+#grid(
+  columns: (0.9fr, 0pt, 1.1fr),
+  [
+    Spalte 1  
+  ],
+  grid.vline(stroke: 0.5pt),
+  block(),
+  [
+    Spalte 2
+  ],
+)
+
+
+
+
+
+\ _Vorlage Tabelle mit Trennlinie_
+// Vertikale Trennlinie
+// #grid( 
+//   // https://forum.typst.app/t/how-to-draw-a-vertical-line-between-two-grid-columns/1123
+//   columns: (1fr, 0pt, 1fr),
+//   [ content1 ],
+//   grid.vline(stroke: 0.5pt),
+//   block(),
+//   [ content2 ],
+// )
+
+\ _Vorlage Tabelle mit Trennlinie_
+
+#grid(
+  columns: (1fr, 0pt, 1fr),
+  [
+    Spalte 1  
+  ],
+  grid.vline(stroke: 0.5pt),
+  block(),
+  [
+    Spalte 2
+  ],
+)
+\ _Vorlage Tabelle ohne Trennlinie_
+#grid(
+  [
+    Spalte 1  
+  ],
+  [
+    Spalte 2
+  ],
+)
+// */
+\
+
+
+== Nullability Vollständig
+<nullability>
 === Nullability Vollständig
 Structs / Nullable Value Types: Null-Zustand musst quasi erzwungen werden, weil keine Referenz/Zustand existiert.
 Klassen / Nullable Reference Types: Null-Zustand (Null Reference) ist in Runtime abgebildet. Zugriff auf Null References führt zu "NullReferenceException"
@@ -3241,15 +3462,6 @@ Klassen / Nullable Reference Types: Null-Zustand (Null Reference) ist in Runtime
 
 === Sicheres Lesen & Type Casts von Value Types
 
-// Vertikale Trennlinie
-// #grid( 
-//   // https://forum.typst.app/t/how-to-draw-a-vertical-line-between-two-grid-columns/1123
-//   columns: (1fr, 0pt, 1fr),
-//   [ content1 ],
-//   grid.vline(stroke: 0.5pt),
-//   block(),
-//   [ content2 ],
-// )
 
 
 #v(0.1em)
@@ -3326,16 +3538,19 @@ welches bereits mit null-state analysis geprüft wurde oder die Referenz wurde i
     // Ebenfalls möglich ist der _Null-forgiving Operator `!`_ hinter einem Wert oder einer Variable, welche explizit erlaubt,
     // eine non-nullable Variable auf `null` zu setzen. _Extrem gefährlich_, sollte nur mit Bedacht eingesetzt werden,
     // da damit Compiletime und Runtime inkonsistent werden.
-    \ 
-    *! Null-forgiving Operator* \
-    Null-forgiving Operator ! übersteuert den null-state explizit. Kann non-nullable Variable auf null setzen. Gefährlich.
+    \ \ *! Null-forgiving Operator* \
+    Null-forgiving Operator ! übersteuert den null-state explizit, keine Warnung bei nonnullable Type. Gefährlich.
 
+    ```cs
+    string notNullable1 = null; // Warning: Converting null literal or possible null value to non-nullable type.
+    string notNullable2 = null; // Keine Warnung wegen !
+    ```
   ],
   [
     ```cs
     string? nameNull = null;
     string name = nameNull; // Warning
-
+    
     if (nameNull is null) { // oder `nameNull == null`
       name = nameNull;      // Warning
       name = nameNull!;     // OK, but wrong
@@ -3343,6 +3558,11 @@ welches bereits mit null-state analysis geprüft wurde oder die Referenz wurde i
       name = nameNull;      // OK
     }
     ```
+    // ```cs
+    // // value type:
+    // int s5 = null!; // fehler: non-nullable value type
+    // // int? s6 = null!; // is null = true
+    // ```
   ],
 )
 
@@ -3393,8 +3613,9 @@ Um den Umgang mit Nullable Types zu erleichtern, gibt es _eigene Operatoren_ fü
 === Null-coalescing assignment operator: `??=`
 #grid(
   [
-    Unärer Operator, welcher der _Variable links_ den _Wert rechts zuweist_, wenn die Variable `null` ist.
-    Hat dasselbe Verhalten wie die anderen Assignment-Operatoren.
+    Null Wert bei ausgewählter Variable ersetzen. 
+    // Unärer Operator, welcher der _Variable links_ den _Wert rechts zuweist_, wenn die Variable `null` ist.
+    // Hat dasselbe Verhalten wie die anderen Assignment-Operatoren.
   ],
   [
     ```cs
@@ -3423,7 +3644,8 @@ Um den Umgang mit Nullable Types zu erleichtern, gibt es _eigene Operatoren_ fü
   ],
 )
 
-== Record Types
+== Record Types Vollständig
+<record-types>
 ```cs public record [class|struct] Person(int Id, string Name);```\
 Ein Record ist eine reine _Datenrepräsentationsklasse_, welche nur initialisierbar ist #hinweis[(immutable)].
 Vereinfacht Arbeit mit nullable Reference Types. _Compiler generiert eigene Klasse mit diversen Member_
