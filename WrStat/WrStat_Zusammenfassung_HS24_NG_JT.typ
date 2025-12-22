@@ -38,10 +38,17 @@
 
 
 = Hitchhiker's Guide to WrStat
-#hinweis[*Hinweis:* In der Zusammenfassung werden Anweisungen zur Taschenrechnerbenutzung gegeben. Diese beziehen sich auf
-  den TI nSpire CX II-T und das Skript auf #underline[https://github.com/KROIA/OST_WrStat]. Das Skript mithilfe der Software,
-  die dem TR beilag, in den "MyLib"-Ordner auf dem TR kopieren, dann im Scratchpad Menu-1-7-1 (Bibliotheken aktualisieren)
-  auswählen. Nun sind alle Funktionen des Skripts im Scratchpad mit der Buch-Taste $->$ 6 $->$ wrstat erreichbar.]
+#hinweis[*Hinweis:* In der Zusammenfassung werden Anweisungen zur Taschenrechnerbenutzung gegeben. Diese beziehen sich
+  auf den TI nSpire CX II-T und das Skript auf #underline[https://github.com/KROIA/OST_WrStat].
+  
+  Das Skript kann entweder mithilfe der Software, die dem TR beilag, oder der Webseite
+  #underline[https://nspireconnect.ti.com/nsc/] auf den TR kopiert werden. Die Webseite ist nur mit Chrome auf Mac oder
+  Windows verwendbar, auf Linux muss der User Agent manuell angepasst werden.
+  
+  Wenn das Skript in den "MyLib"-Ordner abgelegt und im Scratchpad Menu-1-7-1 (Bibliotheken aktualisieren) ausgewählt
+  wird, sind anschliessend alle Funktionen des Skripts direkt im Scratchpad mit der Buch-Taste $->$ 6 $->$ wrstat
+  erreichbar.
+]
 
 Nachfolgend ist die Reihenfolge einer typischen WrStat-Prüfung von Andreas Müller:
 
