@@ -527,64 +527,6 @@ public class Object {
 }
 ```
 
-== Strings
-```cs string s1 = "Test";```
-
-Ein `string` ist ein _reference type_ und _nicht modifizierbar_ #hinweis[(Modifizierung wird in einen Aufruf
-von `System.String.Concat(...)` umgewandelt, ein neuer `string` wird kreiert)]. Eine _Verkettung_ ist mit dem `+` Operator
-möglich und ein _Wertevergleich_ mit `==` oder `equals()`. Ein C\# `string` ist _nicht_ mit `\0` terminiert.
-_Indexierung_ ist möglich, Die Länge wird mit dem `.Length`-Property ermittelt.
-
-=== String Interpolation
-Mit einem `$` vor dem String können Werte und Expressions innerhalb von `{...}` direkt in einen String evaluiert und eingefügt werden.\
-```cs string s2 = $"{DateTime.Now}: {(DateTime.Now.Hour < 18 ? "Hello" : "Good Evening")}";```
-
-=== Raw String Literals
-#grid(
-  columns: (1.1fr, 1fr),
-  [
-    Mehrzeilige Strings ohne spezielle Behandlung des Inhalts\
-    #hinweis[(keine Escape-Sequences, alle Characters sind "normaler Text")]
-    - Deklariert mit _mindestens 3 Double Quotes_ #hinweis[(erlaubt mehrere aufeinanderfolgende Double Quotes im Raw String,
-      muss immer mit 1 Double Quote mehr initialisiert werden, als im String beinhaltet)]
-    - _Einrückung:_ Die Position der "closing quote" definiert das\ 0-te Level #hinweis[(linker Rand)] des Raw Strings.
-    - _Verwendung:_ Einbetten von strukturierten Text-Daten #hinweis[(JSON, XML)], Text bei welchem Whitespace-Formatierung relevant ist.
-  ],
-  [
-    ```cs
-    string s3 =
-    """
-    {
-      "Name": "Nina",
-      "Profession": "WordPress Web Dev"
-    }
-    "" \ \\ ' ''
-    """;
-    ```
-  ],
-)
-
-=== Verbatim String Literals
-#grid(
-  columns: (1.1fr, 1fr),
-  [
-    Simplere Variante des Raw Strings.
-    - Deklariert mit _`@"[string]"`_
-    - Double Quotes müssen mit einem zweiten Double Quote escaped werden
-    - _Verwendung:_ Simple (Multiline-)Strings mit Escape-Chars, z.B. Windows-Dateipfade
-  ],
-  [
-    ```cs
-    string str;
-    // file "C:\sample.txt"
-    str = "file \"C:\\sample.txt\"";
-    str = "file \x0022C:\u005csample.txt\x0022";
-    str = @"file
-    ""C:\sample.txt""";
-    // newline inside verbatim string is ignored
-    ```
-  ],
-)
 
 === Vergleiche
 Bei C\# wird mit #no-ligature(`==`), #no-ligature(`!=`) und `Equals()` der _Inhalt_ der Strings verglichen.
@@ -604,44 +546,6 @@ string s3 = string.Copy(s1);
 bool result5 = string.Equals(s1, s3);          // True
 bool result6 = string.ReferenceEquals(s1, s3); // False
 ```
-
-
-
-== Symbole
-#v(-0.5em)
-=== Identifiers
-Sind _Case-sensitive_, Unicode kann verwendet werden. Wenn ein _Schlüsselwort_ als Identifier verwendet werden soll,
-muss ein `@` vor das Schlüsselwort gestellt werden.\
-_Syntax:_ `(letter | '_' | '@' ){ letter | digit | '_' }`\
-```cs string someName; int sum_of3; int _10percent; int @while; double 🍆; double \u03c0; int f\u0061ck;```
-
-=== Schlüsselwörter
-Im Vergleich zu anderen Sprachen hat C\# relativ viele Schlüsselwörter. Viele sind aber kontextabhängig und werden beim
-Schreiben von "normalem" Code wenig verwendet.
-#small[
-  ```
-  abstract         as               base              bool                    break                    byte
-  case             catch            char              checked                 class                    const
-  continue         decimal          default           delegate                do                       double
-  else             enum             event             explicit                extern                   false
-  finally          fixed            float             for                     foreach                  goto
-  if               implicit         in                in (generic modifier)   int                      interface
-  internal         is               lock              long                    namespace                new
-  null             object           operator          out                     out (generic modifier)   override
-  params           private          protected         public                  readonly                 ref
-  return           sbyte            sealed            short                   sizeof                   stackalloc
-  static           string           struct            switch                  this                     throw
-  true             try              typeof            uint                    ulong                    unchecked
-  unsafe           ushort           using             virtual                 void                     volatile
-  while
-  ```
-]
-
-=== Kommentare
-- _Single-Line:_ ```cs // ...```
-- _Multi-Line:_ ```cs /* ... */```
-- _Dokumentation von Methoden, Feldern, Properties:_
-  ```cs /// <summary>...</summary> <returns>...</returns>```
 
 == Primitivtypen
 #v(-0.5em)
@@ -696,6 +600,138 @@ Schreiben von "normalem" Code wenig verwendet.
   ],
 )
 
+
+
+
+
+
+
+=== Typkompatibilität
+#figure(
+  image("img/dotnet_07.png"),
+  caption: [#hinweis[Typen mit validem Pfad werden implizit konvertiert, bei anderen ist ein expliziter Type Cast nötig]],
+)
+
+Übersicht einiger Beispiel-Casts. Links: Typ der Zielvariable, Rechts: Typ des Quellvariable
+#table(
+  columns: (1fr, 1fr),
+  table.header([Erlaubt], [Nicht erlaubt ohne Cast]),
+  [
+    ```
+    int = short;       decimal = (decimal)double;
+    float = char;      byte = (byte)long;
+    decimal = long;    uint = (uint)int;
+    double = byte;     decimal = char; (!)
+    ```
+  ],
+  [
+    ```
+    short = int;
+    char = int;
+    char = float;
+    decimal = float;
+    ```
+  ],
+)
+
+= Syntax
+
+== Strings
+```cs string s1 = "Test";```
+
+Ein `string` ist ein _reference type_ und _nicht modifizierbar_ #hinweis[(Modifizierung wird in einen Aufruf
+  von `System.String.Concat(...)` umgewandelt, ein neuer `string` wird kreiert)]. Eine _Verkettung_ ist mit dem `+` Operator
+möglich und ein _Wertevergleich_ mit `==` oder `equals()`. Ein C\# `string` ist _nicht_ mit `\0` terminiert.
+_Indexierung_ ist möglich, Die Länge wird mit dem `.Length`-Property ermittelt.
+
+=== String Interpolation
+Mit einem `$` vor dem String können Werte und Expressions innerhalb von `{...}` direkt in einen String evaluiert und eingefügt werden.\
+```cs string s2 = $"{DateTime.Now}: {(DateTime.Now.Hour < 18 ? "Hello" : "Good Evening")}";```
+
+=== Raw String Literals
+#grid(
+  columns: (1.1fr, 1fr),
+  [
+    Mehrzeilige Strings ohne spezielle Behandlung des Inhalts\
+    #hinweis[(keine Escape-Sequences, alle Characters sind "normaler Text")]
+    - Deklariert mit _mindestens 3 Double Quotes_ #hinweis[(erlaubt mehrere aufeinanderfolgende Double Quotes im Raw String,
+        muss immer mit 1 Double Quote mehr initialisiert werden, als im String beinhaltet)]
+    - _Einrückung:_ Die Position der "closing quote" definiert das\ 0-te Level #hinweis[(linker Rand)] des Raw Strings.
+    - _Verwendung:_ Einbetten von strukturierten Text-Daten #hinweis[(JSON, XML)], Text bei welchem Whitespace-Formatierung relevant ist.
+  ],
+  [
+    ```cs
+    string s3 =
+    """
+    {
+      "Name": "Nina",
+      "Profession": "WordPress Web Dev"
+    }
+    "" \ \\ ' ''
+    """;
+    ```
+  ],
+)
+
+=== Verbatim String Literals
+#grid(
+  columns: (1.1fr, 1fr),
+  [
+    Simplere Variante des Raw Strings.
+    - Deklariert mit _`@"[string]"`_
+    - Double Quotes müssen mit einem zweiten Double Quote escaped werden
+    - _Verwendung:_ Simple (Multiline-)Strings mit Escape-Chars, z.B. Windows-Dateipfade
+  ],
+  [
+    ```cs
+    string str;
+    // file "C:\sample.txt"
+    str = "file \"C:\\sample.txt\"";
+    str = "file \x0022C:\u005csample.txt\x0022";
+    str = @"file
+    ""C:\sample.txt""";
+    // newline inside verbatim string is ignored
+    ```
+  ],
+)
+
+
+== Symbole
+#v(-0.5em)
+=== Identifiers
+Sind _Case-sensitive_, Unicode kann verwendet werden. Wenn ein _Schlüsselwort_ als Identifier verwendet werden soll,
+muss ein `@` vor das Schlüsselwort gestellt werden.\
+_Syntax:_ `(letter | '_' | '@' ){ letter | digit | '_' }`\
+```cs string someName; int sum_of3; int _10percent; int @while; double 🍆; double \u03c0; int f\u0061ck;```
+
+=== Schlüsselwörter
+Im Vergleich zu anderen Sprachen hat C\# relativ viele Schlüsselwörter. Viele sind aber kontextabhängig und werden beim
+Schreiben von "normalem" Code wenig verwendet.
+#small[
+  ```
+  abstract         as               base              bool                    break                    byte
+  case             catch            char              checked                 class                    const
+  continue         decimal          default           delegate                do                       double
+  else             enum             event             explicit                extern                   false
+  finally          fixed            float             for                     foreach                  goto
+  if               implicit         in                in (generic modifier)   int                      interface
+  internal         is               lock              long                    namespace                new
+  null             object           operator          out                     out (generic modifier)   override
+  params           private          protected         public                  readonly                 ref
+  return           sbyte            sealed            short                   sizeof                   stackalloc
+  static           string           struct            switch                  this                     throw
+  true             try              typeof            uint                    ulong                    unchecked
+  unsafe           ushort           using             virtual                 void                     volatile
+  while
+  ```
+]
+
+=== Kommentare
+- _Single-Line:_ ```cs // ...```
+- _Multi-Line:_ ```cs /* ... */```
+- _Dokumentation von Methoden, Feldern, Properties:_
+  ```cs /// <summary>...</summary> <returns>...</returns>```
+
 ==== Lesbarkeit von numerischen Werten
 #grid(
   columns: (3fr, 2fr),
@@ -736,33 +772,6 @@ Schreiben von "normalem" Code wenig verwendet.
   ],
 )
 
-=== Typkompatibilität
-#figure(
-  image("img/dotnet_07.png"),
-  caption: [#hinweis[Typen mit validem Pfad werden implizit konvertiert, bei anderen ist ein expliziter Type Cast nötig]],
-)
-
-Übersicht einiger Beispiel-Casts. Links: Typ der Zielvariable, Rechts: Typ des Quellvariable
-#table(
-  columns: (1fr, 1fr),
-  table.header([Erlaubt], [Nicht erlaubt ohne Cast]),
-  [
-    ```
-    int = short;       decimal = (decimal)double;
-    float = char;      byte = (byte)long;
-    decimal = long;    uint = (uint)int;
-    double = byte;     decimal = char; (!)
-    ```
-  ],
-  [
-    ```
-    short = int;
-    char = int;
-    char = float;
-    decimal = float;
-    ```
-  ],
-)
 
 == Statements
 #v(-0.5em)
@@ -791,22 +800,79 @@ Schreiben von "normalem" Code wenig verwendet.
   ],
 )
 
+=== Loops
+#grid(
+  columns: (1fr,) * 2,
+  [
+    @lambda-expressions
+  ],
+  [
+    ```cs
+    // Lambda Syntax
+    list.ForEach( i => Console.WriteLine(i));
+    list.ForEach(i => sum += 1);
+    ```
+  ],
+)
+#grid(
+  columns: (1fr,) * 2,
+  [
+    Foreach
+  ],
+  [
+    ```cs
+    foreach (int x in array)
+    {
+    sum += x;
+    }
+    ```
+  ],
+)
+#grid(
+  columns: (1fr,) * 2,
+  [
+    Foor Loop
+  ],
+  [
+    ```cs
+    int sum = 0;
+    for (int i = 1; i <= 3; i++)
+    {
+      sum += i;
+    }
+    ```
+  ],
+)
+
 === Jumps
 #grid(
   columns: (1fr,) * 2,
   [
     - _`break`:_ Aktuellen Loop beenden
     - _`continue`:_ Zur nächsten Loop-Iteration #hinweis[(z.B. nächstes Item in `foreach`)]
-  ],
-  [
     - _`goto` case:_ Sprung zu Case innerhalb eines `switch`
     - _`goto` label:_ Sprung zum Label #hinweis[(Keine Sprünge in Methoden hinein oder aus `finally`-Block heraus)]
+  ],
+  [
+    ```cs
+    for (int i = 0; i < 10; i++)
+    {
+      if (i == 1) { continue; }
+      if (i == 3) { goto myLabel; }
+      if (i == 5) { break; }
+      Console.WriteLine(i);
+      myLabel: ;
+    }
+    // Ausgabe:
+    // 0
+    // 2
+    // 4
+    ```
   ],
 )
 
 
-
-= Arrays
+== Arrays
 Einfachste Datenstruktur für _Listen_. Können _eindimensional_, _mehrdimensional_ und _rechteckig_ oder _ausgefranst/jagged_ sein.
 Die Länge _aller Dimensionen_ ist bei der Instanzierung bekannt. _Alle Werte_ sind nach der Instanzierung initialisiert
 #hinweis[(`false, 0, null,` etc.)]. Arrays sind _zero-based_ und immer auf dem _Heap_.
@@ -847,6 +913,8 @@ array5 = { 1, 2, 3, 4, 5, 6 };          // Compilerfehler, Zuweisung ohne new un
     a[0, 1] = 9;                       // Schreiben
     int x = a[0, 1];                   // Lesen - returns 9
     int[,] b = { { 1, 2 }, { 4, 5 } }; // Deklaration & Wertedefinition
+
+
     ```
   ],
   image("img/dotnet_05.png"),
@@ -888,6 +956,9 @@ int length1 = a[1].Length; // returns 1 - Länge des zweiten Arrays
 - _Schnellere Garbage Collection:_ Weniger Verwaltungsaufwand weil nur 1 Array statt $n + 1$
 
 Der _Zugriff_ ist jedoch _nicht schneller_, weil der _Boundary-Check_ nur bei 1-dimensionalen Arrays optimiert wird.
+
+
+
 
 
 = Klassen & Structs
@@ -944,6 +1015,7 @@ Der _Zugriff_ ist jedoch _nicht schneller_, weil der _Boundary-Check_ nur bei 1-
 #pagebreak()
 
 == Klassen
+
 #grid(
   [
     Klassen sind _reference Types_, d.h. sie werden auf dem _Heap_ angelegt.
@@ -1076,6 +1148,239 @@ Der _Zugriff_ ist jedoch _nicht schneller_, weil der _Boundary-Check_ nur bei 1-
   ],
 )
 
+
+== Konstruktoren
+#grid(
+  [
+    Bei jedem Erzeugen einer Klasse / eines Structs verwendet #hinweis[(Aufruf von "`new()`")].
+    Default-Konstruktor #hinweis[(ohne Parameter)] wird generiert, falls keiner definiert.
+    _Private Konstruktoren_ können nur intern verwendet werden.
+    Es wird _kein_ Default-Konstruktor erzeugt, wenn ein privater Konstruktor existiert.
+  ],
+  [
+    ```cs
+    class MyClass {
+      private int _x, _y;
+      public MyClass() : this(0, 0) { } // Default Ctor
+      public MyClass(int x) : this(x, 0) { }
+      public MyClass(int x, int y){_y = y; _x = x;}
+    }
+    ```
+  ],
+)
+
+*Regeln*\
+Konstruktoren können _überladen_ werden. Aufruf anderer Konstruktoren mittels ```cs this```
+#hinweis[(damit Verkettung möglich, siehe Beispiel oben)], Aufruf auf Basis-Klassen-Konstruktor mittels ```cs base```.
+
+#grid(
+  [
+    === Primary Constructors
+    Vereinfachung / Verkürzung der Konstruktorlogik. Die Werte für die Konstruktoren werden der Klasse selbst
+    als Parameter mitgegeben, der reguläre Konstruktor fällt weg.
+    
+    *Regeln:*
+    - Klassenparameter #hinweis[(im Beispiel `x,y`)] sind innerhalb der ganzen Klasse verfügbar
+    - Können zur Initialisierung verwendet werden
+    - Können verändert werden, ist aber bad practice
+  ],
+  [
+    ```cs
+    class Point(int x, int y) {
+      // Property Initialisierung
+      public int X { get; } = x;
+      public int Y { get; } = y;
+      public void Print() {
+        // Auch in Funktionen verwendbar
+        Console.WriteLine($"Point: {x}/{y}");
+      }
+    }
+    Point p = new(1, 2); // Anwendung
+    ```
+  ],
+)
+
+=== Default Constructor
+Ein Default Constructor hat keine Parameter. Er hat in Klassen und Structs andere Eigenschaften.
+#table(
+  columns: (1fr, 1fr),
+  table.header([Klasse], [Struct]),
+  [
+    - Parameterloser Konstruktor
+    - _Nicht_ zwingend vorhanden
+    - Automatisch generiert, wenn nicht vorhanden
+    - _Nicht_ automatisch generiert, wenn anderer Konstruktor vorhanden
+    - Initialisiert Felder mit "`default`" Wert
+    - Konstruktor kann beliebig viele Felder initialisieren
+  ],
+  [
+    - Parameterloser Konstruktor
+    - _Immer_ vorhanden
+    - Automatisch generiert, wenn nicht vorhanden
+    - Automatisch generiert, wenn anderer Konstruktor vorhanden
+    - Initialisiert Felder mit "default" Wert
+    - Konstruktor muss _alle_ Felder initialisieren
+    - "`default`" Literal verwendet diesen Default-Konstruktor
+  ],
+)
+
+=== Statische Konstruktoren
+#grid(
+  [
+    Werden für statische _Initialisierungsarbeiten_ verwendet. Identisch bei Klasse & Struct.
+    
+    *Regeln*\
+    Zwingend Parameterlos, Sichtbarkeit darf nicht angegeben werden. Es ist nur _ein_ statischer Konstruktor erlaubt.
+    Wird genau _einmal_ ausgeführt: Entweder bei erster Instanzierung des Typen oder bei erstem Zugriff auf
+    statisches Member des Typen. Kann _nicht_ explizit aufgerufen werden.
+  ],
+  [
+    ```cs
+    class MyClass {
+      static MyClass() {
+        /* ... */
+      }
+    }
+    struct MyStruct {
+      static MyStruct() {
+        /* ... */
+      }
+    }
+    ```
+  ],
+)
+
+#grid(
+  [
+    === Initialisierungsreihenfolge ohne Vererbung
+    <init-reihenfolge>
+    Statische Klassenvariablen $->$ Statische Konstruktoren\ $->$ normale Klassenvariablen $->$ normaler Konstruktor.
+    
+    Beim _zweiten Aufruf_ der Klasse wird der _statische Teil weggelassen_.
+  ],
+  [
+    ```cs
+    class Base { // Zahl = Aufruf-Reihenfolge
+      private static int _baseStaticValue = 0; // 1.
+      private int _baseValue = 0;              // 3.
+      static Base() {}                         // 2.
+      public Base() {}                         // 4.
+    }
+    ```
+  ],
+)
+
+=== Initialisierungsreihenfolge mit Vererbung
+#grid(
+  [
+    _Zuerst in Subklasse:_ Statische Klassenvariablen $->$ Statische Konstruktoren $->$ normale Klassenvariablen,
+    dann Reihenfolge in _Basisklasse_ wie ohne Vererbung, zuletzt _normaler Konstruktor_ von _Subklasse_.
+    
+    Beim _zweiten Aufruf_ der Subklasse wird der _statische Teil_ in Sub und Base _weggelassen_.
+  ],
+  [
+    ```cs
+    class Sub : Base { // Sub-Aufruf / Base-Aufruf
+      private static int _subStaticValue = 0; // 1. / 4.
+      private int _subValue = 0;              // 3. / 6.
+      static Sub() {}                         // 2. / 5.
+      public Sub() {}                         // 8. / 7.
+    }
+    ```
+  ],
+)
+
+=== Konstruktoren in Base- und Subklasse
+#table(
+  columns: (1fr,) * 4,
+  table.header(table.cell(colspan: 3)[Impliziter Aufruf des Basisklassenkonstruktors], [Expliziter Aufruf]),
+  [
+    ```cs
+    class Base {
+    // Default Constructor
+    }
+    class Sub : Base {
+      public Sub(int x) {}
+    }
+    ```
+  ],
+  [
+    ```cs
+    class Base {
+      public Base() {}
+    }
+    class Sub : Base {
+      public Sub(int x) {}
+    }
+    ```
+  ],
+  [
+    ```cs
+    class Base {
+      public Base(int x) {}
+    }
+    class Sub : Base {
+      public Sub(int x) {}
+    }
+    ```
+  ],
+  [
+    ```cs
+    class Base {
+      public Base(int x) {}
+    }
+    class Sub : Base {
+      public Sub(int x)
+        : base(x) {}
+    }
+    ```
+  ],
+  table.cell(colspan: 4, align: center)[```cs Sub s = new Sub(1);```],
+  [
+    Konstruktoraufrufe OK
+    - ```cs Base()```
+    - ```cs Sub(int x)```
+  ],
+  [
+    Konstruktoraufrufe OK
+    - ```cs Base()```
+    - ```cs Sub(int x)```
+  ],
+  [
+    _Compilerfehler!_\
+    Default-Konstruktor für `Base` nicht mehr automatisch erzeugt
+  ],
+  [
+    Konstruktoraufrufe OK
+    - ```cs Base(int x)```
+    - ```cs Sub(int x)```
+  ],
+)
+
+=== Destruktoren / Finalizer
+#grid(
+  [
+    Finalizer ermöglichten _Abschlussarbeiten_ beim Abbau eines Objekts. Nur bei _Klassen_.
+    Zwingend _parameterlos_ und ohne Visibility. Nur _1 Finalizer_ pro Klasse erlaubt.
+    
+    Wird nicht-deterministisch vom Garbage Collector aufgerufen,
+    _kein expliziter Aufruf_ möglich. Danach Aufruf von Finalizer der Basisklasse.
+    Vergleiche Kapitel @deterministic-finalization.
+  ],
+  [
+    ```cs
+    class MyClass {
+      ~MyClass() {
+        /* Freigabe von File-Handles,
+        Netzwerk-Streams etc. */
+      } }
+    // ~ Operator (Finalizer) wird vom Compiler
+    // in diesen Code umgewandelt
+    override void Finalize() { try {/*Code in Finalizer*/} finally { base.Finalize(); } }
+    ```
+  ],
+)
+
 == Memory Modell
 <memory-modell>
 #v(-0.5em)
@@ -1129,7 +1434,9 @@ Der _Zugriff_ ist jedoch _nicht schneller_, weil der _Boundary-Check_ nur bei 1-
 === Statische Methoden
 #grid(
   [
-    Es gibt Methoden _mit Rückgabewert_ #hinweis[(Funktionen)] und _ohne Rückgabewert_ #hinweis[(Prozedur / Aktion)].
+    Zwei Ausprägungen von statischen Methoden\
+    - Prozedur / Aktion (ohne Rückgabewert)
+    - Funktion (mit Rückgabewert)
 
     ==== Verwendung innerhalb `MyClass`:
     ```cs
@@ -1256,6 +1563,8 @@ Der _Zugriff_ ist jedoch _nicht schneller_, weil der _Boundary-Check_ nur bei 1-
 
 
 === Überladung / Overloading
+@operator-overloading
+
 #grid(
   [
     _Mehrere Methoden_ mit _gleichem Namen_ möglich.\
@@ -1359,7 +1668,9 @@ Der _Zugriff_ ist jedoch _nicht schneller_, weil der _Boundary-Check_ nur bei 1-
   [
     ```cs
     public int LengthInitOnly { get; init; }
-    MyClass mc = new() { var LengthInitOnly = 1 };
+    MyClass mc = new() { 
+      var LengthInitOnly = 1 
+    };
     mc.LengthInitOnly = 2; // Compilerfehler
     ```
   ],
@@ -1371,7 +1682,7 @@ Der _Zugriff_ ist jedoch _nicht schneller_, weil der _Boundary-Check_ nur bei 1-
     Mischung aus klassischem Property und auto-implemented Property
     - Im Getter/Setter möglich
     - Keyword *field* verwenden : für aktuelles Feld
-    - Feld kann nicht ausserhalb des Properties verwendet werden
+    - Feld kann *nicht ausserhalb des Properties verwendet werden*
   ],
   [
     ```cs
@@ -1416,9 +1727,22 @@ Der _Zugriff_ ist jedoch _nicht schneller_, weil der _Boundary-Check_ nur bei 1-
 #grid(
   [
     Properties können direkt initialisiert werden.
-  ],
-  [
-    ```cs MyClass mc = new() { Length = 1; Width = 2; }```
+    ```cs
+    MyClass mc = new() 
+    { 
+      Length = 1; 
+      Width = 2; 
+    }
+    ```
+    ],
+    [
+    ```cs 
+    
+    // <- Compiler-Output
+    MyClass mc = new();
+    mc.Length = 1;
+    mc.Width = 2
+    ```
   ],
 )
 
@@ -1445,237 +1769,6 @@ Der _Zugriff_ ist jedoch _nicht schneller_, weil der _Boundary-Check_ nur bei 1-
 
 
 
-== Konstruktoren
-#grid(
-  [
-    Bei jedem Erzeugen einer Klasse / eines Structs verwendet #hinweis[(Aufruf von "`new()`")].
-    Default-Konstruktor #hinweis[(ohne Parameter)] wird generiert, falls keiner definiert.
-    _Private Konstruktoren_ können nur intern verwendet werden.
-    Es wird _kein_ Default-Konstruktor erzeugt, wenn ein privater Konstruktor existiert.
-  ],
-  [
-    ```cs
-    class MyClass {
-      private int _x, _y;
-      public MyClass() : this(0, 0) { } // Default Ctor
-      public MyClass(int x) : this(x, 0) { }
-      public MyClass(int x, int y){_y = y; _x = x;}
-    }
-    ```
-  ],
-)
-
-*Regeln*\
-Konstruktoren können _überladen_ werden. Aufruf anderer Konstruktoren mittels ```cs this```
-#hinweis[(damit Verkettung möglich, siehe Beispiel oben)], Aufruf auf Basis-Klassen-Konstruktor mittels ```cs base```.
-
-#grid(
-  [
-    === Primary Constructors
-    Vereinfachung / Verkürzung der Konstruktorlogik. Die Werte für die Konstruktoren werden der Klasse selbst
-    als Parameter mitgegeben, der reguläre Konstruktor fällt weg.
-
-    *Regeln:*
-    - Klassenparameter #hinweis[(im Beispiel `x,y`)] sind innerhalb der ganzen Klasse verfügbar
-    - Können zur Initialisierung verwendet werden
-    - Können verändert werden, ist aber bad practice
-  ],
-  [
-    ```cs
-    class Point(int x, int y) {
-      // Property Initialisierung
-      public int X { get; } = x;
-      public int Y { get; } = y;
-      public void Print() {
-        // Auch in Funktionen verwendbar
-        Console.WriteLine($"Point: {x}/{y}");
-      }
-    }
-    Point p = new(1, 2); // Anwendung
-    ```
-  ],
-)
-
-=== Default Constructor
-Ein Default Constructor hat keine Parameter. Er hat in Klassen und Structs andere Eigenschaften.
-#table(
-  columns: (1fr, 1fr),
-  table.header([Klasse], [Struct]),
-  [
-    - Parameterloser Konstruktor
-    - _Nicht_ zwingend vorhanden
-    - Automatisch generiert, wenn nicht vorhanden
-    - _Nicht_ automatisch generiert, wenn anderer Konstruktor vorhanden
-    - Initialisiert Felder mit "`default`" Wert
-    - Konstruktor kann beliebig viele Felder initialisieren
-  ],
-  [
-    - Parameterloser Konstruktor
-    - _Immer_ vorhanden
-    - Automatisch generiert, wenn nicht vorhanden
-    - Automatisch generiert, wenn anderer Konstruktor vorhanden
-    - Initialisiert Felder mit "default" Wert
-    - Konstruktor muss _alle_ Felder initialisieren
-    - "`default`" Literal verwendet diesen Default-Konstruktor
-  ],
-)
-
-=== Statische Konstruktoren
-#grid(
-  [
-    Werden für statische _Initialisierungsarbeiten_ verwendet. Identisch bei Klasse & Struct.
-
-    *Regeln*\
-    Zwingend Parameterlos, Sichtbarkeit darf nicht angegeben werden. Es ist nur _ein_ statischer Konstruktor erlaubt.
-    Wird genau _einmal_ ausgeführt: Entweder bei erster Instanzierung des Typen oder bei erstem Zugriff auf
-    statisches Member des Typen. Kann _nicht_ explizit aufgerufen werden.
-  ],
-  [
-    ```cs
-    class MyClass {
-      static MyClass() {
-        /* ... */
-      }
-    }
-    struct MyStruct {
-      static MyStruct() {
-        /* ... */
-      }
-    }
-    ```
-  ],
-)
-
-#grid(
-  [
-    === Initialisierungsreihenfolge ohne Vererbung
-    <init-reihenfolge>
-    Statische Klassenvariablen $->$ Statische Konstruktoren\ $->$ normale Klassenvariablen $->$ normaler Konstruktor.
-
-    Beim _zweiten Aufruf_ der Klasse wird der _statische Teil weggelassen_.
-  ],
-  [
-    ```cs
-    class Base { // Zahl = Aufruf-Reihenfolge
-      private static int _baseStaticValue = 0; // 1.
-      private int _baseValue = 0;              // 3.
-      static Base() {}                         // 2.
-      public Base() {}                         // 4.
-    }
-    ```
-  ],
-)
-
-=== Initialisierungsreihenfolge mit Vererbung
-#grid(
-  [
-    _Zuerst in Subklasse:_ Statische Klassenvariablen $->$ Statische Konstruktoren $->$ normale Klassenvariablen,
-    dann Reihenfolge in _Basisklasse_ wie ohne Vererbung, zuletzt _normaler Konstruktor_ von _Subklasse_.
-
-    Beim _zweiten Aufruf_ der Subklasse wird der _statische Teil_ in Sub und Base _weggelassen_.
-  ],
-  [
-    ```cs
-    class Sub : Base { // Sub-Aufruf / Base-Aufruf
-      private static int _subStaticValue = 0; // 1. / 4.
-      private int _subValue = 0;              // 3. / 6.
-      static Sub() {}                         // 2. / 5.
-      public Sub() {}                         // 8. / 7.
-    }
-    ```
-  ],
-)
-
-=== Konstruktoren in Base- und Subklasse
-#table(
-  columns: (1fr,) * 4,
-  table.header(table.cell(colspan: 3)[Impliziter Aufruf des Basisklassenkonstruktors], [Expliziter Aufruf]),
-  [
-    ```cs
-    class Base {
-    // Default Constructor
-    }
-    class Sub : Base {
-      public Sub(int x) {}
-    }
-    ```
-  ],
-  [
-    ```cs
-    class Base {
-      public Base() {}
-    }
-    class Sub : Base {
-      public Sub(int x) {}
-    }
-    ```
-  ],
-  [
-    ```cs
-    class Base {
-      public Base(int x) {}
-    }
-    class Sub : Base {
-      public Sub(int x) {}
-    }
-    ```
-  ],
-  [
-    ```cs
-    class Base {
-      public Base(int x) {}
-    }
-    class Sub : Base {
-      public Sub(int x)
-        : base(x) {}
-    }
-    ```
-  ],
-  table.cell(colspan: 4, align: center)[```cs Sub s = new Sub(1);```],
-  [
-    Konstruktoraufrufe OK
-    - ```cs Base()```
-    - ```cs Sub(int x)```
-  ],
-  [
-    Konstruktoraufrufe OK
-    - ```cs Base()```
-    - ```cs Sub(int x)```
-  ],
-  [
-    _Compilerfehler!_\
-    Default-Konstruktor für `Base` nicht mehr automatisch erzeugt
-  ],
-  [
-    Konstruktoraufrufe OK
-    - ```cs Base(int x)```
-    - ```cs Sub(int x)```
-  ],
-)
-
-=== Destruktoren / Finalizer
-#grid(
-  [
-    Finalizer ermöglichten _Abschlussarbeiten_ beim Abbau eines Objekts. Nur bei _Klassen_.
-    Zwingend _parameterlos_ und ohne Visibility. Nur _1 Finalizer_ pro Klasse erlaubt.
-
-    Wird nicht-deterministisch vom Garbage Collector aufgerufen,
-    _kein expliziter Aufruf_ möglich. Danach Aufruf von Finalizer der Basisklasse.
-    Vergleiche Kapitel @deterministic-finalization.
-  ],
-  [
-    ```cs
-    class MyClass {
-      ~MyClass() {
-        /* Freigabe von File-Handles,
-        Netzwerk-Streams etc. */
-      } }
-    // ~ Operator (Finalizer) wird vom Compiler
-    // in diesen Code umgewandelt
-    override void Finalize() { try {/*Code in Finalizer*/} finally { base.Finalize(); } }
-    ```
-  ],
-)
 
 == Operatoren
 #grid(
@@ -1706,7 +1799,7 @@ Ein Default Constructor hat keine Parameter. Er hat in Klassen und Structs ander
 )
 
 === Operator Overloading
-
+<operator-overloading>
 #grid(
   [
     Die _Funktionsweise von einem Operator_ kann für eine Klasse _definiert/geändert_ werden, indem er overloaded wird.
@@ -2781,6 +2874,7 @@ der Aufruf des Clients auf das Event nicht angepasst werden muss.
 )
 
 == Lambda Expressions
+<lambda-expressions>
 #grid(
   [
     Methoden, welche als Parameter übergeben wurden, mussten bisher _einer Variable zugewiesen_ und benannt werden,
@@ -6729,7 +6823,7 @@ _Status Codes:_ `OK`, `Cancelled`, `Unknown`, `InvalidArgument`, `DeadlineExceed
   ],
 )
 
-== Special Types
+== Special Types (gRPC Typen)
 === Well Known Types
 - _Empty:_ Platzhalter für Null-Werte
   ```proto
@@ -7210,7 +7304,8 @@ _Parameter / Werte_ müssen vom Compiler berechenbar sein:
 
 === Custom Attribute <custom-attribute>
 Im Beispiel wird ein ```cs [BugfixAttribute]``` für Dokumentation implementiert. Die Klasse hat selbst das Attribut ```cs [AttributeUsage]```,
-welches bestimmt, wo ein Attribut verwendet werden kann. Durch `AllowMultiple` kann es mehrfach am selben Member angebracht werden.
+welches bestimmt, wo ein Attribut verwendet werden kann. \
+Durch `AllowMultiple` kann es mehrfach am selben Member angebracht werden.
 
 #grid(
   [
