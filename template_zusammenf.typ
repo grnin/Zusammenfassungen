@@ -12,6 +12,9 @@
   rot: rgb("#A6460F"),
   orange: rgb("#D98825"),
   comment: rgb("#2D9428"),
+  grey: rgb("#7c7c7c"),
+  light-grey: rgb("#a8a8a8"),
+  text: rgb("#000000"),
 )
 
 #let languages = (
@@ -33,6 +36,7 @@
   tableofcontents: (enabled: false, depth: "", columns: ""), // (depth: none, columns: 1)
   language: "de",
   font-size: 11pt,
+  display-title-header: true,
   display-title-footer: true,
   heading-page-number-in-ref: true,
   appendix: (), // specifiy path to .typ file to add appendix documents
@@ -56,14 +60,43 @@
   )
 
   let footer = context [
-    #set text(font: font-special.font, size: 0.9em)
+    #set text(font: font-special.font, size: 0.9em, fill: colors.light-grey)
     #let separator = if (authors.len() > 2) { ", " } else { " & " } 
     #fach | #semester | #authors.join(separator)
     #h(1fr)
+    #set text(font: font-special.font, size: 0.9em, fill: colors.text)
     #languages.at(language).page #counter(page).display()
   ]
 
+  let header = context [
+    #set text(font: font-default.font, size: 0.9em, fill: colors.grey)
+    #set align(right)
+    // #h(1fr)
+    #languages.at(language).page #counter(page).display()
+    
+
+    //  Zeige die Titel dieser Seite an
+    #context {
+      let current_page = here().page()
+    
+      let headings = query(heading)
+      .filter(it => it.level in (1, 2) and it.location().page() == current_page)
+      
+      if headings.len() > 0 {
+        headings.map(it => it.body).join(", ")
+      } else {
+        let headingsLowerLevel = query(heading)
+        .filter(it => it.level == 3 and it.location().page() == current_page)
+        if (headingsLowerLevel.len() > 0) {
+          set text(font: font-default.font, size: 0.7em, fill: colors.grey)
+          headingsLowerLevel.map(it => it.body).join(", ")
+        }
+      }
+    }
+  ]
+
   set page(
+    header: if (display-title-header) { header },
     flipped: landscape,
     columns: column-count,
     footer: if (display-title-footer) { footer },
