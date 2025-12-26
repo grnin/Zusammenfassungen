@@ -271,54 +271,6 @@ System.Int32 i2 = (System.Int32)obj; // Unboxing
 #image("img/dotnet_04.png", width: 60%)
 
 
-\ _Übung_
-#grid(
-  columns: (0.5fr, 0.8fr),
-  [
-    // #image("memory-layout-example-1.png", width: 50%)
-    // #image("memory-layout-example-2.png", width: 50%)
-    ```cs
-    // Example im Memory Layout
-    public static void Test()
-    {
-      Beer b1 = new Beer();
-      b1.Size = 3;
-      Guest g1 = new Guest();
-      Guest g2 = g1;
-      g1.Drink = b1;
-      b1.Size = 5;
-    }
-    
-    // Example 1
-    public struct Guest
-    {
-      public Beer Drink;
-    }
-    public class Beer
-    {
-      public int Size;
-    }
-    
-    // Example 2
-    public class Guest
-    {
-      public Beer Drink;
-    }
-    public struct Beer
-    {
-      public int Size;
-    }
-    ```
-  ],
-  [
-    \
-    \ \  \
-    #image("memory-layout-uebung-loesung.png", width: 300pt)
-  ],
-)
-\
-
-
 
 = C\# Grundlagen
 ==== Naming Guidelines
@@ -6300,13 +6252,13 @@ gRPC ist ein _Software Development Kit_. Es ist plattformneutral und eine Visual
     ```
   ],
   [
-    ==== Implementation
+    ==== Implementation vom Service
     Ein gRPC-Service returnt immer einen _`Task.FromResult()`_ mit dem entsprechenden Message Type-Objekt.
     ```cs
     public class GreeterService : Greeter.GreeterBase {
-    // GreeterBase = Generierte Basisklasse
+    // Greeter.GreeterBase = Generierte Basisklasse
 
-      // T ist Name einer Message
+      // HelloReply = überschriebene Methode
       public override Task<HelloReply> SayHello(
         HelloRequest request,
         ServerCallContext context
@@ -6325,7 +6277,7 @@ gRPC ist ein _Software Development Kit_. Es ist plattformneutral und eine Visual
 ```cs
 // The Port number (5001) must match the port of the gRPC server.
 GrpcChannel channel = GrpcChannel.ForAddress("https://localhost:5001");
-Greeter.GreeterClient client = new(channel); // Generated Client Stub
+Greeter.GreeterClient client = new(channel); // Generated "Client Stub"
 
 // Remote Procedure Call
 try {
@@ -7236,13 +7188,25 @@ _"Intrinsic" Attribute_ #hinweis[(In CLR definiert und integriert, teilweise vom
 und _"Custom" Attribute_ #hinweis[(In Framework Class Library, Selbst definierte Attribute)]
 
 === Syntax
-Es sind _beliebig viele_ Attribute möglich, Deklaration entweder _separat_ #hinweis[(`[DataContract][Serializable]`)] oder
-_komma-separiert_ #hinweis[(`[DataContract, Serializable]`)]. Je nach Implementation eines Attributes kann es _mehrfach_
+Es sind _beliebig viele_ Attribute möglich, \ 
+Deklaration _separat_ `[DataContract][Serializable]` \
+Deklaration _komma-separiert_ `[DataContract, Serializable]` \ Je nach Implementation eines Attributes kann es _mehrfach_
 angewandt werden.
 
 _Parameter / Werte_ müssen vom Compiler berechenbar sein:
-```cs [Datacontract]```, ```cs [Datacontract(Name = "AutoClass")]```, ```cs [Obsolete("Alt!", true)]```,
-```cs [Obsolete("Alt!", IsError = true)]```
+```cs
+// Ohne
+[Datacontract]
+
+// Named Parameters
+[Datacontract(Name = "AutoClass")]
+
+// Positional Parameters (entspricht Konstruktor-Aufruf)
+[Obsolete("Alt!", true)]
+
+// Mixed (Positional und Named)
+[Obsolete("Alt!", IsError = true)]
+```
 
 === Custom Attribute <custom-attribute>
 Im Beispiel wird ein ```cs [BugfixAttribute]``` für Dokumentation implementiert. Die Klasse hat selbst das Attribut ```cs [AttributeUsage]```,
