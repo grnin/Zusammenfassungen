@@ -35,11 +35,7 @@
 )
 
 
-
-
-
-= kurze Zusammenfassung
-=== Nullability Kurz
+// == Nullability Kurz
 siehe @nullability\
 
 #grid(

@@ -3,7 +3,7 @@
 #import "@preview/codelst:2.0.2": sourcecode
 
 #show: project.with(
-  // authors: ("Nina Grässli", "Jannis Tschan"),
+  authors: ("Nina Grässli", "Jannis Tschan", "Jasmin Fässler"),
   fach: "MsTe",
   fach-long: ".NET Technologien",
   semester: "HS25",
@@ -35,18 +35,15 @@
 )
 
 
+// !TODO im Dokument beachten, lösen
 
 
-!TODO im Dokument beachten, lösen
+// === Wichtige Inhalte
+// @init-reihenfolge
+// @lambda-func-action
 
 
-=== Wichtige Inhalte
-@init-reihenfolge
-@lambda-func-action
-
-#include "mste-kurz.typ"
-
-#pagebreak()
+// #pagebreak()
 
 
 
@@ -81,9 +78,18 @@ Build produziert ein _Assembly_ #hinweis[(\*.dll oder \*.exe)] und ein _Symbol-F
 #hinweis[(\*.pdb - Programm Database für Debugging-Zwecke)] pro Projekt.
 
 ==== Cross-Language Development
+Objekt-Modell und Bibliotheken sind in Plattform integriert. Die _Sprachwahl ist sekundär_, _Konzepte sind allgemeingültig_.
+Die _Common Language Specification (CLS)_ bietet allgemeine _Regeln_ für Cross-Language Development.
+Debugging wird von allen Sprachen unterstützt, auch Cross-Language Debugging möglich.
 Aktuell umfasst .NET ca. 30 Sprachen #hinweis[(C\#, F\#, VB.NET, C++, J\#, IronPython, IronRuby, ...)].
 
 === Kompilierung
+Der _Source Code_ wird während der Design Time #hinweis[(Build-Prozess)] mit dem _Language Compiler_ in den _IL-Code_
+umgewandelt. Dieser wird dann mit dem _JIT-Compiler_ während der Runtime in _Native Code_ #hinweis[(Assembler-Code der Platform)]
+übersetzt. Alternativ kann der Source Code auch _direkt via Native AOT_ #hinweis[(Ahead-of-time compilation)] in Native Code
+übersetzt werden.
+
+==== Just-in-Time (JIT) Kompilierung
 Nach der Kompilierung (ohne Native AOT) liegen die Methoden im Assembly als IL-Code vor. Beim Aufruf einer Methode wird
 erkannt, dass dieser Code noch nicht ersetzt wurde und der JIT-Compiler ersetzt diese Methode an dieser physischen Stelle im
 RAM den IL- durch Assembler-Code. Der nächste Aufruf erfolgt direkt auf den (gecachten) Assembler-Code.
@@ -96,6 +102,19 @@ JIT Kompilierung
 Die _Kompilation_ erzeugt Assemblies. Diese entsprechen ungefähr einem JAR-File in Java.\
 #hinweis[(Assembly = selbstbeschreibende Komponente mit definierter Schnittstelle.)]
 
+#grid(
+  [
+    - Deployment- und Ausführungs-Einheit
+    - Executable oder Library #hinweis[(\*.exe bzw. \*.dll)]
+    - Dynamisch ladbar
+    - Selbstbeschreibende Software-Komponente\ #hinweis[(enthält Metadaten)]
+  ],
+  [
+    - Definiert Typ-Scope #hinweis[(Sichtbarkeit)]
+    - Kleinste versionierte Einheit
+    - Einheit für Security-Überprüfung\ #hinweis[(Code Access Security / Role-Based Security)]
+  ],
+)
 
 Ein _Assembly_ besteht aus dem _Manifest_ #hinweis[(Header-Informationen wie Referenzen auf alle Dateien des Assemblies,
 Referenzen auf andere Assemblies, Metadaten wie Name & Versionsnummer etc.)],
@@ -186,15 +205,16 @@ _Reflection:_ Programmatisches Abfragen des Typensystems. Ist für alle Typen ve
   ],
 )
 
-== Command Line Interface CLI
+=== Command Line Interface CLI
 Komplexe Command Line Tool-Chain "`dotnet.exe`". Ist Teil des .NET (Core) SDK, Basis für high-level Tools.\
 _Beispiele:_ `dotnet publish my_app.csproj` oder `dotnet build --output /build_output`
 
-== Projekte & Referenzen
+== Projekte & Referenzen & Packages
 #v(-0.5em)
 === Projekt-Dateien
-Im XML Format mit `.csproj` Endung.
-Einfache, dynamische Grobstruktur 
+Im XML Format mit `.csproj` Endung. _Build-Engines:_ Microsoft Build Engine "MSBuild" oder .NET Core CLI (`dotnet build`).
+Einfache, dynamische Grobstruktur #hinweis[(Property\*: Projekteinstellungen, Item\*: Zu kompilierende Items,
+  Target\*: Sequenz auszuführender Schritte)]
 
 === Referenzen
 - _Vorkompiliertes Assembly_ #hinweis[(Im File System, Debugging nicht verfügbar, Navigation nur auf Metadaten-Ebene)]
@@ -202,7 +222,7 @@ Einfache, dynamische Grobstruktur
 - _NuGet Package_ #hinweis[(Externe Dependency, Debugging nicht verfügbar, Navigation nur auf Metadaten-Ebene)]
 - _Visual Studio Projekt:_ #hinweis[(In gleicher Solution vorhanden, Debugging und Navigation verfügbar)]
 
-== Packages & NuGet
+=== Packages & NuGet
 NuGet ist der neue Standard für Packaging. .NET wird neu in _kleineren Packages_ geliefert.
 _Vorteile:_ Erlaubt Release-Zyklen unabhängig von .NET/Sprachreleases, Erhöht Kompatibilität durch Kapselung, kleinere Deployment-Einheiten.
 
@@ -298,6 +318,8 @@ System.Int32 i2 = (System.Int32)obj; // Unboxing
 )
 \
 
+
+
 = C\# Grundlagen
 ==== Naming Guidelines
 #table(
@@ -317,8 +339,6 @@ System.Int32 i2 = (System.Int32)obj; // Unboxing
 
 ==== Reference & Value Types
 
-
-
 #table(
   columns: (auto, 1fr, 1fr),
   table.header([], [Reference (Class)], [Value (Struct)]),
@@ -331,8 +351,8 @@ System.Int32 i2 = (System.Int32)obj; // Unboxing
 )
 
 #pagebreak()
-
-== Sichtbarkeitsattribute
+== Sichtbarkeitsattribute & Namespaces
+=== Sichtbarkeitsattribute
 #small[
   #table(
     columns: (auto, 1fr),
@@ -373,14 +393,12 @@ System.Int32 i2 = (System.Int32)obj; // Unboxing
   )
 ]
 
-== Namespaces
+=== Namespaces
 - Namespace muss nicht identisch zu Ordnerstruktur sein
 - mehrere pro Datei möglich
 - hierarchisch
 In Java => "Package". _Strukturiert_ den Quellcode.
 - Beinhaltet andere Namespaces, Klassen, Interfaces, Structs, Enums und Delegates.
-
-!TODO: Adressiert via "Classpath".  Beispiel statt Theorie
 
 ```cs
 namespace A { class C {} }
@@ -390,8 +408,7 @@ namespace B {}
 Namespaces in anderen Namespaces importieren ```cs using System```.\
 Alias-Name ```cs using F = System.Windows.Forms ... F.Button b;```
 
-
-=== File-Scoped Namespaces
+==== File-Scoped Namespaces
 - Ohne  `{}` nach Deklaration (reduziert Einrückung)
 - Dann nur _ein Namespace pro File_ 
 
@@ -415,7 +432,7 @@ Alias-Name ```cs using F = System.Windows.Forms ... F.Button b;```
   ],
 )
 
-=== Global `using` directives
+==== Global `using` directives
 Erlaubt "globale" Deklaration von usings. Gelten für das _ganze_ Projekt, verkleinert Boilerplate Code im Header.
 Das `using`-Statement in den einzelnen Files kann dann weggelassen werden.
 
@@ -430,6 +447,10 @@ Welche Usings verwendet werden, ist abhängig von gewählten SDK.
 
 #pagebreak()
 
+== Main-Methode
+Ist der _Einstiegspunkt_ eines Programms. Ist zwingend für Executables und klassischerweise genau 1x erlaubt.
+Das Programm _beginnt_ mit der ersten Anweisung in der Main-Methode und _endet_ mit der letzten Anweisung in der Main-Methode.
+Befindet sich meist in der Datei `Program.cs`.
 
 === Anforderungen Main-Methode
 #grid(
@@ -439,8 +460,7 @@ Welche Usings verwendet werden, ist abhängig von gewählten SDK.
     - Die Main-Methode muss _`static`_ sein, beinhaltende Klasse nicht
     - _Gültige Rückgabetypen:_ ```cs void, int, Task, Task<int>```
     - _Gültige Parametertypen:_ Keine Parameter oder ```cs string[]```
-    - kann Main-Methode Entry-Point ersetzen mit "Top-level Statements"
-    - mehrere Main-Methoden möglich
+    - Man kann Main-Methode Entry-Point ersetzen mit "Top-level Statements" (siehe unten). So auch mehrere Main-Methoden möglich.
   ],
   [
     ```cs // Examples (some missing for brevity)``` \
@@ -473,6 +493,29 @@ Welche Usings verwendet werden, ist abhängig von gewählten SDK.
     Arg 0 = alpha
     Arg 1 = beta
     Arg 2 = gamma`
+  ],
+)
+
+=== Top-level Statements
+#grid(
+  columns: (1fr, 1fr),
+  [
+    - Erlaubt _Weglassen der Main-Methode_ als Entry Point.
+    - _Regeln:_ Nur 1x pro Assembly erlaubt, Argumente heissen fix `args`, Exit Codes sind erlaubt, _vor_ den top-level Statements
+    können `using`s definiert werden, _nach_ den top-level Statements können Typen/Klassen definiert werden.
+  ],
+  [
+    ```cs
+    using System; // main() code start
+    for (int i = 0; i < args.Length, i++) {
+      ConsoleWriter.Write(args, i);
+    } // main() code end
+    class ConsoleWriter {
+      public static void Write(string[] args, int i) {
+        console.WriteLine($"Arg {i} = {args[i]}");
+      }
+    }
+    ```
   ],
 )
 
@@ -1330,7 +1373,7 @@ Der _Zugriff_ ist jedoch _nicht schneller_, weil der _Boundary-Check_ nur bei 1-
       public int Length {
         // Standard-Implementation bei {get; set;}
         get { return _length; }
-        set { _length = value; }
+        set { _length = value; } //keyword value!
       }
     }
     // Verwendung
@@ -1370,7 +1413,7 @@ Der _Zugriff_ ist jedoch _nicht schneller_, weil der _Boundary-Check_ nur bei 1-
   ],
 )
 
-== Field-backed Properties
+=== Field-backed Properties
 #grid(
   [
     Mischung aus klassischem Property und auto-implemented Property
@@ -1384,6 +1427,7 @@ Der _Zugriff_ ist jedoch _nicht schneller_, weil der _Boundary-Check_ nur bei 1-
     {
          get;
          set => field = Quantity < 0 ? 0 : Quantity;
+         //      ^ keyword field
     }
     ```
   ],
@@ -2572,8 +2616,9 @@ Eine `Method`, welche einem Delegate zugwiesen wird...
 
 *Delegate-Aufruf:*
 ```cs object result = delegateVar[.Invoke](params)``` \
-Kann entweder direkt oder über `.Invoke()` ausgeführt werden. Parameter können wie gewohnt übergeben werden,
-genau wie die Handhabung des Rückgabewerts. `delegateVar` sollte vor dem Aufruf auf `null` geprüft werden:
+Kann entweder direkt oder über `.Invoke()` ausgeführt werden.
+// Parameter können wie gewohnt übergeben werden,
+// genau wie die Handhabung des Rückgabewerts. `delegateVar` sollte vor dem Aufruf auf `null` geprüft werden:
 ```cs delegateVar?.Invoke(params);```
 
 == Multicast Delegates <multicast-delegates>
@@ -2632,9 +2677,9 @@ genau wie die Handhabung des Rückgabewerts. `delegateVar` sollte vor dem Aufruf
     ```cs
     public delegate void Action(int i);
     public class MyClass {
-      public static void PrintValues(int i)
-       { Console.WriteLine($"Value {i}"); }
-      public void SumValues(int i) { Sum += i; }
+      public static void PrintValues(int i) 
+        => Console.WriteLine($"Value {i}");
+      public void SumValues(int i) => Sum += i;
       public int Sum { get; private set; }
     }
     public class FunctionParameter {
@@ -2816,7 +2861,7 @@ der Aufruf des Clients auf das Event nicht angepasst werden muss.
       Block mit geschweiften Klammern, beliebig viele Statements erlaubt, mit/ohne Rückgabewert
 
     Der _Lambda Operator #no-ligature[`=>`]_ ist kein "grösser gleich", sondern ein Trennzeichen.
-    Ausgesprochen als "goes to" oder "geht über in".
+    Ausgesprochen als "goes to".
   ],
   [
     ```cs
@@ -2834,11 +2879,12 @@ der Aufruf des Clients auf das Event nicht angepasst werden muss.
     ```
   ],
 )
-=== Parameter & Type Inference
+=== Parameter & Type Inference (Func, Action)
 <lambda-func-action>
 #grid(
   [
-    _Lambdas_ können $0$ bis $n$ Parameter haben. Sie können als _`Func`_ oder _`Action`_ definiert sein
+    _Lambdas_ können $0$ bis $n$ Parameter haben. Sie können als _`Func`_ oder _`Action`_ definiert sein.\
+    Bei `Func<x,y>` ist letzter Typ der Rückgabetyp und nicht Parametertyp.
     #hinweis[(mit/ohne Rückgabetyp)]
 
     *Regeln:*
@@ -3281,9 +3327,30 @@ Häufig verwendet man auch nur die generischen Varianten.\
 *Häufig verwendet:* `List<T>`, `SortedList<T>`, `Dictionary<TKey, TValue>` #hinweis[(Hashtable)], `SortedDictionary<T>`,
 `LinkedList<T>`, `Stack<T>`, `Queue<T>`, `IEnumerable<T>`, `ICollection`
 
+== Collection Interfaces
+// #image("image-3.png")
+
+*Generische Listentypen und Interfaces* \
+#table(
+  columns: (1fr, 1fr),
+  [Generisch \ Namespace «System.Collections.Generic»], [Nicht-generisch \ Namespace «System.Collections»],
+  [List`<T>` / IList`<T>`], [ArrayList / IList],
+  [SortedList`<TKey, TValue>`], [SortedList],
+  [Dictionary`<TKey, TValue>` / IDictionary`<TKey, TValue>`], [ Hashtable / IDictionary],
+  [SortedDictionary`<TKey, TValue>`], [SortedList],
+  [LinkedList`<T>`], [-],
+  [Stack`<T>`], [Stack],
+  [Queue`<T>`], [Queue],
+  [IEnumerable`<T>` / IEnumerator`<T>`], [IEnumerable / IEnumerator],
+  [ICollection`<T>`], [ICollection],
+)
+
+
+== Nullability kurz
+#include "Nullability_kurz.typ"
+
 == Nullability Vollständig
 <nullability>
-=== Nullability Vollständig
 Structs / Nullable Value Types: Null-Zustand musst quasi erzwungen werden, weil keine Referenz/Zustand existiert.
 Klassen / Nullable Reference Types: Null-Zustand (Null Reference) ist in Runtime abgebildet. Zugriff auf Null References führt zu "NullReferenceException"
 - In Runtime nicht mehr eliminierbar (Basiskonzept)
@@ -3333,12 +3400,12 @@ Klassen / Nullable Reference Types: Null-Zustand (Null Reference) ist in Runtime
     wichtig für Datenbank *Records*
 
     Wenn Status "null", dann ist HasValue "false" und es hat keine Value.
-    // #table(
-    //   columns: (1fr, 1fr, 1fr),
-    //   [Status], [HasValue], [Value],
-    //   [`null`], [`false`], [`?, fehlt`],
-    //   [`not null`], [`true`], [`123`],
-    // )
+    #table(
+      columns: (1fr, 1fr, 1fr),
+      [Status], [HasValue], [Value],
+      [`null`], [`false`], [`?, fehlt`],
+      [`not null`], [`true`], [`123`],
+    )
 
   ],
   [
