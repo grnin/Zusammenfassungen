@@ -302,7 +302,8 @@ System.Int32 i2 = (System.Int32)obj; // Unboxing
   [Ableitung möglich], [Ja Nein (sealed)],
 )
 
-#pagebreak()
+// #pagebreak()
+\
 == Sichtbarkeitsattribute & Namespaces
 === Sichtbarkeitsattribute
 #small[
@@ -1547,16 +1548,16 @@ Ein Default Constructor hat keine Parameter. Er hat in Klassen und Structs ander
 #grid(
   [
     Erlaubt Identifikation _anhand Namen_ anstelle anhand der Position. Weglassen beliebiger optionaler Parameter erlaubt.
-    Positionsparameter #hinweis[(im Beispiel `a`)] immer noch davor. Können aber auch mit Namen angegeben werden,
-    dann ist die Reihenfolge egal.
+    Positionsparameter #hinweis[(im Beispiel `a`)] immer noch davor. Bei Named Parameter ist Reihenfolge egal.
   ],
   [
     ```cs
     void Sort(int[] arr, int from = 0, int to = -1){...}
+
     Sort(a);
-    Sort(a, from: 0); // a muss zuerst stehen
-    Sort(a, to: 10);  // a muss zuerst stehen
-    Sort(from: 2, to: 5, arr: a); // a darf hinten sein
+    Sort(a, from: 0); // Parameter a (int[]) zuerst
+    Sort(a, to: 10);  // Parameter a (int[]) zuerst
+    Sort(from: 2, to: 5, arr: a); // Named: a hinten
     ```
   ],
 )
