@@ -24,8 +24,9 @@ TR Funktionen ersetzen:
 
 #show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
-  fach: "WrStat",
-  fach-long: "Wahrscheinlichkeit und Statistik",
+  // habe den Titel abgeändert, ist so eigentlich nicht korrekt
+  fach: "Version für HP Prime G2",
+  fach-long: "WrStat",
   semester: "HS24",
   tableofcontents: (enabled: true, depth: 3, columns: 2),
   appendix: (
@@ -41,13 +42,29 @@ TR Funktionen ersetzen:
 // Grid size defaults
 #set grid(columns: (1fr, 1fr), gutter: 1em)
 
-// Icon for the "Construct" button on the TI n-spire
+// // Icon for the "Construct" button on the TI n-spire
+// #let tr-constructs-button = box(
+//   stroke: 0.75pt,
+//   inset: (x: 0.2em),
+//   outset: (y: 0.25em, bottom: 0.55em),
+//   radius: 0.25em,
+//   $script(abs(ballot) cases(ballot, ballot))$,
+// )
+// Icon for the "Construct" button on the HP Prime G2
 #let tr-constructs-button = box(
   stroke: 0.75pt,
   inset: (x: 0.2em),
   outset: (y: 0.25em, bottom: 0.55em),
   radius: 0.25em,
-  $script(abs(ballot) cases(ballot, ballot))$,
+  // $script(abs(ballot) cases(ballot, ballot))$,
+  #figure(
+    image("img/construct-button-hp-prime.png", width: 80%),
+    caption: [
+      A step in the molecular testing
+      pipeline of our lab.
+    ],
+  )
+
 )
 
 // Styling for example exercises
@@ -1073,7 +1090,7 @@ $
 
   #hinweis[
     TR Tabellenwert der Standardnormalverteilung lesen:\
-    $Phi(x)$ wenn $x$ bekannt: Menu-5-5-3 / $"invNorm"(x,0,1), x = "Fläche"$\
+    $Phi(x)$ wenn $x$ bekannt: Menu-5-5-3 / $"NORMALD_ICDF"([0, 1,] x), x = "Fläche"$\
     $Phi(x)$ wenn $a$ und $b$ gegeben: Menu-5-5-2 / $"normCdf"(a,b, mu, sigma)$
   ]
 ]
@@ -1135,13 +1152,13 @@ $
   $
 
   Wert aus Quantil-Standardnormalverteilungstabelle lesen #hinweis[(1 - Wert rechnen, um ihn aus der Tabelle ablesen zu können,
-  danach mit mal -1 wieder zurücktransformieren)] oder direkt mit TR $"invNorm"(0.082, 0, 1)$
+  danach mit mal -1 wieder zurücktransformieren)] oder direkt mit TR $"NORMALD_ICDF"([0, 1,] 0.082)$
   $ Phi^(-1)(0.082) = -1 dot Phi^(-1)(1 - 0.082) = -1 dot 1.392 = -1.392 $
 
   Standardabweichung $sigma$ berechnen:
   $ sigma = (x_"min" - mu) / (-1.392) = (2.5 - 3.5) / (-1.392) = 0.7184 $
 
-  $Z$-Wert für 95%-Quantile aus der Quantilentabelle ablesen oder mit $"invNorm"(0.95, 0, 1)$:
+  $Z$-Wert für 95%-Quantile aus der Quantilentabelle ablesen oder mit $"NORMALD_ICDF"([0, 1,] 0.95)$:
   $ Z = Phi^(-1)(0.95) = 1.6449 $
 
   Das kritische Gewicht $x$ mithilfe der Standardnormalverteilungsformel berechnen:
