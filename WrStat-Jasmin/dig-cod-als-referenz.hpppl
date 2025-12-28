@@ -1,0 +1,273 @@
+EXPORT prob(values)
+BEGIN
+  LOCAL sum=sum(values), i, nl=char(10);
+  
+  PRINT(nl + "P(X) = X / Σ(x_i)");
+  PRINT("  = " + STRING(values) + " / " + sum);
+  PRINT("  = " + STRING(values/sum));
+  
+  RETURN(values/sum);
+END;
+
+EXPORT i_info(x)
+BEGIN
+  LOCAL nl=char(10);
+  
+  PRINT(nl + "I(x) = -ld(x) = -ld(" + x + ")");
+  x:=-LOG(x,2);
+  PRINT("  = " + x);
+  
+  RETURN(x);
+END;
+
+EXPORT h_entropy(values)
+BEGIN
+  LOCAL result=0, nl=char(10), i;
+  
+  values:=mat2list(values);
+  PRINT(nl + "H(X) = Σ(p_i * I(p_i)) = Σ(p_i * -ld(p_i))");
+  
+  FOR i FROM 1 TO SIZE(values) DO
+    IF i==1 THEN
+      PRINT("  = " + values(i) + " * -ld(" + values(i) + ")");
+    ELSE
+      PRINT("  + " + values(i) + " * -ld(" + values(i) + ")");
+    END;
+    result:=result + values(i) * -LOG(values(i),2);
+  END;
+
+  PRINT("  = " + result);
+  
+  RETURN(result);
+END;
+
+EXPORT h0_max_entropy(n)
+BEGIN
+  LOCAL nl=char(10);
+  
+  PRINT(nl + "H0(N) = ld(N)");
+  PRINT("  = ld(" + n + ")");
+  n:=LOG(n,2);
+  PRINT("  = " + n);
+  
+  RETURN(n);
+END;
+
+EXPORT res_err_prob(prs_x, prs_yx)
+BEGIN
+  LOCAL res, nl=char(10);
+
+  // TODO: Dot product sign
+  PRINT(nl + "1 - px ∙ px");
+  PRINT("  = " + prs_x + " ∙ " + prs_yx + " = " + (1-DOT(prs_x, prs_yx)));
+  
+  RETURN(1-DOT(prs_x, prs_yx));
+END;
+
+EXPORT h_yx(prs, mat)
+BEGIN
+  LOCAL i, j, res=0, nl=char(10);
+  
+  PRINT(nl + "H(Y|X) = -Σ(Σ(prs(x_j, y_i) * ld(prs(y_j, x_i)))");
+  PRINT("  = -Σ(Σ(prs(x_i) * prs(y_j|x_i) * ld(prs(y_j, x_i)))");
+  FOR i FROM 1 TO SIZE(prs) DO
+    FOR j FROM 1 TO rowDim(mat) DO
+      IF i==1 AND j==1 THEN
+        PRINT("  = " + prs(i) + " * " + mat(i,j) + " * ld(" + mat(i,j) + ")");
+      ELSE
+        PRINT("  + " + prs(i) + " * " + mat(i,j) + " * ld(" + mat(i,j) + ")");
+      END;
+      res:=res + prs(i) * mat(i,j) * log(mat(i,j), 2);
+    END;
+  END;
+
+  PRINT("  = " + -res);
+  
+  RETURN(-res);
+END;
+
+EXPORT prob_y(prx, p_yx)
+BEGIN
+  LOCAL res=0, nl=char(10);
+  
+  // ⊙ = Vector * Matrix multiplication
+  PRINT(nl + "px(x) ⊙ p_yx");
+  PRINT("  = " + list2mat(prx) + " ⊙ " + p_yx);
+  res:=list2mat(prx) * p_yx;
+  PRINT("  = " + res);
+  
+  RETURN(res);
+END;
+
+EXPORT t_transinfo(prx, p_yx)
+BEGIN
+  LOCAL hy, hyx, pry, nl=char(10);
+
+  PRINT(nl + "----TRANSINFO----");
+  pry:=prob_y(prx, p_yx);
+  hy:=h_entropy(pry);
+  hyx:=h_yx(prx, p_yx);
+  PRINT(nl + "T = H(Y) - H(Y|X)");
+  PRINT("  = H(" + pry + ") - H(Y|X)");
+  PRINT("  = " + hy + " - " + hyx);
+  PRINT("  = " + (hy-hyx));
+
+  PRINT(nl + "----END----");
+
+  RETURN(hy-hyx);
+END;
+
+EXPORT kanalmatrix_sym(prx, pry)
+BEGIN
+  LOCAL aa, dd, mat, nl=char(10);
+  
+  PRINT(nl + "y_1 = x_1 * a + x_2 * (1-a)");
+  PRINT("y_2 = x_1 * (1-d) + x_2 * d");
+  PRINT("  =");
+  PRINT(pry(1) + " = " + prx(1) + " * a + " + prx(2) + " * (1-a)");
+  PRINT(pry(2) + " = " + prx(1) + " * (1-d) + " + prx(2) + " * d");
+  PRINT("  =");
+
+  aa:=(-(prx(2) - pry(1))) / (prx(1) - prx(2));
+  dd:=(prx(1) - pry(2)) / (prx(1) - prx(2));
+  mat:=[[aa, 1-aa], [1-dd, dd]];
+
+  PRINT(mat);
+
+  PRINT(nl+"--Calculation--");
+  PRINT("-(" + prx(2) + " - " + pry(1) + ") / (" + prx(1) + " - " + prx(2) + ")");
+  PRINT("(" + prx(1) + " - " + pry(2) + ") / (" + prx(1) + " - " + prx(2) + ")");
+
+  RETURN(mat);
+END;
+
+EXPORT rsa_phi(n)
+BEGIN
+  LOCAL i, values={}, nl=char(10);
+  
+  FOR i FROM 1 TO n-1 DO
+    IF gcd(i, n) == 1 THEN
+      append(values, i);
+    END;
+  END;
+
+  PRINT(values);
+  PRINT("φ(" + n + ") = " + size(values));
+  
+  RETURN(size(values));
+END;
+
+EXPORT rsa_euklid(f, phi_n)
+BEGIN
+  LOCAL a, b, c, d=2, res={}, i, nl=char(10);
+
+  PRINT("");
+
+  // Order the two values descendingly
+  a:=MAX(f, phi_n);
+  c:=MIN(f, phi_n);
+
+  WHILE d>1 DO
+    b:=FLOOR(a / c);
+    d:=a MOD c;
+    PRINT(a + " = " + b + " * " + c + " + " + d);
+    res:=append(res,a);
+    res:=append(res,b);
+    res:=append(res,c);
+    res:=append(res,d);
+    a:=c;
+    c:=d;
+  END;
+
+  PRINT("----------");
+
+  i:=1;
+  LOCAL n, u, v=1, w, x, y, inc, sign;
+  n:=size(res);
+  u:=res(n);
+  w:=res(n-3);
+  x:=-res(n-2);
+  y:=res(n-1);
+  PRINT(u + " = " + v + " * " + w + " - " + abs(x) + " * " + y);
+
+  FOR i FROM 1 TO n/4-1 DO
+    inc:=n-4-i*4;
+    a:=res(inc+1);
+    b:=res(inc+2);
+    c:=res(inc+3);
+    d:=res(inc+4);
+
+    IF x<0 THEN
+      sign:=" - ";
+    ELSE
+      sign:=" + ";
+    END;
+
+    IF y=d THEN
+      PRINT(u + " = " + v + " * " + w + sign + abs(x) + " * (" + a + " - " + b + " * " + c + ")");
+      y:=a;
+      v:=−b*x+v;
+    ELSE 
+      IF w=d THEN
+        PRINT(u + " = " + v + " * (" + a + " - " + b + " * " + c + " )" + sign + abs(x) + " * " + y);
+        w:=a;
+        x:=−b*v+x;
+      ELSE
+        PRINT("Error!");
+      END;
+    END;
+
+    PRINT(u + " = " + v + " * " + w + sign + abs(x) + " * " + y);
+  END;
+
+  PRINT("d = " + x + " mod " + w + " = " + (x MOD w));
+
+  RETURN(x MOD w);
+END;
+
+EXPORT rsa_enc(message, priv_e, n)
+BEGIN
+  LOCAL c=powmod(message, priv_e, n), nl=char(10);
+
+  PRINT(nl + "c=m^e mod n = " + message + "^" + priv_e + " mod " + n + " = " + c);
+
+  RETURN(c);
+END;
+
+EXPORT rsa_dec(crypted, pub_d, n)
+BEGIN
+  LOCAL m=powmod(crypted, pub_d, n), nl=char(10);
+
+  PRINT(nl + "m=c^d mod n = " + crypted + "^" + pub_d + " mod " + n + " = " + m);
+
+  RETURN(m);
+END;
+
+EXPORT cyclic(crc, mask, order)
+BEGIN
+  LOCAL i, j, bitcount=32, nl=char(10);
+  
+  PRINT("");
+  crc:=BITSL(crc, order);
+  mask:=BITSL(mask, bitcount-(order+1));
+
+  FOR i FROM 1 TO bitcount DO
+    IF BITSR(crc, order) = 0 THEN
+       BREAK;
+    END;
+
+    j:=bitcount-i;
+    
+    IF crc(j) = 1 THEN
+      PRINT(crc);      
+      crc:=BITXOR(crc, BITSR(mask, i-1));
+      PRINT(BITSR(mask, i-1));
+       
+    END;
+  
+  END;
+
+  PRINT(crc);
+  
+  RETURN(crc);
+END;

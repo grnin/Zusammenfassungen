@@ -52,20 +52,30 @@ TR Funktionen ersetzen:
 // )
 // Icon for the "Construct" button on the HP Prime G2
 #let tr-constructs-button = box(
-  stroke: 0.75pt,
-  inset: (x: 0.2em),
-  outset: (y: 0.25em, bottom: 0.55em),
-  radius: 0.25em,
-  // $script(abs(ballot) cases(ballot, ballot))$,
-  #figure(
-    image("img/construct-button-hp-prime.png", width: 80%),
-    caption: [
-      A step in the molecular testing
-      pipeline of our lab.
-    ],
-  )
-
+  image("img/hp-prime-construct-button.png", width: 30pt,
+  fit: "contain",
+  ),
 )
+
+#let tr-solve-function = box(
+  image("img/hp-prime-solve.png", width: 30pt,
+  fit: "contain",
+  ),
+)
+
+#let tr-fraction-button = box(
+  image("img/hp-prime-fraction.png", width: 30pt,
+  fit: "contain",
+  ),
+)
+
+#let tr-num-tabelle-button = box(
+  image("img/hp-prime-num-button.png", width: 30pt,
+  fit: "contain",
+  ),
+)
+
+
 
 // Styling for example exercises
 #let example-block(body) = {
@@ -433,19 +443,42 @@ $ r = "cov"(X, Y) / sqrt("var"(X) dot "var"(Y)) $
 
   ==== Vorgehensweise
   + Zuerst muss überprüft werden, ob es sich wirklich um eine Wahrscheinlichkeitsdichte handelt.\
-    Dafür muss die Variable #hinweis[(oft $a$)] so gewählt werden, dass das Integral von $phi$ den Wert 1 hat.
   + Integral mit TR ausrechnen
   + Erwartungswert ausrechnen #hinweis[Falls Funktion $y$-Achsensymmetrisch, ist $E(X) =$ Mittelpunkt der Funktion]
   + Varianzformel $"var"(X) = E(X^2) - E(X)^2$ hinschreiben, ausrechnen
 
+
+
   #hinweis[
     *TR-Tipps:*
-    - Integral: #tr-constructs-button -Taste (Betrag und Cases-Icon) drücken, Integral-Symbol auswählen
-    - Solve-Funktion: Menu-3-1
+    - im CAS Modus
+    - Solve-Funktion: Werkzeuge > CAS > Lösen. 
+    - Integral: #tr-constructs-button -Taste drücken, Integral-Symbol auswählen (z.B. Integral = 1)
     - Wenn Solve beim Lösen eines Integrals ein Integral zurück gibt, auszurechnende Variabel aus dem Integral herausnehmen
-    - Zahlen in Brüche umwandeln: Menu-Zahl-Brüche approximieren
+    - Zahlen in Brüche umwandeln #tr-fraction-button
   ]
 ]
+
+1. 
+Dafür muss die Variable #hinweis[(oft $a$)] so gewählt werden, dass das Integral von $phi$ den Wert 1 hat.
+\
+- Dazu überprüfen, ob die Normierungsbedingung  $integral^infinity_(-infinity) phi(x) space dif x = 1$ erfüllt ist.
+- Manchmal im Graph ablesbar, dass Normierungsbedingung erfüllt (linker Bereich + rechter Bereich = Quadrat mit Höhe/Breite 1)
+
+// korrekt?
+// $E(X) = integral^1_0 x(phi(x)) space dif x = 1$
+
+
+2. 
+Integral aufteilen im TR??
+oder von Hand.
+
+3.
+$E(X) = integral_(-infinity)^(infinity) x dot phi(x)  "dx"$
+
+4.
+
+
 
 #pagebreak()
 
