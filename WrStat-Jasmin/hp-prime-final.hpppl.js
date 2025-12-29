@@ -111,40 +111,45 @@ END;
 
 
 
-EXPORT wahrscheinlichkeitsdichte()
-    BEGIN
 
+// TODO:
+EXPORT wahrscheinlichkeitsdichte(fx)
+BEGIN
+
+    // // 1. Save the current display setting
+    // LOCAL oldFormat:= HFormat;
+    // // 2. Set format to Fraction (Value 3)
+    // HFormat:= 3;
+
+
+    f(x):=piecewise(x<-1,0,x<0,(x+1)^2,x<=1,1-x^2,0);
+
+    PRINT(1);
+    PRINT(f(x));
     f(x) := piecewise(x<-1,0,x<0,(x+1)^2,x<=1,1-x^2,0);
-    ex2 := int(x^2 * f(x), x, -1, 1);
+    ex2 := int(x ^ 2 * f(x), x, -1, 1);
     ex:= int(x * f(x), x, -1, 1);
+    PRINT("Normierung:     " + int(f(x), x, -1, 1));   
+
+    PRINT("Erwartungswert E(X): " + int(x*f(x), x, -1, 1) );
+    PRINT(" E(X2):           "+int(x^2*f(x), x, -1, 1) );
+    PRINT("Varianz:          "+ int(x^2*f(x), x, -1, 1) - ans(1)^2 );
+
 
     PRINT("Normierung:     " + int(f(x), x, -1, 1));
+
+
     PRINT("Erwartungswert E(X): " + ex );
     PRINT(" E(X^2):           "+ ex2 );
     PRINT(" (E(x))^2:           "+ (ex)^2 );
     PRINT("Varianz:          " + ex2 - ex^2 );
     // PRINT("Varianz:          " + int(x^2*f(x), x, -1, 1) - ans(1)^2 );
-    
+
     PRINT(" -------- Ende -------- ");
 
 
-
-    // 1. Save the current display setting
-    LOCAL oldFormat:= HFormat;
-
-    // 2. Set format to Fraction (Value 3)
-    HFormat:= 3;
-
-    // Perform your calculations
-    LOCAL result:= 1 / 2 + 1 / 3;
-
-    // Use MSGBOX or PRINT to see the result as a fraction
-    MSGBOX("The result is: " + result);
-
-    // 3. Restore the original setting before the program ends
-    HFormat:= oldFormat;
-
-
+    // // 3. Restore the original setting before the program ends
+    // HFormat:= oldFormat;
 
     RETURN;
 END;

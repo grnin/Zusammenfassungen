@@ -1,12 +1,12 @@
 EXPORT prob(values)
 BEGIN
-  LOCAL sum=sum(values), i, nl=char(10);
-  
-  PRINT(nl + "P(X) = X / Σ(x_i)");
-  PRINT("  = " + STRING(values) + " / " + sum);
-  PRINT("  = " + STRING(values/sum));
-  
-  RETURN(values/sum);
+    LOCAL sum=sum(values), i, nl=char(10);
+
+    PRINT(nl + "P(X) = X / Σ(x_i)");
+    PRINT("  = " + STRING(values) + " / " + sum);
+    PRINT("  = " + STRING(values/sum));
+
+    RETURN(values/sum);
 END;
 
 EXPORT i_info(x)
