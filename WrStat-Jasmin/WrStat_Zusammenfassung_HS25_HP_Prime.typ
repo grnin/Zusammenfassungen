@@ -1303,7 +1303,7 @@ $ X = "Anzahl Anhänger im Dorf", quad n = 87, quad p = 0.14 $
 *Erwartungswert und Varianz*\
 $ mu = n dot p = 12.180, quad sigma = sqrt(n p(1-p)) approx 3.2365 $
 
-*Nomalverteilungsapproximation der Binomialverteilung*\
+*Normalverteilungsapproximation der Binomialverteilung*\
 Standardisierung: $Z = (X - mu)\/sigma$
 
 $
@@ -1322,7 +1322,7 @@ $ X = "Anzahl gerader Augenzahlen", quad n = 100, quad p = 1 / 2 quad ("Wahrsche
 *Erwartungswert und Varianz*\
 $ mu = n dot p = 50, quad sigma = sqrt(n p(1-p)) = 5 $
 
-*Nomalverteilungsapproximation der Binomialverteilung*\
+*Normalverteilungsapproximation der Binomialverteilung*\
 $
   Rho(X < 45 and X > 55) &= 1 - Rho(45 <= X <= 55)\
   Rho(45 <= X <= 55) &= Rho((45 - mu)/sigma <= (X - mu)/sigma <= (55-mu)/sigma)\
