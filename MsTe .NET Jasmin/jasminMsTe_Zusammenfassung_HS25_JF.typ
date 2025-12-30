@@ -5057,8 +5057,11 @@ Folgende Elemente werden gemapped:
   ],
 )
 
+#pagebreak()
+
 === Übersicht DbContext für nachfolgende Codebeispiele
 
+Übersicht mit Exclude von Entities und Properties
 ```cs
 public class ShopContext : DbContext {
 
@@ -5068,20 +5071,20 @@ public class ShopContext : DbContext {
   // OnModelCreating für Fluent API Syntax
   protected override void OnModelCreating(
     ModelBuilder modelBuilder) {
-    modelBuilder.Entity<Category>().Property(b => b.Name); // (2)
-    modelBuilder.Ignore<Metadata>(); // (2)
+    modelBuilder.Entity<Category>().Property(b => b.Name);
+    modelBuilder.Ignore<Metadata>();
   }
+  
 }
 
-// class wird für alle 3 Syntaxe benötigt, auch Fluent API
+// class wird für alle 3 Syntaxe benötigt
 public class Category {
-  public int Id { get; set; } // (1)
-  public string Name { get; set; } // (1)
+  public int Id { get; set; } // Convention Syntax
+  public string Name { get; set; } // Convention Syntax
 
-  [NotMapped] //(3)
+  [NotMapped] // Attribut Syntax für Property
   public DateTime LoadedFromDatabase { get; set; }
 
-  // werden von Fluent API ignoriert:
   public ICollection<Product> Products { get; set; }
   public ICollection<Metadata> Metadata { get; set; }
 }
@@ -5089,118 +5092,118 @@ public class Category {
 public class Product { ... }
 public class AuditEntry { ... }
 
-[NotMapped] // (3)
+[NotMapped] // Attribut Syntax für Class/Entity
 public class Metadata { ... }
 ```
 
-=== Include/Exclude von Entities
+
+=== Annotations Übersicht
+```cs
+[Table("Category", Schema = "dbo")] // schema ist optional
+public class Category {
+
+  [Key, Column("CategoryNr")]
+  public int Id { get; set; } // Id oder EntityId Name wird von Convention als PK erkannt
+
+
+
+
+  [MaxLength(20), Unicode(false)] // varchar(20), Unicode ist default true
+  public string? Name { get; set; } // Null erlaubt
+
+  
+  [Precision(10, 2), Required] // decimal(10,2) und nicht Null
+  public decimal Price { get; set; }
+
+  // Beziehung
+  public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+
+  // Hierarchie von Kategorien
+  [Column("CategoryNrId")]
+  public int? CategoryId { get; set; }
+
+  [ForeignKey(nameof(CategoryId))]
+  public virtual Category MainCategory { get; set; }
+
+  [InverseProperty(nameof(MainCategory))]
+  public virtual ICollection<Category> Subcategories { get; set; } = new List<Category>();
+}
+```
+
+
+=== Include/Exclude von Entities/Properties
 #grid(
   columns: (0.75fr, 1fr),
   [
-    *`(1)` Convention*\
-    _Alle Klassen werden gemapped_, wenn ein `DbSet`-Property im Context vorhanden ist.
+    _`(1)` Convention_\
+    Alle Klassen (Entities) werden gemapped, wenn ein `DbSet`-Property im Context vorhanden ist.
     Indirekt werden Klassen auch via Navigation Properties gemapped #hinweis[(Relationships, hier `Products` und `Metadata`)].
+    \
+    Alle `public` Properties mit Getter und Setter werden gemapped.
     
-    *`(2)` Fluent API*\
-    In ```cs OnModelCreating()``` durch ```cs Entity<T>()``` bzw. ```cs Ignore<T>()```.
+    _`(2)` Fluent API_\
+    Entities: In ```cs OnModelCreating()``` durch ```cs Entity<T>()``` bzw. ```cs Ignore<T>()```.
+\
+    Properties: In ```cs OnModelCreating()``` durch ```cs Entity<T>().Property()``` bzw. ```cs Entity<T>().Ignore()```.
     
-    *`(3)` Data Annotations*\
-    Es werden alle Entities gemapped, ausschliessen durch ```cs [NotMapped]``` Annotation an Klasse.
+    _`(3)` Data Annotations_\
+    Es werden alle Entities und Properties gemapped, ausschliessen durch ```cs [NotMapped]``` Annotation an Klasse/Properties. 
   ],
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; } // (1)
-      protected override void OnModelCreating(
-         ModelBuilder modelBuilder) {
-        modelBuilder.Entity<AuditEntry>(); // (2)
-        modelBuilder.Ignore<Metadata>(); // (2)
+      public DbSet<Category> Categories { get; set; } // (1)
+      protected override void OnModelCreating        (
+        ModelBuilder modelBuilder) {
+          
+        // Fluent API Entity
+        modelBuilder.Entity<AuditEntry>();
+        modelBuilder.Ignore<Metadata>();
+    
+        // Fluent API Property ignorieren:
+        modelBuilder.Ignore<Metadata>()
+         .Ignore(b => b.LoadedFromDatabase);
       }
     }
     public class Category {
       public int Id { get; set; }
       public string Name { get; set; }
-      public ICollection<Product> Products { get; set; } //(1)
+
+      // Navigation Property gempapped (1)
+      public ICollection<Product> Products { get; set; } 
       public ICollection<Metadata> Metadata { get; set; } //(1)
     }
+    
     public class Product { ... }
     public class AuditEntry { ... }
-    [NotMapped] // (3)
+    [NotMapped] // (3) Entity
     public class Metadata { ... }
     ```
   ],
 )
-#v(-0.5em)
+// #v(-0.5em)
 
-=== Include/Exclude von Properties
-#grid(
-  columns: (0.75fr, 1fr),
-  [
-    *`(1)` Convention*\
-    Alle `public` Properties mit Getter und Setter werden gemapped.
-    
-    *`(2)` Fluent API*\
-    In ```cs OnModelCreating()``` durch ```cs Entity<T>().Property()``` bzw. ```cs Entity<T>().Ignore()```.
-    
-    *`(3)` Data Annotations*\
-    Es werden alle Properties gemapped, durch ```cs [NotMapped]``` Annotation an Property
-    können bestimmte Properties ausgeschlossen werden.
-  ],
-  [
-    ```cs
-    public class ShopContext : DbContext {
-      public DbSet<Category> Categories { get; set; }
-      protected override void OnModelCreating(
-        ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Category>()
-         .Property(b => b.Name); // (2)
-        modelBuilder.Ignore<Metadata>()
-         .Ignore(b => b.LoadedFromDatabase); // (2)
-      }
-    }
-    
-    public class Product { ... }
-    public class AuditEntry { ... }
-
-    public class Category {
-      public int Id { get; set; } // (1)
-      public string Name { get; set; } // (1)
-      [NotMapped] //(3)
-      public DateTime LoadedFromDatabase { get; set; }
-    }
-    ```
-  ],
-)
-#v(-0.5em)
 
 === Keys
 #grid(
   columns: (0.75fr, 1fr),
   [
     Für Primary Keys siehe @ef-primary-key\
-    *`(1)` Convention*\
+    _`(1)` Convention_\
     Property mit Namen "[Entity]Id"\ #hinweis[(z.B. `Category.Id` oder `Category.CategoryId`)]
 
-    *`(2)` Fluent API* \
-    In ```cs OnModelCreating()``` durch \ ```cs Entity<T>().HasKey()```. Einzige Möglichkeit für Composite Primary Keys.
-
-    *`(3)` Data Annotations*\
-    ```cs [Key]``` Annotation an Property.
+    _`(2)` Fluent API_ \
+    Einzige Möglichkeit für Composite Primary Keys.
   ],
   [
     ```cs
-    public class ShopContext : DbContext {
-      public DbSet<Category> Categories { get; set; }
-      protected override void OnModelCreating(
-        ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Category>()
-         .HasKey(e => e.Id); // (2)
-    } }
+    // (2) In Context > OnModelCreating :
+    modelBuilder.Entity<Category>().HasKey(e => e.Id);
+
     public class Category {
-      [Key] // (3)
-      public int Id { get; set; } // (1)
+      [Key] // Primary Key Annotation
+      public int Id { get; set; } // By Convention
       public string Name { get; set; }
-      [NotMapped] // (3)
       public DateTime LoadedFromDatabase { get; set; }
     }
     ```
@@ -5212,8 +5215,7 @@ public class Metadata { ... }
   columns: (0.75fr, 1fr),
   [
     *`(1)` Convention*\
-    Nullable Types sind ```sql NOT NULL```, non-nullable ```sql NULL```.
-    Ausnahme: Wenn nullable Reference Types deaktiviert sind, sind sämtliche Reference Types ```sql NULL```.
+    #image("image-4.png")
 
     *`(2)` Fluent API*\
     In ```cs OnModelCreating()``` durch ```cs Entity<T>().Property().IsRequired([true|false])```.
@@ -5236,110 +5238,60 @@ public class Metadata { ... }
     } }
     public class Category {
       public int Id { get; set; }
-      [Required] // (3)
+      [Required] // (3) Nicht Null
       public string Name { get; set; }
-      [Required(false)] // (3)
+      [Required(false)] // (3) Null erlaubt
       public string? Description { get; set; } }
     ```
   ],
 )
 #v(-0.5em)
-=== Maximum Length
+=== VARCHAR Maximum Length und Unicode
 #grid(
   columns: (0.75fr, 1fr),
   [
-    *`(1)` Convention*\
-    Keine Restriktion, bzw. nur durch DB selbst: ```sql NVARCHAR(MAX)```. Bei Keys Limit von 450 Zeichen.
-
-    *`(2)` Fluent API*\
-    In ```cs OnModelCreating()``` durch ```cs Entity<T>().Property()```\ ```cs .HasMaxLength(int)```.
-
-    *`(3)` Data Annotations*\
-    ```cs [MaxLength(int)]``` Annotation an Property.
+    *Convention*\
+    Keine Restriktion der Zeichenlänge, bzw. nur durch DB : ```sql NVARCHAR(MAX)```. 
+    - Bei Keys gibt es ein Limit von 450 Zeichen.
+    - Strings sind immer Unicode durch ```sql NVARCHAR```.
   ],
   [
     ```cs
-    public class ShopContext : DbContext {
-      public DbSet<Category> Categories { get; set; }
-      protected override void OnModelCreating(
-        ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Category>()
-         .Property(e => e.Name)
-         .HasMaxLength(500); // (2)
-      } }
+    // Fluent API
+    modelBuilder.Entity<Category>()
+      .Property(e => e.Name)
+      .HasMaxLength(500) // varchar länge
+      .IsUnicode([true|false]) // nvarchar oder varchar
+    }
+
+    // Annotations
     public class Category {
       public int Id { get; set; }
       [MaxLength(500)] // (3)
+      [Unicode(false)] // (3)
       public string Name { get; set; }
     }
     ```
   ],
 )
 
-=== Unicode
-#grid(
-  columns: (0.75fr, 1fr),
-  [
-    *`(1)` Convention*\
-    Strings sind immer Unicode durch ```sql NVARCHAR```.
-
-    *`(2)` Fluent API*\
-    In ```cs OnModelCreating()``` durch ```cs Entity<T>().Property()```\ ```cs .IsUnicode([true|false])```.
-
-    *`(3)` Data Annotations*\
-    ```cs [Unicode(false)]```
-    
-  ],
-  [
-    ```cs
-    public class ShopContext : DbContext {
-      public DbSet<Category> Categories { get; set; }
-      protected override void OnModelCreating(
-        ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Category>()
-         .Property(e => e.Name)
-         .IsUnicode(false); //(2)
-      }
-    }
-    public class Category {
-      public int Id { get; set; }
-      [Unicode(false)] //(3)
-      public string Name { get; set; }
-    }
-    ```
-  ],
-)
 
 === Precision (Decimal, Float)
 #grid(
   columns: (0.75fr, 1fr),
   [
-    *`(1)` Convention*\
+    *Convention*\
     Pro Datentyp im Provider festgelegt.\
     #hinweis[(Precision: Anzahl Digits total, Scale: Anzahl Nachkommastellen)]
-
-    *`(2)` Fluent API*\
-    In ```cs OnModelCreating()``` durch\ ```cs Entity<T>().Property()```\ ```cs .HasPrecision(precision, scale)```\
-    oder ```cs .HasPrecision(precision)```.
-
-    *`(3)` Data Annotations*\
-    ```cs [Precision(precision, scale)]``` oder ```cs [Precision(precision)]``` Annotation an Property.
   ],
   [
     ```cs
-    public class ShopContext : DbContext {
-      public DbSet<Category> Categories { get; set; }
-      protected override void OnModelCreating(
-        ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Category>()
-         .Property(e => e.Price)
-         .HasPrecision(10, 2); // HasPrecision(10); (2)
-      }
-    }
+    // Fluent API
+    modelBuilder.Entity<Category>().Property(e => e.Price)
+    .HasPrecision(10, scale: 2); // 10 Stellen und 2 Nachkommastellen. scale/Nachkommastellen ist optional.
 
-    public class Category {
-      public int Id { get; set; }
-      [Precision(10, 2)] // [Precision(10)] (3)
+    // Data Annotations
+    [Precision(10, 2)] // oder [Precision(10)]
       public decimal Price { get; set; }
     }
     ```
@@ -5363,36 +5315,21 @@ public class Metadata { ... }
     In ```cs OnModelCreating()``` durch\ ```cs Entity<T>().HasIndex()``` #hinweis[(Non-unique)]\
     ```cs .HasIndex().IsUnique()``` #hinweis[(Unique)]\
     ```cs .HasIndex(x => new { ... })``` #hinweis[(Multi-Column)]
-
-    *`(3)` Data Annotations*\
-    ```cs [Precision(name)]``` #hinweis[(Non-Unique)]\
-    ```cs [Precision(name, IsUnique = true)]``` #hinweis[(Unique)]\
-    ```cs [Precision(name1, name2,...)]``` #hinweis[(Multi-Column)]
   ],
   [
     ```cs
-    public class ShopContext : DbContext {
-      public DbSet<Category> Categories { get; set; }
-      protected override void OnModelCreating(
-        ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Category>()
-         .HasIndex(b => b.Name); // (2)
-        modelBuilder.Entity<Category>()
-         .HasIndex(b => b.Name)
-         .IsUnique(); // (2)
-        modelBuilder.Entity<Category>()
-         .HasIndex(b => new { b.Name, b.IsActive }); // (2)
-      }
-    }
+    // Fluent API
+    modelBuilder.Entity<Category>().HasIndex(b => b.Name);
+    modelBuilder.Entity<Category>()
+      .HasIndex(b => b.Name).IsUnique();
+    modelBuilder.Entity<Category>()
+      .HasIndex(b => new { b.Name, b.IsActive });
 
-    [Index(nameof(Name))] // (3)
-    [Index(nameof(Name), IsUnique = true)] // (3)
-    [Index(nameof(Name), nameof(IsActive))] // (3)
-    public class Category {
-      public int Id { get; set; }
-      public string Name { get; set; }
-      public bool? IsActive { get; set; }
-    }
+    // Data Annotations bei class (entity)
+    [Index(nameof(Name))] // Non-Unique
+    [Index(nameof(Name), IsUnique = true)]
+    [Index(nameof(Name), nameof(IsActive))] // Multi-Column
+    public class Category { ... }
     ```
   ],
 )
@@ -5400,7 +5337,8 @@ public class Metadata { ... }
 === Entity Type Configuration
 #grid(
   [
-    Die Nachteile der Fluent API sind, dass sie viel Text beinhaltet und unstrukturiert ist.
+    Fluent API Nachteile
+    - viel Text und unstrukturiert
     Mit der Entity Type Configuration kann die Konfiguration im ```cs OnModelCreating()```
     in eigene Klassen und damit Dateien ausgelagert werden.
 
@@ -5431,37 +5369,6 @@ public class Metadata { ... }
   ],
 )
 
-=== Annotations Kurzübersicht
-```cs
-
-[Table("Category", Schema = "dbo")] // schema ist optional
-public class Category {
-  [Key, Column("CategoryNr")]
-  public int Id { get; set; }
-  
-  [MaxLength(20), Unicode(false)] // varchar(20)
-  public string Name { get; set; }
-  
-  [Precision(10, 2)] // decimal(10,2)
-  public decimal Price { get; set; }
-
-  // Beziehung
-  public virtual ICollection<Product> Products { get; set; } = new List<Product>();
-
-  // Hierarchie von Kategorien
-  [Column("CategoryNrId")]
-  public int? CategoryId { get; set; }
-
-  [ForeignKey(nameof(CategoryId))]
-  public virtual Category MainCategory { get; set; }
-
-  [InverseProperty(nameof(MainCategory))]
-  public virtual ICollection<Category> Subcategories { get; set; } = new List<Category>();
-}
-
-
-
-```
 
 === Data Type Mappings bei Microsoft SQL Server
 
