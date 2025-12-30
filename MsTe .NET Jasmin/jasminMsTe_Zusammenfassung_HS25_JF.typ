@@ -5105,12 +5105,8 @@ public class Category {
   [Key, Column("CategoryNr")]
   public int Id { get; set; } // Id oder EntityId Name wird von Convention als PK erkannt
 
-
-
-
   [MaxLength(20), Unicode(false)] // varchar(20), Unicode ist default true
   public string? Name { get; set; } // Null erlaubt
-
   
   [Precision(10, 2), Required] // decimal(10,2) und nicht Null
   public decimal Price { get; set; }
@@ -5118,8 +5114,8 @@ public class Category {
   // Beziehung
   public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
-  // Hierarchie von Kategorien
-  [Column("CategoryNrId")]
+  // Hierarchie von Kategorien (es verlinkt weitere Kategorien)
+  [Column("CategoryNrId")] // DB Spaltenname
   public int? CategoryId { get; set; }
 
   [ForeignKey(nameof(CategoryId))]
@@ -5181,7 +5177,6 @@ public class Category {
     ```
   ],
 )
-// #v(-0.5em)
 
 
 === Keys
@@ -5189,10 +5184,10 @@ public class Category {
   columns: (0.75fr, 1fr),
   [
     Für Primary Keys siehe @ef-primary-key\
-    _`(1)` Convention_\
+    _Convention_\
     Property mit Namen "[Entity]Id"\ #hinweis[(z.B. `Category.Id` oder `Category.CategoryId`)]
 
-    _`(2)` Fluent API_ \
+    _Fluent API_ \
     Einzige Möglichkeit für Composite Primary Keys.
   ],
   [
@@ -5214,34 +5209,23 @@ public class Category {
 #grid(
   columns: (0.75fr, 1fr),
   [
-    *`(1)` Convention*\
+    *Convention*\
     #image("image-4.png")
-
-    *`(2)` Fluent API*\
-    In ```cs OnModelCreating()``` durch ```cs Entity<T>().Property().IsRequired([true|false])```.
-
-    *`(3)` Data Annotations*\
-    ```cs [Required]``` oder ```cs [Required(false)]``` Annotation an Property.
   ],
   [
     ```cs
-    public class ShopContext : DbContext {
-      public DbSet<Category> Categories { get; set; }
-      protected override void OnModelCreating(
-        ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Category>()
-         .Property(e => e.Name)
-         .IsRequired(); // (2)
-        modelBuilder.Entity<Category>()
-         .Property(e => e.Description)
-         .IsRequired(false); // (2)
-    } }
-    public class Category {
-      public int Id { get; set; }
-      [Required] // (3) Nicht Null
-      public string Name { get; set; }
-      [Required(false)] // (3) Null erlaubt
-      public string? Description { get; set; } }
+    // Fluent API OnModelCreating
+    modelBuilder.Entity<Category>().Property(e => e.Name)
+    .IsRequired(); // nicht NULL
+
+    modelBuilder.Entity<Category>().Property(e => e.Description)
+    .IsRequired(false); // damit wird C# Datentyp Nullable
+
+    [Required] // Nicht Null
+    public string Name { get; set; }
+    // Nullable mit "?"
+    public string? Description { get; set; }
+
     ```
   ],
 )
@@ -5299,7 +5283,6 @@ public class Category {
 )
 
 === Indexes
-
 #grid(
   columns: (0.75fr, 1fr),
   [
@@ -5308,22 +5291,19 @@ public class Category {
     - _Unique Index_ #hinweis[(z.B. Keys)]
     - _Multi-Column-Index_ #hinweis[(besteht aus mehreren Spalten)]
 
-    *`(1)` Convention*\
-    Werden bei Foreign Keys automatisch erstellt.
+    *Convention*\
+    Indexes werden bei Foreign Keys automatisch erstellt.
 
-    *`(2)` Fluent API*\
-    In ```cs OnModelCreating()``` durch\ ```cs Entity<T>().HasIndex()``` #hinweis[(Non-unique)]\
-    ```cs .HasIndex().IsUnique()``` #hinweis[(Unique)]\
-    ```cs .HasIndex(x => new { ... })``` #hinweis[(Multi-Column)]
   ],
   [
     ```cs
     // Fluent API
-    modelBuilder.Entity<Category>().HasIndex(b => b.Name);
     modelBuilder.Entity<Category>()
-      .HasIndex(b => b.Name).IsUnique();
+      .HasIndex(b => b.Name); // Non-unique Index
     modelBuilder.Entity<Category>()
-      .HasIndex(b => new { b.Name, b.IsActive });
+      .HasIndex(b => b.Name).IsUnique(); //  Unique
+    modelBuilder.Entity<Category>()
+      .HasIndex(b => new { b.Name, b.IsActive }); // Multi Column
 
     // Data Annotations bei class (entity)
     [Index(nameof(Name))] // Non-Unique
@@ -5334,11 +5314,41 @@ public class Category {
   ],
 )
 
-=== Entity Type Configuration
+=== Data Type Mappings bei Microsoft SQL Server
+#grid(
+  columns: (0.75fr, 1fr),
+  [
+    #table(
+      columns: 2,
+      table.header([*C\#*], [*Microsoft SQL Server*]),
+      [int], [INT],
+      [string], [NVARCHAR(MAX)],
+      [decimal], [DECIMAL(18,2)],
+      [float], [REAL],
+      [byte[]], [VARBINARY(MAX)],
+      [DateTime], [DATETIME],
+    )
+  ],
+  [
+    #table(
+      columns: 2,
+      table.header([*C\#*], [*Microsoft SQL Server*]),
+      [bool], [BIT],
+      [byte], [TINYINT],
+      [short], [SMALLINT],
+      [long], [BIGINT],
+      [double], [FLOAT],
+      [char / sbyte / object / etc.], [No mapping],
+    )
+  ],
+)
+
+=== Entity Type Configuration (besseres Fluent API)
 #grid(
   [
     Fluent API Nachteile
     - viel Text und unstrukturiert
+
     Mit der Entity Type Configuration kann die Konfiguration im ```cs OnModelCreating()```
     in eigene Klassen und damit Dateien ausgelagert werden.
 
@@ -5367,26 +5377,6 @@ public class Category {
         ); } }
     ```
   ],
-)
-
-
-=== Data Type Mappings bei Microsoft SQL Server
-
-#table(
-  columns: 2,
-  table.header([*C\#*], [*Microsoft SQL Server*]),
-  [int], [INT],
-  [string], [NVARCHAR(MAX)],
-  [decimal], [DECIMAL(18,2)],
-  [float], [REAL],
-  [byte[]], [VARBINARY(MAX)],
-  [DateTime], [DATETIME],
-  [bool], [BIT],
-  [byte], [TINYINT],
-  [short], [SMALLINT],
-  [long], [BIGINT],
-  [double], [FLOAT],
-  [char / sbyte / object / etc.], [No mapping]
 )
 
 == Relationale Datenbanken

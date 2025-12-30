@@ -4731,7 +4731,7 @@ Folgende Elemente werden gemapped:
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; } // (1)
+      public DbSet<Category> Categories { get; set; } // (1)
       protected override void OnModelCreating(
          ModelBuilder modelBuilder) {
         modelBuilder.Entity<AuditEntry>(); // (2)
@@ -4771,7 +4771,7 @@ Folgende Elemente werden gemapped:
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -4807,7 +4807,7 @@ Folgende Elemente werden gemapped:
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -4841,7 +4841,7 @@ Folgende Elemente werden gemapped:
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -4877,7 +4877,7 @@ Folgende Elemente werden gemapped:
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -4909,7 +4909,7 @@ Folgende Elemente werden gemapped:
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -4944,7 +4944,7 @@ Folgende Elemente werden gemapped:
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -4987,7 +4987,7 @@ Folgende Elemente werden gemapped:
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -5067,7 +5067,7 @@ Im Model Builder bzw. der Fluent API gibt es zusätzliche Extension Methods nur 
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; } // (1)
+      public DbSet<Category> Categories { get; set; } // (1)
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -5101,7 +5101,7 @@ Im Model Builder bzw. der Fluent API gibt es zusätzliche Extension Methods nur 
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -5139,7 +5139,7 @@ Im Model Builder bzw. der Fluent API gibt es zusätzliche Extension Methods nur 
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -5235,7 +5235,7 @@ je nachdem welche Art von Zugriff von beiden Enden gewünscht ist.
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Product>() // 1-Ende
@@ -5283,7 +5283,7 @@ je nachdem welche Art von Zugriff von beiden Enden gewünscht ist.
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Product>() // 1-Ende
@@ -5327,7 +5327,7 @@ je nachdem welche Art von Zugriff von beiden Enden gewünscht ist.
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Product>() // 1-Ende
@@ -5372,7 +5372,7 @@ je nachdem welche Art von Zugriff von beiden Enden gewünscht ist.
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Product>() // 1-Ende
