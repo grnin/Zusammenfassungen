@@ -5061,7 +5061,6 @@ Folgende Elemente werden gemapped:
 
 === Übersicht DbContext für nachfolgende Codebeispiele
 
-Übersicht mit Exclude von Entities und Properties
 ```cs
 public class ShopContext : DbContext {
 
@@ -5146,21 +5145,15 @@ public class Category {
     Es werden alle Entities und Properties gemapped, ausschliessen durch ```cs [NotMapped]``` Annotation an Klasse/Properties. 
   ],
   [
-    ```cs
-    public class ShopContext : DbContext {
-      public DbSet<Category> Categories { get; set; } // (1)
-      protected override void OnModelCreating        (
-        ModelBuilder modelBuilder) {
-          
-        // Fluent API Entity
-        modelBuilder.Entity<AuditEntry>();
-        modelBuilder.Ignore<Metadata>();
-    
-        // Fluent API Property ignorieren:
-        modelBuilder.Ignore<Metadata>()
-         .Ignore(b => b.LoadedFromDatabase);
-      }
-    }
+    ```cs          
+    // Fluent API Entity im Context OnModelCreating
+    modelBuilder.Entity<AuditEntry>();
+    modelBuilder.Ignore<Metadata>();
+
+    // Fluent API Property ignorieren:
+    modelBuilder.Ignore<Metadata>()
+      .Ignore(b => b.LoadedFromDatabase);
+  
     public class Category {
       public int Id { get; set; }
       public string Name { get; set; }
@@ -5170,8 +5163,6 @@ public class Category {
       public ICollection<Metadata> Metadata { get; set; } //(1)
     }
     
-    public class Product { ... }
-    public class AuditEntry { ... }
     [NotMapped] // (3) Entity
     public class Metadata { ... }
     ```
@@ -5314,220 +5305,6 @@ public class Category {
   ],
 )
 
-=== Data Type Mappings bei Microsoft SQL Server
-#grid(
-  columns: (0.75fr, 1fr),
-  [
-    #table(
-      columns: 2,
-      table.header([*C\#*], [*Microsoft SQL Server*]),
-      [int], [INT],
-      [string], [NVARCHAR(MAX)],
-      [decimal], [DECIMAL(18,2)],
-      [float], [REAL],
-      [byte[]], [VARBINARY(MAX)],
-      [DateTime], [DATETIME],
-    )
-  ],
-  [
-    #table(
-      columns: 2,
-      table.header([*C\#*], [*Microsoft SQL Server*]),
-      [bool], [BIT],
-      [byte], [TINYINT],
-      [short], [SMALLINT],
-      [long], [BIGINT],
-      [double], [FLOAT],
-      [char / sbyte / object / etc.], [No mapping],
-    )
-  ],
-)
-
-=== Entity Type Configuration (besseres Fluent API)
-#grid(
-  [
-    Fluent API Nachteile
-    - viel Text und unstrukturiert
-
-    Mit der Entity Type Configuration kann die Konfiguration im ```cs OnModelCreating()```
-    in eigene Klassen und damit Dateien ausgelagert werden.
-
-    Dazu muss eine Klasse von `IEntityTypeConfiguration<T>` ableiten und ```cs Configure()``` überschreiben.
-    Die Syntax ist mit ```cs OnModelCreating()``` identisch.
-
-    Anschliessend muss die Konfiguration in der entsprechenden ```cs OnModelCreating()``` registriert werden.
-    Alternativ auch mit ```cs [EntityTypeConfiguration]``` Annotation.
-  ],
-  [
-    ```cs
-    internal class CategoryTypeConfig
-      : IEntityTypeConfiguration<Category> {
-
-      public void Configure(
-        EntityTypeBuilder<Category> builder)
-      {
-        builder.Property(p => p.Timestamp)
-          .IsRowVersion();
-    } }
-    public class ShopContext : DbContext {
-      protected override void OnModelCreating(
-        ModelBuilder modelBuilder) {
-        modelBuilder.ApplyConfiguration(
-          new CategoryTypeConfig()
-        ); } }
-    ```
-  ],
-)
-
-== Relationale Datenbanken
-Bisher waren alle Mappings _unabhängig vom Provider_. Die nachfolgenden Beispiele beziehen sich auf _Microsoft SQL Server_.
-Im Model Builder bzw. der Fluent API gibt es zusätzliche Extension Methods nur für relationale Provider.
-
-=== Tabellen
-#grid(
-  columns: (0.75fr, 1fr),
-  [
-    *`(1)` Convention*\
-    Tabellenname = `dbo.DbSet`-Name\ #hinweis[(z.B. `dbo.Categories`)]
-
-    *`(2)` Fluent API*\
-    In ```cs OnModelCreating()``` durch ```cs Entity<T>()```\ ```cs .ToTable(table, schema: schema)```\
-    Tabellenname zwingend, Schema optional.
-
-    *`(3)` Data Annotations*\
-    ```cs [Table(name, Schema = schema)]``` Annotation an Klasse.\
-    Tabellenname zwingend, Schema optional.
-  ],
-  [
-    ```cs
-    public class ShopContext : DbContext {
-      public DbSet<Category> Categories { get; set; } // (1)
-      protected override void OnModelCreating(
-        ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Category>()
-         .ToTable("Category", schema: "dbo"); // (2)
-      }
-    }
-
-    [Table("Category", Schema = "dbo")] // (3)
-    public class Category {
-      public int Id { get; set; }
-      public string Name { get; set; }
-    }
-    ```
-  ],
-)
-
-=== Spalten
-#grid(
-  columns: (0.75fr, 1fr),
-  [
-    *`(1)` Convention*\
-    Spaltenname = Property-Name #hinweis[(z.B. `Name`)]\ Die `Order` #hinweis[(Reihenfolge der Spalte in DB)]
-    ist nach der Reihenfolge der Properties im Code gegeben.
-
-    *`(2)` Fluent API*\
-    In ```cs OnModelCreating()``` durch ```cs Entity<T>().Property()```\ ```cs .HasColumnName(name, order: order)```.
-
-    *`(3)` Data Annotations*\
-    ```cs [Column(name, Order = order)]``` \ Annotation an Property.
-  ],
-  [
-    ```cs
-    public class ShopContext : DbContext {
-      public DbSet<Category> Categories { get; set; }
-      protected override void OnModelCreating(
-        ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Category>()
-         .Property(e => e.Name)
-         .HasColumnName("CategoryName", order: 1); // (2)
-      }
-    }
-
-    public class Category {
-      public int Id { get; set; }
-      [Column("CategoryName", Order = 1)] // (3)
-      public string Name { get; set; }
-    }
-    ```
-  ],
-)
-
-=== Datentypen & Default Values
-#grid(
-  columns: (0.75fr, 1fr),
-  [
-    *`(1)` Convention*\
-    Je nach Provider unterschiedlich.\
-    Keine Default Values.
-
-    *`(2)` Fluent API*\
-    In ```cs OnModelCreating()``` durch ```cs Entity<T>().Property().HasColumnName()```\
-    ```cs .HasColumnType()``` #hinweis[(Datentypname der Ziel-DB)]\
-    ```cs .HasDefaultValue()``` #hinweis[(Wert / Gültige SQL Expression)].
-
-    *`(3)` Data Annotations*\
-    ```cs [Column(name, TypeName = type)]``` Annotation an Property.\
-    Default Values nicht unterstützt.
-  ],
-  [
-    ```cs
-    public class ShopContext : DbContext {
-      public DbSet<Category> Categories { get; set; }
-      protected override void OnModelCreating(
-        ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Category>()
-         .Property(e => e.Name)
-         .HasColumnName("CategoryName")
-         .HasColumnType("NVARCHAR(500)")
-         .HasDefaultValue("---"); // (2)
-      }
-    }
-
-    public class Category {
-      public int Id { get; set; }
-      [Column("CategoryName", TypeName = "NVARCHAR(500)")]//(3)
-      public string Name { get; set; }
-    }
-    ```
-  ],
-)
-
-=== Primary Keys, Default Schema & Computed Columns <ef-primary-key>
-#grid(
-  [
-    _Primary Keys_\
-    *Convention*\
-    `PK_<Klassenname>`
-
-    *Fluent API*
-    #v(-0.5em)
-    ```cs
-    modelBuilder.Entity<Category>()
-      .HasKey(e => e.Id)
-      .HasName("PrimaryKey_Category");
-    ```
-  ],
-  [
-    _Default Schema_\
-    *Convention*\
-    Microsoft SQL Server verwendet "dbo", SQLite kennt keine Schemas
-
-    *Fluent API*\
-    ```cs modelBuilder.HasDefaultSchema("sales");```
-  ],
-  [
-    _Computed Columns_\
-    *Fluent API*
-    #v(-0.5em)
-    ```cs
-    modelBuilder.Entity<Category>()
-      .Property(e => e.DisplayName)
-      .HasComputedColumnSql(
-        "[Id] + ' ' + [Name]");
-    ```
-  ],
-)
 
 
 == Relationships
