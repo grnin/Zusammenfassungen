@@ -5093,23 +5093,29 @@ public class AuditEntry { ... }
 public class Metadata { ... }
 ```
 
-
 === Include/Exclude von Entities
-
-
 #grid(
   columns: (0.75fr, 1fr),
   [
     *`(1)` Convention*\
     _Alle Klassen werden gemapped_, wenn ein `DbSet`-Property im Context vorhanden ist.
     Indirekt werden Klassen auch via Navigation Properties gemapped #hinweis[(Relationships, hier `Products` und `Metadata`)].
+    
+    *`(2)` Fluent API*\
+    In ```cs OnModelCreating()``` durch ```cs Entity<T>()``` bzw. ```cs Ignore<T>()```.
+    
+    *`(3)` Data Annotations*\
+    Es werden alle Entities gemapped, ausschliessen durch ```cs [NotMapped]``` Annotation an Klasse.
   ],
   [
     ```cs
     public class ShopContext : DbContext {
-    
-      public DbSet<Category> Categories { get; set; } // (1)
-      
+      public DBSet<Category> Categories { get; set; } // (1)
+      protected override void OnModelCreating(
+         ModelBuilder modelBuilder) {
+        modelBuilder.Entity<AuditEntry>(); // (2)
+        modelBuilder.Ignore<Metadata>(); // (2)
+      }
     }
     public class Category {
       public int Id { get; set; }
@@ -5117,44 +5123,8 @@ public class Metadata { ... }
       public ICollection<Product> Products { get; set; } //(1)
       public ICollection<Metadata> Metadata { get; set; } //(1)
     }
-    ```
-  ],
-)
-
-
-#grid(
-  columns: (0.75fr, 1fr),
-  [
-    *`(2)` Fluent API*\
-    In ```cs OnModelCreating()``` durch ```cs Entity<T>()``` bzw. ```cs Ignore<T>()```.
-  ],
-  [
-    ```cs
-    public class ShopContext : DbContext {
-      protected override void OnModelCreating(
-         ModelBuilder modelBuilder) {
-        modelBuilder.Entity<AuditEntry>(); // (2)
-        modelBuilder.Ignore<Metadata>(); // (2)
-      }
-    }
-
-    public class Category {
-      public ICollection<Product> Products { get; set; }
-      public ICollection<Metadata> Metadata { get; set; }
-    }
-    ```
-  ],
-)
-
-#grid(
-  columns: (0.75fr, 1fr),
-  [
-    *`(3)` Data Annotations*\
-    Es werden alle Properties gemapped, durch ```cs [NotMapped]``` Annotation an Property
-    können bestimmte Properties ausgeschlossen werden.
-  ],
-  [
-    ```cs
+    public class Product { ... }
+    public class AuditEntry { ... }
     [NotMapped] // (3)
     public class Metadata { ... }
     ```
