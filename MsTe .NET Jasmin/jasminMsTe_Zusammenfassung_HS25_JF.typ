@@ -5174,7 +5174,6 @@ public class Category {
 #grid(
   columns: (0.75fr, 1fr),
   [
-    Für Primary Keys siehe @ef-primary-key\
     _Convention_\
     Property mit Namen "[Entity]Id"\ #hinweis[(z.B. `Category.Id` oder `Category.CategoryId`)]
 
@@ -5302,6 +5301,136 @@ public class Category {
     [Index(nameof(Name), nameof(IsActive))] // Multi-Column
     public class Category { ... }
     ```
+  ],
+)
+
+
+
+=== Entity Type Configuration (besseres Fluent API)
+#grid(
+  [
+    Fluent API Nachteile
+    - viel Text und unstrukturiert
+    
+    Mit der Entity Type Configuration kann die Konfiguration im ```cs OnModelCreating()```
+    in eigene Klassen und damit Dateien ausgelagert werden.
+    
+    Dazu muss eine Klasse von `IEntityTypeConfiguration<T>` ableiten und ```cs Configure()``` überschreiben.
+    Die Syntax ist mit ```cs OnModelCreating()``` identisch.
+    
+    Anschliessend muss die Konfiguration in der entsprechenden ```cs OnModelCreating()``` registriert werden.
+    Alternativ auch mit ```cs [EntityTypeConfiguration]``` Annotation.
+  ],
+  [
+    ```cs
+    internal class CategoryTypeConfig
+      : IEntityTypeConfiguration<Category> {
+    
+      public void Configure(
+        EntityTypeBuilder<Category> builder)
+      {
+        builder.Property(p => p.Timestamp)
+          .IsRowVersion();
+    } }
+    public class ShopContext : DbContext {
+      protected override void OnModelCreating(
+        ModelBuilder modelBuilder) {
+        modelBuilder.ApplyConfiguration(
+          new CategoryTypeConfig()
+        ); } }
+    ```
+  ],
+)
+
+== Relationale Datenbanken
+Bisher waren alle Mappings _unabhängig vom Provider_. Die nachfolgenden Beispiele beziehen sich auf _Microsoft SQL Server_.
+Im Model Builder bzw. der Fluent API gibt es zusätzliche Extension Methods nur für relationale Provider. (Nicht relational wäre z.B. NoSQL)
+
+=== Übersicht <ef-relationale-datenbanken>
+```cs
+public class ShopContext : DbContext {
+  // Tabellenname = DbSet-Name
+  // dbo.Categories Tabelle wird automatisch erstellt
+  public DbSet<Category> Categories { get; set; }
+
+  protected override void OnModelCreating(ModelBuilder modelBuilder) {
+    // Fluent API Tabelle: 
+    // - Name der Tabelle zwingend
+    // - Name des Schemas optional
+    modelBuilder.Entity<Category>()
+      .ToTable("Category", schema: "dbo");
+
+    // Fluent API Spalte: 
+    modelBuilder.Entity<Category>().Property(e => e.Name)
+      .HasColumnName("CategoryName", order: 1);
+
+    modelBuilder.Entity<Category>().Property(e => e.Name).HasColumnName("CategoryName")
+      .HasColumnType("NVARCHAR(500)") // Datenbanktyp vom Zielsystem
+      .HasDefaultValue("---"); // nur Fluent API Syntax ermöglicht Default Values. Hier gültige SQL Expression.
+
+```
+```cs
+    // Primary Key
+    modelBuilder.Entity<Category>()
+    .HasKey(e => e.Id).HasName("PrimaryKey_Category");
+
+    // schema 
+    modelBuilder.HasDefaultSchema("sales");
+
+    // Computed Columns gibt es nur bei Fluent API
+    modelBuilder.Entity<Category>().Property(e => e.DisplayName)
+      .HasComputedColumnSql("[Id] + ' ' + [Name]");
+  }
+}
+
+
+// Annotation API Tabelle: auch Name der Tabelle zwingend und Name des Schemas optional
+[Table("Category", Schema = "dbo")] // Data Annotation
+public class Category
+{
+  // Convention: PK_<Klassenname>. Hier PK_Category
+  public int Id { get; set; }
+
+  [Column("CategoryName", Order = 1)] // Spalte mit Annotation übersteuern
+  public string Name { get; set; } // Convention Spalte
+
+  // Datentyp vom Zielsystem. Default Values nicht unterstützt
+  [Column("CategoryName", TypeName = "NVARCHAR(500)"]
+  public string Name { get; set; }
+}
+```
+
+\
+*Default Schema* bei Convention ist bei Microsoft SQL Server «dbo».
+SQLite kennt keine Schemas.
+
+=== Data Type Mappings bei Microsoft SQL Server
+Convention Datentypen werden je nach Provider anders gemapped. Keine Default Values möglich bei Convention Syntax. Hier das Mapping bei Microsoft SQL Server:
+#grid(
+  columns: (0.75fr, 1fr),
+  [
+    #table(
+      columns: 2,
+      table.header([*C\#*], [*Microsoft SQL Server*]),
+      [int], [INT],
+      [string], [NVARCHAR(MAX)],
+      [decimal], [DECIMAL(18,2)],
+      [float], [REAL],
+      [byte[]], [VARBINARY(MAX)],
+      [DateTime], [DATETIME],
+    )
+  ],
+  [
+    #table(
+      columns: 2,
+      table.header([*C\#*], [*Microsoft SQL Server*]),
+      [bool], [BIT],
+      [byte], [TINYINT],
+      [short], [SMALLINT],
+      [long], [BIGINT],
+      [double], [FLOAT],
+      [char / sbyte / object / etc.], [No mapping],
+    )
   ],
 )
 
