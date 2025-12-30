@@ -5000,7 +5000,7 @@ Es sollte ein Token pro "Unit of Work" generiert werden #hinweis[(alles was zusa
   ],
 )
 
-
+#pagebreak()
 = Entity Framework
 Das Entity Framework #hinweis[(bzw. EF Core)] ist ein _O/R Mapping Framework_.
 Es verbindet _Objektorientiertes_ #hinweis[(Domain Model)] mit _Rationalem_ #hinweis[(Relational Model)].
@@ -5057,29 +5057,59 @@ Folgende Elemente werden gemapped:
   ],
 )
 
+=== Übersicht DbContext für nachfolgende Codebeispiele
+
+```cs
+public class ShopContext : DbContext {
+
+  // DbSet
+  public DbSet<Category> Categories { get; set; }
+  
+  // OnModelCreating für Fluent API Syntax
+  protected override void OnModelCreating(
+    ModelBuilder modelBuilder) {
+    modelBuilder.Entity<Category>().Property(b => b.Name); // (2)
+    modelBuilder.Ignore<Metadata>(); // (2)
+  }
+}
+
+// class wird für alle 3 Syntaxe benötigt, auch Fluent API
+public class Category {
+  public int Id { get; set; } // (1)
+  public string Name { get; set; } // (1)
+
+  [NotMapped] //(3)
+  public DateTime LoadedFromDatabase { get; set; }
+
+  // werden von Fluent API ignoriert:
+  public ICollection<Product> Products { get; set; }
+  public ICollection<Metadata> Metadata { get; set; }
+}
+
+public class Product { ... }
+public class AuditEntry { ... }
+
+[NotMapped] // (3)
+public class Metadata { ... }
+```
+
+
 === Include/Exclude von Entities
+
+
 #grid(
   columns: (0.75fr, 1fr),
   [
     *`(1)` Convention*\
     _Alle Klassen werden gemapped_, wenn ein `DbSet`-Property im Context vorhanden ist.
     Indirekt werden Klassen auch via Navigation Properties gemapped #hinweis[(Relationships, hier `Products` und `Metadata`)].
-
-    *`(2)` Fluent API*\
-    In ```cs OnModelCreating()``` durch ```cs Entity<T>()``` bzw. ```cs Ignore<T>()```.
-
-    *`(3)` Data Annotations*\
-    Es werden alle Entities gemapped, ausschliessen durch ```cs [NotMapped]``` Annotation an Klasse.
   ],
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; } // (1)
-      protected override void OnModelCreating(
-         ModelBuilder modelBuilder) {
-        modelBuilder.Entity<AuditEntry>(); // (2)
-        modelBuilder.Ignore<Metadata>(); // (2)
-      }
+    
+      public DbSet<Category> Categories { get; set; } // (1)
+      
     }
     public class Category {
       public int Id { get; set; }
@@ -5087,15 +5117,50 @@ Folgende Elemente werden gemapped:
       public ICollection<Product> Products { get; set; } //(1)
       public ICollection<Metadata> Metadata { get; set; } //(1)
     }
-    public class Product { ... }
-    public class AuditEntry { ... }
+    ```
+  ],
+)
+
+
+#grid(
+  columns: (0.75fr, 1fr),
+  [
+    *`(2)` Fluent API*\
+    In ```cs OnModelCreating()``` durch ```cs Entity<T>()``` bzw. ```cs Ignore<T>()```.
+  ],
+  [
+    ```cs
+    public class ShopContext : DbContext {
+      protected override void OnModelCreating(
+         ModelBuilder modelBuilder) {
+        modelBuilder.Entity<AuditEntry>(); // (2)
+        modelBuilder.Ignore<Metadata>(); // (2)
+      }
+    }
+
+    public class Category {
+      public ICollection<Product> Products { get; set; }
+      public ICollection<Metadata> Metadata { get; set; }
+    }
+    ```
+  ],
+)
+
+#grid(
+  columns: (0.75fr, 1fr),
+  [
+    *`(3)` Data Annotations*\
+    Es werden alle Properties gemapped, durch ```cs [NotMapped]``` Annotation an Property
+    können bestimmte Properties ausgeschlossen werden.
+  ],
+  [
+    ```cs
     [NotMapped] // (3)
     public class Metadata { ... }
     ```
   ],
 )
-
-#pagebreak()
+#v(-0.5em)
 
 === Include/Exclude von Properties
 #grid(
@@ -5103,10 +5168,10 @@ Folgende Elemente werden gemapped:
   [
     *`(1)` Convention*\
     Alle `public` Properties mit Getter und Setter werden gemapped.
-
+    
     *`(2)` Fluent API*\
     In ```cs OnModelCreating()``` durch ```cs Entity<T>().Property()``` bzw. ```cs Entity<T>().Ignore()```.
-
+    
     *`(3)` Data Annotations*\
     Es werden alle Properties gemapped, durch ```cs [NotMapped]``` Annotation an Property
     können bestimmte Properties ausgeschlossen werden.
@@ -5114,7 +5179,7 @@ Folgende Elemente werden gemapped:
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -5123,6 +5188,10 @@ Folgende Elemente werden gemapped:
          .Ignore(b => b.LoadedFromDatabase); // (2)
       }
     }
+    
+    public class Product { ... }
+    public class AuditEntry { ... }
+
     public class Category {
       public int Id { get; set; } // (1)
       public string Name { get; set; } // (1)
@@ -5133,6 +5202,7 @@ Folgende Elemente werden gemapped:
   ],
 )
 #v(-0.5em)
+
 === Keys
 #grid(
   columns: (0.75fr, 1fr),
@@ -5150,7 +5220,7 @@ Folgende Elemente werden gemapped:
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -5184,7 +5254,7 @@ Folgende Elemente werden gemapped:
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -5220,7 +5290,7 @@ Folgende Elemente werden gemapped:
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -5247,12 +5317,13 @@ Folgende Elemente werden gemapped:
     In ```cs OnModelCreating()``` durch ```cs Entity<T>().Property()```\ ```cs .IsUnicode([true|false])```.
 
     *`(3)` Data Annotations*\
-    ```cs [Unicode]``` oder ```cs [Unicode(false)]``` Annotation an Property.
+    ```cs [Unicode(false)]```
+    
   ],
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -5269,7 +5340,7 @@ Folgende Elemente werden gemapped:
   ],
 )
 
-=== Precision
+=== Precision (Decimal, Float)
 #grid(
   columns: (0.75fr, 1fr),
   [
@@ -5287,7 +5358,7 @@ Folgende Elemente werden gemapped:
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -5295,6 +5366,7 @@ Folgende Elemente werden gemapped:
          .HasPrecision(10, 2); // HasPrecision(10); (2)
       }
     }
+
     public class Category {
       public int Id { get; set; }
       [Precision(10, 2)] // [Precision(10)] (3)
@@ -5330,7 +5402,7 @@ Folgende Elemente werden gemapped:
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -5342,6 +5414,7 @@ Folgende Elemente werden gemapped:
          .HasIndex(b => new { b.Name, b.IsActive }); // (2)
       }
     }
+
     [Index(nameof(Name))] // (3)
     [Index(nameof(Name), IsUnique = true)] // (3)
     [Index(nameof(Name), nameof(IsActive))] // (3)
@@ -5388,6 +5461,57 @@ Folgende Elemente werden gemapped:
   ],
 )
 
+=== Annotations Kurzübersicht
+```cs
+
+[Table("Category", Schema = "dbo")] // schema ist optional
+public class Category {
+  [Key, Column("CategoryNr")]
+  public int Id { get; set; }
+  
+  [MaxLength(20), Unicode(false)] // varchar(20)
+  public string Name { get; set; }
+  
+  [Precision(10, 2)] // decimal(10,2)
+  public decimal Price { get; set; }
+
+  // Beziehung
+  public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+
+  // Hierarchie von Kategorien
+  [Column("CategoryNrId")]
+  public int? CategoryId { get; set; }
+
+  [ForeignKey(nameof(CategoryId))]
+  public virtual Category MainCategory { get; set; }
+
+  [InverseProperty(nameof(MainCategory))]
+  public virtual ICollection<Category> Subcategories { get; set; } = new List<Category>();
+}
+
+
+
+```
+
+=== Data Type Mappings bei Microsoft SQL Server
+
+#table(
+  columns: 2,
+  table.header([*C\#*], [*Microsoft SQL Server*]),
+  [int], [INT],
+  [string], [NVARCHAR(MAX)],
+  [decimal], [DECIMAL(18,2)],
+  [float], [REAL],
+  [byte[]], [VARBINARY(MAX)],
+  [DateTime], [DATETIME],
+  [bool], [BIT],
+  [byte], [TINYINT],
+  [short], [SMALLINT],
+  [long], [BIGINT],
+  [double], [FLOAT],
+  [char / sbyte / object / etc.], [No mapping]
+)
+
 == Relationale Datenbanken
 Bisher waren alle Mappings _unabhängig vom Provider_. Die nachfolgenden Beispiele beziehen sich auf _Microsoft SQL Server_.
 Im Model Builder bzw. der Fluent API gibt es zusätzliche Extension Methods nur für relationale Provider.
@@ -5410,7 +5534,7 @@ Im Model Builder bzw. der Fluent API gibt es zusätzliche Extension Methods nur 
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; } // (1)
+      public DbSet<Category> Categories { get; set; } // (1)
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -5444,7 +5568,7 @@ Im Model Builder bzw. der Fluent API gibt es zusätzliche Extension Methods nur 
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -5482,7 +5606,7 @@ Im Model Builder bzw. der Fluent API gibt es zusätzliche Extension Methods nur 
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Category>()
@@ -5578,7 +5702,7 @@ je nachdem welche Art von Zugriff von beiden Enden gewünscht ist.
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Product>() // 1-Ende
@@ -5626,7 +5750,7 @@ je nachdem welche Art von Zugriff von beiden Enden gewünscht ist.
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Product>() // 1-Ende
@@ -5670,7 +5794,7 @@ je nachdem welche Art von Zugriff von beiden Enden gewünscht ist.
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Product>() // 1-Ende
@@ -5715,7 +5839,7 @@ je nachdem welche Art von Zugriff von beiden Enden gewünscht ist.
   [
     ```cs
     public class ShopContext : DbContext {
-      public DBSet<Category> Categories { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
         ModelBuilder modelBuilder) {
         modelBuilder.Entity<Product>() // 1-Ende
