@@ -5097,6 +5097,7 @@ public class Metadata { ... }
 
 
 === Annotations Übersicht
+// https://learn.microsoft.com/en-us/ef/core/modeling/entity-properties?tabs=data-annotations%2Cwith-nrt#column-data-types
 ```cs
 [Table("Category", Schema = "dbo")] // schema ist optional
 public class Category {
@@ -5126,7 +5127,7 @@ public class Category {
 ```
 
 
-=== Include/Exclude von Entities/Properties
+=== Include/Exclude von Entities und Properties
 #grid(
   columns: (0.75fr, 1fr),
   [
@@ -5137,38 +5138,35 @@ public class Category {
     Alle `public` Properties mit Getter und Setter werden gemapped.
     
     _`(2)` Fluent API_\
-    Entities: In ```cs OnModelCreating()``` durch ```cs Entity<T>()``` bzw. ```cs Ignore<T>()```.
-\
-    Properties: In ```cs OnModelCreating()``` durch ```cs Entity<T>().Property()``` bzw. ```cs Entity<T>().Ignore()```.
+    Siehe Code
     
     _`(3)` Data Annotations_\
     Es werden alle Entities und Properties gemapped, ausschliessen durch ```cs [NotMapped]``` Annotation an Klasse/Properties. 
   ],
   [
-    ```cs          
-    // Fluent API Entity im Context OnModelCreating
-    modelBuilder.Entity<AuditEntry>();
-    modelBuilder.Ignore<Metadata>();
-
-    // Fluent API Property ignorieren:
-    modelBuilder.Ignore<Metadata>()
-      .Ignore(b => b.LoadedFromDatabase);
-  
+    ```cs
     public class Category {
       public int Id { get; set; }
       public string Name { get; set; }
-
+    
       // Navigation Property gempapped (1)
       public ICollection<Product> Products { get; set; } 
       public ICollection<Metadata> Metadata { get; set; } //(1)
     }
+    
+    // Fluent API Entity im Context OnModelCreating
+    modelBuilder.Entity<AuditEntry>();
+    modelBuilder.Ignore<Metadata>();
+    
+    // Fluent API Property ignorieren:
+    modelBuilder.Ignore<Metadata>()
+      .Ignore(b => b.LoadedFromDatabase);
     
     [NotMapped] // (3) Entity
     public class Metadata { ... }
     ```
   ],
 )
-
 
 === Keys
 #grid(
@@ -5186,7 +5184,8 @@ public class Category {
     modelBuilder.Entity<Category>().HasKey(e => e.Id);
 
     public class Category {
-      [Key] // Primary Key Annotation
+      // Primary Key Annotation:
+      [Key] 
       public int Id { get; set; } // By Convention
       public string Name { get; set; }
       public DateTime LoadedFromDatabase { get; set; }
@@ -5417,7 +5416,8 @@ Convention Datentypen werden je nach Provider anders gemapped. Keine Default Val
       [decimal], [DECIMAL(18,2)],
       [float], [REAL],
       [byte[]], [VARBINARY(MAX)],
-      [DateTime], [DATETIME],
+      [DateTime], [(mit Annotation definieren)],
+      // [DateTime], [DATETIME],
     )
   ],
   [
@@ -5435,7 +5435,6 @@ Convention Datentypen werden je nach Provider anders gemapped. Keine Default Val
 )
 
 
-
 == Relationships
 Bildet Beziehungen zwischen _zwei Entitäten_ ab. Sie werden im Modell durch _Navigation Properties_ und
 _Foreign Keys_ dargestellt. In den Beispielen wird eine _Produkt-zu-Kategorie-Beziehung_ gezeigt.
@@ -5446,195 +5445,120 @@ _Foreign Keys_ dargestellt. In den Beispielen wird eine _Produkt-zu-Kategorie-Be
   Damit kann vom N-Ende zum 1-Ende navigiert werden #hinweis[(Produkt $->$ Kategorie)].
 - _Foreign Key Property_: Foreign Key auf dem N-Ende. Wird als eigene Property implementiert.
 
-=== one-to-many / Fully Defined
+=== one-to-many
 Eine one-to-many Relationship ist eine _1-zu-N-Beziehung_. Im Entity Framework gibt es mehrere "Ausbaustufen",
 je nachdem welche Art von Zugriff von beiden Enden gewünscht ist.
 
+\
+
 #grid(
-  columns: (0.75fr, 1fr),
+  columns: (1fr, 1fr),
   [
-    In einer _Fully Defined one-to-many Beziehung_ sind alle Beziehungs-Elemente vorhanden.
-
-    *`(1)` Convention*\
-    #sym.checkmark _Collection Navigation Property_ #hinweis[(das 1-Ende)]\
-    #sym.checkmark _Reference Navigation Property_ #hinweis[(das N-Ende)]\
-    #sym.checkmark _Foreign Key Property_
-
-    *`(2)` Fluent API*\
-    In ```cs OnModelCreating()``` durch\ ```cs Entity<T>().Property()``` entweder\
-    ```cs .HasOne().WithMany()``` #hinweis[(von 1 zu N)] oder\
-    ```cs .HasMany().WithOne()``` #hinweis[(von N zu 1)]\
-    #hinweis[(je nachdem welches Ende `T` ist)]\
-    ```cs .HasForeignKey()```\
-    ```cs .HasConstraintName("FK_<TableName>_<KeyName>")```
-
-    *`(3)` Data Annotations*\
-    ```cs [ForeignKey(name)]``` Annotation an Navigation Property.
-    Das Property, welches die ID enthält muss davor deklariert werden.
-  ],
-  [
+    _Convention_
     ```cs
-    public class ShopContext : DbContext {
+    public class ShopContext : DbContext
+    {
       public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(
-        ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Product>() // 1-Ende
-         .HasOne(p => p.Category)
-         .WithMany(b => b.Products) // (2)
-         .HasForeignKey(p => p.CategoryId)
-         .HasConstraintName("FK_Product_CategoryId");
+        ModelBuilder modelBuilder)
+      {
+        modelBuilder.Entity<Product>()
+        .HasOne(p => p.Category) // normal
+        // .HasOne<Category>() // Ohne Navigation Property
+        .WithMany(b => b.Products)
+        // Foreign Key Property:
+        .HasForeignKey(p => p.CategoryId) // Name in C#
+        .HasConstraintName("FK_Product_CategoryId");//DB
       }
     }
-    public class Category {
+    public class Category
+    {
       public int Id { get; set; }
+
+      // Collection Navigation Property (1-Ende)
       public ICollection<Product> Products { get; set; }
     }
-    public class Product {
+    ```
+  ],
+  [
+    _Convention und Annotations_
+    ```cs
+    public class Product
+    {
       public int Id { get; set; }
+
+      // Foreign Key Property (convention)
+      // Aufruf mit Product.CategoryId
+      // kein automatischer Zugriff auf Category Tabelle (erst bei Join oder so)
       public int CategoryId { get; set; }
-      [ForeignKey(nameof(CategoryId))] // (3)
+
+      // Data Annotations, explizit definieren
+      [ForeignKey(nameof(CategoryId))]
+      // Reference Navigation Property:
+        // Auf Navigation Property wird Foreign Key Property definiert
+        // Aufruf mit Product.Category.Id
+        // Category wird In Memory geladen 
       public Category Category { get; set; }
     }
     ```
-  ],
+  ]
 )
 
-=== one-to-many / Shadow Foreign Key
+_Fluent API_
+HasOne / WithMany ODER HasMany / WithOne
+
+```cs
+public class ShopContext : DbContext
+{
+  public DbSet<Category> Categories { get; set; }
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<Product>()
+    .HasOne(p => p.Category)
+    .WithMany(b => b.Products)
+    .HasForeignKey(p => p.CategoryId)
+    .HasConstraintName("FK_Product_CategoryId");
+  }
+}
+```
+
 #grid(
-  columns: (0.75fr, 1fr),
+  columns: (1fr, 1fr),
   [
-    In einer _Shadow Foreign Key one-to-many Beziehung_ wird der Foreign Key weggelassen.
+    _Fully Defined_ \
+    #sym.checkmark Collection Navigation Property #hinweis[(das 1-Ende)]\
+    #sym.checkmark Reference Navigation Property #hinweis[(das N-Ende)]\
+    #sym.checkmark Foreign Key Property
 
-    *`(1)` Convention*\
-    #sym.checkmark _Collection Navigation Property_ #hinweis[(das 1-Ende)]\
-    #sym.checkmark _Reference Navigation Property_ #hinweis[(das N-Ende)]\
-    #sym.crossmark _Foreign Key Property_
-    \ \ \
-    *`(2)` Fluent API*\
-    In ```cs OnModelCreating()``` durch\ ```cs Entity<T>().Property()``` entweder\
-    ```cs .HasOne().WithMany()``` #hinweis[(von 1 zu N)] oder\
-    ```cs .HasMany().WithOne()``` #hinweis[(von N zu 1)]\
-    #hinweis[(je nachdem welches Ende `T` ist)]\
-    ```cs .HasConstraintName("FK_<TableName>_<KeyName>")``` #hinweis[(ohne Foreign Key)]
+    _Shadow Foreign Key_ \
+    ohne Foreign Key Property
+    - bei Convention ```cs CategoryId``` weglassen
+    - bei Fluent API zusätzlich  ```cs .HasForeignKey()``` weglassen
+    - bei Annotation zusätzlich der Verweis auf CategoryId weglassen
 
-    *`(3)` Data Annotations*\
-    Die Foreign-Key-Annotation wird weggelassen
+    _Single Navigation Property_ \
+    Shadow Foreign Key (kein Foreign Key) + kein Reference Navigation Property. Nur das *Collection Navigation Property* (bei Category) bleibt bestehen.
+    Kein Verweis vom Product zur Category.
+    - bei Convention ```cs public Category Category {..}``` weglassen
+    - bei Fluent API ```cs .HasOne<Category>().WithMany() ``` (ohne Lambda)
+    - keine Annotations (zusätzlich die Navigation Property weglassen)
   ],
   [
-    ```cs
-    public class ShopContext : DbContext {
-      public DbSet<Category> Categories { get; set; }
-      protected override void OnModelCreating(
-        ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Product>() // 1-Ende
-         .HasOne(p => p.Category)
-         .WithMany(b => b.Products) // (2)
-         //.HasForeignKey(p => p.CategoryId)
-         .HasConstraintName("FK_Product_CategoryId");
-      } }
-    public class Category {
-      public int Id { get; set; }
-      public ICollection<Product> Products { get; set; }
-    }
-    public class Product {
-      public int Id { get; set; }
-      //public int CategoryId { get; set; }
-      //[ForeignKey(nameof(CategoryId))] (3)
-      public Category Category { get; set; }
-    }
-    ```
-  ],
+    _Foreign Key_ \
+    Nur das *Foreign Key Property* (bei Product) bleibt bestehen.
+    Kein Verweis von Category zu den Products.
+
+    - bei Convention nur ForeignKey CategoryId
+    - bei Fluent API ```cs .HasOne<Category>() ``` 
+    - keine Annotations
+]
+
 )
 
-=== one-to-many / Single Navigation Property
-#grid(
-  columns: (0.75fr, 1fr),
-  [
-    In einer _Single Navigation Property one-to-many Beziehung_ ist es nicht mehr möglich, vom N-Ende zum 1-Ende zu kommen,
-    da das Reference Navigation Property wegfällt.
 
-    *`(1)` Convention*\
-    #sym.checkmark _Collection Navigation Property_ #hinweis[(das 1-Ende)]\
-    #sym.crossmark _Reference Navigation Property_ #hinweis[(das N-Ende)]\
-    #sym.crossmark _Foreign Key Property_
 
-    *`(2)` Fluent API*\
-    ```cs HasOne()``` bzw. ```cs WithOne()``` enthält nicht mehr ein Lambda zum 1-Ende, sondern nur noch den Typ dessen als `T`.
 
-    *`(3)` Data Annotations*\
-    Das Navigation Property wird ebenfalls weggelassen
-  ],
-  [
-    ```cs
-    public class ShopContext : DbContext {
-      public DbSet<Category> Categories { get; set; }
-      protected override void OnModelCreating(
-        ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Product>() // 1-Ende
-         .HasOne<Category>() // Nur noch Verweis auf Typ
-         .WithMany(b => b.Products) // (2)
-         //.HasForeignKey(p => p.CategoryId)
-         .HasConstraintName("FK_Product_CategoryId");
-      }
-    }
-    public class Category {
-      public int Id { get; set; }
-      public ICollection<Product> Products { get; set; }
-    }
-    public class Product {
-      public int Id { get; set; }
-      //public int CategoryId { get; set; }
-      //[ForeignKey(nameof(CategoryId))] (3)
-      //public Category Category { get; set; }
-    }
-    ```
-  ],
-)
 
-=== one-to-many / Foreign Key only
-#grid(
-  columns: (0.75fr, 1fr),
-  [
-    In einer _Foreign Key only one-to-many Beziehung_ ist nur noch der Foreign Key auf dem N-Ende vorhanden.
-
-    *`(1)` Convention*\
-    #sym.crossmark _Collection Navigation Property_ #hinweis[(das 1-Ende)]\
-    #sym.crossmark _Reference Navigation Property_ #hinweis[(das N-Ende)]\
-    #sym.checkmark _Foreign Key Property_
-
-    *`(2)` Fluent API*\
-    ```cs HasOne()``` bzw. ```cs WithOne()``` enthält nicht mehr ein Lambda zum 1-Ende, sondern nur noch den Typ dessen als `T`.\
-    ```cs WithMany()``` bzw. ```cs HasMany()``` hat ebenfalls kein Lambda mehr, ist aber nicht generisch.
-
-    *`(3)` Data Annotations*\
-    Keine
-  ],
-  [
-    ```cs
-    public class ShopContext : DbContext {
-      public DbSet<Category> Categories { get; set; }
-      protected override void OnModelCreating(
-        ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Product>() // 1-Ende
-         .HasOne<Category>()  // Nur noch Verweis auf Typ
-         .WithMany()          // Kein Lambda mehr (2)
-         .HasForeignKey(p => p.CategoryId)
-         .HasConstraintName("FK_Product_CategoryId");
-      }
-    }
-    public class Category {
-      public int Id { get; set; }
-      //public ICollection<Product> Products { get; set; }
-    }
-    public class Product {
-      public int Id { get; set; }
-      public int CategoryId { get; set; }
-      //[ForeignKey(nameof(CategoryId))] (3)
-      //public Category Category { get; set; }
-    }
-    ```
-  ],
-)
 #pagebreak()
 == Database Context
 Der Database Context ist der _wichtigste Teil des Entity Frameworks_. Zur _Design-Time_ definiert er das Model/OR Mapping,
