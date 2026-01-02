@@ -607,11 +607,12 @@ bool result6 = string.ReferenceEquals(s1, s3); // False
 
 
 
-=== Typkompatibilität
+=== Typkompatibilität (Casting)
 #figure(
   image("img/dotnet_07.png"),
   caption: [#hinweis[Typen mit validem Pfad werden implizit konvertiert, bei anderen ist ein expliziter Type Cast nötig]],
 )
+z.B. Cast nötig von int zu sbyte.
 
 Übersicht einiger Beispiel-Casts. Links: Typ der Zielvariable, Rechts: Typ des Quellvariable
 #table(
@@ -1854,9 +1855,11 @@ Es können nur Unäre und Binäre Operatoren überladen werden, Index- und Type 
             if (_arr[i] == search) return i;
           }
           return -1;
-        } }
+        } 
+      }
       // 2-Dimensionaler Indexer, hier so wenig sinnvoll
-      public string this[int i1, int i2] { ... } }
+      public string this[int i1, int i2] { ... } 
+    }
     string location = words["Hello There"];
     ```
   ],
@@ -2894,7 +2897,8 @@ der Aufruf des Clients auf das Event nicht angepasst werden muss.
         List<int> list = new();
         list.ForEach(/* Print */
           i => Console.WriteLine(i));
-        list.ForEach(/* SumUp */ i => sum += 1); } }
+        list.ForEach(/* SumUp */ i => sum += 1); 
+    } }
     ```
   ],
 )
@@ -4520,7 +4524,7 @@ Die generierten Properties #hinweis[(hier `Id`, `Name`)] sind _read-only_,
 Implizite/Explizite Propertynamen können gemischt werden,
 Anonymer Typ direkt von `System.Object` abgeleitet #hinweis[(hat deswegen `Equals()`, `GetHashCode()`, `ToString()`)],
 kann nur einer Variable vom Typ `var` zugewiesen werden.
-
+\ \
 == Query Expressions
 #grid(
   [
@@ -4545,6 +4549,7 @@ kann nur einer Variable vom Typ `var` zugewiesen werden.
              where s.Subject = "Informatik"
              orderby s.Name
              select new { s.Id, s.Name };
+
     // wird vom Compiler umgewandelt in
     var q1 = students
         .Where(s => s.Subject == "Informatik")
@@ -5492,7 +5497,7 @@ je nachdem welche Art von Zugriff von beiden Enden gewünscht ist.
       // kein automatischer Zugriff auf Category Tabelle (erst bei Join oder so)
       public int CategoryId { get; set; }
 
-      // Data Annotations, explizit definieren
+      // Data Annotations, explizit definieren möglich
       [ForeignKey(nameof(CategoryId))]
       // Reference Navigation Property:
         // Auf Navigation Property wird Foreign Key Property definiert
@@ -5574,6 +5579,7 @@ _Fehleranfälligkeit_, weil Objekte nur an einem Kontext attached.
 instanzieren, GUI-Applikationen eine pro Formular. Generell ausgedrückt: Eine Instanz pro "Unit of Work"\
 ```cs await using ShopContext context = new();```
 
+
 === LINQ to Entities
 Das _Entity Framework_ führt selbst keine Queries aus, es _generiert_ nur Queries, welche die DB dann ausführt.
 Der SQL-Output ist je nach Formulierung der LINQ-Queries unterschiedlich. LINQ-to-Entities-Queries werden zu
@@ -5582,9 +5588,10 @@ Dies impliziert aber, dass nicht alle .NET Expressions auf DB-Syntax übersetzt 
 der Provider muss Funktionen bereits kennen, um deren SQL generieren zu können.
 
 ```cs
-await context.Categories.SingleAsync(c => Name.ToLower() == "Büsis"); // Funktioniert
-// Funktion dem Provider unbekannt, funktioniert nicht
-await context.Categories.SingleAsync(c => MyHelper.DoSomeShitWithThis(c.Name) == "Büsis");
+// Funktionierendes Beispiel:
+await context.Categories.SingleAsync(c => c.Name.ToLower() == "tablets")
+// Fehlerhaftes Beispiel:
+await context.Categories.SingleAsync(c => MyHelper.DoSomethingWithIt(c.Name) == "tablets")
 ```
 
 === Ablauf
@@ -5602,17 +5609,17 @@ await context.Categories.SingleAsync(c => MyHelper.DoSomeShitWithThis(c.Name) ==
   ],
   [
     ```cs
-    await using ShopContext context = new(); // 1.
-    Category category = await context        // 2.
-      .Categories
-      .SingleAsync(c => c.Id == 1);
-    category.Name = $"{category.Name} changed";
-
-    await context.SaveChangesAsync();        // 3.
-    var categories = context.Categories;     // 4.
-    foreach (Category c in categories)
-      { Console.WriteLine(c.Name); }
-    // 5. End of Method
+        await using ShopContext context = new(); // 1.
+        Category category = await context        // 2.
+          .Categories
+          .SingleAsync(c => c.Id == 1);
+        category.Name = $"{category.Name} changed";
+    
+        await context.SaveChangesAsync();        // 3.
+        var categories = context.Categories;     // 4.
+        foreach (Category c in categories)
+          { Console.WriteLine(c.Name); }
+        // 5. End of Method
     ```
   ],
 )
@@ -5703,8 +5710,18 @@ Die Änderungen werden _aufgezeichnet_ und beim Speichern werden alle in einer _
     await context.SaveChangesAsync();
     ```
   ],
+  [
+    *_Daten lesen/abspeichern_*\
+    Speichere pro Kategorie die Produkte in eine Liste
+    ```cs
+    await using ShopContext context = new();
+    List<Category> catProducts = await context.Category
+        .Include(a => a.Products)
+        .ToListAsync();
+    ```
+  ],
 )
-
+\
 ==== Batch-Operationen
 #grid(
   [
@@ -5847,22 +5864,26 @@ Es gibt immer mindestens 3 Varianten mit dem gleichen Effekt.
 ==== Beispiel State Transition
 ```cs
 // New Record
-Category cat = new() { Name = "Glüehwii" };           // EntityState.Detached (wie untracked file in Git)
-context.Add(cat);                                     // EntityState.Added
-await context.SaveChangesAsync();                     // EntityState.Unchanged
-cat.Name = "Drü Manne Kebab";                         // EntityState.Modified
-await context.SaveChangesAsync();                     // EntityState.Unchanged
-context.Remove(cat);                                  // EntityState.Deleted
-await context.SaveChangesAsync();                     // EntityState.Unchanged (Objekt bleibt im Speicher)
+Category cat = new() { Name = "Glüehwii" }; // EntityState.Detached (wie untracked file in Git)
+context.Add(cat);                     // EntityState.Added
+
+await context.SaveChangesAsync();     // EntityState.Unchanged
+cat.Name = "Kebab";         // EntityState.Modified
+
+await context.SaveChangesAsync();     // EntityState.Unchanged
+context.Remove(cat);                  // EntityState.Deleted
+
+await context.SaveChangesAsync();     // EntityState.Unchanged (Objekt bleibt im Speicher)
 // Load from Database (tracked)
-Category catLoaded1 = await context                   // EntityState.Unchanged
+Category catLoaded1 = await context         // EntityState.Unchanged
   .Categories
-  .FirstAsync(c => Name == "Schoggigipfel");
+  .FirstAsync(c => Name == "Schoggi");
+
 // Load from Database (untracked)
-Category catLoaded2 = await context                   // EntityState.Detached
+Category catLoaded2 = await context         // EntityState.Detached
   .Categories
   .AsNoTracking() // Deaktiviert Change Tracking
-  .FirstAsync(c => Name == "El Töni Mate" );
+  .FirstAsync(c => Name == "Mate" );
 ```
 
 == Laden von Object Graphs
