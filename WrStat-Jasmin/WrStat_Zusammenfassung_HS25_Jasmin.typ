@@ -1,32 +1,10 @@
 // Compiled with Typst 0.13.1
 #import "../template_zusammenf.typ": *
 
-
-TR Funktionen ersetzen:
-"invNorm"(p, 0, 1) >> "NORMALD_ICDF"([0, 1,] p)
-"invNorm"(0.082, 0, 1) >> "NORMALD_ICDF"([0, 1,] 0.082)
-
-"invNorm"(x,0,1), x = "Fläche" >>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #show: project.with(
-  authors: ("Nina Grässli", "Jannis Tschan"),
-  // habe den Titel abgeändert, ist so eigentlich nicht korrekt
-  fach: "Version für HP Prime G2",
-  fach-long: "WrStat",
+  authors: ("Nina Grässli", "Jannis Tschan", "Jasmin Fässler"),
+  fach: "WrStat",
+  fach-long: "Wahrscheinlichkeit und Statistik",
   semester: "HS24",
   tableofcontents: (enabled: true, depth: 3, columns: 2),
   appendix: (
@@ -42,40 +20,14 @@ TR Funktionen ersetzen:
 // Grid size defaults
 #set grid(columns: (1fr, 1fr), gutter: 1em)
 
-// // Icon for the "Construct" button on the TI n-spire
-// #let tr-constructs-button = box(
-//   stroke: 0.75pt,
-//   inset: (x: 0.2em),
-//   outset: (y: 0.25em, bottom: 0.55em),
-//   radius: 0.25em,
-//   $script(abs(ballot) cases(ballot, ballot))$,
-// )
-// Icon for the "Construct" button on the HP Prime G2
+// Icon for the "Construct" button on the TI n-spire
 #let tr-constructs-button = box(
-  image("img/hp-prime-construct-button.png", width: 30pt,
-  fit: "contain",
-  ),
+  stroke: 0.75pt,
+  inset: (x: 0.2em),
+  outset: (y: 0.25em, bottom: 0.55em),
+  radius: 0.25em,
+  $script(abs(ballot) cases(ballot, ballot))$,
 )
-
-#let tr-solve-function = box(
-  image("img/hp-prime-solve.png", width: 30pt,
-  fit: "contain",
-  ),
-)
-
-#let tr-fraction-button = box(
-  image("img/hp-prime-fraction.png", width: 30pt,
-  fit: "contain",
-  ),
-)
-
-#let tr-num-tabelle-button = box(
-  image("img/hp-prime-num-button.png", width: 30pt,
-  fit: "contain",
-  ),
-)
-
-
 
 // Styling for example exercises
 #let example-block(body) = {
@@ -154,10 +106,10 @@ Nachfolgend ist die Reihenfolge einer typischen WrStat-Prüfung von Andreas Mül
 
   Die Frage ist meist "Auf wie viele Arten ..." / "Wie viele verschiedene Kombinationen ..."
 
-  // ==== Vorgehensweise
-  // + Aufgabe zuerst auslassen und am Schluss der Prüfung lösen, weil meist relativ kompliziert und zeitintensiv.
-  // + Versuchen, die Texte auf eines der untenstehenden Probleme herunterzubrechen
-  // + Entsprechende Regeln anwenden
+  ==== Vorgehensweise
+  + Aufgabe zuerst auslassen und am Schluss der Prüfung lösen, weil meist relativ kompliziert und zeitintensiv.
+  + Versuchen, die Texte auf eines der untenstehenden Probleme herunterzubrechen
+  + Entsprechende Regeln anwenden
 ]
 
 == Formeln und Beispiele
@@ -166,18 +118,19 @@ Nachfolgend ist die Reihenfolge einer typischen WrStat-Prüfung von Andreas Mül
 Für jedes ... gibt es ...  
 $ n dot m $
 
-// #definition[
-//   #grid(
-//     columns: (2fr, 1fr),
-//     [
-//       Für jede der $n$ Möglichkeiten gibt es eine von der ersten Position _unabhängige Anzahl_ $k$ Möglichkeiten
-//       für den Rest, also $n dot k$ Möglichkeiten.
-//     ],
-//     [
-//       $ n_1 dot n_2 dot ... dot n_k = product_(i=1)^k n_i $
-//     ],
-//   )
-// ]
+#definition[
+  #grid(
+    columns: (2fr, 1fr),
+    [
+      Für jede der $n$ Möglichkeiten gibt es eine von der ersten Position _unabhängige Anzahl_ $k$ Möglichkeiten
+      für den Rest, also $n dot k$ Möglichkeiten.
+    ],
+    [
+      $ n_1 dot n_2 dot ... dot n_k = product_(i=1)^k n_i $
+    ],
+  )
+]
+
 _Beispiele:_
 #v(-0.5em)
 #example-block[
@@ -200,7 +153,8 @@ gewählt werden. Bisher sind nun $n dot (n-1)$ Möglichkeiten gefunden. Führt m
 sich $n!$ Möglichkeiten.
 
 $ n! $
-
+\
+#hinweis[$n$ Objekte kann man auf $n dot (n-1) dot (n-2) dot ... dot 1 = n!$ Arten anordnen. (Bei mehreren Gruppen: $n! dot m!$)]\
 
 _Beispiele:_
 #v(-0.5em)
@@ -222,36 +176,38 @@ _Beispiele:_
     Paarungen gibt es in diesem Fall?_
     $ (n_"schwarz" + n_"weiss")! = (7 + 6)! = 13! = underline(6'227'020'800) $
 
-  // + _Bei der Revision stellt sich heraus, dass zwei schwarze linke Skis und eine linker weisser Ski nicht mehr zu reparieren
-  //   sind. Wie viele mögliche Paarungen gibt es jetzt noch?_
+  + _Bei der Revision stellt sich heraus, dass zwei schwarze linke Skis und eine linker weisser Ski nicht mehr zu reparieren
+    sind. Wie viele mögliche Paarungen gibt es jetzt noch?_
 
-  //   Hat man nur $n$ linke und $m$ rechte Skis einer gewissen Farbe, mit $n < m$, muss man zuerst aus den $m$ Skis davon
-  //   $n$ auswählen, die man verwenden will. Das geht auf $binom(m, n)$ Arten. Davon kann man wieder $n!$ Anordnungen bilden.
-  //   Die Gesamtzahl möglicher Paarungen ist also
-  //   $ binom(m, n) dot n! = binom(7, 5) dot 5! = underline(1'814'400) $
+    Hat man nur $n$ linke und $m$ rechte Skis einer gewissen Farbe, mit $n < m$, muss man zuerst aus den $m$ Skis davon
+    $n$ auswählen, die man verwenden will. Das geht auf $binom(m, n)$ Arten. Davon kann man wieder $n!$ Anordnungen bilden.
+    Die Gesamtzahl möglicher Paarungen ist also
+    $ binom(m, n) dot n! = binom(7, 5) dot 5! = underline(1'814'400) $
 
-  //   #hinweis[TR: $"BINOMIAL"(m,n)$]
+    #hinweis[TR: Menü-5-3 / $"nCr"(m,n)$]
 ]
 
 
-// == Auswahlproblem
-// #v(-0.5em)
-==== Kombination: Ziehen ohne Zurücklegen
+== Auswahlproblem
+#v(-0.5em)
+=== Kombination: Ziehen ohne Zurücklegen
 _"Auf wie viele Arten kann man $k$ Objekte aus $n$ auswählen?"_\
-// Sei $C^n_k$ die Anzahl der Möglichkeiten, $k$ aus $n$ Objekten auszuwählen. Es ist zuerst $k$ mal eine Auswahl zu treffen.
-// Für die erste Auswahl stehen $n$ Objekte zur Verfügung. Danach muss noch $k - 1$ mal eine Auswahl getroffen werden,
-// es stehen noch $n-1$ Alternativen zur Verfügung. So lassen sich $n dot (n - 1) dot (n - 2)...(n - k + 1)$ Möglichkeiten finden.
-// Ist die Reihenfolge der Objekte nicht relevant, muss noch durch $k!$ geteilt werden.
+Sei $C^n_k$ die Anzahl der Möglichkeiten, $k$ aus $n$ Objekten auszuwählen. Es ist zuerst $k$ mal eine Auswahl zu treffen.
+Für die erste Auswahl stehen $n$ Objekte zur Verfügung. Danach muss noch $k - 1$ mal eine Auswahl getroffen werden,
+es stehen noch $n-1$ Alternativen zur Verfügung. So lassen sich $n dot (n - 1) dot (n - 2)...(n - k + 1)$ Möglichkeiten finden.
+Ist die Reihenfolge der Objekte nicht relevant, muss noch durch $k!$ geteilt werden.
 
 #definition[
+    
+    TODO:
+    $C^n_k = n! / (k! dot (n-k)!) = binom(n, k)$ \
+
   $
-    C^n_k = 
-    // (n dot (n-1) dot (n-2) dot ... dot (n-k+1) dot (n-k) dot (n-k-1) dot ... dot 2 dot 1) / (k! dot (n-k)!) = 
-    n! / (k! dot (n-k)!)
-    // \ arrow.double.r.l space C^n_k = C^(n-1)_(k-1) + C^(n-1)_k 
-    = binom(n, k)
+    C^n_k = (n dot (n-1) dot (n-2) dot ... dot (n-k+1) dot (n-k) dot (n-k-1) dot ... dot 2 dot 1) / (k! dot (n-k)!)
+    = n! / (k! dot (n-k)!)\
+    arrow.double.r.l space C^n_k = C^(n-1)_(k-1) + C^(n-1)_k = binom(n, k)
   $
-  #hinweis[TR: BINOM(n, k)]
+  #hinweis[TR: Menü-5-3 / $"nCr"(n, k)$]
 ]
 
 _Beispiele:_
@@ -272,11 +228,11 @@ _Beispiele:_
 ]
 
 
-==== Variation: Ziehen mit Zurücklegen
+=== Variation: Ziehen mit Zurücklegen
 #hinweis[Perlenkettenproblem]\
-// _"Auf wie viele Arten kann man $k$ mal unter $n$ verschiedenen Objekten auswählen?"_\
+_"Auf wie viele Arten kann man $k$ mal unter $n$ verschiedenen Objekten auswählen?"_\
 
-#definition[Anzahl Möglichkeiten, $n$ verschiedene Objekte $k$ mal auszuwählen: \ $V_(n, k) = n^k$]
+#definition[Anzahl Möglichkeiten, $n$ verschiedene Objekte $k$ mal auszuwählen: $V_(n, k) = n^k$]
 
 _Beispiel:_ Auf wie viele Arten kann man eine Perlenkette der Länge $k = 10$ aus $n = 4$ Farben von Perlen herstellen?
 
@@ -443,23 +399,22 @@ $ r = "cov"(X, Y) / sqrt("var"(X) dot "var"(Y)) $
 
   ==== Vorgehensweise
   + Zuerst muss überprüft werden, ob es sich wirklich um eine Wahrscheinlichkeitsdichte handelt.\
+
   + Integral mit TR ausrechnen
   + Erwartungswert ausrechnen #hinweis[Falls Funktion $y$-Achsensymmetrisch, ist $E(X) =$ Mittelpunkt der Funktion]
   + Varianzformel $"var"(X) = E(X^2) - E(X)^2$ hinschreiben, ausrechnen
 
-
-
   #hinweis[
     *TR-Tipps:*
-    - im CAS Modus
-    - Solve-Funktion: Werkzeuge > CAS > Lösen. 
-    - Integral: #tr-constructs-button -Taste drücken, Integral-Symbol auswählen (z.B. Integral = 1)
+    - Integral: #tr-constructs-button -Taste (Betrag und Cases-Icon) drücken, Integral-Symbol auswählen
+    - Solve-Funktion: Menu-3-1
     - Wenn Solve beim Lösen eines Integrals ein Integral zurück gibt, auszurechnende Variabel aus dem Integral herausnehmen
-    - Zahlen in Brüche umwandeln #tr-fraction-button
+    - Zahlen in Brüche umwandeln: Menu-Zahl-Brüche approximieren
   ]
 ]
 
-1. 
+TODO:
+1.
 Dafür muss die Variable #hinweis[(oft $a$)] so gewählt werden, dass das Integral von $phi$ den Wert 1 hat.
 \
 - Dazu überprüfen, ob die Normierungsbedingung  $integral^infinity_(-infinity) phi(x) space dif x = 1$ erfüllt ist.
@@ -468,15 +423,12 @@ Dafür muss die Variable #hinweis[(oft $a$)] so gewählt werden, dass das Integr
 // korrekt?
 // $E(X) = integral^1_0 x(phi(x)) space dif x = 1$
 
-
-2. 
+2.
 Integral aufteilen im TR??
 oder von Hand.
 
 3.
-$E(X) = integral_(-infinity)^(infinity) x dot phi(x)  "dx"$
-
-4.
+$E(X) = integral_(-infinity)^(infinity) x dot phi(x) "dx"$
 
 
 
@@ -707,9 +659,9 @@ ist ${X = a}$ nur beschränkt von Nutzen, da selten das exakt selbe Ereignis ein
   $
   wobei $X$ konstant auf $A_i$ und $A_i = Omega$ sein muss.
 
-  // $ 
-  //   E(X) = x dot phi(x) dx 
-  // $
+
+TODO
+  $E(X) = x dot phi(x) d x$
 ]
 
 Wenn die Wahrscheinlichkeit in allen Fällen _gleich_ ist #hinweis[(Laplace-Experiment)], entspricht der Erwartungswert dem
@@ -719,6 +671,7 @@ Der _empirische Erwartungswert_ entspricht dem gewichteten Mittelwert #hinweis[(
 $ E(X) = sum_i X(i) dot Rho(X = x_i) $
 
 
+TODO
 ------
 Bei einer stetigen Funktion ist der Erwartungswert dann :??
 $ E(X) = sum_i X(i) dot phi(X = x_i) $
@@ -1066,11 +1019,14 @@ Modellierung vieler kleiner Einflüsse, Messwerte, wiederholte Experimente.\
     row-gutter: 1em,
     align: horizon,
 
-    // Vorher:
-    // [$ phi(x) = 1 / (sqrt(2pi) sigma) dot e^(-x^2 / (2 sigma^2)) $],
+    [
+    TODO
+    Vorher:
+    $ phi(x) = 1 / (sqrt(2pi) sigma) dot e^(-x^2 / (2 sigma^2)) $
     
-    // Neu:
-    [$ phi(x) = 1 / (sqrt(2pi) sigma) dot e^(-(x-mu)^2 / (2 sigma^2)) $],
+    Neu:
+    $ phi(x) = 1 / (sqrt(2pi) sigma) dot e^(-(x-mu)^2 / (2 sigma^2)) $
+    ],
 
     [*$sigma$*: Standardabweichung \
     *$mu$*: Median],
@@ -1123,7 +1079,7 @@ $
 
   #hinweis[
     TR Tabellenwert der Standardnormalverteilung lesen:\
-    $Phi(x)$ wenn $x$ bekannt: Menu-5-5-3 / $"NORMALD_ICDF"([0, 1,] x), x = "Fläche"$\
+    $Phi(x)$ wenn $x$ bekannt: Menu-5-5-3 / $"invNorm"(x,0,1), x = "Fläche"$\
     $Phi(x)$ wenn $a$ und $b$ gegeben: Menu-5-5-2 / $"normCdf"(a,b, mu, sigma)$
   ]
 ]
@@ -1133,71 +1089,76 @@ $
   Rho(fxcolor("grün", a) < X <= fxcolor("orange", b))
   &= Rho((fxcolor("grün", a) - mu)/sigma < (X - mu)/sigma <= (fxcolor("orange", b) - mu)/sigma)\
   &= Rho((fxcolor("grün", a) - mu)/sigma < Z <= (fxcolor("orange", b) - mu)/sigma)\
-  &= Phi((fxcolor("orange", b) - mu)/sigma) - Phi((fxcolor("grün", a) - mu)/sigma)$
-  
-  Dann $Phi(x)$ in Tabelle nachschauen.
+  &= Phi((fxcolor("orange", b) - mu)/sigma) - Phi((fxcolor("grün", a) - mu)/sigma)
+$
+
+
+Sollte eine Frage zur Varianz bei $n$ Stichproben kommen, muss die Varianz einfach durch $n$ geteilt werden.
+$ "var"(M_n) = "var"(X) / n = sigma^2 / n, sigma_1 = sqrt("var"(M_n)) $
 
 
 #example-block[
   === Beispiel 1: Feuerwerk
   _Feuerwerk wird in der Silvesternacht ungefähr um Mitternacht gezündet. 5% des Feuerwerks wird schon vor 22 Uhr, 25% erst nach 1 Uhr gezündet._
-
+  
   + _Zu welcher Zeit erreicht die Explosionsdichte ihr Maximum?_
-
+    
     Die gegebenen Wahrscheinlichkeiten sind:
     $ Rho(X < 22 "Uhr") = 0.05, quad Rho(X > 25 "Uhr") = 0.25 => Rho(X < 25) = 0.75 $
-
+    
     Wahrscheinlichkeiten standardisieren:
     $ Rho((X - mu)/sigma < (22 - mu)/sigma) = 0.05, quad Rho((X - mu)/sigma < (25 - mu)/sigma) = 0.75 $
-
+    
     Da wir die Wahrscheinlichkeiten schon haben, müssen wir die Werte aus der Quantiltabelle herauslesen oder
-    mit TR /*"invNorm"(p, 0, 1)*/ $"NORMALD_ICDF"([0, 1,] p)$ erhalten.
+    mit TR $"invNorm"(p, 0, 1)$ erhalten.
     $ Phi^(-1)(0.75) = 0.6745, quad Phi^(-1)(0.05) = 1 - Phi^(-1)(0.95) = 1 - 1.6449 = -1.6449 $
-
+    
     Gleichungssystem aufstellen, mit TR #tr-constructs-button -Taste rechts neben "9" $->$
     "$script(cases(ballot, ballot))$" und dieses dann mit $"solve"()$ lösen
     $
       cases(
-        (22 - mu)/sigma &= -1.6449,
-        (25 - mu)/sigma &= 0.6745
+        (22 - mu)/sigma & = -1.6449,
+        (25 - mu)/sigma & = 0.6745
       )
       quad => quad mu = 24.1276, quad sigma = 1.2934
     $
-
+    
     Wandelt man $mu$ in Stunden und Minuten um, erhält man als Mittelwert 00:08 Uhr.
-
+  
   + _Wie hoch ist die Wahrscheinlichkeit, nach 2 Uhr noch Explosionen zu hören?_
     $ Rho(X > 26) = Rho(Z > (26 - mu)/sigma) = Rho(Z > (26 - 24.1276)/1.2934) = Rho(Z > 1.4477) $
-
+    
     Wert aus Standardnormalverteilungstabelle lesen oder mit TR $"normCdf"(-infinity, 1.4477, 0, 1)$
     $ Phi(1.4477) = 0.9261 $
-
+    
     Da man nur $Rho(X < x)$ berechnen kann, muss noch minus 1 gerechnet werden
     $ Rho(X > 26) = 1 - Rho(X < 26) = 1 - Rho(Z < 1.4477) = 1 - 0.9261 = 0.0739 = underline(7.39%) $
-
+  
   === Beispiel 2: Geburtsgewicht
   _8.2% aller Babies werden mit einem Geburtsgewicht unter $x_"min" = 2.5"kg"$ geboren und gelten als "low birth weight".
-  Das mittlere Gewicht ist 3.5kg. Wie schwer ist ein Baby mindestens, welches schwerer als 95% aller Babies ist?_
-
+    Das mittlere Gewicht ist 3.5kg. Wie schwer ist ein Baby mindestens, welches schwerer als 95% aller Babies ist?_
+  
   Die Wahrscheinlichkeiten aus der Aufgabe herauslesen und standardisieren:
   $
     Rho(X <= x_"min") = 0.082, quad 0.082 = Rho((X - mu)/sigma <= (x_"min" - mu)/sigma) = Rho(Z <= (x_"min" - mu)/sigma)
   $
-
+  
   Wert aus Quantil-Standardnormalverteilungstabelle lesen #hinweis[(1 - Wert rechnen, um ihn aus der Tabelle ablesen zu können,
-  danach mit mal -1 wieder zurücktransformieren)] oder direkt mit TR $"NORMALD_ICDF"([0, 1,] 0.082)$
+    danach mit mal -1 wieder zurücktransformieren)] oder direkt mit TR $"invNorm"(0.082, 0, 1)$
   $ Phi^(-1)(0.082) = -1 dot Phi^(-1)(1 - 0.082) = -1 dot 1.392 = -1.392 $
-
+  
   Standardabweichung $sigma$ berechnen:
   $ sigma = (x_"min" - mu) / (-1.392) = (2.5 - 3.5) / (-1.392) = 0.7184 $
-
-  $Z$-Wert für 95%-Quantile aus der Quantilentabelle ablesen oder mit $"NORMALD_ICDF"([0, 1,] 0.95)$:
+  
+  $Z$-Wert für 95%-Quantile aus der Quantilentabelle ablesen oder mit $"invNorm"(0.95, 0, 1)$:
   $ Z = Phi^(-1)(0.95) = 1.6449 $
-
+  
   Das kritische Gewicht $x$ mithilfe der Standardnormalverteilungsformel berechnen:
   $ Z = (x - mu) / sigma quad => quad 1.644 = (x - 3.5) / (0.7184) quad => quad x = underline(4.682"kg") $
 
+]
 
+#example-block[
   === Beispiel 3: Spaghetti
   In einer Numb3rs Folge bemerkt Charlie, dass trockene Spaghetti beim Biegen jeweils in mindestens   drei Teile brechen. Nachmessen der dazu nötigen Kräfte ergibt, dass *bei 1N 95% der Spaghetti gebrochen sind, dass aber 90% der Spaghetti eine Kraft von 0.5N tragen können*. Wie gross dürfte die Kraft sein, bei der der Spaghetto bricht? Wie gross ist ihre Varianz?
 
@@ -1231,11 +1192,13 @@ $
   Daraus kann man jetzt auch μ bestimmen:
   μ = 1 − 1.6449σ = 0.71896.
 
-  ]
+]
 
 
-  Sollte eine Frage zur Varianz bei$n$ Stichproben kommen, muss die Varianz einfach durch $n$ geteilt werden.
+Sollte eine Frage zur Varianz bei $n$ Stichproben kommen, muss die Varianz einfach durch $n$ geteilt werden.
 $ "var"(M_n) = "var"(X) / n = sigma^2 / n, sigma_1 = sqrt("var"(M_n)) $
+
+
 
 #pagebreak()
 
