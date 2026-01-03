@@ -199,16 +199,18 @@ Ist die Reihenfolge der Objekte nicht relevant, muss noch durch $k!$ geteilt wer
 
 #definition[
     
-    TODO:
-    $C^n_k = n! / (k! dot (n-k)!) = binom(n, k)$ \
-
+  #hinweis[TR: Menü-5-3 / $"nCr"(n, k)$]
+  $
+    C^n_k = n! / (k! dot (n-k)!) = binom(n, k)
+  $ 
+  \
+]
+  Oder so:
   $
     C^n_k = (n dot (n-1) dot (n-2) dot ... dot (n-k+1) dot (n-k) dot (n-k-1) dot ... dot 2 dot 1) / (k! dot (n-k)!)
     = n! / (k! dot (n-k)!)\
     arrow.double.r.l space C^n_k = C^(n-1)_(k-1) + C^(n-1)_k = binom(n, k)
   $
-  #hinweis[TR: Menü-5-3 / $"nCr"(n, k)$]
-]
 
 _Beispiele:_
 #v(-0.5em)
@@ -403,34 +405,52 @@ $ r = "cov"(X, Y) / sqrt("var"(X) dot "var"(Y)) $
   + Integral mit TR ausrechnen
   + Erwartungswert ausrechnen #hinweis[Falls Funktion $y$-Achsensymmetrisch, ist $E(X) =$ Mittelpunkt der Funktion]
   + Varianzformel $"var"(X) = E(X^2) - E(X)^2$ hinschreiben, ausrechnen
-
-  #hinweis[
-    *TR-Tipps:*
-    - Integral: #tr-constructs-button -Taste (Betrag und Cases-Icon) drücken, Integral-Symbol auswählen
-    - Solve-Funktion: Menu-3-1
-    - Wenn Solve beim Lösen eines Integrals ein Integral zurück gibt, auszurechnende Variabel aus dem Integral herausnehmen
-    - Zahlen in Brüche umwandeln: Menu-Zahl-Brüche approximieren
-  ]
 ]
-
-TODO:
-1.
-Dafür muss die Variable #hinweis[(oft $a$)] so gewählt werden, dass das Integral von $phi$ den Wert 1 hat.
 \
-- Dazu überprüfen, ob die Normierungsbedingung  $integral^infinity_(-infinity) phi(x) space dif x = 1$ erfüllt ist.
-- Manchmal im Graph ablesbar, dass Normierungsbedingung erfüllt (linker Bereich + rechter Bereich = Quadrat mit Höhe/Breite 1)
+_Vorgehensweise detailiert_
++ *Zuerst muss überprüft werden, ob es sich wirklich um eine Wahrscheinlichkeitsdichte handelt.*
+  \ > Dafür die Variable #hinweis[(oft $a$)] so wählen, dass das Integral von $phi$ den Wert 1 hat \ = Normierungsbedingung  $integral^infinity_(-infinity) phi(x) space dif x = 1$ erfüllt.
+  - Manchmal im Graph ablesbar, dass Normierungsbedingung erfüllt (linker Bereich + rechter Bereich = Quadrat mit Höhe/Breite 1)
+  - Bei y-Achsensymmetrisch genügt, linker/rechter Teil = 1/2 \ $integral^("Mittelpunkt")_("linke Hälfte") phi(x) space dif x = 1/2$. Berechne das einfachere Integral.
 
-// korrekt?
-// $E(X) = integral^1_0 x(phi(x)) space dif x = 1$
+  - *TR:* Gleichung erstellen #hinweis[Menu-3-1] mit Integral #hinweis[Menu-4-3] vom Typ: $space "solve"(integral_(-infinity)^(infinity) phi(x) "dx" = 1, a ) space$ der Funktion.
+    - beide Integrale berechnen mit + dazwischen. #hinweis[Bei Integral oben die obere Grenze und unten die untere Grenze notieren]
+    // -  $"solve"(1 = integral^0_(-1) a sqrt(x+1) space dif x + integral^1_0 a sqrt(1 - x) space dif x, space a) arrow.double a = 3 / 4$
++ *Integral mit TR ausrechnen*
+  - Integral (Menu-4-3)
+  - oben auswählen mit doppel-doppelklick und ctrl+c und ctrl+v benutzen
 
-2.
-Integral aufteilen im TR??
-oder von Hand.
++ *Erwartungswert ausrechnen* #hinweis[]
+  - $E(X) = integral_(-infinity)^(infinity) x dot phi(x) "dx"$
+  - Falls Funktion $y$-Achsensymmetrisch, ist $E(X) =$ Mittelpunkt der Funktion (x bei Symmetrie)
+    - "Da $phi(x)$ symmetrisch bezüglich #hinweis[x-Wert beim Mittelpunkt] ist, ist E(X) = #hinweis[x-Wert beim Mittelpunkt]"
+  // so? $E(X) = integral^1_0 x(phi(x)) space dif x = 1$
 
-3.
-$E(X) = integral_(-infinity)^(infinity) x dot phi(x) "dx"$
++ *Varianzformel $"var"(X) = E(X^2) - E(X)^2$ hinschreiben, ausrechnen*
+  - $
+  E(X^2) = integral^infinity_(-infinity) x^2 phi(x) space dif x$
+  // - wenn $y$-Achsensymmetrisch: $E(X^2) = 2a integral^1_0 x^2 dot "(rechte Hälfte von Mittelpunkt)" space dif x$
+  - wenn $y$-Achsensymmetrisch trotzdem beide Seiten berechnen.
+  - Wieder mit TR lösen. Beispiel:
+    // - Hier ist a = $3/4$. Kann als Variable geschrieben werden.
+    - $e = $ Variable für $E(X^2)$
+    - nur ein Integral, weil $y$-Achsensymmetrisch ist beim Beispiel:
+    $
+      "solve"(e = 2 dot a integral^1_(0) x^2 sqrt(1-x) space dif x, a=..,  e)
+      arrow.double e = 8 / 35 arrow.double E(X^2) = 8 / 35
+    $
+    Varianz berechnen:\
+    $ "var"(X) = E(X^2) - E(X)^2 = ...$
 
+\
+_TR-Tipps:_
+- *Integral: Menu-4-3*  #hinweis[Oder #tr-constructs-button -Taste (Betrag und Cases-Icon) drücken, Integral-Symbol auswählen]
 
+- *Solve-Funktion: Menu-3-1*
+  - Wenn Solve beim Lösen eines Integrals ein Integral zurück gibt, auszurechnende Variabel aus dem Integral herausnehmen
+  - Zahlen in Brüche umwandeln: Menu-Zahl-Brüche approximieren
+
+- $"ax"$ und $a dot x$ sind nicht gleich, schreibe das $dot$ explizit hin!
 
 #pagebreak()
 
@@ -1104,15 +1124,28 @@ $ "var"(M_n) = "var"(X) / n = sigma^2 / n, sigma_1 = sqrt("var"(M_n)) $
   + _Zu welcher Zeit erreicht die Explosionsdichte ihr Maximum?_
     
     Die gegebenen Wahrscheinlichkeiten sind:
-    $ Rho(X < 22 "Uhr") = 0.05, quad Rho(X > 25 "Uhr") = 0.25 => Rho(X < 25) = 0.75 $
-    
+    #set text(fill: rgb("#092552")); 
+    \ 
+    \
+    $ 
+    Rho(X < 22 "Uhr") = 0.05$, 
+    #set text(fill: rgb("#550044aa"));$quad Rho(X > 25 "Uhr") = 0.25 => Rho(X < 25) = 0.75 $
+    \ \ 
+    #set text(fill: black); 
     Wahrscheinlichkeiten standardisieren:
-    $ Rho((X - mu)/sigma < (22 - mu)/sigma) = 0.05, quad Rho((X - mu)/sigma < (25 - mu)/sigma) = 0.75 $
-    
+    #set text(fill: rgb("#092552")); 
+    \ \
+    $ Rho((X - mu)/sigma < (22 - mu)/sigma) = 0.05$, #set text(fill: rgb("#550044aa")); $quad Rho((X - mu)/sigma < (25 - mu)/sigma) = 0.75 $
+    \ \
+    #set text(fill: black); 
     Da wir die Wahrscheinlichkeiten schon haben, müssen wir die Werte aus der Quantiltabelle herauslesen oder
     mit TR $"invNorm"(p, 0, 1)$ erhalten.
-    $ Phi^(-1)(0.75) = 0.6745, quad Phi^(-1)(0.05) = 1 - Phi^(-1)(0.95) = 1 - 1.6449 = -1.6449 $
-    
+    \ \
+    #set text(fill: rgb("#550044aa"));
+    $ Phi^(-1)(0.75) = 0.6745$,  #set text(fill: rgb("#092552"));  $quad Phi^(-1)(0.05) = 1 - Phi^(-1)(0.95) = 1 - 1.6449 = "TODO:" -1.6449 $
+    \ \
+    #set text(fill: black); 
+
     Gleichungssystem aufstellen, mit TR #tr-constructs-button -Taste rechts neben "9" $->$
     "$script(cases(ballot, ballot))$" und dieses dann mit $"solve"()$ lösen
     $
@@ -1160,7 +1193,7 @@ $ "var"(M_n) = "var"(X) / n = sigma^2 / n, sigma_1 = sqrt("var"(M_n)) $
 
 #example-block[
   === Beispiel 3: Spaghetti
-  In einer Numb3rs Folge bemerkt Charlie, dass trockene Spaghetti beim Biegen jeweils in mindestens   drei Teile brechen. Nachmessen der dazu nötigen Kräfte ergibt, dass *bei 1N 95% der Spaghetti gebrochen sind, dass aber 90% der Spaghetti eine Kraft von 0.5N tragen können*. Wie gross dürfte die Kraft sein, bei der der Spaghetto bricht? Wie gross ist ihre Varianz?
+  In einer Numb3rs Folge bemerkt Charlie, dass trockene Spaghetti beim Biegen jeweils in mindestens drei Teile brechen. Nachmessen der dazu nötigen Kräfte ergibt, dass *bei 1N 95% der Spaghetti gebrochen sind, dass aber 90% der Spaghetti eine Kraft von 0.5N tragen können*. Wie gross dürfte die Kraft sein, bei der der Spaghetto bricht? Wie gross ist ihre Varianz?
 
   Lösung. Die Kraft, bei der der Spaghetto bricht, ist eine normalverteilte Zufallsvariable X, wir müssen μ und σ dieser Verteilung bestimmen. (Kraft N = X, μ und σ unbekannt). Aus der Aufgabenstellung wissen wir
   $P(X <= 1) = 0.95$
@@ -1459,7 +1492,11 @@ feststellen, ob sie sich signifikant unterscheiden
   #hinweis[(Achtung: wenn $P(x_i) = 18%$, muss in Tabelle $0.18$ geschrieben werden und nicht $18$)]
   $ "x2test"(mat(Rho(x_1), x_1; Rho(x_2), x_2; dots.v, dots.v; Rho(x_n), x_n), alpha) $
 - Auf Prüfung schreiben, dass der $chi^2$-Test auf dem Beiblatt steht
-
+\
+TR-Tipps:
+- Matrix erstellen mit Menu-7-1-1
+- Info zu $alpha$: @weitere-test-theorie
+\
 
 == Kolmogorov-Smirnov-Test
 *Wann verwenden?* Wenn mehrere Zufallsvariablen und Grenzen angegeben sind.
@@ -1477,6 +1514,7 @@ feststellen, ob sie sich signifikant unterscheiden
 
 
 == Weitere Theorie
+<weitere-test-theorie>
 === Grundsätzliche Testmethode
 + _Nullhypothese $H_0$_ #hinweis[(Nichts besonderes)] und ggf. Alternativhypothese $H_1$
   #hinweis[(Etwas besonderes)] formulieren
