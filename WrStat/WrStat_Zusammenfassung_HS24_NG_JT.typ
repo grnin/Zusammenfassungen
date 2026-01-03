@@ -38,10 +38,17 @@
 
 
 = Hitchhiker's Guide to WrStat
-#hinweis[*Hinweis:* In der Zusammenfassung werden Anweisungen zur Taschenrechnerbenutzung gegeben. Diese beziehen sich auf
-  den TI nSpire CX II-T und das Skript auf #underline[https://github.com/KROIA/OST_WrStat]. Das Skript mithilfe der Software,
-  die dem TR beilag, in den "MyLib"-Ordner auf dem TR kopieren, dann im Scratchpad Menu-1-7-1 (Bibliotheken aktualisieren)
-  auswählen. Nun sind alle Funktionen des Skripts im Scratchpad mit der Buch-Taste $->$ 6 $->$ wrstat erreichbar.]
+#hinweis[*Hinweis:* In der Zusammenfassung werden Anweisungen zur Taschenrechnerbenutzung gegeben. Diese beziehen sich
+  auf den TI nSpire CX II-T und das Skript auf #underline[https://github.com/KROIA/OST_WrStat].
+  
+  Das Skript kann entweder mithilfe der Software, die dem TR beilag, oder der Webseite
+  #underline[https://nspireconnect.ti.com/nsc/] auf den TR kopiert werden. Die Webseite ist nur mit Chrome auf Mac oder
+  Windows verwendbar, auf Linux muss der User Agent manuell angepasst werden.
+  
+  Wenn das Skript in den "MyLib"-Ordner abgelegt und im Scratchpad Menu-1-7-1 (Bibliotheken aktualisieren) ausgewählt
+  wird, sind anschliessend alle Funktionen des Skripts direkt im Scratchpad mit der Buch-Taste $->$ 6 $->$ wrstat
+  erreichbar.
+]
 
 Nachfolgend ist die Reihenfolge einer typischen WrStat-Prüfung von Andreas Müller:
 
@@ -52,15 +59,15 @@ Nachfolgend ist die Reihenfolge einer typischen WrStat-Prüfung von Andreas Mül
     == Aufgabe 1
     _ @kombinatorik _ Gegeben ist ein Fliesstext oder ein Bild.\
     #hinweis["Auf wie viele Arten..." / "Wie viele verschiedene Kombinationen"]
-
+    
     == Aufgabe 2
     _ @linreg: _ Gegeben ist eine Tabelle mit zwei Spalten und/oder eine Grafik mit Punkten oder einer Linie.\
     #hinweis["Finden Sie ein Modell ...."]
-
+    
     == Aufgabe 3
     _ @dichte: _ Gegeben ist eine Funktion und das Wort "Wahrscheinlichkeitsdichte" kommt vor.\
     #hinweis["Betrachten Sie die Funktion ..." / "Gegeben ist die Funktion ..."]
-
+    
     == Aufgabe 4
     - _ @verteilung: _
       Gegeben ist meist ein längerer Text mit Prozentzahlen.\
@@ -68,15 +75,15 @@ Nachfolgend ist die Reihenfolge einer typischen WrStat-Prüfung von Andreas Mül
     - _ @test: _
       Gegeben ist eine Studie oder Untersuchung mit diversen Messdaten.\
       #hinweis["Kann man daraus schliessen ..." / "Kann damit eine Aussage über xy gemacht werden" / "Formulieren Sie einen Test ..."]
-
+    
     == Aufgabe 5
     _ @test: _ Gegeben ist eine Studie oder Untersuchung mit diversen Messdaten.\
     #hinweis["Kann man daraus schliessen ..." / "Kann damit eine Aussage über xy gemacht werden" / "Formulieren Sie einen Test ..."]
-
+    
     == Aufgabe 6
     _ @verteilung: _ Gegeben ist meist ein längerer Text mit Prozentzahlen.\
     #hinweis["Wann ist ..." / "Zu welcher Zeit ..." / "Mit wie vielen ...", "Wie gross ist die Wahrscheinlichkeit ..."]
-
+    
     == Aufgabe 7 / 8
     - _ @verteilung: _
       Gegeben ist meist ein längerer Text mit Prozentzahlen\
@@ -103,9 +110,9 @@ Nachfolgend ist die Reihenfolge einer typischen WrStat-Prüfung von Andreas Mül
   #v(0.5em)
   ==== Aufgabe
   Gegeben ist ein Fliesstext oder ein Bild.
-
+  
   Die Frage ist meist "Auf wie viele Arten ..." / "Wie viele verschiedene Kombinationen ..."
-
+  
   ==== Vorgehensweise
   + Aufgabe zuerst auslassen und am Schluss der Prüfung lösen, weil meist relativ kompliziert und zeitintensiv.
   + Versuchen, die Texte auf eines der untenstehenden Probleme herunterzubrechen
@@ -130,12 +137,12 @@ _Beispiele:_
 #v(-0.5em)
 #example-block[
   + _Wie viele mögliche Würfelkombinationen können entstehen, wenn $i$ verschiedene Würfel mit je $j$ Augen geworfen werden?_
-
+    
     Da die Würfel voneinander unabhängig sind, gibt es $i dot j$ verschiedene Kombinationen.
-
+  
   + _Ein Autohändler bietet 5 verschiedene Fahrzeugtypen in 30 verschiedenen Farben an. Zu jedem Fahrzeugtyp gibt es
-    7 verschiedene Extraausstattungen. Wie viele verschiedene Fahrzeuge kann der Autohändler verkaufen?_
-
+      7 verschiedene Extraausstattungen. Wie viele verschiedene Fahrzeuge kann der Autohändler verkaufen?_
+    
     Da die Fahrzeugtypen ($i$), die Farben ($j$) und die Extraausstattungen ($k$) voneinander unabhängig sind, gibt es\
     $i dot j dot k$ verschiedene Fahrzeuge, also $5 dot 30 dot 7 = underline(1050)$.
 ]
@@ -157,29 +164,29 @@ _Beispiele:_
 #example-block[
   + _In wie vielen verschiedenen Reihenfolgen können 8 Läufer ins Ziel gelangen?_\
     $ 8! = underline(40'320) $
-
+  
   + _Es treten 7 Frauen und 7 Männer an. Es gibt geschlechtergetrennte Ranglisten. Wie viele Kombinationen gibt es?_
     $ 7! dot 7! = 5040^2 = underline(254'001'600) $
-
+  
   Eine Skiverleihfirma besitzt 6 Paare weisser und 7 Paare schwarzer Skis einer bestimmten Grösse. Die Skis sind
   asymmetrisch, man kann linke und rechte Skis unterscheiden. Nach dem Sommer werden die Skis aus dem Lagercontainer
   geholt, wo sie ziemlich durcheinandergeraten sind.
-
+  
   + _Auf wie viele Arten können die Skis zu Paaren zusammengefügt werden?_
     $ n_"schwarz" ! dot n_"weiss" ! = 7! dot 6! = 5040 dot 720 = underline(3'628'800) $
-
+  
   + _Der Marketingchef findet, es dürften durchaus auch gemischfarbige Paare vermietet werden, wie viele mögliche
-    Paarungen gibt es in diesem Fall?_
+      Paarungen gibt es in diesem Fall?_
     $ (n_"schwarz" + n_"weiss")! = (7 + 6)! = 13! = underline(6'227'020'800) $
-
+  
   + _Bei der Revision stellt sich heraus, dass zwei schwarze linke Skis und eine linker weisser Ski nicht mehr zu reparieren
-    sind. Wie viele mögliche Paarungen gibt es jetzt noch?_
-
+      sind. Wie viele mögliche Paarungen gibt es jetzt noch?_
+    
     Hat man nur $n$ linke und $m$ rechte Skis einer gewissen Farbe, mit $n < m$, muss man zuerst aus den $m$ Skis davon
     $n$ auswählen, die man verwenden will. Das geht auf $binom(m, n)$ Arten. Davon kann man wieder $n!$ Anordnungen bilden.
     Die Gesamtzahl möglicher Paarungen ist also
     $ binom(m, n) dot n! = binom(7, 5) dot 5! = underline(1'814'400) $
-
+    
     #hinweis[TR: Menü-5-3 / $"nCr"(m,n)$]
 ]
 
@@ -206,14 +213,14 @@ _Beispiele:_
 #v(-0.5em)
 #example-block[
   + _In einem Wald mit 1'000 Bäumen schlägt fünfmal der Blitz ein. Wir dürfen annehmen, dass kein Baum zweimal getroffen wird.
-    Auf wie viele Arten können die getroffenen Bäume im Wald verteilt sein?_
-
+      Auf wie viele Arten können die getroffenen Bäume im Wald verteilt sein?_
+    
     Es müssen 5 von 1'000 Bäumen ausgewählt werden:
-    $ binom(1000,5) = 1000! / (5!(1000-5)!) = underline(8'250'291'250'200) $
-
+    $ binom(1000, 5) = 1000! / (5!(1000-5)!) = underline(8'250'291'250'200) $
+  
   + _In einem von $n = 6$ Koffern befindet sich eine Waffe. Es dürfen zwei Koffer geöffnet werden.
-    Wie viele Möglichkeiten gibt es für Erfolg und wie viele für Misserfolg?_
-
+      Wie viele Möglichkeiten gibt es für Erfolg und wie viele für Misserfolg?_
+    
     Es gibt $binom(6, 2) = 15$ Möglichkeiten, zwei Schachteln auszuwählen, aber nur $binom(5, 2) = 10$ Möglichkeiten,
     zwei Schachteln auszuwählen, die die Tatwaffe nicht enthalten. Es gibt also 5 Möglichkeiten für Erfolg und
     10 Möglichkeiten für Misserfolg.
@@ -236,76 +243,76 @@ $ V_(4,10) = 4^10 = underline(1'048'576 "Möglichkeiten") $
   === Beispiel 1: Kartenspiel
   Ein Kartenspiel mit 52 Karten besteht aus 26 roten und 26 schwarzen Karten.
   + _Auf wie viele Arten kann man das Kartenspiel mischen?_
-
+    
     Dies ist ein Anordnungsproblem, es gibt $52!$ solche Reihenfolgen.
-
+  
   + _Auf wie viele Arten kann man das Kartenspiel mischen, so dass die oberste und die unterste Karte die gleiche Farbe haben?_
-
+    
     Zunächst wählen wir eine von 52 Karten, dies wird die oberste Karte. Dann wählen wir eine Karte der gleichen Farbe,
     davon gibt es noch $25$, dies wird die unterste Karte. Die verbleibenden $50$ Karten können nun in jeder beliebiger
     Reihenfolge dazwischengelegt werden.
     $ 52 dot 25 dot 50! $
-
+  
   + _Welcher Prozentsatz der möglichen Kartenstapel hat gleichfarbige oberste und unterste Karten?_
-
+    
     Dies ist der Quotient
     $ (52 dot 25 dot 50!) / 52! = 0.490 = underline(49%) $
-
+  
   + _Jetzt werden dem Spiel noch drei Joker-Karten hinzugefügt, die sowohl als rot als auch als schwarz betrachtet werden
-    können. Auf wie viele Arten kann man das erweiterte Kartenspiel mischen, sodass die oberste und unterste Karte die gleiche
-    Farbe haben?_
-
+      können. Auf wie viele Arten kann man das erweiterte Kartenspiel mischen, sodass die oberste und unterste Karte die gleiche
+      Farbe haben?_
+    
     Die oberste Karte könnte nun eine Farbkarte #hinweis[(Schwarz oder Rot)] oder eine Jokerkarte sein.
-
+    
     *Fall 1, Jokerkarte:* Es gibt $3$ mögliche Jokerkarten für die erste Karte, dann passt jede beliebige Karte als unterste
     Karte, davon gibt es $54$. Die verbleibenden Karten können beliebig angeordnet werden.
     $ 3 dot 54 dot 53! $
-
+    
     *Fall 2, Farbkarte:* Gleich wie Aufgabe b), einfach andere Zahlen
     $ 52 dot 28 dot 53! $
-
+    
     Die beiden Fälle sind disjunkt, können also addiert werden.
     $ 3 dot 54 dot 53! + 52 dot 28 dot 53! $
-
+  
   === Beispiel 2: Wortanordnungen
   #hinweis[Hinweis: Das deutsche Alphabet hat 5 Vokale und 21 Konsonanten.]
-
+  
   + _Wie viele Wörter der Länge 9 gibt es, die genau 4 benachbarte und zwei einzelne Vokale enthalten?_
-
+    
     Die Vokalgruppen lassen sich auf 12 Arten anordnen #hinweis[(aufzeichnen und zählen)]. Die insgesamt $6$ Vokalplätze
     lassen sich auf $5^6$ Arten belegen, die $3$ Konsonantenplätze auf $26^3$ Arten. Die Gesamtzahl der Wörter wird daher
     $ 12 dot 5^6 dot 21^3 = underline(1'736'437'500) $
-
+  
   + _Wie viele Wörter der Länge 9 gibt es, die genau 6 benachbarte Vokale enthalten?_
-
+    
     Die Vokalgruppe lässt sich auf $4$ verschiedene Arten platzieren. Da es immer noch $6$ Vokalplätze und
     $3$ Konsonantenplätze gibt, ist die Gesamtzahl der Wörter daher
     $ 4 dot 5^6 dot 21^3 = underline(578'812'500) $
-
+  
   #pagebreak()
-
+  
   === Beispiel 3: Zugwagen
   In einem Zugwagen gibt es $16$ Plätze, davon $8$ Fenster- und $8$ Gangplätze. Je die Hälfte ist in Fahrtrichtung gerichtet.
   Eine Gesellschaft von zwölf Personen will im Zug Platz nehmen.
-
+  
   + _Auf wie viele Arten können die Reisenden die Plätze annehmen?_
-
-    Es müssen $12$ der $16$ Plätze ausgewählt werden, das ist auf $binom(16,12)$ Arten möglich. Auf den $12$ ausgewählten
+    
+    Es müssen $12$ der $16$ Plätze ausgewählt werden, das ist auf $binom(16, 12)$ Arten möglich. Auf den $12$ ausgewählten
     Plätzen können die Fahrgäste auf $12!$ Arten angeordnet werden. Deshalb gilt
     $ binom(16, 12) dot 12! = "nCr"(16,12) dot 12! = underline(871'782'912'000) $
-
+  
   + _Vier der Personen möchten unbedingt einen Fensterplatz haben. Auf wie viele Arten können die Reisenden nun Platz nehmen?_
-
+    
     $4$ der $8$ Fensterplätze können auf $binom(8, 4)$ Arten ausgewählt werden und die Fensterplatzfahrer in $4!$ möglichen
     Arten platziert werden. Dann werden $8$ von $12$ Plätzen für die verbleibenden Gäste gewählt und auf $8!$ Arten angeordnet.
     So ergeben sich
     $
       binom(8, 4) dot 4! dot binom(12, 8) dot 8! = "nCr"(8,4) dot 4! dot "nCr"(12,8) dot 8! = underline(33'530'112'000)
     $
-
+  
   + _Einer Person wird übel, wenn sie nicht in Fahrtrichtung schauen kann, und benötigt einen Fensterplatz.
-    Wie viele Arten gibt es nun?_
-
+      Wie viele Arten gibt es nun?_
+    
     Die Person nimmt einen von $4$ Fensterplätzen in Fahrtrichtung ein. Die anderen $4$ Gäste werden auf die $7$ verbleibenden
     Fensterplätze platziert und anschliessen werden $7$ von den verbleibenden $11$ Plätzen gewählt.
     $
@@ -327,9 +334,9 @@ $ V_(4,10) = 4^10 = underline(1'048'576 "Möglichkeiten") $
   #v(0.5em)
   ==== Aufgabe
   Gegeben ist eine Tabelle mit zwei Spalten und/oder eine Grafik mit Punkten oder einer Linie.
-
+  
   Die Frage ist meist "Finden Sie ein Modell ...."
-
+  
   ==== Vorgehensweise
   + Beiblatt _"Lineare Regression"_ verwenden
   + TR-Skript _"linreg"_ verwenden: $ "linreg"mat(
@@ -337,7 +344,7 @@ $ V_(4,10) = 4^10 = underline(1'048'576 "Möglichkeiten") $
       x_2, y_2;
       dots.v, dots.v;
       x_n, y_n;
-  ) $
+    ) $
   #hinweis[2.15214E6 = 2'152'140. $arrow$ Punkt um 6 Stellen nach rechts schieben]
   + Auf die Prüfung schreiben, dass die Lineare Regression auf dem Beiblatt steht
   + Formel $y(x) = a dot x + b$ mit $a$ und $b$ von linearer Regression verwenden, um Aufgabe zu lösen
@@ -356,7 +363,7 @@ $ b = E(Y) - a dot E(X) $
 #example-block[
   1. Wie viele $y$ werden innerhalb vom Zeitraum $x = 10 "Tage"$ verwendet?
   $ y(x) = a dot 10 + b $
-
+  
   2. An welchem Zeitpunkt $x$ ist $y = 100$?
   $ 100 = a dot x + b quad arrow.double quad (100 - b) / a = x $
 ]
@@ -386,16 +393,16 @@ $ r = "cov"(X, Y) / sqrt("var"(X) dot "var"(Y)) $
   #v(0.5em)
   ==== Aufgabe
   Gegeben ist eine Funktion und das Wort "Wahrscheinlichkeitsdichte" kommt vor.
-
+  
   Die Frage ist oft: "Betrachten Sie die Funktion ..." / "Gegeben ist die Funktion ..."
-
+  
   ==== Vorgehensweise
   + Zuerst muss überprüft werden, ob es sich wirklich um eine Wahrscheinlichkeitsdichte handelt.\
     Dafür muss die Variable #hinweis[(oft $a$)] so gewählt werden, dass das Integral von $phi$ den Wert 1 hat.
   + Integral mit TR ausrechnen
   + Erwartungswert ausrechnen #hinweis[Falls Funktion $y$-Achsensymmetrisch, ist $E(X) =$ Mittelpunkt der Funktion]
   + Varianzformel $"var"(X) = E(X^2) - E(X)^2$ hinschreiben, ausrechnen
-
+  
   #hinweis[
     *TR-Tipps:*
     - Integral: #tr-constructs-button -Taste (Betrag und Cases-Icon) drücken, Integral-Symbol auswählen
@@ -413,128 +420,128 @@ $ r = "cov"(X, Y) / sqrt("var"(X) dot "var"(Y)) $
   Die Funktion
   $
     phi(x) = cases(
-      0                     &x <= -1,
-      a sqrt(x+1) quad quad &-1 < x <= 0,
-      a sqrt(1-x)           &0 < x <= 1,
-      0                     &x > 1
+      0 & x <= -1,
+      a sqrt(x+1) quad quad & -1 < x <= 0,
+      a sqrt(1-x) & 0 < x <= 1,
+      0 & x > 1
     )
   $
-
+  
   soll als Wahrscheinlichkeitsdichte einer Zufallsvariable $X$ verwendet werden.
-
+  
   #align(center, image("img/wrstat_06.png", width: 60%))
-
+  
   + _Wie muss $alpha$ gewählt werden, damit $phi$ wirklich eine Wahrscheinlichkeitsdichte ist?_
   + _Bestimmen Sie den Erwartungswert $E(X)$_
   + _Bestimmen Sie die Varianz $"var"(X)$_
-
+  
   ==== Lösung
   + Es muss gelten: #hinweis[(Integralgrenzen aus der Wahrscheinlichkeitsfunktion übernehmen)]
-
+    
     $
       1 = integral_(-infinity)^infinity phi(x) space dif x
-      = integral^0_(-1) a sqrt(x+1) space dif x + integral^1_0 a sqrt(1 - x ) space dif x
+      = integral^0_(-1) a sqrt(x+1) space dif x + integral^1_0 a sqrt(1 - x) space dif x
     $
-
+    
     Formel mit dem Taschenrechner mit der Funktion $"solve"()$ lösen:
-
+    
     $
-      "solve"(1 = integral^0_(-1) a sqrt(x+1) space dif x + integral^1_0 a sqrt(1 - x ) space dif x, space a)
+      "solve"(1 = integral^0_(-1) a sqrt(x+1) space dif x + integral^1_0 a sqrt(1 - x) space dif x, space a)
       arrow.double a = 3 / 4
     $
-
+  
   + Da die Funktion $phi(x)$ symmetrisch bzw. gerade ist, ist $E(X) = 0.$\
     #hinweis[(Ist die Funktion gerade, aber nicht um 0, ist $E(X) =$ Mittelpunkt)]
-
+  
   + Für die Varianz brauchen wir $E(X^2)$:
-
+    
     $
       E(X^2) = integral^infinity_(-infinity) x^2 phi(x) space dif x
       = 2a integral^1_0 x^2 sqrt(1-x) space dif x
     $
-
-    Wieder mit TR lösen ($e = $ Variable für $E(X^2)$):
-
+    
+    Wieder mit TR lösen ($e =$ Variable für $E(X^2)$):
+    
     $
       "solve"(e = 2 dot overbracket(3/4, a) integral^1_(0) x^2 sqrt(1-x) space dif x, e)
       arrow.double e = 8 / 35 arrow.double E(X^2) = 8 / 35
     $
-
+    
     Varianz berechnen:\
     $ "var"(X) = E(X^2) - E(X)^2 = E(X^2) - 0^2 = E(X^2) = 8 / 35 approx 0.22857 $
-
+  
   #pagebreak()
-
+  
   === Beispiel 2: Symmetrische Funktion, konstant
   ==== Aufgabenstellung
   Man betrachte die Funktion
   $
     phi(x) = cases(
-      a quad quad &-3/2 <= x <= -1/2 "oder" 1/2 <= x <= 3/2,
-      0           &"sonst"
+      a quad quad & -3/2 <= x <= -1/2 "oder" 1/2 <= x <= 3/2,
+      0 & "sonst"
     )
   $
-
+  
   + _Wie muss $a$ gewählt werden, damit $phi(x)$ die Wahrscheinlichkeitsdichte einer Zufallsvariable $X$ wird?_
   + _Zeichnen Sie einen Graphen der Verteilungsfunktion $F_X (x)$._
   + _Bestimmen Sie $E(X)$._
   + _Bestimmen Sie die Varianz $"var"(X)$._
-
+  
   ==== Lösung
   + Das Integral von $phi(x)$ muss $1$ werden.
     $
       1 = integral^infinity_(-infinity) phi(x) space dif x = integral^(-1 / 2)_(-3 / 2) a space dif x
       + integral^(3 / 2)_(1 / 2) a space dif x overbracket(arrow.double, "TR solve") a = 1 / 2
     $
-
+  
   + $F_X$ ist konstant in den Teilen des Definitionsbereiches, wo $phi(x) = 0$ ist. Ausserhalb dieses Bereichs hat der Graph
     die Steigung $a = 1/2$. Der Graph von $F_X(x)$ sieht also wie folgt aus:
-
+    
     #align(center, image("img/wrstat_07.png", width: 50%))
-
+  
   + Da $phi(x)$ eine gerade Funktion ist, ist $E(X) = 0$.
-
+  
   + Die Varianz kann mit Hilfe von $E(X^2)$ berechnet werden.
     $
-      E(X^2) &= integral^infinity_(-infinity) x^2 phi(x) space dif x\
-      &= integral^(-1 / 2)_(-3 / 2) a x^2 space dif x + integral^(3 / 2)_(1 / 2) a x^2 space dif x\
-      &= integral^(-1 / 2)_(-3 / 2) 1 / 2 x^2 space dif x + integral^(3 / 2)_(1 / 2) 1 / 2 x^2 space dif x
-      overbracket(arrow.double, "TR solve") E(X^2) = 13 / 12
+      E(X^2) & = integral^infinity_(-infinity) x^2 phi(x) space dif x \
+             & = integral^(-1 / 2)_(-3 / 2) a x^2 space dif x + integral^(3 / 2)_(1 / 2) a x^2 space dif x \
+             & = integral^(-1 / 2)_(-3 / 2) 1 / 2 x^2 space dif x + integral^(3 / 2)_(1 / 2) 1 / 2 x^2 space dif x
+               overbracket(arrow.double, "TR solve") E(X^2) = 13 / 12
     $
-
+    
     Varianz berechnen:\
     $ "var"(X) = E(X^2) - E(X)^2 = E(X^2) - 0^2 = E(X^2) = 13 / 12 approx 1.08333 $
-
+  
   #pagebreak()
-
+  
   #grid(
     columns: (3fr, 1fr),
     [
       === Beispiel 3: Asymmetrische Funktion, Median
       ==== Aufgabenstellung
-
+      
       Die Funktion
       $
         phi(x) = cases(
-          0                      &x <= 0,
-          a(x^2 - x^4) quad quad &0 < x <= 1,
-          0                      &1 < x
+          0 & x <= 0,
+          a(x^2 - x^4) quad quad & 0 < x <= 1,
+          0 & 1 < x
         )
       $
       soll als Wahrscheinlichkeitsdichte einer Zufallsvariable $X$ verwendet werden.
-
+    
     ],
     [
       #image("img/wrstat_09.png")
     ],
   )
-
+  
   + _Wie muss $a$ gewählt werden, damit $phi(x)$ tatsächlich eine Wahrscheinlichkeitsdichte sein kann?_
   + _Bestimmen Sie den Erwartungswert von $X$._
   + _Bestimmen Sie die Verteilungsfunktion $F_X (x)$._
   + _Bestimmen Sie die Varianz von $X$._
   + _Bestimmen Sie den Median von $X$._
-
+  
   ==== Lösung
   + $a$ muss so gewählt werden, dass das Integral von $phi$ über $RR$ den Wert $1$ haben muss.
     Man berechnet daher:
@@ -542,39 +549,39 @@ $ r = "cov"(X, Y) / sqrt("var"(X) dot "var"(Y)) $
       1 = integral^infinity_(-infinity) phi(x) space dif x = integral^1_0 a(x^2 - x^4) space dif x
       = a integral^1_0 (x^2 - x^4) space dif x overbracket(arrow.double, "TR solve") a = 15 / 2
     $
-
+  
   + Der Erwartungswert ist das Integral von $x dot phi(x)$:
     $
-      E(X) &= integral^infinity_(-infinity) x dot phi(x) space dif x = integral^1_0 x dot a(x^2 - x^4) space dif x
-      overbracket(=, "TR solve") 5 / 8
+      E(X) & = integral^infinity_(-infinity) x dot phi(x) space dif x = integral^1_0 x dot a(x^2 - x^4) space dif x
+             overbracket(=, "TR solve") 5 / 8
     $
-
+  
   + Die Verteilungsfunktion ist für $x$-Werte zwischen 0 und 1:
     $
       F_X (x) = integral^x_(-infinity) phi(xi) space dif xi = integral^x_0 a(x^2 - x^4) space dif x
       overbracket(=, "TR") (-x^3 dot (3x^2 - 5)) / 2
     $
-
+    
     Die Verteilungsfunktion ist damit
     $
       F_X (x) = cases(
-        0                                           &x <= 0,
-        display((-x^3 dot (3 x^2 - 5))/2) quad quad &0 < x <= 1,
-        1                                           &x > 1,
+        0 & x <= 0,
+        display((-x^3 dot (3 x^2 - 5))/2) quad quad & 0 < x <= 1,
+        1 & x > 1,
       )
     $
-
+  
   + Für die Varianz brauchen wir zunächst $E(X^2)$:
     $
       E(X^2) = integral^infinity_(-infinity) x^2 dot phi(x) space dif x = integral^1_0 x^2 dot a(x^2 - x^4) space dif x
       overbracket(=, "TR solve") 3 / 7
     $
-
+    
     Daraus kann nun die Varianz berechnet werden:
     $
       "var"(X) = E(X^2) - E(X)^2 = 3 / 7 - (5 / 8)^2 overbracket(=, "TR") 17 / 448 approx 0.037946
     $
-
+  
   + Der Median $x_"med"$ ist derjenige Wert, für den $F_X (x_"med") = 1/2$. Es gilt also
     $
       (-x^3_"med" dot (3 x^2_"med" - 5)) / 2 = 1 / 2 overbracket(arrow.double, "TR solve") x_"med" = -1.343209 "oder" 0.643138
@@ -610,11 +617,11 @@ ist ${X = a}$ nur beschränkt von Nutzen, da selten das exakt selbe Ereignis ein
   [
     === Wahrscheinlichkeitsdichte $bold(phi(x))$
     Die Wahrscheinlichkeitsdichte $phi(x)$ von $F(x)$ ist die _Ableitung_ von $F(x)$ und sagt aus, wie gross die Wahrscheinlichkeit ist, dass ein Wert in einem Intervall ist. _Achtung:_ nur für stetige Zufallsvariablen.
-
+    
     #definition[
       Die Ableitung der Verteilungsfunktion heisst _Wahrscheinlichkeitsdichte_.
       $ phi(x) = dif / (dif x) F(x) = F'(x) $
-
+      
       $F(x)$ ist eine Stammfunktion.
       $ Rho(a < X <= b) = integral^b_a phi(x) dif x $
     ]
@@ -644,12 +651,16 @@ $ E(X) = sum_i X(i) dot Rho(X = x_i) $
 #table(
   columns: (auto,) + (1fr,) * 6,
   table.header([Augenzahl], [1], [2], [3], [4], [5], [6]),
-
+  
   [_Gewinn_],
-  [$0$], [$0$], [$fxcolor("grün", 5)$], [$fxcolor("rot", 1)$], [$fxcolor("gelb", 2)$], [$fxcolor("orange", 2)$],
-
-  [_Wahrscheinlichkeit_],
-  [$1\/6$], [$1\/6$], [$1\/6$], [$1\/6$], [$1\/6$], [$1\/6$]
+  [$0$],
+  [$0$],
+  [$fxcolor("grün", 5)$],
+  [$fxcolor("rot", 1)$],
+  [$fxcolor("gelb", 2)$],
+  [$fxcolor("orange", 2)$],
+  
+  [_Wahrscheinlichkeit_], [$1\/6$], [$1\/6$], [$1\/6$], [$1\/6$], [$1\/6$], [$1\/6$],
 )
 
 $
@@ -706,7 +717,7 @@ $display(
         columns: (auto,) * 6,
         align: right,
         table.header([*$omega$*], [*$Rho(omega)$*], [*$X$*], [*$X^2$*], [*$X - E(X)$*], [*$(X - E(X))^2$*]),
-
+        
         [$\u{2680}$], [$1\/6$], [$1$], [$1$], [$-2.5$], [$6.25$],
         [$\u{2681}$], [$1\/6$], [$2$], [$4$], [$-1.5$], [$2.25$],
         [$\u{2682}$], [$1\/6$], [$3$], [$9$], [$-0.5$], [$0.25$],
@@ -739,7 +750,7 @@ Sind $X, Y$ _unabhängige_ Zufallsvariablen, dann gilt:
   Zwei Zufallsvariablen $X, Y$ sind _unkorreliert_, wenn der Erwartungswert des Produktes $E(X dot Y)$ dasselbe ist
   wie das Produkt des Erwartungswertes $E(X) dot E(Y)$
   $ E(X dot Y) = E(X) dot E(Y) => "unkorreliert" $
-
+  
   Die _Kovarianz_ misst die Stärke des Zusammenhangs zwischen zwei Zufallsvariablen.
   $ "cov"(X, Y) = E(X dot Y) - E(X) dot E(Y) $
 ]
@@ -785,10 +796,10 @@ Unabhängige Zufallsvariablen sind immer auch unkorreliert. Das umgekehrte muss 
   #v(0.5em)
   ==== Aufgabe
   Gegeben ist meist ein längerer Text mit Prozentzahlen
-
+  
   Die erste Frage ist meist "Wann ist ..." / "Zu welcher Zeit ..." / "Mit wie vielen ..." und die zweite
   "Wie gross ist die Wahrscheinlichkeit ..."
-
+  
   ==== Vorgehensweise
   + Erkennen, welche Verteilung verwendet werden sollte
     - _Exponentialverteilung:_ Etwas geht kaputt, Radioaktiver Zerfall, Warteschlangen
@@ -807,9 +818,9 @@ Es gibt verschiedene Verteilungen, man muss _klären_, nach welcher Verteilung d
   Zufallsvariablen bei einer beliebigen Verteilung mit zunehmenden Stichprobenumfang der Normalverteilung annähern.\
   Oder anders gesagt: Viele kleine unabhängige Zufallseffekte summieren sich ungefähr zu einer Normalverteilung.
   Dadurch sind z.B. Mittelwerte von Stichproben normalverteilt.
-
+  
   $ S_N = (X_1 + ... + X_n) / sqrt(n) quad => quad lim_(n -> infinity) e^(t^2\/2) "(Standardnormalverteilung)" $
-
+  
   Ist also die Verteilung unbekannt, kann die Wahrscheinlichkeit approximativ mit der Normalverteilung berechnet werden.
 ]
 
@@ -827,21 +838,21 @@ Die Vergangenheit hat _keinen Einfluss_ auf den Ausgang eines Experimentes.\
     [
       $
         phi(x) = cases(
-          a dot e^(-a dot x) quad &x >= 0,
-          0                       &"sonst"
+          a dot e^(-a dot x) quad & x >= 0,
+          0 & "sonst"
         )
       $
     ],
     [
       $
         F(x) = cases(
-          0                 &"für" x < 0,
-          1 - e^(-a x) quad &"für" x >= 0.
+          0 & "für" x < 0,
+          1 - e^(-a x) quad & "für" x >= 0.
         )
       $
-    ]
+    ],
   )
-
+  
   #table(
     columns: (1fr,) * 3,
     table.header([Erwartungswert], [Varianz], [Median]),
@@ -853,38 +864,40 @@ Die Vergangenheit hat _keinen Einfluss_ auf den Ausgang eines Experimentes.\
 === Beispiel: Komponentenlebensdauer
 #example-block[
   _Mittlere Lebensdauer einer Komponente ist eine Woche. Nach einem Jahr wird diese Komponente also etwa 52 mal ausgewechselt.
-  Für Budgetzwecke wird angenommen, dass man mit 10 zusätzlichen Austauschaktionen pro Jahr durchkommt._
-
+    Für Budgetzwecke wird angenommen, dass man mit 10 zusätzlichen Austauschaktionen pro Jahr durchkommt._
+  
   _Verwenden Sie eine geeignete, einfache Approximation, um die Wahrscheinlichkeit zu berechnen, dass das Budget nicht reicht._
-
+  
   Jede Komponente hat eine exponentialverteilte Lebensdauer $T_1, ... , T_n$ mit $a = 1$ (Woche).
   Gefragt ist die Wahrscheinlichkeit, dass die gesamte Lebensdauer der $n$ Komponenten kleiner ist als $52$.
-
+  
   $
     X = T_1 + ... + T_n, quad "gesucht:" Rho(X < 52)
   $
-
+  
   ==== Approximation mit Normalverteilung
   Eine Summe vieler kleiner Einflüsse kann mit der Normalverteilung approximiert werden. Damit gilt:
   $
     E(X) = mu = n dot E(T) = n dot 1["Woche"] = n, quad "var"(X) = sigma^2 = n dot "var"(T) = n dot 1["Woche"^2] = n,
     quad sigma = sqrt(n)
   $
-
+  
   Standardisierung:
   $
     Rho(X < 52) = Rho(X <= 52) = Rho((X - mu)/sigma <= (52-mu)/sigma) = Rho(Z <= (52 - n)/sqrt(n))
   $
-
+  
   $52 - n < 0$ ist nicht in Tabelle der Verteilungsfunktion, deshalb muss das Komplement abgelesen werden
   $
     Rho(Z <= (52 - n)/sqrt(n)) = 1 - Rho(Z <= (- 52 + n)/sqrt(n)) = 1 - Rho(Z <= (n - 52)/sqrt(n))
   $
-
+  
   Für $n = 62$ gilt also:
   $
-    1 - Rho(Z <= (62 - 52)/sqrt(62)) = 1 - Rho(Z <= 1.27) arrow.double 1 - overbracket("normCdf"(-infinity, 1.27, 0, 1),
-    "Menu"-5-5-2) = 1 - 0.89796 = 0.102 arrow.double underline(10.2%)
+    1 - Rho(Z <= (62 - 52)/sqrt(62)) = 1 - Rho(Z <= 1.27) arrow.double 1 - overbracket(
+      "normCdf"(-infinity, 1.27, 0, 1),
+      "Menu"-5-5-2
+    ) = 1 - 0.89796 = 0.102 arrow.double underline(10.2%)
   $
 ]
 
@@ -899,23 +912,23 @@ Jeder Wert innerhalb eines Intervalls ist gleich wahrscheinlich.\
     [
       $
         phi(x) = cases(
-          0            &x < a,
-          1/(b-a) quad &x in [a,b],
-          0            &x > b
+          0 & x < a,
+          1/(b-a) quad & x in [a,b],
+          0 & x > b
         )
       $
     ],
     [
       $
         F(x) = cases(
-          0                &x < a,
-          (x-a)/(b-a) quad &x in [a,b],
-          1                &x > b
+          0 & x < a,
+          (x-a)/(b-a) quad & x in [a,b],
+          1 & x > b
         )
       $
-    ]
+    ],
   )
-
+  
   #table(
     columns: (1fr,) * 3,
     table.header([Erwartungswert], [Varianz], [Median]),
@@ -927,42 +940,42 @@ Jeder Wert innerhalb eines Intervalls ist gleich wahrscheinlich.\
 === Beispiel: Masse von Kartoffeln
 #example-block[
   _Selektierte Kartoffeln haben eine Masse zwischen $80$ und $100g$. Diese werden im Intervall besser mit einer
-  Gleichverteilung anstatt einer Normalverteilung beschrieben._
-
+    Gleichverteilung anstatt einer Normalverteilung beschrieben._
+  
   1. _Wie gross ist die Varianz der Masse einer selektierten Kartoffel?_
-
+    
     $ K = "Masse einer selektierten Kartoffel", quad a = 80g, quad b = 100g, quad E(K) = mu_0 = (80 + 100) / 2 = 90g $
-
+    
     Die Varianz einer Gleichverteilung zwischen $a$ und $b$ ist
-
+    
     $ sigma^2_0 = "var"(K) = (b - a)^2 / 12 = (100 - 80)^2 / 12 = 33.333g^2 $
-
+  
   2. _Wie gross muss $n$ sein, damit man mit mindestens $10"kg"$ Kartoffeln rechnen kann?_\
     Die Masse $K_1, ..., K_n$ der $n$ Kartoffeln sind gleichverteilte Zufallsvariablen mit Erwartungswert $90g$, daher hat
     die Summe $X = K_1 + ... + K_n$ den Erwartungswert $E(X) = n dot mu_0$. Damit der Erwartungswert $10"kg"$ erreicht,
     muss $n >= 10"kg"\/mu_0$ sein:
-
+    
     $
       E(X) = n dot mu_0, quad E(X) >= 10"kg" quad arrow.double quad n = E(X) / mu_0 = (10"kg") / (90g)
       = (10'000g) / (90g) = 111.11 quad arrow.double quad underline(n = 112)
     $
-
+  
   3. _Die Masse der Kartoffeln kann aber immer noch streuen. Wie gross ist die Wahrscheinlichkeit, nicht die verlangten
-    $10"kg"$ zu erhalten?_\
+      $10"kg"$ zu erhalten?_\
     Nach dem zentralen Grenzwertsatz ist $X$ annähernd normalverteilt mit Erwartungswert $mu = n dot mu_0$ und Varianz
     $sigma^2 = n dot sigma^2_0$. Die Wahrscheinlichkeit, dass $X < 10"kg"$ ist, kann jetzt mit Standardisierung berechnet werden
     $
-      Rho(X < 10"kg") = Rho(X <= 10"kg") &= Rho((X - mu)/sigma <= (10"kg" - mu)/sigma)\
-      &= Rho(Z <= (10"kg" - mu)/sigma) = Rho(Z <= (10"kg" - n dot mu_0)/(sqrt(n) dot sigma_0))
-      = Phi((10"kg" - n dot mu_0)/(sqrt(n) dot sigma_0))
+      Rho(X < 10"kg") = Rho(X <= 10"kg") & = Rho((X - mu)/sigma <= (10"kg" - mu)/sigma) \
+                                         & = Rho(Z <= (10"kg" - mu)/sigma) = Rho(Z <= (10"kg" - n dot mu_0)/(sqrt(n) dot sigma_0))
+                                           = Phi((10"kg" - n dot mu_0)/(sqrt(n) dot sigma_0))
     $
-
+    
     Da das Argument $Phi$ negativ ist, gehen wir zum Komplement über #hinweis[(Achtung: Dividend und Einheiten ändern sich!)]
     $
       = 1 - Phi((n dot mu_0 - 10"kg")/(sqrt(n) dot sigma_0)) = 1 - Phi((112 dot 90"g" - 10"kg")/(sqrt(112) dot 33.333"g"^2))
       = 1 - Phi((112 dot 90"g" - 10'000"g")/(sqrt(112) dot sqrt(33.333"g"))) = 1- Phi(1.3093)
     $
-
+    
     Für $n = 112$ ergibt sich
     $
       Rho(X < 10"kg") = 1 - Phi(1.3093) = 1 - overbracket("normCdf"(-infinity, 1.3093, 0, 1), "Menu"-5-5-2) = 1 - 0.9047
@@ -983,13 +996,11 @@ Modellierung vieler kleiner Einflüsse, Messwerte, wiederholte Experimente.\
     [$ phi(x) = 1 / (sqrt(2pi) sigma) dot e^(-x^2 / (2 sigma^2)) $],
     [*$sigma$*: Standardabweichung],
   )
-
+  
   #table(
     columns: (1fr,) * 3,
     table.header([Erwartungswert], [Varianz], [Median]),
-    [$ E(X) = mu $],
-    [$ "var"(X) = sigma^2 $],
-    [$ "Median" = mu $]
+    [$ E(X) = mu $], [$ "var"(X) = sigma^2 $], [$ "Median" = mu $],
   )
 ]
 
@@ -1009,7 +1020,7 @@ $
       $
         Z = (X - mu) / sigma quad => quad Phi(Z) "(aus Verteilungs-Tabelle)"\
         Phi(Z) = cases(
-          Phi(Z)                & Z >= 0,
+          Phi(Z) & Z >= 0,
           1 - Phi(abs(Z)) quad & Z < 0
         )
       $
@@ -1019,16 +1030,15 @@ $
       *$X$:* nicht-standardisierte normalverteilte Zufallsvar.\
       *$mu, sigma^2$:* Params der nicht-standardisierten Normalvert.
       *$Phi$:* Verteilungsfunktion, Wert aus Tabelle ablesen
-    ]
+    ],
   )
-
+  
   #table(
     columns: (1fr,) * 2,
     table.header([Erwartungswert], [Varianz]),
-    [$ E(Z) = 0 $],
-    [$ "var"(Z) = 1 $],
+    [$ E(Z) = 0 $], [$ "var"(Z) = 1 $],
   )
-
+  
   #hinweis[
     TR Tabellenwert der Standardnormalverteilung lesen:\
     $Phi(x)$ wenn $x$ bekannt: Menu-5-5-3 / $"invNorm"(x,0,1), x = "Fläche"$\
@@ -1047,59 +1057,59 @@ $
 #example-block[
   === Beispiel 1: Feuerwerk
   _Feuerwerk wird in der Silvesternacht ungefähr um Mitternacht gezündet. 5% des Feuerwerks wird schon vor 22 Uhr, 25% erst nach 1 Uhr gezündet._
-
+  
   + _Zu welcher Zeit erreicht die Explosionsdichte ihr Maximum?_
-
+    
     Die gegebenen Wahrscheinlichkeiten sind:
     $ Rho(X < 22 "Uhr") = 0.05, quad Rho(X > 25 "Uhr") = 0.25 => Rho(X < 25) = 0.75 $
-
+    
     Wahrscheinlichkeiten standardisieren:
     $ Rho((X - mu)/sigma < (22 - mu)/sigma) = 0.05, quad Rho((X - mu)/sigma < (25 - mu)/sigma) = 0.75 $
-
+    
     Da wir die Wahrscheinlichkeiten schon haben, müssen wir die Werte aus der Quantiltabelle herauslesen oder
     mit TR $"invNorm"(p, 0, 1)$ erhalten.
     $ Phi^(-1)(0.75) = 0.6745, quad Phi^(-1)(0.05) = 1 - Phi^(-1)(0.95) = 1 - 1.6449 = -1.6449 $
-
+    
     Gleichungssystem aufstellen, mit TR #tr-constructs-button -Taste rechts neben "9" $->$
     "$script(cases(ballot, ballot))$" und dieses dann mit $"solve"()$ lösen
     $
       cases(
-        (22 - mu)/sigma &= -1.6449,
-        (25 - mu)/sigma &= 0.6745
+        (22 - mu)/sigma & = -1.6449,
+        (25 - mu)/sigma & = 0.6745
       )
       quad => quad mu = 24.1276, quad sigma = 1.2934
     $
-
+    
     Wandelt man $mu$ in Stunden und Minuten um, erhält man als Mittelwert 00:08 Uhr.
-
+  
   + _Wie hoch ist die Wahrscheinlichkeit, nach 2 Uhr noch Explosionen zu hören?_
     $ Rho(X > 26) = Rho(Z > (26 - mu)/sigma) = Rho(Z > (26 - 24.1276)/1.2934) = Rho(Z > 1.4477) $
-
+    
     Wert aus Standardnormalverteilungstabelle lesen oder mit TR $"normCdf"(-infinity, 1.4477, 0, 1)$
     $ Phi(1.4477) = 0.9261 $
-
+    
     Da man nur $Rho(X < x)$ berechnen kann, muss noch minus 1 gerechnet werden
     $ Rho(X > 26) = 1 - Rho(X < 26) = 1 - Rho(Z < 1.4477) = 1 - 0.9261 = 0.0739 = underline(7.39%) $
-
+  
   === Beispiel 2: Geburtsgewicht
   _8.2% aller Babies werden mit einem Geburtsgewicht unter $x_"min" = 2.5"kg"$ geboren und gelten als "low birth weight".
-  Das mittlere Gewicht ist 3.5kg. Wie schwer ist ein Baby mindestens, welches schwerer als 95% aller Babies ist?_
-
+    Das mittlere Gewicht ist 3.5kg. Wie schwer ist ein Baby mindestens, welches schwerer als 95% aller Babies ist?_
+  
   Die Wahrscheinlichkeiten aus der Aufgabe herauslesen und standardisieren:
   $
     Rho(X <= x_"min") = 0.082, quad 0.082 = Rho((X - mu)/sigma <= (x_"min" - mu)/sigma) = Rho(Z <= (x_"min" - mu)/sigma)
   $
-
+  
   Wert aus Quantil-Standardnormalverteilungstabelle lesen #hinweis[(1 - Wert rechnen, um ihn aus der Tabelle ablesen zu können,
-  danach mit mal -1 wieder zurücktransformieren)] oder direkt mit TR $"invNorm"(0.082, 0, 1)$
+    danach mit mal -1 wieder zurücktransformieren)] oder direkt mit TR $"invNorm"(0.082, 0, 1)$
   $ Phi^(-1)(0.082) = -1 dot Phi^(-1)(1 - 0.082) = -1 dot 1.392 = -1.392 $
-
+  
   Standardabweichung $sigma$ berechnen:
   $ sigma = (x_"min" - mu) / (-1.392) = (2.5 - 3.5) / (-1.392) = 0.7184 $
-
+  
   $Z$-Wert für 95%-Quantile aus der Quantilentabelle ablesen oder mit $"invNorm"(0.95, 0, 1)$:
   $ Z = Phi^(-1)(0.95) = 1.6449 $
-
+  
   Das kritische Gewicht $x$ mithilfe der Standardnormalverteilungsformel berechnen:
   $ Z = (x - mu) / sigma quad => quad 1.644 = (x - 3.5) / (0.7184) quad => quad x = underline(4.682"kg") $
 
@@ -1118,23 +1128,23 @@ Bei einem Zufallsexperiment mit zwei möglichen Ausgängen sind die verschiedene
   Die Wahrscheinlichkeitsfunktion der Binomialverteilung ist:
   #grid(
     align: horizon,
-    [$ Rho(X = k) = binom(n,k) dot p^k dot (1-p)^(n-k) $],
+    [$ Rho(X = k) = binom(n, k) dot p^k dot (1-p)^(n-k) $],
     [
       *$k$*: Anzahl Ereignisse\
       *$n$*: Anzahl Durchführungen\
       *$p$*: Wahrscheinlichkeit, dass Ereignis eintritt
-    ]
+    ],
   )
-
+  
   #table(
     columns: (1fr, 1fr),
     align: horizon,
     table.header([Erwartungswert], [Varianz]),
     [$ E(X) = n dot p = mu $], [$ "var"(X) = n dot p dot (1 - p) = sigma^2 $],
   )
-
+  
   #hinweis[
-    TR Binomialkoeffizient $binom(n,k)$: menu-5-3 / $"nCr"(n, k)$,
+    TR Binomialkoeffizient $binom(n, k)$: menu-5-3 / $"nCr"(n, k)$,
     TR Binomialverteilung: menu-5-5-A / $"binomPdf"(n, p, k)$
   ]
 ]
@@ -1155,10 +1165,10 @@ Für eine genauere Approximation kann folgende Korrektur eingefügt werden:
   [
     $
       Rho(a fxcolor("grün", <) X fxcolor("orange", <=) b)
-      = Phi((b fxcolor("orange",+ 1/2) - n p)/sqrt(n p (1-p))) - Phi((a fxcolor("grün", + 1/2) - n p)/sqrt(n p (1-p)))
+      = Phi((b fxcolor("orange", + 1/2) - n p)/sqrt(n p (1-p))) - Phi((a fxcolor("grün", + 1/2) - n p)/sqrt(n p (1-p)))
       \ \
       Rho(a fxcolor("grün", <=) X fxcolor("orange", <=) b)
-      = Phi((b fxcolor("orange",+ 1/2) - n p)/sqrt(n p (1-p))) - Phi((a fxcolor("grün", - 1/2) - n p)/sqrt(n p (1-p)))
+      = Phi((b fxcolor("orange", + 1/2) - n p)/sqrt(n p (1-p))) - Phi((a fxcolor("grün", - 1/2) - n p)/sqrt(n p (1-p)))
     $
   ],
   image("img/wrstat_11.png"),
@@ -1178,9 +1188,9 @@ $ mu = n dot p = 12.180, quad sigma = sqrt(n p(1-p)) approx 3.2365 $
 Standardisierung: $Z = (X - mu)\/sigma$
 
 $
-  Rho(X <= 10) &approx Rho(Z < (overbracket(10.5, X + 1/2) - mu)/sigma)
-  = Rho(Z < (10.5 - 12.180)/3.2365) = Rho(Z < -0.5191) overbracket(=, 5-5-2) 0.3018\
-  arrow.double Rho(X > 10) &approx 1 - 0.3018 = 0.698 arrow.double underline(69.8%)
+              Rho(X <= 10) & approx Rho(Z < (overbracket(10.5, X + 1/2) - mu)/sigma)
+                             = Rho(Z < (10.5 - 12.180)/3.2365) = Rho(Z < -0.5191) overbracket(=, 5-5-2) 0.3018 \
+  arrow.double Rho(X > 10) & approx 1 - 0.3018 = 0.698 arrow.double underline(69.8%)
 $
 
 
@@ -1236,7 +1246,7 @@ Approximation der Binomialverteilung für seltene Ereignisse, die mit Rate $lamb
 
 #definition[
   Die Wahrscheinlichkeitsfunktion der Poisson-Verteilung ist:
-
+  
   #grid(
     columns: (1fr, 1.2fr),
     [
@@ -1247,7 +1257,7 @@ Approximation der Binomialverteilung für seltene Ereignisse, die mit Rate $lamb
       *$lambda$:* Durchschnittliches Auftreten des Ereignis im Intervall
     ],
   )
-
+  
   #table(
     columns: (1fr, 1.2fr),
     table.header([Erwartungswert], [Varianz]),
@@ -1259,45 +1269,45 @@ Approximation der Binomialverteilung für seltene Ereignisse, die mit Rate $lamb
 #example-block[
   === Beispiel 1: Schwurbler-Anteil (selten)
   _1% der Personen glauben, dass die Erde Flach ist. Wie wahrscheinlich ist es, in einem Dorf mit 87 Einwohner
-  *mehr als* zwei Flacherdler hat?_
-
+    *mehr als* zwei Flacherdler hat?_
+  
   $ n = 87, quad p = 0.01, quad lambda = n dot p = 87 dot 0.01 = 0.87 $
-
+  
   $
     Rho(X > 2) &= 1 - Rho(X <= 2)\
     Rho(X <= 2) &= e^(- lambda) sum^2_(k=0) lambda^k / k! = e^(-lambda) (1 + lambda + lambda^2 / 2) approx 0.9420\
     arrow.double P(X > 2) &= 1 - 0.9420 = 0.0508 arrow.double underline(5.08%)
   $
-
-
+  
+  
   === Beispiel 2: 6er mit 5 Würfeln
   _Es passiert *sehr selten*, dass beim Werfen von 10 fairen Sechserwürfel genau 5 Würfel eine Fünf zeigen.
-  Wie wahrscheinlich ist es, dass dies in 100 Versuchen *mehr als 2 mal* passiert?_
-
+    Wie wahrscheinlich ist es, dass dies in 100 Versuchen *mehr als 2 mal* passiert?_
+  
   Genau fünf Fünfer beim Wurf von 10 Würfeln haben die Wahrscheinlichkeit $p$.\
   #hinweis[Binom TR: Menü-5-3 / $"nCr"(10,5)$]
-
-  $ n = 100, quad p = binom(10,5) (1^5 dot 5^5) / 6^10 = 0.013024, quad lambda = n dot p = 100 dot 0.013024 = 1.3024 $
-
+  
+  $ n = 100, quad p = binom(10, 5) (1^5 dot 5^5) / 6^10 = 0.013024, quad lambda = n dot p = 100 dot 0.013024 = 1.3024 $
+  
   $
-    Rho(Y > 2) &= 1 - Rho(X <= 2)\
-    Rho(X <= 2) &= e^(- lambda) sum^2_(k=0) lambda^k / k! = e^(-lambda) (1 + lambda + lambda^2 / 2) = 0.8566\
-    arrow.double P(Y > 2) &= 1 - 0.8566 = 0.1434 arrow.double underline(14.34%)
+               Rho(Y > 2) & = 1 - Rho(X <= 2) \
+              Rho(X <= 2) & = e^(- lambda) sum^2_(k=0) lambda^k / k! = e^(-lambda) (1 + lambda + lambda^2 / 2) = 0.8566 \
+    arrow.double P(Y > 2) & = 1 - 0.8566 = 0.1434 arrow.double underline(14.34%)
   $
-
+  
   === Beispiel 3: Mehr als X Ereignisse (selten)
   _Betrügerische Transaktionen sind *selten*, erreichen aber etwa 1% des gesamten Zahlungsvolumens._
-
+  
   _Unter der Annahme, dass die Wahrscheinlichkeit einer betrügerischen Transaktion $0.1%$ ist, wie wahrscheinlich ist es,
-  dass der Händler in einer Stichprobe von $1000$ Transaktionen mehr als $3$ betrügerische findet?_
-
+    dass der Händler in einer Stichprobe von $1000$ Transaktionen mehr als $3$ betrügerische findet?_
+  
   $ n = 1000, quad p = 0.001, quad lambda = n dot p = 1000 dot 0.001 = 1 $
-
+  
   $
-    Rho(X > 3) &= 1 - P(X <= 3)\
-    Rho(X <= 3)&= e^(- lambda) sum^3_(k=0) lambda^k / k!
-    = e^(-lambda) ( 1 + lambda + lambda^2 / 2! + lambda^3 / 3!) approx 0.981012\
-    arrow.double Rho(X > 3) &= 1 - 0.981012 = 0.018988 arrow.double underline(1.89%)
+                 Rho(X > 3) & = 1 - P(X <= 3) \
+                Rho(X <= 3) & = e^(- lambda) sum^3_(k=0) lambda^k / k!
+                              = e^(-lambda) ( 1 + lambda + lambda^2 / 2! + lambda^3 / 3!) approx 0.981012 \
+    arrow.double Rho(X > 3) & = 1 - 0.981012 = 0.018988 arrow.double underline(1.89%)
   $
 ]
 
@@ -1315,14 +1325,14 @@ Approximation der Binomialverteilung für seltene Ereignisse, die mit Rate $lamb
   #v(0.5em)
   ==== Aufgabe
   Gegeben ist eine Studie oder Untersuchung mit diversen Messdaten.
-
+  
   Die Frage ist meist "Kann man daraus schliessen ..." / "Kann damit eine Aussage über xy gemacht werden" /
   "Formulieren Sie einen Test ... "
-
+  
   ==== Vorgehensweise
   + Korrekte Testmethode auswählen und entsprechendes Beiblatt verwenden
   + Anleitung des ausgewählten Tests folgen
-
+  
   #hinweis[Sinnvolles $alpha$: $0.05, 0.01, 0.001$ (Häufig $0.05$)]
 ]
 
@@ -1343,7 +1353,7 @@ Die Stichproben $X_1, .... , X_n$ und $Y_1, ... , Y_m$ mit gleicher Varianz habe
   TR-Skript _"tverttest2"_ verwenden #hinweis[(Der obere Teil des Beiblattes mit den Messdaten bleibt in diesem Fall leer)]
   $ "tverttest2"(n, m x, s x, m, m y, s y, alpha) $
   #hinweis[
-    $n =$ Anzahl Werte Messreihe X, $m x = $ Durchschnitt der X-Werte, $s x =$ Standardabweichung der X-Werte\
+    $n =$ Anzahl Werte Messreihe X, $m x =$ Durchschnitt der X-Werte, $s x =$ Standardabweichung der X-Werte\
     $m =$ Anzahl Werte Messreihe Y, $m y =$ Durchschnitt der Y-Werte, $s y =$ Standardabweichung der Y-Werte
   ]
 + Auf Prüfung schreiben, dass der T-Test auf dem Beiblatt steht
@@ -1409,10 +1419,10 @@ feststellen, ob sie sich signifikant unterscheiden
   #v(0.5em)
   ==== Aufgabe
   Gegeben ist eine komplizierte Situation. Nur "ja / nein"-Resultate, keine Messwerte, Abhängigkeit.
-
+  
   Die Frage ist oft: Mit welcher Wahrscheinlichkeit passiert etwas? "Wie gross ist die Wahrscheinlichkeit, dass ..." /
   "Wie wahrscheinlich ist es, ..." / "Wie häufig ..."
-
+  
   ==== Vorgehensweise
   + Ereignisse ableiten und hinschreiben
   + Bedingte Wahrscheinlichkeiten zuordnen
@@ -1434,7 +1444,7 @@ feststellen, ob sie sich signifikant unterscheiden
   Hat man für ein Ereignis $A$ mehrere Bedingungen $B_i$ #hinweis[(z.B. mehrere Fälle oder Ursachen für $A$)],
   kann man die Wahrscheinlichkeit für $A$ berechnen, wenn man die bedingten Wahrscheinlichkeiten für $B_i$
   zusammenzählt #hinweis[(Aus Einzelfällen lässt sich die Gesamtsituation zusammenstellen.)]
-
+  
   $ Rho(A) = sum_(i=1)^n Rho(A|B_i) dot Rho(B_i) $
 ]
 
@@ -1488,16 +1498,18 @@ $arrow.double$ Wechselstrategie ist vorteilhaft.
     $H = {$ Person mit HIV infiziert $}$, $Rho(H) = 0.001$\
     $T = {$ Test positiv $}$, $Rho(T|H) = 0.999$\
     $Rho(dash(T)|dash(H)) = {$ negat. Test bei gesunder Pers. $} = 0.9999$\
-  ]
+  ],
 )
 
 *Totale Wahrscheinlichkeit $Rho(T)$ für positiven Test, egal ob infiziert*\
 $
-  Rho(T) &= fxcolor("grün", Rho(T|H)) dot fxcolor("rot", Rho(H)) + fxcolor("gelb", Rho(T|dash(H)))
-  dot fxcolor("orange", Rho(dash(H)))\
-  &= fxcolor("grün", Rho(T|H)) dot fxcolor("rot", Rho(H)) + underbracket((1 - fxcolor("hellblau", Rho(dash(T)|dash(H))))
-    dot (1 - fxcolor("orange", Rho(H))), "Umkehren des Ereignisses in bekannte Werte")\
-  &= 0.999 dot 0.0001 + 0.0001 dot 0.9999 = underline(0.00019899)
+  Rho(T) & = fxcolor("grün", Rho(T|H)) dot fxcolor("rot", Rho(H)) + fxcolor("gelb", Rho(T|dash(H)))
+           dot fxcolor("orange", Rho(dash(H))) \
+         & = fxcolor("grün", Rho(T|H)) dot fxcolor("rot", Rho(H)) + underbracket(
+             (1 - fxcolor("hellblau", Rho(dash(T)|dash(H))))
+             dot (1 - fxcolor("orange", Rho(H))), "Umkehren des Ereignisses in bekannte Werte"
+           ) \
+         & = 0.999 dot 0.0001 + 0.0001 dot 0.9999 = underline(0.00019899)
 $
 
 *Wahrscheinlichkeit, bei positivem Test infiziert zu sein $Rho(H|T)$*
@@ -1526,7 +1538,7 @@ Wie gross ist die Wahrscheinlichkeit zu sterben, wenn man ein Redshirt auf der E
       [*Engineering*], [rot], [149], [6],
       [*Security*], [rot], [90], [18],
       table.hline(stroke: 1.5pt + black),
-      table.footer([*Total*], [], [430], [40])
+      table.footer([*Total*], [], [430], [40]),
     )
   ],
   [
@@ -1580,8 +1592,10 @@ Wie gross ist die Wahrscheinlichkeit zu sterben, wenn man ein Redshirt auf der E
 
 Der Satz von Bayes kann angewendet werden, um _von einer Wahrscheinlichkeit auf die andere zu schliessen_:
 $
-  fxcolor("grün", Rho(R|T)
-  = Rho(R inter T)/Rho(T)) dot underbracket(Rho(R)/Rho(R), "erweitern")
+  fxcolor(
+    "grün", Rho(R|T)
+    = Rho(R inter T)/Rho(T)
+  ) dot underbracket(Rho(R)/Rho(R), "erweitern")
   = underbracket(fxcolor("rot", Rho(T inter R)/Rho(R)) dot Rho(R)/Rho(T), "umstellen")
   = underbracket(fxcolor("rot", Rho(T|R)), "einsetzen") dot Rho(R) / Rho(T) quad
   arrow.double quad bold(Rho(R|T) = Rho(T|R) dot Rho(R)/Rho(T))
@@ -1612,7 +1626,7 @@ $A$ und $B$ heissen _unabhängig_, wenn $Rho(A inter B) = Rho(A) dot Rho(B)$\
     #hinweis[$B$ beeinflusst $A$ nicht, W'keit ist gleich. Der Anteil von $A$ ist bei $B$ und $dash(B)$ gleich.]
     #v(-0.75em)
     #image("img/wrstat_05.png", width: 57%)
-  ]
+  ],
 )
 
 Bei bedingten Wahrscheinlichkeiten gilt:
@@ -1627,7 +1641,7 @@ Ereignisse die _Wahrscheinlichkeit 0_ hat. Nur dann ist $Rho(A) dot Rho(B) = 0 =
   Hat man für ein Ereignis $A$ mehrere Bedingungen $B_i$ #hinweis[(z.B. mehrere Fälle oder Ursachen für $A$)], kann man
   die Wahrscheinlichkeit für $A$ berechnen, wenn man die bedingten Wahrscheinlichkeiten für $B_i$ zusammenzählt
   #hinweis[(Aus Einzelfällen lässt sich die Gesamtsituation zusammenstellen.)]
-
+  
   $ Rho(A) = sum_(i=1)^n Rho(A|B_i) dot Rho(B_i) $
 ]
 
@@ -1639,12 +1653,12 @@ Wie gross ist die Wahrscheinlichkeit $Rho(T)$, auf der Enterprise umzukommen?
   [
     *Wahrscheinlichkeitsfallunterscheidung:* Aus den bedingten Wahrscheinlichkeiten die Bedingung herausrechnen,
     um die Totale Wahrscheinlichkeit zu erhalten.
-
+    
     $& Rho(T inter G) &= Rho(T|G) dot Rho(G)\
-     + &Rho(T inter B) &= Rho(T|B) dot Rho(B)\
-     + &Rho(T inter R) &= Rho(T|R) dot Rho(R)\
-     #place(line(length: 4.5cm, stroke: 0.075em), dy: -3.4mm)
-     &Rho(T)$
+    + &Rho(T inter B) &= Rho(T|B) dot Rho(B)\
+    + &Rho(T inter R) &= Rho(T|R) dot Rho(R)\
+    #place(line(length: 4.5cm, stroke: 0.075em), dy: -3.4mm)
+    &Rho(T)$
   ],
   image("img/wrstat_03.png"),
 )
@@ -1665,7 +1679,7 @@ Wie gross ist die Wahrscheinlichkeit $Rho(T)$, auf der Enterprise umzukommen?
     - $Omega =$ Menge aller Elementarereignisse
     - $A =$ Ereignis 1 #hinweis[(Alle Versuchsausgänge, bei denen der Würfel 1 zeigt)]
     - $B =$ Ereignis $>=$ 4
-
+    
     === Spezielle Ereignisse
     - _$bold(A = Omega subset Omega)$:_ Das _sichere_ Ereignis #hinweis[(Das Ereignis $A = Omega$ tritt immer auf)].
     - _$bold(B = emptyset = {} subset Omega)$:_ Das _unmögliche_ Ereignis #hinweis[(Tritt nie ein, z.B. das Würfeln einer 7)].
@@ -1686,7 +1700,7 @@ Eine Ereignis-Algebra ist eine Menge $cal(A)$ von Ereignissen derart, dass gilt:
   $A in cal(A) space arrow.double space dash(A) = Omega without A in cal(A)$ #hinweis[(`!A`, nicht A)]
 + Die _Schnittmenge_ von zwei Ereignissen ist ein Ereignis:\
   $A, B in cal(A) space arrow.double space A inter B
-    = (A union B) without ((A without B) union (B without A)) in cal(A)$ #hinweis[(A und B)]
+  = (A union B) without ((A without B) union (B without A)) in cal(A)$ #hinweis[(A und B)]
 
 
 === Wahrscheinlichkeit
