@@ -1,42 +1,43 @@
 // Compiled with Typst 0.13.1
 #import "../template_zusammenf.typ": *
 #import "@preview/codelst:2.0.2": sourcecode
+// #import "00_MSTE_Settings.typ": mste
 
-#show: project.with(
-  // authors: ("Nina Grässli", "Jannis Tschan"),
-  fach: "MsTe",
-  fach-long: ".NET Technologien",
-  semester: "HS25",
-  language: "de",
-  tableofcontents: (enabled: true, depth: 2, columns: 2),
-  font-size: 10pt,
-)
+// #show: project.with(
+//   // authors: ("Nina Grässli", "Jannis Tschan"),
+//   // fach: "MsTe",
+//   // fach-long: "Nullability Kurz",
+//   // semester: "HS25",
+//   // language: "de",
+//   // tableofcontents: (enabled: true, depth: 2, columns: 2),
+//   font-size: 10pt,
+// )
 
-// Global configuration
-#set grid(columns: (1fr, 1fr), gutter: 1em)
-#show grid: set par(justify: false, linebreaks: "optimized")
-#set figure(supplement: none)
+// // Global configuration
+// #set grid(columns: (1fr, 1fr), gutter: 1em)
+// #show grid: set par(justify: false, linebreaks: "optimized")
+// #set figure(supplement: none)
 
-// Set styles for the gRPC example code blocks
-#let code-example(body) = {
-  // sourcecode uses a table internally, the template styles the first row with emph, disable here
-  show emph: set text(fill: black, style: "italic", weight: "regular")
-  set text(size: 0.88em)
-  sourcecode(lang: "cs", body)
-}
+// // Set styles for the gRPC example code blocks
+// #let code-example(body) = {
+//   // sourcecode uses a table internally, the template styles the first row with emph, disable here
+//   show emph: set text(fill: black, style: "italic", weight: "regular")
+//   set text(size: 0.88em)
+//   sourcecode(lang: "cs", body)
+// }
 
-// Table formatting
-#set table(
-  stroke: (x, y) => (
-    left: if x > 0 { 0.07em + rgb("#b2b2b2") },
-    top: if y > 0 { 0.07em + rgb("#b2b2b2") },
-  ),
-  inset: 0.5em,
-)
+// // Table formatting
+// #set table(
+//   stroke: (x, y) => (
+//     left: if x > 0 { 0.07em + rgb("#b2b2b2") },
+//     top: if y > 0 { 0.07em + rgb("#b2b2b2") },
+//   ),
+//   inset: 0.5em,
+// )
 
 
 // == Nullability Kurz
-siehe @nullability\
+// siehe @nullability\
 
 #grid(
   columns: (1fr, 0pt, 1fr),
@@ -131,8 +132,8 @@ siehe @nullability\
 
 
 \
-=== Record Types Kurz
-siehe @record-types\
+== Record Types Kurz
+// siehe @record-types\
 
 #grid(
   [

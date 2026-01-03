@@ -3397,9 +3397,11 @@ Häufig verwendet man auch nur die generischen Varianten.\
 )
 
 
+#pagebreak()
 == Nullability kurz
 #include "Nullability_kurz.typ"
 
+#pagebreak()
 == Nullability Vollständig
 <nullability>
 Structs / Nullable Value Types: Null-Zustand musst quasi erzwungen werden, weil keine Referenz/Zustand existiert.
@@ -3674,6 +3676,7 @@ Um den Umgang mit Nullable Types zu erleichtern, gibt es _eigene Operatoren_ fü
   ],
 )
 
+#pagebreak()
 == Record Types Vollständig
 <record-types>
 ```cs public record [class|struct] Person(int Id, string Name);```\
@@ -3792,6 +3795,7 @@ Ein Record kann nur initialisiert werden, wenn alle Properties angegeben werden.
   ],
 )
 
+#pagebreak()
 
 = Deterministic Finalization: Dispose() <deterministic-finalization>
 
@@ -3822,7 +3826,7 @@ Ein Record kann nur initialisiert werden, wenn alle Properties angegeben werden.
     )
   ],
 )
-== Wann nötig
+=== Wann nötig
 DB-Verbindungen, geöffnete Dateien (file handles),... die das Interface öffnet, sauber schliessen
 
 === Finalizer / Destruktor
@@ -3966,7 +3970,7 @@ DB-Verbindungen, geöffnete Dateien (file handles),... die das Interface öffnet
   ],
 )
 
-
+\
 
 = Iteratoren <iteratoren>
 === `foreach` Loop
@@ -4175,6 +4179,7 @@ Extension Method ist _nur sichtbar_, wenn der _Namespace importiert_ wird, in we
 Bei _Namenskonflikten_ gewinnt immer die Non-Extension-Methode.
 Erlaubt auf Klassen, Structs, Interfaces, Delegates, Enumeratoren und Arrays.
 
+\
 == Deferred Evaluation
 Ein Aufruf von `GetEnumerator()` oder `Range()` führt die Iterator-Methode noch nicht aus.
 Erst der Aufruf von ```cs IEnumerator<T>.MoveNext()``` tut dies. Im `foreach`-Loop wird sie implizit aufgerufen.
