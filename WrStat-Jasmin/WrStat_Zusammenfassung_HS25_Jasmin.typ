@@ -240,8 +240,10 @@ _Beispiel:_ Auf wie viele Arten kann man eine Perlenkette der Länge $k = 10$ au
 
 $ V_(4,10) = 4^10 = underline(1'048'576 "Möglichkeiten") $
 
-#pagebreak()
-
+// #pagebreak()
+\
+\
+\
 #example-block[
   === Beispiel 1: Kartenspiel
   Ein Kartenspiel mit 52 Karten besteht aus 26 roten und 26 schwarzen Karten.
@@ -277,6 +279,8 @@ $ V_(4,10) = 4^10 = underline(1'048'576 "Möglichkeiten") $
     Die beiden Fälle sind disjunkt, können also addiert werden.
     $ 3 dot 54 dot 53! + 52 dot 28 dot 53! $
 
+  #pagebreak()
+
   === Beispiel 2: Wortanordnungen
   #hinweis[Hinweis: Das deutsche Alphabet hat 5 Vokale und 21 Konsonanten.]
 
@@ -292,7 +296,7 @@ $ V_(4,10) = 4^10 = underline(1'048'576 "Möglichkeiten") $
     $3$ Konsonantenplätze gibt, ist die Gesamtzahl der Wörter daher
     $ 4 dot 5^6 dot 21^3 = underline(578'812'500) $
 
-  #pagebreak()
+  \ 
 
   === Beispiel 3: Zugwagen
   In einem Zugwagen gibt es $16$ Plätze, davon $8$ Fenster- und $8$ Gangplätze. Je die Hälfte ist in Fahrtrichtung gerichtet.
@@ -302,7 +306,7 @@ $ V_(4,10) = 4^10 = underline(1'048'576 "Möglichkeiten") $
 
     Es müssen $12$ der $16$ Plätze ausgewählt werden, das ist auf $binom(16,12)$ Arten möglich. Auf den $12$ ausgewählten
     Plätzen können die Fahrgäste auf $12!$ Arten angeordnet werden. Deshalb gilt
-    $ binom(16, 12) dot 12! = "nCr"(16,12) dot 12! = underline(871'782'912'000) $
+    $ binom(16,12) dot 12! = "nCr"(16,12) dot 12! = underline(871'782'912'000) $
 
   + _Vier der Personen möchten unbedingt einen Fensterplatz haben. Auf wie viele Arten können die Reisenden nun Platz nehmen?_
 
@@ -1501,7 +1505,6 @@ feststellen, ob sie sich signifikant unterscheiden
 TR-Tipps:
 - Matrix erstellen mit Menu-7-1-1
 - Info zu $alpha$: @weitere-test-theorie
-\
 
 == Kolmogorov-Smirnov-Test
 *Wann verwenden?* Wenn mehrere Zufallsvariablen und Grenzen angegeben sind.
