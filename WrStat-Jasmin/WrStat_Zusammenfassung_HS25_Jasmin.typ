@@ -680,22 +680,20 @@ ist ${X = a}$ nur beschränkt von Nutzen, da selten das exakt selbe Ereignis ein
   wobei $X$ konstant auf $A_i$ und $A_i = Omega$ sein muss.
 
 
-TODO
-  $E(X) = x dot phi(x) d x$
+// TODO
+//   $E(X) = x dot phi(x) d x$
 ]
 
-Wenn die Wahrscheinlichkeit in allen Fällen _gleich_ ist #hinweis[(Laplace-Experiment)], entspricht der Erwartungswert dem
-_Durchschnitt_, dieser muss kein annehmbarer Wert der Zufallsvariable sein.
+Wenn die Wahrscheinlichkeit in allen Fällen _gleich_ ist #hinweis[(Laplace-Experiment)], entspricht der Erwartungswert dem _Durchschnitt_, dieser muss kein annehmbarer Wert der Zufallsvariable sein.
 
 Der _empirische Erwartungswert_ entspricht dem gewichteten Mittelwert #hinweis[(arithmetisches Mittel)].
 $ E(X) = sum_i X(i) dot Rho(X = x_i) $
 
 
-TODO
-------
-Bei einer stetigen Funktion ist der Erwartungswert dann :??
-$ E(X) = sum_i X(i) dot phi(X = x_i) $
------
+// \ TODO
+// Bei einer stetigen Funktion ist der Erwartungswert dann :??
+// $ E(X) = sum_i X(i) dot phi(X = x_i) $
+
 
 #v(-0.5em)
 ==== Beispiel Würfelspiel
@@ -1040,12 +1038,11 @@ Modellierung vieler kleiner Einflüsse, Messwerte, wiederholte Experimente.\
     align: horizon,
 
     [
-    TODO
-    Vorher:
-    $ phi(x) = 1 / (sqrt(2pi) sigma) dot e^(-x^2 / (2 sigma^2)) $
+    #hinweis[Vorher: $phi(x) = 1 / (sqrt(2pi) sigma) dot e^(-x^2 / (2 sigma^2))$]
     
-    Neu:
+    // Neu:
     $ phi(x) = 1 / (sqrt(2pi) sigma) dot e^(-(x-mu)^2 / (2 sigma^2)) $
+    
     ],
 
     [*$sigma$*: Standardabweichung \
@@ -1129,10 +1126,11 @@ $ "var"(M_n) = "var"(X) / n = sigma^2 / n, sigma_1 = sqrt("var"(M_n)) $
     \
     $ 
     Rho(X < 22 "Uhr") = 0.05$, 
-    #set text(fill: rgb("#550044aa"));$quad Rho(X > 25 "Uhr") = 0.25 => Rho(X < 25) = 0.75 $
+    #set text(fill: rgb("#550044aa"));$quad Rho(X > 25 "Uhr") = 0.25 space space =>  Rho(X < 25) = 0.75 $
     \ \ 
     #set text(fill: black); 
-    Wahrscheinlichkeiten standardisieren:
+    *Wahrscheinlichkeiten standardisieren:*\
+    Variante 1:
     #set text(fill: rgb("#092552")); 
     \ \
     $ Rho((X - mu)/sigma < (22 - mu)/sigma) = 0.05$, #set text(fill: rgb("#550044aa")); $quad Rho((X - mu)/sigma < (25 - mu)/sigma) = 0.75 $
@@ -1141,8 +1139,11 @@ $ "var"(M_n) = "var"(X) / n = sigma^2 / n, sigma_1 = sqrt("var"(M_n)) $
     Da wir die Wahrscheinlichkeiten schon haben, müssen wir die Werte aus der Quantiltabelle herauslesen oder
     mit TR $"invNorm"(p, 0, 1)$ erhalten.
     \ \
+    
     #set text(fill: rgb("#550044aa"));
-    $ Phi^(-1)(0.75) = 0.6745$,  #set text(fill: rgb("#092552"));  $quad Phi^(-1)(0.05) = 1 - Phi^(-1)(0.95) = 1 - 1.6449 = "TODO:" -1.6449 $
+    $ Phi^(-1)(0.75) = 0.6745$,  #set text(fill: rgb("#092552"));  $quad Phi^(-1)(0.05) =$ 
+    // $"TODO:" 1 - Phi^(-1)(0.95) = 1 - 1.6449 =$
+    $-1.6449 $
     \ \
     #set text(fill: black); 
 
@@ -1155,7 +1156,11 @@ $ "var"(M_n) = "var"(X) / n = sigma^2 / n, sigma_1 = sqrt("var"(M_n)) $
       )
       quad => quad mu = 24.1276, quad sigma = 1.2934
     $
+    Variante 2:
+    #image("image-1.png")
+    #image("image-2.png")
     
+    *Mittelwert* \
     Wandelt man $mu$ in Stunden und Minuten um, erhält man als Mittelwert 00:08 Uhr.
   
   + _Wie hoch ist die Wahrscheinlichkeit, nach 2 Uhr noch Explosionen zu hören?_
@@ -1166,7 +1171,9 @@ $ "var"(M_n) = "var"(X) / n = sigma^2 / n, sigma_1 = sqrt("var"(M_n)) $
     
     Da man nur $Rho(X < x)$ berechnen kann, muss noch minus 1 gerechnet werden
     $ Rho(X > 26) = 1 - Rho(X < 26) = 1 - Rho(Z < 1.4477) = 1 - 0.9261 = 0.0739 = underline(7.39%) $
-  
+    
+    Bewertung. Normalverteilung (N) 1 Punkt, Standardisierung (S) 1 Punkt, Quantilen (Q) 1 Punkt, Gleichungssystem für μ und σ (G), 1 Punkt, Teilaufgaben a) (A) und b) (B) je 1 Punkt
+
   === Beispiel 2: Geburtsgewicht
   _8.2% aller Babies werden mit einem Geburtsgewicht unter $x_"min" = 2.5"kg"$ geboren und gelten als "low birth weight".
     Das mittlere Gewicht ist 3.5kg. Wie schwer ist ein Baby mindestens, welches schwerer als 95% aller Babies ist?_
@@ -1191,47 +1198,45 @@ $ "var"(M_n) = "var"(X) / n = sigma^2 / n, sigma_1 = sqrt("var"(M_n)) $
 
 ]
 
-#example-block[
-  === Beispiel 3: Spaghetti
-  In einer Numb3rs Folge bemerkt Charlie, dass trockene Spaghetti beim Biegen jeweils in mindestens drei Teile brechen. Nachmessen der dazu nötigen Kräfte ergibt, dass *bei 1N 95% der Spaghetti gebrochen sind, dass aber 90% der Spaghetti eine Kraft von 0.5N tragen können*. Wie gross dürfte die Kraft sein, bei der der Spaghetto bricht? Wie gross ist ihre Varianz?
+// #example-block[
+//   === Beispiel 3: Spaghetti
+//   In einer Numb3rs Folge bemerkt Charlie, dass trockene Spaghetti beim Biegen jeweils in mindestens drei Teile brechen. Nachmessen der dazu nötigen Kräfte ergibt, dass *bei 1N 95% der Spaghetti gebrochen sind, dass aber 90% der Spaghetti eine Kraft von 0.5N tragen können*. Wie gross dürfte die Kraft sein, bei der der Spaghetto bricht? Wie gross ist ihre Varianz?
 
-  Lösung. Die Kraft, bei der der Spaghetto bricht, ist eine normalverteilte Zufallsvariable X, wir müssen μ und σ dieser Verteilung bestimmen. (Kraft N = X, μ und σ unbekannt). Aus der Aufgabenstellung wissen wir
-  $P(X <= 1) = 0.95$
-  $P(X < 1) = 0.1$
+//   Lösung. Die Kraft, bei der der Spaghetto bricht, ist eine normalverteilte Zufallsvariable X, wir müssen μ und σ dieser Verteilung bestimmen. (Kraft N = X, μ und σ unbekannt). Aus der Aufgabenstellung wissen wir
+//   $P(X <= 1) = 0.95$
+//   $P(X < 1) = 0.1$
 
-  Standardisierung ergibt  
+//   Standardisierung ergibt  
 
-  $P((X-mu) / sigma <= (1-mu) / sigma) = 0.95$  
+//   $P((X-mu) / sigma <= (1-mu) / sigma) = 0.95$  
 
-  $P((X-mu) / sigma <= (0.5-mu) / sigma) = 0.1$
+//   $P((X-mu) / sigma <= (0.5-mu) / sigma) = 0.1$
 
-  Aus der Tabelle der Standardnormalverteilung weiss man
+//   Aus der Tabelle der Standardnormalverteilung weiss man
   
-  Φ(1.6449) = 0.95
+//   Φ(1.6449) = 0.95
   
-  Φ(−1.2816) = 0.1
+//   Φ(−1.2816) = 0.1
 
-  also folgt das Gleichungssystem
+//   also folgt das Gleichungssystem
   
-  $ 1 − μ / σ = 1.6449 $
-  $ 0.5 − μ / σ = −1.2816 $  
-  welches gleichbedeutend ist mit
+//   $ 1 − μ / σ = 1.6449 $
+//   $ 0.5 − μ / σ = −1.2816 $  
+//   welches gleichbedeutend ist mit
 
-  $ 1 = μ + 1.6449σ $
-  $ 0.5 = μ − 1.2816σ $
+//   $ 1 = μ + 1.6449σ $
+//   $ 0.5 = μ − 1.2816σ $
   
-  Die Differenz ergibt
-  0.5 = 2.9265σ ⇒ σ = 0.17085
-  Daraus kann man jetzt auch μ bestimmen:
-  μ = 1 − 1.6449σ = 0.71896.
+//   Die Differenz ergibt
+//   0.5 = 2.9265σ ⇒ σ = 0.17085
+//   Daraus kann man jetzt auch μ bestimmen:
+//   μ = 1 − 1.6449σ = 0.71896.
 
-]
+// ]
 
 
 Sollte eine Frage zur Varianz bei $n$ Stichproben kommen, muss die Varianz einfach durch $n$ geteilt werden.
 $ "var"(M_n) = "var"(X) / n = sigma^2 / n, sigma_1 = sqrt("var"(M_n)) $
-
-
 
 #pagebreak()
 
