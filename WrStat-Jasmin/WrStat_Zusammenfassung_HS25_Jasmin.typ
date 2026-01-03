@@ -836,7 +836,7 @@ Unabhängige Zufallsvariablen sind immer auch unkorreliert. Das umgekehrte muss 
 #hinweis[
   Meist Aufgaben 4, 6 und 7 - kann also in bis zu 3 Aufgaben vorkommen. Normalverteilung fast immer,
   Binomial & Poisson sind sehr häufig\
-  *Punkteverteilung:* Korrekter Verteilung verwendet (1), Standardisierung (1), Werte korrekt aus Tabelle ablesen (1),
+  *Punkteverteilung:* Korrekte Verteilung verwendet (1), Standardisierung (1), Werte korrekt aus Tabelle ablesen (1),
   Korrekte Gleichung für $mu$ / $sigma$ (1), $mu$ und $sigma$ korrekt berechnet
 ]
 
