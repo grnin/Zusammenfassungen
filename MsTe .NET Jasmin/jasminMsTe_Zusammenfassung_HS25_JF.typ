@@ -5351,6 +5351,8 @@ public class Category {
   ],
 )
 
+#pagebreak()
+
 == Relationale Datenbanken
 Bisher waren alle Mappings _unabhängig vom Provider_. Die nachfolgenden Beispiele beziehen sich auf _Microsoft SQL Server_.
 Im Model Builder bzw. der Fluent API gibt es zusätzliche Extension Methods nur für relationale Provider. (Nicht relational wäre z.B. NoSQL)
@@ -5376,8 +5378,8 @@ public class ShopContext : DbContext {
     modelBuilder.Entity<Category>().Property(e => e.Name).HasColumnName("CategoryName")
       .HasColumnType("NVARCHAR(500)") // Datenbanktyp vom Zielsystem
       .HasDefaultValue("---"); // nur Fluent API Syntax ermöglicht Default Values. Hier gültige SQL Expression.
-
 ```
+
 ```cs
     // Primary Key
     modelBuilder.Entity<Category>()
@@ -5566,9 +5568,6 @@ public class ShopContext : DbContext
 )
 
 
-
-
-
 #pagebreak()
 == Database Context
 Der Database Context ist der _wichtigste Teil des Entity Frameworks_. Zur _Design-Time_ definiert er das Model/OR Mapping,
@@ -5583,7 +5582,6 @@ _Fehleranfälligkeit_, weil Objekte nur an einem Kontext attached.
 *Empfehlungen:* `DbContext` in einem `using`-Statement verwenden, Web-Applikationen sollten eine Instanz pro Request
 instanzieren, GUI-Applikationen eine pro Formular. Generell ausgedrückt: Eine Instanz pro "Unit of Work"\
 ```cs await using ShopContext context = new();```
-
 
 === LINQ to Entities
 Das _Entity Framework_ führt selbst keine Queries aus, es _generiert_ nur Queries, welche die DB dann ausführt.
@@ -5614,17 +5612,17 @@ await context.Categories.SingleAsync(c => MyHelper.DoSomethingWithIt(c.Name) == 
   ],
   [
     ```cs
-        await using ShopContext context = new(); // 1.
-        Category category = await context        // 2.
-          .Categories
-          .SingleAsync(c => c.Id == 1);
-        category.Name = $"{category.Name} changed";
+    await using ShopContext context = new(); // 1.
+    Category category = await context        // 2.
+      .Categories
+      .SingleAsync(c => c.Id == 1);
+    category.Name = $"{category.Name} changed";
     
-        await context.SaveChangesAsync();        // 3.
-        var categories = context.Categories;     // 4.
-        foreach (Category c in categories)
-          { Console.WriteLine(c.Name); }
-        // 5. End of Method
+    await context.SaveChangesAsync();        // 3.
+    var categories = context.Categories;     // 4.
+    foreach (Category c in categories)
+      { Console.WriteLine(c.Name); }
+    // 5. End of Method
     ```
   ],
 )
@@ -5637,10 +5635,9 @@ Die Änderungen werden _aufgezeichnet_ und beim Speichern werden alle in einer _
 - _Added:_ Das Entity wird vom `DbContext` getracked, existiert aber in der DB noch nicht
 - _Unchanged:_ Entity wird getracked, existiert in der DB, und ihre Properties haben sich gegenüber DB nicht verändert.
 - _Modified_: Entity wird getracked, existiert in der DB, und mindestens ein Property-Wert wurde verändert.
-- _Deleted:_ Entity wird getracked, existiert in der DB, wurde zum Löschen markiert.
-  Wird deshalb gelöscht, wenn `SaveChanges()` zum nächsten Mal ausgeführt wird
+- _Deleted:_ Entity wird getracked, existiert in DB, wurde zum Löschen markiert.
+  Wird bei nächstem `SaveChanges()` gelöscht
 - _Detached:_ Entity wird nicht vom `DbContext` getracked
-
 
 #grid(
   [
@@ -5649,13 +5646,13 @@ Die Änderungen werden _aufgezeichnet_ und beim Speichern werden alle in einer _
     ```cs
     await using ShopContext context = new();
     Category cat = new() { Name = "Notebook" };
-
+    
     // (1) Nur Kategorie-Objekt ohne Referenzen inserten
     context.Entry(cat).State = EntityState.Added;
     // Alle Objektreferenzen von Kategorie auch inserten
     context.Add(cat); // (2) generisch
     context.Categories.Add(cat); // (3) nur für Category
-
+    
     // SQL generieren & ausführen
     await context.SaveChangesAsync();
     // Neu generierten Primary Key erhalten
@@ -5670,13 +5667,13 @@ Die Änderungen werden _aufgezeichnet_ und beim Speichern werden alle in einer _
     Category cat = await context
       .Categories
       .FirstAsync(c => c.Name == "Kinderartikel");
-
+    
     // Nur Kategorie-Objekt ohne Referenzen löschen
     context.Entry(cat).State = EntityState.Deleted;
     // Alle Objektreferenzen von Kategorie auch löschen
     context.Remove(cat); // generisch
     context.Categories.Remove(cat); // nur für Category
-
+    
     // SQL generieren & ausführen
     await context.SaveChangesAsync();
     ```
@@ -5686,12 +5683,12 @@ Die Änderungen werden _aufgezeichnet_ und beim Speichern werden alle in einer _
     #v(-0.5em)
     ```cs
     await using ShopContext context = new();
-
+    
     // Gewünschte Kategorie laden
     Category cat await context
       .Categories
       .FirstAsync(c => c.Name == "Tastaturen");
-
+    
     // Änderungen an Objekten durchführen
     cat.Name = "Mechanische Tastaturen";
 
@@ -5715,18 +5712,17 @@ Die Änderungen werden _aufgezeichnet_ und beim Speichern werden alle in einer _
     await context.SaveChangesAsync();
     ```
   ],
-  [
-    *_Daten lesen/abspeichern_*\
-    Speichere pro Kategorie die Produkte in eine Liste
-    ```cs
-    await using ShopContext context = new();
-    List<Category> catProducts = await context.Category
-        .Include(a => a.Products)
-        .ToListAsync();
-    ```
-  ],
+  // [
+  //   *_Daten lesen/abspeichern_*\
+  //   Speichere pro Kategorie die Produkte in eine Liste
+  //   ```cs
+  //   await using ShopContext context = new();
+  //   List<Category> catProducts = await context.Category
+  //       .Include(a => a.Products)
+  //       .ToListAsync();
+  //   ```
+  // ],
 )
-\
 ==== Batch-Operationen
 #grid(
   [
@@ -5838,6 +5834,7 @@ Es gibt immer mindestens 3 Varianten mit dem gleichen Effekt.
 - _`context.[...].Add()`, `.Remove()` etc.:_ Berücksichtigen den ganzen Objektgraphen, können nur diese bestimmten Entities entgegennehmen.
 - _`Entry(...).State`:_ Berücksichtigt nur dieses Entity, ohne Referenzen
 
+
 === State Entries
 #grid(
   [
@@ -5871,19 +5868,16 @@ Es gibt immer mindestens 3 Varianten mit dem gleichen Effekt.
 // New Record
 Category cat = new() { Name = "Glüehwii" }; // EntityState.Detached (wie untracked file in Git)
 context.Add(cat);                     // EntityState.Added
-
 await context.SaveChangesAsync();     // EntityState.Unchanged
 cat.Name = "Kebab";         // EntityState.Modified
-
 await context.SaveChangesAsync();     // EntityState.Unchanged
 context.Remove(cat);                  // EntityState.Deleted
-
 await context.SaveChangesAsync();     // EntityState.Unchanged (Objekt bleibt im Speicher)
+
 // Load from Database (tracked)
 Category catLoaded1 = await context         // EntityState.Unchanged
   .Categories
   .FirstAsync(c => Name == "Schoggi");
-
 // Load from Database (untracked)
 Category catLoaded2 = await context         // EntityState.Detached
   .Categories
