@@ -5,7 +5,7 @@
   authors: ("Nina Grässli", "Jannis Tschan", "Jasmin Fässler"),
   fach: "WrStat",
   fach-long: "Wahrscheinlichkeit und Statistik",
-  semester: "HS24",
+  semester: "HS25",
   tableofcontents: (enabled: true, depth: 3, columns: 2),
   appendix: (
     "WrStat/LinRegTabelle.typ",
