@@ -1,0 +1,1 @@
+Notiz (Jasmin) : Word Datei im Github (ist verlinkt). Im Nachhinein war der Theorie Teil (auf der 1. Seite) nicht nötig gewesen und ich würde es austauschen mit konkreten Beispielen von komplexen SQL Queries.

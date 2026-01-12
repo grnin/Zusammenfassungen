@@ -1,0 +1,1 @@
+Achtung: diese Zusammenfassung ist unvollständig angepasst auf HP Prime!

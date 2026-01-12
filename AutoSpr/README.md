@@ -1,0 +1,1 @@
+Notiz (Jasmin) : Zusammenfassung für AutoSpr Prüfung von Nina Grässli ein wenig überarbeitet. Wurde aus Word mit 2 Seiten pro Blatt exportiert. Das PDF A4 ausdrucken und dann zuschneiden. Es sind 16 einseitige A4 Blätter, entspricht 1 Quadratmeter. Word ist verlinkt im Github.
