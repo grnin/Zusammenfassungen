@@ -1065,7 +1065,7 @@ $
 
     Da wir die Wahrscheinlichkeiten schon haben, müssen wir die Werte aus der Quantiltabelle herauslesen oder
     mit TR $"invNorm"(p, 0, 1)$ erhalten.
-    $ Phi^(-1)(0.75) = 0.6745, quad Phi^(-1)(0.05) = 1 - Phi^(-1)(0.95) = 1 - 1.6449 = -1.6449 $
+    $ Phi^(-1)(0.75) = 0.6745, quad Phi^(-1)(0.05) = -1 dot Phi^(-1)(1 - 0.05) = -1 dot 1.6449 = -1.6449 $
 
     Gleichungssystem aufstellen, mit TR #tr-constructs-button -Taste rechts neben "9" $->$
     "$script(cases(ballot, ballot))$" und dieses dann mit $"solve"()$ lösen
