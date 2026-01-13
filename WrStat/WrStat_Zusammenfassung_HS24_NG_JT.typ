@@ -1,4 +1,4 @@
-// Compiled with Typst 0.13.1
+// Compiled with Typst 0.14.2
 #import "../template_zusammenf.typ": *
 
 #show: project.with(
@@ -971,6 +971,7 @@ Jeder Wert innerhalb eines Intervalls ist gleich wahrscheinlich.\
     $
 
     Für $n = 112$ ergibt sich
+    #v(-0.5em)
     $
       Rho(X < 10"kg") = 1 - Phi(1.3093) = 1 - overbracket("normCdf"(-infinity, 1.3093, 0, 1), "Menu"-5-5-2) = 1 - 0.9047
       = 0.0953 = underline(9.53%)
