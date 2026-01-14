@@ -1,4 +1,4 @@
-// Compiled with Typst 0.13.1
+// Compiled with Typst 0.14.2
 #import "../template_zusammenf.typ": *
 
 #show: project.with(
@@ -971,6 +971,7 @@ Jeder Wert innerhalb eines Intervalls ist gleich wahrscheinlich.\
     $
 
     Für $n = 112$ ergibt sich
+    #v(-0.5em)
     $
       Rho(X < 10"kg") = 1 - Phi(1.3093) = 1 - overbracket("normCdf"(-infinity, 1.3093, 0, 1), "Menu"-5-5-2) = 1 - 0.9047
       = 0.0953 = underline(9.53%)
@@ -1065,7 +1066,7 @@ $
 
     Da wir die Wahrscheinlichkeiten schon haben, müssen wir die Werte aus der Quantiltabelle herauslesen oder
     mit TR $"invNorm"(p, 0, 1)$ erhalten.
-    $ Phi^(-1)(0.75) = 0.6745, quad Phi^(-1)(0.05) = 1 - Phi^(-1)(0.95) = 1 - 1.6449 = -1.6449 $
+    $ Phi^(-1)(0.75) = 0.6745, quad Phi^(-1)(0.05) = -1 dot Phi^(-1)(1 - 0.05) = -1 dot 1.6449 = -1.6449 $
 
     Gleichungssystem aufstellen, mit TR #tr-constructs-button -Taste rechts neben "9" $->$
     "$script(cases(ballot, ballot))$" und dieses dann mit $"solve"()$ lösen
