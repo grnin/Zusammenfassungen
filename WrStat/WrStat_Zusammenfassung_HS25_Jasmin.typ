@@ -417,9 +417,10 @@ _Vorgehensweise detailiert_
   - Manchmal im Graph ablesbar, dass Normierungsbedingung erfüllt (linker Bereich + rechter Bereich = Quadrat mit Höhe/Breite 1)
   - Bei y-Achsensymmetrisch genügt, linker/rechter Teil = 1/2 \ $integral^("Mittelpunkt")_("linke Hälfte") phi(x) space dif x = 1/2$. Berechne das einfachere Integral.
 
-  - *TR:* Gleichung erstellen #hinweis[Menu-3-1] mit Integral #hinweis[Menu-4-3] vom Typ: $space "solve"(integral_(-infinity)^(infinity) phi(x) "dx" = 1, a ) space$ der Funktion.
+  - *TR:* Gleichung erstellen #hinweis[Menu-3-1] mit Integral #hinweis[Shift +] vom Typ: $space "solve"(integral_(-infinity)^(infinity) phi(x) "dx" = 1, a ) space$ der Funktion.
     - beide Integrale berechnen mit + dazwischen. #hinweis[Bei Integral oben die obere Grenze und unten die untere Grenze notieren]
     // -  $"solve"(1 = integral^0_(-1) a sqrt(x+1) space dif x + integral^1_0 a sqrt(1 - x) space dif x, space a) arrow.double a = 3 / 4$
+    - neue Vorgehensweise: Integral im TR berechnen und die Gleichung "Lösung mit a = 1" selber auflösen
 + *Integral mit TR ausrechnen*
   - Integral (Menu-4-3)
   - oben auswählen mit doppel-doppelklick und ctrl+c und ctrl+v benutzen
@@ -1264,21 +1265,21 @@ Bei einem Zufallsexperiment mit zwei möglichen Ausgängen sind die verschiedene
     columns: (1fr, 1fr),
     align: horizon,
     table.header([Erwartungswert], [Varianz]),
-    [$ E(X) = n dot p = mu $], [$ "var"(X) = n dot p dot (1 - p) = sigma^2 $],
+    [$ E(X) = n dot p = mu $], [$ "var"(X) = n dot p dot (1 - p) = sigma^2 $ $ sigma = sqrt(sigma^2) $ ],
   )
 
   #hinweis[
     TR Binomialkoeffizient $binom(n,k)$: menu-5-3 / $"nCr"(n, k)$,
     TR Binomialverteilung: menu-5-5-A / $"binomPdf"(n, p, k)$
   ]
-]
-
+] 
+// Berechne $mu$ und $sigma$ mit Wurzel
 === Normalapproximation Binomialverteilung
 $X$ ist die Summe von $n$ kleinen Einflüssen auf das Gesamte $arrow.double Rho(X <= k)$ kann mit der _Normalverteilung_
 approximiert werden, sofern die _Anzahl Wiederholungen *$n$*_ gross genug ist und man sich in der Mitte der Normalverteilung
 befindet.
 
-$display((X - mu)/sigma = (X - n p)/sqrt(n p (1-p))) quad$ ist angenähert standardnormalverteilt.
+$display((X - mu)/sigma fxcolor("grey", = (X - n p)/sqrt(n p (1-p)))) quad$ ist angenähert standardnormalverteilt.
 
 === Standardisierung mit Korrektur
 Für eine genauere Approximation kann folgende Korrektur eingefügt werden:
@@ -1289,14 +1290,40 @@ Für eine genauere Approximation kann folgende Korrektur eingefügt werden:
   [
     $
       Rho(a fxcolor("grün", <) X fxcolor("orange", <=) b)
-      = Phi((b fxcolor("orange",+ 1/2) - n p)/sqrt(n p (1-p))) - Phi((a fxcolor("grün", + 1/2) - n p)/sqrt(n p (1-p)))
+      = Phi((b fxcolor("orange",+ 1/2) - mu)/sigma) - Phi((a fxcolor("grün", + 1/2) - mu)/sigma)
       \ \
       Rho(a fxcolor("grün", <=) X fxcolor("orange", <=) b)
-      = Phi((b fxcolor("orange",+ 1/2) - n p)/sqrt(n p (1-p))) - Phi((a fxcolor("grün", - 1/2) - n p)/sqrt(n p (1-p)))
+      = Phi((b fxcolor("orange",+ 1/2) - mu)/sigma) - Phi((a fxcolor("grün", - 1/2) - mu)/sigma)
+      
     $
   ],
   image("img/wrstat_11.png"),
 )
+
+// \
+// === Binomialverteilung - Standardisierung mit Korrektur
+// $
+//   "Beispiel (bei b Wert einfügen) :"\
+//   Rho(X fxcolor("orange", <=) b)
+//   = P((X - mu)/sigma <= (b - mu)/sigma)
+//   = P(Z <= (b + 1/2 - mu)/sigma) 
+//   = Phi((b fxcolor("orange", + 1/2) - mu)/sigma)
+// $
+// \
+// #grid(
+//   columns: (1.2fr, 1fr),
+//   gutter: 2em,
+//   [
+//     $
+//       Rho(a fxcolor("grün", <) X fxcolor("orange", <=) b)
+//       = Phi((b fxcolor("orange",+ 1/2) - n p)/sqrt(n p (1-p))) - Phi((a fxcolor("grün", + 1/2) - n p)/sqrt(n p (1-p)))
+//       \ \
+//       Rho(a fxcolor("grün", <=) X fxcolor("orange", <=) b)
+//       = Phi((b fxcolor("orange",+ 1/2) - n p)/sqrt(n p (1-p))) - Phi((a fxcolor("grün", - 1/2) - n p)/sqrt(n p (1-p)))
+//     $
+//   ],
+//   image("img/wrstat_11.png"),
+// )
 
 
 === Beispiel 1: Schwurbler-Anteil (nicht selten)
@@ -1329,7 +1356,7 @@ $ mu = n dot p = 50, quad sigma = sqrt(n p(1-p)) = 5 $
 
 *Normalverteilungsapproximation der Binomialverteilung*\
 $
-  Rho(X < 45 and X > 55) &= 1 - Rho(45 <= X <= 55)\
+  Rho(X < 45 or X > 55) &= 1 - Rho(45 <= X <= 55)\
   Rho(45 <= X <= 55) &= Rho((45 - mu)/sigma <= (X - mu)/sigma <= (55-mu)/sigma)\
   &approx Rho((overbracket(-5.5, 45 - 50 + 1/2))/5 <= Z <= overbracket(5.5, 55 - 50 + 1/2)/5) = Rho(-1.1 <= Z <= 1.1)
 $
@@ -1337,7 +1364,7 @@ $
 Wert für $1.1$ aus Standardnormalverteilungstabelle lesen oder mit TR 5-5-2 $"normCdf"(-infinity, 1.1, 0, 1)$
 $
   Phi(1.1) - Phi(-1.1) = Phi(1.1)-(1-Phi(1.1)) = 0.8643 - (1 - 0.8643) = 0.7286\
-  arrow.double Rho(X < 45 and X > 55) = 1 - 0.7286 = 0.2714 arrow.double underline(27.14%)
+  arrow.double Rho(X < 45 or X > 55) = 1 - 0.7286 = 0.2714 arrow.double underline(27.14%)
 $
 
 === Beispiel 3: Mehr als X Ereign. (nicht selten)
@@ -1503,7 +1530,7 @@ feststellen, ob sie sich signifikant unterscheiden
 - Auf Prüfung schreiben, dass der $chi^2$-Test auf dem Beiblatt steht
 \
 TR-Tipps:
-- Matrix erstellen mit Menu-7-1-1
+- Matrix erstellen mit Menu-7-1-1 (oder [ ])
 - Info zu $alpha$: @weitere-test-theorie
 
 == Kolmogorov-Smirnov-Test
