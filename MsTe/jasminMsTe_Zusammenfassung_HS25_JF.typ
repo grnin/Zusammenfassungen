@@ -3395,7 +3395,59 @@ Häufig verwendet man auch nur die generischen Varianten.\
   [IEnumerable`<T>` / IEnumerator`<T>`], [IEnumerable / IEnumerator],
   [ICollection`<T>`], [ICollection],
 )
+\
+\
+// === Kovarianz & Kontravarianz (Falls interessiert)
+// *Kovarianz* \ 
+// Typparameter als Output. Wenn `string` an `object` zuweisbar ist
+// Dann kann `IBuffer<string>` an `IBuffer<object>` zugewiesen werden
 
+// *Kontravarianz* \
+// Typparameter als Input. Wenn `string` an `object` zuweisbar ist
+// Dann kann `IComparer<object>` an
+// `IComparer <string>` zugewiesen werden
+
+// \
+// Varianz im .NET Framework (Interfaces)
+// #table(
+//   columns: (1fr, 1fr, 1fr),
+//   [Typ], [Kovariant], [Kontravariant],
+//   [IComparable`<T>`], [],[Ja],
+//   [IComparer`<T>`], [],[Ja],
+//   [IEnumerable`<T>`], [Ja],[],
+//   [IEnumerator`<T>`], [Ja],[],
+//   [IEqualityComparer`<T>`], [],[Ja],
+//   [IGrouping`<TKey, TElement>`], [Ja],[],
+//   [IOrderedEnumerable`<TElement>`], [Ja],[],
+//   [IOrderedQueryable`<T>`], [Ja],[],
+//   [IQueryable`<T>`], [Ja],[],
+// )
+// \
+// Varianz im .NET Framework (Delegates)
+// #grid(
+//   columns: (0.9fr, 1fr),
+//   [
+// ```cs
+// // Delegate Kovarianz:
+// public delegate TResult Func<out TResult>();
+// // Delegate Kontravarianz:
+// public delegate void Action<in T>(T obj);
+// ```
+//   ],
+//   [
+   
+//   ]
+// )
+//  #table(
+//    columns: (1fr, 1fr, 1fr),
+//    [Typ], [Kovariant], [Kontravariant],
+//    [Action`<T>` bis Action`<T1, …, T16>`], [], [Ja],
+//    [Comparison`<T>`], [], [Ja],
+//    [Converter`<TInput, TOutput>`], [Ja], [Ja],
+//    [Func`<TResult>`], [Ja], [],
+//    [Func`<T, TResult>` bis Func`<T1, …, T16, TResult>`], [Ja], [Ja],
+//    [Predicate`<T>`], [], [Ja],
+//  )
 
 #pagebreak()
 == Nullability kurz
