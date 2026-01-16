@@ -4051,7 +4051,7 @@ DB-Verbindungen, geöffnete Dateien (file handles),... die das Interface öffnet
       if (i == 5) break;
       Console.WriteLine(i);
     } // Compiler Output:
-    IEnumerator enumerator = list.GetEnumerator():
+    IEnumerator enumerator = list.GetEnumerator();
     try {
       while (enumerator.MoveNext()) {
         /* Statements aus foreach-Loop */
