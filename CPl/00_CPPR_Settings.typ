@@ -3,6 +3,7 @@
 #let EXAM_MODE = true
 #let CPPR_ROOT = if EXAM_MODE { "file://C:/cppreference/reference/en/cpp/" } else { "https://en.cppreference.com/w/cpp/" }
 
+// Link does not work in Firefox / only if file exists. But link is clickable in Microsoft Edge.
 #let cppr(url, body) = {
   return underline(link(CPPR_ROOT + url + ".html", body))
 }
