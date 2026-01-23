@@ -93,12 +93,12 @@ umgewandelt. Dieser wird dann mit dem _JIT-Compiler_ während der Runtime in _Na
 Nach der Kompilierung (ohne Native AOT) liegen die Methoden im Assembly als IL-Code vor. Beim Aufruf einer Methode wird
 erkannt, dass dieser Code noch nicht ersetzt wurde und der JIT-Compiler ersetzt diese Methode an dieser physischen Stelle im
 RAM den IL- durch Assembler-Code. Der nächste Aufruf erfolgt direkt auf den (gecachten) Assembler-Code.
-#image("image-1.png", width: 350pt)
-#image("image.png", width: 350pt)
+#image("kompilierung-2.png", width: 350pt)
+#image("compiler.png", width: 350pt)
 JIT Kompilierung
 #image("jit-kompilierung.png", width: 350pt)
 === Assemblies
-#image("image-2.png", width: 350pt)
+#image("assembly.png", width: 350pt)
 Die _Kompilation_ erzeugt Assemblies. Diese entsprechen ungefähr einem JAR-File in Java.\
 #hinweis[(Assembly = selbstbeschreibende Komponente mit definierter Schnittstelle.)]
 
@@ -3379,7 +3379,7 @@ Häufig verwendet man auch nur die generischen Varianten.\
 `LinkedList<T>`, `Stack<T>`, `Queue<T>`, `IEnumerable<T>`, `ICollection`
 
 == Collection Interfaces
-// #image("image-3.png")
+// #image("ienumerable-interfaces.png")
 
 *Generische Listentypen und Interfaces* \
 #table(
@@ -5261,7 +5261,7 @@ public class Category {
   columns: (0.75fr, 1fr),
   [
     *Convention*\
-    #image("image-4.png")
+    #image("nullable.png")
   ],
   [
     ```cs
@@ -5403,7 +5403,9 @@ public class Category {
   ],
 )
 
+
 #pagebreak()
+
 
 == Relationale Datenbanken
 Bisher waren alle Mappings _unabhängig vom Provider_. Die nachfolgenden Beispiele beziehen sich auf _Microsoft SQL Server_.
@@ -6506,6 +6508,7 @@ Garantiert sowohl _Auslieferung_ als auch _Reihenfolge_ der Auslieferung.\
     ```
   ],
 )
+
 === Beispiel: File Streaming Service
 ==== Client (`Program.cs`)
 #code-example(
