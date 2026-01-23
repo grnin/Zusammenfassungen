@@ -5817,7 +5817,7 @@ Die Änderungen werden _aufgezeichnet_ und beim Speichern werden alle in einer _
 Beziehungen können auf mehrere Arten angepasst werden:
 - _Anpassen des Navigation Properties:_ ```cs order.Customer = customer;```
 - _Hinzufügen/Entfernen in Collection Navigation Properties:_ ```cs customerOrders.Add(order);``` bzw. ```cs .Remove(order);```
-- _Setzen des Foreign Keys:_ ```cs order.CustomerId = 1;```
+- _Setzen des Foreign Keys_ ```cs order.CustomerId = 1;```  (einzige Variante, welche keine weiteren Datenbankzugriffe benötigt)
 
 #grid(
   [
