@@ -21,8 +21,8 @@
 #let code-example(body) = {
   // sourcecode uses a table internally, the template styles the first row with emph, disable here
   show emph: set text(fill: black, style: "italic", weight: "regular")
-  set text(size: 0.88em, 
-    top-edge: 0.98em
+  set text(
+    size: 0.88em, 
   )
   
   // line-height heisst einfach top-edge in typst und es verzerrt den Text?.. typst ist mühsam.

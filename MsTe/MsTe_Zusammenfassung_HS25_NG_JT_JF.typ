@@ -3627,7 +3627,7 @@ welches bereits mit null-state analysis geprüft wurde oder die Referenz wurde i
 
     ```cs
     string notNullable1 = null; // Warning: Converting null literal or possible null value to non-nullable type.
-    string notNullable2 = null; // Keine Warnung wegen !
+    string notNullable2 = null!; // Keine Warnung wegen !
     ```
   ],
   [
