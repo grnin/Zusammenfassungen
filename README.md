@@ -38,6 +38,7 @@ Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer:
 - [Bsys2 / Betriebssysteme 2](Bsys2)
 - [CN1 / Computernetze 1](CN1)
 - [ComBau / Compilerbau](ComBau)
+- [ComGra / Computer Grafik](ComGra)
 - [CPl / C++](CPl)
 - [CPlA / C++ Advanced](CPlA)
 - [CySec / Cyber Security Foundations](CySec)
