@@ -23,11 +23,8 @@
   show emph: set text(fill: black, style: "italic", weight: "regular")
   set text(
     size: 0.88em, 
+    top-edge: 0.98em
   )
-  
-  // line-height heisst einfach top-edge in typst und es verzerrt den Text?.. typst ist mühsam.
-  // set block(spacing: 5em)
-  // set par(leading: 15em, spacing: 21em)
   
 
   sourcecode(lang: "cs", body, frame: none)
