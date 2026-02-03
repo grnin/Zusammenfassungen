@@ -38,10 +38,18 @@
 
 
 = Hitchhiker's Guide to WrStat
-#hinweis[*Hinweis:* In der Zusammenfassung werden Anweisungen zur Taschenrechnerbenutzung gegeben. Diese beziehen sich auf
-  den TI nSpire CX II-T und das Skript auf #underline[https://github.com/KROIA/OST_WrStat]. Das Skript mithilfe der Software,
-  die dem TR beilag, in den "MyLib"-Ordner auf dem TR kopieren, dann im Scratchpad Menu-1-7-1 (Bibliotheken aktualisieren)
-  auswählen. Nun sind alle Funktionen des Skripts im Scratchpad mit der Buch-Taste $->$ 6 $->$ wrstat erreichbar.]
+#hinweis[*Hinweis:*   
+  In der Zusammenfassung werden Anweisungen zur Taschenrechnerbenutzung gegeben. Diese beziehen sich
+  auf den TI nSpire CX II-T und das Skript auf #underline[https://github.com/KROIA/OST_WrStat].
+  
+  Das Skript kann entweder mithilfe der Software, die dem TR beilag, oder der Webseite
+  #underline[https://nspireconnect.ti.com/nsc/] auf den TR kopiert werden. Die Webseite ist nur mit Chrome auf Mac oder
+  Windows verwendbar, auf Linux muss der User Agent manuell angepasst werden.
+  
+  Wenn das Skript in den "MyLib"-Ordner abgelegt und im Scratchpad Menu-1-7-1 (Bibliotheken aktualisieren) ausgewählt
+  wird, sind anschliessend alle Funktionen des Skripts direkt im Scratchpad mit der Buch-Taste $->$ 6 $->$ wrstat
+  erreichbar.
+  ]
 
 Nachfolgend ist die Reihenfolge einer typischen WrStat-Prüfung von Andreas Müller:
 
@@ -1162,8 +1170,8 @@ $ "var"(M_n) = "var"(X) / n = sigma^2 / n, sigma_1 = sqrt("var"(M_n)) $
       quad => quad mu = 24.1276, quad sigma = 1.2934
     $
     Variante 2:
-    #image("image-1.png")
-    #image("image-2.png")
+    #image("img/image-1.png")
+    #image("img/image-2.png")
     
     *Mittelwert* \
     Wandelt man $mu$ in Stunden und Minuten um, erhält man als Mittelwert 00:08 Uhr.
@@ -1202,43 +1210,6 @@ $ "var"(M_n) = "var"(X) / n = sigma^2 / n, sigma_1 = sqrt("var"(M_n)) $
   $ Z = (x - mu) / sigma quad => quad 1.644 = (x - 3.5) / (0.7184) quad => quad x = underline(4.682"kg") $
 
 ]
-
-// #example-block[
-//   === Beispiel 3: Spaghetti
-//   In einer Numb3rs Folge bemerkt Charlie, dass trockene Spaghetti beim Biegen jeweils in mindestens drei Teile brechen. Nachmessen der dazu nötigen Kräfte ergibt, dass *bei 1N 95% der Spaghetti gebrochen sind, dass aber 90% der Spaghetti eine Kraft von 0.5N tragen können*. Wie gross dürfte die Kraft sein, bei der der Spaghetto bricht? Wie gross ist ihre Varianz?
-
-//   Lösung. Die Kraft, bei der der Spaghetto bricht, ist eine normalverteilte Zufallsvariable X, wir müssen μ und σ dieser Verteilung bestimmen. (Kraft N = X, μ und σ unbekannt). Aus der Aufgabenstellung wissen wir
-//   $P(X <= 1) = 0.95$
-//   $P(X < 1) = 0.1$
-
-//   Standardisierung ergibt  
-
-//   $P((X-mu) / sigma <= (1-mu) / sigma) = 0.95$  
-
-//   $P((X-mu) / sigma <= (0.5-mu) / sigma) = 0.1$
-
-//   Aus der Tabelle der Standardnormalverteilung weiss man
-  
-//   Φ(1.6449) = 0.95
-  
-//   Φ(−1.2816) = 0.1
-
-//   also folgt das Gleichungssystem
-  
-//   $ 1 − μ / σ = 1.6449 $
-//   $ 0.5 − μ / σ = −1.2816 $  
-//   welches gleichbedeutend ist mit
-
-//   $ 1 = μ + 1.6449σ $
-//   $ 0.5 = μ − 1.2816σ $
-  
-//   Die Differenz ergibt
-//   0.5 = 2.9265σ ⇒ σ = 0.17085
-//   Daraus kann man jetzt auch μ bestimmen:
-//   μ = 1 − 1.6449σ = 0.71896.
-
-// ]
-
 
 Sollte eine Frage zur Varianz bei $n$ Stichproben kommen, muss die Varianz einfach durch $n$ geteilt werden.
 $ "var"(M_n) = "var"(X) / n = sigma^2 / n, sigma_1 = sqrt("var"(M_n)) $
@@ -1299,32 +1270,6 @@ Für eine genauere Approximation kann folgende Korrektur eingefügt werden:
   ],
   image("img/wrstat_11.png"),
 )
-
-// \
-// === Binomialverteilung - Standardisierung mit Korrektur
-// $
-//   "Beispiel (bei b Wert einfügen) :"\
-//   Rho(X fxcolor("orange", <=) b)
-//   = P((X - mu)/sigma <= (b - mu)/sigma)
-//   = P(Z <= (b + 1/2 - mu)/sigma) 
-//   = Phi((b fxcolor("orange", + 1/2) - mu)/sigma)
-// $
-// \
-// #grid(
-//   columns: (1.2fr, 1fr),
-//   gutter: 2em,
-//   [
-//     $
-//       Rho(a fxcolor("grün", <) X fxcolor("orange", <=) b)
-//       = Phi((b fxcolor("orange",+ 1/2) - n p)/sqrt(n p (1-p))) - Phi((a fxcolor("grün", + 1/2) - n p)/sqrt(n p (1-p)))
-//       \ \
-//       Rho(a fxcolor("grün", <=) X fxcolor("orange", <=) b)
-//       = Phi((b fxcolor("orange",+ 1/2) - n p)/sqrt(n p (1-p))) - Phi((a fxcolor("grün", - 1/2) - n p)/sqrt(n p (1-p)))
-//     $
-//   ],
-//   image("img/wrstat_11.png"),
-// )
-
 
 === Beispiel 1: Schwurbler-Anteil (nicht selten)
 An eine Verschwörungstheorie glauben 14% der Amerikaner. Ein Dorf hat 87 Einwohner.\

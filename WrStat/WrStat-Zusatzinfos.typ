@@ -33,7 +33,7 @@
 == WrStat Formeln
 
 === Varianz Rechenregeln
-#image("varianz.png")
+#image("img/varianz.png")
 
 // === Hypergeometrische Verteilung
 // ...
@@ -102,7 +102,7 @@
 
     //  $script(abs(ballot) cases(ballot, ballot))$
     
-    // #image("image-3.png")
+    // #image("img/image-3.png")
   ]
 )
 

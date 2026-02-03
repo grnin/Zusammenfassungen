@@ -1,5 +1,7 @@
-### Druck
-Druck A5 pro Seite, also für den normalen Druck auf A4 Papier wähle die Einstellung 2 Seiten pro Blatt und ich empfehle einseitig zu drucken (Mehr Platz für Notizen und einfacheres blättern). 
+AlgDat Zusammenfassung von Nina Grässli und Jannis Tschan überarbeitet.
+
+### Druckempfehlung
+Farbiger Druck, eine Seite ist A5 gross, für den normalen Druck auf A4 Papier wähle die Einstellung "2 Seiten pro Blatt" und ich empfehle einseitig zu drucken (Mehr Platz für Notizen und einfacheres blättern).
 
 Zusätzlich habe ich den Code der Übungen ausgedruckt, 4 Seiten pro Blatt. War praktisch um die Übungen nochmals zu studieren und Notizen zu machen zum Code. An der Prüfung habe ich es für die Programmieraufgaben nicht benötigt. Dort würde ich den OOP1 oder OOP2 Spick empfehlen mitzunehmen, wenn man unsicher mit Java Syntax ist.
 
