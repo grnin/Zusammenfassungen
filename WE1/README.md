@@ -1,5 +1,8 @@
 ## Web Engineering 1
+Alle Informationen für Prüfung HS2025 vorhanden, ausser möglicherweise CSS. Nach der Prüfung habe ich es ergänzt.
+Hat noch Platz für weitere Notizen.
 
-Bilder sind etwas unscharf, weil es Bilder sind.
+Normaler Export zu PDF, bei Einstellungen hochauflösende Bilder auswählen.
 
-Normaler Export zu PDF und dann bei Einstellungen hochauflösende Bilder auswählen.
+Tipp: 
+Bei der Prüfung den Anhang beachten.
