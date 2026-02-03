@@ -1,0 +1,81 @@
+// <https://www.jetbrains.com/help/idea/creating-and-registering-file-types.html#create-new-file-type>
+// Editor > FileTypes
+
+// Foliencode anpassen:
+= mit == ersetzen
+<- mit = ersetzen
+← mit = ersetzen
+¬ mit ! ersetzen
+
+//---------------
+Typ 1:
+//Statt Pfeil <- benutze ich lieber = um Variablen zu definieren
+Input
+Output
+for
+do
+if
+then
+else
+return
+to
+while
+// neu bei loops und so für dfs
+setLabel
+DFS
+repeat
+until
+finish
+
+//---------------
+Typ 2
+Algorithm
+//dfs und bfs:
+UNEXPLORED
+DISCOVERY
+BACK
+VISITED
+CROSS
+
+//---------------
+Typ 3
+P
+T
+i
+j
+m
+n
+//pcode neu tab 3 für dfs und bfs
+G
+S
+e
+u
+v
+w
+z
+L_0
+L_1
+L_2
+L_i
+L_i+1
+
+//---------------
+Typ 4
+%
+*
++
+-
+
+->
+/
+<-
+=
+
+==
+¬
+←
+→
+↔
+∧
+∨
+!
