@@ -50,7 +50,7 @@ Weitere
 - [DMI / Diskrete Mathematik für Informatik](DMI)
 - [OOP1 / Objektorientierte Programmierung 1](OOP1)
 - [OOP2 / Objektorientierte Programmierung 2](OOP2)
-- neu: [Data Engineering](DatEng)
+- neu von mir: [Data Engineering](DatEng)
 
 
 \3. Semester
@@ -72,6 +72,10 @@ Weitere
 - [Dsy / Distributed Systems](Dsy)
 - [Bsys2 / Betriebssysteme 2](Bsys2)
 - [ComBau / Compilerbau](ComBau)
+
+- [ComGra / Computer Grafik](ComGra)
+- [UIP / UI Patterns and Frameworks](UIP)
+- [AppArch / Application Architecture](AppArch)
 
 
 
@@ -99,3 +103,31 @@ cd Zusammenfassungen
 git sparse-checkout set "ComBau"
 # Der entsprechende Ordner ist nun auf deinem Dateisystem! :)
 ```
+
+## Zusammenfassungen Übersicht (nochmals alle)
+Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer:
+- [AIFo / AI Foundations](AIFo) 
+- [AIAp / AI Applications](AIAp)
+- [AlgDat / Algorithmen und Datenstrukturen](AlgDat)
+- [AppArch / Application Architecture](AppArch)
+- [AutoSpr / Automaten und Sprachen](AutoSpr)
+- [Bsys1 / Betriebssysteme 1](Bsys1)
+- [Bsys2 / Betriebssysteme 2](Bsys2)
+- [CN1 / Computernetze 1](CN1)
+- [ComBau / Compilerbau](ComBau)
+- [ComGra / Computer Grafik](ComGra)
+- [CPl / C++](CPl)
+- [CPlA / C++ Advanced](CPlA)
+- [CySec / Cyber Security Foundations](CySec)
+- [Dbs1 / Datenbanksysteme 1](DBS1)
+- [DigCod / Digitale Codierungen](DigCod)
+- [DMI / Diskrete Mathematik für Informatik](DMI)
+- [Dsy / Distributed Systems](Dsy)
+- [ExEv / Experimentieren und Evaluieren](ExEv)
+- [MsTe / .NET Technologien](MsTe)
+- [OOP1 / Objektorientierte Programmierung 1](OOP1)
+- [OOP2 / Objektorientierte Programmierung 2](OOP2)
+- [ParProg / Parallele Programmierung](ParProg)
+- [UIP / UI Patterns and Frameworks](UIP)
+- [VwlTg / Volkswirtschaft und Technikgeschichte](VWL-TG)
+- [WrStat / Wahrscheinlichkeitsrechnung und Statistik](WrStat)

@@ -1,31 +1,19 @@
 // Compiled with Typst 0.13.1
 #import "../../template_zusammenf.typ": *
 
+// TODO
+// TR Funktionen ersetzen:
+// "invNorm"(p, 0, 1) >> "NORMALD_ICDF"([0, 1,] p)
+// "invNorm"(0.082, 0, 1) >> "NORMALD_ICDF"([0, 1,] 0.082)
 
-TR Funktionen ersetzen:
-"invNorm"(p, 0, 1) >> "NORMALD_ICDF"([0, 1,] p)
-"invNorm"(0.082, 0, 1) >> "NORMALD_ICDF"([0, 1,] 0.082)
-
-"invNorm"(x,0,1), x = "Fläche" >>
-
-
-
-
-
-
-
-
-
-
-
-
+// "invNorm"(x,0,1), x = "Fläche" >>
 
 
 
 #show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan", "Jasmin Fässler"),
   // habe den Titel abgeändert, ist so eigentlich nicht korrekt
-  fach: "Version für HP Prime G2",
+  fach: "Version für HP Prime G2 (WIP)",
   fach-long: "WrStat",
   semester: "HS24",
   tableofcontents: (enabled: true, depth: 3, columns: 2),
@@ -86,10 +74,17 @@ TR Funktionen ersetzen:
 
 
 = Hitchhiker's Guide to WrStat
-#hinweis[*Hinweis:* In der Zusammenfassung werden Anweisungen zur Taschenrechnerbenutzung gegeben. Diese beziehen sich auf
-  den TI nSpire CX II-T und das Skript auf #underline[https://github.com/KROIA/OST_WrStat]. Das Skript mithilfe der Software,
-  die dem TR beilag, in den "MyLib"-Ordner auf dem TR kopieren, dann im Scratchpad Menu-1-7-1 (Bibliotheken aktualisieren)
-  auswählen. Nun sind alle Funktionen des Skripts im Scratchpad mit der Buch-Taste $->$ 6 $->$ wrstat erreichbar.]
+#hinweis[*Hinweis:* In der Zusammenfassung werden Anweisungen zur Taschenrechnerbenutzung gegeben. Diese beziehen sich
+  auf den TI nSpire CX II-T und das Skript auf #underline[https://github.com/KROIA/OST_WrStat].
+  
+  Das Skript kann entweder mithilfe der Software, die dem TR beilag, oder der Webseite
+  #underline[https://nspireconnect.ti.com/nsc/] auf den TR kopiert werden. Die Webseite ist nur mit Chrome auf Mac oder
+  Windows verwendbar, auf Linux muss der User Agent manuell angepasst werden.
+  
+  Wenn das Skript in den "MyLib"-Ordner abgelegt und im Scratchpad Menu-1-7-1 (Bibliotheken aktualisieren) ausgewählt
+  wird, sind anschliessend alle Funktionen des Skripts direkt im Scratchpad mit der Buch-Taste $->$ 6 $->$ wrstat
+  erreichbar.
+]
 
 Nachfolgend ist die Reihenfolge einer typischen WrStat-Prüfung von Andreas Müller:
 
@@ -1049,6 +1044,7 @@ Jeder Wert innerhalb eines Intervalls ist gleich wahrscheinlich.\
     $
 
     Für $n = 112$ ergibt sich
+    #v(-0.5em)
     $
       Rho(X < 10"kg") = 1 - Phi(1.3093) = 1 - overbracket("normCdf"(-infinity, 1.3093, 0, 1), "Menu"-5-5-2) = 1 - 0.9047
       = 0.0953 = underline(9.53%)
@@ -1152,7 +1148,11 @@ $
 
     Da wir die Wahrscheinlichkeiten schon haben, müssen wir die Werte aus der Quantiltabelle herauslesen oder
     mit TR /*"invNorm"(p, 0, 1)*/ $"NORMALD_ICDF"([0, 1,] p)$ erhalten.
-    $ Phi^(-1)(0.75) = 0.6745, quad Phi^(-1)(0.05) = 1 - Phi^(-1)(0.95) = 1 - 1.6449 = -1.6449 $
+    \
+    #set text(fill: rgb("#550044aa"));
+    $Phi^(-1)(0.75) = 0.6745$,  #set text(fill: rgb("#092552"));  $quad Phi^(-1)(0.05) =$
+    // $"TODO:" 1 - Phi^(-1)(0.95) = 1 - 1.6449 =$
+    $-1.6449$
 
     Gleichungssystem aufstellen, mit TR #tr-constructs-button -Taste rechts neben "9" $->$
     "$script(cases(ballot, ballot))$" und dieses dann mit $"solve"()$ lösen
