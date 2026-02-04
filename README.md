@@ -1,14 +1,15 @@
 # Zusammenfassungen BSc Informatik an der OST
 Die Zusammenfassungen in diesem Repository sind mit [CC BY-NC-SA 4.0](LICENSE) lizenziert, das heisst, du darfst sie unter folgenden Bedingungen beliebig überarbeiten, erweitern und teilen:
+
 - **Namensnennung:** Bitte gib die Quelle an.
 - **Nicht kommerziell:** Du darfst diese Zusammenfassungen oder eigene Zusammenfassungen, die auf diesem Material basieren, nicht *kostenpflichtig* verbreiten.
 - **Weitergabe unter gleichen Bedingungen:** Bitte verwende die gleiche oder eine ähnliche Lizenz. 
 Credits: Nina Grässli und Jannis Tschan und Jasmin Fässler (je nach Modul)
 
-
 ### Zusammenfassungen erstellt/bearbeitet von mir (Jasmin)
 
 3. Semester
+
 - [WE1](WE1) neu erstellt
 - [MsTe / .NET Technologien](MsTe) beachte auch zusätzliche PDFs zum ausdrucken
 - [AlgDat / Algorithmen und Datenstrukturen](AlgDat) Grafiken angepasst, Rechtschreibkorrektur, Inhalt geändert (für mich angepasst)
@@ -17,18 +18,19 @@ Credits: Nina Grässli und Jannis Tschan und Jasmin Fässler (je nach Modul)
 - [CPl / C++](CPl) minimal angepasst
 
 2. Semester
+
 - [OOP2 / Objektorientierte Programmierung 2](OOP2)
 - [AutoSpr / Automaten und Sprachen](AutoSpr) ich habe die von NG wenig angepasst
 - neu von mir: [Data Engineering](DatEng)
 
 1. Semester
+
 - [OOP1 / Objektorientierte Programmierung 1](OOP1) meine eigene Version und die von NG
 - [Dbs1 / Datenbanksysteme 1](DBS1) meine eigene Version und die von NG
 
-Anki Karten (ergänzend zu Vorlesungen) [Anki Karten](01_Anki)
+Anki Karten (ergänzend zu Vorlesungen) befinden sich im anderen Repo für Zusammenfassungen [Anki Karten](https://github.com/jasmin-f/Studium-Informatik)
 
 Ich habe das Typst Template angepasst, neu gibt es einen Header/Kopfzeile auf jeder Seite.
-
 
 ## Zusammenfassungen Übersicht alle
 Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer.
