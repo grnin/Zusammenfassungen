@@ -1,0 +1,1 @@
+Notiz Studentenportal (Jasmin) : Word Datei im Github (verlinkt). Spick/Cheatsheet mit Syntax Highlighting. Beim Abschnitt "Code schreiben" habe ich eine Checkliste für mich selbst erstellt. Nachtrag: bei equals sollte stehen, dass == ein Referenzvergleich ist und equals vergleicht den Inhalt!

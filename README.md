@@ -3,27 +3,27 @@ Die Zusammenfassungen in diesem Repository sind mit [CC BY-NC-SA 4.0](LICENSE) l
 - **Namensnennung:** Bitte gib die Quelle an.
 - **Nicht kommerziell:** Du darfst diese Zusammenfassungen oder eigene Zusammenfassungen, die auf diesem Material basieren, nicht *kostenpflichtig* verbreiten.
 - **Weitergabe unter gleichen Bedingungen:** Bitte verwende die gleiche oder eine ähnliche Lizenz. 
-
+Credits: Nina Grässli und Jannis Tschan und Jasmin Fässler (je nach Modul)
 
 
 ### Zusammenfassungen erstellt/bearbeitet von mir (Jasmin)
 
 3. Semester
 - [WE1](WE1) neu erstellt
-- [MsTe / .NET Technologien](MsTe)
-- [AlgDat / Algorithmen und Datenstrukturen](AlgDat) gaanz wenig angepasst
+- [MsTe / .NET Technologien](MsTe) beachte auch zusätzliche PDFs zum ausdrucken
+- [AlgDat / Algorithmen und Datenstrukturen](AlgDat) Grafiken angepasst, Rechtschreibkorrektur, Inhalt geändert (für mich angepasst)
 - [Bsys1 / Betriebssysteme 1](Bsys1) neu strukturiert, Inhalt wenig geändert, bisschen ergänzt
-- [WrStat / Wahrscheinlichkeitsrechnung und Statistik](WrStat) kleine Anpassungen. Die andere Version für [HP-Prime](WrStat/WrStat-Jasmin-HP-Prime) ist nicht vollständig.
-- [CPl / C++](CPl) vielleicht etwas geändert?
+- [WrStat / Wahrscheinlichkeitsrechnung und Statistik](WrStat) kleine Anpassungen/Verbesserungen. Die andere Version für [HP-Prime](WrStat/WrStat-Jasmin-HP-Prime) ist nicht vollständig.
+- [CPl / C++](CPl) minimal angepasst
 
 2. Semester
 - [OOP2 / Objektorientierte Programmierung 2](OOP2)
 - [AutoSpr / Automaten und Sprachen](AutoSpr) ich habe die von NG wenig angepasst
-- neu: [Data Engineering](DatEng)
+- neu von mir: [Data Engineering](DatEng)
 
 1. Semester
-- [OOP1 / Objektorientierte Programmierung 1](OOP1)
-- [Dbs1 / Datenbanksysteme 1](DBS1)
+- [OOP1 / Objektorientierte Programmierung 1](OOP1) meine eigene Version und die von NG
+- [Dbs1 / Datenbanksysteme 1](DBS1) meine eigene Version und die von NG
 
 Anki Karten (ergänzend zu Vorlesungen) [Anki Karten](01_Anki)
 
@@ -89,6 +89,7 @@ die oben genannten Schriftarten aus `C:\Windows\Fonts` in dein Typst Projekt hoc
 Diese werden dann automatisch gefunden.
 
 Da das Repository ziemlich gross ist, und du wahrscheinlich nicht alle Module benötigst, empfiehlt sich ein Sparse Checkout
+
 ```sh
 # Repo mit ausschliesslich Dateien im Rootverzeichnis klonen (Download kann trotzdem etwas dauern)
 git clone --sparse https://github.com/grnin/Zusammenfassungen.git
