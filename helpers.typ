@@ -1,5 +1,5 @@
 // Helper functions
-// (C) 2025 Nina Grässli, Jannis Tschan
+// (C) 2026 Nina Grässli, Jannis Tschan
 
 #let number-format(n, chunks, num-suffix) = {
   box(

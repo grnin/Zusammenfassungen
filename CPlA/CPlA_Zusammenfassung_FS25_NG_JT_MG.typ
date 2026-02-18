@@ -29,7 +29,6 @@
 }
 
 // Document-specific settings
-#set grid(columns: (1fr, 1fr), gutter: 1em)
 #show grid: set par(justify: false, linebreaks: "optimized")
 #show table.cell: set par(justify: false)
 

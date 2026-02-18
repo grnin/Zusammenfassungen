@@ -11,7 +11,6 @@
 )
 
 // Document-specific settings
-#set grid(columns: (1fr, 1fr), gutter: 1em)
 #show figure.caption: set text(hyphenate: false)
 
 = Wohlstand

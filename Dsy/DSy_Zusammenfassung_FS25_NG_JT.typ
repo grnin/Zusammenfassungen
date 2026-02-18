@@ -11,7 +11,6 @@
 )
 
 // Document-specific settings
-#set grid(columns: (1fr, 1fr), gutter: 1em)
 #set table(columns: (1fr, 1fr))
 #show table: set par(justify: false, linebreaks: "optimized")
 

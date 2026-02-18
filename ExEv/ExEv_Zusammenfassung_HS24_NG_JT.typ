@@ -15,7 +15,6 @@
 #let y- = $dash(y)$ // Mittelwert von y
 
 // Document specific settings
-#set grid(columns: (1fr, 1fr), gutter: 1em)
 #show table.cell: set par(justify: false)
 
 #let example-block(body) = {

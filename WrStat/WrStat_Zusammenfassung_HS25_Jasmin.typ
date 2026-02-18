@@ -17,8 +17,6 @@
 )
 
 // Global configuration
-// Grid size defaults
-#set grid(columns: (1fr, 1fr), gutter: 1em)
 
 // Icon for the "Construct" button on the TI n-spire
 #let tr-constructs-button = box(
