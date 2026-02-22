@@ -1,4 +1,4 @@
-// Compiled with Typst 0.13.1
+// Compiled with Typst 0.14.2
 #import "../template_zusammenf.typ": *
 
 #show: project.with(
@@ -18,8 +18,8 @@
 #let EXAM_MODE = false
 #let CPPR_ROOT = if EXAM_MODE {"file://C:/cppreference/reference/en/cpp/"} else {"https://en.cppreference.com/w/cpp/"}
 
-#let cppr(url, body) = {
-  return underline(link(CPPR_ROOT + url + ".html", body))
+#let cppr(url, anchor: "", body) = {
+  return underline(link(CPPR_ROOT + url + ".html" + anchor, body))
 }
 
 // Special table cells
@@ -29,19 +29,20 @@
 }
 
 // Document-specific settings
-#show grid: set par(justify: false, linebreaks: "optimized")
+#show grid: set par(justify: false)
 #show table.cell: set par(justify: false)
 
 = Move Semantics
-#align(center, image("img/cpla_01.png"))
+#align(center, image("img/cpla_01.png", width: 95%))
 
 Sometimes, it is desirable to avoid copying values around for _performance reasons_.
 - With a _copy_, the stack and heap data is copied. The new element is completely independent of the old one.
-- With a _move_, only the stack data is copied. The old heap pointer gets deleted and the new one is attached
-  to the same heap data. _Attention:_ The old stack data is still valid, but in a indeterminate state, risk of dangling pointers.
+- With a _move_, only the stack data is copied. The old heap pointer gets deleted and the new one is attached to the
+  same heap data. _Attention:_ The old stack data is still valid, but in a indeterminate state.
+  It now contains a _dangling pointer_ that should not be used, otherwise _memory corruption is likely!_
 
 *Ownership Transfer:*
-Resources of expiring values can be transferred to a new owner. Might be _more efficient_ than a (deep) copy and
+Resources of _expiring values_ can be transferred to a new owner. Might be _more efficient_ than a (deep) copy and
 destroying the original. Might be feasible when copying is not #hinweis[(e.g. `std::unique_ptr`)].
 Examples of such resources: Heap Memory, Locks, (File) Handles.
 
@@ -80,9 +81,10 @@ private:
 == Lvalue and Rvalue References
 *Lvalue:*
 Everything that has an identity #hinweis[(a name)]. The address can be taken.
-A lvalue reference can be used as function parameter type #hinweis[(no copy happens, but side-effects on argument are possible)],
-Member/local variable or as a return type #hinweis[(returned object must survive, i.e. a reference parameter or `vector.at()`)].
-Beware of dangling references!\
+*Lvalue reference usages:*
+Function parameter type #hinweis[(no copy happens, but side-effects on argument are possible)],
+Member/local variable or as a return type
+#hinweis[(returned object must survive,  e.g. a reference parameter or `vector.at()`)]. Beware of dangling references!\
 *Rvalue:*
 Disposable values without an address or a name. Either a literal, a temporary object or an explicitly converted lvalue.
 If an rvalue is passed to a rvalue reference parameter, it gets a name and turns into an lvalue. See @std-forward.
@@ -98,7 +100,7 @@ If an rvalue is passed to a rvalue reference parameter, it gets a name and turns
   [
     ```cpp
     auto modify(T& t) -> void {
-      // manipulate t
+      // manipulate 't'
     }
     auto lvalueRefExample() -> void {
       T t = 5;
@@ -113,7 +115,7 @@ If an rvalue is passed to a rvalue reference parameter, it gets a name and turns
     auto createT() -> T;
     // 't' can be "stolen" (not needed anymore)
     auto consume(T&& t) -> void {
-      // manipulate t
+      // manipulate 't'
     }
     auto rvalueRefExample() -> void {
       consume(T{}); // new temporary T as param
@@ -126,7 +128,7 @@ If an rvalue is passed to a rvalue reference parameter, it gets a name and turns
 #table(
   columns: (1fr, 1fr),
   table.header([lvalue examples], [rvalue examples]),
-  table.cell(colspan: 2, align: center, [#hinweis[The value which is the lvalue/rvalue is marked as `[value]`]]),
+  table.cell(colspan: 2, align: center, [#hinweis[The lvalue/rvalue is marked as `[value]`]]),
   [
     ```cpp
     // Has a name
@@ -228,11 +230,11 @@ If an rvalue is passed to a rvalue reference parameter, it gets a name and turns
 
 == Value Categories
 #hinweis[#cppr("language/value_category")[CPPReference: Value categories]]
-#align(center, image("img/cpla_02.png", width: 95%))
+#align(center, image("img/cpla_02.png", width: 89%))
 
 A value is always either a lvalue, xvalue or prvalue.
-Lvalue does not always mean "on the left side of an assignment": ```cpp int const a = 0; a = 7; // error```
-#hinweis[(left side can't always be assigned)]
+Lvalue does not always mean "on the left side of an assignment", because the left side can't always be assigned:
+```cpp int const a = 0; a = 7; // error```
 
 #table(
   columns: (1fr,) * 3,
@@ -246,10 +248,10 @@ Lvalue does not always mean "on the left side of an assignment": ```cpp int cons
 *Xvalue:*
 Expiring Value. Address cannot be taken, cannot be used as left-hand operator of built-in assignment.
 Conversion from prvalue through _temporary materialization_. Conversion from lvalue through _```cpp std::move(x)```_.
-*Examples*:
-Function call returning rvalue ref #hinweis[(i.e. ```cpp std::move(x)```)], access of non-ref members of rvalue object:
-
-```cpp X x1{}, x2{}; consume(std::move(x1)); std::move(x2).member; X{}.member;```
+*Examples*
+- Function call returning a rvalue reference #hinweis[(e.g. ```cpp std::move(x)```)]
+- Accessing non-reference members of an rvalue object #hinweis[(e.g. ```cpp X x2{}; std::move(x2).member; X{}.member;```)]
+- Array index access when array is an rvalue #hinweis[(e.g. ```cpp std::array<int, 2> a{6, 7}; std::move(a)[0];```)]
 
 === Temporary Materialization
 Getting from something imaginary to something you can point to #hinweis[(a value getting an address)].
@@ -274,7 +276,7 @@ auto main() -> int { Ghost&& sam = evoke(); /* (1) */ Ghost{}.haunt(); /* (2) */
 #table(
   columns: (auto, auto, 1fr, auto, 1fr),
   table.vline(x: 2, stroke: 0.15em),
-  table.header([], [`f(s)`], [`f(S &)`], [`f(S const &)`], [`f(S &&)`]),
+  table.header([], [`f(S)`], [`f(S &)`], [`f(S const &)`], [`f(S &&)`]),
   [
     ```cpp
     S s{}; f(s);
@@ -316,8 +318,8 @@ auto main() -> int { Ghost&& sam = evoke(); /* (1) */ Ghost{}.haunt(); /* (2) */
   cell-check-hinweis([(preferred over `const&`)]),
 )
 
-The overload for value parameters imposes ambiguities.
-For deciding two lvalue reference overloads, the `const`-ness of the argument is considered.
+Value parameters like `f(s)` impose ambiguities: If both a value and reference overload exists, a compiler error is
+thrown. For deciding two lvalue reference overloads, the `const`-ness of the argument is considered.
 
 == Overload Resolution for Member Functions
 #table(
@@ -332,7 +334,7 @@ For deciding two lvalue reference overloads, the `const`-ness of the argument is
   [
     ```cpp
     S s{};
-    f(s);
+    s.m();
     ```
   ],
   cell-check,
@@ -379,13 +381,18 @@ For deciding two lvalue reference overloads, the `const`-ness of the argument is
 
 Reference and non-reference overloads cannot be mixed.
 The reference qualifier affects the `this` object and the overload resolution.
-```cpp const &&``` is theoretically possible, but an artificial case.
+```cpp S::m() const &&``` is theoretically possible, but an artificial case.
 
 == Special Member Functions
-#hinweis[#cppr("language/rule_of_three")[CPPReference: The rule of three/five/zero]]\
-- *Constructors:* Default Constructor, Copy Constructor, Move Constructor #hinweis[(Called on variable initialization)].
-- *Assignment Operators:* Copy Assignment, Move Assignment #hinweis[(Called on variable reassignment)]
-- *Destructors* #hinweis[(Called automatically when variable goes out of scope to clean up the objects resources)]
+#hinweis[
+  #cppr("language/member_functions", anchor: "#Special_member_functions")[CPPReference: Non-static member functions - Special member functions],
+  #cppr("language/initializer_list")[CPPReference: Constructors and member initializer lists],
+  #cppr("language/operator_assignment")[CPPReference: Assignment Operators],
+  #cppr("language/rule_of_three")[CPPReference: The rule of three/five/zero]
+]
+- *Constructors:* Default Constructor, Copy Constructor, Move Constructor #hinweis[(Called on variable initialization)]
+- *Assignment Operators (`=`, `+=`, `*=` etc.):* Copy Assignment, Move Assignment #hinweis[(Called on variable reassignment)]
+- *Destructors (`~`)* #hinweis[(Called automatically when variable goes out of scope to clean up the objects resources)]
 
 It is normally not necessary to implement these yourself (_"rule of zero"_),
 but if a destructor or a copy function is needed, all three are needed (_"rule of three"_).
@@ -401,7 +408,8 @@ Use the default implementation of the special members whenever possible.
 Takes the guts out of the argument and moves them to the constructed object.
 Leaves the argument in _valid but indeterminate state_.
 Don't use the argument after it has been moved from until you assign it a new value.
-*Default behavior:* Initialize base classes and members with move initialization. #hinweis[```cpp S(S && v) : m{std::move(v.m)}```]
+*Default behavior:* Initialize base classes and members with move initialization:
+#hinweis[```cpp S(S && v) : m{std::move(v.m)}```]
 
 === Copy/Move assignment ```cpp auto operator=(S const &) -> S&``` / ```cpp auto operator=(S &&) -> S&```
 #hinweis[
@@ -409,14 +417,17 @@ Don't use the argument after it has been moved from until you assign it a new va
   #cppr("language/move_assignment")[CPPReference: Move assignment]
 ]\
 Copies/Moves the argument into the `this` object. Executed when the variable to copy/move to has _already been initialized_.
-Must be a member operator. *Default behavior:* Initializes base classes and members with copy-assignment/move-assignment.
+Must be a member operator.
+*Default behavior:* Initializes base classes and members with copy-assignment/move-assignment.
 
 === Destructor ```cpp ~S()```
 #hinweis[#cppr("language/destructor")[CPPReference: Destructors]]\
 _Deallocates resources_ held by the `this` object. No parameters. Must not throw #hinweis[(is `noexcept`)].
-Must be implemented if a custom copy/move is defined. *Default behavior:* Calls destructor of base classes and members.
+Must be imple\-mented if a custom copy/move is defined.
+*Default behavior:* Calls destructor of base classes and members.
 
 === Copy-Swap-Idiom
+#hinweis[#cppr("algorithm/swap")[CPPReference: std::swap]]\
 Allows efficient implementation of the copy-assignment operator.
 Utilizes the copy constructor to create a temporary object, and exchanges its contents with itself using a non-throwing swap.
 Therefore, it _swaps the old data with new data_. The temporary object is then destructed automatically.
@@ -446,9 +457,7 @@ struct S {
   }
 }; // Destructor is implicit
 
-auto swap(S& lhs, S& rhs) noexcept -> void {
-  lhs.swap(rhs); // Calls S::swap() above
-}
+auto swap(S& lhs, S& rhs) noexcept -> void { lhs.swap(rhs); } // Calls S::swap() above
 ```
 
 === What you write vs. what you get
@@ -459,7 +468,7 @@ auto swap(S& lhs, S& rhs) noexcept -> void {
 #let deleted = text(fill: colors.rot, weight: "bold")[deleted]
 
 #hinweis[
-  Watch out for the combinations in red. "defaulted!" are bugs, should be implemented yourself.
+  Watch out for the combinations in red. #defaulted-bug are bugs, should be implemented yourself.
   You want to stay above the black line, avoid going below it!
   When using multiple constructor / assignment methods, #deleted takes precedence over #defaulted-bug, #undeclared over #defaulted.
   Defining a constructor / assignment method as `= default;` makes the implicit default explicitly #user-declared
@@ -479,11 +488,12 @@ auto swap(S& lhs, S& rhs) noexcept -> void {
   [_move ctor_], undeclared, defaulted, deleted, deleted, user-declared, undeclared,
   [_move assign_], defaulted, defaulted, deleted, deleted, undeclared, user-declared,
 )
-
+#v(-0.5em)
 == Copy Elision
 #hinweis[#cppr("language/copy_elision")[CPPReference: copy elision]]\
 In some cases, the compiler is required to elide #hinweis[(omit)] specific copy/move operations
-regardless of the side-effects of the corresponding special member functions (_"Mandatory elision"_). The omitted operations need not exist. This happens...
+regardless of the side-effects of the corresponding special member functions (_"Mandatory elision"_).
+The omitted operations need not exist. This happens...
 - In _initialization_, when the initializer is a _prvalue_: ```cpp S s = S{S{}};```
   #hinweis[(Only 1 constructor call, 0 copy operations)]
 - When a function call _returns a prvalue_: #hinweis[(`S{}` gets initialized directly in `new_sw{}` instead of in `create()`)]
@@ -510,7 +520,7 @@ auto main() -> int {
   std::cout << "\t --- s = create()  ---\n"; s = create();
 }
 ```
-
+#v(-0.5em)
 #grid(
   columns: (1fr,) * 3,
   [
@@ -537,7 +547,7 @@ auto main() -> int {
     Constructor S()
     --- create() ---
     Constructor S(S&&)
-    // no create() to s
+    // no create() into s{}
     --- s = create() ---
     Constructor S()
     --- create() ---
@@ -552,21 +562,31 @@ auto main() -> int {
     --- S s{create()} ---
     Constructor S()
     --- create() ---
-    // no return to create()
-    // no create() to s
+    // no return into create()
+    // no create() into s{}
     --- s = create() ---
     Constructor S()
     --- create() ---
-    // no return to create()
+    // no return into create()
     operator =(S&&)
     ```
   ],
 )
 
 == Life-Time Extension
+#hinweis[
+  #cppr(
+    "language/reference_initialization",
+    anchor: "#Lifetime_of_a_temporary",
+  )[CPPReference: Reference Initialization -- Lifetime of a temporary],
+  #cppr(
+    "language/lifetime",
+    anchor: "#Temporary_object_lifetime",
+  )[CPPReference: Lifetime -- Temporary object lifetime]
+]\
 The life-time of a temporary can be extended by _const lvalue references_ or _rvalue references_.
-Extended life-time ends at the end of the block.
-It is not transitive #hinweis[(Reference Return $->$ Dangling Reference $->$ Undefined Behavior)].
+Extended life-time ends at the end of the block. It is not transitive
+#hinweis[(Reference return of local variable $->$ Dangling Reference $->$ UB!)].
 
 ```cpp
 struct Demon { /* ... */ };
@@ -582,19 +602,22 @@ auto main() -> int {
   Demon&& laznik = summon();
 } // flaaghun and laznik die here
 ```
-
+#colbreak()
 
 = Type Deduction
 #v(-0.75em)
 == Forwarding References and Type Deduction
 #hinweis[
   #cppr("language/template_argument_deduction")[CPPReference: Template argument deduction],
-  #cppr("language/reference.html#Forwarding_references")[CPPReference: Reference declaration -- Forwarding Reference]
+  #cppr(
+    "language/reference",
+    anchor: "#Forwarding_references",
+  )[CPPReference: Reference declaration -- Forwarding References]
 ]\
-In some contexts, `T&&` does not necessarily mean rvalue reference.
+In some contexts, ```cpp T&&``` does not necessarily mean "rvalue reference".
 _Exceptions:_ ```cpp auto &&``` or ```cpp T&&``` when template type deduction applies for type `T`.
 Here, lvalues can also bind to ```cpp T&&``` as a ```cpp T&```.
-Only works for Method Templates, not Class Templates, and only for "```cpp T &&```",
+This binding only works for Method Templates, not Class Templates, and only for "```cpp T &&```",
 not "```cpp std::vector<T> &&```" or "```cpp T const &&```".
 
 #grid(
@@ -612,10 +635,10 @@ not "```cpp std::vector<T> &&```" or "```cpp T const &&```".
   ],
 )
 
-Deduction of `type T` depends on the structure of the type of the corresponding parameter `ParamType`:
+Deduction of type `T` depends on the structure of the type of the corresponding parameter `ParamType`:
 #v(-0.5em)
 
-=== `Paramtype` is a value type (`T`)
+=== `ParamType` is a value type (`T`)
 #hinweis[(e.g. ```cpp auto f(T param) -> void```) #sym.space Note: Pointers (```cpp T *```) are also value types]
 + `<expr>` is a reference type: ignore the reference
 + Ignore the rightmost `const` of `<expr>` #hinweis[(`char const * const --> char const *`)]
@@ -624,14 +647,14 @@ Deduction of `type T` depends on the structure of the type of the corresponding 
 ```cpp
 int x = 23; int const cx = x; int const & crx = x; char const * const ptr = ...;
 
-// calls  // instances                                // deduced Ts
-f(x);     auto f(int param) -> void;                  T = int
-f(cx);    auto f(int param) -> void;                  T = int
-f(crx);   auto f(int param) -> void;                  T = int
-f(ptr);   auto f(char const * param) -> void;         T = char const *
+// calls    // instances                                // deduced Ts
+f(x);       auto f(int param) -> void;                  T = int
+f(cx);      auto f(int param) -> void;                  T = int
+f(crx);     auto f(int param) -> void;                  T = int
+f(ptr);     auto f(char const * param) -> void;         T = char const *
 ```
 
-=== `Paramtype` is a reference (`T&`)
+=== `ParamType` is a reference (`T&`)
 #hinweis[(e.g. ```cpp auto f(T & param) -> void``` or ```cpp auto f(T const & param) -> void```)]
 + `<expr>` is a reference type: ignore the reference
 + Pattern match `<expr>`'s type against `ParamType` to figure out `T`
@@ -643,39 +666,39 @@ int x = 23; int const cx = x; int const & crx = x;
 *Examples for References:* #hinweis[```cpp auto f(T & param) -> void```]
 #v(-0.5em)
 ```cpp
-// calls  // instances                                // deduced Ts
-f(x);     auto f(int& param) -> void;                 T = int
-f(cx);    auto f(int const& param) -> void;           T = int const
-f(crx);   auto f(int const& param) -> void;           T = int const
+// calls    // instances                                // deduced Ts
+f(x);       auto f(int& param) -> void;                 T = int
+f(cx);      auto f(int const& param) -> void;           T = int const
+f(crx);     auto f(int const& param) -> void;           T = int const
 ```
 
 *Examples for Const References:* #hinweis[```cpp auto f(T const & param) -> void```]
 #v(-0.5em)
 ```cpp
-// calls  // instances                                // deduced Ts
-f(x);     auto f(int const& param) -> void;           T = int
-f(cx);    auto f(int const& param) -> void;           T = int
-f(crx);   auto f(int const& param) -> void;           T = int
+// calls    // instances                                // deduced Ts
+f(x);       auto f(int const& param) -> void;           T = int
+f(cx);      auto f(int const& param) -> void;           T = int
+f(crx);     auto f(int const& param) -> void;           T = int
 ```
 
-=== `Paramtype` is a forwarding reference (`T&&`)
+=== `ParamType` is a forwarding reference (`T&&`)
 #hinweis[(e.g. ```cpp auto f(T && param) -> void```)]
-
 + `<expr>` is an lvalue: `T` and `ParamType` become lvalue references #hinweis[(First 3 examples turn into `T&`)]
-+ Otherwise #hinweis[(if `<expr>` is an rvalue)]: Rules for references apply #hinweis[(Last example)]
++ Otherwise #hinweis[(if `<expr>` is an rvalue)]: Rules for references apply #hinweis[(Fourth example)]
 
 ```cpp
 int x = 23; int const cx = x; int const & crx = x;
 
-// calls  // instances                                // deduced Ts
-f(x);     auto f(int & param) -> void;                T = int &
-f(cx);    auto f(int const & param) -> void;          T = int const &
-f(crx);   auto f(int const & param) -> void;          T = int const &
-f(27);    auto f(int && param) -> void;               T = int
-f("OST"); auto f(char const (&) [4] param) -> void;   T = char const (&) [4]
+// calls    // instances                                // deduced Ts
+f(x);       auto f(int & param) -> void;                T = int &
+f(cx);      auto f(int const & param) -> void;          T = int const &
+f(crx);     auto f(int const & param) -> void;          T = int const &
+f(27);      auto f(int && param) -> void;               T = int
+f("OST");   auto f(char const (&) [4] param) -> void;   T = char const (&) [4]
 ```
 
 === Type Deduction and Initializer Lists
+#hinweis[#cppr("utility/initializer_list")[CPPReference: std::initializer_list]]\
 When an `initializer_list` is used for type deduction, an error occurs: ```cpp f({23});```\
 For this to work, a separate template is needed:
 ```cpp
@@ -698,20 +721,21 @@ auto&& uref3 = 23;         // T&&: 23 = int&& (rvalue)     -> uref3 = int&&
 
 // Special cases
 auto init_list1 = {23};    // std::initializer_list<int>
-auto init_list2{23};       // int, was std_initializer_list<int> before C++17
+auto init_list2{23};       // int, was std::initializer_list<int> before C++17
 auto init_list3{23, 23};   // Error, requires one single argument
 ```
 
 *`auto` Return Type Deduction:*
-`auto` can be used as return type and for parameter declarations. Body must be available to deduce the type.
-Multiple `auto` parameters are considered different types.
+`auto` can be used as return type and for parameter declarations. Body must be available to deduce the type
+#hinweis[(not possible in header)]. Multiple `auto` parameters are considered different types.
 
 === Type Deduction for `decltype`
 #hinweis[#cppr("language/decltype")[CPPReference: `decltype` specifier]]\
 Represents the declared type of a named expression.
 `decltype(auto)` allows deduction of (inline) function return types, but _does not strip references (`&`) or `const`
 like plain `auto`_.
-Can take an expression for specifying trailing return types.
+Can take an expression for specifying trailing return types, but this requires the body of the function;
+it can therefore not be declared in a header.
 
 ```cpp
 int              x         = 23;
@@ -723,14 +747,13 @@ template <typename Container, typename Index>
 auto access(Container &c, Index i) -> decltype(auto) { return c[i]; } // Requires body
 auto access(Container &c, Index i) -> decltype(c[i]) { ... } // Body not required (.hpp)
 ```
-
+#v(-0.5em)
 === Type Deduction in Lambdas
 #hinweis[Slides: Page 38]
-#v(-0.5em)
 
 == Perfect forwarding with std::forward <std-forward>
 #hinweis[#cppr("utility/forward")[CPPReference: `std::forward`], Slides Page 25 onward] #h(1fr) ```cpp #include <utility>```\
-
+#v(-0.5em)
 #definition[
   ```cpp
   template <typename T>
@@ -743,25 +766,25 @@ auto access(Container &c, Index i) -> decltype(c[i]) { ... } // Body not require
 `std::forward` is a _conditional cast to an rvalue reference_.
 This allows arguments to be treated as what they originally were: lvalues remain lvalues and rvalues remain rvalues.
 
-- If `T` is of _value type_, `T &&` is an _rvalue reference_ in the return expression. #hinweis[(`int -> int&&`)]
+- If `T` is of _value type_, `T &&` is an _rvalue reference_ in the return expression #hinweis[(`int -> int&&`)].
 - If `T` is of _lvalue reference type_, the resulting type is an _rvalue reference to an lvalue reference_\
-  #hinweis[(e.g. `T = int & -> T &&` would mean "`int & &&`" which can be collapsed into "`int &`")].
+  #hinweis[(`T & -> T & &&` #sym.space *Example:* "`T = int &`". This would return "`int & &&`" which can be collapsed into "`int &`")].
 
 ```cpp
 template<typename T>
 static auto make_buffer(T && value) -> BoundedBuffer<value_type> {
     BoundedBuffer<value_type> new_buffer{};
-    new_buffer.push(std::forward<T>(value));
+    new_buffer.push(std::forward<T>(value)); // Use forward to insert elements as they are
     return new_buffer; }
 ```
 
 == std::move
 #hinweis[#cppr("utility/move")[CPPReference: `std::move`], Slides Page 43 onward] #h(1fr) ```cpp #include <utility>```\
-
+#v(-0.5em)
 #definition[
   ```cpp
   template <typename T>
-  decltype(auto) move(T&& param) {
+  decltype(auto) move(T&& param) { // remove_reference_t gets rid of lvalue references
     return static_cast<std::remove_reference_t<T>&&>(param);
   }
   ```
@@ -769,7 +792,7 @@ static auto make_buffer(T && value) -> BoundedBuffer<value_type> {
 
 Does not actually move objects. It's just a _unconditional cast to an rvalue reference_.
 This allows resolution of rvalue reference overloads #hinweis[(```cpp auto f(T&& t)```)] and move-constructor/-assignment operators.
-_Caution! Moving a `const` object or a non-const object without a move ctor/assignment results in a copy, not move operation!_
+_Caution! Moving a `const` object or a non-const object without a move constructor/assignment results in a copy, not move operation!_
 To allow for moving, there should be no `const` member in a class.
 
 *Reference Collapsing:*
@@ -781,7 +804,7 @@ To allow for moving, there should be no `const` member in a class.
 *Lifetime on Heap:*  Creation and deletion happens _explicitly_ with `new` and `delete` #hinweis[(Dangerous, avoid!)].\
 ```cpp auto foo() -> void { auto ip = new int{5}; /* ... */ delete ip;}```
 
-*Rules:* Delete every object you allocated, do not delete an object twice or access a deleted object.
+*Rules:* Delete every object you allocated, do not delete an object twice or access a deleted object. UB!
 
 == Explicit Life-Time Management
 Global and local variables have life-time implicitly managed by the program flow.
@@ -801,14 +824,14 @@ auto arr = new int[5]{};  // 5 needs to be compile-time-constant, auto -> int *
 int v = arr[4];           // accessing element (*arr + 4 pointer objects)
 ```
 
-*Direct Member Access (->):*
+*Direct Member Access via the #no-ligature[`->`] operator:*
 #v(-0.5em)
 ```cpp
 struct S {
   auto member() -> void { this->value = ...; } int value; // 'this': pointer to a instance
 };
 auto foo() -> void {
-  S* sp = new S{}; sp->member(); // = (*sp).member(); "." binds stronger than "*"
+  S* sp = new S{}; sp->member(); // equal to (*sp).member(); "." binds stronger than "*"
 }
 ```
 
@@ -821,17 +844,22 @@ auto foo(int* p) -> void { }
 auto bar() -> void { int* ip = new int{5}; int local = 6; foo(ip); foo(&local); }
 ```
 #hinweis[More complicated examples with pointer to pointer to pointer to int: Slides page 25]
-
+#v(-0.25em)
 *Const Pointers:*
 `const` Pointer can't be modified, but the object behind it may. `const` is on the right side of the `*`.
 The declaration is read from right to left.\
-```cpp int const * const * * const icpcppc = &icpcp;```\
+```cpp
+int * const ipc; // Can't change pointer address, but can change int
+int const * icp; // Can change pointer address, but can't change int
+int const * const * * const icpcppc = &icpcp;
+```
+#v(-0.5em)
 "icpcppc is a #tcolor("orange")[const pointer] to a #tcolor("grün")[pointer]
 to a #tcolor("dunkelblau")[const pointer] to a #tcolor("rot")[const int]"
 
 *`nullptr`:*
 Represents a `null`-Pointer. Is a _literal_ #hinweis[(prvalue)] and has _type_ `nullptr_t`.
-Implicit conversion to any pointer type: `T *`.
+Implicit conversion to any pointer type: "`T *`".
 Prefer `nullptr` over `0` and `NULL` #hinweis[(no overload ambiguity, no implicit conversion)].
 
 *Pointer vs. Reference*
@@ -845,10 +873,10 @@ Prefer `nullptr` over `0` and `NULL` #hinweis[(no overload ambiguity, no implici
   [can be dangling #hinweis[(pointing to a destroyed object)]],
   [can be dangling #hinweis[(referencing a destroyed object)]],
 )
-
-Use raw pointers only to explicitly _model the possibility of a `nullptr`_ #hinweis[(requires a check like 
-```cpp auto foo(int* ptr) -> void { if (ptr) { ... } }```)] and for _modelling borrowing_ only.
-Else, use _smart pointers_.
+#v(-0.5em)
+Use raw pointers only to explicitly _model the possibility of a `nullptr`_
+#hinweis[(requires a check like ```cpp auto foo(int* ptr) -> void { if (ptr) { ... } }```)]
+and for _modelling borrowing_ only. Else, use _smart pointers_.
 
 == Memory Allocation with new
 #definition[`new <type> <initializer>`]
@@ -862,21 +890,24 @@ struct Point{ Point(int x, int y) : x{x}, y{y}{} int x, y; };
 auto createPoint(int x, int y) -> Point* {
   return new Point{x, y}; // constructor
 }
-auto createCorners(int x, int y) -> Point* {
-  return new Point[2]{{0, 0}, {x, y}};
-}
+auto createCorners(int x, int y) -> Point* { return new Point[2]{{0, 0}, {x, y}}; }
 ```
 
 === Placement new
+#hinweis[
+  #cppr("language/new")[CPPReference: new expression],
+  #cppr("memory/construct_at")[CPPReference: std::construct_at]
+] #h(1fr) ```cpp #include <memory>```
+#v(-0.25em)
 #definition[`new (<location>) <type> <initializer>`]
 
 #grid(
   columns: (1.9fr, 1fr),
   [
-    Used for placing elements on the heap in the location of a deleted element.
+    Used for placing elements on the heap in the _location of a deleted element_.
     Does _not_ allocate new memory #hinweis[(Undefined Behavior)]!
     The memory of `<location>` needs to be suitable for construction of a new object and any element there
-    _must be destroyed before_. Calls the Constructor for creating the object at the given location and returns
+    _must be destroyed before_. Calls the constructor for creating the object at the given location and returns
     the memory location. Better use `std::construct_at()`.
   ],
   [
@@ -895,29 +926,30 @@ auto createCorners(int x, int y) -> Point* {
 == Memory Deallocation with delete
 #definition[`delete <pointer>`]
 
-Deallocates the memory of a single object pointed to by the `<pointer>`. Calls the Destructor of the destroyed type.
+Deallocates the memory of a single object pointed to by the `<pointer>`. Calls the destructor of the destroyed type.
 `delete nullptr` does nothing. _Deleting the same object twice is Undefined Behavior!_
 
 ```cpp
 struct Point{ Point(int x, int y) : x{x}, y{y}{} int x, y; };
 auto funWithPoint(int x, int y) -> void {
-  Point * pp = new Point{x,y};
+  Point * pp = new Point{x,y}; // Member access here with "pp->"
   delete pp; // calls destructor and releases memory
 }
 ```
 
 === Placement delete
-Does not exist, but a destructor can be called explicitly.
+Does not exist, but a destructor can be called explicitly, like any other member function.
 #definition[#no-ligature[`S * ptr = ...; ptr->~S();`]]
 
 Destroys the object, but does _not_ free its memory. Called like any other member function.
-Better use `std::destroy_at(ptr)`. Use this for non-default constructible types.
+Better use `std::destroy_at(ptr)`. Useful for non-default constructible types.
 
 === Array Memory Deallocation with delete[]
 #definition[``` delete[] <pointer-to-array>```]
 
-Deallocates the memory of an array pointed to by the `<pointer-to-array>`. Calls the Destructor of the destroyed objects.
-Also deletes _multidimensional arrays_. Not necessary to know exact amount of elements in the array.
+Deallocates the memory of an array pointed to by the `<pointer-to-array>`.
+Calls the destructor of the destroyed objects inside the array.
+Also deletes _multidimensional arrays_. It is not necessary to know the exact amount of elements in the array.
 Undefined behavior on non-array types.\
 ```cpp Point *arr = new Point[2]{{0, 0}, {3, 2}}; /* do stuff */ delete[] arr;```
 
@@ -928,46 +960,44 @@ To create arrays of NDC types, allocate the plain memory and initialize it later
 ```cpp
 auto memory = std::make_unique<std::byte[]>(sizeof(Point) * 2 /* Array size */);
 auto location = reinterpret_cast<Point*>(memory.get()); // Address of first element
-std::construct_at(location, 1, 2); // Equivalent to arr[0] = Point{1, 2}
+std::construct_at(location, 1, 2); // Equivalent to arr[0] = Point{1, 2} on regular types
 auto value = elementAt(memory.get(), 0); // Access value via helper function
 std::destroy_at(location);
 
 auto elementAt(std::byte* memory, size_t index) -> Point& { // helper function
-  return reinterpret_cast<Point*>(memory)[index];
+  return reinterpret_cast<Point*>(memory)[index]; // dereferences implicitly
 }
 ```
-Don't use an element if it is uninitialized and destroy them before the memory is deallocated.
-
-Use a `std::byte` array as memory for NDC Elements.
+Don't use an element if it is uninitialized. Destroy all elements before the memory is deallocated.\
+Use a `std::byte` array as memory for NDC Elements:
 - *Static:* ```cpp std::array<std::byte, no_of_bytes> values_memory;``` #hinweis[(on stack, size known at compile-time)]
 - *Dynamic:* ```cpp std::unique_ptr<std::byte[]> values_memory;``` #hinweis[(on heap, size known at run-time)]
 
-== Class-Specific Overloading of operator new/delete
+== Class-Specific Overloading of new/delete operators
 Overloading `new` and `delete` for a class can inhibit heap allocation. This can be used to provide efficient allocation.
 Is useful with a memory pool for small instances or if thread-local pools are used.
 Can log or limit number of heap-allocated instances. _But in general, not advisable_.
 
 ```cpp
 struct not_on_heap { // Prevents heap allocation of this class
-  static auto operator new(std::size_t sz) -> void * { throw std::bad_alloc{};}
-  static auto operator new[](std::size_t sz) -> void * { throw std::bad_alloc{};}
+  static auto operator new(std::size_t sz) -> void * { throw std::bad_alloc{}; }
+  static auto operator new[](std::size_t sz) -> void * { throw std::bad_alloc{}; }
   static auto operator delete(void *ptr) -> void noexcept { /* do nothing */ }
-  static auto operator delete[](void *ptr) -> void noexcept { /* do nothing */ }
-};
+  static auto operator delete[](void *ptr) -> void noexcept { /* do nothing */ } };
 ```
 
 == Reading Declarations
-- Declarations are read _starting by the declarator_ (name)
-- First _read to the right_ until a _closing parenthesis_ is encountered
-- Second _read to the left_ until an _opening parenthesis_ is encountered
-- Third _jump out of the parentheses_ and start over
++ Declarations are read _starting by the declarator_ (name)
++ _Read to the right_ until a _closing parenthesis_ is encountered
++ _Read to the left_ until an _opening parenthesis_ is encountered
++ _Jump out of the parentheses_ and start over
 
 *Specifiers right to the declarator:*
 Array Declarator #hinweis[(`[]`)] and Function Parameter List #hinweis[(`(<parameter declarations>)`)]\
 *Specifiers left to the declarator:*
 References #hinweis[(`&&`, `&`)], Pointers #hinweis[(`*`)] and Types #hinweis[(`int`)]\
 *`const`:*
-Applies to its left neighbor, if there is no left neighbor, it applies to its right neighbor.\
+Applies to its left neighbor, if there is no left neighbor, it applies to its right neighbor:\
 ```cpp const int i; int const i;```
 Should always be written to the right of the type to avoid surprises #hinweis[(i.e. with aliases)].
 
@@ -981,11 +1011,12 @@ to #tcolor("dunkelblau")[arrays of 5 elements of pointers] to #tcolor("rot")[`co
 ```cpp int (* f(int(*)(int))) (int); // [7]int ([3]* [1]f ([5]int ([2]*)([4]int))) ([6]int)```\
 `f` #hinweis[[1]] is a function that takes a pointer to a function as argument #hinweis[[`2`]]
 and returns a pointer to a function #hinweis[[`3`]].\
-The function in the argument takes an `int` as argument #hinweis[([`4`])] and returns an int #hinweis[[`5`]].
+The function in the argument takes an `int` as argument #hinweis[[`4`]] and returns an int #hinweis[[`5`]].
 The returned function takes an `int` as argument #hinweis[[`6`]] and returns an `int` #hinweis[[`7`]].
 Always use type aliases on cases like this!
 
 == Resource Management with RAII <RAII>
+#hinweis[#cppr("language/raii")[CPPReference: RAII]]\
 _Resource Acquisition Is Initialization_ is an alternative to allocating and deallocating a resource explicitly.
 Wraps allocation and deallocation in a class, uses regular constructor/destructor. Cleaned up at end of scope.
 
@@ -994,9 +1025,9 @@ Wraps allocation and deallocation in a class, uses regular constructor/destructo
   #cppr("memory/unique_ptr")[CPPReference: std::unique_ptr],
   #cppr("memory/unique_ptr/make_unique")[CPPReference: std::make_unique]
 ]\
-```cpp std::unique_ptr<char> cPtr = std::make_unique<char>('*');``` \
-Wraps a plain pointer, has zero runtime overhead. A custom deleter could be supplied if required.
+A unique pointer wraps a plain pointer, has zero runtime overhead. A custom deleter could be supplied if required.
 Always use `make_unique` for creation. Can create unbound arrays, but not fixed size arrays.
+```cpp std::unique_ptr<char> cPtr = std::make_unique<char>('*');``` \
 
 === Container Member Function `emplace`
 #hinweis[
@@ -1012,9 +1043,10 @@ Constructs elements directly in a container, more efficient than moving them. No
 == Tags for Dispatching
 #hinweis[#cppr("iterator/iterator_tags")[CPPReference: `std::..._iterator_tag`]]\
 If the _same operation_ can be implemented more/less efficiently depending on the capabilities of the argument,
-_tags can be used to find the "best" implementation_.\
+_tags can be used to find the "best" implementation_.
 Tags are used to _mark capabilities_ of associated types. They do not contain any members.
-#v(-0.5em)
+In the example, different spaceships have different means of travel:
+#v(-0.25em)
 ```cpp
 // provides travelThroughSpace(), the base functionality
 struct SpaceDriveTag{};
@@ -1030,7 +1062,7 @@ template <typename Spaceship>
 auto travelToDispatched(Galaxy destination, Spaceship& ship, SubspaceTag) -> void {
   ship.travelThroughHyperspace(destination); // for Spaceships with SubspaceTag
 }
-template <typename Spaceship>
+template <typename Spaceship> // The public API function, tags aren't publicly visible
 auto travelTo(Galaxy destination, Spaceship& ship) -> void {
   typename SpaceShipTraits<Spaceship>::Drive drive{}; // get the Spaceship's drive tag
   travelToDispatched(destination, ship, drive); // call overloaded function
@@ -1038,8 +1070,10 @@ auto travelTo(Galaxy destination, Spaceship& ship) -> void {
 ```
 
 == Iterators
+#hinweis[#cppr("iterator")[CPPReference: Iterator library], #cppr("iterator/iterator_tags")[CPPReference: Iterator tags]]\
 Different algorithms require different strengths of iterators.
-Iterators capabilities can be determined at compile time with tag types.
+Iterators capabilities can be determined at compile time with _iterator tag types_
+#hinweis[(`std::output_iterator_tag`, `std::input_iterator_tag` etc.)].
 - *OutputIterator:* Write results #hinweis[(to console, file etc.)], without specifying an end #hinweis[(used on `std::ostream`)].\
   `operator *` returns an _lvalue reference_ for assignment of the value.
 - *InputIterator:* Read sequence once #hinweis[(used on `std::istream`)].\
@@ -1077,15 +1111,16 @@ template <typename _Tp> struct iterator_traits<Tp*> { /* Provide regular iter us
 ```
 
 === Problems with the Stream Input Iterator
+#v(-0.25em)
 ==== Reference Member and Default Constructor
 When implementing a input iterator, we need to be able to create an `EOF` iterator.
 This dirty hack works, but the global variable to initialize the reference in an anonymous namespace is bad for multi-threading.
 
 ```cpp
-namespace { // global variable to initialize the reference in an empty namespace
+namespace { // global variable to initialize the reference in an anonymous namespace
   std::istringstream empty{}; // pseudo default
 }
-IntInputter::IntInputter() : input { empty }
+IntInputter::IntInputter() : input { empty } // Reference empty stream, auto initialized
   // guarantee the empty stream is !good()
   input.clear(std::ios_base::eofbit); // mark empty stream as EOF
 }
@@ -1095,9 +1130,8 @@ IntInputter::IntInputter() : input { empty }
 ```cpp
 // Dereferencing with * reads the value from the input
 auto IntInputter::operator*() -> IntInputter::value_type {
-  value_type value{};
-  input >> value;
-  return value; }
+  value_type value{}; input >> value; return value;
+}
 // Stream iter comparisons only make sense for testing if they can still be read from
 auto IntInputter::operator==(const IntInputter & other) const -> bool {
   return !input.good() && !other.input.good(); }
@@ -1161,7 +1195,6 @@ Change signature to ```cpp struct iterator_base : boost::operators_impl::random_
 
 = Advanced Templates
 #grid(
-  columns: (1fr, 1fr),
   [
     *Pros of static polymorphism*
     - Happens at compile-time
@@ -1171,23 +1204,24 @@ Change signature to ```cpp struct iterator_base : boost::operators_impl::random_
   [
     *Cons of static polymorphism*
     - Longer compile-times
-    - Template code has to be known when used #hinweis[(Body needs to be in HPP file)]
+    - Template code has to be known when used\ #hinweis[(Body needs to be in HPP file)]
     - Larger binary size #hinweis[(copy of the used parts for each template instance)]
   ],
 )
 
-A polymorphic call of a _virtual function_ #hinweis[(inheritance overloading)] requires lookup of the target function.
-_Non-virtual calls_ #hinweis[(template overloading)] directly call the target function. This is _more efficient_.
+A polymorphic call of a _virtual function_ #hinweis[(inheritance overloading)] requires lookup of the
+target function in a VTable. _Non-virtual calls_ #hinweis[(template overloading)] directly call the target function.
+_More efficient_, but increases binary size.
 
 == SFINAE (Substitution Failure is Not An Error)
-#hinweis[#cppr("language/sfinae")[CPPReference: SFINAE] \ ]
-Is used to eliminate overload candidates by substituting return type and parameters.
-During overload resolution the template parameters in a template declaration #hinweis[(i.e. `T`)]
-are substituted with the deduced types #hinweis[(i.e. `int`)].
-This may result in template instances that cannot be compiled #hinweis[(i.e. calling a member function on a value type)].
+#hinweis[#cppr("language/sfinae")[CPPReference: SFINAE]]\
+Used to _eliminate overload candidates_ by substituting return type and parameters.
+During overload resolution the template parameters in a template declaration #hinweis[(e.g. `T`)]
+are substituted with the deduced types #hinweis[(e.g. `int`)].
+This may result in template instances that cannot be compiled #hinweis[(e.g. calling a member function on a value type)].
 If the substitution of template parameter fails, that overload candidate is _discarded_.
 
-`decltype(<return-expr>)` as return type checks if the overload candidate would work, but this approach is infeasible,
+`decltype(<return-expr>)` as return type checks if the overload candidate would work, but this approach is _infeasible_,
 because functions can be `void` and it's not elegant for complex bodies.
 
 === Type traits
@@ -1202,8 +1236,8 @@ Usually available in a `_v` #hinweis[(returns the `bool` result)] and non-`_v` v
 ==== Example: `std::is_class`
 #hinweis[#cppr("types/is_class")[CPPReference: `std::is_class`]]
 ```cpp
-std::is_class<S>::value;   std::is_class_v<S>;   // both true
-std::is_class<int>::value; std::is_class_v<int>; // both false
+std::is_class<S>::value;     std::is_class_v<S>;   // both true
+std::is_class<int>::value;   std::is_class_v<int>; // both false
 ```
 ==== `std::enable_if` / `std::enable_if_t`
 #hinweis[#cppr("types/enable_if")[CPPReference: `std::enable_if`]]\
@@ -1215,18 +1249,20 @@ auto main() -> int {
   std::enable_if_t<true, int> i; // int
   std::enable_if_t<false, int> error; } // no type, compiler error
 ```
-`std::enable_if` can be applied at different places #hinweis[(marked with "[]", only one needs to be used)]:
+`std::enable_if` can be applied at different places in the signature #hinweis[(marked with "[]", only one needs to be used)]:
 ```cpp
 template <typename T, [typename = enable_if_t<is_class_v<T>, void>]>
-auto increment([enable_if_t<is_class_v<T>, void>] value) // impairs type deduction
+auto increment([enable_if_t<is_class_v<T>, void>] value) // impairs type deduction!
   -> [enable_if_t<is_class_v<T>, T>] {
   return value.increment();
 }
 ```
+#colbreak()
 
 == Template Parameter Constraints and Concepts
 #hinweis[#cppr("language/constraints")[CPPReference: Constraints and Concepts]]\
-Provide a means to _specify_ the _characteristics of a type_ in template context. Better error messages, more expressive SFINAE.
+Provide a means to _specify_ the _characteristics of a type_ in template context.
+Cleaner syntax than using `enable_if_t` within the regular signature, better error messages, more expressive SFINAE.
 
 === Keyword `requires`
 Allow constraining template parameters. `requires` is followed by a compile-time constant boolean expression.
@@ -1245,7 +1281,7 @@ auto function(T argument) -> void requires std::is_class_v<T> /* or here */ { ..
   requires ($parameter-list$) { /* sequence of requirements */ }
   ```
 ]
-
+#v(-0.25em)
 ```cpp
 template <typename T>
 requires requires (T const v) { v.increment(); } // compiles if v has a increment function
@@ -1253,25 +1289,26 @@ auto increment(T value) -> T { return value.increment(); }
 ```
 
 ==== Type Requirements
-Check whether a type exists. Starts with `typename` keyword. Useful for nested types like in Bounded Buffer
+Check whether a type exists. Starts with `typename` keyword. Useful for nested types like in Bounded Buffer.
 #definition[
   ```cpp requires { typename $type$ }```
 ]
-
+#v(-0.25em)
 ```cpp
-requires { typename BoundedBuffer<int>::value_type; }
+requires { typename BoundedBuffer<int>::size_type; }
 ```
 
 ==== Compound Requirements
-Check whether an expression is valid and can check constraints on the expression's type.
-The return-type-requirement is optional. Needs to be a valid type constraint, regular types can't be used.
+Check whether an expression is valid and validates constraints on the expression's type.
+The return-type-requirement is optional. Needs to be a valid type constraint #hinweis[(see @concepts)],
+regular types can't be used.
 
 #definition[
   ```cpp
   requires (T v) { { $expression$ } -> $type-constraint$; }
   ```
 ]
-
+#v(-0.25em)
 ```cpp
 template <typename T> // We can't use T as return type in requires, it is not a constraint
 requires requires (T const v) { v.increment() } -> std::same_as<T>; }
@@ -1279,8 +1316,8 @@ auto increment(T value) -> T { return value.increment(); }
 ```
 
 === Keyword `concept`
-Specifies a named type requirement. Conjunctions #hinweis[(&&)] and disjunctions #hinweis[(||)] can be used to
-combine constraints #hinweis[(i.e. ```cpp requires std::integral<T> || std::floating_point<T>```)].
+Gives a type requirement a name to reuse it somewhere else. Conjunctions #hinweis[(&&)] and disjunctions #hinweis[(||)]
+can be used to combine constraints #hinweis[(e.g. ```cpp requires std::integral<T> || std::floating_point<T>```)].
 
 ```cpp
 template <typename T>
@@ -1295,17 +1332,17 @@ auto increment(T value) -> T { return value.increment(); }
 ```
 
 === Abbreviated Function Templates
-`auto` can be used as parameter type instead of a template declaration.
+`auto` can be used as parameter type instead of a template declaration. _Terse Syntax_ shortens the signature.
 
 ```cpp
 template <Incrementable T>
 auto increment(T value) -> T { return value.increment(); }
-// is equivalent to Terse Syntax
+// This long form above is equivalent to the Terse Syntax below
 auto increment(Incrementable auto value) -> T { return value.increment() }:
 ```
 If there are two `auto` arguments, two template typenames `T1`, `T2` get created.
-
-=== STL Concepts
+#v(-0.25em)
+=== STL Concepts <concepts>
 #hinweis[#cppr("concepts")[CPPReference: Concepts library]] #h(1fr) ```cpp #include <concepts>```\
 The STL has predefined constraints:
 _`std::equality_comparable`_ #hinweis[(can type be `==`/`!=` compared?)]
@@ -1327,30 +1364,35 @@ These expressions always need to be defined at compile-time.
 - `noexcept` expressions #hinweis[(```cpp Blob(Blob &&) noexcept(true);```)]
 
 == constexpr / constinit
+#hinweis[
+  #cppr("language/constexpr")[CPPReference: `constexpr` specifier],
+  #cppr("language/constinit")[CPPReference: `constinit` specifier]
+]\
 _static `const` variables_ in namespace scope of built-in types initialized with a constant expression are usually put
-into ROMable memory, if at all. Allowed in constant expression context. No complicated computations, no guarantee
-to be done at compile-time.
+into ROMable memory, if at all. Allowed in constant expression context #hinweis[(e.g. index calculation)].
+No complicated computations, no guarantee to be done at compile-time.
 
 _`constexpr`_ / _`constinit`_ Variables are _evaluated at compile-time_.
 They are initialized by a constant expression and _require a literal type_ #hinweis[(primitive data type without heap allocation)].
 They can be used in _constant expression contexts_.
 Possible contexts are local scope, namespace scope and `static` data members.
 - _`constexpr`_ variables are const, read only at run-time
-- _`constinit`_ variables are non-const. They need to be initialized at compile-time, but can be changed at run-time.
+- _`constinit`_ variables are non-const. Need to be initialized at compile-time, but can be changed at run-time.
 
+#v(-0.25em)
 === `constexpr` Functions
+Functions that can be ran during compile-time, but are also usable in non-`constexpr` contexts #hinweis[(during runtime)]
 - Can have _local variables of literal type_. The variables must be initialized before usage.
 - Can use loops, recursion, arrays, references, branches
 - Can contain branches that rely on _run-time only features_, if branch is not executed during compile-time computations
   #hinweis[(e.g. `throw`. Compilation error if `throw` is reached while compiling.)]
 - Can _only call `constexpr` functions_.
-- Are usable in `constexpr` and non-`constexpr` contexts #hinweis[(during runtime)]
 - Can allocate dynamic memory that is cleaned up by the end of the compilation #hinweis[(since C++20)]
 - Can be virtual member functions #hinweis[(since C++20)]
 
 #v(-0.35em)
 ```cpp
-constexpr auto factorial(unsigned n) -> unsigned { /* needs to have a body */ }
+constexpr auto factorial(unsigned n) -> unsigned { /* needs to have a body! */ }
 ```
 
 === `consteval` Functions
@@ -1410,7 +1452,7 @@ auto main() -> int {
 
 === Compile-Time Computation with Variable Templates
 #hinweis[(for Class Template see slides page 25)\ ]
-Variable templates can be `constexpr`/`constinit` and defined recursively. _Usage:_ Template-ID
+Variable templates can be `constexpr`/`constinit` and can be defined recursively. _Usage:_ Template-ID
 
 ```cpp
 template <size_t N>
@@ -1430,7 +1472,7 @@ The can be used as types of `constexpr` variables and in `constexpr` functions.
 #definition[`operator"" _UDLSuffix()"`]
 
 Allows integer, floating-point, character, and string literals to produce objects of user-defined type by defining
-a user-defined suffix. The suffix must start with an underscore. It allows to add dimension, conversion, etc.
+a user-defined suffix #hinweis[(e.g. `_kph`)]. The suffix must start with an underscore. It allows to add dimension, conversion, etc.
 If possible, define UDL operator functions as `constexpr.`
 Usually a _conversion function_ like `safeToDouble()` and a _conversion operator_ is needed.
 _Rule:_ put overloaded UDL operators that belong together in a separate namespace.
@@ -1454,7 +1496,7 @@ static constexpr inline auto safeToDouble(long double value) -> double {
 
 struct Speed {
   constexpr explicit Speed(double value) : value{value} {};
-  constexpr explicit operator double() const { return value; } // conversion to double
+  constexpr explicit operator double() const { return value; } // convert Speed -> double
   auto constexpr operator +(arithmetic auto rhs) -> decltype(rhs) { return value + rhs }
 private:
   double value{};
@@ -1467,6 +1509,10 @@ auto constexpr operator +(arithmetic auto lhs, Speed rhs) -> decltype(lhs)
 `(char const *, size_t len) -> std::string` for string literals, `char const *` for a raw UDL operator
 #hinweis[(i.e. to convert ints and floats to string, is not `constexpr`)].
 
+*Standard Literal Suffixes:*
+Do not have leading underscore: `std::string` #hinweis[(s)], `std::complex` #hinweis[(i, il, if)],
+`std::chrono::duration` #hinweis[(ns, us, ms, s, min, h)]
+
 === Template UDL Operator
 #definition[
   ```cpp
@@ -1478,10 +1524,6 @@ auto constexpr operator +(arithmetic auto lhs, Speed rhs) -> decltype(lhs)
 Has an empty parameter list and a variadic template parameter. Characters of the literal are template arguments.
 Often used for interpreting individual characters. Since C++20, the template UDL operator works with string literals as well
 #hinweis[(example and compile-time steps in slides on page 42 - 44)].
-
-*Standard Literal Suffixes:*
-Do not have leading underscore: `std::string` #hinweis[(s)], `std::complex` #hinweis[(i, il, if)],
-`std::chrono::duration` #hinweis[(ns, us, ms, s, min, h)]
 
 == Preprocessor
 `hello.cpp -> preprocessor -> hello.i -> compiler -> hello.o -> linker -> hello` #hinweis[(executable program)]
@@ -1532,13 +1574,14 @@ _`pthreads`_ is legacy. No portability guarantee.
 #hinweis[#cppr("thread/thread")[CPPReference: `std::thread`]] #h(1fr) ```cpp #include <thread>```\
 
 ```cpp
-auto main() -> int { std::thread greeter { [] { /*lambda*/ } }; greeter.join(); }
+auto main() -> int { std::thread greeter { [] { /* lambda */ } }; greeter.join(); }
 ```
 
-A new thread is created and started automatically. Creates a new execution context, `join()` waits for the thread to finish.
+A new thread is created and started automatically. Creates a new execution context.
+_`join()`_ waits for the thread to finish, while _`detach()`_ lets threads run in the background.
 Besides _lambdas_, _functions_ or _functor objects_ can also be executed in a thread.
 The _return value_ of the function is _ignored_. Threads are _default-constructible_ and _moveable_.
-_Caution_: Program terminates if thread gets destructed without calling `join()` before!
+_Caution_: Program terminates if thread gets destructed without calling `join()` or `detach()` before!
 
 ```cpp
 struct Functor {
@@ -1554,10 +1597,10 @@ auto main() -> int {
 *Streams:*
 Using global streams does not create data races, but sequencing of characters could be mixed.
 
-*_`std::this_thread`_ helpers:*
+*`std::this_thread` helpers:*
 _`get_id()`_ #hinweis[(An ID of the underlying OS thread)],
-_`sleep_for(duration)`_/_`sleep_until(time_point)`_ #hinweis[(Suspends thread for/until time)],
-_`yield()`_ #hinweis[(Allows OS to schedule another thread)].
+_`yield()`_ #hinweis[(Allows OS to schedule another thread)],
+_`sleep_for(duration)`_/_`sleep_until(time_point)`_ #hinweis[(Suspends thread for/until time)]
 
 === Passing arguments to a `std::thread`
 #definition[
@@ -1584,24 +1627,28 @@ or _`detach()`_ #hinweis[(detach from the main thread and run in the background)
 == `std::jthread`
 #hinweis[#cppr("thread/jthread")[CPPReference: `std::jthread`]] #h(1fr) ```cpp #include <thread>```\
 RAII wrapper that automatically calls `join()`.
-Also supports external stop requests #hinweis[(Similar to Cancellation Token in C\#. `t.request_stop()` sends the request,
-with `stop_requested()` it can be checked if a stop request has been received)].
+Also supports external stop requests #hinweis[(Similar to C\#'s Cancellation Token. `t.request_stop()` sends the request,
+  while `stop_requested()` checks if a stop request has been received)].
 
 == Inter-thread Communication
 #hinweis[
   #cppr("thread/mutex")[CPPReference: `std::mutex`],
-  #cppr("thread/shared_mutex.html")[CPPReference `std::shared_mutex`]
-] #h(1fr) ```cpp #include <mutex>```\
+  #cppr("thread/shared_mutex")[CPPReference: `std::shared_mutex`],
+  #cppr("thread/timed_mutex")[CPPReference: `std::timed_mutex`]] #h(1fr) ```cpp #include <mutex>```\
+#hinweis[
+  #cppr("thread/recursive_mutex")[CPPReference: `std::recursive_mutex`],
+  #cppr("thread/recursive_timed_mutex")[CPPReference: `std::recursive_timed_mutex`]
+]\
 Communication happens with _mutable shared state_. _Problem:_ Data Race.
 _Solution:_ Locking the shared access or make access atomic.
 
 All _mutexes_ provide the following operations:
-- *Acquire:* `lock()` - blocking, `try_lock()` - non-blocking
-- *Release:* `unlock()` - non-blocking
+- _Acquire:_ `lock()`: blocking, `try_lock()`: non-blocking #hinweis[(returns `true` if all locks could be acquired, `false` no locks acquired)]
+- _Release:_ `unlock()`: non-blocking
 
-Two properties specify the capabilities:
-- *Recursive:* Allow multiple nested acquire operations of the same thread #hinweis[(prevents self-deadlock)]
-- *Timed:* Also provide timed acquire operations #hinweis[(`try_lock_for(duration), try_lock_until(time)`)]
+Two properties specify the capabilities. There is a mutex type for all four combinations #hinweis[(see CPPR links)]:
+- _Recursive:_ Allow multiple nested acquire operations of the same thread #hinweis[(prevents self-deadlock)]
+- _Timed:_ Also provide timed acquire operations #hinweis[(`try_lock_for(duration), try_lock_until(time)`)]
 
 _Reading operations don't need exclusive access_. Only concurrent writes need exclusive locking.
 Use `std::shared_mutex`/`std::shared_timed_mutex` with `lock_shared()` to _read with multiple threads_.
@@ -1623,8 +1670,8 @@ Usually you use a lock that manages the mutex:
 - _`std::unique_lock`_: Mutex wrapper that allows deferred and timed locking.
   Similar interface to timed mutex, allows explicit locking/unlocking. Unlocks when destructed.
 - _`std::shared_lock`_: Wrapper for shared mutexes. Allows explicit locking/unlocking, unlocks when destructed.
-- _`std::condition_variable`:_ Condition. Waits for the condition and then notifies a potential change.
-  Wait will go into sleep again if the actual condition has not been met yet.
+- _`std::condition_variable`:_ Similar to a Java Condition. Waits for the condition and then notifies a potential change.
+  `wait` will go into sleep again if the actual condition has not been met yet.
   #hinweis[(`wait(<mutex>, <predicate>), wait_for(), wait_until(), notify_one(), notify_all()`)]
 
 *Standard Containers and Concurrency:*
@@ -1639,7 +1686,7 @@ Every member function is mutually exclusive because of scoped locking pattern.
 _Strategized Lock Pattern:_ Template Parameter for mutex type.
 
 ```cpp
-template <typename T,
+template <typename T, // Strategized Lock Pattern: User can change mutex type
           typename MUTEX = std::mutex, typename CONDITION = std::condition_variable>
 struct threadsafe_queue {
   using guard = std::lock_guard<MUTEX>;
@@ -1695,11 +1742,11 @@ Future represents results that may be computed asynchronously. They allow us to 
 ...and then _get the result_
 - ```cpp get()```: blocks until available and returns the result value or throws
 
-Their destructor may wait for the result to become available.
+Their destructor may wait for the result to become available, unless they have no shared state.
 
 === `std::promise`
 #hinweis[#cppr("thread/promise")[CPPReference: `std::promise`]] #h(1fr) ```cpp #include <future>```\
-Promises are the origin of futures. They allow us to _obtain_ a future using `get_future()` and _publish_ results or errors
+Promises are one origin of futures. They allow us to _obtain_ a future using `get_future()` and _publish_ results or errors
 #hinweis[
   (```cpp set_result(<result_value>)``` -- set the associated future's result to `result_value`,
   ```cpp set_exception(<exception pointer>)``` -- set the associated future's exception)
@@ -1759,16 +1806,16 @@ The program contains two conflicting actions. Undefined Behavior!
 
 == Memory Model
 The C++ _Memory Model_ defines when the effect of an operation is visible to other threads and
-how and when operations might be reordered. The Memory orderings define when effects become visible.
-- _Sequentially-consistent_ #hinweis[(Same as code ordering and the default behavior)],
-- _Acquire/Release_ #hinweis[(Weaker guarantees than sequentially-consistent)],
-- _Consume_ #hinweis[(Discouraged, slightly weaker than acquire-release)] and
-- _Relaxed_ #hinweis[(No guarantees besides atomicity)].
+how and when operations might be reordered. The memory orderings define when effects become visible.
+- _Sequentially-consistent:_ Same as code ordering and the default behavior
+- _Acquire/Release:_ Weaker guarantees than sequentially-consistent
+- _Consume:_ Discouraged, slightly weaker than acquire-release
+- _Relaxed:_ No guarantees besides atomicity
 
 *Visibility of effects:* #hinweis[(if one thread modifies a variable, under what conditions is
 another thread guaranteed to see that modification?)]\
 _sequenced-before:_ #hinweis[(A comes before B within a single thread)],
-_synchronizes-with:_ #hinweis[(inter-thread sync, event that makes another thread see it, i.e. with Mutex)].
+_synchronizes-with:_ #hinweis[(inter-thread sync, event that makes another thread see it, e.g. with Mutex)].
 _happens-before:_ #hinweis[(A happens-before B if A is sequenced-before or synchronizes-with B)],
 
 Read/Writes in a single statement are "unsequenced": ```cpp std::cout << ++i << ++i; // output unknown```
@@ -1781,35 +1828,36 @@ Read/Writes in a single statement are "unsequenced": ```cpp std::cout << ++i << 
 ]
 #h(1fr) ```cpp #include <atomic>```\
 Template class to create atomic types. Atomics are guaranteed to be _data-race free_.
-There are several specializations in the standard library. The most basic type _`std::atomic_flag`_ is lock-free.
+There are several specializations in the standard library.
+The most basic type _`std::atomic_flag`_ is guaranteed to be lock-free.
 
 ```cpp
 auto outputWhenReady(std::atomic_flag & flag, std::ostream & out) -> void {
   // start critical section
-  while (flag.test_and_set() /* set flag to true and returns old value */) yield();
+  while (flag.test_and_set() /* set flag to true and returns old value */) { yield(); }
   out << "Here is thread: " << get_id() << std::endl;
   flag.clear(); // sets the flag to false
 } // end critical section
 
 auto main() -> int {
   std::atomic_flag flag { };
-  std::thread t { [&flag] { outputWhenReady(flag, std::cout);} };
+  std::thread t { [&flag] { outputWhenReady(flag, std::cout); } };
   outputWhenReady(flag, std::cout); t.join(); }
 ```
-When creating your own atomic type with `std::atomic<T>`, the atomic member operations are:
-- _`void store(T)`_ #hinweis[(set the new value)]
-- _`T load()`_ #hinweis[(get the current value)]
-- _`T exchange(T)`_ #hinweis[(set the new value and return the old one)]
-- _`bool compare_exchange_weak(T & expected, T desired)`_ #hinweis[(compare expected with current value,
-  if equal replace the current value with desired, otherwise replace expected with current value. May spuriously fail)]
-- _`bool compare_exchange_strong(T & expected, T desired)`_ #hinweis[(cannot fail spuriously, but slower)]
+When creating your _own atomic type_ with `std::atomic<T>`, the atomic member operations are:
+- _`void store(T)`:_ Set the new value
+- _`T load()`:_ Get the current value
+- _`T exchange(T)`:_ Set the new value and return the old one
+- _`bool compare_exchange_weak(T & expected, T desired)`:_ Compare `expected` with current value,
+  if equal replace the current value with `desired`, otherwise replace `expected` with current value. May spuriously fail!
+- _`bool compare_exchange_strong(T & expected, T desired)`:_ Cannot fail spuriously, but slower
 
 *Applying Memory Orders:*
 All atomic operations take an additional argument to specify the memory order #hinweis[(Type `std::memory_order`)].
-e.g. ```cpp flag.clear(std::memory_order::seq_cst);```
+*Example:* ```cpp flag.clear(std::memory_order::seq_cst);``` #hinweis[(`clear` may not be reordered)]
 
 - *Sequential Consistency (`seq_cst`):* Global execution order of operations. Every thread observes the same order.
-  This is the Default behavior. The latest modification will be available to a read operation.
+  This is the default behavior. The latest modification will be available to a read operation.
 - *Acquire (`acquire`):* No reads or writes in the current thread can be reordered _before_ this load.
   All writes in other threads that _release the same atomic_ are visible in the current thread.
   _Not guaranteed_ to _see latest write_ (Half Fence), but ordering is consistent.
@@ -1852,6 +1900,7 @@ _Sockets_ are an abstraction of endpoints for communication.
 - *UDP Sockets* are unreliable, datagram-oriented and do not require a connection setup.
 
 *Connection-Oriented Communication Pattern using Sockets:*
+#v(-0.5em)
 #grid(
   columns: (1.05fr, 1fr),
   align: horizon,
@@ -1869,19 +1918,19 @@ _Sockets_ are an abstraction of endpoints for communication.
 )
 
 == Data Sources / Buffers
-Transmit/Receive functions need _sources_ or _destination_ buffers. The ASIO library doesn't manage memory!\
+Transmit/Receive functions need _source_/_destination_ buffers. The ASIO library doesn't manage your memory!\
 *Fixed Size Buffers:* `asio::buffer()`.
 Must provide at least as much memory as will be read. Can use several standard containers as a backend.
 Pointer + Size combinations are available.\
 *Dynamically Sized Buffers:* `asio::dynamic_buffer()`
-Use if you do not know the required space and with `std::string` and `std::vector`.\
+Use if you do not know the required space. Can work with `std::string` and `std::vector`.\
 *Streambuf Buffers:* `asio::streambuf`.
 Works with `std::istream` and `std::ostream`
 
 == ASIO Library
 #hinweis[#cppr("experimental/networking")[CPPReference: Extensions for networking]]
 #h(1fr) ```cpp #include <asio.hpp>``` #hinweis[(if installed)]\
-#v(-0.5em)
+#v(-0.75em)
 
 === Example: Synchronous TCP Client Connection with ASIO
 *Socket:*
@@ -1945,7 +1994,7 @@ auto readLength = asio::read(socket, asio::buffer(reply.data(), bufferSize), err
 The destructor cancels all pending operations and destroys the object.
 
 ```cpp
-socket.shutdown(asio::ip::tcp::socket::shutdown:both); // close read and write end
+socket.shutdown(asio::ip::tcp::socket::shutdown_both); // close read and write end
 socket.close();
 ```
 
@@ -1956,7 +2005,7 @@ Is bound to a given local end point and starts listening automatically.
 
 ```cpp
 asio::io_context context{};
-asio::ip::tcp::endpoint localEndpoint{asio::ip::tcp::v4(), port}; //uses an available IPv4
+asio::ip::tcp::endpoint localEndpoint{asio::ip::tcp::v4(), port};//uses any available IPv4
 asio::ip::tcp::acceptor acceptor{context, localEndpoint};
 ```
 
@@ -1983,7 +2032,7 @@ Most OS support asynchronous IO operations.
 + Still inside the `io_context::run()` the _completion handler_ is called to handle the _result_ of the asynchronous operation.
 
 === Asynchronous Read/Write on Sockets
-- _Async read operations:_ `asio::async_read`, `asio::async_read_until`, `asio::read_at` #hinweis[(certain position in buf.)]
+- _Async read operations:_ `asio::async_read`, `asio::async_read_until`, `asio::read_at` #hinweis[(certain position in buffer)]
 - _Async write operations:_ `asio::async_write`, `asio::async_write_at`
 
 They return immediately. The operation is processed by the executor associated with the stream's `asio:io_context`.
@@ -2011,7 +2060,7 @@ The constructor creates the server. It initializes its acceptor with the given `
 It calls `accept()` for registering the accept handler and does not block.
 To use it, create an `io_context` and the `server`.
 The executor will run until no async operation is left thanks to `async_accept()`.
-It is important that the server lives as long as async operations on it are processed.
+It is important that _the server lives as long as async operations_ on it are processed.
 
 ```cpp
 struct Server { using tcp = asio::ip::tcp;
@@ -2040,7 +2089,7 @@ The constructor stores the socket with the client connection.
 _`start()`_ initializes the first async read, _`read()`_ invokes async reading. _`write()`_ invokes async writing.
 The fields store the data of the session. _`enable_shared_from_this`_ is needed because the session object
 would die at the end of the accept handler, therefore it needs to be allocated on the heap.
-The _handlers need to keep the object alive_ by pointing on it on the heap.
+The _handlers need to keep the object alive_ by pointing on it on the heap through their captured `self` pointer.
 If there is no pointer to the object left, it gets deleted.
 
 ```cpp
@@ -2050,12 +2099,12 @@ private:
   auto read() -> void; auto write(std::string data) -> void;
   asio::streambuf buffer{}; std::istream input{&buffer}; asio::ip::tcp::socket socket;
 };
-// Code in Accept handler
+// Code in Accept handler:
 auto session = std::make_shared<Session>(std::move(peer)); session->start();
 accept(); // if not called, only single connection possible
-// Code in Read handler
+// Code in Read handler:
 auto Session::read() -> void { auto readComplHandl = [self = shared_from_this()] /*...*/}
-// Code in Write handler
+// Code in Write handler:
 auto Session::write(std::string input) -> void {
   auto data = std::make_shared<std::string>(input);
   auto writeCompletionHandler = [self = shared_from_this(), data] /*...*/}
@@ -2122,19 +2171,20 @@ Throwing an exception while another exception is "in flight" in the same thread 
 
 === Safety Levels (from highest to lowest)
 - _`noexcept` aka `no-throw`:_ Will never throw an exception #hinweis[(and is always successful)].
-  Very hard to achieve, sometimes even impossible, e.g. memory allocation.
+  Very hard to achieve, sometimes even impossible, e.g. when dealing with memory allocation.
   #hinweis[(*Examples*: Swap, Move Constructor, Move Assignment Operator, `std::vector<T>::clear()`]
 - _Strong exception safety:_ Operation succeeds and doesn't throw, or nothing happens but an exception is thrown
   #hinweis[(transaction, compare DB transactions)]. Hard to achieve.
-  #hinweis[(*Examples*: Copy Constructor, Copy Assignment Operator (Copy-Swap Idiom))]
-- _Basic exception safety:_ Does not leak resources or garble internal data structures in case of an exception
-  #hinweis[(guarantees invariance)], but operations might be only half-done
-  #hinweis[(i.e. if copy throws, but internal members have not been adjusted yet)]
+  #hinweis[(*Examples*: Copy Constructor, Copy Assignment Operator implementing the Copy-Swap Idiom)]
+  #v(-0.5em)
   ```cpp
   auto push(value_type const & elem) -> void {
     value_type val{elem}; // might throw here due to copy operation failing
     tail_ = (tail_ + 1) % (capacity() + 1); elements_++; /*elements not yet changed*/}
   ```
+- _Basic exception safety:_ Does not leak resources or garble internal data structures in case of an exception
+  #hinweis[(guarantees invariance)], but operations might be only half-done
+  #hinweis[(i.e. if copy throws, but internal members have not been adjusted yet)]
 - _No guarantee:_ Often unintentional, but happens. Invalid or corrupted data when an exception is thrown.
 
 A function can only be as exception-safe as the weakest sub-function it calls!
@@ -2148,10 +2198,11 @@ A function can only be as exception-safe as the weakest sub-function it calls!
   [*No-Throw Guarantee*], cell-check, cell-check, cell-check,
 )
 
-#v(-0.5em)
+#v(-0.75em)
 === `noexcept` Keyword
 #hinweis[#cppr("language/noexcept_spec")[CPPReference: noexcept specifier]]\
-`noexcept` belongs to the function signature. You _cannot overload_ on `noexcept`.
+Tells the compiler that this function will never throw. `noexcept` belongs to the function signature.
+You _cannot overload_ on `noexcept`.
 _`noexcept(expression)`_ can be used to determine the _"noexceptiness"_ of an expression, without computing it.
 ```cpp noexcept(noexcept(f()))``` means "Outer function is `noexcept`, if function `f()` is also `noexcept`".
 
@@ -2179,7 +2230,8 @@ There are other helpers like `is_nothrow_...`:\
 
 === Wide and narrow contracts
 - _Wide Contract:_ A function that can handle all argument values of the given parameter types successfully.
-  It cannot fail and should be specified as `noexcept(true)`. `this`, global and external resources are also possible parameters.
+  It cannot fail and should be specified as `noexcept(true)`.
+  `this`, globals and external (heap) resources are also possible parameters.
 - _Narrow Contract:_ A function that has preconditions on its parameters, e.g. `int` parameter must not be negative.
   Even if not checked and no exception is thrown, those functions _should not be `noexcept`_.
   This allows later checking and throwing.
@@ -2187,7 +2239,8 @@ There are other helpers like `is_nothrow_...`:\
 == PImpl Idiom (Pointer to Implementation Idiom)
 #hinweis[#cppr("language/pimpl")[CPPReference: PImpl]]\
 *Opaque/Incomplete Types:* Name known #hinweis[(declared)], but not the content. Introduced by a forward declaration.
-Can be used for pointers and references, but it cannot dereference values or access members without a later definition.
+Can be used for pointers and references, but it cannot dereference values, access members or allocate memory
+without a later definition.
 
 ```cpp
 struct S; // Forward Declaration
@@ -2196,14 +2249,15 @@ struct S{}; // Definition
 auto main() -> int { S s{}; foo(s); /* s can now be used */ }
 ```
 *Problem:*
-Internal changes in a class' definition require clients to re-compile #hinweis[(e.g. changing a type of a private member variable)].
+Internal changes in a class' definition require clients to re-compile
+#hinweis[(e.g. changing a type of a private member variable)].
 *Solution:*
 Create a "Compilation Firewall": Allow changes to implementation without the need to recompile users.
 It can be used to shield client code from implementation changes, meaning you must not change header files
 your client relies upon.
 
 Put in the "exported" header file a class consisting of a "Pointer to Implementation" plus all public members.
-Basically place all public definition in the header file.
+The private members reside only within the pImpl class. Implement the member of the pImpl class as normal.
 
 With _`std::shared_ptr<class Impl>`_ we can use a minimal header and hide all details in the implementation `WizardImpl`.
 The `Wizard` class called from the header delegates all calls to `WizardImpl`.
@@ -2259,7 +2313,7 @@ The compiler can't move the destructor by himself.
     // WizardImpl.cpp
     class WizardImpl { /* ... */ };
     // ...
-    Wizard::~Wizard() = default;
+    Wizard::~Wizard() = default; // default dtor
     ```
     Because the default deleter of `std::unique_ptr` can't delete an incomplete type, we need to define
     the destructor explicitly.
@@ -2340,7 +2394,7 @@ char const *wizardName(cwizard w); // All member funcs take a wizard pointer as 
 - Pointers, including function pointers
 - Forward-declared structs
 - Unscoped Enums without class or base types
-- If using from C you must embrace it with `extern "C"` when compiling it with C++ #hinweis[(`extern "C" {}`)]
+- If using from C you must embrace it with `extern "C"` when compiling it with C++ #hinweis[(disables name mangling)]
 
 *Implementing the Opaque Wizard Type:*
 Wizard class must be implemented. To allow full C++ including templates, we need to use a "trampoline" class.
@@ -2369,8 +2423,8 @@ It wraps the actual Wizard implementation.
 )
 
 *Dealing with Exceptions:*
-You can't use references in C API, you must use pointers to pointers. In case of an error, allocate error value on the heap.
-You must provide a disposal function to clean up. Internally, you can use C++ types, but you should return `char const *`,
+You _can't use references in C API_, you must use pointers to pointers. In case of an error, allocate error value on the heap.
+You must provide a _disposal function_ to clean up. Internally, you can use C++ types, but you should return `char const *`,
 because the caller owns the object providing memory.\
 *Creating Error Messages from Exceptions:*
 Call the function body and catch expressions. Map them to an `Error` object, set the pointer pointed to by `out_error`.
@@ -2381,7 +2435,7 @@ But you can use a generic standard exception #hinweis[(`std::runtime_error`)]. T
 You could also use a _temporary object with throwing destructor_, but this is tricky because of possible leaking.
 
 #grid(
-  columns: (1fr, 1.8fr),
+  columns: (1fr, 1.3fr),
   [
     ```cpp
     // C++ Client API (Header Only)
@@ -2390,6 +2444,7 @@ You could also use a _temporary object with throwing destructor_, but this is tr
         : opaque{error} {}
       ~ErrorRAII() {
         if (opaque) {
+          // Free, if no error
           error_dispose(opaque);
         }
       }
@@ -2403,8 +2458,10 @@ You could also use a _temporary object with throwing destructor_, but this is tr
     struct ThrowOnError{
       ThrowOnError() = default;
       ~ThrowOnError() noexcept(false) {
-        if (error.opaque) { throw std::runtime_error{error_message(error.opaque)};}
-      }
+        if (error.opaque) {
+          throw std::runtime_error{error_message(error.opaque)};
+        }
+      } // Implicit conversion into error
       operator error_t*() { return &error.opaque; }
     private:
       ErrorRAII error{nullptr};
@@ -2416,19 +2473,19 @@ You could also use a _temporary object with throwing destructor_, but this is tr
 ```cpp
 struct Wizard {
   Wizard(std::string const & who = "Rincewind")
-    : wiz {create_wizard(who.c_str(), ThrowOnError{})} {}
+    : wiz {create_wizard(who.c_str(), ThrowOnError{})} {} // Error thrown on destruction
     // C linkage trampoline
 };
 ```
 
-To complete `WizardClient.cpp`, call the C functions from `WizardClient.hpp` from global namespace #hinweis[(i.e. `::do_magic()`)].
+To complete `WizardClient.cpp`, call the C functions from `WizardClient.hpp` from _global namespace_ #hinweis[(i.e. `::do_magic()`)].
 Delete the copy constructor & assignment to prevent a double free.
 
 ```cpp
 struct Wizard {
   // ...
   auto doMagic(std::string, const &wish) -> std::string {
-    return ::do_magic(wiz, wish.c_str(), ThrowOnError{});
+    return ::do_magic(wiz, wish.c_str(), ThrowOnError{}); // call from global namespace
   }
 private:
   Wizard(Wizard const &) = delete;
@@ -2454,9 +2511,11 @@ otherwise in the system default library search path. Fallback is the class path.
 
 === Interfacing with Functions
 ```cpp
-extern "C" { void printInt(int number); }
+extern "C" { void printInt(int number); } // gets loaded by the Java function above
 ```
 Function names and parameter types _must match_. However, the types are _not_ validated. Parameter names don't matter.
+
+#colbreak()
 
 === Interfacing with Plain `structs`
 #hinweis[(see example on slides starting at page 34)]\
@@ -2473,6 +2532,12 @@ Either provide a dispose method on your Java type or implement `AutoClosable` an
 Use _`IntByReference`_ to retrieve the size of the buffer. Requires that the API supports it.
 _`getByteArray()`_ copies the data from the buffer.
 Make sure to free the buffer either using an API `free...()` functions or `Native.free()` #hinweis[(tends to crash on windows)].
+
+== ABI Wrap-Up
+Library API/ABI can be tricky for third-party user if the source code isn't available.
+But recompiles on changes are still annoying.
+pImpl helps keeping the API stable, but is hard to use with heavily templated code.
+ABI stability is even more important when delivering shared libraries. Hourglass allows shielding C++ clients.
 
 
 = Build Systems
@@ -2511,7 +2576,7 @@ other_target:
 ```
 
 - _Pros:_ Very generic, powerful pattern matching mechanism, builds only what is needed, when its needed
-- _Cons:_ Often platform-specific commands, need to specify how to do thins
+- _Cons:_ Often platform-specific commands, need to specify how to do things
 
 == Build Script Generators
 _Define what we want to achieve, not how to do it_. Work on a higher level, let the tool create the actual build configurations.
