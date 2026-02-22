@@ -1,4 +1,4 @@
-// Compiled with Typst 0.13.1
+// Compiled with Typst 0.14.2
 #import "../template_zusammenf.typ": *
 
 #show: project.with(
@@ -44,7 +44,7 @@ Aufgabenstellung verwendet werden. Es müssen nicht alle diese Fragen beantworte
       #hinweis[z.B. Fundorte- und Umstände, Aufbewahrung und Archivierung, spätere Veränderungen & Ergänzungen bei neueren Ausgaben]
 
       *Wer gilt als Produzent der Quelle? Welche weiteren Personen waren in der Produktion involviert?*\
-      #hinweis[z.B. Autor/Herausgeberfirma, Personen im Impressum. Evtl. Autor näher beschreiben. Achtung: Möglicher Bias!]
+      #hinweis[z.B. Autor/Herausgeberfirma, Personen im Impressum. Evtl. Autor näher beschreiben. Achtung: Möglicher Bias im Text!]
 
       *An wen richtete sich die Quelle und was war ihr Verwendungszweck?*\
       #hinweis[z.B. Informieren von Hardware-Enthusiasten]
@@ -75,7 +75,7 @@ Aufgabenstellung verwendet werden. Es müssen nicht alle diese Fragen beantworte
       #hinweis[z.B. Erwähnung eines Zeitungsartikel oder Zitat einer Quelle]
 
       *Gibt es Anleitungen zum Gebrauch in der Quelle selbst?*\
-      #hinweis[z.B. Vorwort]
+      #hinweis[z.B. Vorwort erklärt, wie Buch zu lesen ist]
 
       #colbreak()
 
@@ -119,9 +119,9 @@ Es sollte also mehr Text verfasst werden. Interpretationen mit _Textzitaten_ unt
   den aktuellen geschichtswissenschaftlichen Methoden.
 ]
 
-Gesellschaft und Technik sind nicht voneinander zu trennen. Aussagen über Technik werden von einem bestimmten
+_Gesellschaft und Technik sind nicht voneinander zu trennen._ Aussagen über Technik werden von einem bestimmten
 Ort aus gemacht, sind mit Interessen der Sprechenden verknüpft. Sie stehen in Konkurrenz zueinander und sind Teil
-eines Aushandlungsprozesses, an dessen Ende das für eine gewisse Zeit Akzeptable steht
+eines Aushandlungsprozesses, an dessen Ende _das für eine gewisse Zeit Akzeptable_ steht
 #hinweis[(nicht das Richtige, Wahre, Beste, Billigste oder Effizienteste)]. Der Konsens dafür muss erarbeitet werden
 und ist immer brüchig. Die Konsensbildung wird durch Pfadabhängigkeiten und Anschlussfähigkeiten eingeschränkt.
 
@@ -133,7 +133,7 @@ und ist immer brüchig. Die Konsensbildung wird durch Pfadabhängigkeiten und An
     == Bild vom Potsdamer Platz 1919
     Auf dem Bild finden sich alle Arten von Menschen in Bewegung: Angestellte, Geschäftsleute, Arbeitslose, Paare,
     Alte, Junge, Kinder und Flaneure. Menschen mit unterschiedlichen Zielen und einem minimalen, gemeinsamen Interesse,
-    dass der Verkehr nicht zum Erliegen kommt. Die Menschen sind inmitten der Technik: Fortbewegungsmittel sind Fahrräder,
+    dass der Verkehr nicht zum Erliegen kommt. Die _Menschen sind inmitten der Technik_: Fortbewegungsmittel sind Fahrräder,
     Droschken, Automobile, Pferdeomnibusse, aber keine Strassenbahnen und Busse, da diese Fahrer im Streik sind.
 
     Balance zwischen individueller Koordinationsleistung #hinweis[(jede Person bahnt ihren eigenen Weg)],
@@ -148,7 +148,7 @@ und ist immer brüchig. Die Konsensbildung wird durch Pfadabhängigkeiten und An
 
 
 Die Lösung dieses Chaos ist die 1924 eingeführte Verkehrsampel. Ein Polizist steuert diese von oben im Turm manuell.\
-Gesellschaftliche Regelung der Technik entsteht aus gesellschaftlichen Krisenmomenten: Die Ampel war wegen starkem
+_Gesellschaftliche Regelung der Technik_ entsteht aus gesellschaftlichen Krisenmomenten: Die Ampel war wegen starkem
 Anstieg an Autos nötig. Einschreibung von gesetzlichen Normen durch Technik soll Ordnung schaffen.
 
 == Die Oligarchen-Intellektuellen im Silicon Valley
@@ -169,6 +169,7 @@ politischen Agenden. Platformbesitz #hinweis[(Facebook, Twitter)] als neue Form 
 Tech-Eliten werden vom Spezialisten zum "Philosophenkönig" und haben eine Kombination aus ökonomischer Macht,
 intellektueller Deutungshoheit und Medienkontrolle inne. Öffentliche Debatten werden auf private Plattformen verlagert.
 Das Silicon Valley hatte seine Ursprünge in Gegenkultur #hinweis[(Hippie-Bewegung)] und Ingenieursidealismus.
+
 Dadurch stieg eine "technische Intelligenzija" mit kritischem Potenzial auf, sich zu einem oligarchischem Machtblock
 mit autoritären Tendenzen zu transformieren.
 
@@ -182,9 +183,10 @@ Existenz pluraler Gegenöffentlichkeit #hinweis[(alternative Plattformen, Bot-Fa
 Ist Morozovs Stil Analyse oder Polemik?
 
 === Verhältnis von Technik und Politik
-*Nach Morozov:* Technik ist nicht neutral, sondern hochgradig ideologisch aufgeladen.
-Technologisches Zukunftsentwürfe ersetzen politische Debatten.
-Politik wird durch Investitionen, Medienmacht und Propaganda ersetzt.
+*Nach Morozov:*
+- Technik ist nicht neutral, sondern hochgradig ideologisch aufgeladen.
+- Technologisches Zukunftsentwürfe ersetzen politische Debatten.
+- Politik wird durch Investitionen, Medienmacht und Propaganda ersetzt.
 
 Treffen Technik und Politik aufeinander wird entweder _neutrale Technik politisiert_ #hinweis[(Ampel wird zum politischen Streitpunkt)]
 oder _intressengeleitete Politik wird technisiert, um die Möglichkeiten zu steigern_.
@@ -194,10 +196,10 @@ Gegen beide Formen kann aber protestiert werden.
 
 = Energetische Weltbilder
 Energie ist die Fähigkeit eines Systems, Arbeit zu leisten, wobei die Arbeit unterschiedliche Formen annehmen kann:
-Primärenergie #hinweis[(fossile Energieträger wie Kohle, Erdöl, Erdgas, erneuerbare Energieträger wie Wasserkraft, Holz,
+_Primärenergie_ #hinweis[(fossile Energieträger wie Kohle, Erdöl, Erdgas, erneuerbare Energieträger wie Wasserkraft, Holz,
   Biogas, Wind, Sonnenenergie, Erdwärme sowie Kernenergie wie Uran)],
-Sekundärenergieträger #hinweis[(Koks, Benzin, Heizöl, Strom, Stadtgas...)]
-und Nutzenergie #hinweis[(Wärme, Licht, Kraft, chemisch gebundene Energie)].
+_Sekundärenergieträger_ #hinweis[(Koks, Benzin, Heizöl, Strom, Stadtgas...)]
+und _Nutzenergie_ #hinweis[(Wärme, Licht, Kraft, chemisch gebundene Energie)].
 
 Die Geschichte der Energie kann auf unterschiedliche Arten erzählt werden:
 - Als _Fortschritts und Innovationsgeschichte_ mit Chronologie von Energiearten und Technologien ihrer Produktion
@@ -211,9 +213,9 @@ Diese Geschichten müssen aber nicht immer übereinstimmen.
 == Energieutopien
 Die Elektrifizierung galt als sozialistisches Zukunftsprojekt. Lenins Leitidee:
 $ "Kommunismus" = "Sovietmacht" + "Elektrifizierung" $
-Der GOELRO-Plan war das erste zentrale Energieprogramm der Sowjetunion mit dem Ziel ganz Russland zu elektrifizieren
+Der _GOELRO-Plan_ war das erste zentrale Energieprogramm der Sowjetunion mit dem Ziel ganz Russland zu elektrifizieren
 als Symbol für Fortschritt und sozialistische Modernisierung. Marx & Engels waren ebenfalls begeistert von
-technischen Entwicklungen, v.a. der Elektrizität. Sie galt als Schlüssel zur Herrschaft des Menschen über die Natur.
+technischen Entwicklungen, vor allem der Elektrizität. Sie galt als Schlüssel zur Herrschaft des Menschen über die Natur.
 Technik wurde zum Mittel, um eine neue, sozialistische Gesellschaft zu erhalten.
 
 Die Wasserkraft diente unter "weisse Kohle" als Fortschrittsmetapher. Die Sowjetunion inszenierte sich als
@@ -235,8 +237,8 @@ Diese verkörpern die Sehnsüchte und Selbstverständlichkeiten einer Epoche und
 einer kulturellen Epoche dar.
 
 Geschichte ist nicht nur das, was "wirklich" ereignete und sich realisieren liess, sondern auch das, was nicht geschah
-oder umsetzen liess und deswegen nur in der Vorstellung als Traum oder Alptraum existierte.
-z.B. Idee durch Technikumgestaltung der Nation in der Sowjetunion.
+oder umsetzen liess und deswegen nur in der Vorstellung als Traum oder Alptraum existierte;
+beispielsweise die Idee durch Technikumgestaltung der Nation in der Sowjetunion.
 
 == Atlantropa
 Atlantropa war die Utopie eines gemeinsamen Subkontinents:
@@ -247,7 +249,7 @@ dem ersten Weltkrieg: Arbeitslosigkeit, Ressourcenknappheit und Kriegsgefahr.
 Die Ziele des Projekts waren:
 - Senkung des Mittelmeers bis zu 200m durch Staudämme
 - Neulandgewinnung auf den abgesenkten Mittelmeer #hinweis[(ca. 660'000 km#super[2], grösser als Frankreich & BeNeLux)]
-- Energieproduktion durch Wasserkraft #hinweis[(z.B. am Gibraltar-Staudamm 50'00 MW)]
+- Energieproduktion durch Wasserkraft #hinweis[(z.B. 50'000 MW am Gibraltar-Staudamm)]
 - Bewässerung Afrikas #hinweis[(Sahara & Kongo-Becken)]
 
 #grid(
@@ -318,7 +320,7 @@ und es braucht Kenntnis über die Quellenbestände, um Fragen formulieren zu kö
   traten beim Experiment in Zürich Wollishofen auf?
 ]
 *Wer spricht mit welchen Motiven und Wertungen?*\
-Der Migros Genossenschaftsbund #hinweis[(Management des Gesamtkonzerns, nicht geschrieben von Genossenschaftsbunds Zürich)]
+Der Migros Genossenschaftsbund #hinweis[(Management des Gesamtkonzerns, nicht geschrieben von Genossenschaftsbund Zürich)]
 wollte das Experiment der selbsttippenden Kunden weiterführen. Das Konzept der Selbstbedienung hatte negative Effekte
 #hinweis[(Wachstumsprobleme, das Management passte nicht mehr zu der Grösse)]. Die Vorteile der Selbstbedienung wurden
 durch Stau an der Kasse zunichte gemacht.
@@ -327,7 +329,7 @@ durch Stau an der Kasse zunichte gemacht.
 Stellungnahme des Migros-Genossenschafts-Bunds: Experiment geriet unter öffentlichen Druck (1966);
 Presse vermeldete Auflösung; Verteidigung des Experiments und Verkündung der Einführung von Kontrollen;
 Von der Presse kritisiertes international verfolgtes Projekt; Ruf der Migros als Rationalisierungsweltmeister im
-Detailhandel steht auf dem Spiel
+Detailhandel steht auf dem Spiel.
 
 *Wie ist die Quelle aufgebaut?*\
 Problembeschreibung; Beschreibung des Tests und der eingeführten Kontrollen aus Sicht der MGB;
@@ -364,12 +366,12 @@ innerbetrieblichen Rationalisierung dar. Die Migros unternahm verschiedene Ansä
 
 *Zielpublikum*\
 Quelle richtet sich an Management mit Entscheidungsmacht im Detailhandel. Es geht um Managementprobleme,
-nicht um Kundenprobleme. Kunden im Text stehen im Mittelpunkt #hinweis[("an geräumigen Tischen ... viel Zeit")].
+nicht um Kundenprobleme. Kunden stehen im Mittelpunkt des Textes #hinweis[("an geräumigen Tischen ... viel Zeit")].
 Experiment funktioniert nicht, Kunden sind aber nicht das Problem und nicht "kriminell" #hinweis[("ehrliche Kunden")].
 Ehrlichkeit der Kunden steht im Mittelpunkt, obwohl sie für Fehlbeträge verantwortlich sind.
 
 Migros setzt auf Rationalisierung und der Stau an der Kasse ist der letzte Punkt der Rationalisierungs-Strategie.
-Entzieht sich noch dem Konzept der Selbstbedienung in Supermärkten. Internationale Mitbewerber beobachteten Experiment.
+Bezieht sich auf das Konzept der Selbstbedienung in Supermärkten. Internationale Mitbewerber beobachteten Experiment.
 Kunden machen nicht mit und müssen für den Ruf trotzdem verteidigt werden. Spannungsverhältnis zwischen dem moralischen Anspruch
 #hinweis[("Vertrauen gegen Vertrauen")] und dem betriebswirtschaftlichen Gedanken mit dem Zwang der Rationalisierung.
 Migros muss das Experiment durchhalten, weil es die grosse Innovation der Stunde ist.
@@ -401,7 +403,7 @@ die Reallöhne stiegen zwischen 1950 und 1960 um durchschnittlich 20%, steigende
 Der Jahresumsatzwachstum der Migros stieg rasch: 1945: 85 Mio CHF, 1955: 426 Mio. CHF, 1961: >1 Mrd. CHF
 
 Aufgrund Mitarbeitermangels für bediente Läden eröffnete die Migros immer mehr Selbstbedienungsläden:
-Von 5 in 1948 zu 870 in 1956 #hinweis[(davon mehr als 50% in Städten)].
+Von 5 in 1948 auf 870 in 1956 #hinweis[(davon mehr als 50% in Städten)].
 Selbstbedienung wurde als _Wachstumsperspektive_ gesehen. Die Läden wurden grösser, Migros erweiterte ihr Sortiment
 von 5 Produkte in 1925 #hinweis[(nur Lebensmittel)] auf 550 in 1950 #hinweis[(auch viele nicht-Lebensmittel)].
 Migros galt mit diesem Konzept als Vorreiter in Europa.
@@ -479,7 +481,7 @@ sowohl jung als alt, unterstützten die Aktion. _Sie alle hatten ein gemeinsames
 
 Der Alltag im Camp war ein Experimentierfeld für Formen des Zusammenlebens und geprägt durch
 _basisdemokratische Organisation_ #hinweis[(alle Personen durften 1x täglich vortragen)].
-Die Versorgung lief über Spenden. Das Camp hatten ein breites Kulturprogramm mit Theater, Musik und Vorträge.
+Die Versorgung lief über Spenden. Das Camp hatten ein breites Kulturprogramm mit Theater, Musik und Vorträgen.
 Allerdings gab es auch interne Konflikte durch Alkohol, Hierarchien und die Frage, ob mit Gewalt vorgegangen werden durfte.
 
 ==== Reaktion von Politik & Wirtschaft
@@ -544,10 +546,10 @@ Die Form der Erzählung hat dabei verschiedene Vor- und Nachteile
 
 *Gibt es Mehrdeutigkeiten und Leerstellen in der Quelle?*\
 Es wird nur über das Lagerleben berichtet, das AKW selbst sowie Daten dazu bleiben im Hintergrund.
-Der Fokus liegt weniger auf das Ziel des Baustopps selbst, als auf der Erhaltung des Lagerlebens.
+Der Fokus liegt weniger auf dem Ziel des Baustopps selbst, als auf der Erhaltung des Lagerlebens.
 
 *Gibt es relevante Schlüsselbegriffe, Metaphern?*\
-Grösse & Dynamik des Protest, ein gewisses Tempo wird vermittelt. _"Wir greifen in die Geschichte ein"_.
+Grösse & Dynamik des Protests, ein gewisses Tempo wird vermittelt. _"Wir greifen in die Geschichte ein"_.
 Aus dem Protest wurde eine eigene soziale Bewegung, welche von der Kerngruppe nicht mehr kontrolliert werden konnte.
 Sie wurden von den Leuten überrannt, vieles ist eingetreten, mit dem nicht gerechnet wurde.
 Es wird ein kritischer Rückblick auf die Selbstdynamisierung geworfen, die als _überraschend
@@ -559,7 +561,7 @@ Die Besetzung wird _als Risiko, nicht als Revolution_ beschrieben. Es musste ein
 Bleiben, um den Druck auf den Betreiber zu erhöhen, aber eine Räumung und Sympathieverlust riskieren oder
 gehen und riskieren, als reiner Publicity-Stunt gesehen zu werden. Es müssen mit dieser Grösse organisatorische Strukturen
 eingerichtet werden. Durch die vielen Gruppierungen entstehen auch breitere Protesthorizonte: Erfahrungen von Personen,
-welche von Vietnam-Protesten kamen, durch den AKW-Protest gegen den Kapitalismus im allgemeinen protestieren.
+welche von Vietnam-Protesten kamen, aber auch durch den AKW-Protest gegen den Kapitalismus im allgemeinen lernen zu protestieren.
 
 Durch das Campleben konnten _neue Regeln des Miteinanders_ ausprobiert werden, miteinander sprechen in dieser
 allgemeinen Orientierungskrise der 1970er. Das führt auch zu Disputen und Krisen; Protest ist anstrengend.
@@ -572,7 +574,7 @@ gesellschaftlichen Protest verhindert werden.
 = Die Eisenbahn der Zukunft
 Die ersten Eisenbahnlinien Mitte des 19. Jahrhunderts waren föderalistisch aufgelegt, jeder Kanton baute sein
 eigenes Netz mit unterschiedlicher Technik. Das limitierte die Anschlussmöglichkeiten im In- und Ausland.
-1898 wurde eine Volksabstimmung über das Rückkaufsgesetz durchgeführt, eine Entscheidung über die
+1898 wurde eine Volksabstimmung über das Rückkaufgesetz durchgeführt, eine Entscheidung über die
 _Verstaatlichung_ der grossen Privatbahnen #hinweis[(Kostenersparnis, Eisenbahn ist sehr teuer in der Wartung)].
 1902-13 wurden bedeutende Bahngesellschaften in die 1902 gegründete SBB integriert
 #hinweis[(Schweizerische Centralbahn SCB, Nordostbahn NOB, Vereinigte Schweizerbahnen VSB, Jura-Simplon-Bahn JS und Gotthardbahn)].
@@ -588,7 +590,7 @@ man musste für jeden Zug einzeln ein Billet kaufen, _lange Wartezeiten_ in Wart
 nicht auf die Fahrgäste ausgerichtet. Zwischen den Bahngesellschaften wurde die teure Infrastruktur nicht optimal genutzt.
 
 Ein weiterer Grund dafür war unter anderem die _Förderung des Strassenverkehrs_, welcher 5x mehr staatliche Förderung erhielt.
-1958 fiel der Volksentscheid für eine Nationalstrassennetz #hinweis[(Autobahnen)], 1960 wurde dann das Bundesgesetz
+1958 fiel der Volksentscheid für ein Nationalstrassennetz #hinweis[(Autobahnen)], 1960 wurde dann das Bundesgesetz
 über die Nationalstrassen verabschiedet. Die erste Nationalstrasse wurde 1962 eröffnet. 1965 gab es in der Schweiz
 bereits 800'000 Autos und 200'000 Motorräder.
 
@@ -763,14 +765,14 @@ Es gab einen _bedeutenden Mehraufwand für das Personal_ durch das höhere Zugau
 dass nicht viel neues Personal eingestellt wurde, sondern das Bestehende mit diesen Änderungen und Aufgaben
 klar kommen musste. Die Umstellung von Arbeitsroutinen, die fehlenden Erfahrungswerte und der Leistungsdruck,
 dass diese Umstellung auch den Ansprüchen gerecht wird. Erhöhte Abstimmungsschwierigkeiten mit
-beispielsweise Anschlusszügen, Verpflegung im Zug und Baustellen. Die Fahrdienstleiter stehen ebenfalls vor
+beispielsweise Anschlusszügen, Verpflegung im Zug, und Baustellen. Die Fahrdienstleiter stehen ebenfalls vor
 einem komplett neuen System und können weniger auf Erfahrung vertrauen.\
 Wie bei vielen technischen Innovationen wird der Taktfahrplan _nicht nur von den Erfindern getragen_,
 sondern auch von denjenigen, die _diese Arbeit tatsächlich ausführen_ und sich dadurch deren Rollen wandeln können.
 
 *Welche Berufsgruppen sind betroffen?*\
-Die Kondukteure, die Zugputzequippe, die Bordköche, die Fahrdienstleiter, aber auch die Gleisarbeiter im Tunnelbau
-müssen häufiger ihre Arbeit unterbrechen, weil mehr Züge ihre Baustelle passieren. Hauptsächlich also diejenigen,
+Hauptsächlich die Kondukteure, die Zugputzequippe, die Bordköche, die Fahrdienstleiter. Aber auch die Gleisarbeiter im Tunnelbau
+müssen häufiger ihre Arbeit unterbrechen, weil mehr Züge ihre Baustelle passieren. Im Gros also diejenigen,
 die körperliche Arbeit verrichten und weniger Lohn verdienen. Die _"Autorität" des Kontrolleurs_, welchem man beweisen muss,
 dass man mit diesem Zug fahren darf, wird durch den Snackverkauf aufgeweicht.
 
@@ -889,7 +891,6 @@ Das Paradox der Modernisierung ist, dass mehr technischer Fortschritt auch zu ne
 #hinweis[(Mehr Züge, mehr Unfälle)]. Die Gesellschaft hinterfragt die Sicherheit wissenschaftlicher Erkenntnisse.
 
 Nichtwissen kann auf verschiedene Arten produziert werden:
-
 - _Ungewissheit:_ Die Zukunft kann nur schätzungsweise vorhergesagt werden
 - _Ignoranz:_ Ignorieren von Erkenntnissen
 - _Nicht-Erkenntnis:_ Dinge, die (noch) nicht wissenschaftlich erforscht sind und deshalb kein sicheres Wissen
@@ -942,7 +943,7 @@ Grosses Bild von spielenden Kinder auf einem geräumigem Spielplatz mit Bäumen,
 oder Häuser; Dynamisch. Kein "normales" Bild für ein Technikunternehmen. Verbindung von Zukunft der Gesellschaft und Technik.
 Adressierung des Vorwurfs einer "unmenschlichen Technik": Die Technik arbeitet für die Verwaltung und die Verwaltung soll
 (wieder mehr) dem Bürger dienen. IBM will dem Staat die Voraussetzungen liefern, um für die Chancengleichheit, Bildung, Wohlstand
-und Rechte der Bürger (besser) sorgen zu können. Der Staat muss voraussehen können um die Zukunft unserer Kinder gestalten können.
+und Rechte der Bürger (besser) sorgen zu können. Der Staat muss voraussehen können, um die Zukunft unserer Kinder gestalten können.
 Der Wachstum an Aufgaben muss bewältigt werden können, dafür muss sich aufs Nötige besinnt werden.
 IBM will den Staat bei den wachsenden Aufgaben unterstützen.
 Es geht nicht um die Funktion des Computers, sondern um die Funktion, die er in der Gesellschaft bzw. dem Staat einnehmen kann.
@@ -989,7 +990,7 @@ Es gab ein starkes Aufgabenwachstum und gesteigerte Aufgabenverflechtung zwische
 
 == Computer in der Schweizer Verwaltung
 Ende der 60er begannen die Schweizer Verwaltungen damit, die Aufgaben und Verfahren in den digitalen Raum zu verschieben.
-Die Computerhersteller greifen mit ihrer Marketingstrategie genau da an, wo die Helvetische Malaise stattfindet.
+Die Computerhersteller greifen mit ihrer Marketingstrategie genau da an, wo die Helvetische Malaise stattfand.
 Doch zunächst wurde der Verwaltungsprozess nicht einfacher, sondern komplexer. Der Betrieb von Rechnern erzeugte
 Handlungszwänge und Probleme, die in den Versprechungen der Computerhersteller nicht einkalkuliert waren.
 Im Verlauf dieses Prozesses veränderten sich die Staatlichkeit und die digitale Wirklichkeit.
@@ -1022,7 +1023,7 @@ Der Lagerplatz für die Karteikarten wurde knapp und es gab ein hohes Fehleraufk
 
 Also prüften sie drei Optionen:
 - _Einen eigenen Computer anschaffen_: Kein Geld und keine Programmierer dafür
-- _Mit dem Kanton/anderen Gemeinden kooperieren_: Autonomie und "Stolz" liessen das nicht zu
+- _Mit dem Kanton/anderen Gemeinden kooperieren_: Autonomie und "Kantönligeist" liessen das nicht zu
 - _Rechenzeit mieten_: Die Lösung, für die sich entschieden wurde
 
 Chur griff auf das kommerzielle Rechenzentrum von IBM zurück und wollte Rechenzeit mieten. IBM hatte ihr Geschäftsmodell
@@ -1030,13 +1031,13 @@ angepasst und Chur erhielt Terminals #hinweis[(neue Erfindung von IBM, um Einspe
 zu verschieben)]. Mutationen in der Datenbank wurden im Rechenzentrum zwischengespeichert.
 Um das Zwischenspeichern so kostengünstig wie möglich zu halten, kauften sie bei Kodak Mikrofilm.
 Diese Mikrofilme konnten dann in Chur ausgelesen werden.
-Alle 14 Tage wurde die Daten aktualisiert und von Chur zum Rechenzentrum in Zürich gesendet.
+Alle 14 Tage wurden die Daten aktualisiert und von Chur zum Rechenzentrum in Zürich gesendet.
 Diese wurde dann von Zürich an Kodak gesendet, wobei die Daten im Rechenzentrum gelöscht wurden.
 Kodak wandelte diese Daten dann in Mikrofilm um und sendete sie zurück nach Chur.
 
 Die Daten wurden also in der ganzen Schweiz umhergeschickt, weil die digitale Speicherung zu teuer war.
 Datenschutz war damals noch kein Thema. Dieser Mittelweg zeigt auf, welche Unterschiede es in den Schweizer Gemeinden
-bei der Digitalisierung gab. Es erlaubte es Kodak und IBM auch anderen Gemeinden in der Schweiz aufzuzeigen, dass es
+bei der Digitalisierung gab. Er erlaubte es Kodak und IBM auch anderen Gemeinden in der Schweiz aufzuzeigen, dass es
 billigere Wege für die Digitalisierung gab und erzeugte eine grosse mediale Aufmerksamkeit, weil ein spezielles
 Model entwickelt wurde.
 
@@ -1080,7 +1081,7 @@ bieten zu können. Sie wird halbjährlich im Juni und November veröffentlicht.
 
 Diese basieren auf dem LINPACK-Benchmark, welcher ein festes Problem darstellt, welches auf jedem Supercomputer
 laufen gelassen wird. Basierend auf der Anzahl Rechenoperationen #hinweis[(FLOPS: Floating Point Operations per Second,
-  Anzahl Kommazahlberechnungen pro Sekunde)], welche in diesem Benchmark erzielt werden wird der Computer in die
+Anzahl Kommazahlberechnungen pro Sekunde)], welche in diesem Benchmark erzielt werden wird der Computer in die
 Liste eingeordnet.
 
 In den ersten Jahren war diese Liste _stark amerikanisch und japanisch geprägt_, in den Folgejahren kamen auch
@@ -1119,8 +1120,9 @@ gelegenen Flughafens auch nicht leicht eingeflogen werden.
 
 Auch gab es politischen Widerstand: Die rechtspopulistische Partei Lega de Ticinesi klagte gegen den Bau.
 Der Standort sei intransparent gewählt worden, wieso genau dieses von der SBB abgekaufte Gelände in Manno auserkoren wurde.
-Somit verzögerte sich der Bau, wurde aber schlussendlich doch durchgeführt, ansonsten wäre die Laufzeit des Massnahmenpakets
-ausgelaufen und das Geld wäre verpufft. 1990 wurde mit dem Bau begonnen und _1992 wurde das CSCS offiziell eröffnet_.
+Somit verzögerte sich der Bau. Dieser wurde aber schlussendlich doch durchgeführt, ansonsten wäre die Laufzeit
+des Massnahmenpakets ausgelaufen und das Geld wäre verpufft. 1990 wurde mit dem Bau begonnen und
+_1992 wurde das CSCS offiziell eröffnet_.
 
 Die Eröffnung lief bescheiden: Wenige Personen von der ETH und EPFL waren bei der Zeremonie anwesend und es wurde
 lange nach einem Leiter für das Rechenzentrum gesucht. Schlussendlich landete man bei Alfred Scheidegger,
@@ -1133,7 +1135,7 @@ Die Berichtsschreiber hatten also die Aufgabe, dieses Rechenzentrum, das niemand
 Nutzer dazu motivieren, nach Lugano zu kommen.
 
 #grid(
-  columns: (1.30fr, 1fr),
+  columns: (1.3fr, 1fr),
   gutter: 1em,
   [
     Im Vorwort beschrieben sie, dass bei ihnen interdisziplinäre wissenschaftliche Probleme gelöst würden und dass bei
