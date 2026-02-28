@@ -33,7 +33,7 @@ _Concurrency_ #hinweis[(interleaved execution of programs for simpler programs)]
   *Multi-threads:*
   Changes made by one thread to shared resources will be _seen_ by other threads.\
   *Context switch:*
-  Required when changing threads. _Synchronous_ #hinweis[(Thread waiting for condition)] or\
+  Required when changing threads. \ _Synchronous_ #hinweis[(Thread waiting for condition)] or\
   _Asynchronous_ #hinweis[(Thread gets released after defined time)]\
   *Multitasking:*
   _Cooperative_ #hinweis[(Threads must explicitly initiate context switches, scheduler can't interrupt)] or\
