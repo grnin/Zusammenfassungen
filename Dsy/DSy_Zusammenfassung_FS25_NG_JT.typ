@@ -1,4 +1,4 @@
-// Compiled with Typst 0.13.1
+// Compiled with Typst 0.14.2
 #import "../template_zusammenf.typ": *
 
 #show: project.with(
@@ -22,10 +22,10 @@ _appear as a single computer_ to the user.
 == Categorization
 - _Tightly coupled_ #hinweis[(The processing elements have access to a common memory)] vs.
   _loosely coupled_ #hinweis[(No shared memory)]
-- _Homogeneous_ #hinweis[(all processors are of the same type)] vs.
-  _heterogeneous_ #hinweis[(contains processors of different types, more common)]
+- _Homogeneous_ #hinweis[(All processors are of the same type)] vs.
+  _heterogeneous_ #hinweis[(Contains processors of different types, more common)]
 - _Small-scale system_ #hinweis[(Web app + database on the same system)] vs.
-  _large-scale system_ #hinweis[(with more than 2 machines)]
+  _large-scale system_ #hinweis[(With more than 2 machines)]
 - _Decentralized_ #hinweis[(e.g. Blockchain, distributed in the technical sense, but not owned by one actor)] vs.
   _distributed_ #hinweis[(owned by one actor)]
 
@@ -33,14 +33,19 @@ _appear as a single computer_ to the user.
 States that a distributed data store _cannot simultaneously be consistent, available and partition tolerant_.
 - _#underline[C]onsistency:_ Every node has the same consistent state & data
 - _#underline[A]vailability:_ Every non-failing node always returns a response
-- _#underline[P]artition tolerant:_ The system continues to be consistent even when network partitions\
+- _#underline[P]artition tolerant:_ The system continues to be consistent even when network partitions
   #hinweis[(not all nodes reachable due to network outages)]
 
 You can only have two.
-Since _network partition_ needs to be a given with distributed system, you need to choose between availability and consistency.
+Since _network partition tolerance_ needs to be a given with distributed system, you need to choose between availability and consistency.
 Is a system _AP_ or _CP_?
 
-- _Eventual Consistency:_ Consistency is eventually restored when the partition ends #hinweis[(e.g. DNS server)]
+The CAP theorem is often criticized for being _too simplistic_, as most of the time there isn't an "either-or"
+between consistency and availability, there are many levels in between. But it offers a _good conceptual framing_.
+
+=== Consistency models
+- _Eventual Consistency:_ Consistency is eventually restored when the partition ends
+  #hinweis[(data gets synchronized without the need for manual intervention to solve conflicts)]
   #plus-list[
     + Explicitly allows data partitions on different nodes
     + Allows high availability and high performance, because nodes can confirm operations locally and
@@ -65,15 +70,12 @@ Is a system _AP_ or _CP_?
   #hinweis[(reading and incrementing a value)] will be seen in the correct order, but independent operations can be seen
   in different orders.
 
-The CAP theorem is often criticized for being _too simplistic_, as most of the time there isn't an "either-or"
-between consistency and availability, there are many levels in between. But it offers a _good conceptual framing_.
-
 === Other Categorizations
-There are more classifications.
+Less common categorizations for distributed systems are:
 - _Classifications based on architecture:_ Client-server, peer-to-peer #hinweis[(P2P)], hybrid and more
 - _Classifications based on software architecture:_ Layered, object-based, microservices, event-based, data-centric
 - _Classifications based on communication model:_ Synchronous or asynchronous
-- _Other Classification:_ Degree of transparency #hinweis[(The degree to which the distribution is concealed from the user)],
+- _Other Classification:_ Degree of transparency #hinweis[(The degree to which the distribution of the services is concealed from the user)],
   fault tolerance, scalability, degree of consistency, data replication #hinweis[(how and where data copies are stored)],
   data partitioning, heterogeneity.
 
@@ -86,8 +88,8 @@ There is _no universally applicable categorization_ of distributed systems.
   [1 responsible organization],
   [N responsible organizations],
 
-  [low churn #hinweis[(low fluctuation of the participating nodes, planned)]],
-  [high churn #hinweis[(high fluctuation)]],
+  [Low churn #hinweis[(low fluctuation of the participating nodes, planned)]],
+  [High churn #hinweis[(high fluctuation, nodes can join/leave at any time)]],
 
   [*Examples:* Amazon DynamoDB, Client/server],
   [*Examples:* BitTorrent, Blockchain, E-Mail],
@@ -124,25 +126,26 @@ There is _no universally applicable categorization_ of distributed systems.
       better scalability, but: requires maintaining consistency in replicas
     ],
   ),
-  table.cell(colspan: 2, align: center, [*Transparency principles:* apply]),
+  table.cell(colspan: 2, align: center, [*Transparency principles:* Apply to all types of distributed systems]),
 )
 
-== Transparency in distributed systems
+== Transparency principles in distributed systems
 Distributed systems should _hide_ their distributed nature.
+
 - _Location transparency:_ Users should not be aware of physical location
 - _Access transparency:_ Users should access resources in a single, uniform way
 - _Migration/relocation transparency:_ Users should not be aware that resources have moved
 - _Replication transparency:_ Users should not be aware about replicas, it should appear as a single resource
 - _Concurrent transparency:_ Users should not be aware of other users
   #hinweis[(For concurrent access, users should not accidentally modify data of another user --
-  it should seem as if everyone has exclusive access. Exceptions: Online Status on Messengers)]
+  it should seem as if everyone has exclusive access. Exceptions: Online Status in Messengers)]
 - _Failure transparency:_ Users should not be aware of recovery mechanisms
-- _Security transparency:_ Users should be minimally aware of security mechanisms #hinweis[(only e.g. login at the beginning)]
+- _Security transparency:_ Users should be minimally aware of security mechanisms #hinweis[(e.g. only login at the beginning)]
 
 == Fallacies of distributed computing
 - _The network is reliable:_ Submarine cables break a lot
-- _Latency is zero:_ Ping to Australia is \~ 300ms
-- _Bandwidth is infinite:_ 1 GBit/s means that 1TB needs 2h and 16minutes to transfer
+- _Latency is zero:_ Ping to Australia is $~$300ms
+- _Bandwidth is infinite:_ 1 GBit/s means that 1TB needs 2 hours and 16 minutes to transfer
 - _The network is secure:_ Assume someone is listening.
 - _Topology doesn't change:_ Request can take different route than reply
 - _There is one administrator:_ Sometimes your route goes from one company to another rival company #hinweis[(UPC, Init7)]
@@ -195,17 +198,17 @@ Moore's law is based on observation of historical trends which cannot continue f
 size of atoms. It might be dead already in 2025.
 
 #definition[
-  *Nielsen's Law* states that high end Users' bandwidth grows by 50% per year.
+  *Nielsen's Law* states that high end users' bandwidth grows by 50% per year.
   In other words, the amount of available bandwidth to individual users roughly doubles every 1.5 years.
 ]
 
-The bandwidth grows slower than computer power because telecoms companies are conservative and most users are reluctant
-to spend much money on bandwidth because current connections are fast enough for them.
+The bandwidth grows slower than computer power because telecom companies are conservative and most users are reluctant
+to spend much money on bandwidth because their current connections are fast enough for them.
 Therefore, you should _optimize for bandwidth, not for CPU_.
 
 #definition[
-  *Kryder's Law* states that the density of information on hard drives doubles every 13 months
-  or in other words increases by a factor of 1,000 every 10.5 years.
+  *Kryder's Law* states that the density of information on hard drives doubles every 13 months,
+  or in other words increases by a factor of 1'000 every 10.5 years.
 ]
 
 User behavior changed in the time of SSDs, _speed is more important_ than raw storage size.
@@ -257,7 +260,7 @@ Everything gets faster, but latency stays because nothing is faster than the spe
 In a _perfect_, direct vacuum light tube to Sydney, the RTT would be:
 
 $
-  overbracket(16'540 "km", "distance")/underbracket(300'000 "km/s", "speed of light") #h(1em) dot overbracket(2, "both ways")
+  overbracket(16'540 "km", "direct distance")/underbracket(300'000 "km/s", "speed of light") #h(1em) dot overbracket(2, "both ways")
   = 0.110"s" = 110"ms"
 $
 
@@ -274,7 +277,7 @@ There are two main factors that reduce the speed from the calculated perfect tim
   protocol overhead.
 
 $
-  overbracket(24'000 "km", "distance")/underbracket(200'000 "km/s", "speed of signal") dot overbracket(2, "both ways")
+  overbracket(24'000 "km", "actual distance")/underbracket(200'000 "km/s", "speed of signal") dot overbracket(2, "both ways")
   = 0.240"s" = 240"ms" underbracket(+ ~50-60"ms", "other reasons for delay") = 298"ms"
 $
 
@@ -307,7 +310,7 @@ Geostationary satellites with a higher altitude than Starlink uses have a latenc
 *Wi-Fi* could _in theory have the lowest latency_ due to the same advantages of satellites.
 But it also has a _lot of delays_: CSMA/CA #hinweis[(collision avoidance)], wait times before transmission,
 acknowledgement packages, retransmissions, signal processing at receiver and transmitter, MAC layer procession,
-protocol stack traversal, DCF backoff, channel busy waiting... In the end, it adds up to _additional $5"ms"$ of latency_.
+protocol stack traversal, DCF backoff, channel busy waiting... In the end, it adds up to _additional $bold(5"ms")$ of latency_.
 
 #table(
   columns: (auto, auto, 1fr),
@@ -325,7 +328,7 @@ protocol stack traversal, DCF backoff, channel busy waiting... In the end, it ad
 === Importance of Latency
 _If a website is slower, less people visit._ Google for example measured a $20%$ drop in traffic after the latency was
 $500"ms"$ higher. In gaming, if a game lags $300"ms"$, it is unplayable.
-Even a $50"ms"$ latency reduces the performance noticeably. Human reaction time is around 200ms.
+Even a $50"ms"$ latency reduces the performance noticeably. Human reaction time is around $200"ms"$.
 Depending on the device, the time from the key press to display can be $70"ms"-150"ms"$.
 Keyboards have a delay of $15-60"ms"$ due to key travel time and USB polling adding $~8"ms"$ #hinweis[(although gaming
 keyboards can reach $1"ms"$ polling)]. A standard monitor with 60hz display rate also has a delay of $8"ms"$.
@@ -337,13 +340,13 @@ With a distributed system, the latency can be reduced by _placing services close
 This also _increases the bandwidth_ #hinweis[(local networks are often better developed)] and _improves reliability_ and
 _availability_ #hinweis[(less hops)]. The downside is that data replication and caching are _more complicated_ to coordinate.
 
-An example for this is _CDN_ #hinweis[(Content delivery network)]. Places your images, sites and scripts close to your users.
+An example for this are _CDNs_ #hinweis[(Content delivery networks)]. Places your images, sites and scripts close to your users.
 
 === Bandwidth
 Another important factor is bandwidth, or _how much data can be transmitted per second over a certain medium_.
 The current world record belongs to an experimental fiber optic cable that can transmit $~23"Pb/s"$.
 NASA also experimented with transmitting data via laser into space and reached $~200"Gb/s"$,
-while Starlink can exchange $~100"Gb/s"$ between its satellites with multiroute.
+while Starlink can exchange\ $~100"Gb/s"$ between its satellites with multiroute.
 
 #pagebreak()
 
@@ -354,8 +357,8 @@ Any hardware will crash eventually. Failures are not a question of "if", but "wh
 There are _random bit flips_ due to bad pin connections, incorrect RAM timings, clock issues, design flaws or cosmic rays
 #hinweis[(A bit flip added 4096 votes to a candidate in a Belgian election. The candidate had more votes than were possible)].
 
-_Influencing Factors_ are the _sensitivity_ of each transistor, _number_ of transistors on the microchip, _altitude_, ...
-#hinweis[(The Cassini mars rover has 280 bitflips daily, during a solar proton storm even up to 890 on its 300MB TMR RAM)]
+_Influencing factors_ are the _sensitivity_ of each transistor, _number_ of transistors on the microchip, _altitude_, ...\
+For example, the Cassini mars rover has 280 bitflips daily, during a solar proton storm even up to 890 on its 300MB TMR RAM.
 
 _Error-correcting code memory_ #hinweis[(ECC)] uses _TMR_ #hinweis[(Triple modular redundancy - every memory operation is
 triple validated)] or _Hamming Code_ to detect or additionally correct bitflips.
@@ -366,7 +369,7 @@ ECC is currently used mostly _for servers, not for customer products_, although 
 
 HDDs can break and SSDs wear out with time. An SSD consists of _NAND cells_
 #hinweis[(Flash memory that can store data without using power)] with a _limited lifetime_.
-It has _spare_ NAND that are used when cells break.
+It has _spare_ NAND that is used when cells break.
 
 There are different kinds of NAND-Types:
 
@@ -385,10 +388,10 @@ There are different kinds of NAND-Types:
 )
 
 _SLC_ has the highest lifetime, but limited capacity and costs the most. It is therefore often used for _caching_
-files / cells that are frequently accessed. Rarely used data should be stored on MLC/TLC/QLC drives for cost efficiency.
+files or cells that are frequently accessed. Rarely used data should be stored on MLC/TLC/QLC drives for cost efficiency.
 
 ==== Wear Leveling
-Distribute write and erase operations across all memory cells. This technique is used to prolong the life of memory.
+Distribute write and erase operations across all memory cells. This technique is used to prolong the life of SSD memory.
 
 ==== Bitsquatting
 Specific type of _DNS Hijacking._ If a user wants to visit `example.com` and a bitflip occurs, he might land on `uxample.com`.
@@ -396,7 +399,7 @@ Some malicious user could register a domain with a single bit error and hope tha
 
 === Network Outages
 There is also always the possibility of network outages #hinweis[(i.e. damaged undersea cables or a ISP messing up BGP again)].
-If your system is distributed, the likelihood of this affecting you strongly is much smaller.
+If your system is distributed, the likelihood of this affecting you strongly is much smaller, because your services are redundant.
 
 === Conclusion
 It is not a question of "if" hardware will fail, but "when". Multiple machines provide _redundancy_.
@@ -424,10 +427,10 @@ Software that runs the virtual machine. There are two types:
 On newer processors, unmodified OS can run as guests with virtualization extensions like Intel VT-X or AMD-V enabled.
 If these are not present or disabled, a guest OS can be modified to communicate with the hypervisor instead of
 the hardware directly; it runs _paravirtualized_. But _VMs should not access memory directly_, only through the hypervisor.
-Otherwise this would be considered a sandbox escape, because the guest could modify unrelated files on the host.
+Otherwise this would be considered a sandbox escape, because the guest could modify unrelated memory and files on the host.
 
 The guest machine needs to have the _same architecture_ as the host, else an _emulator_ is needed
-#hinweis[(i.e. game consoles or desktop OS for ARM/RISC-V processors)].
+#hinweis[(e.g. game consoles or desktop OS for ARM/RISC-V processors)].
 There are hardware-specific #hinweis[(Snes9x, Dolphin, PCSX2)] and generic emulators #hinweis[(QEMU)].
 
 Virtual Machines can be _expensive_. New providers tend to be cheap at first, but become more expensive over time.
@@ -468,7 +471,7 @@ There are a lot of different container softwares. The most well known is Docker,
   it is compatible with Docker compose files and uses similar workflows and commands.
 
 There are also _application-level containers_ that sandbox on the application level.
-These are often more geared towards graphical applications instead of the CLI/Service applications of container.
+These are often more geared towards graphical applications instead of the CLI/Service applications of containers.
 The most widely used is _Bubblewrap_, powering sandboxed _Flatpak_ applications on Linux.
 Others are syd, Firejail, GVisor and minijail.
 
@@ -485,7 +488,7 @@ Others are syd, Firejail, GVisor and minijail.
       + Process-based isolation #hinweis[(share same kernel, reducing overhead)]
     ]
     #minus-list[
-      + Available memory is shared\ #hinweis[(Containers can affect others with high RAM usage)]
+      + Available memory is shared #hinweis[(Containers can affect others with high RAM usage)]
       + Process-based isolation #hinweis[(less secure isolation than VMs)]
     ]
 
@@ -535,7 +538,7 @@ The apps running inside the containers need to be compatible with the host OS.
 Docker can also be used over a GUI like Docker Desktop.
 
 == Underlying Components
-Docker itself is built on preexisting Linux components, this is why Docker itself can be implemented in
+Docker is built on preexisting Linux components, this is why Docker itself can be implemented in
 just around 100 lines of Bash, as shown in the "Bocker" project.\
 This chapter explains these concepts, but _Docker handles the configuration_ of these tools itself,
 so you don't need to manually fiddle with them.
@@ -561,26 +564,24 @@ The _workdir_ is used to prepare files as they are switched between the layers.
 #grid(
   columns: (1.9fr, 1fr),
   [
-    *Example:* The _lower directory_ can be _read-only_ or could be an overlay itself.
-    The _upper directory_ is normally _writable_.
-    The _workdir_ is used to prepare files as they are switched between the layers.
+    *Example:* Create a new overlay.
 
     ```sh
     cd /tmp
     mkdir lower upper workdir overlay
     sudo mount -t overlay -o \
-    lowerdir=/tmp/lower, upperdir=/tmp/upper, \
-    workdir=/tmp/workdir/ none /tmp/overlay
-    # The source device is "none", because the FS doesn't
-    # originate from a block device like /dev/sda
+      lowerdir=/tmp/lower, upperdir=/tmp/upper, \
+      workdir=/tmp/workdir/ none /tmp/overlay
+      # The source device is "none", because the FS doesn't
+      # originate from a block device like /dev/sda
     ```
   ],
   image("img/dsy_06.jpg"),
 )
 
 === Cgroups
-Cgroups are _control groups_. They define limits, isolation, prioritization of CPU, memory, disk I/0, network.
-They can be used for processes or for docker containers. Docker uses cgroups behind the scenes.
+Cgroups are _control groups_. They define limits, isolation, prioritization of CPU, memory, disk I/0 and network.
+They can be used for processes or for Docker containers. Docker uses cgroups behind the scenes.
 Windows and MacOS don't support cgroups, but Docker just uses a lightweight Linux VM to run its containers on these OS.
 
 *Example:* Create a group to limit CPU usage to 20%.
@@ -609,7 +610,7 @@ Windows and MacOS don't support cgroups, but Docker just uses a lightweight Linu
   ],
 )
 
-If another group with 80% would be created and ran on the same core, the usage will be around the specified limit.
+If another group with 80% would be created and ran on the same core, the usage will be around the specified limits.
 
 === Linux Network Namespaces
 Provides _isolation_ on the system resources associated with networking.
@@ -684,9 +685,9 @@ the required files from one stage to the next. This fixes problems with Dockers 
 
 === Docker Compose
 With a Docker Compose file, you can more easily _deploy multiple containers_
-#hinweis[(i.e. your service, load balancer, DB etc.)].
+#hinweis[(e.g. your service, load balancer, DB etc.)].
 You can specify the dockerfile(s) to be built and started and configure additional things like networking or
-specify dependencies between containers #hinweis[(i.e. start backend only after DB is running)].
+specify dependencies between containers #hinweis[(e.g. start backend only after DB is running)].
 It is also possible to override settings from the dockerfiles.
 The compose file is written in `yml` syntax and serves as _lightweight_ orchestration for Docker.
 
@@ -744,16 +745,17 @@ Containers in the same network can communicate among themselves over all ports b
 
 === Logging
 - Set the logging level to _at least INFO_ and set the log level per environment. #hinweis[(There is
-    TRACE -- only use during development,
-    DEBUG -- logs about anything that happens in the program,
-    INFO -- log all actions that are user-driven or system specific,
-    NOTICE -- should be used in production,
-    WARN -- logs everything that could become an error,
-    ERROR -- logs errors,
-    FATAL -- doomsday)]
+    _TRACE_ -- only use during development,
+    _DEBUG_ -- logs about anything that happens in the program,
+    _INFO_ -- log all actions that are user-driven or system specific,
+    _NOTICE_ -- should be used in production,
+    _WARN_ -- logs everything that could become an error,
+    _ERROR_ -- logs errors,
+    _FATAL_ -- doomsday)
+  ]
 - Use _logging libraries_
 - Use _meaningful_ messages
-- Log in _JSON_ -- structured logging. Keep the log structure consistent. #hinweis[(allows automated analysis of logs)]
+- Log in _JSON_ -- structured logging. Keep the log structure consistent #hinweis[(allows automated analysis of logs)]
 - Avoid logging _sensitive information_
 - _Secret Management:_ Use SaaS solutions like GitHub Secrets or AWS Secrets.
 
@@ -772,16 +774,16 @@ Containers in the same network can communicate among themselves over all ports b
 - Is Docker application _Docker aware_?
   #hinweis[(Docker memory limits are not hard limits, if over limit, the application restarts)]
 - To _reduce performance impacts_, use multi-stage dockerfiles and `.dockerignore` to exclude files not needed
-  inside the container #hinweis[(i.e. `node_modules`)]
+  inside the container #hinweis[(e.g. `node_modules`)]
 
 === Pitfalls / Supply chain attacks
-Docker uses _aggressive caching_, i.e. files downloaded with `wget` in Dockerfiles are cached.
-Use links with _version numbers instead of `latest`_ #hinweis[(ie. https://example.com/package-1.2.0.zip)].
+Docker uses _aggressive caching_, meaning files downloaded with `wget` in Dockerfiles are cached.
+Use links with _version numbers instead of `latest`_ #hinweis[(e.g. https://example.com/package-1.2.0.zip)].
 Even better: use the `ADD` keyword in your dockerfile to download resources instead of `wget`.
 
 _Supply chain attacks happen often._ One of your dependencies could be modified to include malicious code.
 Because of dependency hell, you could be affected without using a unsafe library directly yourself #hinweis[(nested dependencies)].
-_Mitigation Strategies_ are dependency scanning tools, or not executing dependencies on your own machine but in a container.
+_Mitigation strategies_ are dependency scanning tools, or not executing dependencies on your own machine but in a container.
 
 
 = Monorepos / Polyrepos
@@ -865,7 +867,7 @@ There are three types of load balancers:
   This is less generic, but has better performance. Only usable if you control your own datacenter
   #hinweis[(Examples: loadbalancer.org, Cisco)].
 - _Software load balancer:_  There are different load balancers that function on different levels of the OSI model.
-  Seesaw runs on Layer 2/3 #hinweis[(data link / network layer)] , LoadMaster, HAProxy, ZEVENET, Neutrino, Nginx, Gobetween
+  Seesaw runs on Layer 2/3 #hinweis[(data link / network layer)], LoadMaster, HAProxy, ZEVENET, Neutrino, Nginx, Gobetween
   and Traefik run on Layer 4 #hinweis[(transport layer)] and Layer 7 #hinweis[(application layer)].
 - _Cloud-based load balancers:_ Pay for use. They often also provide predictive analytics and depending on the product
   also operate on different OSI layers #hinweis[(Examples are AWS, Google Cloud, Cloudflare, DigitalOcean and Azure)]
@@ -890,7 +892,7 @@ _Don't store_ anything in the service that can only be accessed on that server -
 If you do, you need a _sticky session_ that always sends a user to the same machine.
 Makes fault tolerance more complex and it makes scaling near impossible.
 
-If you have to store something about the user #hinweis[(i.e. contents of shopping basket)],
+If you have to store something about the user #hinweis[(e.g. contents of shopping basket)],
 either store it in a database accessible from every service or store the information on the user-side via cookie or similar.
 The user then has to provide that cookie with every request.
 This service is _stateless_ because the service itself does not store that information and the user can request the same
@@ -912,12 +914,12 @@ Tell your load balancer if you are running low on resources. There are two metho
 === DNS Load balancing
 DNS Load balancing runs on Layer 7. Has different modes of balancing:
 - _Round Robin:_ On the DNS, a domain name is mapped to multiple IP addresses. On a request, the DNS returns all of these
-  and the client can pick one of them. Basic & simple load balancing, but IPs are static, client can choose suboptimal address,
-  and updating IPs can be slow due to caching.
+  and the client can pick one of them. Basic & simple load balancing, but IPs are static,
+  the client could choose a suboptimal address, and updating IPs can be slow due to caching.
 - _Split Horizon DNS:_ Provide different sets of DNS information selected by the source address of the DNS request
-  #hinweis[(i.e. a European server for Swiss IP address)].
+  #hinweis[(e.g. a European server for Swiss IP address)].
 
-Very easy to setup. Caching with no fast changes. Requires stateless services.
+Very easy to setup. Requires stateless services.
 Offers reduced downtime, scalability and redundancy, but has a negative caching impact.
 
 === Layer 3 Load balancing
@@ -927,9 +929,9 @@ Usually only used on the ISP or _big datacenter level_.
 
 == Traefik
 Traefik is a layer 4 & 7 load balancer.
-It works by defining _entrypoints_ #hinweis[(i.e. all incoming traffic on a specific port)] that correspond to _routers_
-that can filter traffic based on path prefixes #hinweis[(i.e. a router that handles all requests to `/api`)].
-The routers then forward traffic to _services_ defined inside Traefik #hinweis[(i.e. frontend, backend, DB...)]
+It works by defining _entrypoints_ #hinweis[(e.g. all incoming traffic on a specific port)] that correspond to _routers_
+that can filter traffic based on path prefixes #hinweis[(e.g. a router that handles all requests to `/api`)].
+The routers then forward traffic to _services_ defined inside Traefik #hinweis[(e.g. frontend, backend, DB...)]
 which then distribute it to the machines registered for that service.
 
 Configuration can be done via TOML files for Traefik or directly inside a Docker compose with labels\
@@ -956,7 +958,7 @@ Configuration can be done via TOML files for Traefik or directly inside a Docker
 Works with these steps:
 + _User request:_ Browser sends a request to the web server #hinweis[(server-side routing)].
 + _Server processing:_ Server processes request by running server-side code like PHP, C\# or Java,
-  fetch required data from a database or other resources and generates HTML #hinweis[(i.e. via a HTML template engine)].
+  fetches required data from a database or other resources and generates HTML #hinweis[(i.e. via a HTML template engine)].
 + _Response:_ Generate the appropriate HTML, CSS and JS for the requested page.
   The browser receives the response and renders the page.
 
@@ -977,7 +979,7 @@ Relies on _JavaScript_ to update the UI.
 
 *Steps to render a page:*
 + _Initial request:_ Browser sends a request to receive initial HTML/CSS/JS
-+ _Initial response:_ server returns a single #hinweis[(placeholder)] HTML file with CSS and JS.
++ _Initial response:_ Server returns a single #hinweis[(placeholder)] HTML file with CSS and JS.
   JS files contain the applications logic.
 + _Browser rendering:_ Shows HTML file, typically a spinner #hinweis[(loading animation)], then executes JavaScript.
 + _User Interactions:_ JS manages the UI updates. Application does not require full page reloads.
@@ -1010,7 +1012,7 @@ port or scheme)] initiated from scripts #hinweis[(i.e. JS)].
 CORS is a HTTP header based mechanism to indicate browsers from which other origins the site is allowed to load assets from.
 
 *Solution* \
-Use _reverse proxy_ with built-in webserver, e.g. nginx or user reverse proxy with external webserver.
+Use a _reverse proxy_ with built-in webserver, e.g. nginx or user reverse proxy with external webserver.
 The client only sees the same origin for the API and the frontend assets.
 Alternatively, CORS header can be set to specify which domains can be fetched from
 
@@ -1038,7 +1040,7 @@ The CIA triad is a trade-off between three concepts. You can't achieve all three
 ==== Goals of access control
 - _Non-Repudiation:_ Provides that neither the sender nor the receiver can deny that a communication has taken place
 - _Identification:_ E.g. with a username "alice", you are claiming to be Alice
-- _Authentication:_ Verifying a claim of identity. E.g. Alice shows passport, so another person can authenticate her
+- _Authentication:_ Verifying a claim of identity. E.g. Alice shows passport, so another person can authenticate her.
   Different authentication types are:
   - _Something you know:_ Things such as a PIN or a password
   - _Something you have:_ A key or a swipe card
@@ -1047,11 +1049,11 @@ The CIA triad is a trade-off between three concepts. You can't achieve all three
 
 === Authentication Basics
 Can be split into two different categories:
-- _Single-factor_ #hinweis[(only uses one type of authentication, usually password. Simple to implement, but limited protection)]
-- _Multi-factor (2FA)_ #hinweis[(uses multiple factors, usually password & one-time-pin. Token via SMS are considered insecure)]
+- _Single-factor:_ Only uses one type of authentication, usually password. Simple to implement, but limited protection
+- _Multi-factor (2FA):_ Uses multiple factors, usually password & one-time-pin. Token via SMS are considered insecure
 
 When choosing a password, it should _not contain the following_: Names of persons #hinweis[(or pets)] close to you,
-anniversary or birth dates, name of a favorite holiday, favorite sports team or the word password.
+anniversary or birth dates, name of a favorite holiday, favorite sports team or the word "password".
 But it is better anyway if you use a _password manager_ and generate a password that way, which also solves the problem of
 password reuse. In general, the length of the password matters most: The _longer_ it is, the longer it takes to crack it.
 You also should not enter login credentials on unencrypted websites #hinweis[(HTTP-only)].
@@ -1104,16 +1106,16 @@ Because of _timing deviations_, a server may also accept a token from the next o
 
 == Basic Auth
 Basic auth transmits the credentials in the `Authorization` HTTP header with base64 encoding.
-- On an unauthenticated request, the _server will reply with the header:_` WWW-Authenticate: Basic realm=` `"restricted area"`.
++ On an unauthenticated request, the _server will reply with the header:_` WWW-Authenticate: Basic realm=` `"restricted area"`.
   The browser will display a authentication dialog together with the `realm` information to indicate what area the user
   is logging into.
-- The _client will provide the authorization_ by setting the `Authorization: Basic <base64>` HTTP header.
++ The _client will provide the authorization_ by setting the `Authorization: Basic <base64>` HTTP header.
   `<base64>` contains `username:password` in base64 encoding. The credentials could also be _encoded in URL_
   #hinweis[(e.g. https://username:password@dsl.i.ost.ch)]. This can be a security risk if the URL gets saved or passed on.
 
-Does _not provide encryption for credentials_, only formatting for HTTP Header.
+Does _not provide encryption for credentials_, only formatting for the HTTP Header.
 Should _only be used with HTTPS_, otherwise login credentials are transmitted in the open.
-State would need to be managed by the services #hinweis[(i.e. with a list of users)]. Very easy to implement in a load balancer.
+State would need to be managed by the services #hinweis[(e.g. with a list of users)]. Very easy to implement in a load balancer.
 
 _Suboptimal when logging off: _There is no standardization, the client must enter incorrect login data in order to
 receive a new authentication request, resulting in inconsistent behavior.
@@ -1122,9 +1124,9 @@ receive a new authentication request, resulting in inconsistent behavior.
 A little better than basic auth. Has a hash and a nonce which helps against replay attacks.
 + Client sends _request_
 + Server sends a 401 with HTTP header `WWW-Authenticate: Digest` that contains a _nonce_
-+ Client _sends response:_
-  `Authorization: Digest username="Alice", realm="testrealm@host.com", nonce="...", uri="../index.html", ... , response="..."`.
-  The response is a hash which is calculated from the password amongst other things.
++ Client _sends response_ with the HTTP header:\
+  `Authorization: Digest username="Alice", realm="testrealm@host.com", nonce="...", uri="../index.html", response="..."`\
+  The `response` field contains a hash which is calculated from the password amongst other things.
 + Server _calculates hash_ as well
 + If the hashes match, the user gets _access_
 
@@ -1143,50 +1145,53 @@ The _client provides a certificate_ signed by the server to authenticate. Usuall
 Better than Digest Auth.
 + _Generate a SSL CA_ #hinweis[(Certificate Authority)] on the server and configure proxy or service to require
   a client certificate
-+ _Create CSR_ #hinweis[(certificate signing request)], sign with CA and install certificate on client in browser
++ _Create a CSR_ #hinweis[(certificate signing request)] that signs a newly created user certificate with CA
++ Send the signed certificate to the user, they install the certificate in their browser
 + The browser sends the signed certificate to the server when prompted
 
 == Let's Encrypt
 _Free, automated, open certification authority._ Has automated certificate creation and renewal.
-Certificates are valid for 90 days. It is integrated in modern web servers.\
+Certificates are valid for 90 days. It is integrated in modern web servers to auto-renew your certificates.\
 There are two main ways to get a certificate from Let's Encrypt:
+#v(-0.5em)
 #table(
   columns: (1fr, 1fr),
   table.header([HTTP challenge verification], [DNS challenge verification]),
   [
-    - Server must be _publicly accessible_ #hinweis[(no VPN or internal-only)]
+    - Server must be _publicly accessible_ #hinweis[(no VPN or internal-only server)]
     - A _token_ generated by Let's Encrypt is placed under \ `/.well-known/acme-challenge/`
     - Let's Encrypt verifies the token _via HTTP request_
   ],
   [
     - Server does _not have to be publicly accessible_
+    - Requires access to the DNS records
     - Enables _wildcard certificates_ #hinweis[(\*.ost.ch)]
     - Token is placed as a _TXT entry in DNS_
     - Let's Encrypt _checks the DNS entry_
   ],
 )
-
+#v(-0.5em)
 == Session-based Authentication
 After a _successful login_, the server creates a session and sends the user a _session ID_ to authenticate with.
-Usually stored in a Cookie. _Stateful, needs sticky session_ because authentication is done in the service which
-then has an authenticated session for the client -- meaning when accessing another service
+Usually stored in a Cookie. _Stateful, needs sticky session_ because authentication is done in that specific
+service instance which then has an authenticated session for the client -- meaning when accessing another service
 #hinweis[(or the load balancer selects another server)], _re-authentication_ is required.
 The load balancer avoids this with a _sticky session_: Sending the same user to the same service every time.
-Example for this is spring-boot.
+An example for this is spring-boot.
 
 == JSON Web Token (JWT)
 _Stateless_, all server instances know a secret token / public key. When the user _logs in_, the server sends back a token.
-The User Token gets saved in local storage. The client then sends the `Authorization: Bearer <token>` header with every request
+The user token gets saved in local storage. The client then sends the `Authorization: Bearer <token>` header with every request
 to authenticate.
 
 #grid(
   columns: (1.3fr, 1fr),
   [
     A JWT consists of _three parts_:
-    - _Header:_ Contains token type #hinweis[(`typ`)], encryption algorithm #hinweis[(`alg`)]
+    - _Header:_ Specifies token type #hinweis[(`typ`)], encryption algorithm #hinweis[(`alg`)]
     - _Payload:_ Usual fields are subject #hinweis[(`sub`)], user role #hinweis[(`role`)],
       issued at in Unix time #hinweis[(`iat`)], token expiry date in Unix time #hinweis[(`exp`)]. Can also contain custom fields
-    - _Signature:_ generated from the header and payload together with a secret
+    - _Signature:_ Generated from the header and payload together with a secret
 
     To generate a JWT, these three parts are _individually encoded with Base64Url_
     #hinweis[(a modification of Base64 that replaces all special URL characters)] and concatenated with dots,
@@ -1232,7 +1237,7 @@ to authenticate.
 #grid(
   [
     Protocol for authorization of 3rd party integration. Grant access on other websites without giving them the passwords.
-    Often implemented with JWT.
+    Defines "Flows" applications can implement. Data is often stored with JWT.
 
     _Access Tokens_ should only have a _short lifetime_ #hinweis[(e.g. 5 minutes)].
     If the public key / secret is known, the content in the token can be trusted.
@@ -1247,7 +1252,7 @@ to authenticate.
 - _Only access token:_ If a user credential is revoked, how can every service be informed?
 - _Only refresh token:_ Tightly coupled service & auth: For every request to the service auth needs to be involved
 - _Access + Refresh token:_ If a user credential is revoked, user has a maximum of 10 minutes remaining to access the service.
-  The Auth is only involved if access token is expired -- a pragmatic middle way.
+  The auth is only involved if access token is expired -- a pragmatic middle way.
 
 
 = Protocols
@@ -1265,16 +1270,16 @@ to authenticate.
 
   [Session], [Handles the _exchange of information_, restarts sessions], [`Data`],
 
-  [Transport], [Transport], [Logical _end-to-end connection_. #hinweis[Ports]], [`TCP Header, Data`],
+  [Transport], [Transport], [Logical _end-to-end connection_ #hinweis[(Ports)].], [`TCP Header, Data`],
 
   [Internet],
   [Network],
-  [Responsible for _delivering the IP packets_ from source to destination. #hinweis[IP addresses]],
+  [Responsible for _delivering the IP packets_ from source to destination #hinweis[(IP addresses)].],
   [`IP Header,` \ `TCP Header, Data`],
 
   [Link\ #comment[#sym.space #sym.triangle.filled.t #v(-1.3em) #h(0.07em)#sym.triangle.filled.t #sym.triangle.filled.t]],
   [Data link],
-  [Responsible for _delivering data link frames_ on the same network. Error detection mechanisms. #hinweis[MAC Addresses]],
+  [Responsible for _delivering data link frames_ on the same network. Error detection mechanisms #hinweis[(MAC Addresses)].],
   [`Ethernet Header, ` \ `IP Header,` \ `TCP Header, Data`],
 
   [--], [Physical], [The medium the data travels through #hinweis[(copper, fibre, air...)]], [--],
@@ -1285,7 +1290,8 @@ The goal of the OSI layer definition is _interoperability_.
 There are a lot of different designations for the layers, everyone calls stuff differently.
 
 _Important to know:_ Each layer takes on a _specific part_ of the communication task and communicates with
-the _corresponding layer_ on the other side. This means that the layers are modular and protocols can be replaced.
+the _corresponding layer_ on the other side. This means that the layers are modular and protocols can be
+easily replaced.
 
 Protocols enable an entity/instance to interact with an entity/instance at the same layer in another host.
 Layers don't need to worry about the ones below it, as that has already been taken care of.
@@ -1369,7 +1375,8 @@ This would _increase the amount of traffic_ on the network between client and se
       #hinweis[(Maximum segment size)] for each ACK received.
 
     - _Congestion avoidance:_ Congestion avoidance state is entered when `cwnd` reaches slow start threshold
-      #hinweis[(ssthresh)]. `cwnd` increases by one MSS for each RTT #hinweis[(if no duplicate ACK arrives)]
+      #hinweis[(ssthresh)]. `cwnd` increases by one MSS #hinweis[(Maximum Segment Size)] for each RTT
+      #hinweis[(if no duplicate ACK arrives)]
 
     There are _different algorithms_ for congestion control.
   ],
@@ -1382,7 +1389,7 @@ Flow Control manages the capacity of a single client, Congestion Control of the 
 === TCP Considerations
 The TCP handshake is _not_ flexible: You need 1 roundtrip for the TCP handshake.
 It only ensures that both sides are ready to transmit data and nothing else.
-There is _no mechanism to cannot exchange public / private keys via TCP_, you need another security layer for the exchange,
+There is _no mechanism to exchange public / private keys via TCP_, you need another security layer for the exchange,
 but this _adds at least another roundtrip_.
 Additional roundtrips for DNS or old security protocols may be necessary. There is a _big overhead_.
 
@@ -1397,7 +1404,7 @@ It runs after the initial TCP handshake.
 + _key exchange_ using random bytes sent by server, now server and client can calculate the secret key
 + _"finished" message_, encrypted with the secret key
 
-This process needs 3 RTTs to send first byte #hinweis[(1x TCP handshake, 2x TLS handshake)] and 4RTTs to receive the first
+This process needs 3 RTTs to send the first byte #hinweis[(1x TCP handshake, 2x TLS handshake)] and 4RTTs to receive the first
 data byte. When connecting to Australia, 3 RTTs mean a latency of \~900ms.
 
 To decrease the amounts of RTTs, _TLS 1.3_ was released in 2018. It _decreases_ the TLS RTTs from 2 to 1.
@@ -1427,19 +1434,21 @@ If a packet gets dropped, it can impact all other resources in that connection.
 + Client _requests resources_ $A$ and $B$ in a _multiplexed connection_.
 + Server sends $A$ and $B$, but one packet containing part of resource $B$ _gets lost_
 + Due to the _ordering guarantee_, the TCP stack on the client _can't deliver resource $A$_, even though it has been
-  fully transmitted. Only when the missing packet from $B$ has been received, both resources can be processed further.
-
+  fully transmitted. Only when $B$'s missing packet has been received, both resources can be processed further.
+#v(-0.25em)
 QUIC solves this by introducing _streams_. Every requests gets its own stream.
 A _packet loss in one stream doesn't impact all other streams_ in the same connection.
 
 == UDP
 #grid(
-  columns: (1.1fr, 1fr),
+  columns: (1.4fr, 1fr),
+  align: horizon,
   [
-    UDP #hinweis[(User Datagram Protocol)] is a _simple connection-less communication model_ without any guarantees regarding
-    _delivery_ #hinweis[(you don't know if package has been received)], _ordering_ #hinweis[(packets may appear in any order)]
-    or _duplicate protection_ #hinweis[(client needs to handle receiving the same packet twice)].
-    Its main use is for _DNS_ and _audio/video streaming_.
+    UDP #hinweis[(User Datagram Protocol)] is a _simple connection-less communication model_ for use with _DNS_ and
+    _audio/video streaming_. It has no guarantees regarding...
+    - _delivery_ #hinweis[(you don't know if package has been received)]
+    - _ordering_ #hinweis[(packets may appear in any order)]
+    - _duplicate protection_ #hinweis[(client needs to handle receiving the same packet twice)]
   ],
   image("img/dsy_11.png"),
 )
@@ -1453,7 +1462,7 @@ at all. Despite this, it is _used by WebRTC_ #hinweis[(see chapter @webrtc)], bu
 
 == DDoS Amplification Attack
 Badly designed UDP implementations can be used to perform a DDoS amplification attack, in which the client makes a
-_small request_ #hinweis[(i.e. 10 bytes)], to which the server delivers a _much larger response_ #hinweis[(i.e. 100 bytes)].
+_small request_ #hinweis[(e.g. 10 bytes)], to which the server delivers a _much larger response_ #hinweis[(e.g. 100 bytes)].
 If the client performs _IP spoofing to redirect the response towards a victim_, for every byte the attacker sends,
 the victim receives _10 times the amount of traffic._
 
@@ -1693,7 +1702,8 @@ _Apache Arrow_ #hinweis[(fast data serialization for data in tables)].
 Web Real-Time Communication #hinweis[(WebRTC)] is a protocol released in 2011 by Google that offers
 _browser-to-browser communication_. Its main usage is _audio/video calls_ inside the browser.
 It communicates mostly over Peer-to-Peer. Before WebRTC, users had to either install plugins like Adobe Flash or
-install a native program; now most calls inside the browser #hinweis[(WhatsApp Web, Facebook Messenger)] use WebRTC.
+install a native program to do audio/video calls; now most calls inside the browser
+#hinweis[(WhatsApp Web, Facebook Messenger)] use WebRTC.
 
 Until the WebRTC specification was _completely standardized in 2021_, there were a lot of implementation differences
 between browsers. Now, WebRTC works well across most browsers.
@@ -1712,7 +1722,7 @@ To guarantee compatibility, all WebRTC implementations _must support the VP8 and
     It routes the traffic over a _relay server_ to make connections in network environments where peer-to-peer would
     not work correctly #hinweis[(i.e. symmetrical NAT)]. The communication with the TURN servers happens over _UDP_,
     but can also be sent over TCP, in case firewalls block UDP traffic.
-    _TURN works guaranteed_, but it is _less efficient_ and the communication _no longer peer-to-peer_.
+    _TURN works guaranteed_, but it is _less efficient_ and the communication is _no longer peer-to-peer_.
 
     In theory, TURN could be avoided by implementing _NAT-PMP_ #hinweis[(NAT Port Mapping Protocol)] that automatically
     opens ports inside the NAT, similar to UPnP. But implementation of it into browsers has been stalled for a long time.
@@ -1763,9 +1773,9 @@ There are a few points of _criticism_ about WebRTC:
   and even encrypts the media itself #hinweis[(with SRTP & DTLS)].
 
 == DNS
-_DNS translates human readable domain names to IP adresses._
-It works hierarchical, with the authority over subdomains transferred to the owners of these:
-The root servers have authority over TLDs #hinweis[(.com, .ch, etc.)], TLDs over sub-level domains.
+_DNS translates human-readable domain names into IP adresses._
+It operates hierarchically, with the authority over subdomains transferred to their owners:
+The root servers have authority over Top-Level Domains (TLDs) #hinweis[(.com, .ch, etc.)], TLDs over sub-level domains.
 DNS uses _UDP port 53_ for communication. It was designed in 1983 with no encryption or verification mechanism.
 Before DNS, the `host.txt` containing all IP-domain mappings needed to be distributed -- not scalable!
 
@@ -1774,19 +1784,19 @@ While domain names only allow ASCII characters, _Punycode_ can be used to "trans
 
 === DNS Setup
 Typically, there are _primary_ and _secondary_ DNS servers for redundancy in case of failure.
-The secondary servers get its data from the primary through _zone transfer_ that copies the entries to the secondary.
+The secondary servers get their data from the primary through _zone transfer_ that copies the DNS records to the secondary.
 
 To make DNS queries more efficient, different DNS server types exist:
-- _Caching/Forwarding DNS:_ Cache DNS queries, so name lookups don't need to be repeated. Usually on routers in the LAN.
+- _Caching/Forwarding DNS:_ They cache DNS queries, so name lookups don't need to be repeated. Usually on routers in the LAN.
 - _Recursive servers:_ Execute the actual name resolution for the client. Ask the authoritative servers and return the result.
   Usually on the ISP.
-- _Authoritative server:_ Provide the definitive answer to a name resolution. At the root and each TLD and SLD.
+- _Authoritative server:_ Provide the definitive answer to a name resolution. At the root and at each TLD and SLD.
 
 _In essence:_ Authoritative servers allow others to find your domain, recursive servers allow you to find other domains.
 
 === Root servers
-The root servers were originally limited to 13 due to the maximum DNS packet limit of 512 bytes, but with _Anycast_
-#hinweis[(One address represents multiple servers)], these 13 servers now _correspond to over a 1000 servers worldwide_.
+The root servers were originally limited to 13 servers due to the maximum DNS packet limit of 512 bytes, but with _Anycast_
+#hinweis[(One address represents multiple servers)], these 13 servers now _correspond to over 1000 servers worldwide_.
 For example, `l.root-servers.net` has one IP, but is mirrored in 138 locations.
 
 The control over these root zones lies with the _United States Departement of Commerce_ and they are operated by _ICANN_
@@ -1862,7 +1872,7 @@ is encrypted, the connections from the recursive to the authoritative servers ar
   table.header([], [DoH (DNS over HTTPS)], [DoT (DNS over TLS)]),
   [*Functionality*],
   [
-    DoH-capable applications send queries over the HTTPS port 443 to a DoH capable resolver #hinweis[(i.e. Cloudflare)].
+    DoH-capable applications send queries over the HTTPS port 443 to a DoH capable resolver #hinweis[(e.g. Cloudflare)].
     This hides DNS traffic, which makes it harder to filter.
   ],
   [Sends DNS queries over TLS with port 853, meaning this traffic can be easily blocked or prioritized.],
@@ -1883,13 +1893,24 @@ is encrypted, the connections from the recursive to the authoritative servers ar
 
 = Deployment
 Back in the old days, there were two main strategies for deployment:
-- _OTS:_ "Off-the-shelf software" -- ready-made Packages which could be easily installed with package managers.
+- _Off-the-shelf software (OTS):_ Ready-made packages which could be easily installed with package managers.
 - _Custom Software:_ More complicated, you had to upload Java Web Archive files #hinweis[(`.war`)] to the application server,
   which in turn extracted and installed the software.
 
 *Problems:*
-"It runs on my machine", Who installs Java in the right version?, What happens on crashes?, Scaling, Hardware Defects,
-Misconfiguration #hinweis[(Security risks if configuration wrong)]
+#v(-0.5em)
+#grid(
+  [
+    - "It runs on my machine", but not on the server
+    - Is the right version of Java installed?
+    - What happens on crashes?
+  ],
+  [
+    - Scaling
+    - Hardware Defects
+    - Misconfiguration #hinweis[(Security risks if configuration is bad)]
+  ],
+)
 
 _VMs / Containers_ help a lot to combat these problems. They don't give the programs access to the complete PC,
 can scale, can more easily be moved to another machine and can pre-install the right Java version.
@@ -1899,7 +1920,7 @@ There are a lot of different strategies to deploy containers.
 #grid(
   [
     - *Rolling Deployment / Ramped Deployment:*
-      The new version is _gradually deployed_ to replace the old version - _without taking the entire system down_ at once.
+      The new version is _gradually deployed_ to replace the old version _without taking the entire system down_ at once.
       #plus-list[+ Minimal downtime, low risk]
       #v(-0.5em)
       #minus-list[+ Complexity, longer deployment times]
@@ -1946,10 +1967,10 @@ Ansible is a configuration tool which connects _via SSH_ to the server.
 Not originally built to work with containers, but can still be used with them.
 Can also be used with other tools like Progress Chef or Puppet.
 The Ansible workflow is designed around _playbooks_ that define the state a server is meant to be in.
-In a list of SSH hosts, the server it should administer are entered. Ansible then connects to them and executes the playbook.
+In a list of SSH hosts, the servers it should administer are entered. Ansible then connects to them and executes the playbook.
 The host should run the same OS as the Ansible host to avoid conflicts.
 
-Ansible has _no agents running_ unlike Progress Chef or puppet. Very good for _structured deployment_.
+Ansible has _no agents running_ unlike Progress Chef or Puppet. Very good for _structured deployment_.
 
 Run it with `ansible-playbook playbook.yml`
 
@@ -2007,7 +2028,7 @@ because Kubernetes can do more than Docker Swarm and supports more complex requi
 
 === Kubernetes (K8s)
 Kubernetes _automates deployment, scaling, and management of containerized applications._
-Started by Google in 2014, now it's in the hands of the CNCF #hinweis[(Cloud Native Compute Foundation)].
+Started by Google in 2014, it's now in the hands of the CNCF #hinweis[(Cloud Native Compute Foundation)].
 Has become the industry standard. All big cloud providers support Kubernetes. But they often have a difficult pricing scheme.
 
 Kubernetes simplifies _application deployment_ and management by automatically determining how and where to deploy
@@ -2051,7 +2072,7 @@ It provides a powerful ecosystem of tools and services.
 - _ConfigMap:_ Stores non-sensitive configuration data for an application #hinweis[(e.g. environment variables)]
 - _Secret:_ Stores sensitive configuration data like passwords and API keys.
 - _Volume:_ Persistent storage for data generated by a container. Kubernetes supports multiple types of volumes.
-- _Namespaces:_ run multiple projects on one cluster, separate them with namespaces.
+- _Namespaces:_ Run multiple projects on one cluster, separate them with namespaces.
 
 == Ideal Deployment Strategy
 Ideally, you should only have to _change a single line_ to deploy your application with _another provider_.
@@ -2116,7 +2137,7 @@ _Text_ can be compressed relatively well. If you have _more read than write acce
 
 ==== HTTP Compression Algorithms
 - _gzip:_ General compression tool. Most widely used option for web content.
-- _Brotli:_ optimized for web content because of included dictionary for web keywords
+- _Brotli:_ optimized for web content because of the included dictionary for web keywords
   #hinweis[(HTML tags, HTTP headers, CSS properties, JavaScript keywords, URL fragments etc.)]
 - _zstd:_ General purpose, better than gzip, because it is faster and has a better compression ratio
 
@@ -2150,7 +2171,7 @@ ab -n 5000 -c 50 -k -H "Connection: keep-alive" http://localhost/info
 #pagebreak()
 
 = Bitcoin / Blockchain
-Bitcoin is an experimental _digital currency_. It is fully peer-2-peer and therefore has no central entity.
+Bitcoin is an experimental _digital currency_. It is fully peer-to-peer and therefore has no central entity.
 The first bitcoin was issued on January 3, 2009. The smallest possible unit is 0.00000001 BTC, it is called 1 satoshi.
 
 == Key characteristics
@@ -2162,11 +2183,11 @@ This moment will occur at around the year 2140.
 
 _Every transaction broadcasts to all peers._ Every peer knows all transactions, their total size is around 660 GB as of today.
 
-_Validation_ is done by _proof-of-work_ by calculating partial hash collisions.
+_Validation_ is done through _proof-of-work_ by calculating partial hash collisions.
 This is difficult to fake and makes sure that there is _no double-spending_ #hinweis[(using the same Bitcoins twice)].
 
 _The initiator is unknown so far._ We know only the pseudonym Satoshi Nakamoto. There are rumors, but so far nobody has
-found out who the person or organization is and why the bitcoins which Satoshi has #hinweis[(around 1mio BTC)] were never moved.
+found out who the person or organization is and why the Bitcoins which Satoshi has were never moved #hinweis[(around 1 million BTC)].
 
 The first Bitcoin boom #hinweis[(and crash!)] was in 2013 and another one in 2014. The trend is upwards.
 At the moment, the price of 1 BTC is around 104'000 USD. After every halving, the price tends to go up.
@@ -2218,9 +2239,9 @@ A wallet has public-private keys.
 - The _private key_ is used for signing transactions. If you lose your key, you lose your bitcoins.
 
 === Transaction
-+ Peer A wants to _send BTC_ to peer B. To do this, he creates a _transaction message_
-+ Transaction message contains _inputs and outputs_ #hinweis[(where the BTC came from and where it goes)]
-+ Peer A _broadcasts_ the transaction to all the peers in the network
++ Peer $A$ wants to _send BTC_ to peer $B$. To do this, he creates a _transaction message_
++ The transaction message contains _inputs and outputs_ #hinweis[(where the BTC came from and where it goes)]
++ Peer $A$ _broadcasts_ the transaction to all the peers in the network
 + Transactions are _stored in blocks_. A new block is _created / verified_ every 10 minutes, this process is called _mining_.
 
 The system is designed to be both _secure_ and _transparent_, as all transactions are stored _publicly_ in the blockchain.
@@ -2313,10 +2334,10 @@ An online shop for clothes accepts payments in Bitcoins. What are the 4 steps of
 + Order clothes with a _regular transaction_.
   Simultaneously _start a new chain_ with _more than 50% computing power_ that does not include that transaction.
 + The clothes shop _confirms the transaction_ and _despatches the ordered clothes_.
-+ _Publish the secret, longer chain._ Because the chain is now the longest in the Bitcoin network, it is now considered the
++ _Publish your secret, longer chain._ Because the chain is now the longest in the Bitcoin network, it is now considered the
   correct chain and the chain with the payment made to the online shop is _discarded_.
   The Bitcoins were therefore _never spent_.
-+ _Profit_.
++ _Profit!_
 
 == Coins and Mechanisms
 All electronic coins are backed by scarce resources to avoid double spending.
