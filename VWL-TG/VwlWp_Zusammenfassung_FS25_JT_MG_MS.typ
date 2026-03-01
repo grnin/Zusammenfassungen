@@ -1,4 +1,4 @@
-// Compiled with Typst 0.13.1
+// Compiled with Typst 0.14.2
 #import "../template_zusammenf.typ": *
 
 #show: project.with(
@@ -10,14 +10,12 @@
   tableofcontents: (enabled: true, depth: 2, columns: 2),
 )
 
-// Document-specific settings
-#show figure.caption: set text(hyphenate: false)
-
 = Wohlstand
 *Ziele der Wirtschaftspolitik*\
-Die verschiedenen Ziele der Wirtschaftspolitik besitzen untereinander entweder Zielharmonie
-#hinweis[(Profitieren voneinander, wenn erfüllt)], Zielneutralität #hinweis[(nicht voneinander abhängig)] oder
-Zielkonflikte #hinweis[(Können nicht gleichzeitig erfüllt werden)].
+Die verschiedenen Ziele der Wirtschaftspolitik besitzen untereinander entweder _Zielharmonie_
+#hinweis[(Profitieren voneinander, wenn erfüllt)], _Zielneutralität_ #hinweis[(nicht voneinander abhängig)] oder
+_Zielkonflikte_ #hinweis[(Können nicht gleichzeitig erfüllt werden)].
+
 - _Wirtschaftswachstum:_ Notwendig, damit es zukünftigen Generationen besser als den heutigen geht.
 - _Vollbeschäftigung:_ Weniger Arbeitslose steigern den BIP und damit den Wohlstand
 - _Sozialer Ausgleich:_ Umverteilung von Ressourcen zu sozial Schwachen
@@ -30,7 +28,7 @@ Zielkonflikte #hinweis[(Können nicht gleichzeitig erfüllt werden)].
 - _Volkswirtschaftslehre:_ Sie beschäftigt sich mit der Frage, wie eine Gesellschaft mit ihren knappen Ressourcen
   (Arbeit, Kapital, Technologie, Boden und natürliche Ressourcen) umgeht.
 - _Mikroökonomie:_ Zunächst werden die Entscheidungen der einzelnen Wirtschaftseinheiten innerhalb des Landes,
-  d.h. der Haushalte und der Unternehmen analysiert. Dazu kommen Staat und Ausland.
+  also der Haushalte und der Unternehmen analysiert. Dazu kommen Staat und Ausland.
 - _Makroökonomie:_ In einem nächsten Schritt wird untersucht, wie diese Vielzahl von Entscheidungen miteinander
   koordiniert werden und ob das Ergebnis aus gesamtwirtschaftlicher Sicht wünschenswert ist.
 - _Wirtschaftspolitik:_ Schliesslich werden die sich daraus ergebenden wirtschaftspolitischen Massnahmen,
@@ -107,7 +105,7 @@ Danach stieg es verhältnismässig langsam an, meist nur um etwa 1%.
 
 Aufgrund ihrer geringen Grösse ist die Schweiz beim realen und nominalen BIP-Vergleich relativ weit hinter
 bevölkerungsreicheren Ländern, steht aber im pro-Kopf-Vergleich in den Top 5 mit Bankenländern Luxemburg und Singapur,
-der Grosskonzern-Steueroase Irland und dem Ölländern Katar, VAE und Norwegen #hinweis[(viel Öl in Untersee)].
+der Grosskonzern-Steueroase Irland und den Öl-Ländern Katar, VAE und Norwegen #hinweis[(viel Öl in Untersee)].
 
 #pagebreak()
 
@@ -117,11 +115,19 @@ Angebot und Nachfrage definieren die Wertschöpfung. Ressourcen auf der Entstehu
 #grid(
   columns: (1fr, 1fr),
   align: horizon,
-  figure(caption: [Gesamtwirtschaftliche Wertschöpfung], image("img/vwl/gesamtwirtschaft-angebot-nachfrage.png")),
   figure(
-    caption: [Wertschöpfung der Volkswirtschaftlichen Gesamtrechnung (VGR)],
-    image("img/vwl/vgr-wertschöpfung.png"),
+    caption: [Gesamtwirtschaftliche Wertschöpfung],
+    image(
+      width: 96%,
+      "img/vwl/gesamtwirtschaft-angebot-nachfrage.png",
+    ),
   ),
+  [
+    #figure(
+      caption: [Wertschöpfung der Volkswirtschaftlichen Gesamtrechnung (VGR)],
+      image("img/vwl/vgr-wertschöpfung.png"),
+    ) <vgr>
+  ],
 )
 
 Die volkswirtschaftlichen Aspekte können den BIP-Perspektiven zugeordnet werden:
@@ -129,11 +135,11 @@ Die volkswirtschaftlichen Aspekte können den BIP-Perspektiven zugeordnet werden
 - _Produktionsansatz:_ Vorleistungen, Produktionswert
 - _Verwendungsansatz:_ Konsumausgaben der Haushalte, Exporte
 
-Die VGR misst die Wertschöpfung nicht zuverlässig:
+Die VGR #hinweis[(@vgr)] misst die Wertschöpfung nicht zuverlässig:
 Nicht erfasste Tätigkeiten #hinweis[(Hausarbeit, Schwarzarbeit, Kriminalität)],
 Probleme bei der Erfassungsgenauigkeit #hinweis[(Herausrechnen der Vorleistung)],
 Fehlen von Marktpreisen #hinweis[(v.a. bei öffentlichen Gütern)]
-
+#v(-0.25em)
 === Produktionsseite
 #grid(
   align: horizon,
@@ -174,7 +180,7 @@ Freiheits- und Wahlrechte, Toleranz, Zugang zu Bildung
 BIP allein macht nicht glücklich. Bei Ländern mit tiefem BIP bringt eine BIP-Erhöhung viel Lebensqualität,
 je höher der BIP schon ist, desto geringer wird der Zuwachs.
 Arme Länder sind gezwungen, Wohlstandsentwicklung zu betreiben, um ihre Lebensqualität zu erhöhen.
-Reiche Länder dagegen müssen in soziale Institutionen investieren, damit die Glücklichsein der Bevölkerung verbessert wird.
+Reiche Länder dagegen müssen in soziale Institutionen investieren, damit das Glücklichsein der Bevölkerung verbessert wird.
 
 #pagebreak()
 
@@ -228,8 +234,8 @@ Der Anteil des Staatskonsums am BIP auf der Verwendensseite ist die _Staatsquote
 #grid(
   align: horizon,
   [
-    Während die Schweiz in Vergleichen zu Wettbewerbsfähigkeit und Lebensqualität gut abschneidet, ist beim Wachstum der
-    Arbeitsproduktivität das Gegenteil der Fall:
+    Während die Schweiz in Vergleichen zu Wettbewerbsfähigkeit und Lebensqualität gut abschneidet, ist beim _Wachstum der
+    Arbeitsproduktivität_ das Gegenteil der Fall:
     Laut OECD durchschnittlich nur 1.2% #hinweis[(EU-Spitzenreiter Polen, Slowakei, Lettland, Litauen zwischen 3.8% - 4.7%)].
     Die Schweiz liegt zwar im Vergleich mit ähnlich entwickelten Volkswirtschaften nur um wenige Prozentpunkte zurück
     #hinweis[(DE & FR 0.1, AT 0.2, USA 0.6)], diese summieren sich aber wegen der Exponentialität der Werte.
@@ -279,7 +285,7 @@ Sie verhindert aber nur die Staatsverschuldung, nicht aber den Ausbau der Staats
 Das erste Massnahmenpaket zeigte nicht die erhoffte Wirkung, darum wurde 2008 die Wachstumspolitik angepasst.
 
 *Wachstumspaket mit 20 wirtschaftspolitischen Massnahmen*\
-Senkung des hohen Kostenniveaus (Hochpreisinsel Schweiz), Attraktivitätssteigerung für Teilnahme am Erwerbsleben,
+Kernziele: Senkung des hohen Kostenniveaus (Hochpreisinsel Schweiz), Attraktivitätssteigerung für Teilnahme am Erwerbsleben,
 Aufwertung der Schweiz als Unternehmensstandort
 
 === Schweizer Wachstumspolitik III (2012 - 2015)
@@ -350,7 +356,7 @@ Gerechtigkeit und absoluter Leistungsgerechtigkeit zu finden #hinweis[(z.B. Reic
   columns: (1fr, 1.5fr),
   [
     Die _Verteilung des Vermögens oder Einkommens_ innerhalb einer Bevölkerung wird durch den _Gini-Koeffizient_ gemessen.
-    Dafür wird auf einem Graph das Verhältnis von Familien zu ihrem Einkommen/Vermögen eingetragen.
+    Dafür wird auf einem Graph das Verhältnis von Familien zu ihrem Einkommen oder Vermögen eingetragen.
     Bei perfekter Gleichverteilung müsste sich eine Gerade ergeben. Dies ist aber nie der Fall, also ergibt sich eine
     _Lorenzkurve_: je "bauchiger" diese ist, desto ungleicher ist das Einkommen/Vermögen in einer Bevölkerung verteilt.
 
@@ -393,13 +399,13 @@ Damit wäre der Anteil des reichsten Prozents in der Schweiz bei 25-28% anstatt 
   [
     - Lohn
     - Erträge aus Vermögen
-    - Staatliche Transfers\ #hinweis[(Sozialversicherungen, Subventionen etc.)]
+    - Staatliche Transfers #hinweis[(Sozialversicherungen, Subventionen etc.)]
   ],
   [
     Basierend auf Alter/Tod, Arbeitslosigkeit, Gesundheit, Kinder & Bedürftigkeit
-    - Umverteilung über die Einnahmensseite
+    - *Umverteilung über die Einnahmensseite*
       - Progressives Steuersystem #hinweis[(Einkommens- & Vermögenssteuer)]
-    - Umverteilung über die Ausgabensseite
+    - *Umverteilung über die Ausgabensseite*
       - Direkte Geldtransfers
       - Verbilligung von staatlichen Leistungen #hinweis[(z.B. Krankenkassenprämien)]
   ],
@@ -408,13 +414,15 @@ Damit wäre der Anteil des reichsten Prozents in der Schweiz bei 25-28% anstatt 
 #grid(
   align: horizon,
   figure(
-    caption: [Staatliche Transfers verschieben die Einkommensverteilung],
+    caption: [Staatliche Transfers verschieben die\ Einkommensverteilung],
     image("img/vwl/staatliche-transfers.png"),
   ),
-  [#figure(
-    caption: [Umverteilung international],
-    image("img/vwl/umverteilung-international.png"),
-  ) <umverteilung-international>],
+  [
+    #figure(
+      caption: [Umverteilung international],
+      image("img/vwl/umverteilung-international.png"),
+    ) <umverteilung-international>
+  ],
 )
 
 Wie in @umverteilung-international sichtbar, wird in der Schweiz im europäischen Vergleich relativ wenig Wohlstand umverteilt.
@@ -526,8 +534,9 @@ Der Umwandlungssatz für den überobligatorischen Teil ist deutlich geringer und
 )
 
 == Bedingungsloses Grundeinkommen
-2012 war der Start der Unterschriftensammlung für ein BGE mit Unterstützung durch Syna, SP, PdA und weitere.
-Die Volksinitiative war 2013 erfolgreich zustande gekommen. Abstimmung war am 5. Juni 2016, sie wurde mit 23.1% Ja abgelehnt.
+2012 war der Start der Unterschriftensammlung für ein Bedingungsloses Grundeinkommen mit Unterstützung
+durch Syna, SP, PdA und weitere. Die Volksinitiative war 2013 erfolgreich zustande gekommen.
+Abstimmung war am 5. Juni 2016, sie wurde mit 23.1% Ja abgelehnt.
 
 #v(-0.5em)
 #table(
@@ -543,7 +552,7 @@ Die Volksinitiative war 2013 erfolgreich zustande gekommen. Abstimmung war am 5.
   [
     Jede rechtmässig in der Schweiz sich aufhaltende Person erhält ein bedingungsloses Grundeinkommen. Vorgeschlagen wird:\
     Erwachsene CHF 2'500, Kinder CHF 625 (zuerst CHF 800)\
-    Das Grundeinkommen ersetzt dabei bestehende Einkommen, zum Beispiel:\
+    Das Grundeinkommen ersetzt dabei bestehende Einkommen, zum Beispiel:
     - vorher: Lohn 6'000
     - nachher: Lohn 3'500 und Grundeinkommen 2'500
 
@@ -764,7 +773,7 @@ Japan geriet 1990 in eine Deflationsfalle und erholte sich erst nach über 20 Ja
     jedoch tieferem Preisniveau.
 
     Gemäss der mikroökonomischen Theorie sollten "funktionierende" Arbeitsmärkte kurz- bis mittelfristig von alleine wieder
-    ins Gleichgewicht kommen. Die geschieht durch ein_ marktgerechtes Sinken des Lohnniveaus_.
+    ins Gleichgewicht kommen. Dies geschieht durch ein_ marktgerechtes Sinken des Lohnniveaus_.
     Durch das Sinken des Lohnniveaus entstehen _tiefere Lohnkosten_ für die Unternehmen.
     Mit den sinkenden Lohnkosten verschiebt sich die kurzfristige Angebotskurve $"AA"_K$ nach rechts.
     Ist theoretisch möglich, _praktisch sinken aber Löhne nicht (schnell genug)_.
@@ -861,7 +870,7 @@ _"timely, targeted, temporary"_ sein -- schnell den Betroffenen temporär unter 
 - _Zweite Stufe 2009 (710 Mio. CHF):_ Investitionen in Schiene, Strasse, Infrastruktur, Forschung und Erneuerbare Energien
 - _Dritte Stufe 2010 (944 Mio. CHF):_ Kurzarbeit, Frühzeitige Rückverteilung der CO2-Abgaben an Krankenkassen
 
-Diese obigen Massnahmen waren das Gegenteil .
+Diese obigen Massnahmen waren das Gegenteil von "timely, targeted, temporary".
 Der Bund musste also feststellen, dass er nur wenige Investitionsmöglichkeiten hat, die sich als
 Konjunkturstützungsmassnahmen eigenen.
 
@@ -927,14 +936,14 @@ mit einem _erhöhten Geldangebot_ besteht die Gefahr, dass eine Lohn-Preis-Spira
   align: horizon,
   [
     Eine Umfrage zur Inflationserwartung wird durch die SECO vierteljährlich durchgeführt.
-    1200 Haushalte werden zu ihrer Einschätzung, wie sich die Inflation in nächste 12 Monaten entwickelt, befragt.
-    Die auswählbaren Kategorien sind grob: "stark steigen", "nahezu unverändert", "deutlich zurück".
+    1200 Haushalte werden zu ihrer Einschätzung, wie sich die Inflation in den nächsten 12 Monaten entwickelt, befragt.
+    Die auswählbaren Kategorien sind grob: "stark steigend", "nahezu unverändert", "deutlich zurück".
     Die Meinungsbildung ist abhängig von alltäglichen Erfahrungen, z.B. der Einkauf im Supermarkt.
 
     63 Prozent der befragten Schweizer Ökonomen zeigen sich zuversichtlich, dass es sich beim Inflationsdruck nach Corona
     um ein primär temporäres Phänomen handelt.
-    Damit wäre die Inflation durch Anstieg der Rohstoffpreise & Preissteigerung in Waren, welche sich in Lieferengpässen
-    befinden zu erklären.
+    Damit wäre die Inflation durch Anstieg der Rohstoffpreise und Preissteigerungen in Waren, welche sich in Lieferengpässen
+    befinden, zu erklären.
   ],
   figure(caption: [Inflationswahrnehmung in der Schweiz], image("img/vwl/inflation-erwartung.png")),
 )
@@ -983,13 +992,13 @@ Wie sieht der theoretische Zusammenhang zwischen der Geldpolitik der Zentralbank
     - _Kosten der Unsicherheit:_ (Zu) hohe Nominalzinsen auf Kredite #hinweis[(um Inflation zuvorzukommen)]
     - _Kosten aufgrund der kalten Progression der Steuern_: Höheres Nominaleinkommen führt zur Einstufung
       in höhere Steuerklassen
+    - _Handelsdefizit_: Entweder sinkende Importe oder steigende Exporte
   ],
   [
     - _Kosten aufgrund der Verzerrung der relativen Preise_: Verwischung der Knappheitssignale, da sich
-      Güterpreise unterschiedlich schnell anpassen #hinweis[(nicht klar, ob Preis gut)]
+      Güterpreise unterschiedlich schnell anpassen #hinweis[(Kunden ist nicht klar, ob Preis der Ware gut ist oder nicht)]
     - _Kosten für die Kreditgeber_: Inflation frisst Realzinsen bzw. Kapital der Haushalte auf
       #hinweis[(Staat kann so seine Schulden abbauen, durch Inflation werden reale Schulden kleiner)]
-    - _Handelsdefizit_: Entweder sinkende Importe oder steigende Exporte
   ],
 )
 
@@ -1002,7 +1011,7 @@ Wie sieht der theoretische Zusammenhang zwischen der Geldpolitik der Zentralbank
     die Arbeitslosigkeit bewegt sich dann auf einem tiefen Niveau.
 
     Bei schwach ausgelasteter Wirtschaft ist die Arbeitslosigkeit hoch, jedoch der Inflationsdruck gering.
-    Für die Wirtschaftspolitik spielt die Phillips-Kurve lange Zeit eine wichtige Rolle, da sie es der Politik scheinbar
+    Für die Wirtschaftspolitik spielte die Phillips-Kurve lange Zeit eine wichtige Rolle, da sie es der Politik scheinbar
     erlaubte, sich eine Kombination von Inflation und Arbeitslosigkeit auf der Kurve "auszusuchen".
   ],
   figure(caption: [Phillips-Kurve], image("img/vwl/phillips-kurve.png")),
@@ -1010,7 +1019,7 @@ Wie sieht der theoretische Zusammenhang zwischen der Geldpolitik der Zentralbank
 
 #v(-0.5em)
 == Deflation
-Deflation bedeutet ein _permanenter Rückgang des Preisniveaus_.
+Deflation bedeutet einen _permanenten Rückgang des Preisniveaus_.
 Deflation ist dann schädlich, wenn diese auf einem Rückgang der aggregierten Nachfrage ($"AN"$) beruht.
 Ein Preisrückgang aufgrund einer Ausweitung des aggregierten Angebots ($"AA"$) kann hingegen positiv beurteilt werden.
 
@@ -1082,7 +1091,7 @@ Ein Markt repräsentiert das _Zusammentreffen von Angebot und Nachfrage_.
   columns: (1fr,) * 3,
   table.header([Gütermarkt], [Arbeitsmarkt], [Kapitalmarkt]),
   [Auf dem Gütermarkt findet der Austausch von Gütern und Dienstleistungen statt.],
-  [Auf dem Arbeitsmarkt findet der Austausch des Produktionsfaktors Arbeit statt.],
+  [Auf dem Arbeitsmarkt findet der Austausch des Produktionsfaktors "Arbeit" statt.],
   [Auf dem Kapitalmarkt findet der Austausch von finanziellen Mitteln statt.],
 
   [
@@ -1130,7 +1139,7 @@ Deshalb führt eine _Preiserhöhung in der Regel zu einem Konsumrückgang_ des e
 
 == Markt- und Planwirtschaft
 Es existieren zwei unterschiedliche Vorstellungen, wie eine Volkswirtschaft organisiert sein muss, damit die
-knappen Ressourcen effizient genutzt werden können
+knappen Ressourcen effizient genutzt werden können.
 
 #v(-0.5em)
 #table(
@@ -1155,7 +1164,7 @@ Damit haben die Preise eine _Signalwirkung._
 
 Bei steigendem Preis steigen die Opportunitätskosten für den Konsum des Gutes bei den Nachfragern
 #hinweis[(damit wird der Konsum gesenkt)], für den Anbieter kann sich eine Ausweitung der Produktion für das Gut lohnen
-#hinweis[(Voraussetzung sind gleich bleibende oder sinkende Produktionskosten)]
+#hinweis[(Voraussetzung sind gleich bleibende oder sinkende Produktionskosten)].
 
 == Das mikroökonomische Grundmodell <mikroökonomisches-grundmodell>
 #grid(
@@ -1167,7 +1176,7 @@ Bei steigendem Preis steigen die Opportunitätskosten für den Konsum des Gutes 
     - Es gibt keine Marktzutrittshemmnisse #hinweis[(Gleiche Konditionen, Ortsunabhängig)]
     - Anbieter & Nachfrager sind über Mengen & Preise vollständig informiert
 
-    Dieses simple Modell besteht aus den zwei Linien Angebot $A$ und Nachfrage $N$, diese stehen in einem inversen Verhältnis
+    Dieses simple Modell besteht aus den zwei Linien Angebot $A$ und Nachfrage $N$. Diese stehen in einem inversen Verhältnis
     zueinander -- je höher der Preis, desto geringer ist die Nachfrage #hinweis[(Weniger Leute wollen das Gut kaufen)],
     aber auch desto höher ist das Angebot #hinweis[(Mehr Anbieter wollen das Gut verkaufen)].
 
@@ -1181,7 +1190,8 @@ Bei steigendem Preis steigen die Opportunitätskosten für den Konsum des Gutes 
   [
     Die Effizienz der Markttransaktionen kann am Grundmodell abgelesen werden.
     Auf der linken Seite des Schnittpunkts befinden sich Güter, welche zu einem tieferen Preis als dem Marktpreis verkauft werden
-    und Nachfrager, welche bereit gewesen wären, mehr als den aktuellen Preis für das Gut zu bezahlen.
+    #hinweis[(auf der $A$-Linie)] und Nachfrager, welche bereit gewesen wären, mehr als den aktuellen Preis für das Gut zu bezahlen
+    #hinweis[(auf der $N$-Linie)].
 
     - _Konsumentenrente ($"KR"$):_ Zahlungsbereitschaft des Käufers für ein Gut, abzüglich des Preises,
       den er tatsächlich dafür bezahlen muss
@@ -1196,12 +1206,12 @@ Bei steigendem Preis steigen die Opportunitätskosten für den Konsum des Gutes 
 
 === Staatliche Preiseingriffe
 Durch das Setzen eines _Mindestpreises_ entsteht ein Wohlfahrtsverlust der Konsumenten.
-Zu dem künstlich hoch gehaltenen Preis entsteht ein Überschussangebot, das heisst, die angebotene ist grösser als die
-nachgefragte Menge. _Gewinner: Produzenten, Verlierer: Konsumenten_
+Aus dem künstlich hoch gehaltenen Preis entsteht ein Überschussangebot, das heisst, die angebotene Menge ist grösser als die
+nachgefragte. _Gewinner: Produzenten, Verlierer: Konsumenten_
 
 Durch das Setzen eines _Höchstpreises_ entsteht ein Wohlfahrtsverlust der Produzenten.
-Zu dem künstlich zu tief gehaltenem Preis entsteht eine Überschussnachfrage, das heisst, die nachgefragte ist grösser
-als die angebotene Menge: eine _Angebotslücke_ entsteht. _Gewinner: Konsumenten, Verlierer: Produzenten_
+Aus dem künstlich zu tief gehaltenem Preis entsteht eine Überschussnachfrage, das heisst, die nachgefragte Menge ist grösser
+als die angebotene: eine _Angebotslücke_ entsteht. _Gewinner: Konsumenten, Verlierer: Produzenten_
 
 In beiden Fällen bleibt die gesamte Wohlfahrt aber gleich, sie wird nur umverteilt zu Lasten einer Seite.
 
@@ -1240,9 +1250,11 @@ Mit der Elastizität wird die Grösse der Anpassung eines Faktors bei der Änder
   $
 ]
 
-Die Preiselastizität der Nachfrage ist umso geringer (unelastisch), desto weniger Substitutionsmöglichkeiten es gibt,
-desto wichtiger und lebensnotwendiger das Gut ist, geringer der Anteil der Ausgaben für dieses Gut ist und
-kurzfristiger der Effekt betrachtet wird.
+Die Preiselastizität der Nachfrage ist umso geringer (unelastisch), desto...
+- weniger Substitutionsmöglichkeiten es gibt
+- wichtiger und lebensnotwendiger das Gut ist
+- geringer der Anteil der Ausgaben für dieses Gut ist
+- kurzfristiger der Effekt betrachtet wird
 
 #figure(caption: [Effekte einer Angebotsänderung bei verschiedener Elastizität der Nachfrage], image(
   "img/vwl/markt-und-preise-preiselastizität.png",
@@ -1250,17 +1262,21 @@ kurzfristiger der Effekt betrachtet wird.
 ))
 
 === Preiselastizität des Angebots
-#definition[$
-  "Preiselastizität des Angebots" = "Veränderung der angebotenen Menge (in %)"/"Veränderung des Preises (in %)"
-$]
+#definition[
+  $
+    "Preiselastizität des Angebots" = "Veränderung der angebotenen Menge (in %)"/"Veränderung des Preises (in %)"
+  $
+]
 
 Die Preiselastizität des Angebots ist umso geringer (unelastischer), desto weniger haltbar und lagerfähig ein Gut ist,
 desto weniger rasch das Gut in beliebiger Menge hergestellt werden kann und desto kurzfristiger der Effekt betrachtet wird.
 
 === Einkommenselastizität
-#definition[$
-  "Einkommenselastizität" = "Veränderung der nachgefragten Menge (in %)"/"Veränderung des Einkommens (in %)"
-$]
+#definition[
+  $
+    "Einkommenselastizität" = "Veränderung der nachgefragten Menge (in %)"/"Veränderung des Einkommens (in %)"
+  $
+]
 
 #grid(
   [
@@ -1295,7 +1311,7 @@ RFA hat nur selten und sehr begrenzt Einfluss auf Meinungsbildung und Entscheidu
 Der Arbeitsmarkt lässt sich als mikroökonomisches Modell darstellen:
 Die _Haushalte_ stellen ihre _Arbeitskraft_ zur Verfügung #hinweis[(Arbeitsangebot)].
 Je höher der Lohn, desto mehr Haushaltsmitglieder sind interessiert, ihre Arbeitskraft zur Verfügung zu stellen bzw.
-mehr zu arbeiten. Ab einer bestimmten Grenze gibt es keine verfügbaren Arbeitskräfte mehr ($A$).
+mehr zu arbeiten. Ab einer bestimmten Grenze gibt es keine verfügbaren Arbeitskräfte mehr ($A$ in @arbeitsmarktmodell).
 
 Die_ Unternehmen suchen Arbeitskräfte_ #hinweis[(Arbeitsnachfrage)].
 Je tiefer der Lohn, desto mehr Arbeitsstellen werden geschaffen, da sich z.B. eine Automatisierung nicht lohnt.
@@ -1310,15 +1326,15 @@ beiden Marktkräfte #hinweis[(siehe @unsichtbare-hand)]. Damit ist auch die Anza
 #grid(
   columns: (1fr, 1.1fr),
   align: horizon,
+  [#figure(caption: [Arbeitsmarktmodell], image("img/vwl/arbeitsmarkt.png")) <arbeitsmarktmodell>],
   figure(caption: [Arbeitslosenquote Schweiz], image("img/vwl/arbeitslosenquote-schweiz.png", width: 80%)),
-  figure(caption: [Arbeitsmarktmodell], image("img/vwl/arbeitsmarkt.png")),
 )
 
 Das Arbeitsmarktmodell kann in vier verschiedene Sektoren aufgeteilt werden #hinweis[(siehe @arbeitsmarkt-sektoren)]:
 
 + Unternehmen, deren Nachfrage nach Arbeitskräften erfüllt wird #hinweis[(Sind bereit gewesen, einen höheren Lohn zu zahlen)]
 + Haushalte #hinweis[(bzw. Arbeitskräfte)], die keine Arbeitsangebote erhalten, weil sie nicht gewillt sind
-  zum Marktlohn zu arbeiten. _Dies ist eine freiwillige Arbeitsverzichtung, diese Arbeitnehmer gelten nicht als arbeitslos!_
+  zum Marktlohn zu arbeiten. _Dies ist ein freiwilliger Arbeitsverzicht, diese Arbeitnehmer gelten nicht als arbeitslos!_
 + Haushalte #hinweis[(bzw. Arbeitskräfte)], die von den Unternehmen beschäftigt werden
   #hinweis[(würden auch für tieferen Lohn arbeiten)].
 + Unternehmen, die keine Arbeitskräfte erhalten, weil sie nicht gewillt sind, den Marktlohn zu bezahlen.
@@ -1345,7 +1361,7 @@ Es gibt einfach mehr Haushalte, die nicht bereit sind, zu diesem tieferen Marktl
   [
     Sollte der Staat diesen Lohnrückgang aus sozialen Gründen zu verhindern versuchen, kann er eine _staatliche Lohnuntergrenze
     (Mindestlohn)_ setzen. Wird der Lohn fixiert, z.B durch einen Mindestlohn in der Höhe des ursprünglichen Lohns, entsteht
-    bei einem Rückgang der Nachfrage _unfreiwillige Arbeitslosigkeit_.
+    bei einem Rückgang der Nachfrage ($N_1$ nach $N_2$) _unfreiwillige Arbeitslosigkeit_.
 
     Eigentlich möchte zu diesem Lohn die Anzahl Personen $q_1$ beschäftigt werden, die Unternehmen werden aber nur der
     Anzahl $q_3$ einen Arbeitsvertrag anbieten. Es entsteht somit Arbeitslosigkeit in der Höhe $q_1 - q_3$.
@@ -1360,7 +1376,7 @@ Es gibt einfach mehr Haushalte, die nicht bereit sind, zu diesem tieferen Marktl
 Die Bevölkerung lässt sich einteilen in _15 - 64-jährige_ #hinweis[(Arbeitsbevölkerung)] und
 _Übrige_ #hinweis[(Schüler & Rentner können nicht arbeiten)].
 Die Arbeitsbevölkerung lässt sich weiter unterteilen in _Erwerbsbevölkerung_ und
-_Nichterwerbsbevölkerung_ #hinweis[(Könnten arbeiten, wollen aber nicht)].
+_Nichterwerbsbevölkerung_ #hinweis[(Kranke Personen & Personen, die arbeiten könnten, aber nicht wollen)].
 Die Erwerbsbevölkerung teilt sich wieder weiter auf in _Beschäftigte_ #hinweis[(arbeiten)] und
 _Arbeitslose_ #hinweis[(Können und wollen arbeiten)]. Die Quoten für diese Schichten berechnen sich wie folgt
 
@@ -1508,7 +1524,7 @@ Es hat drei Funktionen:
 - _Masseinheit:_ Vergleichbarkeit des relativen Wertes von Gütern
 - _Wertaufbewahrungsmittel:_ "Lagerung" von Kaufkraft, Geld "verdirbt" nicht
 
-Ein ebenfalls wichtiges Kriterium ist die _Akzeptanz_: Dritte müssen bereit$"M0"$ sein, das Zahlungsmittel entgegenzunehmen.
+Ein ebenfalls wichtiges Kriterium ist die _Akzeptanz_: Dritte müssen bereit sein, das Zahlungsmittel entgegenzunehmen.
 
 == Die Schweizerische Nationalbank
 Der Bund hat das alleinige Recht zur Produktion von Münzen und Banknoten.
@@ -1600,7 +1616,7 @@ Ende 2020 existierte etwa 600 Milliarden $"M0"$, verglichen mit etwa 30 Milliard
 Diese Menge stabilisierte sich in den folgenden Jahren.
 
 2021 waren etwa 50 Milliarden CHF in Form von Tausender-Noten im Umlauf.
-Alle anderen Noten kamen einzeln alle auf etwa 18 Milliarden CHF.
+Alle anderen Noten kamen einzeln alle auf eine Summe von etwa 18 Milliarden CHF.
 
 === Bilanz einer Zentralbank
 #grid(
@@ -1656,25 +1672,25 @@ Die Nationalbanken können sich für eine dieser Strategien für ihre Währung e
 )
 
 === Die Geldpolitik der SNB
-- _1945 – 1973:_ Wechselkursziel (Anbindung an USD)
+- _1945 – 1973:_ Wechselkursziel (Anbindung an USD durch Bretton-Woods-System)
 - _1973 – 1978:_ Monetaristische Geldpolitik (Quantitätsgleichung: $M = Q$)
 - _1978 – 1980:_ Wechselkursziel (Anbindung an Deutsche Mark)
 - _1980 – 1999:_ Monetaristische Geldpolitik (Quantitätsgleichung: $M = Q$)
 - _1999 – heute:_ Preisstabilität (Inflationsprognose durch Grösse von $"M2"$ und $"M3"$)
 
 === Das Bretton-Woods-System
-Die Schweiz nahm nach dem zweiten Weltkrieg am _Bretton-Woods-System_ teil (fixe Wechselkurse).
+Die Schweiz nahm nach dem zweiten Weltkrieg am _Bretton-Woods-System_ teil #hinweis[(fixe Wechselkurse)].
 Der US-Dollar fungierte als internationale Leitwährung.
 Dazu wurde die _Golddeckung_ des Dollars eingeführt mit 35 USD pro Unze, gesichert durch knapp 18.000 Tonnen gelagert in
 Fort Knox, mehr als die Hälfte der gesamten globalen Bestände.
-Die Finanzierung des Vietnamkriegs #hinweis[(grosse Ausweitung der US-Geldmenge)] führt zu importierter Inflation in
-vielen Ländern. Die Golddeckung in den USA nimmt massiv ab, deshalb _Aufkündigung der Goldeinlösungspflicht_ durch die
+Die Finanzierung des Vietnamkriegs #hinweis[(grosse Ausweitung der US-Geldmenge)] führte zu importierter Inflation in
+vielen Ländern. Die Golddeckung in den USA nahm massiv ab, deshalb _Aufkündigung der Goldeinlösungspflicht_ durch die
 US-Regierung #hinweis[(galt nur für Zentralbanken)].
 Das führte zum Zusammenbruch des Bretton-Woods-Systems (Austritt der Mitgliedsstaaten).
 
 === 1974 – 1999: Orientierung an der Geldmenge
 Ausrichtung am _Monetarismus_ (Ökonomische Theorie, dass Inflation immer durch ein Überangebot an Geld verursacht wird).
-Am Ende 80er Jahre gab es viele Innovationen auf dem Finanzmarkt mit Einfluss auf die Umlaufgeschwindigkeit des Geldes.
+Ende der 80er Jahre gab es viele Innovationen auf dem Finanzmarkt mit Einfluss auf die Umlaufgeschwindigkeit des Geldes.
 Häufigeres Verfehlen der Geldmengenziele.
 
 === Seit 1999: Orientierung an Inflationsprognosen
@@ -1683,7 +1699,12 @@ Inflationsprognosen anhand der Geldmengen $"M2"$ und $"M3"$
 Umsetzung mit folgendem geldpolitischen Konzept:
 - Definition der Preisstabilität (Ziel)
 - Inflationsprognose (Entscheidungsgrundlage)
-- Zielband für Dreimonats-Libor in CHF (operatives Ziel), ab 2019 SARON
+- Zielband für Dreimonats-Libor #hinweis[(London Interbank offered rate, Referenzzinssatz für GBP)] in CHF (operatives Ziel),\
+  ab 2019 SARON #hinweis[(Swiss Average Rate Overnight, Referenzzinssatz für CHF)]
+
+Der letzte Punkt bezeichnet den Zinssatz, zu welchem sich die Banken untereinander für drei Monate
+ohne Sicherheiten #hinweis[(z.B. Wertpapiere)] Geld leihen können.
+Der Zinssatz ist dabei nicht fest, sondern ein Band #hinweis[(0.0% - 0.75%)]
 
 == Vollgeld-Initiative
 Die Vollgeldinitiative wollte die Geldschöpfung durch die Geschäftsbanken abschaffen und allein der SNB diese Macht übergeben
@@ -1726,7 +1747,7 @@ Fett markiert sind die aktuell wichtigsten Beeinflusser.
 )
 
 == Nominaler & realer Wechselkurs
-Der nominale Wechselkurs ist das Verhältnis der inländischen Währung im Vergleich zur ausländischen.
+Der _nominale Wechselkurs_ ist das Verhältnis der inländischen Währung im Vergleich zur ausländischen.
 Bei den _realen Wechselkursen_ werden zusätzlich die unterschiedlichen Preisniveaus im Inland und Ausland berücksichtigt.
 
 #definition[
@@ -1761,7 +1782,7 @@ Der reale Wechselkurs kann kurz- oder langfristig berechnet werden, weil sich di
 
 === Effekte der Geldpolitik
 Eine _Erhöhung der inländischen Geldmenge_ hat folgende Effekte: Nominale Abwertung der inländischen Währung ($e arrow.t$)
-und Inländisches Preisniveau steigt ($p arrow.t$) #hinweis[(siehe @quantitätsgleichung)].
+und die Steigerung des Inländischen Preisniveaus ($p arrow.t$) #hinweis[(siehe @quantitätsgleichung)].
 
 Beide Effekte reagieren aber mit unterschiedlichem Zeithorizont: Der nominale Wechselkurs $e$ reagiert sofort.
 Das inländische Preisniveau $p$ reagiert mit Verzögerung von deutlich mehr als einem Jahr.
@@ -1770,8 +1791,8 @@ Das inländische Preisniveau $p$ reagiert mit Verzögerung von deutlich mehr als
   columns: (1fr, 1fr),
   table.header([Kurzfristige Effekte], [Langfristige Effekte]),
   [
-    Bei einer Ausweitung der inländischen Geldmenge reagiert der nominale Wechselkurs sofort, das inländische Preisniveau
-    kurzfristig aber nicht. Der reale Wechselkurs reagiert sofort, damit wird die Exportindustrie wettbewerbsfähiger.
+    Bei einer Ausweitung der inländischen Geldmenge reagiert der nominale Wechselkurs $e$ sofort, das inländische Preisniveau $p$
+    kurzfristig aber nicht. Der reale Wechselkurs $r$ reagiert sofort, damit wird die Exportindustrie wettbewerbsfähiger.
 
     $ r arrow.t = (e arrow.t dot p^*)/p $
   ],
@@ -1814,8 +1835,18 @@ $ r arrow.b = (e dot p^* arrow.t)/(p arrow.t) $
 #grid(
   columns: (1fr, 1.1fr),
   align: horizon,
-  figure(caption: [Probleme eines Fixkurssystems Deutschland/England], image("img/vwl/fixer-wechselkurs.png")),
-  [#figure(caption: [Inflationskonvergenz DM/Lira], image("img/vwl/inflationskonvergenz.png")) <inflation-lira>],
+  [
+    #figure(
+      caption: [Probleme des Fixkurssystems DE/GB],
+      image("img/vwl/fixer-wechselkurs.png"),
+    ) <inflation-pfund>
+  ],
+  [
+    #figure(caption: [Inflationskonvergenz DM/Lira], image(
+      width: 95%,
+      "img/vwl/inflationskonvergenz.png",
+    )) <inflation-lira>
+  ],
 )
 
 Fixe Wechselkurse führen zwangsläufig dazu, dass die Mitgliedsländer die _Geldpolitik des Leitwährungs-Landes imitieren_
@@ -1823,9 +1854,10 @@ müssen. Diese aufgezwungene Geldpolitik kann im _Widerspruch_ zur konjunkturell
 Spekulanten "wetten" in solchen Situationen auf eine nominale Auf- oder Abwertung der entsprechenden Währungen.
 
 Zwei Formen von Inkonsistenzen, welche Spekulanten nutzen können:
-- _Inkonsistenz zwischen Konjunkturlage und Geldpolitik_ (Fall England: Restriktive Währungspolitik in Rezession).
+- _Inkonsistenz zwischen Konjunkturlage und Geldpolitik_: Fall England: Restriktive Währungspolitik in Rezession
+  #hinweis[(@inflation-pfund)]
 - _Beeinträchtigung der Wettbewerbsfähigkeit_ bei grossen Inflationsunterschieden durch reale Aufwertung der inländischen
-  Währung (Fall Italien).
+  Währung (Fall Italien, @inflation-lira).
 
 Beide Fälle zeigen exemplarisch auf, dass "falsche Wechselkurse" langfristig nicht verteidigt werden können.
 
@@ -1838,12 +1870,12 @@ Investoren wie z.B. George Soros verdienten damit Milliardenbeträge.
 
 
 Die italienische Lira wurde bis Ende der 1980er Jahre periodisch _nominal abgewertet_, um die reale Aufwertung dieser Währung
-zu verhindern. Danach verzichtet man bewusst auf weitere Paritätsanpassungen, _siehe @inflation-lira _.
+zu verhindern. Danach verzichtete man bewusst auf weitere Paritätsanpassungen, #emph[siehe @inflation-lira].
 Die immer noch vorhanden leichten Inflationsdifferenzen führten zu einer_ schleichenden realen Aufwertung der Lira_ gegenüber
 der D-Mark. Damit kam die italienische Exportindustrie immer stärker unter Druck.
 Die Spekulanten wetteten nun auf eine_ baldige Abwertung der Lira_ und kauften mit (noch) überbewerteten Lira in grossen Mengen
 D-Mark. Die Banca d'Italia wertete in der Folge die Lira ab.
-Die Spekulanten kauften nun mit den D-Mark wieder die nun "billigen" Lira, ein risikoloses Geschäft.
+Die Spekulanten kauften nun mit den D-Mark wieder die jetzt "billigen" Lira, ein risikoloses Geschäft.
 
 == Währungsunion
 In einem Fixkurssystem sind die Wechselkurse nicht für alle Zeiten fixiert.
@@ -1912,6 +1944,8 @@ Langfristig bauten sich aber zwei fatale Ungleichgewichte auf:
   figure(caption: [Entstehung der Eurokrise], image("img/vwl/eurokrise-entstehung.png")),
 )
 
+#pagebreak()
+
 = Staatsfinanzen
 Es gibt drei Hauptformen von Staatseinnamen:
 
@@ -1944,7 +1978,7 @@ Die staatliche Verschuldung führt in der Regel zu einem Rückgang der gesamtwir
   table.header([Verschuldung im Inland], [Verschuldung im Ausland]),
   [
     Rückgang der inländischen Investitionen der Unternehmen #hinweis[(Erhöhung der staatlichen Kreditnachfrage auf dem
-    inländischen Kapitalmarkt $->$ steigende Kreditzinsen $->$ crowding- out der Unternehmensinvestitionen:
+    inländischen Kapitalmarkt $->$ steigende Kreditzinsen $->$ "crowding-out" der Unternehmensinvestitionen:
     Unternehmen erhalten keine Kredite mehr, weil Staat sich alle gönnt)]
   ],
   [
@@ -1966,7 +2000,7 @@ Die staatliche Verschuldung führt in der Regel zu einem Rückgang der gesamtwir
 *Vorteile von Staatsschulden:*
 - _Staatliche Investitionen:_ Finanzierung von langfristigen Innovationen durch die zukünftigen Generationen,
   _intertemporaler Finanzausgleich_ #hinweis[(Projekte, welche mehrere Generationen nutzen können werden zB. beim Bau
-  zu $1/4$ durch Steuern und $3/4$ durch Schulden verschiedener Länge, welche spätere Generationen bezahlen müssen)]
+  zu $1\/4$ durch Steuern und $3\/4$ durch Schulden verschiedener Länge, welche spätere Generationen bezahlen müssen)]
 - _Steuerglättung:_ Jährliche Anpassung der Steuersätze kaum vorstellbar, um jederzeit Budgeteinhaltungen zu garantieren --
   Schulden sind flexibler
 - _Makroökonomische Verschiebung:_ Ausgleich von konjunkturellen Schwankungen durch Veränderungen der staatlichen Nachfrage,
@@ -1989,8 +2023,8 @@ Kantonen und zwischen finanzstarken und -schwachen Kantonen. Seit 2004 gibt es d
 )
 
 Der Bund besteuert hauptsächlich _alles was Spass macht_ und _für den Krieg_.
-Bei der Bundessteuern gibt es\ 6 Einkommensstufen, kategorisiert nach jährlichem Einkommen.
-Die grösste Stufe bildet mit 38.1% aller Bürger ist Stufe 2 #hinweis[(30'000-60'700 CHF)].
+Bei den Bundessteuern gibt es\ 6 Einkommensstufen, kategorisiert nach jährlichem Einkommen.
+Die grösste Stufe bildet mit 38.1% aller Bürger die Stufe 2 #hinweis[(30'000-60'700 CHF)].
 Sie zahlen aber nur 5.5% aller Steuern.
 Die beiden obersten Stufen 5 #hinweis[(121'700 - 607'800 CHF)] und 6 #hinweis[(über 607'000 CHF)] zahlen jeweils 53% und 19%
 aller Steuern, obwohl sich nur 11.5% bzw. 0.3% aller Bürger in diesen Einkommensstufen befinden.
@@ -2018,7 +2052,7 @@ aller Steuern, obwohl sich nur 11.5% bzw. 0.3% aller Bürger in diesen Einkommen
 
 == Schuldenbremse
 Die Schuldenbremse besagt, dass grundsätzlich nicht mehr ausgegeben als eingenommen werden darf.
-Da man in der Regel eher vorsichtig budgetiert, fallen die Erträge in der Regel besser aus als budgetiert.
+Da man in der Regel eher vorsichtig budgetiert, fallen die Erträge in der Regel besser aus als geplant.
 Die Ausgaben bleiben aber wie budgetiert limitiert.
 Dies führt in der Regel zu Gewinnen, welche zur Schuldrückzahlung verwendet werden müssen.
 
@@ -2054,7 +2088,7 @@ so sind die Mehrausgaben in den Folgejahren zu kompensieren.
   figure(caption: [Schuldenbremsen der Kantone], image("img/vwl/schuldenbremse-kantone.png", width: 90%)),
 )
 
-Die _Verschuldung_ des Bundes hat seit einführung der Schuldenbremse 2003 stark abgenommen:
+Die _Verschuldung_ des Bundes hat seit Einführung der Schuldenbremse 2003 stark abgenommen:
 Die Bruttoschuldquote sank bis 2024 von ca. 55% auf 30%, die Nettoschuldenquote von 30% auf 15%.
 Die totale Verschuldung der Kantone blieb seit 2000 ungefähr stabil.
 2016 lag die öffentliche _Gesamtverschuldung_ bei etwa _300 Milliarden CHF_, davon 130 Milliarden beim Bund,
@@ -2105,15 +2139,17 @@ Der AHV droht eine Finanzierungslücke im Volumen von 173.4% des Schweizer Brutt
 Entwicklungsländer konkurrenzieren mit Industrieländer, indem sie _komparative Kostenvorteile_ ausnutzen.
 
 #grid(
+  figure(caption: [Prinzip des komparativen Kostenvorteils], image("img/vwl/prinzip-komparativer-kostenvorteil.png")),
   [
+    *Aufgaben:*
     + Auf welches Gut spezialisiert sich Insel A, auf welches Insel B?
     + Wie funktionieren somit Handelsströme?
-    + Berechne durch Handel entstehenden Wohlfahrtseffekt für beide Inseln.
-    + Berechne die maximalen Transportkosten für Bananen bzw. Kokosnüsse
+    + Berechne die durch Handel entstehenden Wohlfahrtseffekte für beide Inseln.
+    + Berechne die maximalen Transportkosten für Bananen bzw. Kokosnüsse, ohne dass der Handel zum Erliegen kommt.
   ],
-  figure(caption: [Prinzip des komparativen Kostenvorteils], image("img/vwl/prinzip-komparativer-kostenvorteil.png")),
 )
 
+*Lösungen:*
 + Insel A: Kokosnüsse. Insel B: Bananen.
 + Für die Produktion einer Kokosnuss auf der Insel A könnte sie stattdessen 3.3 Bananen produzieren.
   Wird die Kokosnuss jedoch nach Insel B exportiert, kann sie 4 Bananen erhalten.
@@ -2133,10 +2169,10 @@ der entsprechende Heimmarktpreis ist.
 Der Markt der Autarkie kennt keine Importe oder Exporte und ist somit gleich dem regulären mikroökonomischen Modell
 #hinweis[(siehe @mikroökonomisches-grundmodell)].
 
-#figure(caption: [Effekte einer Angebotsänderung bei verschiedener Elastizität der Nachfrage], image(
-  "img/vwl/arbeitsteilung-wohlfahrt-autarkie.png",
-  width: 40%,
-))
+#figure(
+  caption: [Effekte einer Angebotsänderung bei verschiedener Elastizität der Nachfrage],
+  image("img/vwl/arbeitsteilung-wohlfahrt-autarkie.png", width: 40%),
+)
 
 === Wohlfahrt bei freiem Handel
 ==== Szenario: Weltmarktpreis für das Gut > Heimmarktpreis
@@ -2152,7 +2188,10 @@ Der Markt der Autarkie kennt keine Importe oder Exporte und ist somit gleich dem
     - Höhere Preise für inländische Kunden
     - Mehr Lohn für Arbeiter
   ],
-  figure(caption: [Wohlfahrt beim Freihandel mit höherem Weltmarktpreis], image("img/vwl/wohlfahrt-freihandel.png")),
+  figure(
+    caption: [Wohlfahrt beim Freihandel mit höherem Weltmarktpreis],
+    image("img/vwl/wohlfahrt-freihandel.png"),
+  ),
 )
 
 ==== Szenario: Weltmarktpreis für das Gut \< Heimmarktpreis
@@ -2193,11 +2232,12 @@ Der Markt der Autarkie kennt keine Importe oder Exporte und ist somit gleich dem
 
 == Politische Ökonomie des Protektionismus
 Freihandel bringt Umverteilung der Wohlfahrt zum Wohle der Konsumenten und Lasten der Produzenten.
-Häufig können Produzenten protektionistische Regelungen gegen Interesse der Konsumenten durchsetzen.
+Häufig können Produzenten protektionistische Regelungen gegen Interesse der Konsumenten durchsetzen
+#hinweis[(z.B. Schutz von Schweizer Bauern gegenüber Billigfleisch aus Übersee)].
 Produzenten sicheren sich also eine künstliche Rente durch Staatseingriffe.
 
 === Moderne Formen des Protektionismus
-Organisationen wie die WTO versucht Zölle weltweit abzubauen.
+Organisationen wie die WTO #hinweis[(World Trade Organization)] versuchen Zölle weltweit abzubauen.
 Länder weichen also immer mehr auf nicht-tärifäre Handelshemmnisse aus:
 _Quoten_, _Technische Handelshemmnisse_, _Subventionen_, _Öffentliche Aufträge_ (Bevorzugung von Inländer)
 
@@ -2221,8 +2261,10 @@ Dadurch ergeben sich zwei Effekte: _Handelsschaffung_ und _Handelsumlenkung_.
 === Regionale Integrationsräume
 #grid(
   [
-    - Ware aus Land C wäre für Land A ohne Zölle billiger als die aus Land B.
-      Da Land B jedoch ein Freihandelsabkommen mit Land A abgeschlossen hat, wird von dort importiert.
+    - Ware aus Land C ($p_C$) wäre für Land A ohne Zölle billiger als die aus Land B ($p_B$).
+    - Die Zölle auf die Produkte sind in B & C gleich hoch ($t$), C ist also immer noch billiger als B ($p_C + t < p_B + t$).
+    - Da Land B jedoch ein Freihandelsabkommen mit Land A abgeschlossen hat und damit der Zoll $t$ wegfällt,
+      wird von dort importiert.
     - Land C wird diskriminiert
     - Handelsumlenkung von Land C zu Land B
     - Handelsschaffung von $q_C$ zu $q_B$
@@ -2253,7 +2295,8 @@ Dadurch ergeben sich zwei Effekte: _Handelsschaffung_ und _Handelsumlenkung_.
 
 === Formen der regionalen Integration
 #table(
-  columns: (0.97fr, 1fr, 0.8fr, 1fr, 0.8fr, 1.05fr),
+  columns: (auto, 1fr, 0.8fr, 1fr, 0.8fr, 1fr),
+  align: (x, y) => if x > 0 and y == 5 { horizon } else { auto },
   [],
   [Keine Zölle zwischen den Mitgliedern],
   [Gemeinsame Außenzölle],
@@ -2261,24 +2304,24 @@ Dadurch ergeben sich zwei Effekte: _Handelsschaffung_ und _Handelsumlenkung_.
   [Gemeinsame Währung],
   [Gemeinsame Wirtschaftspolitik],
 
-  [Freihandelszone], cell-check, [], [], [], [],
-  [Zollunion], cell-check, cell-check, [], [], [],
-  [Binnenmarkt], cell-check, cell-check, cell-check, [], [],
-  [Währungsunion], cell-check, cell-check, cell-check, cell-check, [],
-  [Vollständige Wirtschaftsunion], cell-check, cell-check, cell-check, cell-check, cell-check,
+  [*Freihandelszone*], cell-check, [], [], [], [],
+  [*Zollunion*], cell-check, cell-check, [], [], [],
+  [*Binnenmarkt*], cell-check, cell-check, cell-check, [], [],
+  [*Währungsunion*], cell-check, cell-check, cell-check, cell-check, [],
+  [*Vollständige\ Wirtschaftsunion*], cell-check, cell-check, cell-check, cell-check, cell-check,
 )
 
 == Internationale Wirtschaftsorganisationen
-- Bretton-Woods-Institutionen: IWF (IMF), Weltbank (World Bank)
-- Weitere Institutionen: WTO, OECD, UNCTAD, G7
+- _Bretton-Woods-Institutionen:_ IWF (IMF), Weltbank (World Bank)
+- _Weitere Institutionen:_ WTO, OECD, UNCTAD, G7
 
 === Internationaler Währungsfond (IWF/IMF)
 - Sonderorganisation der UNO mit Sitz in Washington DC, USA mit Ursprung im Bretton-Woods-System
-- Hauptaufgabe: Kreditvergabe an Länder ohne ausreichende Währungsreserven mit Zahlungsschwierigkeiten
-- Weitere Aufgaben: Internationale Zusammenarbeit in der Währungspolitik, Ausweitung des Welthandels,
+- _Hauptaufgabe:_ Kreditvergabe an Länder ohne ausreichende Währungsreserven mit Zahlungsschwierigkeiten
+- _Weitere Aufgaben:_ Internationale Zusammenarbeit in der Währungspolitik, Ausweitung des Welthandels,
   Stabilisierung von Wechselkursen, Überwachung der Geldpolitik, technische Hilfe
 - Kreditvergabe an wirtschaftspolitische Auflagen geknüpft, Kredite müssen zurückbezahlt werden
-- Rechnungseinheit der IWF ist _Sonderziehungsrecht_ (SZR), quasi Weltgeld im Zahlungsverkehr der Zentralbanken Recheneinheit:
+- Rechnungseinheit der IWF ist das _Sonderziehungsrecht_ (SZR), quasi Weltgeld im Zahlungsverkehr der Zentralbanken Recheneinheit:
   gewichtete Kurse von USD, Euro, chinesischer Renminbi, Yen und Pfund
 - Jedes Land hat eine _Quote_ abhängig von wirtschaftlicher Leistungsfähigkeit
 - Die Quote bestimmt Stimmrecht, Einzahlungsverpflichtung #hinweis[(Gold, Devisen, Landeswährung)],
@@ -2398,7 +2441,7 @@ Diese Güter waren relevant für die Industrie, aber auch für die Kriegsführun
 Frankreich. Doch bei der Vertragsunterzeichnung waren auch Belgien, Italien, Luxemburg und Niederlande als
 Gründungsmitglieder dabei.
 
-Sorgte für freien Warenverkehr dieser Güter ohne Zölle, Abgaben und diskriminierende Massnahmen.
+Sorgte für freien Warenverkehr dieser Güter ohne Zölle, Abgaben oder diskriminierende Massnahmen.
 
 Die EGKS stiess 1954 mit dem gescheiterten Versuch, mittels der Europäischen Verteidigungsgemeinschaft (EVG) eine eigene
 gemeinsame Armee zu schaffen, an ihre Grenzen.
@@ -2411,29 +2454,29 @@ Die Errichtung der EWG und damit die Schaffung des freien Marktes verfolgte zwei
 _Umgestaltung der wirtschaftlichen Bedingungen des Handels und der Produktion_ auf dem Gebiet der Gemeinschaft und
 als Beitrag zur funktionellen _Errichtung eines politischen Europas_ in Richtung einer umfassenderen europäischen Integration.
 
-_Die 4 Freiheiten des EWG:_ Freie Verkehr von Waren, Personen, Dienstleistungen & Kapital
+_Die 4 Freiheiten des EWG:_ Freier Verkehr von Waren, Personen, Dienstleistungen & Kapital
 
 Stellen mit EGKS die 3 Gründungsverträge der EU dar.
 Die früheren Zölle wurden durch einen gemeinsamen Zolltarif für Drittstaaten ersetzt.
-Begleitet wird dies durch eine _gemeinsame Handelspolitik_
+Begleitet wird dies durch eine _gemeinsame Handelspolitik_.
 
 === EFTA, Freihandelszone (1960)
 Freihandelszone zwischen Ländern, die nicht Teil der EWG waren
 #hinweis[(Schweiz, Dänemark, Grossbritannien, Norwegen, Österreich, Portugal, Schweden)].
 Das Ziel war ein gemeinsames Auftreten der Mitgliedsstaaten gegenüber der EWG, um wirtschaftliche Nachteile zu vermeiden und
-zu beweisen, dass Freihandelszonen in Europa funktionieren könnten.
+zu beweisen, dass Freihandelszonen in Europa funktionieren können.
 
 === EG (1967)
-Bündelung der EGKS, Euratom und EWG in der Europäischen Gemeinschaft EG.
+_Bündelung der EGKS, Euratom und EWG_ in der Europäischen Gemeinschaft EG.
 Unter der EG wurde mit den einzelnen EFTA-Staaten Freihandelsabkommen geschlossen.
 Diese bildeten unter anderem den Grundstein für die Bilateralen I und II für den Export nach Europa der Schweiz.
 
 === EU, Wirtschaftsunion (1992)
 Der Vertrag zur Europäischen Wirtschaftsgemeinschaft (EWG) war die Grundlage zur Schaffung von Zollunion und _Binnenmarkt_.
 Die Verträge zur Gründung der EU, eine _Wirtschaftsunion_ und _Währungsunion_ beruht auf 3 Säulen:
-- EG bleibt das tragende Element (erste Säule)
-- Einstieg in eine "Gemeinsame Außen- und Sicherheitspolitik" (zweite Säule)
-- "Zusammenarbeit der Justiz- und Innenminister" (dritte Säule, Innen- und Justizpolitik) erschloss neue,
+- _Erste Säule:_ Die Grundsätze der EG bleiben das tragende Element
+- _Zweite Säule:_ Einstieg in eine "Gemeinsame Aussen- und Sicherheitspolitik"
+- _Dritte Säule:_ "Zusammenarbeit der Justiz- und Innenminister" (Innen- und Justizpolitik) erschloss neue,
   wichtige Handlungsbereiche
 
 Die Botschaft des EU-Vertrags: Mehr als eine Wirtschaftsgemeinschaft, sondern die Politische Union Europas.
@@ -2450,8 +2493,8 @@ erfüllt sind. _Ausnahme: Dänemark & Grossbritannien (Opting-Out-Klausel)_.
 Sie können selbst entscheiden, ob die der Währungsunion beitreten, wenn sie die Konvergenzkriterien erfüllen.
 
 Die im EU-Vertrag festgelegten Konvergenzkriterien sind:
-- _Preisstabilität:_ Inflationsrate ist nicht mehr als 1.5 Prozentpunkte über den drei preisstabilsten Mitgliedsländer der EU.
-- _Höhe der langfristigen Zinsen:_ Langfristige Nominalzinssätze dürfen nicht mehr als 2 Prozentpunkte über Zinssätze der
+- _Preisstabilität:_ Inflationsrate liegt nicht mehr als 1.5 Prozentpunkte über den drei preisstabilsten Mitgliedsländer der EU.
+- _Höhe der langfristigen Zinsen:_ Langfristige Nominalzinssätze dürfen nicht mehr als 2 Prozentpunkte über den Zinssätzen der
   drei preisstabilsten Mitgliedsländer der EU sein
 - _Haushaltsdisziplin:_ Das jährliche öffentliche Defizit sollte nicht mehr als 3% des BIP sein und der
   Öffentliche Schuldenstand nicht mehr als 60% des BIPs.
@@ -2476,7 +2519,8 @@ Die Gründungsländer der EU konnten nie über einen Beitritt zu dieser abstimme
 Die Volksabstimmungen zur EU-Verfassung waren Teil des Wahlkampfs in Frankreich und der Niederlande, es war eine freiwillige
 Entscheidung durch die regierenden Parteien. Es war der erste Moment, in welchem das Volk über die EU entscheiden konnte.
 Die EU als "Projekt Einheitsstaat" steht im direkten Widerspruch mit Nationalismus.
-Mit dem Scheitern war die weitere Zukunft der EU-Verfassung unklar, nur wenn alle Staaten ratifizierten, konnte er in Kraft treten.
+Mit dem Scheitern war die weitere Zukunft der EU-Verfassung unklar, nur wenn ihn alle Staaten ratifizierten,
+konnte er in Kraft treten.
 
 Der Vertrag von Lissabon (2009) wurde als Alternative zur Verfassung entwickelt.
 Seitdem Stabilisierung von Krisen in der EU, keine grossen Energie für Weiterentwicklung.
@@ -2564,6 +2608,8 @@ In der Zahlungsbilanz werden _Transaktionen_ #hinweis[(grenzüberschreitende Zah
 Akteuren im Ausland während eines Jahres ausgewiesen. Die Zahlungsbilanz _misst Veränderungen_, nicht Bestände.
 Die Zahlungsbilanz ist eigentliche keine Bilanz #hinweis[("Blitzlicht-Aufnahme")], sondern entspricht eher einer _Kapitalflussrechnung_.
 
+#pagebreak()
+
 Die Zahlungsbilanz besteht aus:
 - _Leistungsbilanz_: Erfasst alle Ausgaben und Einnahmen einer Volkswirtschaft
   #hinweis[(z.B. Exporte und Importe, Lohnzahlungen für Grenzgänger usw.)]
@@ -2585,7 +2631,7 @@ und die _Kapitalbilanz_. Diese hängen miteinander zusammen, sodass _die Zahlung
 - _Erwerbsbilanz_: Lohn für Grenzgänger
 - _Vermögensbilanz_: Dividenden #hinweis[(Dividenden von ausländischen Aktien sind Zahlungseingang,
   Dividenden an einen Ausländer einer Schweizer Aktie ist Zahlungsausgang)]
-- _Laufende Übertragungen_: z.B Rimessen #hinweis[(Personen mit Niederlassungsbewilligung schicken Geld in die Heimat)]
+- _Laufende Übertragungen_: z.B. Rimessen #hinweis[(Personen mit Niederlassungsbewilligung schicken Geld in die Heimat)]
 - _Bilanz der Vermögensübertragungen_: Einmalige Zahlungen z.B. Erben, Lottogewinne
 - _Primäreinkommen:_ Grenzüberschreitend gezahlte Löhne sowie grenzüberschreitend erwirtschaftete Einkommen aus Vermögensanlagen
   #hinweis[(Zins- und Dividendenzahlungen)].
@@ -2637,20 +2683,22 @@ die _ohne Absicht direkter Management-Beeinflussung_ vorgenommen werden, wie z.B
 #hinweis[(Geldmarktpapiere, Obligationen)], _Dividendenpapiere_ #hinweis[(Aktien, Partizipationsscheine, Genussscheine)] und
 _Anlagefondszertifikate_.
 
+#pagebreak()
+
 === Fallbeispiel
 Bei den Beträgen handelt es sich immer um Veränderungen, nicht um Bestände.
+
+#figure(caption: [Fallbeispiel Zahlungsbilanz], image("img/vwl/zahlungsbilanz-fallbeispiel.png", width: 60%))
 
 ==== 2002 bis 2007
 Leistungsbilanzüberschuss von 400. Mehr Geld ist in die Schweiz geflossen als ins Ausland.
 Damit könnte man einen Kapitalexport von 400 finanzieren. Kapitalexport liegt jedoch bei 420.
-Die 20 kommen von den Währungsreserven.
+Die fehlenden 20 werden mithilfe der Währungsreserven gedeckt.
 
 ==== 2008 bis 2015
 Leistungsbilanzüberschuss von 460. Kapitalflüsse bei -100. Heisst entweder hat die Schweiz 100 Direktinvestitionen oder
 Portfolioinvestition aufgelöst oder das Ausland hat für 100 mehr Schweizer Unternehmen gekauft als die Schweiz im Ausland.
 460 und 100 fliessen beide den Währungsreserven zu.
-
-#figure(caption: [Fallbeispiel Zahlungsbilanz], image("img/vwl/zahlungsbilanz-fallbeispiel.png", width: 60%))
 
 2016 hat die Schweizer Wirtschaft zwar erneut einen hohen Leistungsbilanzüberschuss erwirtschaftet, aber
 _netto kaum Kapital exportiert_. Ohne Nationalbank wäre der Franken deshalb viel stärker.
@@ -2678,7 +2726,6 @@ schon die _Kapitaleinkommen_ aus den grossen Auslandsvermögen bei.
 )
 
 === Währungsmanipulation
-
 Länder können mit einer bewussten Schwächung der inländischen Währung Exportvorteile schaffen.
 Von einer Währungsmanipulation spricht die USA, wenn zwei von drei Kriterien aus einer Liste erfüllt werden:
 
@@ -2709,7 +2756,6 @@ ums Arbeitsrecht usw. Das Abkommen wurde bereits unterzeichnet, ist aber noch ni
   #set text(size: 0.67em)
   #show outline.entry: entry => {
     v(-.3em)
-
     entry
   }
   #outline(target: figure, title: "Abbildungsverzeichnis")
