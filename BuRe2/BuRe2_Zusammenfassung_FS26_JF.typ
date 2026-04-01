@@ -4,14 +4,23 @@
 
 #show: project.with(
   authors: ("Jasmin Fässler", ""),
-  fach: "AIAp",
-  fach-long: "AI Applications",
+  fach: "BuRe2",
+  fach-long: "Business und Recht 2 Vorlesung",
   semester: "FS24",
   language: "en",
   font-size: 10pt,
   tableofcontents: (enabled: true, depth: 3, columns: 2),
 )
 
-= Titel 1
-Text _italic_ 
 
+// Document-specific settings
+#show grid: set par(justify: false, linebreaks: "optimized")
+
+
+#include "00_Diagramme.typ"
+#include "01_OR.typ"
+#include "02_ZGB-Einleitung.typ"
+
+// TODO: export to typst with correct underlines
+#import "@preview/cmarker:0.1.8"
+#cmarker.render(read("03_IT-Verträge.md"))
