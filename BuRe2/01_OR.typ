@@ -78,6 +78,7 @@ Vertragsform Merkmale Beispiele Formfreiheit (Art. 11 OR) Das Obligationenrecht 
 #image("img/image-1.png")
 
 === Vertragstypen
+
 #image("img/image-2.png")
 Quelle: Reichle/Kobler, Recht lernen einfach gemacht, S. 101.
 10.12.2025Allgemeines Vertragsrecht10

@@ -1,0 +1,49 @@
+# custom gitignores here
+
+
+
+# -----------------------------
+# Standard ignored files
+# archive files
+*.zip
+*.tar
+
+# optional
+workspace.xml
+*.code-workspace
+
+# flake profile Dateien
+*.rc
+.direnv
+
+# Programme
+.obsidian
+.idea
+
+    # Default ignored files
+    /shelf/
+    # Rider ignored files
+    /contentModel.xml
+    /.idea.Vorgabe.iml
+    /modules.xml
+    /projectSettingsUpdater.xml
+    # Editor-based HTTP Client requests
+    /httpRequests/
+    # Datasource local storage ignored files
+    /dataSources/
+    /dataSources.local.xml
+
+
+# WSL
+*:Zone.Identifier
+
+# Ordner mit automatisch kompilierten Dateien
+/build
+/test
+archiv/*
+
+# Dateien die generiert werden
+.dll
+bin
+obj
+*.cache

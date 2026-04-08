@@ -1,0 +1,71 @@
+@startuml
+title Kaufvertrages
+
+top to bottom direction
+allowmixing
+
+<style>
+objectDiagram {
+    ' backgroundColor red
+    MaximumWidth 500
+}
+</style>
+
+
+
+object "Kauf einer Sache" as kauf1
+' kauf1 : "test" 
+
+object "Kaufsache unverzüglich prüfen" as kauf2
+kauf2 : Art. 201 Abs1 OR 
+
+
+
+    kauf1 -- kauf2
+
+    ' mache es zu Trapez:
+    object "Offensichtlicher Sachmangel?" as sachmangel
+
+    kauf2 -- sachmangel
+
+    object "Mangel unverzüglich rügen" as sachmangelJa
+
+
+object "Genehmigung der Sache" as genehmigung
+
+kauf2 --> genehmigung : "Falls versäumt"
+sachmangelJa --> genehmigung : "Falls versäumt"
+
+
+    ' trapez
+    object "Später auftauchender verdeckter Sachmangel" as spaeter
+
+    sachmangel -- sachmangelJa : "Ja"
+    sachmangel -- spaeter : "Nein"
+
+' trapez
+    object "Entdeckung innerhalb von zwei Jahren ab Ablieferung?" as spaetEntdeckt
+    spaetEntdeckt : oder 
+
+    object ":)" as spaeterNein
+
+    spaeter -- spaetEntdeckt : "Ja"
+    spaeter -- spaeterNein : "Nein"
+
+    object "Rechte verjährt" as rechteVerjaehrt
+
+    spaetEntdeckt -- rechteVerjaehrt
+
+
+object "Wahlrecht ausüben (Gewährleistungsansprüche)" as Wahlrecht
+
+sachmangelJa -- Wahlrecht
+
+
+
+
+header
+Jasmin Fässler 2026
+endheader
+
+@enduml
