@@ -1,0 +1,56 @@
+digraph Vertragstypen {
+  rankdir=TB;
+  splines=ortho;
+  node [shape=box];
+
+  root [label="Vertragstypen"];
+
+  // Hauptkategorien
+  v1 [label="Veräusserungsverträge"];
+  v2 [label="Gebrauchsüberlassungsverträge"];
+  v3 [label="Verträge auf Arbeitsleistung"];
+  v4 [label="Weitere Verträge"];
+
+  // Unterkategorien
+  k [label="Kaufvertrag\n(Art. 184 ff. OR)"];
+  t [label="Tausch\n(Art. 237 f. OR)"];
+  s [label="Schenkung\n(Art. 239 ff. OR)"];
+
+  m [label="Miete\n(Art. 253 ff. OR)"];
+  p [label="Pacht\n(Art. 275 ff. OR)"];
+  g [label="Gebrauchsleihe\n(Art. 305 ff. OR)"];
+  d [label="Darlehen\n(Art. 312 ff. OR)"];
+  l [label="Leasing (z. T. im Konsumkreditgesetz KKG)"];
+
+  a [label="Arbeitsvertrag\n(Art. 319 ff. OR)"];
+  w [label="Werkvertrag\n(Art. 363 ff. OR)"];
+  au [label="Auftrag\n(Art. 394 ff. OR)"];
+
+  inn [label="Innominatverträge"];
+
+  // Verbindungen
+  root -> {v1 v2 v3 v4};
+
+  v1 -> {k t s};
+  v2 -> {m p g d l};
+  v3 -> {a w au};
+  v4 -> inn;
+
+  // Layout-Kontrolle
+
+  // Hauptkategorien in eine Reihe
+  { rank=same; v1; v2; v3; v4 }
+
+  // Spaltenweise Ausrichtung
+  { rank=same; k; m; a; inn }
+  { rank=same; t; p; w }
+  { rank=same; s; g; au }
+  { rank=same; d }
+  { rank=same; l }
+
+  // Unsichtbare Kanten für perfekte Spalten
+  k -> m -> a -> inn [style=invis];
+  t -> p -> w [style=invis];
+  s -> g -> au [style=invis];
+  g -> d -> l [style=invis];
+}

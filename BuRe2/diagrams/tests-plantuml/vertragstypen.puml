@@ -3,7 +3,7 @@
 title Vetragstypen 
 
 left to right direction
-
+skinparam linetype ortho
 
 ' ' Styling:
 ' !$BASEPATH = "./"

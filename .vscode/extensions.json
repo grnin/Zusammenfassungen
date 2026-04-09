@@ -1,6 +1,8 @@
 {
     "recommendations": [
         "myriad-dreamin.tinymist",
-        "jebbs.plantuml"
+        // "jebbs.plantuml",
+        // "stephanvs.dot",
+        "hediet.vscode-drawio"
     ]
 }

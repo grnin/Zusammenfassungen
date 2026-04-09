@@ -1,0 +1,55 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Personen Rechtsubjekte">
+    <mxGraphModel dx="1000" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Title -->
+        <mxCell id="title" value="Personen (Rechtssubjekte)" style="rounded=1;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="350" y="40" width="300" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Left: Natürliche Personen -->
+        <mxCell id="nat" value="Natürliche Personen" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="140" width="250" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="menschen" value="Menschen" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="210" width="250" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Right: Juristische Personen -->
+        <mxCell id="jur" value="Juristische Personen" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="140" width="300" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="list" value="• AG (Art. 620 ff. OR)
+• GmbH (Art. 772 ff. OR)
+• Genossenschaft (Art. 828 ff. OR)
+• Verein (Art. 60 ff. ZGB)
+• Stiftung (Art. 80 ff. ZGB)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="210" width="300" height="150" as="geometry"/>
+        </mxCell>
+
+        <!-- Connections -->
+        <mxCell id="edge1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;" edge="1" parent="1" source="title" target="nat">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="edge2" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;" edge="1" parent="1" source="title" target="jur">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="edge3" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;" edge="1" parent="1" source="nat" target="menschen">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="edge4" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;" edge="1" parent="1" source="jur" target="list">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

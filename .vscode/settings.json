@@ -1,0 +1,26 @@
+{
+    // https://deepwiki.com/hediet/vscode-drawio/2.2-configuring-the-extension
+    "hediet.vscode-drawio.defaultEdgeStyle": {
+        "fontColor": "#000000",
+        "fontFamily": "Helvetica",
+        "fontSize": 12,
+        "strokeWidth": 1,
+        "strokeColor": "#000000",
+        "endArrow": "none", // war classic
+        "startArrow": "none",
+        "edgeStyle": "orthogonalEdgeStyle",
+    },
+    "hediet.vscode-drawio.defaultVertexStyle": {
+        "fontColor": "#000000",
+        "fontFamily": "Helvetica",
+        "fontSize": 12,
+        "strokeWidth": 1,
+        "strokeColor": "#000000",
+        "fillColor": "#ffffff",
+        // 
+        "spacingLeft": "10",  
+        "spacingTop": "8",  
+        "spacingBottom": "8",  
+        "spacingRight": "5"  
+    },
+}

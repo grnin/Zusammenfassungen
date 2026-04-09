@@ -1,0 +1,144 @@
+<mxfile host="65bd71144e">
+    <diagram id="contract-defects" name="Mängel bei Vertragsabschluss">
+        <mxGraphModel dx="1378" dy="968" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="44" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1;fontFamily=Helvetica;fontSize=18;fontColor=default;startArrow=none;endArrow=none;" parent="1" source="2" target="18" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="45" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1;fontFamily=Helvetica;fontSize=18;fontColor=default;startArrow=none;endArrow=none;" parent="1" source="2" target="4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="&lt;b&gt;Mängel bei Vertragsabschluss&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=24;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="30" width="480" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="&lt;b&gt;Inhaltsmängel&lt;/b&gt; (Art. 20 Abs. 1 OR)" style="rounded=0;whiteSpace=wrap;html=1;fontSize=19;align=left;spacingLeft=6;spacingRight=5;spacingTop=2;spacingBottom=3;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="115" width="360" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="Widerrechtlicher Vertragsinhalt" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;align=left;spacingLeft=6;spacingRight=5;spacingTop=2;spacingBottom=3;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="175" width="300" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Sittenwidriger Vertragsinhalt" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;align=left;spacingLeft=6;spacingRight=5;spacingTop=2;spacingBottom=3;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="239" width="300" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="Anfänglich objektiv unmöglicher Vertragsinhalt" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;align=left;spacingLeft=6;spacingRight=5;spacingTop=2;spacingBottom=3;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="305" width="300" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=18;align=left;spacingLeft=6;spacingRight=5;spacingTop=2;spacingBottom=3;endFill=0;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="80" y="335" as="sourcePoint"/>
+                        <Array as="points">
+                            <mxPoint x="80" y="145"/>
+                        </Array>
+                        <mxPoint x="80" y="145" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="9" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=18;align=left;spacingLeft=6;spacingRight=5;spacingTop=2;spacingBottom=3;endFill=0;" parent="1" target="5" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="80" y="195" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="10" style="endArrow=none;html=1;fontSize=18;align=left;spacingLeft=6;spacingRight=5;spacingTop=2;spacingBottom=3;endFill=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="80" y="260" as="sourcePoint"/>
+                        <mxPoint x="100" y="260" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="11" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=18;align=left;spacingLeft=6;spacingRight=5;spacingTop=2;spacingBottom=3;endFill=0;" parent="1" target="7" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="80" y="335" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="12" value="&lt;b style=&quot;line-height: 130%;&quot;&gt;Beispiele&lt;/b&gt;&lt;br&gt;&lt;div style=&quot;line-height: 130%;&quot;&gt;&lt;ul style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); padding-left: 15px; margin: 5px 0px 2px; padding-bottom: 0px; padding-right: 0px;&quot;&gt;&lt;li style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;ewige Verträge ohne Kündigungsmöglichkeit&lt;/span&gt;&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;Kaufvertrag über 5g Kokain&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=#f5f5f5;align=left;verticalAlign=middle;rounded=0;fontSize=13;" parent="1" vertex="1">
+                    <mxGeometry x="410" y="165" width="320" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="&lt;b&gt;Teilnichtigkeit des Vertrags&lt;/b&gt;&lt;br&gt;(Art. 20 Abs. 2 OR)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="827.5" y="110" width="215" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="&lt;b&gt;Gänzliche Nichtigkeit &lt;br&gt;des Vertrags&lt;/b&gt;&lt;br&gt;(Art. 20 OR)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="820" y="215" width="230" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="4" target="14" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="510" y="135"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="36" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=#000000;strokeWidth=1;spacingLeft=8;spacingRight=5;spacingTop=8;spacingBottom=8;fontFamily=Helvetica;fontSize=12;fontColor=#000000;fillColor=#ffffff;imageWidth=25;" parent="16" vertex="1" connectable="0">
+                    <mxGeometry x="0.16" y="2" relative="1" as="geometry">
+                        <mxPoint x="-19" y="-18" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="17" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;Ansonsten&lt;/font&gt;" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;fontSize=13;" parent="1" source="14" target="15" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="53" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1;fontFamily=Helvetica;fontSize=18;fontColor=default;startArrow=none;endArrow=none;" parent="1" source="18" target="23" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="54" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1;fontFamily=Helvetica;fontSize=18;fontColor=default;startArrow=none;endArrow=none;" parent="1" source="18" target="22" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="59" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1;fontFamily=Helvetica;fontSize=12;fontColor=#000000;startArrow=none;endArrow=none;" edge="1" parent="1" source="18" target="29">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="&lt;b&gt;Willensmängel und Übervorteilung&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=19;align=left;spacingLeft=6;spacingRight=5;spacingTop=2;spacingBottom=3;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="426" width="370" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="&lt;font color=&quot;#7030a0&quot;&gt;Anfechtungstatbestände&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=17;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="400" width="140" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="56" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#000000;strokeWidth=1;fontFamily=Helvetica;fontSize=18;fontColor=default;startArrow=none;endArrow=none;" parent="1" source="20" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="70" y="460" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="20" value="&lt;b&gt;Übervorteilung &lt;/b&gt;(Art. 21 OR)" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;align=left;spacingLeft=6;spacingRight=5;spacingTop=2;spacingBottom=3;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="502" width="300" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="55" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#000000;strokeWidth=1;fontFamily=Helvetica;fontSize=18;fontColor=default;startArrow=none;endArrow=none;" parent="1" source="21" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="70" y="460" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="21" value="&lt;b&gt;Wesentlicher Irrtum&lt;/b&gt; (Art. 23 f. OR)" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;align=left;spacingLeft=6;spacingRight=5;spacingTop=2;spacingBottom=3;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="590" width="360" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="&lt;b&gt;Absichtliche Täuschung &lt;/b&gt;(Art. 28 OR)" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;align=left;spacingLeft=6;spacingRight=5;spacingTop=2;spacingBottom=3;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="661" width="360" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="&lt;b&gt;Drohung, Furchterregung&lt;/b&gt; (Art. 29 f. OR)" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;align=left;spacingLeft=6;spacingRight=5;spacingTop=2;spacingBottom=3;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="730" width="360" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" value="&lt;b&gt;Anfechtbarkeit des Vertrags&lt;/b&gt;&lt;br&gt;(Art. 21 und Art. 23 ff. OR)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;" parent="1" vertex="1">
+                    <mxGeometry x="540" y="421" width="220" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="35" value="&lt;ul style=&quot;padding-left: 15px; margin: 13px 0px; padding-bottom: 0px; padding-right: 0px;&quot;&gt;&lt;li&gt;Verkauf einer Anleitung zum Bau eines Perpetuum mobile (nicht existierendes Gerät)&lt;/li&gt;&lt;/ul&gt;" style="text;html=1;strokeColor=none;fillColor=#f5f5f5;align=left;verticalAlign=middle;rounded=0;fontSize=13;spacingLeft=0;whiteSpace=wrap;" parent="1" vertex="1">
+                    <mxGeometry x="410" y="308" width="550" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="38" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;span style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); background-color: rgb(251, 251, 251); float: none; color: rgb(0, 0, 0); display: inline !important;&quot;&gt;&lt;font style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;Sofern Mangel nur Teile des&amp;nbsp;&lt;/font&gt;&lt;span style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); background-color: transparent; color: rgb(0, 0, 0);&quot;&gt;Vertrags&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); background-color: light-dark(rgb(251, 251, 251), rgb(21, 21, 21));&quot;&gt;betrifft, gegebenenfalls&lt;/span&gt;&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;/span&gt;&lt;/font&gt;&lt;div style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); text-wrap-mode: nowrap; background-color: rgb(255, 255, 255);&quot;&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;strokeColor=none;strokeWidth=1;spacingLeft=10;spacingRight=5;spacingTop=8;spacingBottom=8;fontFamily=Helvetica;fontSize=13;fontColor=#000000;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="100" width="370" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="39" value="&lt;ul style=&quot;padding-left: 15px; margin: 5px 0px 2px; padding-bottom: 0px; padding-right: 0px; line-height: 130%;&quot;&gt;&lt;li&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;Prostitutionsvertrag (umstritten)&lt;/span&gt;&lt;/li&gt;&lt;li&gt;bezahlte Unterstützung der Erbschleicherei&lt;/li&gt;&lt;/ul&gt;" style="text;html=1;strokeColor=none;fillColor=#f5f5f5;align=left;verticalAlign=middle;rounded=0;fontSize=13;spacingLeft=0;spacing=2;" parent="1" vertex="1">
+                    <mxGeometry x="410" y="240" width="320" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="43" value="&lt;span style=&quot;background-color: transparent; line-height: 130%;&quot;&gt;&lt;b&gt;Beispiel ausnutzen von Notlage:&lt;br&gt;&lt;/b&gt;&lt;font style=&quot;font-size: 12px; line-height: 130%;&quot;&gt;Thomas, äusserst verzweifelt ob des akuten und prekären Gesundheitszustandes seiner Frau, kommt zum weit und breit einzigen Apotheker Stefan, um lebensnotwendige Medikamente zu kaufen. &lt;br&gt;Stefan wittert die Gunst der Stunde und verlangt für die fiebersenkenden Medikamente CHF 320.00 statt CHF 32.00.&lt;/font&gt;&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;spacingLeft=0;fillColor=#f5f5f5;fontColor=#333333;strokeColor=none;spacing=7;" parent="1" vertex="1">
+                    <mxGeometry x="410" y="490" width="670" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="46" value="&lt;span&gt;&lt;font style=&quot;color: rgb(0, 0, 153);&quot;&gt;möglich wenn keine Gewährleistungsansprüche mehr&lt;/font&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontColor=#0000CC;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="567" width="360" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="50" value="&lt;ul style=&quot;padding-left: 15px; margin: 13px 0px; padding-bottom: 0px; padding-right: 0px; line-height: 130%;&quot;&gt;&lt;li style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;p style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); margin: 0px; padding: 0px; color: rgb(63, 63, 63);&quot; data-path-to-node=&quot;15,1,1,1,0&quot;&gt;&lt;font style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;Paul Popp bestellt irrtümlich 500 Flaschen Wein statt wie beabsichtigt nur 50.&lt;/font&gt;&lt;/p&gt;&lt;/li&gt;&lt;li style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;p style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); margin: 0px; padding: 0px; color: rgb(63, 63, 63);&quot; data-path-to-node=&quot;15,1,1,1,0&quot;&gt;&lt;span style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); background-color: transparent; color: rgb(63, 63, 63);&quot;&gt;Hans Heule kauft ein «unfallfreies» Auto, das sich später als Unfallauto erweist (ohne dass der Verkäufer dies gewusst hätte).&lt;/span&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;spacingLeft=0;fillColor=#f5f5f5;fontColor=#333333;strokeColor=none;spacing=7;" parent="1" vertex="1">
+                    <mxGeometry x="470" y="585" width="610" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="51" value="&lt;ul style=&quot;padding-left: 15px; margin: 13px 0px; padding-bottom: 0px; padding-right: 0px;&quot;&gt;&lt;li style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;p style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); margin: 0px; padding: 0px; color: rgb(63, 63, 63);&quot; data-path-to-node=&quot;15,1,1,1,0&quot;&gt;&lt;span style=&quot;color: rgb(63, 63, 63); line-height: 130%;&quot;&gt;Der Garagist Georg Gründler verkauft einen Gebrauchtwagen wider besseres Wissen als «unfallfrei».&lt;/span&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;spacingLeft=0;fillColor=#f5f5f5;fontColor=#333333;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="470" y="663" width="610" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="52" value="&lt;ul style=&quot;padding-left: 15px; margin: 13px 0px; padding-bottom: 0px; padding-right: 0px;&quot;&gt;&lt;li style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;p style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); margin: 0px; padding: 0px; color: rgb(63, 63, 63);&quot; data-path-to-node=&quot;15,1,1,1,0&quot;&gt;&lt;span style=&quot;color: rgb(63, 63, 63); line-height: 130%;&quot;&gt;Der Nachbar droht Hans Huber, ihn wegen eines Bagatelldelikts anzuzeigen, wenn er ihm nicht seinen Porsche über das Wochenende ausleiht. Hans Huber willigt zähneknirschend ein.&lt;/span&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;spacingLeft=0;fillColor=#f5f5f5;fontColor=#333333;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="470" y="729" width="610" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

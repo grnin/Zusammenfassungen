@@ -72,31 +72,51 @@ dispositiv = allgemein ?
 4. Schutz der schwächeren Partei
 
 === Vertragsform einteilen
-Vertragsform Merkmale Beispiele Formfreiheit (Art. 11 OR) Das Obligationenrecht geht von dem Grundsatz der Formfreiheit aus. Darunter versteht man die Freiheit, Verträge in freier Form abzuschliessen, abzuändern oder aufzuheben. Eine besondere Form ist nur notwendig, wenn es das Gesetz oder Abrede eine solche vorschreibt. - Einzelarbeitsvertrag - Mietvertrag - Kaufvertrag - Darlehen Einfache Schriftlichkeit (Art. 13 – 15 OR) Ist die einfache Schriftlichkeit vorgesehen, muss der Vertrag die eigenhändige Unterschrift oder eine qualifizierte elektronische Signatur aller beteiligten Personen aufweisen. - Schenkungsversprechen - Lehrvertrag - Versicherungsvertrag - Konkurrenzverbot im Arbeitsvertrag Qualifizierte Schriftlichkeit Die qualifizierte Schriftlichkeit verlangt nicht nur die Unterschrift der Verpflichteten, sondern die handschriftliche Angabe gewisser Elemente in der Urkunde. - Bürgschaft - Testament Öffentliche Beurkundung Bei der öffentlichen Beurkundung erfolgt der Vertragsschluss unter Mitwirkung einer Urkundsperson (z.B. Notar). Die Urkundsperson bestätigt die Richtigkeit des Inhaltes der Urkunde. - Grundstückkaufvertrag - Vorvertrag über ein Grundstück mit Kaufpreis - Bürgschaft natürlicher Personen, wenn die Haftungssumme über Fr. 2'000.– liegt - Ehe- und Erbvertrag
+Vertragsform Merkmale Beispiele Formfreiheit (Art. 11 OR) Das Obligationenrecht geht von dem Grundsatz der Formfreiheit aus. Darunter versteht man die Freiheit, Verträge in freier Form abzuschliessen, abzuändern oder aufzuheben. Eine besondere Form ist nur notwendig, wenn es das Gesetz oder Abrede eine solche vorschreibt.
+- Einzelarbeitsvertrag
+- Mietvertrag
+- Kaufvertrag
+- Darlehen Einfache Schriftlichkeit (Art. 13 – 15 OR) Ist die einfache Schriftlichkeit vorgesehen, muss der Vertrag die eigenhändige Unterschrift oder eine qualifizierte elektronische Signatur aller beteiligten Personen aufweisen.
+- Schenkungsversprechen
+- Lehrvertrag
+- Versicherungsvertrag
+- Konkurrenzverbot im Arbeitsvertrag Qualifizierte Schriftlichkeit Die qualifizierte Schriftlichkeit verlangt nicht nur die Unterschrift der Verpflichteten, sondern die handschriftliche Angabe gewisser Elemente in der Urkunde.
+- Bürgschaft
+- Testament Öffentliche Beurkundung Bei der öffentlichen Beurkundung erfolgt der Vertragsschluss unter Mitwirkung einer Urkundsperson (z.B. Notar). Die Urkundsperson bestätigt die Richtigkeit des Inhaltes der Urkunde.
+- Grundstückkaufvertrag
+- Vorvertrag über ein Grundstück mit Kaufpreis
+- Bürgschaft natürlicher Personen, wenn die Haftungssumme über Fr. 2'000.– liegt
+- Ehe- und Erbvertrag
 
-
+=== Vertragsformen
 #image("img/image-1.png")
 
 === Vertragstypen
 
-#image("img/image-2.png")
-Quelle: Reichle/Kobler, Recht lernen einfach gemacht, S. 101.
-10.12.2025Allgemeines Vertragsrecht10
-Auch Innominatverträge: Gemischte Verträge oder Verträge eigener
-Art (Neuschöpfungen der Vertragspraxis
+#figure(
+  image("diagrams/vertragstypen.svg", width: 80%),
+  caption: [Quelle: Reichle/Kobler, Recht lernen einfach gemacht, S. 101.],
+)
 
 
-==== R
-Quelle: Reichle/Kobler, Recht lernen einfach gemacht, S. 268.
-#image("img/image-3.png")
 
-=== S
-mit Ermächtigung
+
+==== Rechtssubjekte
+
+#figure(
+  image("img/image-3.png"),
+  // image("diagrams/maengel.svg", width: 80%),
+  caption: [Quelle: Reichle/Kobler, Recht lernen einfach gemacht, S. 268.],
+)
+
+=== Stellvertretung
+==== Stellvertretung mit Ermächtigung
 #image("img/image-4.png")
-ohne Ermächtigung
+==== Stellvertretung ohne Ermächtigung
 #image("img/image-5.png")
 
 == Gewährleistung
+// TODO
 - Gewährleistungs... kann im dispositiven Recht wegbedungen werden, kann dann nur noch anfechten @ link
 
 
@@ -135,9 +155,11 @@ Die Ansetzung einer Frist zur nachträglichen Erfüllung ist nicht erforderlich:
   - Negativ: Verzichten auf Produkt, aber Verkäufer muss Geld zurück + Schadenersatz zahlen. Z.B. Lieferunternehmen schon bestellt und dieses wird
 
 === Inhalts-/Willensmängel
-#image("img/image.png")
+#figure(
+  image("diagrams/maengel.svg", width: 80%),
+  // caption: [Quelle:],
+)
 
-Vertrag anfechten, wenn keine Gewährleistungsansprüche
-
+==== Vertrag anfechten, wenn keine Gewährleistungsansprüche
 - wesentlicher Irrtum: mögliche Anfechtung wenn keine Gewährleistungsansprüche mehr
 - Absichtliche Täuschung : wenn Beweis vorhanden, dass es absichtlich ist. Betrug gibt auch Strafabzug

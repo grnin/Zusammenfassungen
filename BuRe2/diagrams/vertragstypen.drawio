@@ -1,0 +1,143 @@
+<mxfile host="65bd71144e">
+    <diagram name="Vertragstypen" id="0">
+        <mxGraphModel dx="397" dy="547" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="0.7" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="30" value="" style="group" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="70" y="20" width="590" height="480" as="geometry"/>
+                </mxCell>
+                <mxCell id="root" value="Vertragstypen" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;" parent="30" vertex="1">
+                    <mxGeometry width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;fontSize=16;" parent="30" source="v1" target="root" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;endArrow=none;endFill=0;" parent="30" source="v1" target="k" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;align=left;" parent="30" source="v1" target="t" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;align=left;" parent="30" source="v1" target="s" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="v1" value="Veräusserungsverträge" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;spacingLeft=10;" parent="30" vertex="1">
+                    <mxGeometry x="30" y="80" width="220" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;endArrow=none;endFill=0;fontSize=16;" parent="30" source="v2" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint y="40" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint y="200"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="18" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;endArrow=none;endFill=0;align=left;" parent="30" source="v2" target="m" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2" value="Gebrauchsüberlassungsverträge" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;spacingLeft=10;" parent="30" vertex="1">
+                    <mxGeometry x="30" y="180" width="260" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;endArrow=none;endFill=0;fontSize=16;" parent="30" source="v3" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint y="40" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="v3" value="Verträge auf Arbeitsleistung" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;spacingLeft=10;" parent="30" vertex="1">
+                    <mxGeometry x="30" y="320" width="240" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;fontSize=16;" parent="30" source="v4" target="root" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4" value="Weitere Verträge" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;align=left;spacingLeft=10;" parent="30" vertex="1">
+                    <mxGeometry x="30" y="430" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="k" value="&lt;b&gt;Kaufvertrag &lt;/b&gt;(Art. 184 ff. OR)" style="rounded=0;whiteSpace=wrap;html=1;spacing=1;align=left;spacingLeft=9;" parent="30" vertex="1">
+                    <mxGeometry x="330" y="54" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="t" value="&lt;b&gt;Tausch &lt;/b&gt;(Art. 237 f. OR)" style="rounded=0;whiteSpace=wrap;html=1;spacing=1;align=left;spacingLeft=9;" parent="30" vertex="1">
+                    <mxGeometry x="330" y="84" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="s" value="&lt;b&gt;Schenkung &lt;/b&gt;(Art. 239 ff. OR)" style="rounded=0;whiteSpace=wrap;html=1;spacing=1;align=left;spacingLeft=9;" parent="30" vertex="1">
+                    <mxGeometry x="330" y="113" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="m" value="&lt;b&gt;Miete &lt;/b&gt;(Art. 253 ff. OR)" style="rounded=0;whiteSpace=wrap;html=1;spacing=1;align=left;spacingLeft=9;" parent="30" vertex="1">
+                    <mxGeometry x="330" y="160" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;endArrow=none;endFill=0;align=left;" parent="30" source="p" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="290" y="200" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="p" value="&lt;b&gt;Pacht &lt;/b&gt;(Art. 275 ff. OR)" style="rounded=0;whiteSpace=wrap;html=1;spacing=1;align=left;spacingLeft=9;" parent="30" vertex="1">
+                    <mxGeometry x="330" y="190" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;align=left;" parent="30" source="g" target="v2" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="300" y="210" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="310" y="234"/>
+                            <mxPoint x="310" y="200"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="g" value="&lt;b&gt;Gebrauchsleihe &lt;/b&gt;(Art. 305 ff. OR)" style="rounded=0;whiteSpace=wrap;html=1;spacing=1;align=left;spacingLeft=9;" parent="30" vertex="1">
+                    <mxGeometry x="330" y="219" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" style="edgeStyle=elbowEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;endArrow=none;endFill=0;align=left;" parent="30" source="a" target="v3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a" value="&lt;b&gt;Arbeitsvertrag &lt;/b&gt;(Art. 319 ff. OR)" style="rounded=0;whiteSpace=wrap;html=1;spacing=1;align=left;spacingLeft=9;" parent="30" vertex="1">
+                    <mxGeometry x="330" y="320" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" style="edgeStyle=elbowEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;endArrow=none;endFill=0;align=left;" parent="30" source="w" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="270" y="340" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="w" value="&lt;b&gt;Werkvertrag &lt;/b&gt;(Art. 363 ff. OR)" style="rounded=0;whiteSpace=wrap;html=1;spacing=1;align=left;spacingLeft=9;" parent="30" vertex="1">
+                    <mxGeometry x="330" y="350" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" style="edgeStyle=elbowEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;endArrow=none;endFill=0;align=left;" parent="30" source="au" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="270" y="340" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="au" value="&lt;b&gt;Auftrag &lt;/b&gt;(Art. 394 ff. OR)" style="rounded=0;whiteSpace=wrap;html=1;spacing=1;align=left;spacingLeft=9;" parent="30" vertex="1">
+                    <mxGeometry x="330" y="379" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;endArrow=none;endFill=0;" parent="30" source="inn" target="v4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="inn" value="Auch &lt;b&gt;Innominatverträge&lt;/b&gt;:&lt;div&gt;Gemischte Verträge oder Verträge eigener Art (Neuschöpfung der Vertragspraxis)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;spacing=1;align=left;spacingLeft=9;" parent="30" vertex="1">
+                    <mxGeometry x="330" y="420" width="260" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;endArrow=none;endFill=0;align=left;" parent="30" source="15" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="290" y="200" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="310" y="264"/>
+                            <mxPoint x="310" y="200"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="15" value="&lt;b&gt;Darlehen &lt;/b&gt;(Art. 312 ff. OR)" style="rounded=0;whiteSpace=wrap;html=1;spacing=1;align=left;spacingLeft=9;" parent="30" vertex="1">
+                    <mxGeometry x="330" y="249" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;align=left;" parent="30" source="16" target="v2" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="290" y="210" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="310" y="301"/>
+                            <mxPoint x="310" y="200"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="16" value="&lt;b&gt;Leasing&amp;nbsp;&lt;/b&gt;(z. T. im Konsumkreditgesetz KKG)" style="rounded=0;whiteSpace=wrap;html=1;spacing=1;align=left;spacingLeft=9;" parent="30" vertex="1">
+                    <mxGeometry x="330" y="278" width="260" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

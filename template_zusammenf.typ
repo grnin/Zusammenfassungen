@@ -50,7 +50,11 @@
     date: date,
   )
 
-  let font-default = (font: "Calibri", lang: language, region: "ch", size: font-size)
+  let font-default = (
+    font: ("Calibri", "Source Sans Pro", "Roboto"), 
+    lang: language, region: "ch", 
+    size: font-size
+  )
 
   let font-special = (
     ..font-default,
