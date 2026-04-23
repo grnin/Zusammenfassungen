@@ -1,4 +1,12 @@
 
+#let link_box(content) = block(
+  fill: rgb("#eef2ff"),
+  inset: 10pt,
+  radius: 8pt,
+  spacing: 0.75em,
+  content,
+)
+
 == Begriffe
 kaufmännischer Verkehr = Kauf für Weiterverkauf
 Gewährleistungs.. = Garantie
@@ -10,10 +18,13 @@ unsittlich = unsanständig
 == Obligation
 
 Wie entsteht eine Obligation ?
-- unerlaubte Handlungen (Art. 41-61 OR)
-- ungerechtfertigte Bereicherung (Art. 62-67 OR)
-- Vertrag (Art. 1 - 40 ff. OR)
-- andere Rechtsgründe
+#link_box[unerlaubte Handlungen (Art. 41-61 OR)]
+#link_box[ungerechtfertigte Bereicherung (Art. 62-67 OR)]
+#link_box[Vertrag (Art. 1 - 40 ff. OR)]
+#link_box[andere Rechtsgründe]
+
+
+
 
 <small>
 Andere Rechtsgründe sind:
