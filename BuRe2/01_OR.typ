@@ -8,23 +8,27 @@
 )
 
 == Begriffe
-kaufmännischer Verkehr = Kauf für Weiterverkauf
-Gewährleistungs.. = Garantie
-Willensbildung =
-Willenserklärung =
-Verjährungseinredeverzichtserklärung = Verkäufer ist einverstanden die Verjährung zu unterbrechen
-unsittlich = unsanständig
+- kaufmännischer Verkehr = Kauf für Weiterverkauf
+- Gewährleistungs.. = Garantie
+- Willensbildung =
+- Willenserklärung =
+- Verjährungseinredeverzichtserklärung = Verkäufer ist einverstanden die Verjährung zu unterbrechen
+- unsittlich = unsanständig
+
+- dispositiv = allgemein ?
+
 
 == Obligation
-
-Wie entsteht eine Obligation ?
+Wie entsteht eine Obligation?
+\
+\
+#link_box[Vertrag (Art. 1 - 40 ff. OR)]
 #link_box[unerlaubte Handlungen (Art. 41-61 OR)]
 #link_box[ungerechtfertigte Bereicherung (Art. 62-67 OR)]
-#link_box[Vertrag (Art. 1 - 40 ff. OR)]
-#link_box[andere Rechtsgründe]
+#link_box[andere Rechtsgründe (unten)]
 
 
-
+\
 
 <small>
 Andere Rechtsgründe sind:
@@ -36,8 +40,9 @@ Andere Rechtsgründe sind:
 - Verwandtenunterstützungspflicht (Art. 328 f. ZGB)
 </small>
 
+-----
 
-=== Grundsatz der Vertragsfreiheit
+=== _Grundsatz_ der Vertragsfreiheit
 Verschiedene Aspekte der Vertragsfreiheit:
 - Abschlussfreiheit
 - Partnerwahlfreiheit
@@ -45,15 +50,16 @@ Verschiedene Aspekte der Vertragsfreiheit:
 - Aufhebungsfreiheit
 - Formfreiheit
 Ob ein Vertrag aber tatsächlich gültig ist, hängt von verschiedenen Voraussetzungen ab.
-dispositiv = allgemein ?
+
+----
 
 ==== Voraussetzungen der Vertragsgültigkeit
-- Kein Inhaltsmangel: nicht *unmöglich*, nicht rechtswidrig (z.B. Verstoss der AGB gegen UWG 8), nicht unsittlich=unanständig, oder Covid19 Massnahmen
-  - Mond kaufen ist unmöglich, deshalb kein gültiger Vertrag
 - (Beschränkte) Handlungsfähigkeit der Parteien
 - Konsens beim Vertragsabschluss
 - Formgültigkeit
+- Kein Inhaltsmangel: nicht *unmöglich*, nicht rechtswidrig (z.B. Verstoss der AGB gegen UWG 8), nicht unsittlich (soz. unanständig), oder Covid19 Massnahmen
 - Keine Übervorteilung (führt zur Anfechtbarkeit)
+  - Mond kaufen ist unmöglich, deshalb kein gültiger Vertrag
 - Kein Willensmangel (führt zur Anfechtbarkeit)
 - Gültige Stellvertretung
 
