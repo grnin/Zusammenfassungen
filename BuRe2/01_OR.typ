@@ -1,13 +1,7 @@
 
-#let link_box(content) = block(
-  fill: rgb("#eef2ff"),
-  inset: 10pt,
-  radius: 8pt,
-  spacing: 0.75em,
-  content,
-)
 
 == Begriffe
+// TODO weniger Zeilenabstand:
 - kaufmännischer Verkehr = Kauf für Weiterverkauf
 - Gewährleistungs.. = Garantie
 - Willensbildung =
@@ -18,22 +12,12 @@
 - dispositiv = allgemein ?
 
 
-== Obligation
-Wie entsteht eine Obligation?
-\
-\
-#link_box[Vertrag (Art. 1 - 40 ff. OR)]
-#link_box[unerlaubte Handlungen (Art. 41-61 OR)]
-#link_box[ungerechtfertigte Bereicherung (Art. 62-67 OR)]
-#link_box[andere Rechtsgründe (unten)]
-
-
 \
 
 <small>
 Andere Rechtsgründe sind:
 - Geschäftsführung ohne Auftrag (Art. 419 ff. OR)
-- Culpa in contrahendo
+- Culpa in contrahendo (??)
 - Eigentumsfreiheitsklage (Art. 641 ZGB)
 - Besitzesrechtsklage (Art. 934 ff. ZGB)
 - Persönlichkeitsverletzung (Art. 28 ff. ZGB)
@@ -57,7 +41,8 @@ Ob ein Vertrag aber tatsächlich gültig ist, hängt von verschiedenen Vorausset
 - (Beschränkte) Handlungsfähigkeit der Parteien
 - Konsens beim Vertragsabschluss
 - Formgültigkeit
-- Kein Inhaltsmangel: nicht *unmöglich*, nicht rechtswidrig (z.B. Verstoss der AGB gegen UWG 8), nicht unsittlich (soz. unanständig), oder Covid19 Massnahmen
+- Kein Inhaltsmangel: nicht *unmöglich*, nicht rechtswidrig (z.B. Verstoss der AGB gegen UWG 8), nicht unsittlich (soz. unanständig),
+ unmöglich:Covid19 Massnahmen?
 - Keine Übervorteilung (führt zur Anfechtbarkeit)
   - Mond kaufen ist unmöglich, deshalb kein gültiger Vertrag
 - Kein Willensmangel (führt zur Anfechtbarkeit)
@@ -93,7 +78,7 @@ Vertragsform Merkmale Beispiele Formfreiheit (Art. 11 OR) Das Obligationenrecht 
 - Einzelarbeitsvertrag
 - Mietvertrag
 - Kaufvertrag
-- Darlehen Einfache Schriftlichkeit (Art. 13 – 15 OR) Ist die einfache Schriftlichkeit vorgesehen, muss der Vertrag die eigenhändige Unterschrift oder eine qualifizierte elektronische Signatur aller beteiligten Personen aufweisen.
+- Darlehen Einfache Schriftlichkeit (Art. 13 - 15 OR) Ist die einfache Schriftlichkeit vorgesehen, muss der Vertrag die eigenhändige Unterschrift oder eine qualifizierte elektronische Signatur aller beteiligten Personen aufweisen.
 - Schenkungsversprechen
 - Lehrvertrag
 - Versicherungsvertrag
@@ -102,7 +87,7 @@ Vertragsform Merkmale Beispiele Formfreiheit (Art. 11 OR) Das Obligationenrecht 
 - Testament Öffentliche Beurkundung Bei der öffentlichen Beurkundung erfolgt der Vertragsschluss unter Mitwirkung einer Urkundsperson (z.B. Notar). Die Urkundsperson bestätigt die Richtigkeit des Inhaltes der Urkunde.
 - Grundstückkaufvertrag
 - Vorvertrag über ein Grundstück mit Kaufpreis
-- Bürgschaft natürlicher Personen, wenn die Haftungssumme über Fr. 2'000.– liegt
+- Bürgschaft natürlicher Personen, wenn die Haftungssumme über Fr. 2'000.- liegt
 - Ehe- und Erbvertrag
 
 === Vertragsformen

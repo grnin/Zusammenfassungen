@@ -13,9 +13,28 @@
 )
 
 
+#let link_box(content) = block(
+  fill: rgb("#eef2ff"),
+  inset: 10pt,
+  radius: 8pt,
+  spacing: 0.75em,
+  content,
+)
+
+#let notiz(content) = block(
+  color: rgb("#da05a1"),
+  // fill: rgb("#eef2ff"),
+  // inset: 10pt,
+  // radius: 8pt,
+  // spacing: 0.75em,
+  content,
+)
+
+
 // Document-specific settings
 #show grid: set par(justify: false, linebreaks: "optimized")
 
+#include "01 Obligationenrecht Allgemeiner Teil.typ"
 
 #include "00_Diagramme.typ"
 #include "01_OR.typ"
