@@ -1,48 +1,61 @@
-// Vorlesungsfolien als Typst, Notizen in eigener Typst Box 
+// Vorlesungsfolien als Typst, Notizen in eigener Typst Box
 // pdf hat 25 im name, schauen ob es aktuell ist
 
 #let link_box(content) = block(
-  fill: rgb("#eef2ff"),
-  inset: 10pt,
-  radius: 8pt,
-  spacing: 0.75em,
-  content,
+    fill: rgb("#eef2ff"),
+    inset: 10pt,
+    radius: 8pt,
+    spacing: 0.75em,
+    content,
 )
 
 #let notiz(content) = text(
-  // text: rgb("#da05a1"),
-  fill: rgb("#e007a6"),
-  content,
+    // text: rgb("#da05a1"),
+    fill: rgb("#e007a6"),
+    content,
 )
 
 #set heading(numbering: "1.")
 
 #notiz([
-  Themen:
-  @obligation
-  @vertragsfreiheit
-  @vertragsgueltigkeit
-]
-)
+    Themen:
+    @obligation
+    @vertragsfreiheit
+    @vertragsgueltigkeit
+])
+
+// Es würde genügen einfach die Folien zu haben an der Prüfung, aber die sind nicht "schön" formatiert und einige meiner Notizen habe ich als Kommentar, werden also nicht automatisch ausgedruckt.
+// Ziel von Zusammenfassung: Inhalt aus Folien ist vorhanden und einfach auffindbar + eigene Notizen eher klein daneben und gut erkennbar als eigene Notizen
+// Prüfung ist multiple cohoice
+// wichtigste, prüfungsrelevante themen separat? Oder einfach Lesezeichen machen
+//
+// Ideen:
+// Mindmap/concept map? Vielleicht mit den titeln / verschiedenen Arten von ..., Begriffe
+// aufteilen links und rechts, links original und rechts meine Notizen
+// TODOS:
+// Titel level 3 ohne Zahl, mit fetter schrift, level 4 auch erstellen
+
 = Entstehung der Obligation <obligation>
+#grid(
+    [
+        Wie entsteht eine Obligation?
+        \
+        \
+        #link_box[*Vertrag* (Art. 1 - 40 ff. OR)]
+        #link_box[*unerlaubte Handlungen* (Art. 41-61 OR)]
+        #link_box[*ungerechtfertigte Bereicherung* (Art. 62-67 OR)]
+        #link_box[*andere Rechtsgründe* (unten)]
 
-Wie entsteht eine Obligation?
-\
-\
-#link_box[*Vertrag* (Art. 1 - 40 ff. OR)]
-#link_box[*unerlaubte Handlungen* (Art. 41-61 OR)]
-#link_box[*ungerechtfertigte Bereicherung* (Art. 62-67 OR)]
-#link_box[*andere Rechtsgründe* (unten)]
-
-Andere Rechtsgründe sind:
-- Geschäftsführung ohne Auftrag (Art. 419 ff. OR)
-- Culpa in contrahendo
-- Eigentumsfreiheitsklage (Art. 641 ZGB)
-- Besitzesrechtsklage (Art. 934 ff. ZGB)
-- Persönlichkeitsverletzung (Art. 28 ff. ZGB)
-- Verwandtenunterstützungspflicht (Art. 328 f. ZGB)
-
----------
+        === Andere Rechtsgründe sind:
+        - Geschäftsführung ohne Auftrag (Art. 419 ff. OR)
+        - Culpa in contrahendo
+        - Eigentumsfreiheitsklage (Art. 641 ZGB)
+        - Besitzesrechtsklage (Art. 934 ff. ZGB)
+        - Persönlichkeitsverletzung (Art. 28 ff. ZGB)
+        - Verwandtenunterstützungspflicht (Art. 328 f. ZGB)
+    ],
+    [Notizen hier:],
+)
 
 = [Grundsatz]{.underline} der Vertragsfreiheit <vertragsfreiheit>
 
@@ -131,13 +144,13 @@ unmittelbar oder analog geregelt?
 
 > **Gründe für Formvorschriften:**
 
-1.  Beweissicherung
+1. Beweissicherung
 
-2.  Schutz vor übereiltem Vertragsschluss
+2. Schutz vor übereiltem Vertragsschluss
 
-3.  Rechtssicherheit
+3. Rechtssicherheit
 
-4.  Schutz der schwächeren Partei
+4. Schutz der schwächeren Partei
 
 = Vertragsform
 
@@ -306,7 +319,7 @@ eigenem Namen, siehe Art. 32 Abs. 3 OR
 
 Quelle: Reichle/Kobler, Recht lernen einfach gemacht, S. 16.
 
-= Vertragsschluss 
+= Vertragsschluss
 
 > ![](media/image10.jpg){width="11.0in" height="4.761527777777777in"}
 
@@ -315,14 +328,14 @@ Quelle: Reichle/Kobler, Recht lernen einfach gemacht, S. 17.
 = Antrag
 
 - Der Antrag ist ein einseitiges Rechtsgeschäft, der auf den Abschluss
-  eines Vertrages gerichtet ist.
+    eines Vertrages gerichtet ist.
 
 - Begrifflichkeiten:
 
 - Empfangsbedürftigkeit
 
 - Unterscheidung verbindlicher -- und unverbindlicher Antrag (vgl. Art.
-  7 OR)
+    7 OR)
 
 - Antrag unter Anwesenden resp. Abwesenden (vgl. Art. 4 und 5 OR)
 
@@ -689,18 +702,18 @@ Vereinigung **OR 118**
 = Übungen
 
 1)  Petra gefällt beim Einkaufsbummel in einem grossen Möbelhaus eine
-    grosse, farbige Blumenvase. Da der Wagen schon voll ist, nimmt Petra
-    die Vase unter den
+grosse, farbige Blumenvase. Da der Wagen schon voll ist, nimmt Petra
+die Vase unter den
 
 > Arm und macht sich auf den Weg an die Kasse. Auf der Rolltreppe fällt
 > Petra die Vase zu Boden und zerbricht in 1000 Stücke. Gestützt auf
 > welche Rechtsgrundlage(n) könnte Ikea einen Anspruch geltend machen?
 
 2)  Hans interessiert sich in einem Fachgeschäft für ein bestimmtes
-    Mobiltelefon, das aber vor Ort nicht erhältlich ist. Auf Wunsch von
-    Hans bestellt die Verkäuferin das gewünschte Gerät und sagt zu Hans,
-    dass die Lieferfrist ca. 2 -- 3 Tage beträgt und Hans ein Mail
-    erhalte, wenn er es abholen könne. Hans verspricht, dies zu tun.
+Mobiltelefon, das aber vor Ort nicht erhältlich ist. Auf Wunsch von
+Hans bestellt die Verkäuferin das gewünschte Gerät und sagt zu Hans,
+dass die Lieferfrist ca. 2 -- 3 Tage beträgt und Hans ein Mail
+erhalte, wenn er es abholen könne. Hans verspricht, dies zu tun.
 
 > Beim Herumschlendern in der Stadt sieht Hans das gewünschte Telefon
 > beim Konkurrenz-Unternehmen und kauft es sofort. Als er die Nachricht
@@ -756,11 +769,11 @@ Vereinigung **OR 118**
 = Übungen
 
 6)  Peter kauft beim Juwelier eine Halskette als Geburtstagsgeschenk für
-    seine Frau. Leider gefällt seiner Frau die Halskette überhaupt nicht
-    und er möchte sie dem Juwelier zurück geben. Ist das möglich?
+seine Frau. Leider gefällt seiner Frau die Halskette überhaupt nicht
+und er möchte sie dem Juwelier zurück geben. Ist das möglich?
 
 7)  Die Inhaberin eines Uhrengeschäfts verwechselt in der Auslage bei
-    zwei Uhren die Preisschilder. Sie versieht die Rolex mit dem
-    Preisschild der Swatch für CHF 129.-- und bei der günstigen Swatch
-    wurde der Preis der Rolex von CHF 9'890.-- angebracht. Was kann Sie
-    tun, wenn ein Käufer die Rolex für CHF 129.-- kaufen möchte?
+zwei Uhren die Preisschilder. Sie versieht die Rolex mit dem
+Preisschild der Swatch für CHF 129.-- und bei der günstigen Swatch
+wurde der Preis der Rolex von CHF 9'890.-- angebracht. Was kann Sie
+tun, wenn ein Käufer die Rolex für CHF 129.-- kaufen möchte?
