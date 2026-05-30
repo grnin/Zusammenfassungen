@@ -1,36 +1,6 @@
 // #import "/src/main.typ" as ta
 #import "@local/tanki:0.0.1" as ta
 
-/*
-Infos zur Nutzung:
-- kopiere dieses template.typ
-- behalte die Vorlagen und erstelle Karten gemäss der Vorlage unten
-- ändere Kartentyp/notetype in Anki
-
-```shell
-nix develop
-# tanki-rs <path-to-typst-file> [typst-args]
-tanki-rs example-template.typ
-```
-
-Credits: https://github.com/omega-800/tanki
-
-more info:
-```shell
-nix flake update tanki
-
-typst info
-typst compile --format=html --features=html --input=tanki=true example-template.typ
-
-# "No such file or directory":
-# nix run github:omega-800/tanki#tanki-rs -- example-template.typ
-```
-
-Image sources:
-- lecture slides (Gang of Four Design Patterns, Head First Design Patterns)
-- cheatsheet design patterns cards (dpc) : https://mcdonaldland.info/2007/11/28/40/
-
-*/
 
 #let (
   deck,
@@ -42,9 +12,9 @@ Image sources:
 ) = ta.deck-with-models(
   ta.deck(
     "10 Design Patterns",
-    "SEP2 Design Patterns Cards",
+    "SEP2 Design Patterns Anki Karten mit Typst erstellt in Zusammenfassungen.",
     filename: "sep2-design-patterns-cards-typst",
-    id: 123457,
+    id: 1234579,
   ),
   ta.model(
     "normal",
@@ -122,7 +92,12 @@ Image sources:
 
 #add-note-eintippen(
   "What are the GoF-Design Patterns?", // question
-  "", // answer
+  "<b>4 Behavioral Patterns</b> 
+  Observer, State, Strategy and Template Method \
+  <b>3 Creational Patterns</b>
+  Factory Method, Abstract Factory and Singleton \
+  <b>4 Structural Patterns</b>
+  Adapter, Facade, Decorator and Proxy", // answer
   "", // more info
   format: ta.template-note
 )
@@ -140,13 +115,9 @@ Image sources:
 )
 #add-note-normal(
   "Observer Pattern:  Can you draw a diagram and explain the main components and its interactions?", // question
-  // ADD IMAGES
-  // "", // answer 
   [
-    #image("assets/dpc-observer.png")
-    #image("/assets/image.png");\
+    #image("./assets/dpc-observer.png");\
     #image("./assets/observer.png");\
-    #image("./assets/image.png");\
   ],
   "", // more info
   format: ta.template-note,
@@ -158,15 +129,16 @@ Image sources:
   "Differences to a State Machine: it focuses on behaviour while being in a state but the state machine focuses on the action during a transition", // more info
   format: ta.template-note
 )
+
+
 #add-note-normal(
   "State Pattern:  Can you draw a diagram and explain the main components and its interactions?", // question
-  // ADD IMAGES
-  // "", // answer 
   [
-    #image("assets/dpc-state.png")\
-    #image("./assets/image-1.png")\
+    #image("./assets/dpc-state.png")\
   ],
-  "", // more info
+  [
+    #image("./assets/code-state.png")\
+  ], // more info
   format: ta.template-note,
 )
 
@@ -179,23 +151,19 @@ Image sources:
   
 #add-note-normal(
   "What is the problem with the original duck pond game, not complied to which design principles?", // question
-  // ADD IMAGE
   "Liskov's Substitution Principle, Encapsulate what varies (with SRP and OCP), Favor Composition over Inheritance (FCoI) (because inheritance has more coupling, composition makes unit testing easier + adoption at runtime)", // answer
   [
-  #image("./assets/image-2.png");\
+    #image("./assets/strategy-ducks-bad.png");\
   ],
-  // "", // more info
   format: ta.template-note
 )
 
 #add-note-normal(
   "Strategy Pattern:  Can you draw a diagram and explain the main components and its interactions?", // question
-  // "", // answer 
-  // ADD IMAGE
   [
-  #image("assets/dpc-strategy.png")\
-  #image("./assets/image-3.png");\
-  #image("./assets/image-4.png");\
+  #image("./assets/dpc-strategy.png")\
+  #image("./assets/strategy.png");\
+  #image("./assets/code-strategy.png");\
   ],
   "", // more info
   format: ta.template-note,
@@ -207,14 +175,13 @@ Image sources:
   "", // more info
   format: ta.template-note
 )
+
 #add-note-normal(
   "Template Method Pattern:  Can you draw a diagram and explain the main components and its interactions?", // question
-  // "", // answer 
-  // ADD IMAGE
   [
-  #image("assets/dpc-template-method.png")\
-  #image("./assets/image-6.png");\
-  #image("./assets/image-7.png");\
+  #image("./assets/dpc-template-method.png")\
+  #image("./assets/template-method-grafik.png");\
+  #image("./assets/template-method.png");\
   ],
   "", // more info
   format: ta.template-note,
@@ -224,31 +191,39 @@ Image sources:
 === Creational Patterns
 #add-note-normal(
   "Abstract Factory : Can you give an example what it is used for?", // question
-  "", // answer
+  "It's a strategy for creating objects: 
+  - with hardcoded values
+  - with read from a database
+  - with read from a webservice", // answer
   "", // more info
   format: ta.template-note
 )
 #add-note-normal(
   "Abstract Factory : Can you draw a diagram and explain the main components and its interactions?", // question
-  "", // answer
+  [
+    #image("./assets/dpc-abstract-factory.png")
+  ], // answer
   "", // more info
   format: ta.template-note
 )
 #add-note-normal(
   "Factory Method : Can you give an example what it is used for?", // question
-  "", // answer
+  "Dice Game: instead of new Dice() create Dice with CreateDice() Factory Method.", // answer
   "", // more info
   format: ta.template-note
 )
 #add-note-normal(
   "Factory Method : Can you draw a diagram and explain the main components and its interactions?", // question
-  "", // answer
+  [
+    #image("./assets/factory-method.png")
+  ], // answer
+  
   "", // more info
   format: ta.template-note
 )
 #add-note-normal(
   "Singleton : Can you give an example what it is used for?", // question
-  "", // answer
+  "No example, replace it with another alternative design pattern.", // answer
   "", // more info
   format: ta.template-note
 )
@@ -263,7 +238,7 @@ Image sources:
 
 #add-note-normal(
   "Adapter : Can you give an example what it is used for?", // question
-  "", // answer
+  "Duck and Turkey class or Power Adapter from Switzerland to United States", // answer
   "", // more info
   format: ta.template-note,
 )
@@ -271,41 +246,47 @@ Image sources:
   "Adapter : Can you draw a diagram and explain the main components and its interactions?", // question
   "", // answer
   [
-    #image("assets/dpc-adapter.png")
+    #image("./assets/dpc-adapter.png")
   ], // more info
   format: ta.template-note,
 )
 
 #add-note-normal(
   "Decorator : Can you give an example what it is used for?", // question
-  "", // answer
+  "For debugging, add additonal responsibilites to an object dynamically.", // answer
   "", // more info
   format: ta.template-note,
 )
 #add-note-normal(
   "Decorator : Can you draw a diagram and explain the main components and its interactions?", // question
-  "", // answer
+  [
+    #image("./assets/decorator.png")
+  ], // answer
   "", // more info
   format: ta.template-note,
 )
 
 #add-note-normal(
   "Facade : Can you give an example what it is used for?", // question
-  "", // answer
+  "Solve the problem of using a legacy library. Example with Hotel Receptionist. Facade defines a higher-level interface that makes the subsystem easier to use.", // answer
   "", // more info
   format: ta.template-note,
 )
 #add-note-normal(
   "Facade : Can you draw a diagram and explain the main components and its interactions?", // question
-  "", // answer
+  [
+   #image("/assets/facade.png")
+   #image("/assets/dpc-facade.png") 
+  ], // answer
   "", // more info
   format: ta.template-note,
 )
 
 #add-note-normal(
   "Proxy : Can you give an example what it is used for?", // question
-  "", // answer
-  "", // more info
+  "Example: Feed reader with Feeds, Loading and Finished.
+  A surrogate or placeholder object to control access to it.", // answer
+  "Different types of proxy: Caching Proxy, Remote Proxy, Virtual Proxy, Protection Proxy and more.", // more info
   format: ta.template-note,
 )
 #add-note-normal(
@@ -316,6 +297,52 @@ Image sources:
   "", // more info
   format: ta.template-note,
 )
+
+
+
+=== Important Non-GoF Patterns
+#add-note-normal(
+  "What is \"Dependency Injection\"?", // question
+  "Get rid of all inheritance and inject the full behavior using the construct (is constructor injection).", // answer
+  [
+    #image("/assets/dependency-injection-simple.png") \
+    #image("/assets/dependency-injection.png") \
+  ], // more info
+  format: ta.template-note
+)
+
+#add-note-normal(
+  "Why is Dependency Injection important for decoupling code?", // question
+  "Depend on abstractions, not concretions", // answer
+  "(DIP - Dependency Inversion Principle). Often combined with Strategy Pattern.", // more info
+  format: ta.template-note
+)
+
+#add-note-normal(
+  "What can a Null Object be used for?", // question
+  "Useful to get rid of null-checks and the risk of NullPointerException", // answer
+  "Classes implementing an interface with empty methods are called Null Objects. 
+  In the Duck Pond Game 2.0 from Strategy, we had two of them: Mute and NoneFlying.", // more info
+  format: ta.template-note
+)
+
+#add-note-normal(
+  "With what Design Pattern(s) is the \"Null Object\" typically combined with?", // question
+  "Useful for strategy pattern, so no conditionals are required if behaviour is not implemented.", // answer
+  "", // more info
+  format: ta.template-note
+)
+
+#add-note-normal(
+  "What is the difference between the \"Simple Factory\" and the \"Abstract Factory\"?", // question
+  "Abstract Factory is GoF Design Pattern, it's a scaled-up factory which creates multiple related Objects. \
+  Simple Factory is not from GoF, it is the \"normal\" factory. A strategy for creating objects.", // answer
+  "", // more info
+  format: ta.template-note
+)
+
+
+
 
 // === -
 // Match the Pattern to their category
@@ -329,3 +356,12 @@ Image sources:
         // häufig genutzt in frameworks für libraries
 // Creational : Abstract Factory, Factory Method, Singleton,    Builder, Prototype
 // Structural : Adapter, Decorator, Facade, Proxy,    Bridge, Composite, Flyweight
+
+=== self-made questions
+
+#add-note-normal(
+  [What Design Pattern(s) is this using?],
+  "",
+  "",
+  format: ta.template-note
+)

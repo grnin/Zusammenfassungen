@@ -2,29 +2,7 @@
 #import "@local/tanki:0.0.1" as ta
 
 /*
-Infos zur Nutzung:
-- kopiere dieses template.typ
-- behalte die Vorlagen und erstelle Karten gemäss der Vorlage unten
-- TODO: allow html in description
-
-```shell
-nix develop
-# tanki-rs <path-to-typst-file> [typst-args]
-tanki-rs example-template.typ
-```
-
-Credits: https://github.com/omega-800/tanki
-
-more info:
-```shell
-nix flake update tanki
-
-typst info
-typst compile --format=html --features=html --input=tanki=true example-template.typ
-
-# "No such file or directory":
-# nix run github:omega-800/tanki#tanki-rs -- example-template.typ
-```
+Infos zur Nutzung im README.md
 */
 
 #let (
