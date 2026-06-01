@@ -1,0 +1,10 @@
+result
+.direnv
+push.sh
+tmp
+*/anki.pdf
+*/deck.pdf
+ankiconf.typ
+*/*.html
+.pre-commit-config.yaml
+web
