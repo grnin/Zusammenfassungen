@@ -3,6 +3,14 @@
 András Tarlós, Jasmin Fässler |
 FS 2026
 
+## TODOs
+- Kanban Bild bei 12-agile.. wirft Fehler beim Export, eventuell ist die Datei zu gross?
+- html <b></b> funktioniert nicht
+- automatisch den korrekten Kartentyp mit Styling
+- "Multiple choice beautiful" Kartentyp mit JS
+- Zeilenumbruch mit \ soll funktionieren 
+
+
 ## Anki Karten
 
 Die meisten Karten sind nur als .akpkg verfügbar.

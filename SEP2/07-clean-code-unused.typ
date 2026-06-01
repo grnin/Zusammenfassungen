@@ -32,7 +32,7 @@
     (
       (
         "Card 1",
-        "Ändere die Karte zu '022 Kartentyp eine Karte, Lösung mehr infos' {{Question}}",
+        "Ändere die Karte zu '0215 eintippen ...' {{Question}}",
         "{{Answer}} <br /> {{more info}}",
       ),
     ),

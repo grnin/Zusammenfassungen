@@ -33,7 +33,7 @@
     (
       (
         "Card 1",
-        "Ändere die Karte zu '022 Kartentyp eine Karte, Lösung mehr infos' {{Question}}",
+        "Ändere die Karte zu '0215 eintippen ...' {{Question}}",
         "{{Answer}} <br /> {{more info}}",
       ),
     ),
@@ -125,7 +125,7 @@
 
 #add-note-normal(
   "State Pattern: Can you give an example what it is used for?", // question
-  "Managing states of a class, example Partner Simulator", // answer
+  "Managing states of a class, example: Partner Simulator", // answer
   "Differences to a State Machine: it focuses on behaviour while being in a state but the state machine focuses on the action during a transition", // more info
   format: ta.template-note
 )
@@ -221,15 +221,18 @@
   "", // more info
   format: ta.template-note
 )
-#add-note-normal(
-  "Singleton : Can you give an example what it is used for?", // question
-  "No example, replace it with another alternative design pattern.", // answer
-  "", // more info
-  format: ta.template-note
-)
+// #add-note-normal(
+//   "Singleton : Can you give an example what it is used for?", // question
+//   "No example, replace it with another alternative design pattern. \"Avoid implementing this pattern; use one of
+// the alternatives shown on the previous slide\" ", // answer
+//   "", // more info
+//   format: ta.template-note
+// )
 #add-note-normal(
   "Singleton : Can you draw a diagram and explain the main components and its interactions?", // question
-  "", // answer
+  [
+    #image("./assets/singleton-drawing.png")
+  ], // answer
   "", // more info
   format: ta.template-note
 )
@@ -244,7 +247,10 @@
 )
 #add-note-normal(
   "Adapter : Can you draw a diagram and explain the main components and its interactions?", // question
-  "", // answer
+  [
+    #image("./assets/simple-adapter-drawing.png");\
+    #image("./assets/object-class-adapter-drawing.png")
+  ], // answer
   [
     #image("./assets/dpc-adapter.png")
   ], // more info
@@ -357,11 +363,15 @@
 // Creational : Abstract Factory, Factory Method, Singleton,    Builder, Prototype
 // Structural : Adapter, Decorator, Facade, Proxy,    Bridge, Composite, Flyweight
 
-=== self-made questions
 
-#add-note-normal(
-  [What Design Pattern(s) is this using?],
-  "",
-  "",
-  format: ta.template-note
-)
+
+// -------------------------------------
+
+// === self-made questions
+
+// #add-note-normal(
+//   [What Design Pattern(s) is this using?],
+//   "",
+//   "",
+//   format: ta.template-note
+// )

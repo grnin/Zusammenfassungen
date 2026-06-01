@@ -62,7 +62,7 @@ Image sources:
     (
       (
         "Card 1",
-        "Ändere die Karte zu '022 Kartentyp eine Karte, Lösung mehr infos' {{Question}}",
+        "Ändere die Karte zu '0215 eintippen ...' {{Question}}",
         "{{Answer}} <br /> {{more info}}",
       ),
     ),
@@ -98,7 +98,8 @@ Image sources:
 == 12-agile-methodologies-continued
 #add-note-normal(
   "Can you name three missing parts in Scrum?",
-  "Engineering practices, Project Management, Scaling", // more info
+  "Engineering practices, Project Management, Scaling", // answer
+  "", // more info
   format: ta.template-note
 );
 
@@ -143,8 +144,7 @@ Image sources:
 
 #add-note-normal(
   "What is an easy way to scale Scrum?", // question
-  "Self-made scaling \"Scrum of Scrums\": 3 Project managers instead of 1.
-  ", // answer
+  "Self-made scaling \"Scrum of Scrums\": 3 Project managers instead of 1.", // answer
   "", // more info
   format: ta.template-note
 )
@@ -187,8 +187,7 @@ Image sources:
 
 #add-note-normal(
   "How is Kanban different from Scrum?", // question
-  "
-  Scrum
+  "Scrum
   - <b>Contains roles and artifacts</b>
   - <b>Has iterations of equal length</b>
   - Uses Velocity for planning & improvement
@@ -213,7 +212,8 @@ Image sources:
   - Board only cleared when stopping the project
   ", // answer
   [
-    #image("/assets/scrum-kanban.png")
+    // TODO Bild, zu gross vielleicht? BacktrackLimitExceeded
+    // #image("./assets/scrum-kanban.png");
   ], // more info
   format: ta.template-note
 )

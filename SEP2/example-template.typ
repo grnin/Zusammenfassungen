@@ -53,7 +53,7 @@ Infos zur Nutzung im README.md
     (
       (
         "Card 1",
-        "Ändere die Karte zu '022 Kartentyp eine Karte, Lösung mehr infos' {{question}}",
+        "Ändere die Karte zu '0215 eintippen ...' {{question}}",
         "{{answer}} <br /> {{more info}}",
       ),
     ),
