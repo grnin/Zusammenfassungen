@@ -1,6 +1,6 @@
 #let info = (
-  module: "",
-  name: "",
-  semester: "",
-  language: "de",
+  module: "Template",
+  name: "Cheatsheet and normal summary template",
+  semester: "FSXX",
+  language: "en",
 )

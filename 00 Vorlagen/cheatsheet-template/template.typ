@@ -1,4 +1,4 @@
-#import "../lib.typ": *
+#import "../../lib.typ": *
 #import "./info.typ": info
 
 #show: cheatsheet.with(..info)
@@ -37,4 +37,12 @@ Normal Text paragraph
 
 Pfeile $->$ #sym.arrow.r
 
+=== Tests
+Bild
+#image("/assets/image.png")
 
+doppelter Abstand:
+\
+\
+A
+bstand^
