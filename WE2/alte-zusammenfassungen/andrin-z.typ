@@ -1,21 +1,51 @@
 Web Engineering 2
 https://github.com/aendi123/ost-bsc-it-summaries/tree/main
+pdf: https://studentenportal.ch/dokumente/wed2/2715/
 
 = Node.js
 <node.js>
 Callback: Funktion, die als Argument einer anderen Funktion übergeben
 wird, wo sie aufgerufen wird
 
+```js
+function logger(msg) { console.log(msg); }
+function fn(n1, n2, callback) {
+let sum = n1 + n2; callback(sum); }
+fn(1, 2, logger)
+```
+
 Promise: bildet asynchrone Abläufe besser ab, bei Erfolg wird
 Fulfilled-Cb. aufgerufen, bei Fehler Reject-Cb.
-
+```js
+let prom = new Promise((resolve, reject) => {
+setTimeout(() => { let success = true;
+if (success) { resolve("good"); }
+else { reject("bad"); } }, 2000); });
+prom.then(msg => console.log(msg))
+.catch(error => console.log(error));
+```
 Wichtige Node Packages (mehr Methoden vorhanden):
+```js
+const fs = require('node:fs/promises'); // oder node:fs
+readFile(path[, options]); writeFile(file, data[, options]);
+unlink(path); mkdir(path[, options]); rmdir(path[, options])
+// vor Funktion jeweils "fs.", callback letztes Argument
+const url = require('node:url');
+const u = new URL("↓"); // z.B. u.href & u.search.query
+```
 
-#box(image("Pictures/10000001000003700000009ADAEAB952.png", height: 0.3693in, width: 2.1138in))CommonJS:
+// url image
+// #box(image("Pictures/10000001000003700000009ADAEAB952.png", height: 0.3693in, width: 2.1138in))
+CommonJS:
 älter, verbreiteter, synchron, nur in Node, dynamische Imports at
 Runtime, kein Tree Shaking, File Extensions .js/.ts/.cjs/.cts, use
 strict muss explizit gesetzt werden, Import mit require, this=exports
-
+```js
+module.exports = // default
+exports = // default read-only
+module.exports.name = // named
+exports.name = // named read-only
+```
 #emph[#strong[ESM];];: ab Node 14, asynchron, in Node & Browser,
 statische Imports at parse time, File-Extensions .mjs/.mts, strict Mode
 ist Default, this=undefined, #strong[Resolve-Reihenfolge];: 1. Core
@@ -26,7 +56,14 @@ node\_modules bis root gesucht)
 #emph[#strong[package.json];];: beinhaltet Projekt-Infos, nötig für
 Publishing & Installation, definiert Scripts, package-lock.json
 beschreibt exakten Abhängigkeitsgraph
+```js
+{ "name": "test", "version": "1.0.0", "main": "index.js",
+"scripts": { "test": "echo \"no tests\" && exit 1" },
+"keywords": [], "author": "", "license": "ISC",
+"description": "", "type": "commonjs/module" }
+```
 
+// ab hier habe ich den code nicht eingefügt
 = Express.js
 <express.js>
 meistgenutztes, etwas veraltetes Web Framework
