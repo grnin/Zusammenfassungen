@@ -24,6 +24,11 @@
 
 #let dateformat = "[day].[month].[year]"
 
+#let code-font = "JetBrainsMonoNL NF"; 
+// #let code-font = ("JetBrains Mono", "DejaVu Sans Mono"); // windows
+
+#let text-font = ("Calibri", "Source Sans Pro", "Roboto"); // does not warn when "bold" is missing
+
 // Main template
 #let project(
   authors: (),
@@ -51,14 +56,14 @@
   )
 
   let font-default = (
-    font: ("Calibri", "Source Sans Pro", "Roboto"), 
+    font: text-font, 
     lang: language, region: "ch", 
     size: font-size
   )
 
   let font-special = (
     ..font-default,
-    font: ("JetBrains Mono", "DejaVu Sans Mono"),
+    font: code-font,
     weight: "bold",
     fill: colors.hellblau,
   )
@@ -254,11 +259,12 @@
   }
 }
 
+
 // Additional formatting templates
 // "Zusätzlicher Hinweis"-Vorlage
 #let hinweis(style: "italic", t) = {
   set text(style: style, size: 0.8em)
-  show raw: set text(font: "JetBrains Mono", size: 1.05em)
+  show raw: set text(font: code-font, size: 1.05em)
   t
 }
 

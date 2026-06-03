@@ -27,9 +27,28 @@
   {      
     devShells.${system} = rec {
 
-      # TODO: update nix flake template
 
       default = pkgs.mkShell {
+        packages = with pkgs; [ 
+          typst
+        ];
+        shellHook = ''
+          echo ""
+          echo "typst installiert:"
+          echo " typst compile Module/doc.typ --root ."
+          echo ""
+          echo "diagram:"
+          echo " nix develop .#plantuml"
+          echo " nix develop .#mermaid"
+          echo " nix develop .#graphviz"
+          echo " or use draw.io vscode extension"
+          echo ""
+        '';
+      };
+      
+      # TODO: update nix flake template
+
+      plantuml = pkgs.mkShell {
         packages = with pkgs; [ 
           plantuml # server
           # umlet
@@ -40,6 +59,7 @@
           echo ""
         '';
       };
+
       mermaid = pkgs.mkShell {
         packages = with pkgs; [ 
           mermaid-cli

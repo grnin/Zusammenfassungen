@@ -25,7 +25,7 @@
   number-format(n, 2, if (suffix) { "h" } else { "" })
 }
 
-// Disables ligatures in JetBrains Mono
+// Disables ligatures in JetBrains Mono (or using the NL font version)
 #let no-ligature(t) = {
   text(features: (calt: 0), t)
 }
