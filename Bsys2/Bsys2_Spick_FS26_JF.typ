@@ -4,8 +4,7 @@
 #import "@preview/wrap-it:0.1.1": wrap-content
 
 #show: project.with(
-  // authors: ("Jasmin Fässler", "Nina Grässli", "Jannis Tschan"),
-  authors: ("Nina Grässli", "Jannis Tschan"),
+  authors: ("Jasmin Fässler", "Nina Grässli", "Jannis Tschan"),
   fach: "BSys2",
   fach-long: "Betriebssysteme 2",
   semester: "FS26",

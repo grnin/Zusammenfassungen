@@ -36,7 +36,7 @@
 
 #include "01 Obligationenrecht Allgemeiner Teil.typ"
 
-#include "00_Diagramme.typ"
+// #include "00_Diagramme.typ"
 #include "01_OR.typ"
 #include "02_ZGB-Einleitung.typ"
 

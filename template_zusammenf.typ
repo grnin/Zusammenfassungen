@@ -24,9 +24,9 @@
 
 #let dateformat = "[day].[month].[year]"
 
-#let code-font = "JetBrainsMonoNL NF"; 
-// #let code-font = ("JetBrains Mono", "DejaVu Sans Mono"); // windows
+// #let code-font = "JetBrainsMonoNL NF"; 
 
+#let code-font = ("JetBrains Mono", "DejaVu Sans Mono"); // windows
 #let text-font = ("Calibri", "Source Sans Pro", "Roboto"); // does not warn when "bold" is missing
 
 // Main template

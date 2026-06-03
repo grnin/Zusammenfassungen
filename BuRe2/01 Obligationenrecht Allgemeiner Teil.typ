@@ -1,17 +1,17 @@
 // Vorlesungsfolien als Typst, Notizen in eigener Typst Box
 // pdf hat 25 im name, schauen ob es aktuell ist
 
-#let link_box(content) = block(
-    fill: rgb("#eef2ff"),
-    inset: 10pt,
-    radius: 8pt,
-    spacing: 0.75em,
-    content,
-)
+#let link_box(content) = block(fill: rgb("#eef2ff"), inset: 10pt, radius: 8pt, spacing: 0.75em, content)
 
 #let notiz(content) = text(
     // text: rgb("#da05a1"),
     fill: rgb("#e007a6"),
+    content,
+)
+
+#let pruefung(content) = text(
+    // text: font-size: 5pt,
+    fill: rgb("#ffbbed"),
     content,
 )
 
@@ -40,24 +40,24 @@
     [
         Wie entsteht eine Obligation?
         \
-        \
         #link_box[*Vertrag* (Art. 1 - 40 ff. OR)]
         #link_box[*unerlaubte Handlungen* (Art. 41-61 OR)]
-        #link_box[*ungerechtfertigte Bereicherung* (Art. 62-67 OR)]
-        #link_box[*andere Rechtsgründe* (unten)]
+        #link_box[ungerechtfertigte Bereicherung (Art. 62-67 OR)]
+        #link_box[andere Rechtsgründe (unten)]
 
         === Andere Rechtsgründe sind:
         - Geschäftsführung ohne Auftrag (Art. 419 ff. OR)
-        - Culpa in contrahendo
+        - *Culpa in contrahendo*
         - Eigentumsfreiheitsklage (Art. 641 ZGB)
         - Besitzesrechtsklage (Art. 934 ff. ZGB)
-        - Persönlichkeitsverletzung (Art. 28 ff. ZGB)
+        - *Persönlichkeitsverletzung* (Art. 28 ff. ZGB)
         - Verwandtenunterstützungspflicht (Art. 328 f. ZGB)
     ],
-    [Notizen hier:],
+    // [Notizen hier:],
 )
 
-= [Grundsatz]{.underline} der Vertragsfreiheit <vertragsfreiheit>
+= Vertrag
+== [Grundsatz]{.underline} der Vertragsfreiheit <vertragsfreiheit>
 
 Verschiedene Aspekte der Vertragsfreiheit:
 
@@ -69,160 +69,112 @@ Verschiedene Aspekte der Vertragsfreiheit:
 
 Ob ein Vertrag aber tatsächlich gültig ist, hängt von verschiedenen Voraussetzungen ab.
 
-= Voraussetzungen der Vertragsgültigkeit <vertragsgueltigkeit>
-// TODO: hier fortsetzen
-> - (Beschränkte) Handlungsfähigkeit der Parteien
->
-> - Konsens beim Vertragsabschluss
->
-> - Formgültigkeit
->
-> - Kein Inhaltsmangel: nicht unmöglich, nicht rechtswidrig (z.B.
-> Verstoss der AGB gegen UWG 8), nicht unsittlich
->
-> - Keine Übervorteilung (führt zur Anfechtbarkeit)
->
-> - Kein Willensmangel (führt zur Anfechtbarkeit)
->
-> - Gültige Stellvertretung
+== Ist Vertrag gültig?
+==== Voraussetzungen der Vertragsgültigkeit <vertragsgueltigkeit>
+
+// TODO: wichtig, hervorheben, grössere  Abstände oder so!!
+//
+- (Beschränkte) Handlungsfähigkeit der Parteien
+- Konsens beim Vertragsabschluss
+- Formgültigkeit
+- Kein Inhaltsmangel: nicht unmöglich, nicht rechtswidrig (z.B. Verstoss der AGB gegen UWG 8), nicht unsittlich #notiz[unmöglich: Verträge nicht erfüllt worden bei Corona, weil nachträglich unmöglich] #notiz[z.B. einem Stern einen Namen geben geht in de Schweiz nicht, Mond kaufen.
+        so ein Vertrag ist nichtig = wie wenn nie abgeschlossen. unsichtlich : unanständig]
+- Keine Übervorteilung (führt zur Anfechtbarkeit)
+- Kein Willensmangel (führt zur Anfechtbarkeit)
+- Gültige Stellvertretung
 
 = Gesetzliche Bestimmungen
 
-- Dispositive Gesetzesbestimmungen:
+#pruefung[unterscheiden und erkennen, was ist was]
+#grid(
+    [
+        - Dispositive Gesetzesbestimmungen:
+            - Sofern der Vertrag Aspekte nicht regelt, kommen die dispositiven Gesetzesbestimmungen zum Zuge. Die meisten Bestimmungen im OR AT und im OR BT sind dispositiv und finden bloss Anwendung, wenn die Parteien nichts anderes vereinbart haben.
 
-> - Sofern der Vertrag Aspekte nicht regelt, kommen die dispositiven
->
-> Gesetzesbestimmungen zum Zuge. Die meisten Bestimmungen im OR AT und
-> im OR BT sind dispositiv und finden bloss Anwendung, wenn die Parteien
-> nichts anderes vereinbart haben.
+            - Zwingende Gesetzesbestimmungen:
+                - Die zwingenden Gesetzesnormen gehen den vertraglichen Bestimmungen immer vor.
+                    Beispiele: OR 100 I, OR 199, OR 210 IV, OR 404, UWG 8 -- sodann zahlreiche Normen des Miet- und Arbeitsrechts.
 
-- Zwingende Gesetzesbestimmungen:
+    ],
+    [
+        meiste Verträge privat: dispositiv
+        kann Gewährleistung bei dispositivem Recht wegbedingen, keine Garantie=Gewährleistung mehr
+        kann nur noch anfechten
+        \
+        \
+        \
+        \
+        \
 
-> - Die zwingenden Gesetzesnormen gehen den vertraglichen Bestimmungen
-> immer vor.
->
-> Beispiele: OR 100 I, OR 199, OR 210 IV, OR 404, UWG 8 -- sodann
-> zahlreiche Normen des Miet- und Arbeitsrechts.
+        öffentliches Recht, Arbeitsrecht : nicht zugunsten des Arbeitsnehmer abgeändert werden
+
+        OR 404 = bei Täuschung
+
+    ],
+)
 
 = Theorie: OR AT & BT
+#image("/assets/image-5.png")
 
-1
-
-•
-
-Welche Vertragsart liegt vor?
-
-2
-
-•
-
-Gibt es im OR BT Regeln zu dieser Vertragsart?
-
-3
-
-•
-
-Ist meine Fragestellung durch diese Normen
-
-unmittelbar oder analog geregelt?
-
-**Nein**
-
-**Ja**
-
-+-----------------------+------+--------------------------------------+
-| Regeln im AT suchen!  |      | > Gibt es neben den Regeln im        |
-|                       |      |                                      |
-|                       |      | OR BT im OR AT weitere               |
-|                       |      |                                      |
-|                       |      | Regeln, die zu beachten sind?        |
-+=======================+======+======================================+
-
-10.12.2025
 
 = Formvorschriften
 
-> **Gründe für Formvorschriften:**
+== Gründe für Formvorschriften
 
 1. Beweissicherung
-
 2. Schutz vor übereiltem Vertragsschluss
-
 3. Rechtssicherheit
-
 4. Schutz der schwächeren Partei
 
-= Vertragsform
+== Vertragsformen
 
-+----------------------+----------------------+-------------------------+
-| **Vertragsform**     | > **Merkmale**       | > **Beispiele**         |
-+======================+======================+=========================+
-| Formfreiheit (Art.   | > Das                | - Einzelarbeitsvertrag  |
-| 11 OR)               | > Obligationenrecht  |                         |
-|                      | > geht von dem       | - Mietvertrag           |
-|                      | > Grundsatz der      |                         |
-|                      | >                    | - Kaufvertrag           |
-|                      | > Formfreiheit aus.  |                         |
-|                      | > Darunter versteht  | - Darlehen              |
-|                      | > man die Freiheit,  |                         |
-|                      | > Verträge in freier |                         |
-|                      | > Form               |                         |
-|                      | > abzuschliessen,    |                         |
-|                      | > abzuändern oder    |                         |
-|                      | > aufzuheben. Eine   |                         |
-|                      | > besondere Form ist |                         |
-|                      | > nur notwendig,     |                         |
-|                      | > wenn es das Gesetz |                         |
-|                      | > oder Abrede eine   |                         |
-|                      | > solche             |                         |
-|                      | > vorschreibt.       |                         |
-+----------------------+----------------------+-------------------------+
-| Einfache             | > Ist die einfache   | - Schenkungsversprechen |
-| Schriftlichkeit      | > Schriftlichkeit    |                         |
-| (Art. 13 -- 15 OR)   | > vorgesehen, muss   | - Lehrvertrag           |
-|                      | > der Vertrag die    |                         |
-|                      | > eigenhändige       | - Versicherungsvertrag  |
-|                      | > Unterschrift oder  |                         |
-|                      | > eine qualifizierte | - Konkurrenzverbot im   |
-|                      | > elektronische      |   Arbeitsvertrag        |
-|                      | > Signatur aller     |                         |
-|                      | > beteiligten        |                         |
-|                      | > Personen           |                         |
-|                      | > aufweisen.         |                         |
-+----------------------+----------------------+-------------------------+
-| Qualifizierte        | > Die qualifizierte  | - Bürgschaft            |
-| Schriftlichkeit      | > Schriftlichkeit    |                         |
-|                      | > verlangt nicht nur | - Testament             |
-|                      | > die Unterschrift   |                         |
-|                      | > der                |                         |
-|                      | > Verpflichteten,    |                         |
-|                      | > sondern die        |                         |
-|                      | > handschriftliche   |                         |
-|                      | > Angabe gewisser    |                         |
-|                      | > Elemente in der    |                         |
-|                      | > Urkunde.           |                         |
-+----------------------+----------------------+-------------------------+
-| Öffentliche          | > Bei der            | - Grundstückkaufvertrag |
-| Beurkundung          | > öffentlichen       |                         |
-|                      | > Beurkundung        | - Vorvertrag über ein   |
-|                      | > erfolgt der        |   Grundstück mit        |
-|                      | >                    |   Kaufpreis             |
-|                      | > Vertragsschluss    |                         |
-|                      | > unter Mitwirkung   | - Bürgschaft            |
-|                      | > einer              |   natürlicher Personen, |
-|                      | >                    |   wenn die              |
-|                      | > Urkundsperson      |   Haftungssumme über    |
-|                      | > (z.B. Notar). Die  |   Fr. 2\'000.-- liegt - |
-|                      | > Urkundsperson      |   Ehe- und Erbvertrag   |
-|                      | > bestätigt die      |                         |
-|                      | > Richtigkeit des    |                         |
-|                      | > Inhaltes der       |                         |
-|                      | > Urkunde.           |                         |
-+----------------------+----------------------+-------------------------+
+=== Formfreiheit (Art. 11 OR)
+Das Obligationenrecht geht von dem Grundsatz der
+Formfreiheit aus. Darunter versteht man die Freiheit,
+Verträge in freier Form abzuschliessen, abzuändern
+oder aufzuheben. Eine besondere Form ist nur
+notwendig, wenn es das Gesetz oder Abrede eine
+solche vorschreibt.
+
+- Einzelarbeitsvertrag
+- Mietvertrag
+- Kaufvertrag
+- Darlehen
+
+=== Einfache Schriftlichkeit (Art. 13 – 15 OR)
+Ist die einfache Schriftlichkeit vorgesehen, muss der
+Vertrag die eigenhändige Unterschrift oder eine
+qualifizierte elektronische Signatur aller beteiligten
+Personen aufweisen.
+
+- Schenkungsversprechen
+- Lehrvertrag
+- Versicherungsvertrag
+- Konkurrenzverbot im Arbeitsvertrag
+
+=== Qualifizierte Schriftlichkeit
+Die qualifizierte Schriftlichkeit verlangt nicht nur die
+Unterschrift der Verpflichteten, sondern die
+handschriftliche Angabe gewisser Elemente in der
+Urkunde.
+
+- Bürgschaft
+- Testament
+
+=== Öffentliche Beurkundung
+Bei der öffentlichen Beurkundung erfolgt der
+Vertragsschluss unter Mitwirkung einer
+Urkundsperson (z.B. Notar). Die Urkundsperson
+bestätigt die Richtigkeit des Inhaltes der Urkunde.
+
+- Grundstückkaufvertrag
+- Vorvertrag über ein Grundstück mit Kaufpreis
+- Bürgschaft natürlicher Personen, wenn die Haftungssumme über Fr. 2'000.– liegt
+- Ehe- und Erbvertrag
 
 = Vertragstypen
-
-Quelle: Reichle/Kobler, Recht lernen einfach gemacht, S. 101.
+#pruefung[Vertragstypen nur nice to know, einfach kennen, Thema IT Vertrag]
+// Quelle: Reichle/Kobler, Recht lernen einfach gemacht, S. 101.
 
 **Auch**
 
@@ -360,36 +312,36 @@ Quelle: Reichle/Kobler, Recht lernen einfach gemacht, S. 17.
 = Allgemeine Geschäftsbedingungen (AGB's)
 
 +-----------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------+
-|   -----------------------------------------------------------------------         | +-----------------------------------------------------------------------+                       |
-|   Begriff                                                                         | | - generell vorformulierte Bestimmungen, die Inhalt des Vertrages      |                       |
-|   -----------------------------------------------------------------------         | |   werden                                                              |                       |
-|                                                                                   | |                                                                       |                       |
-|   -----------------------------------------------------------------------         | | - gelten für eine Vielzahl von Verträgen                              |                       |
-|                                                                                   | |                                                                       |                       |
-|                                                                                   | | - Abweichungen vom dispositiven Recht                                 |                       |
-|                                                                                   | +=======================================================================+                       |
+| ----------------------------------------------------------------------- | +-----------------------------------------------------------------------+ |
+| Begriff | | - generell vorformulierte Bestimmungen, die Inhalt des Vertrages | |
+| ----------------------------------------------------------------------- | | werden | |
+| | | | |
+| ----------------------------------------------------------------------- | | - gelten für eine Vielzahl von Verträgen | |
+| | | | |
+| | | - Abweichungen vom dispositiven Recht | |
+| | +=======================================================================+ |
 +===========================+=======================================================+=======================================+=========================================================+
-|   -----------------------------------------------------------------------         |   -----------------------------------------------------------------------                       |
-|   Geltung                                                                         |   nur verbindlich, wenn von den Parteien übernommen, d.h. keine                                 |
-|   -----------------------------------------------------------------------         |   allgemeine Verbindlichkeit                                                                    |
-|                                                                                   |   -----------------------------------------------------------------------                       |
-|   -----------------------------------------------------------------------         |                                                                                                 |
-|                                                                                   |   -----------------------------------------------------------------------                       |
+| ----------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Geltung | nur verbindlich, wenn von den Parteien übernommen, d.h. keine |
+| ----------------------------------------------------------------------- | allgemeine Verbindlichkeit |
+| | ----------------------------------------------------------------------- |
+| ----------------------------------------------------------------------- | |
+| | ----------------------------------------------------------------------- |
 +-----------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------+
-|   -----------------------------------------------------------------------         | +-----------------------------------------------------------------------+                       |
-|   keine Geltung, trotz Übernahme                                                  | | - Verstoss gegen zwingendes Recht                                     |                       |
-|   -----------------------------------------------------------------------         | |                                                                       |                       |
-|                                                                                   | | - abweichende individuelle Regelung                                   |                       |
-|   -----------------------------------------------------------------------         | |                                                                       |                       |
-|                                                                                   | | - keine Möglichkeit, sich vom Inhalt Kenntnis zu verschaffen          |                       |
-|                                                                                   | |                                                                       |                       |
-|                                                                                   | | - ungewöhnliche Klausel                                               |                       |
-|                                                                                   | |                                                                       |                       |
-|                                                                                   | | - missbräuchlicher Inhalt (Art. 8 UWG)                                |                       |
-|                                                                                   | +=======================================================================+                       |
+| ----------------------------------------------------------------------- | +-----------------------------------------------------------------------+ |
+| keine Geltung, trotz Übernahme | | - Verstoss gegen zwingendes Recht | |
+| ----------------------------------------------------------------------- | | | |
+| | | - abweichende individuelle Regelung | |
+| ----------------------------------------------------------------------- | | | |
+| | | - keine Möglichkeit, sich vom Inhalt Kenntnis zu verschaffen | |
+| | | | |
+| | | - ungewöhnliche Klausel | |
+| | | | |
+| | | - missbräuchlicher Inhalt (Art. 8 UWG) | |
+| | +=======================================================================+ |
 +---------------------------+-------------------------------------------------------+---------------------------------------+---------------------------------------------------------+
-| Auslegung                 |                                                       | > bei Unklarheiten gegen den          |                                                         |
-|                           |                                                       | > Verfasser                           |                                                         |
+| Auslegung | | > bei Unklarheiten gegen den | |
+| | | > Verfasser | |
 +---------------------------+-------------------------------------------------------+---------------------------------------+---------------------------------------------------------+
 
 = Erfüllung der Obligation
@@ -473,22 +425,22 @@ Schuldners
 > **Übersicht:**
 
 +----------------------------------------------------------------------------------------------+
-| **Auf Seiten des Schuldners Auf Seiten des Gläubigers**                                      |
+| **Auf Seiten des Schuldners Auf Seiten des Gläubigers** |
 +========================================================+=====================================+
-| > Nichterfüllung (Art. 97 ff. OR)                      | > Gläubigerverzug (Art. 91 ff. OR)  |
-|                                                        | >                                   |
-|                                                        | > → Unterlassung von                |
-|                                                        | > Mitwirkungshandlungen             |
+| > Nichterfüllung (Art. 97 ff. OR) | > Gläubigerverzug (Art. 91 ff. OR) |
+| | > |
+| | > → Unterlassung von |
+| | > Mitwirkungshandlungen |
 +--------------------------------------------------------+-------------------------------------+
-| Positive Vertragsverletzung (Art. 97 ff. OR)           |                                     |
-|                                                        |                                     |
-| →                                                      |                                     |
-|                                                        |                                     |
-| Verletzung von Nebenpflichten oder                     |                                     |
-|                                                        |                                     |
-| Schlechterfüllung                                      |                                     |
+| Positive Vertragsverletzung (Art. 97 ff. OR) | |
+| | |
+| → | |
+| | |
+| Verletzung von Nebenpflichten oder | |
+| | |
+| Schlechterfüllung | |
 +--------------------------------------------------------+-------------------------------------+
-| > Schuldnerverzug (Art. 102 ff. OR)                    |                                     |
+| > Schuldnerverzug (Art. 102 ff. OR) | |
 +--------------------------------------------------------+-------------------------------------+
 
 > **Merke:** Für den Schuldner besteht Erfüllungszwang. Art. 98 OR gibt
@@ -585,22 +537,22 @@ Normalfall:
 **Mahnung**
 
 +-----------------------------------------------------------------------+
-| **verschuldens[un]{.underline}abhängig**                              |
-|                                                                       |
-| - Geldschulden: Zins                                                  |
-|                                                                       |
-| - Bei zweiseitigen Verträgen: Rücktritt und Rückforderung bereits     |
-|   erbrachter Leistungen                                               |
+| **verschuldens[un]{.underline}abhängig** |
+| |
+| - Geldschulden: Zins |
+| |
+| - Bei zweiseitigen Verträgen: Rücktritt und Rückforderung bereits |
+| erbrachter Leistungen |
 +=======================================================================+
-| **verschuldensabhängig**                                              |
-|                                                                       |
-| → Schadenersatzpflichten:                                             |
-|                                                                       |
-| - Verzugsschaden und Zufallshaftung (Art. 103 OR)                     |
-|                                                                       |
-| - Bei Verzicht auf Leistung (Art. 107 Abs. 2 OR)                      |
-|                                                                       |
-| - Bei Rücktritt (Art. 109 Abs. 2 OR)                                  |
+| **verschuldensabhängig** |
+| |
+| → Schadenersatzpflichten: |
+| |
+| - Verzugsschaden und Zufallshaftung (Art. 103 OR) |
+| |
+| - Bei Verzicht auf Leistung (Art. 107 Abs. 2 OR) |
+| |
+| - Bei Rücktritt (Art. 109 Abs. 2 OR) |
 +-----------------------------------------------------------------------+
 
 **Voraussetzungen Verzug**
@@ -643,14 +595,14 @@ Quelle: Reichle/Kobler, Recht lernen einfach gemacht, S. 30.
 = Verjährung
 
 +----------------+-----------------------------------------------------------+
-| > **Begriff:** | > Untergang der Durchsetzbarkeit einer Obligation durch   |
-|                | > Zeitablauf                                              |
+| > **Begriff:** | > Untergang der Durchsetzbarkeit einer Obligation durch |
+| | > Zeitablauf |
 +================+===========================================================+
-|                |                                                           |
+| | |
 +----------------+-----------------------------------------------------------+
-| > **Fristen:** | - Grundsatz: OR 127                                       |
-|                |                                                           |
-|                | - Ausnahmen: OR 128, OR 128a, OR 60, OR 67 etc.           |
+| > **Fristen:** | - Grundsatz: OR 127 |
+| | |
+| | - Ausnahmen: OR 128, OR 128a, OR 60, OR 67 etc. |
 +----------------+-----------------------------------------------------------+
 
 > Merke: Gesetzliche Verjährungsfristen können vertraglich nicht
@@ -680,11 +632,11 @@ Erfüllung **= Normalfall**
 Verrechnung **OR 120-126**
 
 +-----------------------------------------------------------------------+
-| **Erlöschen heisst:**                                                 |
-|                                                                       |
-| - Schuldner hat Leistung erbracht oder muss nicht mehr erfüllen       |
-|                                                                       |
-| - Gläubiger kann Leistung nicht mehr verlangen oder durchsetzen       |
+| **Erlöschen heisst:** |
+| |
+| - Schuldner hat Leistung erbracht oder muss nicht mehr erfüllen |
+| |
+| - Gläubiger kann Leistung nicht mehr verlangen oder durchsetzen |
 +=======================================================================+
 
 Verjährung **OR 127-142**
@@ -701,7 +653,7 @@ Vereinigung **OR 118**
 
 = Übungen
 
-1)  Petra gefällt beim Einkaufsbummel in einem grossen Möbelhaus eine
+1) Petra gefällt beim Einkaufsbummel in einem grossen Möbelhaus eine
 grosse, farbige Blumenvase. Da der Wagen schon voll ist, nimmt Petra
 die Vase unter den
 
@@ -709,7 +661,7 @@ die Vase unter den
 > Petra die Vase zu Boden und zerbricht in 1000 Stücke. Gestützt auf
 > welche Rechtsgrundlage(n) könnte Ikea einen Anspruch geltend machen?
 
-2)  Hans interessiert sich in einem Fachgeschäft für ein bestimmtes
+2) Hans interessiert sich in einem Fachgeschäft für ein bestimmtes
 Mobiltelefon, das aber vor Ort nicht erhältlich ist. Auf Wunsch von
 Hans bestellt die Verkäuferin das gewünschte Gerät und sagt zu Hans,
 dass die Lieferfrist ca. 2 -- 3 Tage beträgt und Hans ein Mail
@@ -768,11 +720,11 @@ erhalte, wenn er es abholen könne. Hans verspricht, dies zu tun.
 
 = Übungen
 
-6)  Peter kauft beim Juwelier eine Halskette als Geburtstagsgeschenk für
+6) Peter kauft beim Juwelier eine Halskette als Geburtstagsgeschenk für
 seine Frau. Leider gefällt seiner Frau die Halskette überhaupt nicht
 und er möchte sie dem Juwelier zurück geben. Ist das möglich?
 
-7)  Die Inhaberin eines Uhrengeschäfts verwechselt in der Auslage bei
+7) Die Inhaberin eines Uhrengeschäfts verwechselt in der Auslage bei
 zwei Uhren die Preisschilder. Sie versieht die Rolex mit dem
 Preisschild der Swatch für CHF 129.-- und bei der günstigen Swatch
 wurde der Preis der Rolex von CHF 9'890.-- angebracht. Was kann Sie
