@@ -1,19 +1,20 @@
 #import "../lib.typ": *
 #import "./info.typ": info
 
-#show: cheatsheet.with(..info)
+// #show: cheatsheet.with(..info)
 #set enum(numbering: "1)1)")
 
 // Todos
+// - vorlage von omega
 // - text nicht in code font bei cheatsheet
 
-#todo[ändere === heading 3 zu design mit bold Titel der nach links -offset hat]
+//#todo[ändere === heading 3 zu design mit bold Titel der nach links -offset hat]
 
-= React 
+= React
 
 === Begriffe kurz
 / React: vorallem für SPA, JS-Library
-/ Komponente: 
+/ Komponente:
 / Props: alle JS Datentypen möglich, als destructured object oder als props Objekt annehmen. Props sind Eingabewerte für Komponenten, immutable, Parent zu Child
 / JSX: Syntax für React Komponente, verbindet HTML und JS - wird übersetzt in JS, JavaScript XML
 / Expressions: sind Werte oder Kombinationen von Werten, Variablen und Operatoren, die ein
@@ -23,92 +24,92 @@ Inhalten `.map()`
 / Conditional Rendering: - `.filter()`
 
 / State: Zustand einer Komponente
-	- Der State kann durch Interaktionen verändert werden z. B. Klickcounter, Suchtext den der Nutzer eingibt, Wert einer Checkbox
-	- bleibt nicht unverändert, nicht als props erhalten, kann man nicht aus anderen Daten berechnen
+    - Der State kann durch Interaktionen verändert werden z. B. Klickcounter, Suchtext den der Nutzer eingibt, Wert einer Checkbox
+    - bleibt nicht unverändert, nicht als props erhalten, kann man nicht aus anderen Daten berechnen
 
 === Wie baut man UIs in React? (Thinking in React) / Wie komme ich von einer Skizze/Wireframe/... zu einer Anwendung?
-#todo[mehr Abstand hier zwischen Elementen:]
-1. *Eine Idee haben, wie es aussehen soll (Skizze, Mockup, HTML/CSS)* 
-	Das kann ein Mockup (links) sein, ein (HTML-, Papier-, Figma-, ...)Prototyp, ein Datenmodell, eine JSON-API-Response
+//#todo[mehr Abstand hier zwischen Elementen:]
+1. *Eine Idee haben, wie es aussehen soll (Skizze, Mockup, HTML/CSS)*
+    Das kann ein Mockup (links) sein, ein (HTML-, Papier-, Figma-, ...)Prototyp, ein Datenmodell, eine JSON-API-Response
 2. *Zerlegen in eine Komponentenhierarchie*
 #image("/assets/SW01 Einführung React-2026-02-2.png")
 #image("/assets/image-1.png")
 3. *Eine statische Version in React implementieren*
-	Statisches UI in React
-	```js
-	const FilterableProductTable = ({ products }) => {
-    // ...
-  };
-  const SearchBar = () => {
-    // ...
-  };
-  const ProductTable = ({ products }) => {
-    // ...
-  };
-  const ProductRow = (props) => {
-    // ...
-  };
-	```
-	
+    Statisches UI in React
+    ```js
+    const FilterableProductTable = ({ products }) => {
+       // ...
+     };
+     const SearchBar = () => {
+       // ...
+     };
+     const ProductTable = ({ products }) => {
+       // ...
+     };
+     const ProductRow = (props) => {
+       // ...
+     };
+    ```
+
 4a. *Den minimalen, kompletten UI Zustand (State) finden*
-	Um die Anwendung interaktiv zu machen, müssen User das Datenmodell anpassen können.
-	Wir verwenden dafür State.
-	Der State (Zustand) der Anwendung sollte das kleinstmögliche Set von Daten sein, die sich 	ändern und die Anwendung sich merken soll.
-	
-	Prinzip für die Struktur des State -> DRY (Don't repeat yourself)
-	"Make your state as simple as it can be — but no simpler."
+Um die Anwendung interaktiv zu machen, müssen User das Datenmodell anpassen können.
+Wir verwenden dafür State.
+Der State (Zustand) der Anwendung sollte das kleinstmögliche Set von Daten sein, die sich 	ändern und die Anwendung sich merken soll.
+
+Prinzip für die Struktur des State -> DRY (Don't repeat yourself)
+"Make your state as simple as it can be — but no simpler."
 
 4b. *Herausfinden, wo der State leben soll*
 Jetzt kennen wir den State - Wo in der Anwendung kommt der hin? Grundsätzlich kann jede Komponente State
 besitzen. Wir erinnern uns, Daten können durch Props immer nur von Parent zu Child weitergegeben werden.
 
 Vorgehen für jedes Stück Zustand:
-  Alle Komponenten identifizieren, die etwas aufgrund dieses Stück Zustands darstellen.
-  Den nächsten gemeinsamen Parent in der Hierarchie finden.
-  Entscheiden, wo der Zustand leben soll
-    Häufig ist es der *gemeinsame Parent*
-    Machmal ist es eine höhere Komponente als der gemeinsame Parent
-    Wenn es keine Komponente gibt, wo die Platzierung des States Sinn ergibt, erstelle eine neue
-    Komponente und platziere sie in der Hierarchie überhalb des gemeinsamen Parents
+Alle Komponenten identifizieren, die etwas aufgrund dieses Stück Zustands darstellen.
+Den nächsten gemeinsamen Parent in der Hierarchie finden.
+Entscheiden, wo der Zustand leben soll
+Häufig ist es der *gemeinsame Parent*
+Machmal ist es eine höhere Komponente als der gemeinsame Parent
+Wenn es keine Komponente gibt, wo die Platzierung des States Sinn ergibt, erstelle eine neue
+Komponente und platziere sie in der Hierarchie überhalb des gemeinsamen Parents
 #image("/assets/image-4.png")
 
-  - Nutze Eventhandler 
+- Nutze Eventhandler
 
 5. Datenflow von Child zu Parent aufbauen
 
 
 
-#todo[style heading 4 als bold text mit Zeilenumbruch]
+//#todo[style heading 4 als bold text mit Zeilenumbruch]
 
 === React Regeln
 - Nur ein Rückgabewert (1 parent element oder React.Fragment `<></>`)
 
 ==== Naming Komponente
-	- UpperCamelCase
-	- treffende Beschreibung der Komponente
-  - Beispiele: LinkButton , InfoTooltip , DraftEditor
+- UpperCamelCase
+- treffende Beschreibung der Komponente
+    - Beispiele: LinkButton , InfoTooltip , DraftEditor
 
 ==== HTML
 - HTML Attribut "class" -> "className" (weil 'class' in JS ein reserviertes Keyword ist) oder "for" in Formularfeldern -> "htmlFor"
-  - HTML-Attribute mit Bindestrich werden zu *lowerCamelCase*, bsp. stroke-width -> strokeWidth
+    - HTML-Attribute mit Bindestrich werden zu *lowerCamelCase*, bsp. stroke-width -> strokeWidth
 - Alle Elemente müssen geschlossen sein, auch wenn sie keine child-Elemente beinhalten (in React strenger als in HTML).
-  - ausser `aria-*` und `data-*`
-	- Jedes öffnende Element braucht ein Schliessendes: `<li></li>`
-	- Leere Elemente müssen mit einem schliessend Slash / ausgezeichnet werden: `<img /> ,<input /> oder auch leere React Komponenten <Article />`
+    - ausser `aria-*` und `data-*`
+    - Jedes öffnende Element braucht ein Schliessendes: `<li></li>`
+    - Leere Elemente müssen mit einem schliessend Slash / ausgezeichnet werden: `<img /> ,<input /> oder auch leere React Komponenten <Article />`
 - Comments in JSX werden so geschrieben: `{/* comment */}` im JavaScript Teil werden Comments regulär ausgezeichnet
 
-==== JSX 
-#todo[möglicherweise doppelt]
-  - Nur ein einziges Root Element zurückgeben (-> Siehe React Fragment)
-  - HTML Attribut "class" -> "className" (weil 'class' in JS ein reserviertes Keyword ist) oder "for"
-  in Formularfeldern -> "htmlFor"
-  - HTML-Attribute mit Bindestrich werden zu lowerCamelCase, bsp. stroke-width ->
-  strokeWidth
-  - Alle Elemente müssen geschlossen sein, auch wenn sie keine child-Elemente beinhalten (in React strenger als in HTML).
-  - Jedes öffnende Element braucht ein Schliessendes: `<li></li>`
-  - Leere Elemente müssen mit einem schliessend Slash / ausgezeichnet werden: `<img />` ,
-  `<input />` oder auch leere React Komponenten `<Article />`
-  - Comments in JSX werden so geschrieben: {/* comment */} im JavaScript Teil werden Comments regulär ausgezeichnet
+==== JSX
+//#todo[möglicherweise doppelt]
+- Nur ein einziges Root Element zurückgeben (-> Siehe React Fragment)
+- HTML Attribut "class" -> "className" (weil 'class' in JS ein reserviertes Keyword ist) oder "for"
+in Formularfeldern -> "htmlFor"
+- HTML-Attribute mit Bindestrich werden zu lowerCamelCase, bsp. stroke-width ->
+strokeWidth
+- Alle Elemente müssen geschlossen sein, auch wenn sie keine child-Elemente beinhalten (in React strenger als in HTML).
+- Jedes öffnende Element braucht ein Schliessendes: `<li></li>`
+- Leere Elemente müssen mit einem schliessend Slash / ausgezeichnet werden: `<img />` ,
+`<input />` oder auch leere React Komponenten `<Article />`
+- Comments in JSX werden so geschrieben: {/* comment */} im JavaScript Teil werden Comments regulär ausgezeichnet
 
 === Vanilla JS
 Destructuring an Array
@@ -121,7 +122,7 @@ console.log(y) // Output: 300
 
 
 === Eventhandler
-Wir brauchen Funktionen, die Interaktionen im UI mit dem State verbinden -> Eventhandler. 
+Wir brauchen Funktionen, die Interaktionen im UI mit dem State verbinden -> Eventhandler.
 `<button onClick={() => setCounter(counter+1)}>Click Me</button>`
 Native HTML Elemente haben in React spezielle Attribute/Props, die Eventhandler aufnehmen.
 Einige der häufig verwendeten:
@@ -185,7 +186,7 @@ React rendering Fehler:
 ```
 
 === Arrays
-immer keys dazuschreiben `key={..}`! 
+immer keys dazuschreiben `key={..}`!
 - Sobald die Liste umsortiert wird oder anderweitig dynamisch ist, braucht es einen Key, sonst
 kann es Bugs geben
 ```js
