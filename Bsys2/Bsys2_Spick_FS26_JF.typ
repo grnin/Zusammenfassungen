@@ -1,6 +1,6 @@
 
 // Compiled with Typst 0.13.1
-#import "../template_zusammenf.typ": *
+#import "../template_cheatsheet.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
 #show: project.with(
@@ -13,6 +13,8 @@
     font-size: 4pt,
     landscape: true,
 )
+
+
 
 #let wait = ```c wait()```
 
@@ -132,9 +134,8 @@ int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
 }
 
 = Betriebssystem API
-*Aufgaben:*
-Abstraktion, Portabilität, Ressourcenmanagement & Isolation der Anwendungen,
-Benutzerverwaltung und Sicherheit.\
+/ Aufgaben: Abstraktion, Portabilität, Ressourcenmanagement & Isolation der Anwendungen,
+Benutzerverwaltung und Sicherheit.
 *Privilege Levels:*
 _Kernel-Mode_ #hinweis[(darf alles ausführen, Ring 0)],
 _User-Mode_ #hinweis[(darf nur beschränkte Menge an Instruktionen ausführen, Ring 3)]\
@@ -882,14 +883,10 @@ Jeder Thread hat seinen _eigenen_ Instruction-Pointer und Stack-Pointer. Wenn Er
 der _Ausführungsreihenfolge_ einzelner Instruktionen abhängen, spricht man von einer _Race
 Condition_. Threads müssen _synchronisiert_ werden, damit keine _Race Condition_ entsteht.\
 
-// TODO:
-
-/ Critical Section: Code-Bereich, in dem Daten mit anderen Threads _geteilt_ werden. Muss unbedingt
-synchronisiert werden.\
-/ Atomare Instruktionen:
-Eine atomare Instruktion kann vom Prozessor _unterbrechungsfrei_ ausgeführt werden.
+/ Critical Section: Code-Bereich, in dem Daten mit anderen Threads _geteilt_ werden. Muss unbedingt synchronisiert werden.
+/ Atomare Instruktionen: Eine atomare Instruktion kann vom Prozessor _unterbrechungsfrei_ ausgeführt werden.
 #hinweis[*Achtung:* Selbst einzelne Assembly-Instruktionen nicht immer atomar!]\
-*Anforderungen an Synchronisations-Mechanismen:*
+=== Anforderungen an Synchronisations-Mechanismen:
 _Gegenseitiger Ausschluss_ #hinweis[(Nur ein Thread darf in Critical Section sein)],
 _Fortschritt_ #hinweis[(Entscheidung, wer in die Critical Section darf, muss in endlicher Zeit getroffen werden)],
 _Begrenztes Warten_ #hinweis[(Thread wird nur $n$ mal übergangen, bevor er in die Critical Section darf)].\

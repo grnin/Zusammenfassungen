@@ -1,0 +1,234 @@
+
+#import "./template--fonts-colors.typ": *
+
+// Main template
+#let project(
+    authors: (),
+    fach: "",
+    fach-long: "",
+    semester: "",
+    date: datetime.today(),
+    landscape: false,
+    column-count: 1,
+    tableofcontents: (enabled: false, depth: "", columns: ""), // (depth: none, columns: 1)
+    language: "de",
+    font-size: 11pt,
+    display-title-header: true,
+    display-title-footer: true,
+    heading-page-number-in-ref: true,
+    appendix: (), // specifiy path to .typ file to add appendix documents
+    body,
+) = {
+    // == Document Configuration ==
+    // PDF Metadata
+    set document(
+        author: authors,
+        title: fach + " Zusammenfassung " + semester,
+        date: date,
+    )
+
+    let font-default = (
+        font: text-font,
+        lang: language,
+        region: "ch",
+        size: font-size,
+    )
+
+    let font-special = (
+        ..font-default,
+        font: code-font,
+        weight: "bold",
+        fill: colors.hellblau,
+    )
+
+    let footer = context [
+        #set text(font: font-special.font, size: 0.9em, fill: colors.light-grey)
+        #let separator = if (authors.len() > 2) { ", " } else { " & " }
+        #fach | #semester | #authors.join(separator)
+        // #let authorsString = authors.join(separator)
+        // // #let authorsString = if (authors.len() >= 2) { authors.join(separator) } else { authors.first() }
+        // #fach | #semester | #authorsString
+        #h(1fr)
+        #set text(font: font-special.font, size: 0.9em, fill: colors.text)
+        #languages.at(language).page #counter(page).display()
+    ]
+
+    let header = context [
+        #set text(font: font-default.font, size: 0.9em, fill: colors.grey)
+        #set align(right)
+        // #h(1fr)
+        #languages.at(language).page #counter(page).display()
+
+
+        //  Zeige die Titel dieser Seite an
+        #context {
+            let current_page = here().page()
+
+            let headings = query(heading).filter(it => it.level in (1, 2) and it.location().page() == current_page)
+
+            if headings.len() > 0 {
+                headings.map(it => it.body).join(", ")
+            } else {
+                let headingsLowerLevel = query(heading).filter(it => (
+                    it.level == 3 and it.location().page() == current_page
+                ))
+                if (headingsLowerLevel.len() > 0) {
+                    set text(font: font-default.font, size: 0.7em, fill: colors.grey)
+                    headingsLowerLevel.map(it => it.body).join(", ")
+                }
+            }
+        }
+    ]
+
+    set page(
+        header: if (display-title-header) { header },
+        flipped: landscape,
+        columns: column-count,
+        footer: if (display-title-footer) { footer },
+        margin: if (column-count < 2) {
+            (top: 2cm, left: 1.5cm, right: 1.5cm, bottom: 2cm)
+        } else {
+            0.5cm
+        },
+    )
+
+    set columns(column-count, gutter: 2em)
+
+    // Default document font
+    set text(..font-default)
+
+    // Style built-in functions
+    // Headings formatting
+    set heading(numbering: "1.1.1.", supplement: languages.at(language).chapter)
+    show heading: hd => block({
+        if hd.numbering != none and hd.level <= 3 {
+            context counter(heading).display()
+            h(1.3em)
+        }
+        hd.body
+    })
+
+    show heading.where(level: 1): h => {
+        set text(..font-special, top-edge: 0.18em)
+        set par(leading: 1.3em, hanging-indent: 2.5em)
+        line(length: 100%, stroke: 0.18em + colors.hellblau)
+        upper(h)
+        v(0.45em)
+    }
+
+    show heading.where(level: 2): h => {
+        set text(size: 0.9em)
+        upper(h)
+    }
+
+    // Remove space above H4, fixes spacing between H3 & H4
+    show heading.where(level: 4): h => {
+        v(-0.4em)
+        h
+    }
+
+
+    // Table formatting
+    set table(
+        stroke: (x, y) => (
+            left: if x > 0 { 0.07em },
+            top: if y > 0 { 0.07em },
+        ),
+        inset: 0.5em,
+    )
+
+    // Recommended workaround in Typst 0.11 until table.header is styleable
+    show table.cell.where(y: 0): emph
+
+    // Set default sizing of grid
+    set grid(columns: (1fr, 1fr), gutter: 1em)
+
+    // Unordered list, use with "- " or #list[]
+    show list: set list(marker: "–", body-indent: 0.45em)
+
+    // "Important" template, use with "_text_" or #emph[]
+    show emph: set text(fill: font-special.fill, weight: font-special.weight)
+
+    // Code, use with ```python print("Hello World")```
+    show raw: set text(font: font-special.font, size: 1em)
+
+    // Quotes
+    set quote(block: true, quotes: true)
+    show quote: q => {
+        set text(style: "italic")
+        q
+    }
+
+    // Reference, show heading name & page number
+    show ref: ref => if ref.element.func() != heading {
+        ref
+    } else {
+        let label = ref.target
+        let header = ref.element
+        if heading-page-number-in-ref {
+            // "Heading Name" (Page X)
+            link(label, ["#header.body" (#languages.at(language).page #header.location().page())])
+        } else {
+            // Chapter 1.1.1 "Heading Name"
+            let chapter-numbering = counter(heading).at(header.label)
+            link(label, [#header.supplement #numbering(header.numbering, ..chapter-numbering) "#header.body"])
+        }
+    }
+
+    // Table of contents
+    set outline(indent: 0em)
+
+    // Table of contents, header level 1
+    show outline.entry.where(level: 1): entry => {
+        v(1.1em, weak: true)
+        strong(entry)
+    }
+
+    // Title page configuration
+    let subtitle(subt) = {
+        set text(..font-special, size: 0.7em)
+        pad(bottom: 1.3em, subt)
+    }
+
+    // == Page Content ==
+    // The title header
+    if (display-title-footer) {
+        title[
+            #text(..font-special, size: 1.06em, fach-long + " | " + fach)
+            #v(0.6em, weak: true)
+            #subtitle[Zusammenfassung]
+        ]
+    }
+
+    // Table of contents
+    if (tableofcontents.enabled) {
+        // Generate language-specific ToC header spanning the whole page
+        heading(outlined: false, numbering: none, languages.at(language).toc)
+        columns(
+            // Set number of columns for ToC
+            tableofcontents.at("columns", default: 1),
+            outline(
+                depth: tableofcontents.at("depth", default: none),
+                title: none,
+            ),
+        )
+        pagebreak()
+    }
+
+    // Main body
+    set par(
+        justify: true,
+        // Use character-level justification with recommended values
+        // https://typst.app/docs/reference/model/par/#parameters-justification-limits
+        justification-limits: (tracking: (min: -0.01em, max: 0.02em)),
+    )
+    body
+
+    // Appendix Documents
+    counter(heading).update(0)
+    set heading(numbering: "I.I")
+    for document in appendix {
+        pagebreak()
+        include document
+    }
+}
