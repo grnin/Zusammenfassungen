@@ -1,17 +1,17 @@
 
 // Compiled with Typst 0.13.1
-#import "../template_zusammenf.typ": *
+#import "../../template_zusammenf.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
 #show: project.with(
-  authors: ("Nina Grässli", "Jannis Tschan"),
-  fach: "BSys2",
-  fach-long: "Betriebssysteme 2",
-  semester: "FS24",
-  language: "de",
-  column-count: 5,
-  font-size: 4pt,
-  landscape: true,
+    authors: ("Nina Grässli", "Jannis Tschan"),
+    fach: "BSys2",
+    fach-long: "Betriebssysteme 2",
+    semester: "FS24",
+    language: "de",
+    column-count: 5,
+    font-size: 4pt,
+    landscape: true,
 )
 
 #let wait = ```c wait()```
@@ -22,28 +22,113 @@ int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
 ```
 
 #table(
-  columns: (auto,) * 5 + (2.75em,) * 4 + (1fr,) * 4,
-  [*$4096$*], [*$2048$*], [*$1024$*], [*$512$*], [*$256$*], [*$128$*], [*$64$*], [*$32$*], [*$16$*], [*$8$*], [*$4$*], [*$2$*], [*$1$*],
-  [$2^12$], [$2^11$], [$2^10$], [$2^9$], [$2^8$], [$2^7$], [$2^6$], [$2^5$], [$2^4$], [$2^3$], [$2^2$], [$2^1$], [$2^0$],
-  [#hex("1000")], [#hex("800")], [#hex("400")], [#hex("200")], [#hex("100")], [#hex("80")], [#hex("40")], [#hex("20")], [#hex("10")], [#hex("8")], [#hex("4")], [#hex("2")], [#hex("1")],
+    columns: (auto,) * 5 + (2.75em,) * 4 + (1fr,) * 4,
+    [*$4096$*],
+    [*$2048$*],
+    [*$1024$*],
+    [*$512$*],
+    [*$256$*],
+    [*$128$*],
+    [*$64$*],
+    [*$32$*],
+    [*$16$*],
+    [*$8$*],
+    [*$4$*],
+    [*$2$*],
+    [*$1$*],
+
+    [$2^12$],
+    [$2^11$],
+    [$2^10$],
+    [$2^9$],
+    [$2^8$],
+    [$2^7$],
+    [$2^6$],
+    [$2^5$],
+    [$2^4$],
+    [$2^3$],
+    [$2^2$],
+    [$2^1$],
+    [$2^0$],
+
+    [#hex("1000")],
+    [#hex("800")],
+    [#hex("400")],
+    [#hex("200")],
+    [#hex("100")],
+    [#hex("80")],
+    [#hex("40")],
+    [#hex("20")],
+    [#hex("10")],
+    [#hex("8")],
+    [#hex("4")],
+    [#hex("2")],
+    [#hex("1")],
 )
 
 #table(
-  columns: (1fr,) * 6,
-  [*$1'048'576$*], [*$65'536$*], [*$4'096$*], [*$256$*], [*$16$*], [*$1$*],
-  [$16^5$], [$16^4$], [$16^3$], [$16^2$], [$16^1$], [$16^0$],
-  [#hex("10 0000")], [#hex("01 0000")], [#hex("00 1000")], [#hex("00 0100")], [#hex("00 0010")], [#hex("00 0001")],
+    columns: (1fr,) * 6,
+    [*$1'048'576$*], [*$65'536$*], [*$4'096$*], [*$256$*], [*$16$*], [*$1$*],
+    [$16^5$], [$16^4$], [$16^3$], [$16^2$], [$16^1$], [$16^0$],
+    [#hex("10 0000")], [#hex("01 0000")], [#hex("00 1000")], [#hex("00 0100")], [#hex("00 0010")], [#hex("00 0001")],
 )
 
 #{
-  show raw: set text(size: 0.9em)
-  table(
-    columns: (1fr,) * 16,
-    align: (_, y) => if (y == 2) { center } else { left },
-    [*$0$*], [*$1$*], [*$2$*], [*$3$*], [*$4$*], [*$5$*], [*$6$*], [*$7$*], [*$8$*], [*$9$*], [*$A$*], [*$B$*], [*$C$*], [*$D$*], [*$E$*], [*$F$*],
-    [$0$], [$1$], [$2$], [$3$], [$4$], [$5$], [$6$], [$7$], [$8$], [$9$], [$10$], [$11$], [$12$], [$13$], [$14$], [$15$],
-    [`0000`], [`0001`], [`0010`], [`0011`], [`0100`], [`0101`], [`0110`], [`0111`], [`1000`], [`1001`], [`1010`], [`1011`], [`1100`], [`1101`], [`1110`], [`1111`],
-  )
+    show raw: set text(size: 0.9em)
+    table(
+        columns: (1fr,) * 16,
+        align: (_, y) => if (y == 2) { center } else { left },
+        [*$0$*],
+        [*$1$*],
+        [*$2$*],
+        [*$3$*],
+        [*$4$*],
+        [*$5$*],
+        [*$6$*],
+        [*$7$*],
+        [*$8$*],
+        [*$9$*],
+        [*$A$*],
+        [*$B$*],
+        [*$C$*],
+        [*$D$*],
+        [*$E$*],
+        [*$F$*],
+
+        [$0$],
+        [$1$],
+        [$2$],
+        [$3$],
+        [$4$],
+        [$5$],
+        [$6$],
+        [$7$],
+        [$8$],
+        [$9$],
+        [$10$],
+        [$11$],
+        [$12$],
+        [$13$],
+        [$14$],
+        [$15$],
+
+        [`0000`],
+        [`0001`],
+        [`0010`],
+        [`0011`],
+        [`0100`],
+        [`0101`],
+        [`0110`],
+        [`0111`],
+        [`1000`],
+        [`1001`],
+        [`1010`],
+        [`1011`],
+        [`1100`],
+        [`1101`],
+        [`1110`],
+        [`1111`],
+    )
 }
 
 = Betriebssystem API
@@ -93,7 +178,7 @@ jedem Aufruf gleich sind.
 - *Setzen einer Umgebungsvariable:* ```c int ret = setenv("HOME", "/usr/home", 1);```
 - *Entfernen einer Umgebungsvariable:* ```c int ret = unsetenv("HOME");```
 - *Hinzufügen einer Umgebungsvariable :* ```c int ret = putenv("HOME=/usr/home");```\
-  #hinweis[(gefährlich wegen Pointer auf `NULL`)]
+    #hinweis[(gefährlich wegen Pointer auf `NULL`)]
 
 _Grössere Konfigurationsinformationen_ sollten über _Dateien_ übermittelt werden.
 
@@ -108,7 +193,7 @@ Relativ #hinweis[(beginnt nicht mit /)],
 Kanonisch #hinweis[(Absolut, ohne "`.`" und "`..`", `realpath()`)]\
 - _`NAME_MAX`:_ Maximale Länge eines Dateinamens (exklusive terminierender Null)
 - _`PATH_MAX`:_ Maximale Länge eines Pfads (inklusive terminierender Null)
-  #hinweis[(beinhalt. Wert von `NAME_MAX`)]
+    #hinweis[(beinhalt. Wert von `NAME_MAX`)]
 - _`_POSIX_NAME_MAX`:_ Minimaler Wert von `NAME_MAX` nach POSIX #hinweis[(14)]
 - _`_POSIX_PATH_MAX`:_ Minimaler Wert von `PATH_MAX` nach POSIX #hinweis[(256)]
 
@@ -297,23 +382,18 @@ Jede davon _ersetzt_ im gerade laufenden Prozess das Programmimage _durch ein an
 Programmargumente müssen spezifiziert werden. #hinweis[(`..l` als Liste, `..v` als Array)]
 
 #table(
-  columns: (auto, 1fr, auto, auto),
-  table.header(
-    [],
-    [],
-    [Programmargumente\ als Liste],
-    [Programmargumente\ als Array],
-  ),
-  table.cell(rowspan: 2)[Angabe des Pfads],
-  [mit neuem Environment],
-  [`execle()`],
-  [`execve()`],
-  table.cell(rowspan: 2)[mit altem Environment],
-  [`execl()`],
-  [`execv()`],
-  [Suche über `PATH`],
-  [`execlp()`],
-  [`execvp()`]
+    columns: (auto, 1fr, auto, auto),
+    table.header([], [], [Programmargumente\ als Liste], [Programmargumente\ als Array]),
+    table.cell(rowspan: 2)[Angabe des Pfads],
+    [mit neuem Environment],
+    [`execle()`],
+    [`execve()`],
+    table.cell(rowspan: 2)[mit altem Environment],
+    [`execl()`],
+    [`execv()`],
+    [Suche über `PATH`],
+    [`execlp()`],
+    [`execvp()`],
 )
 
 === Zombie- & Orphan-Prozesse
@@ -360,13 +440,13 @@ Beschreibt den _Aufbau_ der Datei: Typ, 32/64-bit, Encoding, Maschinenarchitektu
 Entrypoint, Infos zu den Einträgen in PHT und SHT.\
 #tcolor("orange", "Segment/Program Header Table und Segmente:") Tabelle mit $n$ Einträgen,
 jeder Eintrag #hinweis[(je 32 Byte)] beschreibt ein Segment #hinweis[(Typ und Flags, Offset
-und Grösse, virtuelle Adresse und Grösse im Speicher - kann unterschiedlich zur Dateigrösse
-sein)]. Ist Verbindung zwischen Segmenten im RAM und im File.
+    und Grösse, virtuelle Adresse und Grösse im Speicher - kann unterschiedlich zur Dateigrösse
+    sein)]. Ist Verbindung zwischen Segmenten im RAM und im File.
 Definiert, wo ein Segment liegt und wohin der Loader es im RAM laden soll.\
 Segmente werden vom _Loader_ dynamisch _zur Laufzeit_ verwendet.\
 #tcolor("grün", "Section Header Table und Sektionen:") Tabelle mit $m$ Einträgen ($!=n$).
 Jeder Eintrag #hinweis[(je 40 Byte)] beschreibt eine Sektion #hinweis[(Name, Section-Typ,
-Flags, Offset und Grösse, ...)].
+    Flags, Offset und Grösse, ...)].
 Werden vom _Linker_ verwendet: Verschmilzt Sektionen und erzeugt ausführbares Executable.\
 *String-Tabelle:*
 Bereich in der Datei, der nacheinander _null-terminierte Strings enthält_.
@@ -421,7 +501,7 @@ Der Linker verwendet den Linker-Namen, der Loader verwendet den SO-Namen.
 Nahezu alle Executables benötigen _zwei Shared Objects_:
 _`libc.so`:_ Standard C library,
 _`ld-linux.so`:_ ELF Shared Object loader #hinweis[(Lädt Shared Objects und rekursiv alle
-Dependencies)].\
+    Dependencies)].\
 *Implementierung dynamischer Bibliotheken:*
 Müssen verschiebbar sein, mehrere müssen in den gleichen Prozess geladen werden.
 Die Aufgabe des Linkers wird in den Loader bzw. Dynamic Linker verschoben
@@ -432,7 +512,7 @@ Dynamische Bibliotheken sollen _Code zwischen Programmen teilen_. Code soll _nic
 im Speicher abgelegt werden. Mit Shared Memory kann jedes Programm eine _eigene virtuelle
 Page_ für den Code definieren. Diese werden auf denselben Frame im RAM gemappt.
 Benötigt _Position-Independent Code_ #hinweis[(Adressen nur relativ zum Instruction
-Pointer, Prozessor muss relative Instruktionen anbieten)].\
+    Pointer, Prozessor muss relative Instruktionen anbieten)].\
 *Relative Moves via Relative Calls:*
 Mittels Hilfsfunktion wird Rücksprungadresse in Register abgelegt, somit kann relativ dazu
 gearbeitet werden.\
@@ -458,25 +538,25 @@ Informationen werden in einem _Thread-Control-Block_ abgelegt.
 == Amdahls Regel
 Nur bestimmte Teile eines Algorithmus können parallelisiert werden.
 / $T$: Ausführungszeit, wenn _komplett seriell_ durchgeführt
-  #hinweis[(Im Bild: $T = T_0 + T_1 + T_2 + T_3 + T_4 $)]
+    #hinweis[(Im Bild: $T = T_0 + T_1 + T_2 + T_3 + T_4$)]
 / $n$: Anzahl der Prozessoren
 / $T'$: Ausführungszeit, wenn _maximal parallelisiert_
-  #hinweis[gesuchte Grösse]
+    #hinweis[gesuchte Grösse]
 / $T_s$: Ausführungszeit für den Anteil, der _seriell_ ausgeführt werden _muss_
-  #hinweis[(Im Bild: $T_s = T_0 + T_2 + T_4$)]
+    #hinweis[(Im Bild: $T_s = T_0 + T_2 + T_4$)]
 / $T - T_s$: Ausführungszeit für den Anteil, der _parallel_ ausgeführt werden _kann_
-  #hinweis[(Im Bild: $T_1 + T_3$)]
+    #hinweis[(Im Bild: $T_1 + T_3$)]
 
 #wrap-content(
-  image("img/bsys_25.png"),
-  align: top + right,
-  columns: (54%, 46%),
+    image("img/bsys_25.png"),
+    align: top + right,
+    columns: (54%, 46%),
 )[
-  / $(T - T_s) \/ n$: Parallel-Anteil verteilt auf alle $n$ Prozessoren. #hinweis[(Im Bild: $(T_1 + T_3) \/ n$)]
+    / $(T - T_s) \/ n$: Parallel-Anteil verteilt auf alle $n$ Prozessoren. #hinweis[(Im Bild: $(T_1 + T_3) \/ n$)]
 
-  / $T_s + (T - T_s) / n$: Serieller Teil + Paralleler Teil #hinweis[$= T^'$]
+    / $T_s + (T - T_s) / n$: Serieller Teil + Paralleler Teil #hinweis[$= T^'$]
 
-  Die _serielle Variante_ benötigt also höchstens _$f$ mal mehr Zeit_ als die _parallele Variante_:
+    Die _serielle Variante_ benötigt also höchstens _$f$ mal mehr Zeit_ als die _parallele Variante_:
 ]
 
 $ f <= T / T^' = T / (T_s + (T - T_s) / n) $
@@ -487,31 +567,31 @@ Definiert man $s = T_s\/T$, also den seriellen Anteil am Algorithmus, dann ist
 $s dot T = T_s$. Dadurch erhält man $f$ unabhängig von der Zeit:
 
 $
-  f <= T / (T_s + (T - T_s) / n) = T / (s dot T + (T - s dot T) / n)
-  = T / (s dot T + (1 - s) / n dot T) quad => quad f <= 1 / (s + (1 - s) / n)
+    f <= T / (T_s + (T - T_s) / n) = T / (s dot T + (T - s dot T) / n)
+    = T / (s dot T + (1 - s) / n dot T) quad => quad f <= 1 / (s + (1 - s) / n)
 $
 
 #wrap-content(
-  image("img/bsys_26.png"),
-  align: top + right,
-  columns: (61%, 39%),
+    image("img/bsys_26.png"),
+    align: top + right,
+    columns: (61%, 39%),
 )[
-  === Bedeutung
-  - Abschätzung einer _oberen Schranke_ für den maximalen Geschwindigkeitsgewinn
-  - Nur wenn _alles_ parallelisierbar ist, ist der Speedup\ _proportional_ und _maximal_
-    #hinweis[$f(0,n) = n$]
-  - Sonst ist der Speedup mit _höherer Prozessor-Anzahl_ immer _geringer_
-    #hinweis[(Kurve flacht ab)]
-  - $f(1,n)$: rein seriell
+    === Bedeutung
+    - Abschätzung einer _oberen Schranke_ für den maximalen Geschwindigkeitsgewinn
+    - Nur wenn _alles_ parallelisierbar ist, ist der Speedup\ _proportional_ und _maximal_
+        #hinweis[$f(0,n) = n$]
+    - Sonst ist der Speedup mit _höherer Prozessor-Anzahl_ immer _geringer_
+        #hinweis[(Kurve flacht ab)]
+    - $f(1,n)$: rein seriell
 
-  *Grenzwert:* Mit höherer Anzahl Prozessoren nähert sich der Speedup $1/s$ an:
+    *Grenzwert:* Mit höherer Anzahl Prozessoren nähert sich der Speedup $1/s$ an:
 ]
 
 #grid(
-  columns: (1fr, 1fr, 1fr),
-  [$ lim_(n -> infinity) (1 - s) / n = 0 $],
-  [$ lim_(n -> infinity) s + (1 - s) / n = s $],
-  [$ lim_(n -> infinity) 1 / (s + (1 - s) / n) = 1 / s $],
+    columns: (1fr, 1fr, 1fr),
+    [$ lim_(n -> infinity) (1 - s) / n = 0 $],
+    [$ lim_(n -> infinity) s + (1 - s) / n = s $],
+    [$ lim_(n -> infinity) 1 / (s + (1 - s) / n) = 1 / s $],
 )
 
 == POSIX THREAD API
@@ -527,36 +607,36 @@ spezifiziert werden kann. Die erste auszuführende Instruktion ist die Funktion 
 Argumente für `start_function`.
 
 #grid(
-  columns: (40%, 60%),
-  gutter: 11pt,
-  [
-    ```c
-    // Erstellung
-    struct T { // params of function
-      int value;
-    };
-    void * my_start (void * arg) {
-      struct T * p = arg;
-      printf ("%d\n", p->value);
-      free (arg);
-      return 0:
-    }
-    ```
-  ],
-  [
-    ```c
-    // Verwendung
-    void start_my_thread (void) {
-      struct T * t = malloc (sizeof (struct T));
-      t->value = 109; // set argument
-      pthread_t tid;
-      pthread_create (
-        &tid,
-        0, // default attributes
-        &my_start,
-        t);}
-    ```
-  ],
+    columns: (40%, 60%),
+    gutter: 11pt,
+    [
+        ```c
+        // Erstellung
+        struct T { // params of function
+          int value;
+        };
+        void * my_start (void * arg) {
+          struct T * p = arg;
+          printf ("%d\n", p->value);
+          free (arg);
+          return 0:
+        }
+        ```
+    ],
+    [
+        ```c
+        // Verwendung
+        void start_my_thread (void) {
+          struct T * t = malloc (sizeof (struct T));
+          t->value = 109; // set argument
+          pthread_t tid;
+          pthread_create (
+            &tid,
+            0, // default attributes
+            &my_start,
+            t);}
+        ```
+    ],
 )
 
 *Thread-Attribute:*
@@ -612,34 +692,35 @@ _schreibt_ bzw. _liest_ den Wert, der mit dem Key in diesem Thread assoziiert is
 Oft als _Pointer auf einen Speicherbereich_ verwendet.
 
 #grid(
-  columns: (auto,) * 2,
-  [
-    ```c
-    // Setup
-    typedef struct {
-      int code;
-      char *message;
-    } error_t;
-    pthread_key_t error;
-    void set_up_error (void) {
-      // am Anfang des Threads aufgerufen
-      pthread_setspecific(
-       error, malloc(sizeof(error_t)))}
-    ```
-  ], [
-    ```c
-    // Lesen und Schreiben im Thread
-    void print_error (void) {
-      error_t * e = pthread_getspecific(error);
-      printf("Error %d: %s\n",
-        e->code, e->message);}
-    int force_error (void) {
-      error_t * e = pthread_getspecific(error);
-      e->code = 98;
-      e->message = "file not found";
-      return -1;}
-    ```
-  ]
+    columns: (auto,) * 2,
+    [
+        ```c
+        // Setup
+        typedef struct {
+          int code;
+          char *message;
+        } error_t;
+        pthread_key_t error;
+        void set_up_error (void) {
+          // am Anfang des Threads aufgerufen
+          pthread_setspecific(
+           error, malloc(sizeof(error_t)))}
+        ```
+    ],
+    [
+        ```c
+        // Lesen und Schreiben im Thread
+        void print_error (void) {
+          error_t * e = pthread_getspecific(error);
+          printf("Error %d: %s\n",
+            e->code, e->message);}
+        int force_error (void) {
+          error_t * e = pthread_getspecific(error);
+          e->code = 98;
+          e->message = "file not found";
+          return -1;}
+        ```
+    ],
 )
 
 ```c
@@ -658,33 +739,33 @@ int main (int argc, char **argv) {
 
 = Scheduling
 #wrap-content(
-  image("img/bsys_27.png"),
-  align: top + right,
-  columns: (50%, 50%),
+    image("img/bsys_27.png"),
+    align: top + right,
+    columns: (50%, 50%),
 )[
-  Auf einem Prozessor läuft zu einem Zeitpunkt immer _höchstens ein Thread_.
-  Es gibt folgende Zustände:
-  - _Running_ #hinweis[(der Thread, der gerade läuft)]
-  - _Ready_ #hinweis[(Threads die laufen können, es aber gerade nicht tun)]
-  - _Waiting:_ #hinweis[(Threads, die auf ein Ereignis warten, können nicht direkt in den
-    Running State wechseln)]
-  _Übergänge_ von einem Status zum anderen werden _immer vom OS_ vorgenommen.
-  Dieser Teil vom OS heisst _Scheduler_.
+    Auf einem Prozessor läuft zu einem Zeitpunkt immer _höchstens ein Thread_.
+    Es gibt folgende Zustände:
+    - _Running_ #hinweis[(der Thread, der gerade läuft)]
+    - _Ready_ #hinweis[(Threads die laufen können, es aber gerade nicht tun)]
+    - _Waiting:_ #hinweis[(Threads, die auf ein Ereignis warten, können nicht direkt in den
+            Running State wechseln)]
+    _Übergänge_ von einem Status zum anderen werden _immer vom OS_ vorgenommen.
+    Dieser Teil vom OS heisst _Scheduler_.
 ]
 #wrap-content(
-  image("img/bsys_28.png"),
-  align: top + right,
-  columns: (40%, 60%),
+    image("img/bsys_28.png"),
+    align: top + right,
+    columns: (40%, 60%),
 )[
-  Das OS _registriert Threads_ auf ein Ereignis und setzt sie in den Zustand "waiting".
-  Tritt das Ereignis auf, ändert das OS den Zustand auf _ready_.\
-  #hinweis[(Es laufen nur Threads auf dem Prozessor, die _nicht warten_.)]\
-  *Ready-Queue:*
-  In der Ready-Queue #hinweis[(kann auch ein Tree sein)] befinden sich alle Threads, die
-  _bereit sind zu laufen_.\
-  *Powerdown-Modus:*
-  Wenn kein Thread _laufbereit_ ist, schaltet das OS den Prozessor in _Standby_ und wird
-  durch _Interrupt_ wieder geweckt.
+    Das OS _registriert Threads_ auf ein Ereignis und setzt sie in den Zustand "waiting".
+    Tritt das Ereignis auf, ändert das OS den Zustand auf _ready_.\
+    #hinweis[(Es laufen nur Threads auf dem Prozessor, die _nicht warten_.)]\
+    *Ready-Queue:*
+    In der Ready-Queue #hinweis[(kann auch ein Tree sein)] befinden sich alle Threads, die
+    _bereit sind zu laufen_.\
+    *Powerdown-Modus:*
+    Wenn kein Thread _laufbereit_ ist, schaltet das OS den Prozessor in _Standby_ und wird
+    durch _Interrupt_ wieder geweckt.
 ]
 *Arten von Threads:*
 _I/O-lastig_ #hinweis[(Wenig rechnen, viel I/O-Geräte-Kommunikation)],
@@ -701,14 +782,14 @@ _Quasiparallel_ #hinweis[($n$ Threads auf $<n$ Prozessoren abwechselnd)],
 _Nebenläufig_ #hinweis[(Überbegriff für parallel oder quasiparallel)]
 
 #wrap-content(
-  image("img/bsys_29.png"),
-  align: top + right,
-  columns: (37%, 63%),
+    image("img/bsys_29.png"),
+    align: top + right,
+    columns: (37%, 63%),
 )[
-  *Bursts:*
-  _Prozessor-Burst_ #hinweis[(Thread belegt Prozessor voll)],
-  _I/O-Burst_ #hinweis[(Thread belegt Prozessor nicht)].
-  Jeder Thread kann als _Abfolge_ von _Prozessor-Bursts_ und\ _I/O-Bursts_ betrachtet werden.
+    *Bursts:*
+    _Prozessor-Burst_ #hinweis[(Thread belegt Prozessor voll)],
+    _I/O-Burst_ #hinweis[(Thread belegt Prozessor nicht)].
+    Jeder Thread kann als _Abfolge_ von _Prozessor-Bursts_ und\ _I/O-Bursts_ betrachtet werden.
 ]
 
 == Scheduling-Strategien
@@ -813,15 +894,15 @@ _Begrenztes Warten_ #hinweis[(Thread wird nur $n$ mal übergangen, bevor er in d
 *Implementierung:*
 Nur _mit HW-Unterstützung_ möglich. Es gibt zwei atomare Instruktionen:\
 _Test-And-Set_ #hinweis[(Setzt einen `int` auf 1 und returnt den vorherigen Wert:
-```c test_and_set(int * target) {int value = *target; *target = 1; return value;}```)] und
+    ```c test_and_set(int * target) {int value = *target; *target = 1; return value;}```)] und
 _Compare-and-Swap_ #hinweis[(Überschreibt einen `int` mit einem spezifizierten Wert, wenn
-dieser dem erwarteten Wert entspricht:
-```c compare_and_swap (int *a, int expected, int new_a) {int value = *a; if (value == expected) { *a = new_a; } return value;}```)].
+    dieser dem erwarteten Wert entspricht:
+    ```c compare_and_swap (int *a, int expected, int new_a) {int value = *a; if (value == expected) { *a = new_a; } return value;}```)].
 
 == Semaphore
 Enthält Zähler $z >= 0$. Wird nur über _`Post(v)`_ #hinweis[(Erhöht $z$ um 1)] und
 _`Wait(v)`_ zugegriffen\ #hinweis[(Wenn $z > 0$, verringert $z$ um $1$ und fährt fort.
-Wenn $z = 0$, setzt den Thread in waiting, bis anderer Thread $z$ erhöht)].
+    Wenn $z = 0$, setzt den Thread in waiting, bis anderer Thread $z$ erhöht)].
 
 *```c int sem_init (sem_t *sem, int pshared, unsigned int value)```:*
 _Initialisiert_ den Semaphor, typischerweise als _globale Variable_.
@@ -841,63 +922,63 @@ _Entfernt Speicher_, den das OS mit `sem` _assoziiert_ hat.
 semaphore free = n; semaphore used = 0;
 ```
 #grid(
-  columns: (auto, auto),
-  [
-    ```c
-    // Producer
-    while (1) {
-      // Warte, falls Customer zu langsam
-      WAIT (free); // Hat es Platz in Queue?
-      produce_item (&buffer[w], ...);
-      POST (used); // 1 Element mehr in Queue
-      w = (w+1) % BUFFER_SIZE;
-    }
-    ```
-  ],
-  [
-    ```c
-    // Consumer
-    while (1) {
-      // Warte, falls Producer zu langsam
-      WAIT (used); // Hat es Elem. in Queue?
-      consume (&buffer[r]);
-      POST (free); // 1 Element weniger in Q
-      r = (r+1) % BUFFER_SIZE;
-    }
-    ```
-  ],
+    columns: (auto, auto),
+    [
+        ```c
+        // Producer
+        while (1) {
+          // Warte, falls Customer zu langsam
+          WAIT (free); // Hat es Platz in Queue?
+          produce_item (&buffer[w], ...);
+          POST (used); // 1 Element mehr in Queue
+          w = (w+1) % BUFFER_SIZE;
+        }
+        ```
+    ],
+    [
+        ```c
+        // Consumer
+        while (1) {
+          // Warte, falls Producer zu langsam
+          WAIT (used); // Hat es Elem. in Queue?
+          consume (&buffer[r]);
+          POST (free); // 1 Element weniger in Q
+          r = (r+1) % BUFFER_SIZE;
+        }
+        ```
+    ],
 )
 
 == Mutexe
 Ein Mutex hat einen _binären Zustand $bold(z)$_, der nur durch zwei Funktionen verändert werden kann:
 _Acquire_ #hinweis[(Wenn $z = 0$, setze $z$ auf 1 und fahre fort. Wenn $z = 1$, blockiere
-den Thread, bis $z = 0$)],
+    den Thread, bis $z = 0$)],
 _Release_ #hinweis[(Setzt $z = 0$)]. Auch als non-blocking-Funktion:
 ```c int pthread_mutex_trylock (pthread_mutex_t *mutex)```
 
 #grid(
-  columns: (auto, auto),
-  [
-    ```c
-      // Beispiel Initialisierung
-      pthread_mutex_t mutex; // global
-      int main() {
-        pthread_mutex_init (&mutex, 0);
-      // run threads & wait for them to finish
-        pthread_mutex_destroy (&mutex); }
-    ```
-  ],
-  [
-    ```c
-    // Beispiel Verwendung in Threads
-    void * thread_function (void * args) {
-      while (running) { ...
-        // Enter critical section:
-        pthread_mutex_lock (&mutex);
-        // Leave critical section:
-        pthread_mutex_unlock (&mutex);...}}
-    ```
-  ],
+    columns: (auto, auto),
+    [
+        ```c
+          // Beispiel Initialisierung
+          pthread_mutex_t mutex; // global
+          int main() {
+            pthread_mutex_init (&mutex, 0);
+          // run threads & wait for them to finish
+            pthread_mutex_destroy (&mutex); }
+        ```
+    ],
+    [
+        ```c
+        // Beispiel Verwendung in Threads
+        void * thread_function (void * args) {
+          while (running) { ...
+            // Enter critical section:
+            pthread_mutex_lock (&mutex);
+            // Leave critical section:
+            pthread_mutex_unlock (&mutex);...}}
+        ```
+    ],
 )
 
 *Priority Inversion:*
@@ -939,10 +1020,10 @@ _`kill 1234 5678`_ sendet `SIGTERM` an Prozesse `1234` und `5678`\
 *```c int sigaction (int signal, struct sigaction *new, struct sigaction *old)```:*\
 Definiert Signal-Handler für `signal`, wenn `new` $!= 0$.
 #hinweis[(Eigene Signal-Handler definiert via `sigaction` struct:
-  `sa_handler`: Zu callende Funktion,
-  `sa_mask`: Blockierte Signale während Ausführung,
-  bearbeitet nur durch `sig*set()`-Funktionen:
-  `sigemptyset`, `sigfillset`, `sigaddset`, `sigdelset`, `sigismember`)]\
+    `sa_handler`: Zu callende Funktion,
+    `sa_mask`: Blockierte Signale während Ausführung,
+    bearbeitet nur durch `sig*set()`-Funktionen:
+    `sigemptyset`, `sigfillset`, `sigaddset`, `sigdelset`, `sigismember`)]\
 
 == Pipes
 Eine geöffnete Datei entspricht einem _Eintrag in der File-Descriptor-Tabelle (FDT)_ im
@@ -965,36 +1046,36 @@ if (id == 0) { // child
 ```
 
 Eine *Pipe* ist eine "Datei" #hinweis[(Eine Datei muss nur `open`, `close` etc.
-unterstützen)] im Hauptspeicher, die über zwei File-Deskriptoren verwendet wird:
+    unterstützen)] im Hauptspeicher, die über zwei File-Deskriptoren verwendet wird:
 _read end_ und _write end_. Daten, die in _write end_ geschrieben werden, können aus
 _read end_ genau _einmal_ und als _FIFO_ gelesen werden. Pipes erlauben _Kommunikation über
 Prozess-Grenzen hinweg_. Ist unidirektional.
 #grid(
-  columns: (0.95fr, 1fr),
-  gutter: 0.5em,
-  [
-    ```c
-    int fd[2]; // 0 = read, 1 = write
-    pipe (fd);
-    int id = fork();
-    ```
-    Pipe lebt nur so lange, wie mind. ein Ende geöffnet ist. Alle Read-Ends geschlossen
-    #sym.arrow `SIGPIPE` an Write-End. Mehrere Writes können zusammengefasst werden.
-    Lesen mehrere Prozesse dieselbe Pipe, ist unklar, wer die Daten erhält.
-  ],
-  [
-    ```c
-    if (id == 0) { // Child thread
-      close (fd [1]); // don't use write end
-      char buffer [BSIZE];
-      int n = read (fd[0], buffer, BSIZE);
-    } else { // Parent thread
-      close (fd[0]); // don't use read end
-      char * text = "I <3 segfaults";
-      write (fd[1], text, strlen(text) + 1);
-    }
-    ```
-  ],
+    columns: (0.95fr, 1fr),
+    gutter: 0.5em,
+    [
+        ```c
+        int fd[2]; // 0 = read, 1 = write
+        pipe (fd);
+        int id = fork();
+        ```
+        Pipe lebt nur so lange, wie mind. ein Ende geöffnet ist. Alle Read-Ends geschlossen
+        #sym.arrow `SIGPIPE` an Write-End. Mehrere Writes können zusammengefasst werden.
+        Lesen mehrere Prozesse dieselbe Pipe, ist unklar, wer die Daten erhält.
+    ],
+    [
+        ```c
+        if (id == 0) { // Child thread
+          close (fd [1]); // don't use write end
+          char buffer [BSIZE];
+          int n = read (fd[0], buffer, BSIZE);
+        } else { // Parent thread
+          close (fd[0]); // don't use read end
+          char * text = "I <3 segfaults";
+          write (fd[1], text, strlen(text) + 1);
+        }
+        ```
+    ],
 )
 
 *```c int mkfifo (const char *path, mode_t mode)```:*
@@ -1082,7 +1163,7 @@ _Send_ #hinweis[(Kopiert die Nachricht _aus_ dem Prozess: ```c send (message)```
 _Receive:_ #hinweis[(Kopiert die Nachricht _in_ den Prozess: ```c receive (message)```)].
 Dabei können Implementierungen nach verschiedenen Kriterien unterschieden werden
 #hinweis[(Feste oder Variable Nachrichtengrösse, direkte oder indirekte / synchrone oder
-  asynchrone Kommunikation, Pufferung, mit oder ohne Prioritäten für Nachrichten)]\
+    asynchrone Kommunikation, Pufferung, mit oder ohne Prioritäten für Nachrichten)]\
 *Feste oder variable Nachrichtengrösse:*
 feste Nachrichtengrösse ist einfacher zu implementieren, aber umständlicher zu verwenden als
 variable Nachrichtengrösse.\
@@ -1106,30 +1187,30 @@ Sind Empfang und Versand _beide blockierend_, kommt es zum Rendezvous, sobald be
 ihren Aufruf getätigt haben. _Impliziter Synchronisationsmechanismus_.
 
 #grid(
-  columns: (auto, auto),
-  gutter: 0.5em,
-  [
-    ```c
-    // Producer
-    message msg;
-    open(Q);
-    while(1) {
-      produce_next(&msg);
-      send(Q, &msg); // blocked until sent
-    }
-    ```
-  ],
-  [
-    ```c
-    // Consumer
-    message msg;
-    open(Q);
-    while(1) {
-      receive(Q, &msg); // blocked until rec.
-      consume_next(&msg);
-    }
-    ```
-  ],
+    columns: (auto, auto),
+    gutter: 0.5em,
+    [
+        ```c
+        // Producer
+        message msg;
+        open(Q);
+        while(1) {
+          produce_next(&msg);
+          send(Q, &msg); // blocked until sent
+        }
+        ```
+    ],
+    [
+        ```c
+        // Consumer
+        message msg;
+        open(Q);
+        while(1) {
+          receive(Q, &msg); // blocked until rec.
+          consume_next(&msg);
+        }
+        ```
+    ],
 )
 
 *Pufferung:*
@@ -1146,7 +1227,7 @@ _synchron und asynchron_ verwendet werden.\
 *```c mqd_t mq_open (const char *name, int flags, mode_t mode, struct mq_attr *attr)```:*
 _Öffnet_ eine Message-Queue mit systemweitem `name`, returnt Message-Queue-Descriptor.
 #hinweis[(`name` mit "`/`" beginnen, `flags` & `mode` wie bei Dateien,
-  `mq_attr`: Div. Konfigs & Queue-Status, R/W mit `mp_getattr`/`mq_setattr`)]\
+    `mq_attr`: Div. Konfigs & Queue-Status, R/W mit `mp_getattr`/`mq_setattr`)]\
 *```c int mq_close (mqd_t queue)```:*
 _Schliesst_ die Queue mit dem Descriptor `queue` für diesen Prozess.\
 *```c int mq_unlink (const char *name)```:*
@@ -1204,30 +1285,27 @@ Mehr-Prozessor-Systemen bald performanter.
 
 == Vergleich Message-Queues und Pipes
 #table(
-  columns: (auto, 1fr),
-  table.header(
-    [Message-Queues],
-    [Pipes],
-  ),
+    columns: (auto, 1fr),
+    table.header([Message-Queues], [Pipes]),
 
-  [
-    - bidirektional
-    - Daten sind in einzelnen Messages organisiert
-    - beliebiger Zugriff
-    - Haben immer einen Namen
-  ],
-  [
-    - unidirektional
-    - übermittelt Bytestrom an Daten
-    - FIFO-Zugriff
-    - Müssen keinen Namen haben
-  ],
+    [
+        - bidirektional
+        - Daten sind in einzelnen Messages organisiert
+        - beliebiger Zugriff
+        - Haben immer einen Namen
+    ],
+    [
+        - unidirektional
+        - übermittelt Bytestrom an Daten
+        - FIFO-Zugriff
+        - Müssen keinen Namen haben
+    ],
 )
 
 = Unicode
 == ASCII - American Standard Code for Information Interchange
 Hat _128 definierte Zeichen_ #hinweis[(erste Hexzahl = Zeile, zweite Hexzahl = Spalte,
-d.h. #hex("41") = `A`)].
+    d.h. #hex("41") = `A`)].
 #image("img/bsys_40.png")
 
 *Codepages:*
@@ -1240,8 +1318,8 @@ Nummer eines Zeichen - "welches Zeichen?"\
 *Code-Unit (CU):*
 Einheit, um Zeichen in einem Encoding darzustellen #hinweis[(bietet den Speicherplatz)]\
 #hinweis[_$bold(P_i) =$_ $i$-tes Bit des unkodierten CPs,
-  _$bold(U_i) =$_ $i$-tes Code-Unit des kodierten CPs,
-  _$bold(B_i) =$_ $i$-tes Byte des kodierten CPs]
+    _$bold(U_i) =$_ $i$-tes Code-Unit des kodierten CPs,
+    _$bold(B_i) =$_ $i$-tes Byte des kodierten CPs]
 
 == UTF-32
 Jede CU umfasst _32 Bit_, jeder CP kann mit _einer CU_ dargestellt werden. Direkte Kopie der
@@ -1262,99 +1340,130 @@ wegen dem Separator _ungültig_ und müssen "umgerechnet" werden.\
 ==== Beispiel
 Encoding von U+10'437 (\u{10437})
 #hinweis[#fxcolor("grün", bits("00 0100 0001", suffix: false))
-#fxcolor("gelb", bits("00 0011 0111"))]:
+    #fxcolor("gelb", bits("00 0011 0111"))]:
 
 + Code-Point $P$ minus #hex("10000") rechnen und in Binär umwandeln\
-  $P = hex("10437"), quad Q = hex("10437") - hex("10000") = hex("0437")
+    $P = hex("10437"), quad Q = hex("10437") - hex("10000") = hex("0437")
     = fxcolor("grün", #bits("00 0000 0001", suffix: false)) fxcolor("gelb", bits("00 0011 0111"))$
 + Obere & untere 10 Bits in Hex umwandeln\
-  $fxcolor("grün", #hex("0001", suffix: false)) fxcolor("gelb", hex("0137"))$\
+    $fxcolor("grün", #hex("0001", suffix: false)) fxcolor("gelb", hex("0137"))$\
 + Oberer Wert mit #hex("D800") und unterer Wert mit #hex("DC00") addieren, um Code-Units zu erhalten\
-  $U_1 = fxcolor("grün", hex("0001")) + hex("D800") = fxcolor("orange", hex("D801")), quad
+    $U_1 = fxcolor("grün", hex("0001")) + hex("D800") = fxcolor("orange", hex("D801")), quad
     U_2 = fxcolor("gelb", hex("0137")) + hex("DC00") = fxcolor("hellblau", hex("DD37"))$\
 + Zu BE/LE zusammensetzen\
-  $"BE" = underline(fxcolor("orange", #hex("D801", suffix: false)) thin
-  fxcolor("hellblau", hex("DD37"))), quad
-    "LE" = underline(fxcolor("orange", #hex("01D8", suffix: false)) thin
-  fxcolor("hellblau", hex("37DD")))$
+    $"BE" = underline(
+        fxcolor("orange", #hex("D801", suffix: false)) thin
+        fxcolor("hellblau", hex("DD37"))
+    ), quad
+    "LE" = underline(
+        fxcolor("orange", #hex("01D8", suffix: false)) thin
+        fxcolor("hellblau", hex("37DD"))
+    )$
 
 == UTF-8
 Jede CU umfasst _8 Bit_, ein CP benötigt _1 bis 4 CUs_. Encoding muss Endianness _nicht_
 berücksichtigen. Standard für Webpages. Echte Erweiterung von ASCII.
 #let nextCU = bits("10xx xxxx")
 #table(
-  columns: (auto, 1fr, 1fr, 1fr, 1fr, 1fr),
-  table.header([Code-Point in], [$bold(U_3)$], [$bold(U_2)$], [$bold(U_1)$], [$bold(U_0)$], [signifikant]),
-  [#hex("0") - #hex("7F")], [], [], [], [#bits("0xxx xxxx")], [7 bits],
-  [#hex("80") - #hex("7FF")], [], [], [#bits("110x xxxx")], [#nextCU], [11 bits],
-  [#hex("800") - #hex("FFFF")], [], [#bits("1110 xxxx")], [#nextCU], [#nextCU], [16 bits],
-  [#hex("10000") - #hex("10FFFF")], [#bits("1111 0xxx")], [#nextCU], [#nextCU], [#nextCU], [21 bits],
+    columns: (auto, 1fr, 1fr, 1fr, 1fr, 1fr),
+    table.header([Code-Point in], [$bold(U_3)$], [$bold(U_2)$], [$bold(U_1)$], [$bold(U_0)$], [signifikant]),
+    [#hex("0") - #hex("7F")], [], [], [], [#bits("0xxx xxxx")], [7 bits],
+    [#hex("80") - #hex("7FF")], [], [], [#bits("110x xxxx")], [#nextCU], [11 bits],
+    [#hex("800") - #hex("FFFF")], [], [#bits("1110 xxxx")], [#nextCU], [#nextCU], [16 bits],
+    [#hex("10000") - #hex("10FFFF")], [#bits("1111 0xxx")], [#nextCU], [#nextCU], [#nextCU], [21 bits],
 )
 #image("img/bsys_44.png")
 
 ==== Beispiele
 - _ä_: $P = hex("E4") = fxcolor("grün", #bits("00011", suffix: false)) thin
-  fxcolor("gelb", bits("10 0110"))$\
-  $=> P_10 ... P_6 = fxcolor("grün", bits("00011")) = fxcolor("rot", hex("03")), quad
+    fxcolor("gelb", bits("10 0110"))$\
+    $=> P_10 ... P_6 = fxcolor("grün", bits("00011")) = fxcolor("rot", hex("03")), quad
     P_5 ... P_0 = fxcolor("gelb", bits("100100")) = fxcolor("orange", hex("24"))$\
-  $=> U_1 = hex("C0") (= bits("11000000")) + fxcolor("rot", hex("03")) = hex("C3"), quad
+    $=> U_1 = hex("C0") (= bits("11000000")) + fxcolor("rot", hex("03")) = hex("C3"), quad
     U_0 = hex("80") (= bits("10000000")) + fxcolor("orange", hex("24")) = hex("A4")$\
-  $=> ä = underline(hex("C3 A4"))$
+    $=> ä = underline(hex("C3 A4"))$
 - _ặ_: $P = hex("1EB7") = fxcolor("grün", #bits("0001", suffix: false)) thin
     fxcolor("gelb", #bits("111010", suffix: false)) thin fxcolor("hellblau", bits("110111"))$\
-  $=> P_15 ... P_12 = fxcolor("grün", hex("01")), quad
+    $=> P_15 ... P_12 = fxcolor("grün", hex("01")), quad
     P_11 ... P_6 = fxcolor("gelb", hex("3A")), quad
     P_5 ... P_0 = fxcolor("hellblau", hex("37"))$\
-  $=> U_2 = hex("E0") (= #bits("11100000")) + fxcolor("grün", hex("01")) = hex("E1"), quad
+    $=> U_2 = hex("E0") (= #bits("11100000")) + fxcolor("grün", hex("01")) = hex("E1"), quad
     U_1 = hex("80") + fxcolor("gelb", hex("3A")) = hex("BA"), space
     U_0 = hex("80") + fxcolor("hellblau", hex("37")) = hex("B7")$\
-  $=> ặ = underline(hex("E1 BA B7"))$
+    $=> ặ = underline(hex("E1 BA B7"))$
 
 == Encoding-Beispiele
 #{
-  set text(size: 0.94em)
-  table(
-    align: (_, y) => if (y == 0) { left } else { right },
-    columns: (auto,) + (1fr,) * 6,
-    table.header([Zeichen], [Code-Point], [UTF-32BE], [UTF-32LE], [UTF-8], [UTF-16BE], [UTF-16LE]),
-    [A], [#hex("41")], [#hex("00 00 00 41")], [#hex("41 00 00 00")], [#hex("41")], [#hex("00 41")], [#hex("41 00")],
-    [ä], [#hex("E4")], [#hex("00 00 00 E4")], [#hex("E4 00 00 00")], [#hex("C3 A4")], [#hex("00 E4")], [#hex("E4 00")],
-    [\u{3B1}], [#hex("3 B1")], [#hex("00 00 03 B1")], [#hex("B1 03 00 00")], [#hex("CE B1")], [#hex("03 B1")], [#hex("B1 03")],
-    [\u{1EB7}], [#hex("1E B7")], [#hex("00 00 1E B7")], [#hex("B7 1E 00 00")], [#hex("E1 BA B7")], [#hex("1E B7")], [#hex("B7 1E")],
-    [\u{10330}], [#hex("1 03 30")], [#hex("00 01 03 30")], [#hex("30 03 01 00")], [#hex("F0 90 8C B0")], [#hex("D8 00 DF 30")], [#hex("00 D8 30 DF")],
-  )
+    set text(size: 0.94em)
+    table(
+        align: (_, y) => if (y == 0) { left } else { right },
+        columns: (auto,) + (1fr,) * 6,
+        table.header([Zeichen], [Code-Point], [UTF-32BE], [UTF-32LE], [UTF-8], [UTF-16BE], [UTF-16LE]),
+        [A], [#hex("41")], [#hex("00 00 00 41")], [#hex("41 00 00 00")], [#hex("41")], [#hex("00 41")], [#hex("41 00")],
+        [ä],
+        [#hex("E4")],
+        [#hex("00 00 00 E4")],
+        [#hex("E4 00 00 00")],
+        [#hex("C3 A4")],
+        [#hex("00 E4")],
+        [#hex("E4 00")],
+
+        [\u{3B1}],
+        [#hex("3 B1")],
+        [#hex("00 00 03 B1")],
+        [#hex("B1 03 00 00")],
+        [#hex("CE B1")],
+        [#hex("03 B1")],
+        [#hex("B1 03")],
+
+        [\u{1EB7}],
+        [#hex("1E B7")],
+        [#hex("00 00 1E B7")],
+        [#hex("B7 1E 00 00")],
+        [#hex("E1 BA B7")],
+        [#hex("1E B7")],
+        [#hex("B7 1E")],
+
+        [\u{10330}],
+        [#hex("1 03 30")],
+        [#hex("00 01 03 30")],
+        [#hex("30 03 01 00")],
+        [#hex("F0 90 8C B0")],
+        [#hex("D8 00 DF 30")],
+        [#hex("00 D8 30 DF")],
+    )
 }
 #hinweis[Bei LE / BE werden nur die Zeichen _innerhalb_ eines Code-Points vertauscht,
-  nicht die Code-Points an sich.]
+    nicht die Code-Points an sich.]
 
 = Ext2-Dateisystem
 _Partition_ #hinweis[(Ein Teil eines Datenträgers, wird selbst wie ein Datenträger behandelt.)],
 _Volume_ #hinweis[(Ein Datenträger oder eine Partition davon.)],
 _Sektor_ #hinweis[(Kleinste logische Untereinheit eines Volumes.
-Daten werden als Sektoren transferiert. Grösse ist von HW definiert.
-Enthält Header, Daten und Error-Correction-Codes.)],
+    Daten werden als Sektoren transferiert. Grösse ist von HW definiert.
+    Enthält Header, Daten und Error-Correction-Codes.)],
 _Format_ #hinweis[(Layout der logischen Strukturen auf dem Datenträger, wird vom Dateisystem definiert.)]\
 
 == Block
 Ein Block besteht aus _mehreren aufeinanderfolgenden Sektoren_ #hinweis[(1 KB, 2 KB oder
-4 KB (normal))]. Das gesamte Volume ist in _Blöcke aufgeteilt_ und Speicher wird _nur in
+    4 KB (normal))]. Das gesamte Volume ist in _Blöcke aufgeteilt_ und Speicher wird _nur in
 Form von Blöcken_ alloziert. Ein Block enthält nur Daten einer _einzigen Datei_. Es gibt
 _Logische Blocknummern_ #hinweis[(Blocknummer vom Anfang der Datei aus gesehen, wenn Datei
-eine ununterbrochene Abfolge von Blöcken wäre)] und
+    eine ununterbrochene Abfolge von Blöcken wäre)] und
 _Physische Blocknummern_ #hinweis[(Tatsächliche Blocknummer auf dem Volume)].
 
 == Inodes
 #wrap-content(
-  image("img/bsys_42.png"),
-  align: top + right,
-  columns: (30%, 70%),
+    image("img/bsys_42.png"),
+    align: top + right,
+    columns: (30%, 70%),
 )[
-  Enthält _alle Metadaten_ über die Datei, _ausser Namen oder Pfad_ #hinweis[(Grösse,
-  Anzahl der verwendeten Blöcke, Erzeugungszeit, Zugriffszeit, Modifikationszeit,
-  Löschzeit, Owner-ID, Group-ID, Flags, Permission Bits)].
-  Hat eine _fixe Grösse_ je Volume: Zweierpotenz, mind. 128 Byte, max. 1 Block.
-  Der Inode _verweist auf die Blöcke_, die _Daten für eine Datei_ enthalten.
-  Enthält ein Array _`i_block`_ mit 15 Einträgen zu je 32 Bit.
+    Enthält _alle Metadaten_ über die Datei, _ausser Namen oder Pfad_ #hinweis[(Grösse,
+        Anzahl der verwendeten Blöcke, Erzeugungszeit, Zugriffszeit, Modifikationszeit,
+        Löschzeit, Owner-ID, Group-ID, Flags, Permission Bits)].
+    Hat eine _fixe Grösse_ je Volume: Zweierpotenz, mind. 128 Byte, max. 1 Block.
+    Der Inode _verweist auf die Blöcke_, die _Daten für eine Datei_ enthalten.
+    Enthält ein Array _`i_block`_ mit 15 Einträgen zu je 32 Bit.
 ]
 *Lokalisierung:*
 Alle Inodes aller Blockgruppen gelten als _eine grosse Tabelle_. Startet mit 1.\
@@ -1377,51 +1486,51 @@ _Block $bold(n+3)$ bis $bold(n+m+2)$_ #hinweis[(Tabelle aller Inodes in dieser G
 _Block $bold(n+m+3)$ bis Ende der Gruppe_ #hinweis[(Blöcke der eigentlichen Daten)]\
 *Superblock:*
 Enthält _alle Metadaten_ über das Volume #hinweis[(Anzahlen, Zeitpunkte, Statusbits,
-Erster Inode, ...)] \ immer an Byte 1024, wegen möglicher Bootdaten vorher.\
+    Erster Inode, ...)] \ immer an Byte 1024, wegen möglicher Bootdaten vorher.\
 *Sparse Superblock:*
 Kopien des Superblocks werden nur in Blockgruppe 0, 1 und allen reinen Potenzen von 3, 5
 oder 7 gehalten #hinweis[(Sehr hoher Wiederherstellungsgrad, aber deutlich weniger
-Platzverbrauch)].\
+    Platzverbrauch)].\
 *Gruppendeskriptor:*
 32 Byte _Beschreibung einer Blockgruppe_. #hinweis[(Blocknummer des Block-Usage-Bitmaps,
-Blocknummer des Inode-Usage-Bitmaps, Nummer des ersten Blocks der Inode-Tabelle,
-Anzahl freier Blöcke und Inodes in der Gruppe, Anzahl der Verzeichnisse in der Gruppe)]\
+    Blocknummer des Inode-Usage-Bitmaps, Nummer des ersten Blocks der Inode-Tabelle,
+    Anzahl freier Blöcke und Inodes in der Gruppe, Anzahl der Verzeichnisse in der Gruppe)]\
 *Gruppendeskriptortabelle:*
 Tabelle mit Gruppendeskriptor pro Blockgruppe im Volume. Folgt direkt auf Superblock(-kopie).
 $32 dot n$ Bytes gross. Anzahl Sektoren $= (32 dot n)\/"Sektorgrösse"$\
 *Verzeichnisse:*
 Enthält _Dateieinträge_ mit variabler Länge von 8 - 263 Byte
 #hinweis[(4B Inode, 2B Eintraglänge, 1B Dateinamenlänge, 1B Dateityp, 0 - 255B Dateiname
-aligned auf 4B).] Defaulteinträge: "." und ".."\
+    aligned auf 4B).] Defaulteinträge: "." und ".."\
 *Links:*
 Es gibt _Hard-Links_ #hinweis[(gleicher Inode, verschiedene Pfade:
-Wird von verschiedenen Dateieinträgen referenziert)] und
+    Wird von verschiedenen Dateieinträgen referenziert)] und
 _Symbolische Links_ #hinweis[(Wie eine Datei, Datei enthält Pfad anderer Datei)].
 
 
 == Vergleich FAT, NTFS, Ext2
 #{
-  set text(size: 0.8em)
-  table(
-    columns: (1fr, 1fr, auto),
-    table.header([FAT], [Ext2], [NTFS]),
-    [
-      - Verzeichnis enthält alle Daten über die Datei
-      - Datei ist in einem einzigen Verzeichnis
-      - Keine Hard-Links möglich
-    ],
-    [
-      - Dateien werden durch Inodes beschrieben
-      - Kein Link von der Datei zurück zum Verzeichnis
-      - Hard-Links möglich
-    ],
-    [
-      - Dateien werden durch File-Records beschrieben
-      - Verzeichnis enthält Namen und Link auf Datei
-      - Link zum Verzeichnis und Name sind in einem Attribut
-      - Hard-Links möglich
-    ],
-  )
+    set text(size: 0.8em)
+    table(
+        columns: (1fr, 1fr, auto),
+        table.header([FAT], [Ext2], [NTFS]),
+        [
+            - Verzeichnis enthält alle Daten über die Datei
+            - Datei ist in einem einzigen Verzeichnis
+            - Keine Hard-Links möglich
+        ],
+        [
+            - Dateien werden durch Inodes beschrieben
+            - Kein Link von der Datei zurück zum Verzeichnis
+            - Hard-Links möglich
+        ],
+        [
+            - Dateien werden durch File-Records beschrieben
+            - Verzeichnis enthält Namen und Link auf Datei
+            - Link zum Verzeichnis und Name sind in einem Attribut
+            - Hard-Links möglich
+        ],
+    )
 }
 
 = Ext4
@@ -1436,7 +1545,7 @@ Positive Zahlen = Block initialisiert, Negativ = Block voralloziert. Im Inode ha
 *Extent Trees:*
 _Index-Knoten_ #hinweis[(Innerer Knoten des Baums, besteht aus Index-Eintrag und Index-Block)],\
 _Index-Eintrag_ #hinweis[(Enthält Nummer des physischen Index-Blocks und kleinste logische
-Blocknummer aller Kindknoten)],
+    Blocknummer aller Kindknoten)],
 _Index-Block_ #hinweis[(Enthält eigenen Tree-Header und Referenz auf Kindknoten)]\
 *Extent Tree Header:*
 Benötigt ab 4 Extents, weil zusätzlicher Block.
@@ -1452,36 +1561,36 @@ Nodes nötig.
 
 === Notation
 #{
-  set text(size: 0.8em)
-  table(
-    columns: (1fr, 1fr),
-    table.header([(in)direkte Adressierung], [Extent-Trees]),
-    [_direkte Blöcke:_ Index $|->$ Blocknummer],
-    [_Indexknoten:_ Index $|->$ (Kindblocknummer, kleinste Nummer der 1. logischen Blöcke aller Kinder)],
+    set text(size: 0.8em)
+    table(
+        columns: (1fr, 1fr),
+        table.header([(in)direkte Adressierung], [Extent-Trees]),
+        [_direkte Blöcke:_ Index $|->$ Blocknummer],
+        [_Indexknoten:_ Index $|->$ (Kindblocknummer, kleinste Nummer der 1. logischen Blöcke aller Kinder)],
 
-    [_indirekte Blöcke:_ indirekter Block.Index $|->$ direkter Block],
-    [_Blattknoten:_ Index $|->$ (1. logisch. Block, 1. phy. Block, Anz. Blöcke)],
+        [_indirekte Blöcke:_ indirekter Block.Index $|->$ direkter Block],
+        [_Blattknoten:_ Index $|->$ (1. logisch. Block, 1. phy. Block, Anz. Blöcke)],
 
-    [], [_Header:_ Index $|->$ (Anz. Einträge, Tiefe)],
-  )
+        [], [_Header:_ Index $|->$ (Anz. Einträge, Tiefe)],
+    )
 }
 
 ==== Beispiel Berechnung 2MB grosse, konsekutiv gespeicherte Datei, 2KB Blöcke ab Block #hex("2000")
 _(In-)direkte Block-Adressierung_\
-2 MB = $2^21$B, #math.quad 2 KB = $2^11$B, #math.quad $ 2^(21-11) = 2^10 = #fxcolor("rot", hex("400"))$
+2 MB = $2^21$B, #math.quad 2 KB = $2^11$B, #math.quad $2^(21-11) = 2^10 = #fxcolor("rot", hex("400"))$
 Blöcke von #fxcolor("grün", hex("2000")) bis #fxcolor("orange", hex("23FF"))\
 $0 arrow.bar #fxcolor("grün", hex("2000")), quad
-  1 arrow.bar #hex("2002"), space ..., space
-  #hex("B") arrow.bar #hex("200B"), quad
-  #hex("C") arrow.bar #hex("2400")$ #hinweis[(indirekter Block)]\
+1 arrow.bar #hex("2002"), space ..., space
+#hex("B") arrow.bar #hex("200B"), quad
+#hex("C") arrow.bar #hex("2400")$ #hinweis[(indirekter Block)]\
 $#hex("1400").#hex("0") arrow.bar #hex("200C"), quad
-  #hex("1400").#hex("1") arrow.bar #hex("200D"), space
-  ..., space
-  #hex("1400").#hex("3F3") arrow.bar #fxcolor("orange", hex("23FF"))$
+#hex("1400").#hex("1") arrow.bar #hex("200D"), space
+..., space
+#hex("1400").#hex("3F3") arrow.bar #fxcolor("orange", hex("23FF"))$
 
 _Extent Trees_\
 *Header:* $0 arrow.bar (1,0)$\
-*Extent:* $1 arrow.bar (0, #fxcolor("grün", hex("2000")), #fxcolor("rot",hex("400")))$
+*Extent:* $1 arrow.bar (0, #fxcolor("grün", hex("2000")), #fxcolor("rot", hex("400")))$
 
 == Journaling
 Wenn Dateisystem beim _Erweitern_ einer Datei _unterbrochen_ wird, kann es zu
@@ -1514,14 +1623,14 @@ der Bildschirm ist die Wurzel #hinweis[(z.B. Dialogbox, Scrollbar, Button...)].\
 
 == GUI Architektur
 Nicht nur X Window System, sondern auch _Window Manager_ #hinweis[(Verwaltung der sichtbaren
-Fenster, Umrandung, Knöpfe. Läuft im Client und realisiert Window Layout Policy)] und
+    Fenster, Umrandung, Knöpfe. Läuft im Client und realisiert Window Layout Policy)] und
 _Desktop Manager_ #hinweis[(Desktop-Hilfsmittel wie Taskleiste, Dateimanager, Papierkorb etc.)].\
 
 == Xlib
 Ist das _C Interface_ für das X Protocol. Wird meist nicht direkt verwendet.\
 *Funktionen:*
 ```c XOpenDisplay()``` #hinweis[öffnet Verbindung zum Display,
-NULL = Wert von `DISPLAY` Umgebungsvariabel)],
+    NULL = Wert von `DISPLAY` Umgebungsvariabel)],
 ```c XCloseDisplay()``` #hinweis[schliesst Verbindung],
 ```c XCreateSimpleWindow()``` #hinweis[erzeugt ein Fenster],
 ```c XDestroyWindow()``` #hinweis[entfernt ein Fenster & Unterfenster],
@@ -1546,7 +1655,7 @@ _Server-Seitig_ berücksichtigt Netzwerkverfügbarkeit, _Client-Seitige_ hält E
 Ereignisse werden vom Client verarbeitet oder weitergeleitet.
 Muss _festlegen, welche_ Typen er empfangen will.
 ```c XSelectInput()``` #hinweis[legt fest, welche Events via Event-Masken empfangen werden,
-z.B. `ExposureMask`],
+    z.B. `ExposureMask`],
 ```c XNextEvent()``` #hinweis[kopiert den nächsten Event aus dem Buffer].
 
 == Zeichnen

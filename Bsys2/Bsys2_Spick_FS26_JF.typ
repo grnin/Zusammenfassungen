@@ -1,10 +1,11 @@
 
 // Compiled with Typst 0.13.1
 #import "../template_cheatsheet.typ": *
+// #import "../template_zusammenf.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
 #show: project.with(
-    authors: ("Jasmin Fässler", "Nina Grässli", "Jannis Tschan"),
+    authors: ("Jasmin Fässler",),
     fach: "BSys2",
     fach-long: "Betriebssysteme 2",
     semester: "FS26",
@@ -13,7 +14,6 @@
     font-size: 4pt,
     landscape: true,
 )
-
 
 
 #let wait = ```c wait()```
@@ -134,27 +134,13 @@ int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
 }
 
 = Betriebssystem API
-/ Aufgaben: Abstraktion, Portabilität, Ressourcenmanagement & Isolation der Anwendungen,
-Benutzerverwaltung und Sicherheit.
-*Privilege Levels:*
-_Kernel-Mode_ #hinweis[(darf alles ausführen, Ring 0)],
-_User-Mode_ #hinweis[(darf nur beschränkte Menge an Instruktionen ausführen, Ring 3)]\
-*Kernels:*
-_Microkernel_ #hinweis[(nur kritische Teile laufen im Kernel-Mode)],
-_Monolithisch_ #hinweis[(meiste OS, weniger Wechsel, weniger Schutz)],
-_Unikernel_ #hinweis[(Kernel ist nur ein Programm)]\
-*`syscall`*
-veranlasst den Prozessor, in den Kernel Mode zu schalten. Jede OS-Kernel-Funktion
-hat einen Code, der einem Register übergeben werden muss. #hinweis[(`exit` hat den Code 60)]\
-*ABI:*
-Application Binary Interface, Abstrakte Schnittstelle mit platformunabhängigen Aspekten.
-*API:*
-Application Programming Interface, Konkrete Schnittstellen, Calling Convention, Abbildung
-von Datenstrukturen. _Linux-Kernels_ sind API-, aber nicht ABI-kompatibel.
-#hinweis[(C-Wrapper-Funktionen)]\
-*POSIX:*
-Portable Operating System Interface. Sammlung von IEEE Standards, welche die Kompatibilität
-zwischen OS gewährleistet. Windows ist nicht POSIX-konform.
+/ Aufgaben: Abstraktion, Portabilität, Ressourcenmanagement & Isolation der Anwendungen, Benutzerverwaltung und Sicherheit
+/ Privilege Levels: _Kernel-Mode_ #hinweis[(darf alles ausführen, Ring 0)], _User-Mode_ #hinweis[(darf nur beschränkte Menge an Instruktionen ausführen, Ring 3)]
+/ Kernels: _Microkernel_ #hinweis[(nur kritische Teile laufen im Kernel-Mode)], _Monolithisch_ #hinweis[(meiste OS, weniger Wechsel, weniger Schutz)], _Unikernel_ #hinweis[(Kernel ist nur ein Programm)]
+/ `syscall`: veranlasst den Prozessor, in den Kernel Mode zu schalten. Jede OS-Kernel-Funktion hat einen Code, der einem Register übergeben werden muss. #hinweis[(`exit` hat den Code 60)]
+/ ABI: Application Binary Interface, Abstrakte Schnittstelle mit platformunabhängigen Aspekten
+/ API: Application Programming Interface, Konkrete Schnittstellen, Calling Convention, Abbildung von Datenstrukturen. _Linux-Kernels_ sind API-, aber nicht ABI-kompatibel. #hinweis[(C-Wrapper-Funktionen)]
+/ POSIX: Portable Operating System Interface. Sammlung von IEEE Standards, welche die Kompatibilität zwischen OS gewährleistet. Windows ist nicht POSIX-konform.
 
 == Programmargumente
 `clang` *`-c abc.c -o abc.o`*. Die Shell teilt Programmargumente in Strings auf

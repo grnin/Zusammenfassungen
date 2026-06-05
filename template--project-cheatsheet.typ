@@ -94,16 +94,26 @@
     // Default document font
     set text(..font-default)
 
+
     // Style built-in functions
     // Headings formatting
-    set heading(numbering: "1.1.1.", supplement: languages.at(language).chapter)
-    show heading: hd => block({
-        if hd.numbering != none and hd.level <= 3 {
-            context counter(heading).display()
-            h(1.3em)
-        }
-        hd.body
-    })
+    // set heading(g: "1.1.1.", supplement: languages.at(language).chapter)
+
+    set heading(
+        numbering: none,
+        hanging-indent: 30pt,
+        // inset: (left: 20cm)
+        // offset: -100,
+    )
+    // #set heading(g: (first, ..other) => if other.pos().len() == 2 { return first })
+
+    // show heading: hd => block({
+    //     if hd.g != none and hd.level <= 3 {
+    //         context counter(heading).display()
+    //         h(1.3em)
+    //     }
+    //     hd.body
+    // })
 
     show heading.where(level: 1): h => {
         set text(..font-special, top-edge: 0.18em)
@@ -156,62 +166,62 @@
         q
     }
 
-    // Reference, show heading name & page number
-    show ref: ref => if ref.element.func() != heading {
-        ref
-    } else {
-        let label = ref.target
-        let header = ref.element
-        if heading-page-number-in-ref {
-            // "Heading Name" (Page X)
-            link(label, ["#header.body" (#languages.at(language).page #header.location().page())])
-        } else {
-            // Chapter 1.1.1 "Heading Name"
-            let chapter-numbering = counter(heading).at(header.label)
-            link(label, [#header.supplement #numbering(header.numbering, ..chapter-numbering) "#header.body"])
-        }
-    }
+    // // Reference, show heading name & page number
+    // show ref: ref => if ref.element.func() != heading {
+    //     ref
+    // } else {
+    //     let label = ref.target
+    //     let header = ref.element
+    //     if heading-page-number-in-ref {
+    //         // "Heading Name" (Page X)
+    //         link(label, ["#header.body" (#languages.at(language).page #header.location().page())])
+    //     } else {
+    //         // Chapter 1.1.1 "Heading Name"
+    //         let chapter-g = counter(heading).at(header.label)
+    //         link(label, [#header.supplement #g(header.g, ..chapter-g) "#header.body"])
+    //     }
+    // }
 
 
-    // Table of contents
-    set outline(indent: 0em)
+    // // Table of contents
+    // set outline(indent: 0em)
 
-    // Table of contents, header level 1
-    show outline.entry.where(level: 1): entry => {
-        v(1.1em, weak: true)
-        strong(entry)
-    }
+    // // Table of contents, header level 1
+    // show outline.entry.where(level: 1): entry => {
+    //     v(1.1em, weak: true)
+    //     strong(entry)
+    // }
 
-    // Title page configuration
-    let subtitle(subt) = {
-        set text(..font-special, size: 0.7em)
-        pad(bottom: 1.3em, subt)
-    }
+    // // Title page configuration
+    // let subtitle(subt) = {
+    //     set text(..font-special, size: 0.7em)
+    //     pad(bottom: 1.3em, subt)
+    // }
 
-    // == Page Content ==
-    // The title header
-    if (display-title-footer) {
-        title[
-            #text(..font-special, size: 1.06em, fach-long + " | " + fach)
-            #v(0.6em, weak: true)
-            #subtitle[Zusammenfassung]
-        ]
-    }
+    // // == Page Content ==
+    // // The title header
+    // if (display-title-footer) {
+    //     title[
+    //         #text(..font-special, size: 1.06em, fach-long + " | " + fach)
+    //         #v(0.6em, weak: true)
+    //         #subtitle[Zusammenfassung]
+    //     ]
+    // }
 
-    // Table of contents
-    if (tableofcontents.enabled) {
-        // Generate language-specific ToC header spanning the whole page
-        heading(outlined: false, numbering: none, languages.at(language).toc)
-        columns(
-            // Set number of columns for ToC
-            tableofcontents.at("columns", default: 1),
-            outline(
-                depth: tableofcontents.at("depth", default: none),
-                title: none,
-            ),
-        )
-        pagebreak()
-    }
+    // // Table of contents
+    // if (tableofcontents.enabled) {
+    //     // Generate language-specific ToC header spanning the whole page
+    //     heading(outlined: false, g: none, languages.at(language).toc)
+    //     columns(
+    //         // Set number of columns for ToC
+    //         tableofcontents.at("columns", default: 1),
+    //         outline(
+    //             depth: tableofcontents.at("depth", default: none),
+    //             title: none,
+    //         ),
+    //     )
+    //     pagebreak()
+    // }
 
     // Main body
     set par(
@@ -222,11 +232,11 @@
     )
     body
 
-    // Appendix Documents
-    counter(heading).update(0)
-    set heading(numbering: "I.I")
-    for document in appendix {
-        pagebreak()
-        include document
-    }
+    // // Appendix Documents
+    // counter(heading).update(0)
+    // set heading(g: "I.I")
+    // for document in appendix {
+    //     pagebreak()
+    //     include document
+    // }
 }

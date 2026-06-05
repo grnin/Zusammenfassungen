@@ -1,7 +1,7 @@
 // Global variables
 #let colors = (
-    hellblau: rgb("#29769E"),
-    dunkelblau: rgb("#1A4E69"),
+    hellblau: rgb("#00aebb"),
+    dunkelblau: rgb("#1a6469"),
     grün: rgb("#8B9654"),
     hellgrün: rgb("#BFBC8A"),
     gelb: rgb("#F2C12E"),
