@@ -115,17 +115,49 @@
     //     hd.body
     // })
 
+
+    // H1
     show heading.where(level: 1): h => {
-        set text(..font-special, top-edge: 0.18em)
-        set par(leading: 1.3em, hanging-indent: 2.5em)
-        line(length: 100%, stroke: 0.18em + colors.hellblau)
-        upper(h)
+        // set text(..font-special, top-edge: 0.18em)
+        // set par(leading: 1.3em, hanging-indent: 2.5em)
+        // line(length: 100%, stroke: 0.18em + colors.hellblau)
+        block(
+            fill: rgb("#4472c4"),
+            // upper(h),
+            sticky: true,
+            text(
+                // font: text-font,
+                font: "Calibri",
+                style: "normal",
+                weight: "light",
+                tracking: 0.75pt,
+                fill: white,
+                stroke: white,
+                size: 7pt,
+                top-edge: 2pt,
+                bottom-edge: 1pt,
+                upper(h.body),
+            ),
+        )
         v(0.45em)
     }
+    show heading.where(level: 1): set text(
+        font: "Calibri",
+        style: "normal",
+        weight: "light",
+        tracking: 0.75pt,
+        fill: white,
+        stroke: white,
+        size: 7pt,
+        top-edge: 2pt,
+        bottom-edge: 1pt,
+    )
 
+    // H2
     show heading.where(level: 2): h => {
         set text(size: 0.9em)
         upper(h)
+        // d9e2f3
     }
 
     // Remove space above H4, fixes spacing between H3 & H4

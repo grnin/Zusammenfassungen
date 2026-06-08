@@ -9,5 +9,4 @@
 #import "template--additional-formatting-templates.typ": *
 
 
-
 //

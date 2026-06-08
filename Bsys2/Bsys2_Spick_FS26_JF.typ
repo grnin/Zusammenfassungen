@@ -15,6 +15,14 @@
     landscape: true,
 )
 
+// #set text(
+//     font: "Calibri",
+//     style: "normal",
+//     weight: "light",
+//     tracking: 0.75pt,
+//     stroke: white,
+//     size: 7pt,
+// )
 
 #let wait = ```c wait()```
 
