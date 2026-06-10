@@ -174,7 +174,7 @@
 
     show heading.where(level: 4): h => {
         block(
-            above: 7pt,
+            above: 5pt,
             below: 3pt,
             text(
                 // size: 1.1em,
@@ -300,6 +300,28 @@
             it.body,
         )
     }
+
+
+    // more syntaxes compact
+    set enum(tight: true, spacing: .5em)
+    set list(tight: true, spacing: .5em)
+    set terms(
+        separator: [: ],
+        hanging-indent: 0.75em,
+        tight: true,
+        spacing: .5em,
+    )
+    // // terms with more spacing:
+    // show terms: body => {
+    //     body
+    //         .children
+    //         .map(it => pad(left: body.indent + body.hanging-indent, {
+    //             box(inset: (left: -body.hanging-indent), emph(it.term))
+    //             emph(body.separator)
+    //             it.description
+    //         }))
+    //         .join()
+    // }
 
 
     // Code, use with ```python print("Hello World")```

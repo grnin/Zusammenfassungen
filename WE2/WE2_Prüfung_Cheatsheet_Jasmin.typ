@@ -26,17 +26,12 @@
 = React
 == React Regeln (Komponente, HTML, JSX)
 - [ ] Nur ein Rückgabewert: 1 parent element (Root Element) oder React.Fragment `<></>`
-// - Nur ein einziges Root Element zurückgeben (`->` Siehe React Fragment)
 - [ ] Naming der Komponente
     - UpperCamelCase
     - treffende Beschreibung der Komponente
         - Beispiele: LinkButton , InfoTooltip , DraftEditor
-- [ ] HTML Attribute in JSX mit camelCase
-    // TODO durchstreichen
-    - __`class`__ `->` `className`
-    - __`for`__ in Formularfeldern `->` `htmlFor`
-    - __`stroke-width`__ `->` `strokeWidth`
-    - ausser `aria-*` und `data-*`
+- [ ] HTML Attribute in JSX mit camelCase (ausser `aria-*` und `data-*`)
+    - #strike[class] `->` `className`, #strike[for] in Formularfeldern `->` `htmlFor`, #strike[stroke-width] `->` `strokeWidth`
 - [ ] HTML Elemente geschlossen, z.B. `<img />` ,`<input />`
 - [ ] Syntax wie in JS: Wert in `{title}`
 
@@ -59,10 +54,5 @@
 #include "./_code-to-add-react.typ"
 
 #include "./_code-to-add-express.typ"
-
-
-
-
-
 
 

@@ -260,43 +260,37 @@ _`lseek(fd, 0, SEEK_END)`:_ gibt die Grösse der Datei zurück.
 === Unterschiede Windows und POSIX
 In Windows werden Pfad-Bestandteile durch Backslash (`\`) getrennt + es gibt ein Wurzelverzeichnis pro Datenträger/Partition + andere File-Handling-Funktionen. (z.B. open <-> CreateFile)
 
-== C Stream API
+== C Stream API (File API)
 Unabhängig vom Betriebssystem, Stream-basiert, gepuffert oder ungepuffert,
 hat einen eigenen File-Position-Indicator.
 
 / Streams: `FILE *` enthält _Informationen über einen Stream_. Soll nicht direkt verwendet oder kopiert werden, sondern nur über von C-API erzeugte Pointer.
 
-*```c FILE * fopen(char const *path, char const *mode)```:*
+/ ```c FILE * fopen(char const *path, char const *mode)```:
 _Öffnen eine Datei._ Erzeugt `FILE`-Objekt für Datei an `path`. Flags für `mode`:
 _`"r"`_ #hinweis[(Datei lesen)],
-_`"w"`_ #hinweis[(in neue oder bestehende geleerte Datei schreiben)],\
+_`"w"`_ #hinweis[(in neue oder bestehende geleerte Datei schreiben)],
 _`"a"`:_ #hinweis[(in neue oder bestehende Datei anfügen)],
 _`"r+`:_ #hinweis[(Datei lesen & schreiben)],
 _`"w+"`_ #hinweis[(neue oder geleerte bestehende Datei lesen & überschreiben)],
 _`"a+"`_ #hinweis[(neue oder bestehende Datei lesen & an Datei anfügen)].
 Gibt Pointer auf erzeugtes `FILE`-Objekt zurück oder 0 bei Fehler.
-```c FILE * fdopen(int fd, char const * mode)```
-ist gleich, aber statt Pfad wird direkt der FD übergeben.
-```c int fileno (FILE *stream)```
-gibt FD zurück. Nach API-Umwandlung vorherige nicht mehr verwenden.\
-*```c int fclose(FILE *file)```:*
-_Schliesst eine Datei._
-Ruft ```c fflush()``` #hinweis[(schreibt Inhalt aus Speicher in die Datei)] auf, schliesst
-den Stream, entfernt `file` aus Speicher und gibt 0 zurück wenn OK, andernfalls `EOF`.\
-*```c int fgetc(FILE *stream)```:*
-_Liest_ das nächste Byte und erhöht FPI um 1.\
-```c char * fgets(char *buf, int n, FILE *stream)``` liest bis zu $n-1$ Zeichen aus `stream`.\
-*```c int ungetc(int c, FILE *stream)```:*
-_Lesen rückgängig machen._ Nutzt Unget-Stack.\
-*```c int fputc(int c, FILE *stream)```: *
-_Schreibt `c` in eine Datei._ ```c int fputs(char *s, FILE *stream)``` schreibt die Zeichen
-vom String `s` bis zur terminierenden 0 in `stream`.
+```c FILE * fdopen(int fd, char const * mode)``` ist gleich, aber statt Pfad wird direkt der FD übergeben.
 
-=== Dateiende und Fehler:
+TODO: was für API-UmwaNDLUNG?
+
+/ ```c int fileno (FILE *stream)```: gibt FD zurück. Nach API-Umwandlung vorherige nicht mehr verwenden.
+/ ```c int fclose(FILE *file)```: _Schliesst eine Datei._ Ruft ```c fflush()``` #hinweis[(schreibt Inhalt aus Speicher in die Datei)] auf, schliesst den Stream, entfernt `file` aus Speicher und gibt 0 zurück wenn OK, andernfalls `EOF`.
+/ ```c int fgetc(FILE *stream)```: _Liest_ das nächste Byte und erhöht FPI um 1.
+/ ```c char * fgets(char *buf, int n, FILE *stream)```: liest bis zu $n-1$ Zeichen aus `stream`.
+/ ```c int ungetc(int c, FILE *stream)```: _Lesen rückgängig machen._ Nutzt Unget-Stack.
+/ ```c int fputc(int c, FILE *stream)```: _Schreibt `c` in eine Datei._ ```c int fputs(char *s, FILE *stream)``` schreibt die Zeichen vom String `s` bis zur terminierenden 0 in `stream`.
+
+==== Dateiende und Fehler:
 ```c int feof(FILE *stream)``` gibt 0 zurück, wenn Dateiende _noch nicht_ erreicht wurde\
 ```c int ferror(FILE * stream)``` gibt 0 zurück, wenn _kein_ Fehler auftrat.
 
-=== Manipulation des File-Position-Indicator (FPI):
+==== Manipulation des File-Position-Indicator (FPI):
 ```c long ftell(FILE *stream)``` gibt den gegenwärtigen FPI zurück,
 ```c int fseek (FILE *stream, long offset, int origin)``` setzt den FPI, analog zu `lseek`,
 ```c int rewind (FILE *stream)``` setzt den Stream zurück.
@@ -956,40 +950,7 @@ freigegeben wird.
 
 = Signale, Pipes und Sockets
 #v(-0.5em)
-== Signale
-Signale ermöglichen es, einen Prozess _von aussen_ zu unterbrechen, wie ein _Interrupt_.
-_Unterbrechen_ des gerade laufenden Prozesses/Threads, Auswahl und Ausführen der
-_Signal-Handler-Funktionen_, _Fortsetzen_ des Prozesses. Werden über ungültige Instruktionen
-oder Abbruch auf Seitens Benutzer ausgelöst. Jeder Prozess hat pro Signal einen Handler.\
-*Handler:*
-_Ignore-Handler_ #hinweis[(ignoriert das Signal)],
-_Terminate-Handler_ #hinweis[(beendet das Programm)],
-_Abnormal-Terminate-Handler_ #hinweis[(beendet Programm und erzeugt Core-Dump)].
-Fast alle Signale ausser `SIGKILL` und `SIGSTOP` können _überschrieben_ werden.\
-*Programmfehler-Signale:*
-_`SIGFPE`_ #hinweis[(Fehler in arithmetischen Operation)],
-_`SIGILL`_ #hinweis[(Ungültige Instruktion)],
-_`SIGSEGV`_ #hinweis[(Ungültiger Speicherzugriff)],
-_`SIGSYS`_ #hinweis[(Ungültiger Systemaufruf)]\
-*Prozesse abbrechen:*
-_`SIGTERM`_ #hinweis[(Normale Anfrage an den Prozess, sich zu beenden)],
-_`SIGINT`_ #hinweis[(Nachdrücklichere Aufforderung an den Prozess, sich zu beenden)],
-_`SIGQUIT`_ #hinweis[(Wie `SIGINT`, aber anormale Terminierung)],
-_`SIGABRT`_ #hinweis[(Wie `SIGQUIT`, aber vom Prozess an sich selber)],
-_`SIGKILL`_ #hinweis[(Prozess wird "abgewürgt", kann nicht verhindert werden)]\
-*Stop and Continue:*
-_`SIGTSTP`_ #hinweis[(Versetzt den Prozess in den Zustand _stopped_, ähnlich wie _waiting_)],
-_`SIGSTOP`_ #hinweis[(Wie `SIGTSTP`, aber kann nicht ignoriert oder abgefangen werden)],
-_`SIGCONT`_ #hinweis[(Setzt den Prozess fort)]\
-*Signale von der Shell senden:*
-_`kill 1234 5678`_ sendet `SIGTERM` an Prozesse `1234` und `5678`\
-*```c int sigaction (int signal, struct sigaction *new, struct sigaction *old)```:*\
-Definiert Signal-Handler für `signal`, wenn `new` $!= 0$.
-#hinweis[(Eigene Signal-Handler definiert via `sigaction` struct:
-    `sa_handler`: Zu callende Funktion,
-    `sa_mask`: Blockierte Signale während Ausführung,
-    bearbeitet nur durch `sig*set()`-Funktionen:
-    `sigemptyset`, `sigfillset`, `sigaddset`, `sigdelset`, `sigismember`)]\
+#include "./signale.typ"
 
 == Pipes
 Eine geöffnete Datei entspricht einem _Eintrag in der File-Descriptor-Tabelle (FDT)_ im
@@ -997,8 +958,7 @@ Prozess. Zugriff über _File-API_ #hinweis[(`open`, `close`, `read`, `write`, ..
 Das OS speichert _je Eintrag der Prozess-FDT_ einen _Verweis auf die globale FDT_.
 Bei `fork()` wird die FDT auch kopiert.\
 *```c int dup (int source_fd); int dup2 (int source_fd, int destination_fd)```:*
-_Duplizieren_ den File-Descriptor `source_fd`. _`dup`_ alloziert einen neuen FD,
-_`dup2`_ überschreibt `destination_fd`.
+_Duplizieren_ den File-Descriptor `source_fd`. _`dup`_ alloziert einen neuen FD und return, _`dup2`_ überschreibt `destination_fd`.
 #v(-0.5em)
 
 === Umleiten des Ausgabestreams
@@ -1125,11 +1085,9 @@ send (fd, buf, len, 0); // Aufruf Beispiel
 = Message Passing und Shared Memory
 Prozesse sind voneinander isoliert, müssen jedoch trotzdem miteinander interagieren.
 
-
 === Vergleich Message-Passing und Shared Memory
 _Shared Memory_ ist schneller zu realisieren, aber schwer wartbar.
-_Message-Passing_ erfordert mehr Engineering-Aufwand, schlussendlich aber in
-Mehr-Prozessor-Systemen bald performanter.
+_Message-Passing_ erfordert mehr Engineering-Aufwand, schlussendlich aber in Mehr-Prozessor-Systemen bald performanter.
 
 === Vergleich Message-Queues und Pipes
 #table(
