@@ -1,4 +1,5 @@
 
+== React Code
 
 // Demo vl9
 ```tsx
@@ -38,7 +39,6 @@ export const StaticCounter = () => {
 export const Counter = () => {
   // use reducer with useReducer hook
   const [state, dispatch] = useReducer(reducer, { count: 0 });
-
   return (
     <div>
       <h3>useReducer</h3>

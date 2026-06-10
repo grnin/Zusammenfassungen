@@ -1,6 +1,7 @@
 
 // Compiled with Typst 0.13.1
 #import "../template_cheatsheet.typ": *
+
 #import "@preview/wrap-it:0.1.1": wrap-content
 
 #show: project.with(
@@ -13,15 +14,6 @@
     font-size: 4pt,
     landscape: true,
 )
-
-// #set text(
-//     font: "Calibri",
-//     style: "normal",
-//     weight: "light",
-//     tracking: 0.75pt,
-//     stroke: white,
-//     size: 7pt,
-// )
 
 #let wait = ```c wait()```
 
@@ -180,11 +172,8 @@ _Grössere Konfigurationsinformationen_ sollten über _Dateien_ übermittelt wer
 Applikationen dürfen nie annehmen, dass Daten gültig sind.\
 / Arbeitsverzeichnis: Bezugspunkt für relative Pfade, jeder Prozess hat eines #hinweis[(`getcwd()`, `chdir()`: nimmt String, `fchdir()`: nimmt File Deskriptor)].\
 / Pfade: Absolut #hinweis[(beginnt mit /)], Relativ #hinweis[(beginnt nicht mit /)], Kanonisch #hinweis[(Absolut, ohne "`.`" und "`..`", `realpath()`)]
-- _`NAME_MAX`:_ Maximale Länge eines Dateinamens (exklusive terminierender Null)
-- _`PATH_MAX`:_ Maximale Länge eines Pfads (inklusive terminierender Null)
-    #hinweis[(beinhalt. Wert von `NAME_MAX`)]
-- _`_POSIX_NAME_MAX`:_ Minimaler Wert von `NAME_MAX` nach POSIX #hinweis[(14)]
-- _`_POSIX_PATH_MAX`:_ Minimaler Wert von `PATH_MAX` nach POSIX #hinweis[(256)]
+
+Längster erlaubter Pfadname `NAME_MAX` #hinweis[Maximale Länge eines Dateinamens (exklusive terminierender Null)] je nach System unterschiedlich, aber gemäss `_POSIX_NAME_MAX` mindestens 14. `limits.h`
 
 / Zugriffsrechte: Je 3 Permission-Bits für Owner, Gruppe und andere Benutzer. _`r`_ead, _`w`_rite, e_`x`_ecute: `r=4, w=2, x=1` _Beispiel:_ `0740` oder `rwx r-- ---` #hinweis[(Owner hat alle Rechte, Gruppe kann lesen, andere haben keine Rechte)].
 
@@ -208,42 +197,27 @@ Enthält _Index in systemweite Tabelle_ #sym.arrow Enthält Daten zur Identifika
 _`STDIN_FILENO = 0`:_ standard input, _`STDOUT_FILENO = 1`:_ standard output, _`STDERR_FILENO = 2`:_ standard error
 
 
-// ```c
-// // Gibt Arbeitsverzeichnis aus
-// int main (int argc, char ** argv) {
-//     char *wd = malloc(PATH_MAX);
-//     getcwd(wd, PATH_MAX); printf("Current WD is %s", wd);
-//     free(wd);
-// }
-// ```
-// ```c
-// if (chdir("docs") < 0) { // 3 Varianten Error handling:
-//     printf ("Error: %s\n", strerror (errno)); // textuelle Beschr. Fehlercode
-//     if (errno == EACCESS)
-//     perror ("chdir"); // (add error) print to standard error stream
-//     // error stream neu "chdir:`strerror(errno)`"
-// }
-// ```
-// ```c
-// int fd = open("myfile.dat", O_RDONLY);
-// if (fd < 0) {
-//     /* error handling */
-// } /* read data; */
-// close(fd);
-// ```
-// ```c
-// #define N 32
-// char buf[N]
-// char spath[PATH_MAX]; // source path
-// char dpath[PATH_MAX]; // destination path
-// // ... gets paths from somewhere
-// int src = open(spath, O_RDONLY);
-// int dst = open(dpath, O_WRONLY | O_CREAT, S_IRWXU);
-// ssize_t read_bytes = read(src, buf, N);
-// write(dst, buf, read_bytes); // if file closed early, use return value
-// close(src);                  // of "read_bytes"
-// close(dst);
-// ```
+/ ```c int open (char *path, int flags, ...)```: erzeugt FD auf Datei an `path`. `flags` = wie die Datei geöffnet werden soll: _`O_RDONLY`_, _`O_RDWR`_, _`O_CREAT`_(wenn nicht existiert), _`O_APPEND`_ (Setze Offset ans Ende der Datei vor jedem Schreibzugriff), _`O_TRUNC`_ (Setze Länge der Datei auf 0)
+// die meisten sind ja lesbar:
+// - _`O_RDONLY`:_ nur lesen,
+// - _`O_RDWR`:_ lesen und schreiben,
+// - _`O_CREAT`:_ Erzeuge Datei, wenn sie nicht existiert,
+// - _`O_APPEND`:_ Setze Offset ans Ende der Datei vor jedem Schreibzugriff,
+// - _`O_TRUNC`:_ Setze Länge der Datei auf 0
+
+/ ```c int close (int fd)```: schliesst Datei = dealloziert den FD. FD kann von `open` für andere Dateien verwendet werden. Returned 0 oder -1. #hinweis[Wenn mehrere FDs die gleiche Datei öffnen, können sie sich gegenseitig Daten überschreiben.]
+// Wenn FD's nicht geschlossen werden, kann das FD-Limit erreicht werden, dann können keine weiteren Dateien mehr geöffnet werden.
+/ ```c ssize_t read(int fd, void * buffer, size_t n)```: \ kopiert die nächsten $n$ Bytes am aktuellen Offset von fd in den Buffer.
+/ ```c ssize_t write(int fd, void * buffer, size_t n)```: \ kopiert die nächsten $n$ Byte vom `buffer` an den aktuellen Offset von `fd`
+/ ```c off_t lseek(int fd, off_t offset, int origin)```: _Springen in einer Datei_. Verschiebt den Offset und gibt den neuen Offset zurück.
+_`SEEK_SET`:_ Beginn der Datei,
+_`SEEK_CUR`:_ Aktueller Offset,
+_`SEEK_END`:_ Ende der Datei.
+_`lseek(fd, 0, SEEK_CUR)`_ gibt aktuellen Offset zurück,
+_`lseek(fd, 0, SEEK_END)`:_ gibt die Grösse der Datei zurück.
+
+/ ```c ssize_t pread/pwrite(int fd, void * buffer, size_t n, off_t offset)```: Wie `read` bzw. `write`. Statt des Offsets von `fd` wird der zusätzliche Parameter `offset` verwendet. Offset von fd wird nicht verändert.
+
 
 #block(
     sticky: true,
@@ -278,32 +252,10 @@ _`STDIN_FILENO = 0`:_ standard input, _`STDOUT_FILENO = 1`:_ standard output, _`
             // error stream neu "chdir:`strerror(errno)`"
         }
         /* read data; */ close(fd);
-
     } // main
     ```,
-)
 );
 
-/ ```c int open (char *path, int flags, ...)```: erzeugt FD auf Datei an `path`. `flags` = wie die Datei geöffnet werden soll: _`O_RDONLY`_, _`O_RDWR`_, _`O_CREAT`_(wenn nicht existiert), _`O_APPEND`_ (Setze Offset ans Ende der Datei vor jedem Schreibzugriff), _`O_TRUNC`_ (Setze Länge der Datei auf 0)
-// die meisten sind ja lesbar:
-// - _`O_RDONLY`:_ nur lesen,
-// - _`O_RDWR`:_ lesen und schreiben,
-// - _`O_CREAT`:_ Erzeuge Datei, wenn sie nicht existiert,
-// - _`O_APPEND`:_ Setze Offset ans Ende der Datei vor jedem Schreibzugriff,
-// - _`O_TRUNC`:_ Setze Länge der Datei auf 0
-
-/ ```c int close (int fd)```: schliesst Datei = dealloziert den FD. FD kann von `open` für andere Dateien verwendet werden. Returned 0 oder -1. #hinweis[Wenn mehrere FDs die gleiche Datei öffnen, können sie sich gegenseitig Daten überschreiben.]
-// Wenn FD's nicht geschlossen werden, kann das FD-Limit erreicht werden, dann können keine weiteren Dateien mehr geöffnet werden.
-/ ```c ssize_t read(int fd, void * buffer, size_t n)```: \ kopiert die nächsten $n$ Bytes am aktuellen Offset von fd in den Buffer.
-/ ```c ssize_t write(int fd, void * buffer, size_t n)```: \ kopiert die nächsten $n$ Byte vom `buffer` an den aktuellen Offset von `fd`
-/ ```c off_t lseek(int fd, off_t offset, int origin)```: _Springen in einer Datei_. Verschiebt den Offset und gibt den neuen Offset zurück.
-_`SEEK_SET`:_ Beginn der Datei,
-_`SEEK_CUR`:_ Aktueller Offset,
-_`SEEK_END`:_ Ende der Datei.
-_`lseek(fd, 0, SEEK_CUR)`_ gibt aktuellen Offset zurück,
-_`lseek(fd, 0, SEEK_END)`:_ gibt die Grösse der Datei zurück.
-
-/ ```c ssize_t pread/pwrite(int fd, void * buffer, size_t n, off_t offset)```: Wie `read` bzw. `write`. Statt des Offsets von `fd` wird der zusätzliche Parameter `offset` verwendet. Offset von fd wird nicht verändert.
 
 === Unterschiede Windows und POSIX
 In Windows werden Pfad-Bestandteile durch Backslash (`\`) getrennt + es gibt ein Wurzelverzeichnis pro Datenträger/Partition + andere File-Handling-Funktionen. (z.B. open <-> CreateFile)
@@ -523,17 +475,11 @@ Die Aufgabe des Linkers wird in den Loader bzw. Dynamic Linker verschoben
 Dynamische Bibliotheken sollen _Code zwischen Programmen teilen_. Code soll _nicht mehrfach_
 im Speicher abgelegt werden. Mit Shared Memory kann jedes Programm eine _eigene virtuelle
 Page_ für den Code definieren. Diese werden auf denselben Frame im RAM gemappt.
-Benötigt _Position-Independent Code_ #hinweis[(Adressen nur relativ zum Instruction
-    Pointer, Prozessor muss relative Instruktionen anbieten)].\
-*Relative Moves via Relative Calls:*
-Mittels Hilfsfunktion wird Rücksprungadresse in Register abgelegt, somit kann relativ dazu
-gearbeitet werden.\
-*Global Offset Table (GOT):*
-Pro dynamische Bibliothek & Executable vorhanden, enthält pro Symbol einen Eintrag.
-Der Loader füllt zur Laufzeit die Adressen in die GOT ein.\
-*Procedure Linkage Table (PLT):*
-Implementiert Lazy Binding. Enthält pro Funktion einen Eintrag, dieser enthält Sprungbefehl
-an Adresse in GOT-Eintrag. Dieser zeigt auf eine Proxy-Funktion, welche den GOT-Eintrag
+Benötigt _Position-Independent Code_ #hinweis[(Adressen nur relativ zum Instruction Pointer, Prozessor muss relative Instruktionen anbieten)].\
+
+/ Relative Moves via Relative Calls: Mittels Hilfsfunktion wird Rücksprungadresse in Register abgelegt, somit kann relativ dazu gearbeitet werden.
+/ Global Offset Table (GOT): Pro dynamische Bibliothek & Executable vorhanden, enthält pro Symbol einen Eintrag. Der Loader füllt zur Laufzeit die Adressen in die GOT ein.
+/ Procedure Linkage Table (PLT): Implementiert Lazy Binding. Enthält pro Funktion einen Eintrag, dieser enthält Sprungbefehl an Adresse in  GOT-Eintrag. Dieser zeigt auf eine Proxy-Funktion, welche den GOT-Eintrag
 überschreibt. _Vorteil:_ erspart bedingten Sprung.
 
 = Threads
@@ -1162,49 +1108,65 @@ while (running) {
   delegate_to_worker_thread (client_fd); // will call close(client_fd)
 }
 ```
+=== Senden und Empfangen von Daten
+Puffern der Daten ist Aufgabe des Netzwerkstacks. flags einfach `0` setzen. ```c
+ssize_t send (int socket, const void *buffer, size_t length, int flags);
+/* wie write: */ ssize_t write (int fd, void *buffer, size_t n)
+ssize_t recv (int socket, void *buffer, size_t length, int flags);
+/* wie read: */ ssize_t read (int fd, void *buffer, size_t n)
+send (fd, buf, len, 0); // Aufruf Beispiel
 
-*```c send (fd, buf, len, 0) == write (fd, buf, len);```\
-```c recv (fd, buf, len, 0) == read (fd, buf, len)```:*\
-_Senden und Empfangen von Daten_. Puffern der Daten ist Aufgabe des Netzwerkstacks.\
-*```c int close (int socket)```:*
-_Schliesst_ den Socket für den aufrufenden Prozess. Hat ein anderer Prozess den Socket noch
-geöffnet, bleibt die Verbindung bestehen. Die Gegenseite wird nicht benachrichtigt.\
-*```c int shutdown (int socket, int mode)```:*
-_Schliesst_ den Socket für alle Prozesse und baut die entsprechende Verbindung ab. `mode`:
-_`SHUT_RD`_ #hinweis[(Keine Lese-Zugriffe mehr)],
-_`SHUT_WR`_ #hinweis[(Keine Schreib-Zugriffe mehr)],
-_`SHUT_RDWR`_ #hinweis[(Keine Lese- oder Schreib-Zugriffe mehr)]
+```
+
+/ `int close (int socket)`: Schliesst Socket für den aufrufenden Prozess. Hat ein anderer Prozess den Socket noch geöffnet, bleibt Verbindung bestehen. Gegenseite wird nicht benachrichtigt. Gegenseite erhält bei einem read kein EOF und verlässt die Lese-Schleife nicht.
+/ `int shutdown (int socket, int mode)`: Schliesst  Socket für alle Prozesse und baut die entsprechende Verbindung ab. `mode`: _`SHUT_RD`_ #hinweis[(Keine Lese-Zugriffe mehr)], _`SHUT_WR`_ #hinweis[(Keine Schreib-Zugriffe mehr)], _`SHUT_RDWR`_ #hinweis[(Keine Lese- oder Schreib-Zugriffe mehr)]
 
 
 = Message Passing und Shared Memory
 Prozesse sind voneinander isoliert, müssen jedoch trotzdem miteinander interagieren.
-_Message-Passing_ ist ein Mechanismus mit zwei Operationen:
-_Send_ #hinweis[(Kopiert die Nachricht _aus_ dem Prozess: ```c send (message)```)],
-_Receive:_ #hinweis[(Kopiert die Nachricht _in_ den Prozess: ```c receive (message)```)].
+
+
+=== Vergleich Message-Passing und Shared Memory
+_Shared Memory_ ist schneller zu realisieren, aber schwer wartbar.
+_Message-Passing_ erfordert mehr Engineering-Aufwand, schlussendlich aber in
+Mehr-Prozessor-Systemen bald performanter.
+
+=== Vergleich Message-Queues und Pipes
+#table(
+    columns: (auto, 1fr),
+    table.header([Message-Queues], [Pipes]),
+
+    [
+        - bidirektional
+        - Daten sind in einzelnen Messages organisiert
+        - beliebiger Zugriff
+        - Haben immer einen Namen
+    ],
+    [
+        - unidirektional
+        - übermittelt Bytestrom an Daten
+        - FIFO-Zugriff
+        - Müssen keinen Namen haben
+    ],
+)
+
+
+== Message-Passing
+ist ein Mechanismus mit zwei Operationen:
+- _Send_ #hinweis[(Kopiert die Nachricht aus dem Prozess: ```c send (message)```)],
+- _Receive:_ #hinweis[(Kopiert die Nachricht in den Prozess: ```c receive (message)```)].
+=== Unterscheidungskritierien
 Dabei können Implementierungen nach verschiedenen Kriterien unterschieden werden
-#hinweis[(Feste oder Variable Nachrichtengrösse, direkte oder indirekte / synchrone oder
-    asynchrone Kommunikation, Pufferung, mit oder ohne Prioritäten für Nachrichten)]\
-*Feste oder variable Nachrichtengrösse:*
-feste Nachrichtengrösse ist einfacher zu implementieren, aber umständlicher zu verwenden als
-variable Nachrichtengrösse.\
-*Direkte Kommunikation:*
-Kommunikation nur zwischen genau zwei Prozessen, Sender muss Empfänger kennen. Es gibt
-_symmetrische direkte Kommunikation_ #hinweis[(Empfänger muss Sender auch kennen)] und
-_asymmetrische direkte Kommunikation_ #hinweis[(Empfänger muss Sender nicht kennen)].\
-*Indirekte Kommunikation:*
-Prozess sendet Nachricht an _Mailboxen, Ports oder Queues_. Empfänger empfängt aus diesem
-Objekt. Beide Teilnehmer müssen die gleiche(n) Mailbox(en) kennen.\
-*Lebenszyklus Queue:*
-Wenn diese Queue einem Prozess gehört, lebt sie solange wie der Prozess.
-Wenn sie dem OS gehört, muss das OS das Löschen übernehmen.\
-*Synchronisation:*
-_Blockierendes Senden_ #hinweis[(Sender wird solange blockiert, bis die Nachricht vom Empfänger empfangen wurde)],
-_Nicht-blockierendes Senden_ #hinweis[(Sender sendet Nachricht und fährt sofort weiter)],
-_Blockierendes Empfangen_ #hinweis[(Empfänger wird blockiert, bis Nachricht verfügbar)],
-_Nicht-blockierendes Empfangen_ #hinweis[(Empfänger erhält Nachricht, wenn verfügbar, oder 0)]\
-*Rendezvous:*
-Sind Empfang und Versand _beide blockierend_, kommt es zum Rendezvous, sobald beide Seiten
-ihren Aufruf getätigt haben. _Impliziter Synchronisationsmechanismus_.
+
+/ Feste oder variable Nachrichtengrösse: feste Nachrichtengrösse ist einfacher zu implementieren, aber umständlicher zu verwenden als variable Nachrichtengrösse.
+/ Direkte Kommunikation: Kommunikation nur zwischen genau zwei Prozessen, Sender muss Empfänger kennen. Es gibt _symmetrische direkte Kommunikation_ #hinweis[(Empfänger muss Sender auch kennen (oder Alias))] und _asymmetrische direkte Kommunikation_ #hinweis[(Empfänger muss Sender nicht kennen, sondern erhält die ID in einem Out-Parameter id `receive (id, message)`)].
+/ Indirekte Kommunikation: Prozess sendet Nachricht an _Mailboxen, Ports oder Queues_. Empfänger empfängt aus diesem Objekt. Beide Teilnehmer müssen die gleiche(n) Mailbox(en) kennen.
+/ Weitere: synchrone oder asynchrone Kommunikation, Pufferung, mit oder ohne Prioritäten für Nachrichten
+
+==== Indirekte Kommunikation
+/ Lebenszyklus Queue: Wenn diese Queue einem Prozess gehört, lebt sie solange wie der Prozess. Wenn sie dem OS gehört, muss das OS das Löschen übernehmen.\
+/ Synchronisation: Blockierendes Senden #hinweis[(Sender wird solange blockiert, bis die Nachricht vom Empfänger empfangen wurde)], Nicht-blockierendes Senden #hinweis[(Sender sendet Nachricht und fährt sofort weiter)], Blockierendes Empfangen #hinweis[(Empfänger wird blockiert, bis Nachricht verfügbar)], Nicht-blockierendes Empfangen #hinweis[(Empfänger erhält Nachricht, wenn verfügbar, oder 0)]\
+/ Rendezvous: Sind Empfang und Versand _beide blockierend_, kommt es zum Rendezvous, sobald beide Seiten ihren Aufruf getätigt haben. _Impliziter Synchronisationsmechanismus_.
 
 #grid(
     columns: (auto, auto),
@@ -1244,22 +1206,11 @@ Der Empfänger holt die Nachricht mit der _höchsten Priorität zuerst_ aus der 
 === POSIX Message-Passing
 OS-Message-Queues mit _variabler Länge_, haben mind. 32 Prioritäten und können
 _synchron und asynchron_ verwendet werden.\
-*```c mqd_t mq_open (const char *name, int flags, mode_t mode, struct mq_attr *attr)```:*
-_Öffnet_ eine Message-Queue mit systemweitem `name`, returnt Message-Queue-Descriptor.
-#hinweis[(`name` mit "`/`" beginnen, `flags` & `mode` wie bei Dateien,
-    `mq_attr`: Div. Konfigs & Queue-Status, R/W mit `mp_getattr`/`mq_setattr`)]\
-*```c int mq_close (mqd_t queue)```:*
-_Schliesst_ die Queue mit dem Descriptor `queue` für diesen Prozess.\
-*```c int mq_unlink (const char *name)```:*
-_Entfernt_ die Queue mit dem Namen `name` aus dem System.
-_Name_ wird _sofort entfernt_ und Queue kann anschliessend _nicht mehr geöffnet_ werden.\
-*```c int mq_send (mqd_t queue, const char *msg, size_t length, unsigned int priority)```:*
-_Sendet_ die Nachricht, die an Adresse `msg` beginnt und `length` Bytes lang ist,
-in die `queue`.\
-*```c int mq_receive (mqd_t queue, const char *msg, size_t length, unsigned int *priority)```:*
-_Kopiert_ die nächste Nachricht aus der Queue in den Puffer, der an Adresse `msg` beginnt
-und `length` Bytes lang ist.
-_Blockiert_, wenn die Queue _leer_ ist.
+/ ```c mqd_t mq_open (const char *name, int flags, mode_t mode, struct mq_attr *attr)```: _Öffnet_ eine Message-Queue mit systemweitem `name`, returnt Message-Queue-Descriptor. #hinweis[(`name` mit "`/`" beginnen, `flags` & `mode` wie bei Dateien, `mq_attr`: Div. Konfigs & Queue-Status, R/W mit `mp_getattr`/`mq_setattr`)]
+/ ```c int mq_close (mqd_t queue)```: _Schliesst_ die Queue mit dem Descriptor `queue` für diesen Prozess.
+/ ```c int mq_unlink (const char *name)```: _Entfernt_ die Queue mit dem Namen `name` aus dem System. _Name_ wird _sofort entfernt_ und Queue kann anschliessend _nicht mehr geöffnet_ werden.
+/ ```c int mq_send (mqd_t queue, const char *msg, size_t length, unsigned int priority)```: _Sendet_ die Nachricht, die an Adresse `msg` beginnt und `length` Bytes lang ist, in die `queue`.
+/ ```c int mq_receive (mqd_t queue, const char *msg, size_t length, unsigned int *priority)```: _Kopiert_ die nächste Nachricht aus der Queue in den Puffer, der an Adresse `msg` beginnt und `length` Bytes lang ist. _Blockiert_, wenn die Queue _leer_ ist.
 
 == Shared Memory
 Frames des Hauptspeichers werden _zwei (oder mehr) Prozessen_ $P_1$ und $P_2$ _zugänglich_
@@ -1273,54 +1224,21 @@ zugreifen. Im Shared Memory müssen _relative Adressen_ verwendet werden.
 Das OS benötigt eine "Datei" _$bold(S)$_, das Informationen über den gemeinsamen Speicher
 verwaltet und eine _Mapping Table_ je Prozess.
 
-*```c int fd = shm_open ("/mysharedmemory", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR)```:*\
-Erzeugt (falls nötig) und öffnet Shared Memory `/mysharedmemory` zum Lesen und Schreiben.\
-*```c int ftruncate (int fd, offset_t length)```:*
-_Setzt_ Grösse der "Datei". Muss _zwingend_ nach SM-Erstellung gesetzt werden, um
-entsprechend viele Frames zu allozieren.
-Wird für Shared Memory mit ganzzahligen Vielfachen der Page-/Framegrösse verwendet.\
-*```c int close (int fd)```:*
-_Schliesst_ "Datei". Shared Memory _bleibt aber im System_.\
-*```c int shm_unlink (const char * name)```:*
-_Löscht_ das Shared Memory mit dem `name`.
-#hinweis[(bleibt vorhanden, solange noch von Prozess geöffnet)]\
-*```c int munmap (void *address, size_t length)```:*
-_Entfernt_ das Mapping.
+/ ```c int fd = shm_open ("/mysharedmemory", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR)```: Erzeugt (falls nötig) und öffnet Shared Memory `/mysharedmemory` zum Lesen und Schreiben.
+/ ```c int ftruncate (int fd, offset_t length)```: _Setzt_ Grösse der "Datei". Muss _zwingend_ nach SM-Erstellung gesetzt werden, um entsprechend viele Frames zu allozieren. \ Wird für Shared Memory mit ganzzahligen Vielfachen der Page-/Framegrösse verwendet.
+/ ```c int close (int fd)```: _Schliesst_ "Datei". Shared Memory _bleibt aber im System_.
+/ ```c int shm_unlink (const char * name)```: _Löscht_ das Shared Memory mit dem `name`. #hinweis[(bleibt vorhanden, solange noch von Prozess geöffnet)]\
+/ ```c int munmap (void *address, size_t length)```: _Entfernt_ das Mapping.
 ```c
 void * address = mmap( // maps shared memory into virt. address space of process
-  0,                      // void *hint_address (0 because nobody cares)
+  0,    // void *hint_address (0 because nobody cares)
   size_of_shared_memory,  // size_t length (same as used in ftruncate)
   PROT_READ | PROT_WRITE, // int protection (never use execute)
-  MAP_SHARED,             // int flags
-  fd,                     // int file_descriptor
-  0                       // off_t offset (start map from first byte)
+  MAP_SHARED,   // int flags
+  fd,   // int file_descriptor
+  0     // off_t offset (start map from first byte)
 );
 ```
-
-== Vergleich Message-Passing und Shared Memory
-_Shared Memory_ ist schneller zu realisieren, aber schwer wartbar.
-_Message-Passing_ erfordert mehr Engineering-Aufwand, schlussendlich aber in
-Mehr-Prozessor-Systemen bald performanter.
-
-
-== Vergleich Message-Queues und Pipes
-#table(
-    columns: (auto, 1fr),
-    table.header([Message-Queues], [Pipes]),
-
-    [
-        - bidirektional
-        - Daten sind in einzelnen Messages organisiert
-        - beliebiger Zugriff
-        - Haben immer einen Namen
-    ],
-    [
-        - unidirektional
-        - übermittelt Bytestrom an Daten
-        - FIFO-Zugriff
-        - Müssen keinen Namen haben
-    ],
-)
 
 = Unicode
 == ASCII - American Standard Code for Information Interchange
