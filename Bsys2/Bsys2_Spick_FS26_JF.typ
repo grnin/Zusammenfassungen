@@ -1,7 +1,6 @@
 
 // Compiled with Typst 0.13.1
 #import "../template_cheatsheet.typ": *
-// #import "../template_zusammenf.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
 #show: project.with(
@@ -153,149 +152,167 @@ int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
 == Programmargumente
 `clang` *`-c abc.c -o abc.o`*. Die Shell teilt Programmargumente in Strings auf
 #hinweis[(Trennung durch Leerzeichen, sonst Quotes)].
-*Calling Convention:*
-OS schreibt Argumente als null-terminierte Strings in den Speicherbereich des Programms.
-Zusätzlich legt das OS ein Array `argv` an, dessen Elemente jeweils auf das erste Zeichen
-eines Arguments zeigen. Die Art und Weise, wie das gehandhabt wird, ist die Calling Convention.
-Werden explizit angegeben, nützlich für Informationen, die bei jedem Aufruf anders sind.\
-```c int main(int argc, char ** argv) { ... } // argv[0] = program path```
+
+=== Calling Convention
+- OS schreibt Argumente als null-terminierte Strings in den Speicherbereich des Programms. Zusätzlich legt das OS ein Array `argv` an, dessen Elemente jeweils auf das erste Zeichen eines Arguments zeigen. Die Art und Weise, wie das gehandhabt wird, ist die Calling Convention.
+- Werden explizit angegeben, nützlich für Informationen, die bei jedem Aufruf anders sind.
+- ```c int main(int argc, char ** argv) { ... } // argv[0] = program path```
 
 == Umgebungsvariablen
 Strings, die mindestens ein `Key=Value` enthalten #hinweis[`OPTER=1`, `PATH=/home/ost/bin`].
-Der Key muss einzigartig sein. Unter POSIX verwaltet das OS die Umgebungsvariablen innerhalb
-jedes laufenden Prozesses. Werden initial festgelegt. Das OS legt die Variablen als ein
-null-terminiertes Array von Pointern auf null-terminierte Strings ab. Unter C zeigt die
-Variable ```c extern char **environ``` darauf. Sollte nur über untenstehende Funktionen
-manipuliert werden. Werden implizit bereitgestellt, nützlich für Informationen, die bei
-jedem Aufruf gleich sind.
+Unter POSIX verwaltet das OS die Umgebungsvariablen innerhalb
+jedes laufenden Prozesses. Werden initial festgelegt. Das OS legt die Variablen als ein null-terminiertes Array von Pointern auf null-terminierte Strings ab.\ Unter C zeigt die Variable ```c extern char **environ``` darauf.
+// Sollte nur über untenstehende Funktionen manipuliert werden.
 
-- *Abfragen einer Umgebungsvariable:* ```c char *value = getenv("PATH");```
-- *Setzen einer Umgebungsvariable:* ```c int ret = setenv("HOME", "/usr/home", 1);```
-- *Entfernen einer Umgebungsvariable:* ```c int ret = unsetenv("HOME");```
-- *Hinzufügen einer Umgebungsvariable :* ```c int ret = putenv("HOME=/usr/home");```\
+/ ```c char *value = getenv("PATH");```: Abfragen einer Umgebungsvariable
+/ ```c int ret = setenv("HOME", "/usr/home", 1);```: Setzen einer Umgebungsvariable
+/ ```c int ret = unsetenv("HOME");```: Entfernen einer Umgebungsvariable
+/ ```c int ret = putenv("HOME=/usr/home");```: Hinzufügen einer Umgebungsvariable
     #hinweis[(gefährlich wegen Pointer auf `NULL`)]
 
+TODO: was passiert wenn auf vorhandenen key neu gesetzt?
+
+// Der Key muss einzigartig sein. (ist logisch)
+// \ Werden implizit bereitgestellt, nützlich für Informationen, die bei jedem Aufruf gleich sind.
 _Grössere Konfigurationsinformationen_ sollten über _Dateien_ übermittelt werden.
 
 = Dateisystem API
 Applikationen dürfen nie annehmen, dass Daten gültig sind.\
-*Arbeitsverzeichnis:*
-Bezugspunkt für relative Pfade, jeder Prozess hat eines\
-#hinweis[(`getcwd()`, `chdir()`: nimmt String, `fchdir()`: nimmt File Deskriptor)].\
-*Pfade:*
-Absolut #hinweis[(beginnt mit /)],
-Relativ #hinweis[(beginnt nicht mit /)],
-Kanonisch #hinweis[(Absolut, ohne "`.`" und "`..`", `realpath()`)]\
+/ Arbeitsverzeichnis: Bezugspunkt für relative Pfade, jeder Prozess hat eines #hinweis[(`getcwd()`, `chdir()`: nimmt String, `fchdir()`: nimmt File Deskriptor)].\
+/ Pfade: Absolut #hinweis[(beginnt mit /)], Relativ #hinweis[(beginnt nicht mit /)], Kanonisch #hinweis[(Absolut, ohne "`.`" und "`..`", `realpath()`)]
 - _`NAME_MAX`:_ Maximale Länge eines Dateinamens (exklusive terminierender Null)
 - _`PATH_MAX`:_ Maximale Länge eines Pfads (inklusive terminierender Null)
     #hinweis[(beinhalt. Wert von `NAME_MAX`)]
 - _`_POSIX_NAME_MAX`:_ Minimaler Wert von `NAME_MAX` nach POSIX #hinweis[(14)]
 - _`_POSIX_PATH_MAX`:_ Minimaler Wert von `PATH_MAX` nach POSIX #hinweis[(256)]
 
-```c
-// Gibt Arbeitsverzeichnis aus
-int main (int argc, char ** argv) { char *wd = malloc(PATH_MAX);
-getcwd(wd, PATH_MAX); printf("Current WD is %s", wd); free(wd); return 0; }
-```
+/ Zugriffsrechte: Je 3 Permission-Bits für Owner, Gruppe und andere Benutzer. _`r`_ead, _`w`_rite, e_`x`_ecute: `r=4, w=2, x=1` _Beispiel:_ `0740` oder `rwx r-- ---` #hinweis[(Owner hat alle Rechte, Gruppe kann lesen, andere haben keine Rechte)].
 
-*Zugriffsrechte:*
-Je 3 Permission-Bits für Owner, Gruppe und andere Benutzer.
-Bits sind: _`r`_ead, _`w`_rite, e_`x`_ecute: `r=4, w=2, x=1`
-_Beispiel:_ `0740` oder `rwx r-- ---`
-#hinweis[(Owner hat alle Rechte, Gruppe kann lesen, andere haben keine Rechte)].
-*POSIX:*
-_`S_IRWXU`_ `= 0700`, _`S_IWUSR`_ `= 0200`, _`S_IRGRP`_ `= 0040`, _`S_IXOTH`_ `= 0001`.
-Werden mit | verknüpft.
+TODO bei message passing oder shared memory:
+/ POSIX (mode für shm_open, mq_open): _`S_IRWXU`_ `= 0700`, _`S_IWUSR`_ `= 0200`, _`S_IRGRP`_ `= 0040`, _`S_IXOTH`_ `= 0001`. Werden mit | verknüpft.
 
-*POSIX-API:*
-für direkten Zugriff, alle Dateien sind rohe Binärdaten.
-*C-API:*
-für direkten Zugriff auf Streams.
-*POSIX FILE API:*
-für direkten, unformatierten Zugriff auf Inhalt der Datei. Nur für Binärdaten verwenden.
-*`errno`:*
-Makro oder globale Variable vom typ `int`.
-Sollte direkt nach Auftreten eines Fehlers aufgerufen werden.
+/ POSIX-API: für direkten Zugriff, alle Dateien sind rohe Binärdaten.
+/ C-API: für direkten Zugriff auf Streams.
+/ POSIX FILE API: für direkten, unformatierten Zugriff auf Inhalt der Datei. Nur für Binärdaten verwenden.
+/ `errno`: Makro oder globale Variable vom typ `int`. Nach Auftreten eines Fehlers abfragen.
 
-```c if (chdir("docs") < 0) { if (errno == EACCESS) { printf("Error: Denied"); }}```
-
-*`strerror`*
-gibt die Adresse eines Strings zurück, der den Fehlercode `code` textuell beschreibt.
-*`perror`*
-schreibt `text` gefolgt von einem Doppelpunkt und vom Ergebnis von `strerror(errno)`
-auf den Errorstream.
-
+// if (chdir("docs") < 0) { if (errno == EACCESS) { printf("Error: Denied"); }}
+// `strerror`
+// gibt die Adresse eines Strings zurück, der den Fehlercode `code` textuell beschreibt.
+// `perror`: schreibt `text` gefolgt von einem Doppelpunkt und vom Ergebnis von `strerror(errno)` auf den Errorstream.
 == File-Descriptor (FD)
-Files werden in der POSIX-API über FD's repräsentiert. Gilt nur _innerhalb eines Prozesses_.
+Files werden in der POSIX-API über FD's repräsentiert.
+// Gilt nur _innerhalb eines Prozesses_.
 Returnt _Index in Tabelle_ aller geöffneter Dateien im Prozess #sym.arrow
 Enthält _Index in systemweite Tabelle_ #sym.arrow Enthält Daten zur Identifikation der Datei.
-_`STDIN_FILENO = 0`:_ standard input,\
-_`STDOUT_FILENO = 1`:_ standard output,
-_`STDERR_FILENO = 2`:_ standard error
+_`STDIN_FILENO = 0`:_ standard input, _`STDOUT_FILENO = 1`:_ standard output, _`STDERR_FILENO = 2`:_ standard error
 
-*```c int open (char *path, int flags, ...)```:*
-_öffnet_ eine Datei. Erzeugt FD auf Datei an `path`.\
-`flags` gibt an, *wie* die Datei geöffnet werden soll:\
-- _`O_RDONLY`:_ nur lesen,
-- _`O_RDWR`:_ lesen und schreiben,
-- _`O_CREAT`:_ Erzeuge Datei, wenn sie nicht existiert,
-- _`O_APPEND`:_ Setze Offset ans Ende der Datei vor jedem Schreibzugriff,
-- _`O_TRUNC`:_ Setze Länge der Datei auf 0
 
-*```c int close (int fd)```:*
-_schliesst_ Datei bzw. _dealloziert_ den FD. Kann dann wieder für andere Dateien verwendet
-werden. Wenn FD's nicht geschlossen werden, kann das FD-Limit erreicht werden, dann können
-keine weiteren Dateien mehr geöffnet werden.
-Wenn mehrere FDs die gleiche Datei öffnen, können sie sich gegenseitig Daten überschreiben.
+// ```c
+// // Gibt Arbeitsverzeichnis aus
+// int main (int argc, char ** argv) {
+//     char *wd = malloc(PATH_MAX);
+//     getcwd(wd, PATH_MAX); printf("Current WD is %s", wd);
+//     free(wd);
+// }
+// ```
+// ```c
+// if (chdir("docs") < 0) { // 3 Varianten Error handling:
+//     printf ("Error: %s\n", strerror (errno)); // textuelle Beschr. Fehlercode
+//     if (errno == EACCESS)
+//     perror ("chdir"); // (add error) print to standard error stream
+//     // error stream neu "chdir:`strerror(errno)`"
+// }
+// ```
+// ```c
+// int fd = open("myfile.dat", O_RDONLY);
+// if (fd < 0) {
+//     /* error handling */
+// } /* read data; */
+// close(fd);
+// ```
+// ```c
+// #define N 32
+// char buf[N]
+// char spath[PATH_MAX]; // source path
+// char dpath[PATH_MAX]; // destination path
+// // ... gets paths from somewhere
+// int src = open(spath, O_RDONLY);
+// int dst = open(dpath, O_WRONLY | O_CREAT, S_IRWXU);
+// ssize_t read_bytes = read(src, buf, N);
+// write(dst, buf, read_bytes); // if file closed early, use return value
+// close(src);                  // of "read_bytes"
+// close(dst);
+// ```
 
-```c
-int fd = open("myfile.dat", O_RDONLY);
-if (fd < 0) { /* error handling */ } /* read data; */ close(fd);
-```
+#block(
+    sticky: true,
+    // code kombiniert:
+    ```c
+    #define N 32
+    int main (int argc, char ** argv) {
+        // Gibt Arbeitsverzeichnis aus
+        char *wd = malloc(PATH_MAX);
+        getcwd(wd, PATH_MAX); printf("Current WD is %s", wd);
+        free(wd);
 
-*```c ssize_t read(int fd, void * buffer, size_t n)```:*\
-_kopiert_ die nächsten $n$ Bytes am aktuellen Offset _von fd in den Buffer_.\
-*```c ssize_t write(int fd, void * buffer, size_t n)```:*\
-_kopiert_ die nächsten $n$ Byte _vom `buffer` an den aktuellen Offset von `fd`_
+        // Lesen und Schreiben von Dateien
+        char buf[N]; // oben definiert
+        char spath[PATH_MAX]; /* source path */
+        char dpath[PATH_MAX]; /* destination path */
+        // ... get paths from somewhere
+        int src = open(spath, O_RDONLY);
+        int dst = open(dpath, O_WRONLY | O_CREAT, S_IRWXU);
+        ssize_t read_bytes = read(src, buf, N);
+        write(dst, buf, read_bytes); // if file closed early, use return value
+        close(src);                  // of "read_bytes"
+        close(dst);
 
-#colbreak()
+        // Datei öffnen zum lesen und Fehlerbehandlung
+        int fd = open("myfile.dat", O_RDONLY);
+        if (fd < 0) {
+            // textuelle Beschreibung vom Fehlercode:
+            printf ("Error: %s\n", strerror (errno));
+            if (errno == EACCESS) { printf("access denied"); } // eigener Text
+            perror ("chdir"); // (add error) print to standard error stream
+            // error stream neu "chdir:`strerror(errno)`"
+        }
+        /* read data; */ close(fd);
 
-```c
-#define N 32
-char buf[N]
-char spath[PATH_MAX]; // source path
-char dpath[PATH_MAX]; // destination path
-// ... gets paths from somewhere
-int src = open(spath, O_RDONLY);
-int dst = open(dpath, O_WRONLY | O_CREAT, S_IRWXU);
-ssize_t read_bytes = read(src, buf, N);
-write(dst, buf, read_bytes); // if file closed early, use return value
-close(src);                  // of "read_bytes"
-close(dst);
-```
+    } // main
+    ```,
+)
+);
 
-*```c off_t lseek(int fd, off_t offset, int origin)```:*
-_Springen in einer Datei_. Verschiebt den Offset und gibt den neuen Offset zurück.
+/ ```c int open (char *path, int flags, ...)```: erzeugt FD auf Datei an `path`. `flags` = wie die Datei geöffnet werden soll: _`O_RDONLY`_, _`O_RDWR`_, _`O_CREAT`_(wenn nicht existiert), _`O_APPEND`_ (Setze Offset ans Ende der Datei vor jedem Schreibzugriff), _`O_TRUNC`_ (Setze Länge der Datei auf 0)
+// die meisten sind ja lesbar:
+// - _`O_RDONLY`:_ nur lesen,
+// - _`O_RDWR`:_ lesen und schreiben,
+// - _`O_CREAT`:_ Erzeuge Datei, wenn sie nicht existiert,
+// - _`O_APPEND`:_ Setze Offset ans Ende der Datei vor jedem Schreibzugriff,
+// - _`O_TRUNC`:_ Setze Länge der Datei auf 0
+
+/ ```c int close (int fd)```: schliesst Datei = dealloziert den FD. FD kann von `open` für andere Dateien verwendet werden. Returned 0 oder -1. #hinweis[Wenn mehrere FDs die gleiche Datei öffnen, können sie sich gegenseitig Daten überschreiben.]
+// Wenn FD's nicht geschlossen werden, kann das FD-Limit erreicht werden, dann können keine weiteren Dateien mehr geöffnet werden.
+/ ```c ssize_t read(int fd, void * buffer, size_t n)```: \ kopiert die nächsten $n$ Bytes am aktuellen Offset von fd in den Buffer.
+/ ```c ssize_t write(int fd, void * buffer, size_t n)```: \ kopiert die nächsten $n$ Byte vom `buffer` an den aktuellen Offset von `fd`
+/ ```c off_t lseek(int fd, off_t offset, int origin)```: _Springen in einer Datei_. Verschiebt den Offset und gibt den neuen Offset zurück.
 _`SEEK_SET`:_ Beginn der Datei,
 _`SEEK_CUR`:_ Aktueller Offset,
 _`SEEK_END`:_ Ende der Datei.
 _`lseek(fd, 0, SEEK_CUR)`_ gibt aktuellen Offset zurück,
 _`lseek(fd, 0, SEEK_END)`:_ gibt die Grösse der Datei zurück.
 
-*```c ssize_t pread/pwrite(int fd, void * buffer, size_t n, off_t offset)```:*\
-_Lesen und Schreiben ohne Offsetänderung_. Wie `read` bzw. `write`. Statt des Offsets von
-`fd` wird der zusätzliche Parameter `offset` verwendet.
+/ ```c ssize_t pread/pwrite(int fd, void * buffer, size_t n, off_t offset)```: Wie `read` bzw. `write`. Statt des Offsets von `fd` wird der zusätzliche Parameter `offset` verwendet. Offset von fd wird nicht verändert.
 
 === Unterschiede Windows und POSIX
-Bestandteile von Pfaden werden durch _Backslash_ (`\`) getrennt, ein _Wurzelverzeichnis pro_
-Datenträger/Partition, andere File-Handling-Funktionen.
+In Windows werden Pfad-Bestandteile durch Backslash (`\`) getrennt + es gibt ein Wurzelverzeichnis pro Datenträger/Partition + andere File-Handling-Funktionen. (z.B. open <-> CreateFile)
 
 == C Stream API
 Unabhängig vom Betriebssystem, Stream-basiert, gepuffert oder ungepuffert,
-hat einen eigenen File-Position-Indicator.\
-*Streams:*
-`FILE *` enthält _Informationen über einen Stream_. Soll nicht direkt verwendet oder kopiert
-werden, sondern nur über von C-API erzeugte Pointer.
+hat einen eigenen File-Position-Indicator.
+
+/ Streams: `FILE *` enthält _Informationen über einen Stream_. Soll nicht direkt verwendet oder kopiert werden, sondern nur über von C-API erzeugte Pointer.
 
 *```c FILE * fopen(char const *path, char const *mode)```:*
 _Öffnen eine Datei._ Erzeugt `FILE`-Objekt für Datei an `path`. Flags für `mode`:
@@ -765,9 +782,10 @@ int main (int argc, char **argv) {
 *Arten von Threads:*
 _I/O-lastig_ #hinweis[(Wenig rechnen, viel I/O-Geräte-Kommunikation)],
 _Prozessor-lastig_ #hinweis[(Viel rechnen, wenig Kommunikation)]\
-*Arten der Nebenläufigkeit:*
-_Kooperativ_ #hinweis[(Threads entscheiden selbst über Abgabe des Prozessors)],
+=== Arten der Nebenläufigkeit
+_Kooperativ_ #hinweis[(Threads entscheiden selbst über Abgabe des Prozessors)] \
 _Präemptiv_ #hinweis[(Scheduler entscheidet, wann einem Thread der Prozessor entzogen wird)]\
+
 *Präemptives Multithreading:*
 Thread läuft, bis er auf etwas zu _warten_ beginnt, Prozessor _yielded_,
 ein _System-Timer-Interrupt_ auftritt oder ein _bevorzugter Thread_ erzeugt oder ready wird.\
@@ -788,6 +806,10 @@ _Nebenläufig_ #hinweis[(Überbegriff für parallel oder quasiparallel)]
 ]
 
 == Scheduling-Strategien
+// Durchlaufzeit = throughput time = 1 Thread
+// Durchsatz = throughput
+// Bandbraeite = bandwidth = wieviele Threads/Arbeit möglich sind in einer gewissen Zeit
+
 Anforderungen an einen Scheduler können vielfältig sein.
 _Geschlossene Systeme_ #hinweis[(Hersteller kennt Anwendungen und ihre Beziehungen)] vs.
 _Offene Systeme_ #hinweis[(Hersteller muss von typischen Anwendungen ausgehen)]
@@ -817,14 +839,19 @@ sich beenden.
 *SJF-Strategie* #hinweis[(Shortest Job First)]\
 Scheduler wählt den Thread aus, der den _kürzesten_ Prozessor-Burst hat. Bei gleicher Länge
 wird nach FCFS ausgewählt. Kann _kooperativ_ oder _präemptiv_ sein. Ergibt _optimale
-Wartezeit_, kann jedoch nur _korrekt implementiert_ werden, wenn die Länge der Bursts
-_bekannt_ sind.
+Wartezeit_, kann jedoch nur _korrekt implementiert_ werden, wenn die Länge der Bursts _bekannt_ sind.
 #image("img/bsys_32.png", width: 80%)
 
 *Round-Robin:*
 _Zeitscheibe_ von etwa 10 bis 100ms. _FCFS_, aber ein Thread kann nur solange laufen,
 bis seine _Zeitscheibe erschöpft_ ist, dann wird der in der _Queue hinten angehängt_.
+
+// ? Round-Robin schliesst Runde ab, bevor neue Threads hinzugenommen werden und startet immer beim gleichen Thread. Nutzt eine "Ready-Queue".
+Notiere: die Ready Queue pro Zeitscheibe, laufender Thread landet (wenn direkt Ready) ganz hinten in nächster Ready-Queue. Am besten pro Zeit die R.Q. notieren.
+Bei Wechsel zu `waiting` beginnt nächster Prozess früher, aber erhält keine zusätzliche Zeit.
+
 #image("img/bsys_33.png", width: 80%)
+
 
 *Prioritäten-basiert:*
 Jeder Thread erhält _eine Nummer_, seine _Priorität_. Threads mit höherer Priorität werden

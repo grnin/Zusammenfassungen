@@ -28,7 +28,7 @@
     )
 
     let font-default = (
-        font: text-font,
+        font: calibri-font,
         lang: language,
         region: "ch",
         size: font-size,
@@ -96,68 +96,74 @@
 
 
     // Style built-in functions
+
     // Headings formatting
-    // set heading(g: "1.1.1.", supplement: languages.at(language).chapter)
 
     set heading(
         numbering: none,
         hanging-indent: 30pt,
-        // inset: (left: 20cm)
-        // offset: -100,
     )
-    // #set heading(g: (first, ..other) => if other.pos().len() == 2 { return first })
-
-    // show heading: hd => block({
-    //     if hd.g != none and hd.level <= 3 {
-    //         context counter(heading).display()
-    //         h(1.3em)
-    //     }
-    //     hd.body
-    // })
 
 
     // H1
     show heading.where(level: 1): h => {
-        // set text(..font-special, top-edge: 0.18em)
-        // set par(leading: 1.3em, hanging-indent: 2.5em)
-        // line(length: 100%, stroke: 0.18em + colors.hellblau)
         block(
             fill: rgb("#4472c4"),
-            // upper(h),
             sticky: true,
+            // margin:
+            // above: 2pt,
+            above: 4.5pt,
+            below: 1pt,
+            // padding:
+            inset: (top: 3pt, right: 2pt, bottom: 3pt, left: 2pt),
+            width: 100%,
             text(
-                // font: text-font,
-                font: "Calibri",
+                font: calibri-font,
                 style: "normal",
                 weight: "light",
+                size: 7pt,
                 tracking: 0.75pt,
                 fill: white,
-                stroke: white,
-                size: 7pt,
-                top-edge: 2pt,
-                bottom-edge: 1pt,
                 upper(h.body),
             ),
         )
         v(0.45em)
     }
-    show heading.where(level: 1): set text(
-        font: "Calibri",
-        style: "normal",
-        weight: "light",
-        tracking: 0.75pt,
-        fill: white,
-        stroke: white,
-        size: 7pt,
-        top-edge: 2pt,
-        bottom-edge: 1pt,
-    )
 
     // H2
     show heading.where(level: 2): h => {
-        set text(size: 0.9em)
-        upper(h)
-        // d9e2f3
+        block(
+            fill: rgb("#d9e2f3"),
+            sticky: true,
+            // margin:
+            // above: 2pt,
+            above: 4.5pt,
+            below: 1pt,
+            // padding:
+            inset: (top: 3pt, right: 2pt, bottom: 3pt, left: 2pt),
+            width: 100%,
+            text(
+                font: calibri-font,
+                style: "normal",
+                weight: "light",
+                size: 5.5pt,
+                tracking: 0.75pt,
+                // fill: white,
+                upper(h.body),
+            ),
+        )
+        v(0.45em)
+    }
+
+    // H3
+    show heading.where(level: 3): h => {
+        text(
+            font: aptos-font,
+            style: "normal",
+            weight: "semibold",
+            size: 5pt,
+            h.body,
+        )
     }
 
     // Remove space above H4, fixes spacing between H3 & H4
@@ -186,7 +192,15 @@
     show list: set list(marker: "–", body-indent: 0.45em)
 
     // "Important" template, use with "_text_" or #emph[]
-    show emph: set text(fill: font-special.fill, weight: font-special.weight)
+    show emph: it => {
+        text(
+            fill: font-special.fill,
+            weight: font-special.weight,
+            style: "normal",
+            it.body,
+        )
+    }
+
 
     // Code, use with ```python print("Hello World")```
     show raw: set text(font: font-special.font, size: 1em)
