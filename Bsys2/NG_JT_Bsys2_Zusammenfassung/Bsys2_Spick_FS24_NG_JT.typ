@@ -1,7 +1,7 @@
 
 // Compiled with Typst 0.14.2
-// #import "../../template_zusammenf.typ": *
-#import "../../template_cheatsheet.typ": *
+#import "../../template_zusammenf.typ": *
+// #import "../../template_cheatsheet.typ": *
 
 #show: project.with(
     authors: ("Nina Grässli", "Jannis Tschan"),

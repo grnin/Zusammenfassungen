@@ -210,7 +210,7 @@ _`STDIN_FILENO = 0`:_ standard input, _`STDOUT_FILENO = 1`:_ standard output, _`
 // Wenn FD's nicht geschlossen werden, kann das FD-Limit erreicht werden, dann können keine weiteren Dateien mehr geöffnet werden.
 / ```c ssize_t read(int fd, void * buffer, size_t n)```: \ kopiert die nächsten $n$ Bytes am aktuellen Offset von fd in den Buffer.
 / ```c ssize_t write(int fd, void * buffer, size_t n)```: \ kopiert die nächsten $n$ Byte vom `buffer` an den aktuellen Offset von `fd`
-/ ```c off_t lseek(int fd, off_t offset, int origin)```: _Springen in einer Datei_. Verschiebt den Offset und gibt den neuen Offset zurück.
+/ ```c off_t lseek(int fd, off_t offset, int origin)```: \ _Springen in einer Datei_. Verschiebt den Offset und gibt den neuen Offset zurück.
 _`SEEK_SET`:_ Beginn der Datei,
 _`SEEK_CUR`:_ Aktueller Offset,
 _`SEEK_END`:_ Ende der Datei.
@@ -239,8 +239,8 @@ _`lseek(fd, 0, SEEK_END)`:_ gibt die Grösse der Datei zurück.
         int src = open(spath, O_RDONLY);
         int dst = open(dpath, O_WRONLY | O_CREAT, S_IRWXU);
         ssize_t read_bytes = read(src, buf, N);
-        write(dst, buf, read_bytes); // if file closed early, use return value
-        close(src);                  // of "read_bytes"
+        write(dst, buf, read_bytes);// if file closed early, only write as many bytes
+        close(src);                 // as have been read from the file
         close(dst);
 
         // Datei öffnen zum lesen und Fehlerbehandlung
@@ -263,7 +263,7 @@ In Windows werden Pfad-Bestandteile durch Backslash (`\`) getrennt + es gibt ein
 
 == C Stream API (File API)
 Unabhängig vom Betriebssystem, Stream-basiert, gepuffert oder ungepuffert,
-hat einen eigenen File-Position-Indicator.
+hat einen eigenen File-Position-Indicator (FPI).
 
 / Streams: `FILE *` enthält _Informationen über einen Stream_. Soll nicht direkt verwendet oder kopiert werden, sondern nur über von C-API erzeugte Pointer.
 
@@ -285,7 +285,8 @@ TODO: was für API-UmwaNDLUNG?
 / ```c int fgetc(FILE *stream)```: _Liest_ das nächste Byte und erhöht FPI um 1.
 / ```c char * fgets(char *buf, int n, FILE *stream)```: liest bis zu $n-1$ Zeichen aus `stream`.
 / ```c int ungetc(int c, FILE *stream)```: _Lesen rückgängig machen._ Nutzt Unget-Stack.
-/ ```c int fputc(int c, FILE *stream)```: _Schreibt `c` in eine Datei._ ```c int fputs(char *s, FILE *stream)``` schreibt die Zeichen vom String `s` bis zur terminierenden 0 in `stream`.
+/ ```c int fputc(int c, FILE *stream)```: _Schreibt `c` in eine Datei._
+/ ```c int fputs(char *s, FILE *stream)```: schreibt die Zeichen vom String `s` bis zur terminierenden 0 in `stream`.
 
 ==== Dateiende und Fehler:
 ```c int feof(FILE *stream)``` gibt 0 zurück, wenn Dateiende _noch nicht_ erreicht wurde\
@@ -342,7 +343,12 @@ Programmargumente müssen spezifiziert werden. #hinweis[(`..l` als Liste, `..v` 
 
 #table(
     columns: (auto, 1fr, auto, auto),
-    table.header([], [], [Programmargumente\ als Liste], [Programmargumente\ als Array]),
+    table.header(
+        [Aufrufen der\ Executable],
+        [Zustand der Environment-Variabeln],
+        [Programmargumente\ als Liste],
+        [Programmargumente\ als Array],
+    ),
     table.cell(rowspan: 2)[Angabe des Pfads],
     [mit neuem Environment],
     [`execle()`],
@@ -437,7 +443,7 @@ gibt die _Adresse des Symbols_ `name` aus der mit `handle` bezeichneten _Bibliot
 Keine Typinformationen #hinweis[(Variabel? Funktion?)]
 
 ```c
-// type "func_t" is a address of a function with a int param and int return type
+// type "func_t" is an address of a function with a int param and int return type
 typedef int (*func_t)(int);
 handle = dlopen("libmylib.so", RTLD_NOW); // open library
 func_t f = dlsym(handle, "my_function"); // write my_function addr. into a func_t
@@ -916,12 +922,12 @@ _Release_ #hinweis[(Setzt $z = 0$)]. Auch als non-blocking-Funktion:
     columns: (auto, auto),
     [
         ```c
-          // Beispiel Initialisierung
-          pthread_mutex_t mutex; // global
-          int main() {
-            pthread_mutex_init (&mutex, 0);
-          // run threads & wait for them to finish
-            pthread_mutex_destroy (&mutex); }
+        // Beispiel Initialisierung
+        pthread_mutex_t mutex; // global
+        int main() {
+        pthread_mutex_init (&mutex, 0);
+        // run threads & wait for them to finish
+        pthread_mutex_destroy (&mutex); }
         ```
     ],
     [
@@ -1033,8 +1039,8 @@ _`close`_ #hinweis[(Schliessen der Verbindung)]\
 struct sockaddr_in ip_addr;
 ip_addr.sin_port = htons (443); // default HTTPS port
 inet_pton (AF_INET, "192.168.0.1", &ip_addr.sin_addr.s_addr);
-// port in memory: 0x01 0xBB
-// addr in memory: 0xC0 0xA8 0x00 0x01
+// IP address in memory: 0xC0 0xA8 0x00 0x01
+// Port in memory: 0x01 0xBB
 ```
 
 _`htons()`_ konvertiert 16 Bit von Host-Byte-order #hinweis[(LE)] zu Network-Byte-Order
@@ -1064,15 +1070,19 @@ while (running) {
   delegate_to_worker_thread (client_fd); // will call close(client_fd)
 }
 ```
-=== Senden und Empfangen von Daten
-Puffern der Daten ist Aufgabe des Netzwerkstacks. flags einfach `0` setzen. ```c
+
+
+```c
 ssize_t send (int socket, const void *buffer, size_t length, int flags);
 /* wie write: */ ssize_t write (int fd, void *buffer, size_t n)
 ssize_t recv (int socket, void *buffer, size_t length, int flags);
 /* wie read: */ ssize_t read (int fd, void *buffer, size_t n)
 send (fd, buf, len, 0); // Aufruf Beispiel
-
 ```
+=== Senden und Empfangen von Daten
+Erweitern `read()` bzw. `write()` um Socket-Funktionalitäten
+durch den `flags`-Parameter. Puffern der Daten ist Aufgabe des Netzwerkstacks.\
+// flags einfach `0` setzen.
 
 / `int close (int socket)`: Schliesst Socket für den aufrufenden Prozess. Hat ein anderer Prozess den Socket noch geöffnet, bleibt Verbindung bestehen. Gegenseite wird nicht benachrichtigt. Gegenseite erhält bei einem read kein EOF und verlässt die Lese-Schleife nicht.
 / `int shutdown (int socket, int mode)`: Schliesst  Socket für alle Prozesse und baut die entsprechende Verbindung ab. `mode`: _`SHUT_RD`_ #hinweis[(Keine Lese-Zugriffe mehr)], _`SHUT_WR`_ #hinweis[(Keine Schreib-Zugriffe mehr)], _`SHUT_RDWR`_ #hinweis[(Keine Lese- oder Schreib-Zugriffe mehr)]
@@ -1467,22 +1477,23 @@ Nodes nötig.
     )
 }
 
-==== Beispiel Berechnung 2MB grosse, konsekutiv gespeicherte Datei, 2KB Blöcke ab Block #hex("2000")
+==== Beispiel-Berechnung: 4MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex("1000")
 _(In-)direkte Block-Adressierung_\
-2 MB = $2^21$B, #math.quad 2 KB = $2^11$B, #math.quad $2^(21-11) = 2^10 = #fxcolor("rot", hex("400"))$
-Blöcke von #fxcolor("grün", hex("2000")) bis #fxcolor("orange", hex("23FF"))\
-$0 arrow.bar #fxcolor("grün", hex("2000")), quad
-1 arrow.bar #hex("2002"), space ..., space
-#hex("B") arrow.bar #hex("200B"), quad
-#hex("C") arrow.bar #hex("2400")$ #hinweis[(indirekter Block)]\
-$#hex("1400").#hex("0") arrow.bar #hex("200C"), quad
-#hex("1400").#hex("1") arrow.bar #hex("200D"), space
+4 MB = $2^22$B, #math.quad 4 KB = $2^12$B, #math.quad $2^(22-12) = 2^10 = #fxcolor("rot", hex("400"))$
+Blöcke von #fxcolor("grün", hex("1000")) bis #fxcolor("orange", hex("13FF"))\
+$0 arrow.bar #fxcolor("grün", hex("1000")), quad
+1 arrow.bar #hex("1002"), space ..., space
+#hex("B") arrow.bar #hex("100B"), quad
+#hex("C") arrow.bar #hex("1400")$ #hinweis[(indirekter Block, #fxcolor("rot", hex("400")) nach Startblock)]\
+$#hex("1400").#hex("0") arrow.bar #hex("100C"), quad
+#hex("1400").#hex("1") arrow.bar #hex("100D"), space
 ..., space
-#hex("1400").#hex("3F3") arrow.bar #fxcolor("orange", hex("23FF"))$
+#hex("1400").#hex("3F3") arrow.bar #fxcolor("orange", hex("13FF"))$
 
 _Extent Trees_\
 *Header:* $0 arrow.bar (1,0)$\
-*Extent:* $1 arrow.bar (0, #fxcolor("grün", hex("2000")), #fxcolor("rot", hex("400")))$
+*Extent:* $1 arrow.bar (0, #fxcolor("grün", hex("1000")), #fxcolor("rot", hex("400")))$
+
 
 == Journaling
 Wenn Dateisystem beim _Erweitern_ einer Datei _unterbrochen_ wird, kann es zu
