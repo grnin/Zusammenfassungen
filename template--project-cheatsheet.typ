@@ -135,7 +135,7 @@
     // H2
     show heading.where(level: 2): h => {
         block(
-            fill: light-blue,
+            fill: colors.light-blue,
             sticky: true,
             // margin:
             // above: 2pt,
@@ -179,7 +179,7 @@
             text(
                 // size: 1.1em,
                 size: 1em,
-                fill: bg-dark-blue,
+                fill: colors.bg-dark-blue,
                 // [#(h.body)     --- --- --- --- --- --- --- --- --- ---],
                 [#(h.body)],
             ),
@@ -213,7 +213,7 @@
     // H2
     show heading.where(level: 2): h => {
         block(
-            fill: light-blue,
+            fill: colors.light-blue,
             sticky: true,
             // margin:
             above: 2pt,
@@ -255,7 +255,7 @@
             below: 2pt,
             text(
                 size: 1em,
-                fill: bg-dark-blue,
+                fill: colors.bg-dark-blue,
                 // [#(h.body)     --- --- --- --- --- --- --- --- --- ---],
                 [#(h.body)],
             ),
