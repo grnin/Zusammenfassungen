@@ -187,7 +187,7 @@
     }
 
     // compact version:
-    /*
+    // /*
     // // H1
     show heading.where(level: 1): h => {
         block(
@@ -202,8 +202,8 @@
                 font: calibri-font,
                 style: "normal",
                 weight: "light",
-                size: 6pt,
-                tracking: 0.75pt,
+                size: 5pt,
+                tracking: 0.5pt,
                 fill: white,
                 upper(h.body),
             ),
@@ -218,14 +218,14 @@
             // margin:
             above: 2pt,
             below: 0.5pt,
-            inset: 1pt,
+            inset: 1.5pt,
             width: 100%,
             text(
                 font: calibri-font,
                 style: "normal",
                 weight: "light",
-                size: 5pt,
-                tracking: 0.75pt,
+                size: 4.5pt,
+                tracking: 0.5pt,
                 // fill: white,
                 upper(h.body),
             ),
@@ -242,7 +242,7 @@
                 font: aptos-font,
                 style: "normal",
                 weight: "semibold",
-                size: 5pt,
+                size: 4.5pt,
                 h.body,
             ),
         )
@@ -251,8 +251,8 @@
 
     show heading.where(level: 4): h => {
         block(
-            above: 7pt,
-            below: 3pt,
+            above: 4pt,
+            below: 2pt,
             text(
                 size: 1em,
                 fill: rgb("#07388b"),

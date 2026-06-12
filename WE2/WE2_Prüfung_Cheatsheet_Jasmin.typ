@@ -18,9 +18,6 @@
 
 #set heading(
     numbering: none,
-    // hanging-indent: 30pt,
-    // inset: (left: 20cm)
-    // offset: -100,
 );
 
 = React
@@ -56,3 +53,7 @@
 #include "./_code-to-add-express.typ"
 
 
+#include "./_express.typ"
+#include "./_security-testing.typ"
+
+#include "./_testing-andrin.typ"

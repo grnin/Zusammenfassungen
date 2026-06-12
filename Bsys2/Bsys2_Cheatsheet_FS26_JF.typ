@@ -507,10 +507,8 @@ Nur bestimmte Teile eines Algorithmus können parallelisiert werden.
     / $(T - T_s) \/ n$: Parallel-Anteil verteilt auf alle $n$ Prozessoren. #hinweis[(Im Bild: $(T_1 + T_3) \/ n$)]
 
     / $T_s + (T - T_s) / n$: Serieller Teil + Paralleler Teil #hinweis[$= T^'$]
-
     Die _serielle Variante_ benötigt also höchstens _$f$ mal mehr Zeit_ als die _parallele Variante_:
 ]
-
 $ f <= T / T^' = T / (T_s + (T - T_s) / n) $
 $f$ heisst auch _Speedup-Faktor_, weil die parallele Variante max. $f$-mal schneller ist als
 die serielle.
@@ -522,29 +520,26 @@ $
     f <= T / (T_s + (T - T_s) / n) = T / (s dot T + (T - s dot T) / n)
     = T / (s dot T + (1 - s) / n dot T) quad => quad f <= 1 / (s + (1 - s) / n)
 $
-
+#hinweis[Bringe $s$ und $../n$ auf den gleichen Nenner]
 #wrap-content(
     image("img/bsys_26.png"),
     align: top + right,
     columns: (61%, 39%),
 )[
-    === Bedeutung
-    - Abschätzung einer _oberen Schranke_ für den maximalen Geschwindigkeitsgewinn
-    - Nur wenn _alles_ parallelisierbar ist, ist der Speedup\ _proportional_ und _maximal_
-        #hinweis[$f(0,n) = n$]
-    - Sonst ist der Speedup mit _höherer Prozessor-Anzahl_ immer _geringer_
+    // === Bedeutung
+    - Amd. Regel = Abschätzung einer _oberen Schranke_ für den maximalen Geschwindigkeitsgewinn
+    - Nur wenn _alles_ parallelisierbar, ist Speedup _proportional_ und _maximal_
+        #hinweis[100% parallel: $f(0,n) = n$ und rein seriell: $f(1,n)$]
+    - Sonst ist Speedup mit _höherer Prozessor-Anzahl_ immer _geringer_
         #hinweis[(Kurve flacht ab)]
-    - $f(1,n)$: rein seriell
-
     *Grenzwert:* Mit höherer Anzahl Prozessoren nähert sich der Speedup $1/s$ an:
 ]
-
 #grid(
     columns: (1fr, 1fr, 1fr),
     [$ lim_(n -> infinity) (1 - s) / n = 0 $],
     [$ lim_(n -> infinity) s + (1 - s) / n = s $],
     [$ lim_(n -> infinity) 1 / (s + (1 - s) / n) = 1 / s $],
-)
+);
 
 == POSIX THREAD API
 *```c

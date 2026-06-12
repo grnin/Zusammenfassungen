@@ -50,7 +50,8 @@ _`SIGABRT`_ #hinweis[(Wie `SIGQUIT`, aber vom Prozess an sich selber)],
 _`SIGKILL`_ #hinweis[(Prozess wird "abgewürgt", kann nicht verhindert werden)]
 #table(
     columns: 2,
-    stroke: rgb("#00287e2d"),
+    stroke: rgb("#0039b31a"),
+    inset: (top: 4pt, right: 3pt, bottom: 4pt, left: 3pt),
     [SIGTERM], [die normale, höfliche Anfrage an den Prozess, sich zu beenden],
     [SIGINT], [Etwas nachdrücklichere Aufforderung, Wird generiert, wenn der Benutzer `Ctrl-C` drückt],
     [SIGQUIT],
