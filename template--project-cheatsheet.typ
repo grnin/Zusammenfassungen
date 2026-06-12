@@ -186,6 +186,17 @@
         )
     }
 
+    show heading.where(level: 5): h => {
+        block(
+            above: 3pt,
+            below: 2pt,
+            // text(
+            // ),
+            h.body,
+        )
+    }
+
+
     // compact version:
     // /*
     // // H1
@@ -251,7 +262,7 @@
 
     show heading.where(level: 4): h => {
         block(
-            above: 4pt,
+            // above: 4pt,
             below: 2pt,
             text(
                 size: 1em,

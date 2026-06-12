@@ -23,115 +23,7 @@ int *px = &x; // &x = Adresse des ints, * = Pointer-Bezeichner
 int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
 ```
 
-#table(
-    columns: (auto,) * 5 + (2.75em,) * 4 + (1fr,) * 4,
-    [*$4096$*],
-    [*$2048$*],
-    [*$1024$*],
-    [*$512$*],
-    [*$256$*],
-    [*$128$*],
-    [*$64$*],
-    [*$32$*],
-    [*$16$*],
-    [*$8$*],
-    [*$4$*],
-    [*$2$*],
-    [*$1$*],
-
-    [$2^12$],
-    [$2^11$],
-    [$2^10$],
-    [$2^9$],
-    [$2^8$],
-    [$2^7$],
-    [$2^6$],
-    [$2^5$],
-    [$2^4$],
-    [$2^3$],
-    [$2^2$],
-    [$2^1$],
-    [$2^0$],
-
-    [#hex("1000")],
-    [#hex("800")],
-    [#hex("400")],
-    [#hex("200")],
-    [#hex("100")],
-    [#hex("80")],
-    [#hex("40")],
-    [#hex("20")],
-    [#hex("10")],
-    [#hex("8")],
-    [#hex("4")],
-    [#hex("2")],
-    [#hex("1")],
-)
-
-#table(
-    columns: (1fr,) * 6,
-    [*$1'048'576$*], [*$65'536$*], [*$4'096$*], [*$256$*], [*$16$*], [*$1$*],
-    [$16^5$], [$16^4$], [$16^3$], [$16^2$], [$16^1$], [$16^0$],
-    [#hex("10 0000")], [#hex("01 0000")], [#hex("00 1000")], [#hex("00 0100")], [#hex("00 0010")], [#hex("00 0001")],
-)
-
-#{
-    show raw: set text(size: 0.9em)
-    table(
-        columns: (1fr,) * 16,
-        align: (_, y) => if (y == 2) { center } else { left },
-        [*$0$*],
-        [*$1$*],
-        [*$2$*],
-        [*$3$*],
-        [*$4$*],
-        [*$5$*],
-        [*$6$*],
-        [*$7$*],
-        [*$8$*],
-        [*$9$*],
-        [*$A$*],
-        [*$B$*],
-        [*$C$*],
-        [*$D$*],
-        [*$E$*],
-        [*$F$*],
-
-        [$0$],
-        [$1$],
-        [$2$],
-        [$3$],
-        [$4$],
-        [$5$],
-        [$6$],
-        [$7$],
-        [$8$],
-        [$9$],
-        [$10$],
-        [$11$],
-        [$12$],
-        [$13$],
-        [$14$],
-        [$15$],
-
-        [`0000`],
-        [`0001`],
-        [`0010`],
-        [`0011`],
-        [`0100`],
-        [`0101`],
-        [`0110`],
-        [`0111`],
-        [`1000`],
-        [`1001`],
-        [`1010`],
-        [`1011`],
-        [`1100`],
-        [`1101`],
-        [`1110`],
-        [`1111`],
-    )
-}
+#include "_binary-hex-table.typ"
 
 = Betriebssystem API
 / Aufgaben: Abstraktion, Portabilität, Ressourcenmanagement & Isolation der Anwendungen, Benutzerverwaltung und Sicherheit
@@ -143,9 +35,8 @@ int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
 / POSIX: Portable Operating System Interface. Sammlung von IEEE Standards, welche die Kompatibilität zwischen OS gewährleistet. Windows ist nicht POSIX-konform.
 
 == Programmargumente
-`clang` *`-c abc.c -o abc.o`*. Die Shell teilt Programmargumente in Strings auf
-#hinweis[(Trennung durch Leerzeichen, sonst Quotes)].
-
+`clang` *`-c abc.c -o abc.o`*. Shell teilt Programmargumente in Strings auf
+// #hinweis[(Trennung durch Leerzeichen, sonst Quotes)].
 === Calling Convention
 - OS schreibt Argumente als null-terminierte Strings in den Speicherbereich des Programms. Zusätzlich legt das OS ein Array `argv` an, dessen Elemente jeweils auf das erste Zeichen eines Arguments zeigen. Die Art und Weise, wie das gehandhabt wird, ist die Calling Convention.
 - Werden explizit angegeben, nützlich für Informationen, die bei jedem Aufruf anders sind.
@@ -156,18 +47,17 @@ Strings, die mindestens ein `Key=Value` enthalten #hinweis[`OPTER=1`, `PATH=/hom
 Unter POSIX verwaltet das OS die Umgebungsvariablen innerhalb
 jedes laufenden Prozesses. Werden initial festgelegt. Das OS legt die Variablen als ein null-terminiertes Array von Pointern auf null-terminierte Strings ab.\ Unter C zeigt die Variable ```c extern char **environ``` darauf.
 // Sollte nur über untenstehende Funktionen manipuliert werden.
-
 / ```c char *value = getenv("PATH");```: Abfragen einer Umgebungsvariable
 / ```c int ret = setenv("HOME", "/usr/home", 1);```: Setzen einer Umgebungsvariable
 / ```c int ret = unsetenv("HOME");```: Entfernen einer Umgebungsvariable
 / ```c int ret = putenv("HOME=/usr/home");```: Hinzufügen einer Umgebungsvariable
     #hinweis[(gefährlich wegen Pointer auf `NULL`)]
 
-TODO: was passiert wenn auf vorhandenen key neu gesetzt?
+// TODO: was passiert wenn auf vorhandenen key neu gesetzt?
 
 // Der Key muss einzigartig sein. (ist logisch)
 // \ Werden implizit bereitgestellt, nützlich für Informationen, die bei jedem Aufruf gleich sind.
-_Grössere Konfigurationsinformationen_ sollten über _Dateien_ übermittelt werden.
+// _Grössere Konfigurationsinformationen_ sollten über _Dateien_ übermittelt werden.
 
 = Dateisystem API
 Applikationen dürfen nie annehmen, dass Daten gültig sind.\
@@ -178,7 +68,7 @@ Längster erlaubter Pfadname `NAME_MAX` #hinweis[Maximale Länge eines Dateiname
 
 / Zugriffsrechte: Je 3 Permission-Bits für Owner, Gruppe und andere Benutzer. _`r`_ead, _`w`_rite, e_`x`_ecute: `r=4, w=2, x=1` _Beispiel:_ `0740` oder `rwx r-- ---` #hinweis[(Owner hat alle Rechte, Gruppe kann lesen, andere haben keine Rechte)].
 
-TODO bei message passing oder shared memory:
+// TODO bei message passing oder shared memory:
 / POSIX (mode für shm_open, mq_open): _`S_IRWXU`_ `= 0700`, _`S_IWUSR`_ `= 0200`, _`S_IRGRP`_ `= 0040`, _`S_IXOTH`_ `= 0001`. Werden mit | verknüpft.
 
 / POSIX-API: für direkten Zugriff, alle Dateien sind rohe Binärdaten.
@@ -191,34 +81,6 @@ TODO bei message passing oder shared memory:
 // gibt die Adresse eines Strings zurück, der den Fehlercode `code` textuell beschreibt.
 // `perror`: schreibt `text` gefolgt von einem Doppelpunkt und vom Ergebnis von `strerror(errno)` auf den Errorstream.
 == File-Descriptor (FD)
-Files werden in der POSIX-API über FD's repräsentiert.
-// Gilt nur _innerhalb eines Prozesses_.
-Returnt _Index in Tabelle_ aller geöffneter Dateien im Prozess #sym.arrow
-Enthält _Index in systemweite Tabelle_ #sym.arrow Enthält Daten zur Identifikation der Datei.
-_`STDIN_FILENO = 0`:_ standard input, _`STDOUT_FILENO = 1`:_ standard output, _`STDERR_FILENO = 2`:_ standard error
-
-
-/ ```c int open (char *path, int flags, ...)```: erzeugt FD auf Datei an `path`. `flags` = wie die Datei geöffnet werden soll: _`O_RDONLY`_, _`O_RDWR`_, _`O_CREAT`_(wenn nicht existiert), _`O_APPEND`_ (Setze Offset ans Ende der Datei vor jedem Schreibzugriff), _`O_TRUNC`_ (Setze Länge der Datei auf 0)
-// die meisten sind ja lesbar:
-// - _`O_RDONLY`:_ nur lesen,
-// - _`O_RDWR`:_ lesen und schreiben,
-// - _`O_CREAT`:_ Erzeuge Datei, wenn sie nicht existiert,
-// - _`O_APPEND`:_ Setze Offset ans Ende der Datei vor jedem Schreibzugriff,
-// - _`O_TRUNC`:_ Setze Länge der Datei auf 0
-
-/ ```c int close (int fd)```: schliesst Datei = dealloziert den FD. FD kann von `open` für andere Dateien verwendet werden. Returned 0 oder -1. #hinweis[Wenn mehrere FDs die gleiche Datei öffnen, können sie sich gegenseitig Daten überschreiben.]
-// Wenn FD's nicht geschlossen werden, kann das FD-Limit erreicht werden, dann können keine weiteren Dateien mehr geöffnet werden.
-/ ```c ssize_t read(int fd, void * buffer, size_t n)```: \ kopiert die nächsten $n$ Bytes am aktuellen Offset von fd in den Buffer.
-/ ```c ssize_t write(int fd, void * buffer, size_t n)```: \ kopiert die nächsten $n$ Byte vom `buffer` an den aktuellen Offset von `fd`
-/ ```c off_t lseek(int fd, off_t offset, int origin)```: \ _Springen in einer Datei_. Verschiebt den Offset und gibt den neuen Offset zurück.
-_`SEEK_SET`:_ Beginn der Datei,
-_`SEEK_CUR`:_ Aktueller Offset,
-_`SEEK_END`:_ Ende der Datei.
-_`lseek(fd, 0, SEEK_CUR)`_ gibt aktuellen Offset zurück,
-_`lseek(fd, 0, SEEK_END)`:_ gibt die Grösse der Datei zurück.
-
-/ ```c ssize_t pread/pwrite(int fd, void * buffer, size_t n, off_t offset)```: Wie `read` bzw. `write`. Statt des Offsets von `fd` wird der zusätzliche Parameter `offset` verwendet. Offset von fd wird nicht verändert.
-
 
 #block(
     sticky: true,
@@ -256,6 +118,32 @@ _`lseek(fd, 0, SEEK_END)`:_ gibt die Grösse der Datei zurück.
     } // main
     ```,
 );
+Files werden in der POSIX-API über FD's repräsentiert.
+// Gilt nur _innerhalb eines Prozesses_.
+Returnt _Index in Tabelle_ aller geöffneter Dateien im Prozess #sym.arrow
+Enthält _Index in systemweite Tabelle_ #sym.arrow Enthält Daten zur Identifikation der Datei.
+#hinweis[_`STDIN_FILENO = 0`:_ standard input, _`STDOUT_FILENO = 1`:_ standard output, _`STDERR_FILENO = 2`:_ standard error ]
+/ ```c int open (char *path, int flags, ...)```: erzeugt FD auf Datei an `path`. `flags` = wie die Datei geöffnet werden soll: _`O_RDONLY`_, _`O_RDWR`_, _`O_CREAT`_(wenn nicht existiert), _`O_APPEND`_ (Setze Offset ans Ende der Datei vor jedem Schreibzugriff), _`O_TRUNC`_ (Setze Länge der Datei auf 0)
+// die meisten sind ja lesbar:
+// - _`O_RDONLY`:_ nur lesen,
+// - _`O_RDWR`:_ lesen und schreiben,
+// - _`O_CREAT`:_ Erzeuge Datei, wenn sie nicht existiert,
+// - _`O_APPEND`:_ Setze Offset ans Ende der Datei vor jedem Schreibzugriff,
+// - _`O_TRUNC`:_ Setze Länge der Datei auf 0
+
+/ ```c int close (int fd)```: schliesst Datei = dealloziert den FD. FD kann von `open` für andere Dateien verwendet werden. Returned 0 oder -1. #hinweis[Wenn mehrere FDs die gleiche Datei öffnen, können sie sich gegenseitig Daten überschreiben.]
+// Wenn FD's nicht geschlossen werden, kann das FD-Limit erreicht werden, dann können keine weiteren Dateien mehr geöffnet werden.
+/ ```c ssize_t read(int fd, void * buffer, size_t n)```: \ kopiert die nächsten $n$ Bytes am aktuellen Offset von fd in den Buffer.
+/ ```c ssize_t write(int fd, void * buffer, size_t n)```: \ kopiert die nächsten $n$ Byte vom `buffer` an den aktuellen Offset von `fd`
+/ ```c off_t lseek(int fd, off_t offset, int origin)```: \ _Springen in einer Datei_. Verschiebt den Offset und gibt den neuen Offset zurück.
+_`SEEK_SET`:_ Beginn der Datei,
+_`SEEK_CUR`:_ Aktueller Offset,
+_`SEEK_END`:_ Ende der Datei.
+_`lseek(fd, 0, SEEK_CUR)`_ gibt aktuellen Offset zurück,
+_`lseek(fd, 0, SEEK_END)`:_ gibt die Grösse der Datei zurück.
+
+/ ```c ssize_t pread/pwrite(int fd, void * buffer, size_t n, off_t offset)```: Wie `read` bzw. `write`. Statt des Offsets von `fd` wird der zusätzliche Parameter `offset` verwendet. Offset von fd wird nicht verändert.
+
 
 
 === Unterschiede Windows und POSIX
@@ -277,10 +165,7 @@ _`"w+"`_ #hinweis[(neue oder geleerte bestehende Datei lesen & überschreiben)],
 _`"a+"`_ #hinweis[(neue oder bestehende Datei lesen & an Datei anfügen)].
 Gibt Pointer auf erzeugtes `FILE`-Objekt zurück oder 0 bei Fehler.
 ```c FILE * fdopen(int fd, char const * mode)``` ist gleich, aber statt Pfad wird direkt der FD übergeben.
-
-TODO: was für API-UmwaNDLUNG?
-
-/ ```c int fileno (FILE *stream)```: gibt FD zurück. Nach API-Umwandlung vorherige nicht mehr verwenden.
+/ ```c int fileno (FILE *stream)```: gibt FD zurück von Stream (nicht mit POSIX mischen).
 / ```c int fclose(FILE *file)```: _Schliesst eine Datei._ Ruft ```c fflush()``` #hinweis[(schreibt Inhalt aus Speicher in die Datei)] auf, schliesst den Stream, entfernt `file` aus Speicher und gibt 0 zurück wenn OK, andernfalls `EOF`.
 / ```c int fgetc(FILE *stream)```: _Liest_ das nächste Byte und erhöht FPI um 1.
 / ```c char * fgets(char *buf, int n, FILE *stream)```: liest bis zu $n-1$ Zeichen aus `stream`.
@@ -752,21 +637,20 @@ _Nebenläufig_ #hinweis[(Überbegriff für parallel oder quasiparallel)]
 // Durchsatz = throughput
 // Bandbraeite = bandwidth = wieviele Threads/Arbeit möglich sind in einer gewissen Zeit
 
-Anforderungen an einen Scheduler können vielfältig sein.
-_Geschlossene Systeme_ #hinweis[(Hersteller kennt Anwendungen und ihre Beziehungen)] vs.
-_Offene Systeme_ #hinweis[(Hersteller muss von typischen Anwendungen ausgehen)]
-
+// Anforderungen an einen Scheduler können vielfältig sein.
+_Anforderungen Geschlossene Systeme_ #hinweis[(Hersteller kennt Anwendungen und ihre Beziehungen)] vs.
+_Anford. Offene Systeme_ #hinweis[(Hersteller muss von typischen Anwendungen ausgehen)]
 *Anwendungssicht, Minimierung von:*
-_Durchlaufzeit_ #hinweis[(Zeit vom Starten des Threads bis zu seinem Ende)],
-_Antwortzeit_ #hinweis[(Zeit vom Empfang eines Requests bis die Antwort zur Verfügung steht)],
+_Durchlaufzeit_ #hinweis[(Zeit Starten Threads bis Ende)],
+_Antwortzeit_ #hinweis[(Zeit Empfang Requests bis Antwort zur Verfügung steht)],
 _Wartezeit_ #hinweis[(Zeit, die ein Thread in der Ready-Queue verbringt)].\
 *Aus Systemsicht, Maximierung von:*
 _Durchsatz_ #hinweis[(Anzahl Threads, die pro Intervall bearbeitet werden)],
 _Prozessor-Verwendung_ #hinweis[(Prozentsatz der Verwendung des Prozessors gegenüber der Nichtverwendung)]\
 *Latenz*
-ist die durchschnittliche Zeit zwischen Auftreten und Verarbeiten eines Ereignisses.
-Im schlimmsten Fall tritt das Ereignis dann auf, wenn der Thread gerade vom Prozessor
-entfernt wurde. Um die Antwortzeit zu verringern, muss jeder Thread öfters ausgeführt
+durchschnittliche Zeit zwischen Auftreten und Verarbeiten eines Ereignisses.
+Im schlimmsten Fall tritt Ereignis dann auf, wenn der Thread gerade vom Prozessor
+entfernt wurde. Um Antwortzeit verringern, muss jeder Thread öfters ausgeführt
 werden, was jedoch zu mehr Thread-Wechsel und somit zu mehr Overhead führt.
 _Die Utilization nimmt also ab, wenn die Antwortzeit verringert wird._
 
@@ -827,6 +711,14 @@ gibt den Nice-Wert von $p$ zurück\
 setzt den Nice-Wert.
 - _`which`:_ `PRIO_PROCESS`, `PRIO_PGRP` oder `PRIO_USER`
 - _`who`:_ ID des Prozesses, der Gruppe oder des Users)
+
+// / Nice-Wert: Jeder Prozess hat einen Nice-Wert von $-20$ #hinweis[(soll bevorzugt werden)] bis $+19$ #hinweis[(nicht bevorzugt)]
+// / ```sh nice [-n increment] utility [argument...]```: Nice-Wert beim Start erhöhen oder verringern
+// / ```c int nice (int i)```: Nice-Wert im Prozess erhöhen oder verringern. #hinweis[(Addiert `i` zum Wert dazu.)]
+// / ```c int getpriority (int which, id_t who)```: gibt den Nice-Wert von $p$ zurück
+// / ```c int setpriority (int which, id_t who, int prio)```: setzt den Nice-Wert.
+// - _`which`:_ `PRIO_PROCESS`, `PRIO_PGRP` oder `PRIO_USER`
+// - _`who`:_ ID des Prozesses, der Gruppe oder des Users)
 
 ==== Priorität bei Thread-Erzeugung setzen
 Funktionen ohne `attr` bevor Thread gestartet wird:\
@@ -1436,8 +1328,8 @@ _Symbolische Links_ #hinweis[(Wie eine Datei, Datei enthält Pfad anderer Datei)
 }
 
 = Ext4
-_Vergrössert_ die wichtigen Datenstrukturen, besser für grosse Dateien, erlaubt höhere
-maximale Dateigrösse. Blöcke werden mit _Extent Trees_ verwaltet, _Journaling_ wird eingeführt.
+// _Vergrössert_ die wichtigen Datenstrukturen, besser für grosse Dateien, erlaubt höhere
+// maximale Dateigrösse. Blöcke werden mit _Extent Trees_ verwaltet, _Journaling_ wird eingeführt.
 
 == Extents
 Beschreiben ein _Intervall physisch konsekutiver Blöcke_. Ist 12 Byte gross

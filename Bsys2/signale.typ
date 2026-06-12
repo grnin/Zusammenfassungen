@@ -1,5 +1,19 @@
 #import "../template--additional-formatting-templates.typ": *
 
+/* preview
+#import "../template_cheatsheet.typ": *
+#import "@preview/wrap-it:0.1.1": wrap-content
+#show: project.with(
+    authors: ("Jasmin Fässler", "Nina Grässli", "Jannis Tschan"),
+    fach: "BSys2",
+    fach-long: "Betriebssysteme 2",
+    semester: "FS26",
+    language: "de",
+    column-count: 5,
+    font-size: 4pt,
+    landscape: true,
+)
+// */
 
 // Signal Tabelle
 
@@ -17,67 +31,57 @@ oder Abbruch auf Seitens Benutzer ausgelöst. Jeder Prozess hat pro Signal einen
 // Fast alle Signale ausser `SIGKILL` und `SIGSTOP` können _überschrieben_ werden.\
 
 
-
-==== Die 3 Default-Handler für Signale
-Mit `kill` kann eines dieser Signale gesendet werden:
-
-
-
-
-
-
-*Abnormal-Terminate-Handler*: beendet das Programm und erzeugt Core Dump (für Programmfehler)\
-// *Programmfehler-Signale:*
+Mit `kill` kann ein Signal, mit einem dieser Default-Handler, gesendet werden:
+===== *Abnormal-Terminate-Handler* | Beendet Programm + Core Dump (für Programmfehler)
 _`SIGFPE`_ #hinweis[(Fehler in arithmetischen Operation)],
-_`SIGILL`_ #hinweis[(Ungültige Instruktion)],
+_`SIGILL`_ #hinweis[(Ungültige Instruktion)], \
 _`SIGSEGV`_ #hinweis[(Ungültiger Speicherzugriff)],
 _`SIGSYS`_ #hinweis[(Ungültiger Systemaufruf)]
-#table(
-    columns: 2,
-    stroke: rgb("#00287e2d"),
-    [SIGFPE], [Fehler in arithmetischer Operation],
-    [SIGILL], [Ungültige Instruktion],
-    [SIGSEGV], [Ungültiger Speicherzugriff],
-    [SIGSYS], [Ungültiger Systemaufruf],
-);
+// #table(
+//     columns: 2,
+//     stroke: rgb("#00287e2d"),
+//     [SIGFPE], [Fehler in arithmetischer Operation],
+//     [SIGILL], [Ungültige Instruktion],
+//     [SIGSEGV], [Ungültiger Speicherzugriff],
+//     [SIGSYS], [Ungültiger Systemaufruf],
+// );
+===== *Terminate-Handler* | Beendet das Programm (Prozess abbrechen)
+_`SIGKILL`_ #hinweis[(*nicht überschreibbar*)]
+_`SIGTERM`_ #hinweis[(Normale höfliche Anfrage an den Prozess, sich zu beenden)],
+\
+_`SIGINT`_ #hinweis[(Nachdrücklichere Aufforderung an Prozess, sich zu beenden)],
+_`SIGQUIT`_ #hinweis[(Wie `SIGINT`, aber anormale Terminierung `Ctrl-\`)],
+_`SIGABRT`_ #hinweis[(Wie `SIGQUIT`, aber vom Prozess an sich selber (Programmierfehler bemerkt))],
+// #table(
+//     columns: 2,
+//     stroke: rgb("#0039b31a"),
+//     inset: (top: 4pt, right: 3pt, bottom: 4pt, left: 3pt),
+//     [SIGTERM], [die normale, höfliche Anfrage an den Prozess, sich zu beenden],
+//     [SIGINT], [Etwas nachdrücklichere Aufforderung, Wird generiert, wenn der Benutzer `Ctrl-C` drückt],
+//     [SIGQUIT],
+//     [Wie SIGINT, aber anormale Terminierung. Wird generiert, wenn der Benutzer `Ctrl-\` (Ctrl-AltGr-<) drückt],
 
-*Terminate-Handler* beendet das Programm (Prozess abbrechen)\
-// *Prozesse abbrechen:*
-_`SIGTERM`_ #hinweis[(Normale Anfrage an den Prozess, sich zu beenden)],
-_`SIGINT`_ #hinweis[(Nachdrücklichere Aufforderung an den Prozess, sich zu beenden)],
-_`SIGQUIT`_ #hinweis[(Wie `SIGINT`, aber anormale Terminierung)],
-_`SIGABRT`_ #hinweis[(Wie `SIGQUIT`, aber vom Prozess an sich selber)],
-_`SIGKILL`_ #hinweis[(Prozess wird "abgewürgt", kann nicht verhindert werden)]
-#table(
-    columns: 2,
-    stroke: rgb("#0039b31a"),
-    inset: (top: 4pt, right: 3pt, bottom: 4pt, left: 3pt),
-    [SIGTERM], [die normale, höfliche Anfrage an den Prozess, sich zu beenden],
-    [SIGINT], [Etwas nachdrücklichere Aufforderung, Wird generiert, wenn der Benutzer `Ctrl-C` drückt],
-    [SIGQUIT],
-    [Wie SIGINT, aber anormale Terminierung. Wird generiert, wenn der Benutzer `Ctrl-\` (Ctrl-AltGr-<) drückt],
+//     [SIGABRT],
+//     [Wie SIGQUIT (anormale Terminierung). Wird bevorzugt vom Prozess an sich selbst geschickt, z.B. wenn er selbst einen Programmierfehler bemerkt],
 
-    [SIGABRT],
-    [Wie SIGQUIT (anormale Terminierung). Wird bevorzugt vom Prozess an sich selbst geschickt, z.B. wenn er selbst einen Programmierfehler bemerkt],
-
-    [SIGKILL], [Kann der Prozess nicht blockieren, ignorieren oder abfangen, *nicht überschreibbar*],
-);
-
-*Ignore-Handler* ignoriert das Signal\
+//     [SIGKILL], [Kann der Prozess nicht blockieren, ignorieren oder abfangen, *nicht überschreibbar*],
+// );
+===== *Ignore-Handler* | ignoriert das Signal
 // *Stop and Continue:*
-_`SIGTSTP`_ #hinweis[(Versetzt den Prozess in den Zustand _stopped_, ähnlich wie _waiting_)],
-_`SIGSTOP`_ #hinweis[(Wie `SIGTSTP`, aber kann nicht ignoriert oder abgefangen werden)],
-_`SIGCONT`_ #hinweis[(Setzt den Prozess fort)]\
-#table(
-    columns: 2,
-    stroke: rgb("#00287e2d"),
-    [SIGTSTP], [Versetzt einen Prozess in den Zustand stopped, ähnlich wie waiting. `Ctrl-Z`],
-    [SIGSTOP], [Wie SIGTSTP, aber *nicht überschreibbar* (abfrangen/ignorieren)],
-    [SIGCONT], [Setzt den Prozess fort. Wird auf der Shell mit den Kommandos fg / bg erzeugt],
-);
+_`SIGTSTP`_ #hinweis[(Versetzt den Prozess in den Zustand _stopped_, ähnlich wie _waiting_ `Ctrl-Z`)], \
+_`SIGSTOP`_ #hinweis[(Wie `SIGTSTP`, aber *nicht überschreibbar*)],
+_`SIGCONT`_ #hinweis[(Setzt den Prozess fort (`fg`))]\
+// #table(
+//     columns: 2,
+//     stroke: rgb("#00287e2d"),
+//     [SIGTSTP], [Versetzt einen Prozess in den Zustand stopped, ähnlich wie waiting. `Ctrl-Z`],
+//     [SIGSTOP], [Wie SIGTSTP, aber *nicht überschreibbar* (abfangen/ignorieren)],
+//     [SIGCONT], [Setzt den Prozess fort. Wird auf der Shell mit den Kommandos fg / bg erzeugt],
+// );
 
 // ==== *Signale von der Shell senden:*
 // _`kill 1234 5678`_ sendet `SIGTERM` an Prozesse `1234` und `5678`
+
 ==== *```c int sigaction(int signal, struct sigaction *new, struct sigaction *old)```:*\
 Definiert Signal-Handler für `signal`, wenn `new` $!= 0$.
 #hinweis[(Eigene Signal-Handler definiert via `sigaction` struct:
