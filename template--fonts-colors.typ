@@ -24,10 +24,10 @@
 
 #let dateformat = "[day].[month].[year]"
 
-// #let code-font = "JetBrainsMonoNL NF";
-#let code-font = ("JetBrains Mono", "DejaVu Sans Mono"); // windows
+// #let code-font = "JetBrainsMonoNL NF"; // ohne Ligaturen (besser) linux
+// #let code-font = ("JetBrains Mono", "DejaVu Sans Mono"); // windows
+#let code-font = ("JetBrainsMonoNL NF", "JetBrains Mono", "DejaVu Sans Mono");
 #let text-font = ("Calibri", "Source Sans Pro", "Roboto"); // does not warn when "bold" is missing
 
-
 #let calibri-font = ("Calibri", "Source Sans Pro", "Roboto");
-#let aptos-font = ("Aptos", "Source Sans Pro", "Roboto");
+#let aptos-font = ("Aptos", "Source Sans Pro", "Roboto"); //

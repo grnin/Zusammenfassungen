@@ -18,6 +18,9 @@
 
 #import "./helpers.typ": *
 
+// #let \-\> = sym.arrow.r;
+#show "->": sym.arrow.r;
+
 
 = React
 == React Regeln (Komponente, HTML, JSX)
@@ -27,7 +30,7 @@
   - treffende Beschreibung der Komponente
     - Beispiele: LinkButton , InfoTooltip , DraftEditor
 - [ ] HTML Attribute in JSX mit camelCase (ausser `aria-*` und `data-*`)
-  - #strike[class] `->` `className`, #strike[for] in Formularfeldern `->` `htmlFor`, #strike[stroke-width] `->` `strokeWidth`
+  - #strike[class] -> `className`, #strike[for] in Formularfeldern -> `htmlFor`, #strike[stroke-width] -> `strokeWidth`
 - [ ] HTML Elemente geschlossen, z.B. `<img />` ,`<input />`
 - [ ] Syntax wie in JS: Wert in `{title}`
 
@@ -54,6 +57,7 @@
 
 #include "/WE2/_express-theorie.typ"
 #include "/WE2/_code-express-demo.typ"
+#include "/WE2/_code-express-testat.typ"
 #include "/WE2/_security-testing.typ"
 
 #include "./_testing-andrin.typ"

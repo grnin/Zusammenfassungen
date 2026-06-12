@@ -4,8 +4,8 @@
 
 ==== index.js
 ```js
-import {app} from './app.js'
-
+import { app } from './app.js'
+// const app = (await import('./app')).app; // lazy loading
 const hostname = '127.0.0.1';
 const port = 3001;
 app.listen(port, hostname, (error) => {
@@ -17,6 +17,8 @@ app.listen(port, hostname, (error) => {
     }
 });
 ```
+
+
 ==== app.js
 ```js
 import express from 'express';
@@ -24,9 +26,7 @@ import path from 'path';
 import session from 'express-session';
 import exphbs from 'express-handlebars';
 // (more imports inline for readability)
-
 ```
-
 
 // #line()
 ```js
