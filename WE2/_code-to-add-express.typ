@@ -14,11 +14,11 @@ app.get("/cookieDemo/{*splat}", function (req, res) {
     res.cookie("signedUrl", req.url, {signed: true});
 
     if (req.cookies.url) {
-        res.end(`dein letzter besuch:
+        res.end(`dein letzter Besuch:
         Cookie: ${req.cookies.url}
         SignedCookie: ${req.signedCookies.signedUrl || "---"}`);
     } else {
-        res.end("Dein erster besuch?!")
+        res.end("Dein erster Besuch?!")
     }
 });
 
