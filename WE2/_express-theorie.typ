@@ -27,7 +27,7 @@ Origin. Cross-Origin Resource Sharing ist ein Mechanismus, um
 Cross-Site-Requests zu ermöglichen. Der Ziel-Server kann dem Client den
 Zugriff erlauben.
 
-#image("/assets/image-6.png")
+#image("/WE2/assets/image-6.png")
 
 
 = express
@@ -79,12 +79,12 @@ Objekt.
 
 - #strong[router.all(path, \[callback, ...\] callback)]
 
-    - Wird unabhängig vom der HTTP Methode aufgerufen. Dynamische Werte
-        möglich (/order/:id/)
+  - Wird unabhängig vom der HTTP Methode aufgerufen. Dynamische Werte
+    möglich (/order/:id/)
 
 - #strong[router.METHOD(path, \[callback, ...\] callback)]
 
-    - Wird aufgerufen, falls die jeweilige HTTP Methode verwendet wurde
+  - Wird aufgerufen, falls die jeweilige HTTP Methode verwendet wurde
 
 router.get(\'/\', function (req, res) { \
 res.send(\'hello world\'); \
@@ -92,8 +92,8 @@ res.send(\'hello world\'); \
 
 - #strong[router.route(path)]
 
-    - Kann benutzt werden um für einen Path verschiedene Methoden zu
-        gruppieren
+  - Kann benutzt werden um für einen Path verschiedene Methoden zu
+    gruppieren
 
 app.route(\'/book\').get(function (req, res) { \
 res.send(\'Get a random book\'); \
@@ -189,7 +189,7 @@ items: songs});
 Der Server schreibt ein Cookie auf einen Client (set-cookie: …). Client
 schickt alle Cookies für aktuelle Seite zurück and Server (cookie: …).
 
-#image("/assets/image-5.png")
+#image("/WE2/assets/image-5.png")
 // #box(image("media/image2.png", height: 0.75in, width: 2.047222222222222in))
 
 #strong[Session:] HTTP-Stateless umgehen. Daten werden Server-seitig

@@ -37,6 +37,12 @@
           echo "typst installiert:"
           echo " typst compile Module/doc.typ --root ."
           echo ""
+          echo "Beispiele:"
+          echo " typst watch ./WE2/WE2_Prüfung_Cheatsheet_Jasmin.typ --root ."
+          echo " typst compile ./WE2/WE2_Prüfung_Cheatsheet_Jasmin.typ --root . --font-path /home/jf/.nix-profile/share/fonts/truetype/"
+          echo " (live kompilierung aber pdf manuell refreshen)"
+          
+          echo ""
           echo "diagram:"
           echo " nix develop .#plantuml"
           echo " nix develop .#mermaid"

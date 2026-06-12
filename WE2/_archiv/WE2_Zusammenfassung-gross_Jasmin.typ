@@ -1,5 +1,5 @@
-#import "../lib.typ": *
-#import "./info.typ": info
+#import "/lib.typ": *
+#import "/WE2/info.typ": info
 
 // #show: cheatsheet.with(..info)
 #set enum(numbering: "1)1)")
@@ -62,7 +62,7 @@ sind Eingabewerte für Komponenten (Tatsächlich ist das Props Objekt der einzig
 - als Attribute übergeben und in Komponentenfunktion als Parameter auslesen
 - Props können immer nur von Parent zum Child übergeben werden
 - immutable
-#image("/assets/image-3.png")
+#image("/WE2/assets/image-3.png")
 ```js
 // props als destructured object
 const Article = ({ title, content }) => (..);
@@ -80,11 +80,11 @@ function Newspaper() {
 		<h2>Newspaper Page 1</h2>
 		<Article
 			title="Article 1"
-			content="..." 
+			content="..."
 		/>
 		<Article
 		title="Article 2"
-		content="..." 
+		content="..."
 		/>
 		</div>
 	);
@@ -205,12 +205,12 @@ JSX ist die Syntax, die wir für React Komponenten verwenden. Dabei wird
 JS und HTML miteinander verflochten
 
 - JSX (JavaScript XML) und ist eine JavaScript Syntax Extension (Darum auch eine .jsx Datei statt .js)
-- JSX erlaubt die Verwendung von HTML Notation in JS (und die Verwendung von JS in HTML) 
+- JSX erlaubt die Verwendung von HTML Notation in JS (und die Verwendung von JS in HTML)
 - JSX ist an sich separat von React, heisst React könnte auch ohne JSX verwendet werden, aber das macht Niemand
 - intuitiveres Programmieren als mit reinem JS (Vanilla JS)
 - JSX übernimmt die Übersetzung von JSX-Code in JavaScript.
-	
-#image("/assets/image-2.png");
+
+#image("/WE2/assets/image-2.png");
 
 ```js
 <section className="category">
@@ -290,7 +290,7 @@ const greet = function () {
 return "Hello";
 };
 greet(); // "Hello"
-         // 
+         //
 // named function expression
 const greet = function greetPerson() {...};
 
@@ -301,10 +301,10 @@ return <li>{person}</li>;
 ```
 
 Arrow Function (Lambda) (MDN)
-	Ist eine kompaktere Form einer Function Expression
-	Man kann die geschweiften Klammern und return weglassen für den Function Body,
-	wenn der Rückgabewert nur eine Expression ist. (darf man bei der Function
-	Expression nicht)
+Ist eine kompaktere Form einer Function Expression
+Man kann die geschweiften Klammern und return weglassen für den Function Body,
+wenn der Rückgabewert nur eine Expression ist. (darf man bei der Function
+Expression nicht)
 ```js
 
 // Keine Parameter

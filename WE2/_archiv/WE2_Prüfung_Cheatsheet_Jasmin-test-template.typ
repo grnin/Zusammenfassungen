@@ -1,5 +1,5 @@
-#import "../lib.typ": *
-#import "./info.typ": info
+#import "/lib.typ": *
+#import "/WE2/info.typ": info
 
 // #show: cheatsheet.with(..info)
 #set enum(numbering: "1)1)")
@@ -24,32 +24,32 @@ Inhalten `.map()`
 / Conditional Rendering: - `.filter()`
 
 / State: Zustand einer Komponente
-    - Der State kann durch Interaktionen verändert werden z. B. Klickcounter, Suchtext den der Nutzer eingibt, Wert einer Checkbox
-    - bleibt nicht unverändert, nicht als props erhalten, kann man nicht aus anderen Daten berechnen
+  - Der State kann durch Interaktionen verändert werden z. B. Klickcounter, Suchtext den der Nutzer eingibt, Wert einer Checkbox
+  - bleibt nicht unverändert, nicht als props erhalten, kann man nicht aus anderen Daten berechnen
 
 === Wie baut man UIs in React? (Thinking in React) / Wie komme ich von einer Skizze/Wireframe/... zu einer Anwendung?
 //#todo[mehr Abstand hier zwischen Elementen:]
 1. *Eine Idee haben, wie es aussehen soll (Skizze, Mockup, HTML/CSS)*
-    Das kann ein Mockup (links) sein, ein (HTML-, Papier-, Figma-, ...)Prototyp, ein Datenmodell, eine JSON-API-Response
+  Das kann ein Mockup (links) sein, ein (HTML-, Papier-, Figma-, ...)Prototyp, ein Datenmodell, eine JSON-API-Response
 2. *Zerlegen in eine Komponentenhierarchie*
-#image("/assets/SW01 Einführung React-2026-02-2.png")
-#image("/assets/image-1.png")
+#image("/WE2/assets/SW01 Einführung React-2026-02-2.png")
+#image("/WE2/assets/image-1.png")
 3. *Eine statische Version in React implementieren*
-    Statisches UI in React
-    ```js
-    const FilterableProductTable = ({ products }) => {
-       // ...
-     };
-     const SearchBar = () => {
-       // ...
-     };
-     const ProductTable = ({ products }) => {
-       // ...
-     };
-     const ProductRow = (props) => {
-       // ...
-     };
-    ```
+  Statisches UI in React
+  ```js
+  const FilterableProductTable = ({ products }) => {
+     // ...
+   };
+   const SearchBar = () => {
+     // ...
+   };
+   const ProductTable = ({ products }) => {
+     // ...
+   };
+   const ProductRow = (props) => {
+     // ...
+   };
+  ```
 
 4a. *Den minimalen, kompletten UI Zustand (State) finden*
 Um die Anwendung interaktiv zu machen, müssen User das Datenmodell anpassen können.
@@ -71,7 +71,7 @@ Häufig ist es der *gemeinsame Parent*
 Machmal ist es eine höhere Komponente als der gemeinsame Parent
 Wenn es keine Komponente gibt, wo die Platzierung des States Sinn ergibt, erstelle eine neue
 Komponente und platziere sie in der Hierarchie überhalb des gemeinsamen Parents
-#image("/assets/image-4.png")
+#image("/WE2/assets/image-4.png")
 
 - Nutze Eventhandler
 
@@ -87,15 +87,15 @@ Komponente und platziere sie in der Hierarchie überhalb des gemeinsamen Parents
 ==== Naming Komponente
 - UpperCamelCase
 - treffende Beschreibung der Komponente
-    - Beispiele: LinkButton , InfoTooltip , DraftEditor
+  - Beispiele: LinkButton , InfoTooltip , DraftEditor
 
 ==== HTML
 - HTML Attribut "class" -> "className" (weil 'class' in JS ein reserviertes Keyword ist) oder "for" in Formularfeldern -> "htmlFor"
-    - HTML-Attribute mit Bindestrich werden zu *lowerCamelCase*, bsp. stroke-width -> strokeWidth
+  - HTML-Attribute mit Bindestrich werden zu *lowerCamelCase*, bsp. stroke-width -> strokeWidth
 - Alle Elemente müssen geschlossen sein, auch wenn sie keine child-Elemente beinhalten (in React strenger als in HTML).
-    - ausser `aria-*` und `data-*`
-    - Jedes öffnende Element braucht ein Schliessendes: `<li></li>`
-    - Leere Elemente müssen mit einem schliessend Slash / ausgezeichnet werden: `<img /> ,<input /> oder auch leere React Komponenten <Article />`
+  - ausser `aria-*` und `data-*`
+  - Jedes öffnende Element braucht ein Schliessendes: `<li></li>`
+  - Leere Elemente müssen mit einem schliessend Slash / ausgezeichnet werden: `<img /> ,<input /> oder auch leere React Komponenten <Article />`
 - Comments in JSX werden so geschrieben: `{/* comment */}` im JavaScript Teil werden Comments regulär ausgezeichnet
 
 ==== JSX
