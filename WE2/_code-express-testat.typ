@@ -97,10 +97,7 @@ const userUuid = req.auth.uuid;
 // import { accountService } from '../services/account-service';
 const isOwner = await accountService.isOwner(data.from, userUuid);
 ```
-#code-block[
-  ==== services/account-service.ts
-
-]
+(accountService code at end)
 ```ts
     if (!isOwner) { throw new HttpError(402, 'Incorrect user'); }
     await transactionService.create(data);
@@ -110,90 +107,127 @@ const isOwner = await accountService.isOwner(data.from, userUuid);
 
 // ```
 #code-block[
-  ==== services/transaction-service.ts
-  ```ts
-  import Datastore from '@seald-io/nedb';
-  import { z } from 'zod';
-  import { accountService } from './account-service';
-  import { HttpError } from './http-error';
+    ==== services/transaction-service.ts
+    ```ts
+    import Datastore from '@seald-io/nedb';
+    import { z } from 'zod';
+    import { accountService } from './account-service';
+    import { HttpError } from './http-error';
 
-  const TransactionSchema = z.object({
-      from: z.number(), // can be float
-      amount: z.number().int(),
-      date: z.date(), to:.., total:..
-  }); type Transaction = z.infer<typeof TransactionSchema>;
+    const TransactionSchema = z.object({
+        from: z.number(), // can be float
+        amount: z.number().int(),
+        date: z.date(), to:.., total:..
+    }); type Transaction = z.infer<typeof TransactionSchema>;
 
-  export const AddTransactionSchema = z.object({
-    amount: z.number().int().positive(), from:.., to:..,
-  }); type AddTransaction = z.infer<typeof AddTransactionSchema>;
+    export const AddTransactionSchema = z.object({
+      amount: z.number().int().positive(), from:.., to:..,
+    }); type AddTransaction = z.infer<typeof AddTransactionSchema>;
 
-  type FindTransactionResult = {
-      docs: Transaction[]; count: number; skip: number; docCount: number;
-  };
+    type FindTransactionResult = {
+        docs: Transaction[]; count: number; skip: number; docCount: number;
+    };
 
-  export const FindTransactionSchema = z.object({
-      accountNr: z.coerce.number(),
-      count: z.coerce.number().int().positive().optional().default(10),
-      skip: z.coerce.number().int().nonnegative().optional().default(0),
-  }); type FindTransaction = z.infer<typeof FindTransactionSchema>;
+    export const FindTransactionSchema = z.object({
+        accountNr: z.coerce.number(),
+        count: z.coerce.number().int().positive().optional().default(10),
+        skip: z.coerce.number().int().nonnegative().optional().default(0),
+    }); type FindTransaction = z.infer<typeof FindTransactionSchema>;
 
-  export class TransactionService {
-      private db: Datastore<Transaction>;
+    export class TransactionService {
+        private db: Datastore<Transaction>;
 
-      constructor() { this.db = new Datastore({}); }
+        constructor() { this.db = new Datastore({}); }
 
-      async create(data: AddTransaction): Promise<void> {
-          const from = await accountService.get(data.from);
-          if (from.balance < data.amount) {
-              throw new HttpError(400, 'Insufficient funds');
-          }
-        //  throw error if amount < 0, sending to yourself..
+        async create(data: AddTransaction): Promise<void> {
+            const from = await accountService.get(data.from);
+            if (from.balance < data.amount) {
+                throw new HttpError(400, 'Insufficient funds');
+            }
+          //  throw error if amount < 0, sending to yourself..
 
-          const newFromBalance = from.balance - data.amount;
-          const to = await accountService.get(data.to);
-          const newToBalance = to.balance + data.amount;
+            const newFromBalance = from.balance - data.amount;
+            const to = await accountService.get(data.to);
+            const newToBalance = to.balance + data.amount;
 
-          const date = new Date();
-          await this.db.insertAsync({ from: data.from,... });
-  ```
+            const date = new Date();
+            await this.db.insertAsync({ from: data.from,... });
+    ```
 
-  //   await this.db.insertAsync({
-  //       from: data.from,
-  //       to: data.to,
-  //       amount: data.amount,
-  //       date: date,
-  //       total: newFromBalance,
-  //   });
+    //   await this.db.insertAsync({
+    //       from: data.from,
+    //       to: data.to,
+    //       amount: data.amount,
+    //       date: date,
+    //       total: newFromBalance,
+    //   });
 
-  ```ts
-          await accountService.update(from.accountNr, { balance: newFromBalance });
-          await accountService.update(to.accountNr, { balance: newToBalance });
-      } // transactionService.create
+    ```ts
+            await accountService.update(from.accountNr, { balance: newFromBalance });
+            await accountService.update(to.accountNr, { balance: newToBalance });
+        } // transactionService.create
 
-      async find(data: FindTransaction): Promise<FindTransactionResult> {
-          const filter = {
-              $or: [{ from: data.accountNr }, { to: data.accountNr }],
-          };
+        async find(data: FindTransaction): Promise<FindTransactionResult> {
+            const filter = {
+                $or: [{ from: data.accountNr }, { to: data.accountNr }],
+            };
 
-          const limit = data.count < 5 ? data.count : 5;
+            const limit = data.count < 5 ? data.count : 5;
 
-          let transactions: Transaction[] = await this.db
-              .findAsync(filter)
-              .sort({ date: -1 })
-              .skip(data.skip)
-              .limit(limit);
+            let transactions: Transaction[] = await this.db
+                .findAsync(filter)
+                .sort({ date: -1 })
+                .skip(data.skip)
+                .limit(limit);
 
-          const transactionCount = await this.db.countAsync(filter);
+            const transactionCount = await this.db.countAsync(filter);
 
-          return {
-              docs: transactions,
-              count: transactions.length,
-              skip: data.skip,
-              docCount: transactionCount,
-          };
-      } // transactionService.find
-  } export const transactionService = new TransactionService();
-  ```
+            return {
+                docs: transactions,
+                count: transactions.length,
+                skip: data.skip,
+                docCount: transactionCount,
+            };
+        } // transactionService.find
+    } export const transactionService = new TransactionService();
+    ```
 ]
 // ```ts
 
+// #code-block[
+==== services/account-service.ts
+```ts
+// imports and define schemas like transaction-service.ts
+export class AccountService {
+    // private db with constructor like transaction-service
+    // here is the file version:
+    constructor() {
+        this.db = new Datastore({ filename: './data/account.db', autoload: true });
+        // index und stellt Einzigartigkeit sicher:
+        this.db.ensureIndexAsync({ fieldName: 'owner', unique: true });
+        this.db.ensureIndexAsync({ fieldName: 'accountNr', unique: true });
+    }
+
+    // const isOwner = await accountService.isOwner(data.from, userUuid);
+    async isOwner(accountNr: number, userId: string) {
+        const account = await this.get(accountNr);
+        return account.owner === userId;
+    }
+
+    // const to = await accountService.get(data.to);
+    async get(accountNr: number) {
+        const account = await this.db.findOneAsync({ accountNr });
+        if (!account) { throw new HttpError(404, `${accountNr} not Found`); }
+        return account;
+    }
+
+    // await accountService.update(to.accountNr, { balance: newToBalance });
+    async update(accountNr: number, data: Update) {
+        const account = await this.db.updateAsync(
+            { accountNr }, { $set: data }, { multi: false, returnUpdatedDocs: true },
+        );
+        if (!account.affectedDocuments) { throw new HttpError(404, `${accountNr} not Found`); }
+        return true;
+    }
+```
+// ]

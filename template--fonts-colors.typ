@@ -14,6 +14,7 @@
     // -------
     stroke-blue: rgb("#4472c4"),
     bg-dark-blue: rgb("#07388b"),
+    violett: rgb("#810092"),
     light-blue: rgb("#d9e2f3"),
 )
 

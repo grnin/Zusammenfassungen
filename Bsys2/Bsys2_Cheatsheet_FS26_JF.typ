@@ -16,20 +16,57 @@
     landscape: true,
 )
 
+// temp typst functions ----------------
+
 #let wait = ```c wait()```
+
+#let indent(b) = block(
+    above: 0.7em,
+    inset: (top: 0em, left: 2pt, bottom: 0em, right: 0em),
+    b,
+)
+
+#let posix_code_hinweis(b) = [
+    #text(
+        fill: rgb("#db6a00"),
+        style: "italic",
+        size: 0.8em,
+    )[#b  ]
+]
+
+
+#let hinweis-normal-gross(b) = text(
+    fill: colors.violett,
+    b,
+)
+
+#show "->": sym.arrow.r;
+
+#let terms-spacing(spacing, body) = [
+    #show terms: set terms(spacing: spacing)
+    #body
+]
+
+// end temp typst functions ----------------
+
 
 ```c
 int *px = &x; // &x = Adresse des ints, * = Pointer-Bezeichner
 int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
 ```
-
+#v(-1pt)
 #include "_binary-hex-table.typ"
 
-= Betriebssystem API
+= Betriebssystem API - Zusammenspiel OS und Programm
+// / Ein Programm kann über Systemaufrufe auf Dienste des OS zugreifen: Intel 64 Prozessoren haben dafür den Befehl syscall -> Dieser wechselt in den Kernel Mode des Prozessors -> Argumente werden in vom OS definierten Registern übergeben -> Ein Argument bestimmt die Nummer des tatsächlichen Systemaufrufs -> Anzahl und Art der Argumente hängen vom jeweiligen Systemaufruf ab
+/ Ein Programm kann über Systemaufrufe auf Dienste des OS zugreifen: syscall -> Kernel Mode des Prozessors -> Argumente Registern übergeben -> Argument für Nummer des Systemaufrufs
+/ OS Mechanismen um Programme zu konfigurieren: Programmargumente (explizit), Umgebungsv. (implizit), Dateien oder Windows Registry (KVP).
+// -----
 / Aufgaben: Abstraktion, Portabilität, Ressourcenmanagement & Isolation der Anwendungen, Benutzerverwaltung und Sicherheit
 / Privilege Levels: _Kernel-Mode_ #hinweis[(darf alles ausführen, Ring 0)], _User-Mode_ #hinweis[(darf nur beschränkte Menge an Instruktionen ausführen, Ring 3)]
 / Kernels: _Microkernel_ #hinweis[(nur kritische Teile laufen im Kernel-Mode)], _Monolithisch_ #hinweis[(meiste OS, weniger Wechsel, weniger Schutz)], _Unikernel_ #hinweis[(Kernel ist nur ein Programm)]
-/ `syscall`: veranlasst den Prozessor, in den Kernel Mode zu schalten. Jede OS-Kernel-Funktion hat einen Code, der einem Register übergeben werden muss. #hinweis[(`exit` hat den Code 60)]
+/ `syscall`: Befehl um auf OS-Dienste zuzugreifen, wechselt in Kernel Mode von Prozessor. Argumente in Register gemäss OS #hinweis[(Ein Argument ist die Syscall Nummer/Code pro OS-Kernel-Funktion. z.B. `exit`=60, `exec*`.)]. C-API sollte nicht Syscall aufrufen, sondern C-Wrapper-Funktionen.
+// veranlasst den Prozessor, in den Kernel Mode zu schalten. Jede OS-Kernel-Funktion hat einen Code, der einem Register übergeben werden muss. #hinweis[(`exit` hat den Code 60)]
 / ABI: Application Binary Interface, Abstrakte Schnittstelle mit platformunabhängigen Aspekten
 / API: Application Programming Interface, Konkrete Schnittstellen, Calling Convention, Abbildung von Datenstrukturen. _Linux-Kernels_ sind API-, aber nicht ABI-kompatibel. #hinweis[(C-Wrapper-Funktionen)]
 / POSIX: Portable Operating System Interface. Sammlung von IEEE Standards, welche die Kompatibilität zwischen OS gewährleistet. Windows ist nicht POSIX-konform.
@@ -37,43 +74,53 @@ int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
 == Programmargumente
 `clang` *`-c abc.c -o abc.o`*. Shell teilt Programmargumente in Strings auf
 // #hinweis[(Trennung durch Leerzeichen, sonst Quotes)].
-=== Calling Convention
-- OS schreibt Argumente als null-terminierte Strings in den Speicherbereich des Programms. Zusätzlich legt das OS ein Array `argv` an, dessen Elemente jeweils auf das erste Zeichen eines Arguments zeigen. Die Art und Weise, wie das gehandhabt wird, ist die Calling Convention.
 - Werden explizit angegeben, nützlich für Informationen, die bei jedem Aufruf anders sind.
+=== Calling Convention
+- OS schreibt Argumente als null-terminierte Strings in den Speicherbereich des Programms.
+- Zusätzlich legt das OS ein Array `argv` an, dessen Elemente jeweils auf das erste Zeichen eines Arguments zeigen.
+- Der Pointer auf dieses Array und die Anzahl der Elemente wird dem Progamm an einer vom OS definierten Stelle zur Verfügung gestellt, z.B. in Registern oder auf dem Stack.
 - ```c int main(int argc, char ** argv) { ... } // argv[0] = program path```
+// Die Art und Weise, wie das gehandhabt wird, ist die Calling Convention.
 
 == Umgebungsvariablen
-Strings, die mindestens ein `Key=Value` enthalten #hinweis[`OPTER=1`, `PATH=/home/ost/bin`].
+Umgebungsv.: Strings, die mindestens ein `Key=Value` enthalten #hinweis[`OPTER=1`, `PATH=/home/ost/bin`].
 Unter POSIX verwaltet das OS die Umgebungsvariablen innerhalb
 jedes laufenden Prozesses. Werden initial festgelegt. Das OS legt die Variablen als ein null-terminiertes Array von Pointern auf null-terminierte Strings ab.\ Unter C zeigt die Variable ```c extern char **environ``` darauf.
 // Sollte nur über untenstehende Funktionen manipuliert werden.
-/ ```c char *value = getenv("PATH");```: Abfragen einer Umgebungsvariable
-/ ```c int ret = setenv("HOME", "/usr/home", 1);```: Setzen einer Umgebungsvariable
-/ ```c int ret = unsetenv("HOME");```: Entfernen einer Umgebungsvariable
-/ ```c int ret = putenv("HOME=/usr/home");```: Hinzufügen einer Umgebungsvariable
-    #hinweis[(gefährlich wegen Pointer auf `NULL`)]
 
-// TODO: was passiert wenn auf vorhandenen key neu gesetzt?
+/ ```c char *value = getenv("PATH")```: Abfragen einer Umgebungsv. #hinweis[returns Adresse von 1. Zeichen oder 0 wenn nicht vorhanden]
+/ ```c int ret = setenv("HOME", "/usr/home", 1) / setenv(*key, *value, overwrite)```: Umgebungsv. setzen #hinweis[Mit oder ohne überschreiben]
+/ ```c int ret = putenv("HOME=/usr/home") / putenv(char * string)```: #hinweis[löscht vorhandenen key, string als Variable mitgeben ist im nachhinein modifizierbar  (gefährlich Pointer auf `NULL`)]
+/ ```c int ret = unsetenv("HOME")```: Umgebungsv. entfernen
 
 // Der Key muss einzigartig sein. (ist logisch)
 // \ Werden implizit bereitgestellt, nützlich für Informationen, die bei jedem Aufruf gleich sind.
 // _Grössere Konfigurationsinformationen_ sollten über _Dateien_ übermittelt werden.
 
 = Dateisystem API
-Applikationen dürfen nie annehmen, dass Daten gültig sind.\
-/ Arbeitsverzeichnis: Bezugspunkt für relative Pfade, jeder Prozess hat eines #hinweis[(`getcwd()`, `chdir()`: nimmt String, `fchdir()`: nimmt File Deskriptor)].\
-/ Pfade: Absolut #hinweis[(beginnt mit /)], Relativ #hinweis[(beginnt nicht mit /)], Kanonisch #hinweis[(Absolut, ohne "`.`" und "`..`", `realpath()`)]
+/ Datei: Daten (Bytes) und Metadaten (Sammlung von Attributen) #hinweis[Dateiname, Verzeichnis, Ablageort ]
+/ Verzeichnis: Datei mit Liste aller Dateien. Verz.Hierarchie = Gesamtheit aller Verz. im System
+/ Links: _Hard-Link_: gleicher Inode, verschiedene Pfade, _Symbolischer Link_: wie eine Datei die Pfad auf andere Datei enthält. 0-1 Block alloziert.
 
-Längster erlaubter Pfadname `NAME_MAX` #hinweis[Maximale Länge eines Dateinamens (exklusive terminierender Null)] je nach System unterschiedlich, aber gemäss `_POSIX_NAME_MAX` mindestens 14. `limits.h`
+/ Zugriffsrechte: Je 3 Permission-Bits für Owner, Gruppe und andere Benutzer. \ `r=4, w=2, x=1` #hinweis[Zahlen so addieren, Beispiel: `0741` = `rwx r-- --x`]
+// #hinweis[(Owner hat alle Rechte, Gruppe kann lesen, andere haben keine Rechte)]. _`r`_ead, _`w`_rite, e_`x`_ecute
+// ---
+#v(-0.5em)
+/ Arbeitsverzeichnis: Bezugspunkt für relative Pfade, jeder Prozess hat eines #hinweis[(`getcwd()`, `chdir()`: nimmt String, `fchdir()`: nimmt File Deskriptor)]. z.B. `/home/bsys2` \
+/ Pfade: Absolut #hinweis[(beginnt mit /)], Relativ #hinweis[(beginnt nicht mit /)], Kanonisch #hinweis[(Absolut, ohne "`.`" und "`..`", `realpath()`)] \ Längster erlaubter Pfadname `NAME_MAX` #hinweis[Maximale Länge eines Dateinamens (exklusive terminierender Null)] je nach System unterschiedlich, aber gemäss `_POSIX_NAME_MAX` mindestens 14 #hinweis[`limits.h`]
+/ Datentyp: Applikationen müssen Daten validieren und auf Grenzverletzung überprüfen.
 
-/ Zugriffsrechte: Je 3 Permission-Bits für Owner, Gruppe und andere Benutzer. _`r`_ead, _`w`_rite, e_`x`_ecute: `r=4, w=2, x=1` _Beispiel:_ `0740` oder `rwx r-- ---` #hinweis[(Owner hat alle Rechte, Gruppe kann lesen, andere haben keine Rechte)].
 
-// TODO bei message passing oder shared memory:
-/ POSIX (mode für shm_open, mq_open): _`S_IRWXU`_ `= 0700`, _`S_IWUSR`_ `= 0200`, _`S_IRGRP`_ `= 0040`, _`S_IXOTH`_ `= 0001`. Werden mit | verknüpft.
 
-/ POSIX-API: für direkten Zugriff, alle Dateien sind rohe Binärdaten.
-/ C-API: für direkten Zugriff auf Streams.
-/ POSIX FILE API: für direkten, unformatierten Zugriff auf Inhalt der Datei. Nur für Binärdaten verwenden.
+// // TODO bei message passing oder shared memory:
+// / POSIX (mode für shm_open, mq_open): _`S_IRWXU`_ `= 0700`, _`S_IWUSR`_ `= 0200`, _`S_IRGRP`_ `= 0040`, _`S_IXOTH`_ `= 0001`. Werden mit | verknüpft.
+
+/ POSIX-API: für direkten Zugriff, alle Dateien sind rohe Binärdaten. Nutzt File-Deskriptoren. Blockorientiert, liest Bytes. `open/close, read/write, lseek, pwrite/pread`
+// / POSIX FILE API: für direkten, unformatierten Zugriff auf Inhalt der Datei. Nur für Binärdaten verwenden.
+/ C-API: für direkten Zugriff auf Streams, Stream-orientiert (möglicherweise gepuffert) liest characters (Zeilenumbruch automatisch auf OS formatiert), OS-unabhängig. `fopen/fclose, fgetc/fputc/funputc, fseek/ftell`
+/ File-Deskriptor: Index in die File-Descriptor-Table vom aktuellen Prozess.
+/ File-Descriptor-Table (FDT): hat jeder Prozess, Einträge enthalten u.a. aktuellen Offset + Zeiger in Global File Table. Nutze Indizes in diese Tabelle als Argument für Filesystem-API-Funktionen.
+/ stdin, stdout, stderr: vordefinierte Streams in jedem FDT von 0-1, wenn geschlossen können diese nicht mehr einfach geöffnet werden (im Prozess).
 / `errno`: Makro oder globale Variable vom typ `int`. Nach Auftreten eines Fehlers abfragen.
 
 // if (chdir("docs") < 0) { if (errno == EACCESS) { printf("Error: Denied"); }}
@@ -133,16 +180,11 @@ Enthält _Index in systemweite Tabelle_ #sym.arrow Enthält Daten zur Identifika
 
 / ```c int close (int fd)```: schliesst Datei = dealloziert den FD. FD kann von `open` für andere Dateien verwendet werden. Returned 0 oder -1. #hinweis[Wenn mehrere FDs die gleiche Datei öffnen, können sie sich gegenseitig Daten überschreiben.]
 // Wenn FD's nicht geschlossen werden, kann das FD-Limit erreicht werden, dann können keine weiteren Dateien mehr geöffnet werden.
-/ ```c ssize_t read(int fd, void * buffer, size_t n)```: \ kopiert die nächsten $n$ Bytes am aktuellen Offset von fd in den Buffer.
-/ ```c ssize_t write(int fd, void * buffer, size_t n)```: \ kopiert die nächsten $n$ Byte vom `buffer` an den aktuellen Offset von `fd`
-/ ```c off_t lseek(int fd, off_t offset, int origin)```: \ _Springen in einer Datei_. Verschiebt den Offset und gibt den neuen Offset zurück.
-_`SEEK_SET`:_ Beginn der Datei,
-_`SEEK_CUR`:_ Aktueller Offset,
-_`SEEK_END`:_ Ende der Datei.
-_`lseek(fd, 0, SEEK_CUR)`_ gibt aktuellen Offset zurück,
-_`lseek(fd, 0, SEEK_END)`:_ gibt die Grösse der Datei zurück.
-
-/ ```c ssize_t pread/pwrite(int fd, void * buffer, size_t n, off_t offset)```: Wie `read` bzw. `write`. Statt des Offsets von `fd` wird der zusätzliche Parameter `offset` verwendet. Offset von fd wird nicht verändert.
+/ ```c ssize_t read(int fd, void * buffer, size_t n)```: Versucht die nächsten $n$ Bytes am aktuellen Offset von fd in den Buffer zu kopieren, erhöht FD offset, blockierend
+/ ```c ssize_t write(int fd, void * buffer, size_t n)```: Versucht die nächsten n Byte vom buffer an aktuellen Offset von fd zu kopieren, erhöht FD offset, blockierend
+// \ kopiert die nächsten $n$ Byte vom `buffer` an den aktuellen Offset von `fd`
+/ ```c off_t lseek(int fd, off_t offset, int origin)```: Setzt offset auf `offset` und gibt neuen Offset zurück. *`origin`* = wozu Offset relativ ist: _`SEEK_SET`:_ Beginn der Datei, _`SEEK_CUR`:_ Aktueller Offset, _`SEEK_END`:_ Dateieende. \ *Beispiele*: _`lseek(fd, 0, SEEK_CUR)`_ aktueller Offset, _`lseek(fd, 0, SEEK_END)`:_ Grösse der Datei. `lseek (fd, n, SEEK_END)` hängt, bei nachfolgendem write, n Nullen an Datei.
+/ ```c ssize_t pread/pwrite(int fd, void * buffer, size_t n, off_t offset)```: Wie `read`/`write`. Statt Offsets von `fd` wird zusätzlicher Parameter `offset` verwendet. fd offset nicht verändert.
 
 
 
@@ -150,27 +192,24 @@ _`lseek(fd, 0, SEEK_END)`:_ gibt die Grösse der Datei zurück.
 In Windows werden Pfad-Bestandteile durch Backslash (`\`) getrennt + es gibt ein Wurzelverzeichnis pro Datenträger/Partition + andere File-Handling-Funktionen. (z.B. open <-> CreateFile)
 
 == C Stream API (File API)
-Unabhängig vom Betriebssystem, Stream-basiert, gepuffert oder ungepuffert,
-hat einen eigenen File-Position-Indicator (FPI).
-
-/ Streams: `FILE *` enthält _Informationen über einen Stream_. Soll nicht direkt verwendet oder kopiert werden, sondern nur über von C-API erzeugte Pointer.
-
-/ ```c FILE * fopen(char const *path, char const *mode)```:
-_Öffnen eine Datei._ Erzeugt `FILE`-Objekt für Datei an `path`. Flags für `mode`:
-_`"r"`_ #hinweis[(Datei lesen)],
-_`"w"`_ #hinweis[(in neue oder bestehende geleerte Datei schreiben)],
-_`"a"`:_ #hinweis[(in neue oder bestehende Datei anfügen)],
-_`"r+`:_ #hinweis[(Datei lesen & schreiben)],
-_`"w+"`_ #hinweis[(neue oder geleerte bestehende Datei lesen & überschreiben)],
-_`"a+"`_ #hinweis[(neue oder bestehende Datei lesen & an Datei anfügen)].
-Gibt Pointer auf erzeugtes `FILE`-Objekt zurück oder 0 bei Fehler.
-```c FILE * fdopen(int fd, char const * mode)``` ist gleich, aber statt Pfad wird direkt der FD übergeben.
+Unabhängig vom Betriebssystem (POSIX/Windows), Stream-basiert = zeichen-orientiert, für Dateien im Normalfall gepuffert, hat einen eigenen File-Position-Indicator (FPI).\
+/ FPI: bei gepuffert Position im Puffer, bei ungepuffert Offset des FD.\
+/ Streams: `FILE *` enthält _Informationen über einen Stream_. Soll nicht direkt verwendet oder kopiert werden, sondern nur über von C-API erzeugte Pointer.\
+/ FILE: Stream-infos, nur über C-API nutzen und nicht kopieren, die 3 Standard streams stdin-stderr.\
+/ ```c FILE * fopen(char const *path, char const *mode)```: _Öffnen eine Datei._ Erzeugt `FILE`-Objekt für Datei an `path`.  Flags für `mode`: *r*, *w* #hinweis-normal-gross[in neue/bestehende geleerte Datei schreiben], *a* #hinweis-normal-gross[in neue/bestehende Datei anfügen], *r+* #hinweis-normal-gross[bestehende Datei lesen und schreiben], *w+* #hinweis-normal-gross[neue/geleerte bestehende Datei lesen und schreiben], *a+* #hinweis-normal-gross[neue/bestehende Datei lesen und anfügen] \ Gibt Pointer auf erzeugtes `FILE`-Objekt zurück oder 0 bei Fehler.
+// _`"r"`_ #hinweis[(Datei lesen)],
+// _`"w"`_ #hinweis[(in neue oder bestehende geleerte Datei schreiben)],
+// _`"a"`:_ #hinweis[(in neue oder bestehende Datei anfügen)],
+// _`"r+`:_ #hinweis[(Datei lesen & schreiben)],
+// _`"w+"`_ #hinweis[(neue oder geleerte bestehende Datei lesen & überschreiben)],
+// _`"a+"`_ #hinweis[(neue oder bestehende Datei lesen & an Datei anfügen)].
+/ ```c FILE * fdopen(int fd, char const * mode)```: ist gleich, aber statt Pfad wird direkt der FD übergeben.
 / ```c int fileno (FILE *stream)```: gibt FD zurück von Stream (nicht mit POSIX mischen).
 / ```c int fclose(FILE *file)```: _Schliesst eine Datei._ Ruft ```c fflush()``` #hinweis[(schreibt Inhalt aus Speicher in die Datei)] auf, schliesst den Stream, entfernt `file` aus Speicher und gibt 0 zurück wenn OK, andernfalls `EOF`.
 / ```c int fgetc(FILE *stream)```: _Liest_ das nächste Byte und erhöht FPI um 1.
-/ ```c char * fgets(char *buf, int n, FILE *stream)```: liest bis zu $n-1$ Zeichen aus `stream`.
+/ ```c char * fgets(char *buf, int n, FILE *stream)```: liest bis zu $n-1$ Zeichen aus `stream`. // gibt bei Fehler 0 zurück!
 / ```c int ungetc(int c, FILE *stream)```: _Lesen rückgängig machen._ Nutzt Unget-Stack.
-/ ```c int fputc(int c, FILE *stream)```: _Schreibt `c` in eine Datei._
+/ ```c int fputc(int c, FILE *stream)```: schreibt `int c` als unsigned char in Stream.
 / ```c int fputs(char *s, FILE *stream)```: schreibt die Zeichen vom String `s` bis zur terminierenden 0 in `stream`.
 
 ==== Dateiende und Fehler:
@@ -182,26 +221,26 @@ Gibt Pointer auf erzeugtes `FILE`-Objekt zurück oder 0 bei Fehler.
 ```c int fseek (FILE *stream, long offset, int origin)``` setzt den FPI, analog zu `lseek`,
 ```c int rewind (FILE *stream)``` setzt den Stream zurück.
 
+
 = Prozesse
-Prozesse #hinweis[(aktiv)] sind die _Verwaltungseinheit_ des OS für Programme #hinweis[(passiv)].
-Jedem Prozess ist ein _virtueller Adressraum_ zugeordnet.\
-Ein Prozess umfasst das _Abbild eines Programms_ im Hauptspeicher #hinweis[(text section)],
-die _globalen Variablen des Programms_ #hinweis[(data section)],
-Speicher für den _Heap_ und Speicher für den _Stack_.\
-*Process Control Block (PCB):*
-Das Betriebssystem hält Daten über jeden Prozess in jeweils einem _PCB_ vor. Speicher für
-alle Daten, die das OS benötigt, um die Ausführung des Prozesses ins Gesamtsystem zu
-integrieren, u.a.: Diverse IDs, Speicher für Zustand, Scheduling-Informationen, Daten zur
-Synchronisation, Security-Informationen etc.\
-*Interrupts:*
-_Kontext_ des aktuellen Prozesses muss im dazugehörigen PCB gespeichert werden\ #hinweis[(context save)]:
-Register, Flags, Instruction Pointer, MMU-Konfiguration. _Interrupt-Handler_ überschreibt
-den Kontext. Anschliessend wird Kontext aus PCB wiederhergestellt #hinweis[(context restore)].\
-*Prozess-Erstellung:*
-Das OS erzeugt den Prozess und lädt das Programm in den Prozess.\
-Unter POSIX getrennt, unter Windows eine einzige Funktion.\
-*Prozess-Hierarchie:*
-Baumstruktur, startet bei Prozess 1.
+#terms-spacing(0.7em)[
+    / Modell Monoprogrammierung: Prozess sieht System, als gäbe es nur ihn und OS.
+    / Programm: Ein Programm kann mehrfach ausgeführt werden: verschiedene, voneinander unabhängige Prozesse. Prozess kann mehrere Programme nacheinander ausführen.
+    / Prozesse: sind die _Verwaltungseinheit_ des OS für Programme. Jedem Prozess ist ein _virtueller Adressraum_ zugeordnet (MMU). _ Ein Prozess umfasst_: das _Abbild eines Programms_ im Hauptspeicher #hinweis[(text section)], die _globalen Variablen des Programms_ #hinweis[(data section)], Speicher für _Heap_ und Speicher für _Stack_.
+    / Process Control Block (PCB): IDs, Kontext, Scheduling-Infos #hinweis[Priorität], Sync-Daten, offene Dateien...
+    // / Process Control Block (PCB): Diverse IDs, Speicher für Zustand, Scheduling-Informationen, Daten zur Synchronisation, Security-Informationen etc.
+    // Das Betriebssystem hält Daten über jeden Prozess in jeweils einem _PCB_ vor. Speicher für
+    // alle Daten, die das OS benötigt, um die Ausführung des Prozesses ins Gesamtsystem zu
+    // integrieren,
+    / Kontext: Register, Flags, Instruction Pointer, MMU-Konfiguration (Page-Table-Pointer)
+    / Kontextwechsel: Interrupt -> context save #hinweis[von Prozess in PCB] -> _Interrupt-Handler_ #hinweis[kann Kontext überschreiben] -> context restore. Ermöglicht quasi-parallele Ausführung.
+    //     Kontext-Wechsel ermöglichen quasi-parallele Ausführung von Prozessen auf einem Prozessor
+    // • OS sichert Kontext von Prozess A während Timer-Interrupt in PCB A
+    // • OS stellt Kontext aus PCB B wieder her ⇒ Nach Rücksprung aus Timer-Interrupt läuft Prozess B
+    / Prozess-Erstellung: OS erzeugt Prozess und lädt das Programm in den Prozess. `fork exec`
+    // Unter POSIX getrennt, unter Windows eine einzige Funktion.
+    / Prozess-Hierarchie: Baumstruktur, startet bei Prozess 1.
+]
 
 == Prozess-API
 *```c pid_t fork(void)```*
@@ -247,7 +286,7 @@ Programmargumente müssen spezifiziert werden. #hinweis[(`..l` als Liste, `..v` 
 )
 
 === Zombie- & Orphan-Prozesse
-$C$ ist zwischen seinem Ende und dem Aufruf von #wait durch $P$ ein Zombie-Prozess.
+// $C$ ist zwischen seinem Ende und dem Aufruf von #wait durch $P$ ein Zombie-Prozess.
 _Dauerhafter Zombie-Prozess:_ $P$ ruft wegen Fehler #wait nie auf.
 _Orphan-Prozess:_ $P$ wird vor $C$ beendet. $P$ kann somit nicht mehr auf $C$ warten, was
 bei Beendung von $C$ in einem dauerhaften Zombie resultiert. Wenn $P$ beendet wird, werden
@@ -261,7 +300,7 @@ Registriert Funktionen für Aufräumarbeiten vor Ende.\
 *```c pid_t getpid()/getppid()```* geben die (Parent-)Prozess-ID zurück.
 
 = Programme und Bibliotheken
-`C-Quelle -> Präprozessor -> Bereinigte C-Quelle -> Compiler -> Assembler-Datei -> Assembler -> Objekt-Datei -> Linker -> Executable`\
+`"C-Quelle" -> Präprozessor -> "Bereinigte C-Quelle" -> Compiler -> "Assembler-Datei" -> Assembler -> "Objekt-Datei" -> Linker -> "Executable"`\
 _Präprozessor:_ Die Ausgabe des Präprozessors ist eine reine C-Datei (Translation-Unit) ohne
 Makros, Kommentare oder Präprozessor-Direktiven.
 _Linker:_ Der Linker verknüpft Objekt-Dateien (und statische Bibliotheken) zu Executables
@@ -270,21 +309,20 @@ _Loader_ lädt Executables und eventuelle dynamische Bibliotheken dieser in den 
 
 == ELF (Executable and Linking Format)
 _Binär-Format_, das Kompilate spezifiziert. Besteht aus #tcolor("grün", "Linking View")
-#hinweis[(wichtig für Linker, für Object-Files und Shared Objects)] und
-#tcolor("orange", "Execution View") #hinweis[(wichtig für Loader, für Programme und Shared Objects)].\
-*Struktur:*
+#hinweis[(wichtig für Linker, für Object-Files und Shared Objects, Sektionen)] und
+#tcolor("orange", "Execution View") #hinweis[(wichtig für Loader, für Programme und Shared Objects, Segmente)]. Die Views definieren "gleichartige" Daten. Der _Linker_ vermittelt zwischen beiden Views.
+*ELF Struktur:*
 Besteht aus _Header_,
-#tcolor("orange", "Programm Header Table") #hinweis[(execution view)],
-#tcolor("orange", "Segmente") #hinweis[(execution view)],
-#tcolor("grün", "Section Header Table") #hinweis[(linking view)],
-#tcolor("grün", "Sektionen") #hinweis[(linking view)]
+#tcolor("orange", "Programm Header Table"), //#hinweis[(execution view)],
+#tcolor("orange", "Segmenten"), // #hinweis[(execution view)],
+#tcolor("grün", "Section Header Table"), //#hinweis[(linking view)],
+#tcolor("grün", "Sektionen") // #hinweis[(linking view)]
+und enthält auch Strings (z.B. Namen von Symbolen + Sektionen..) und Symboltabelle (für Bibliotheken und object files).
 
-== Segmente und Sektionen
-#tcolor("orange", "Segmente") und #tcolor("grün", "Sektionen") sind eine andere Einteilung
-für die gleichen Speicherbereiche. View des #tcolor("orange", "Loaders") sind die
-#tcolor("orange", "Segmente"), view des #tcolor("grün", "Compilers") die #tcolor("grün", "Sektionen").
-Definieren "gleichartige" Daten. Der _Linker_ vermittelt zwischen beiden Views.
-
+// #tcolor("orange", "Segmente")=Loader und #tcolor("grün", "Sektionen")=Linker=Compiler sind eine andere Einteilung (Views)
+// für die gleichen Speicherbereiche.
+// View des #tcolor("orange", "Loaders") sind die
+// #tcolor("orange", "Segmente"), view des #tcolor("grün", "Compilers") die #tcolor("grün", "Sektionen").
 *Header:*
 Beschreibt den _Aufbau_ der Datei: Typ, 32/64-bit, Encoding, Maschinenarchitektur,
 Entrypoint, Infos zu den Einträgen in PHT und SHT.\
@@ -309,13 +347,31 @@ Die Symboltabelle enthält jeweils _einen Eintrag je Symbol_
 *Statische Bibliotheken:*
 Archive von Objekt-Dateien. Name: `lib<name>.a`, referenziert wird nur `<name>`.
 _Linker_ behandelt statische Bibliotheken wie _mehrere Objekt-Dateien_. Ursprünglich gab es
-_nur statische Bibliotheken_ #hinweis[(Einfach zu implementieren, aber Funktionalität fix)].\
+_nur statische Bibliotheken_ #hinweis[(Einfach zu implementieren, aber Funktionalität fix, wie zip vorstellen)].\
 *Dynamische Bibliotheken:*
-Linken erst zur Ladezeit bzw. Laufzeit des Programms. Höherer Aufwand, jedoch austauschbar.
-Executable enthält nur Referenz auf Bibliothek. *Vorteile:* Entkoppelter Lebenszyklus,
-Schnellere Ladezeiten durch Lazy Loading, Flexibler Funktionsumfang.
-
+Linken erst zur Ladezeit bzw. Laufzeit des Programms.
+Executable enthält nur Referenz auf Bibliothek. Höherer Aufwand.
+_Vorteile_: austauschbar, Entkoppelter Lebenszyklus, Plugin-Mechanismus, (Schnellere Ladezeiten durch Lazy Loading, Flexibler Funktionsumfang).
+_Dynamisches Linken_ explizit im Programm #hinweis[dlopen, dlsym] oder zum Programmstart.
 == POSIX Shared Objects API
+*Konventionen:*
+Shared Objects können _automatisch_ bei Bedarf geladen werden.
+Linker->Linker-Namen, Loader->SO-Namen.
+- _Linker-Name:_ `lib + Bibliotheksname + .so` #hinweis[(z.B. libmylib.so)],
+- _SO-Name:_ `Linker-Name + . + Versionsnummer` #hinweis[(z.B. libmylib.so.2)],
+- _Real-Name:_ `SO-name + . + Unterversionsnummer` #hinweis[(z.B. libmylib.so.2.1)]
+#v(-0.5em)
+*Shared Objects:*
+Nahezu alle Executables benötigen _zwei Shared Objects_:
+_`libc.so`:_ Standard C library,
+_`ld-linux.so`:_ ELF Shared Object loader #hinweis[(Lädt Shared Objects und rekursiv alle
+    Dependencies)].\
+*Implementierung dynamischer Bibliotheken:*
+Müssen verschiebbar sein, mehrere müssen in den gleichen Prozess geladen werden.
+Die Aufgabe des Linkers wird in den Loader bzw. Dynamic Linker verschoben
+#hinweis[(Load Time Relocation)].
+
+
 *```c void * dlopen (char * filename, int mode)```:*
 _öffnet_ eine dynamische Bibliothek und gibt ein Handle darauf zurück.
 `mode` ist einer der folgenden Werte:
@@ -341,32 +397,12 @@ schliesst das durch `handle` bezeichnete, zuvor geöffnete Objekt.\
 *```c char * dlerror()```:*
 gibt Fehlermeldung als null-terminierten String zurück.
 
-*Konventionen:*
-Shared Objects können _automatisch_ bei Bedarf geladen werden.
-Der Linker verwendet den Linker-Namen, der Loader verwendet den SO-Namen.
-- _Linker-Name:_ `lib + Bibliotheksname + .so` #hinweis[(z.B. libmylib.so)],
-- _SO-Name:_ `Linker-Name + . + Versionsnummer` #hinweis[(z.B. libmylib.so.2)],
-- _Real-Name:_ `SO-name + . + Unterversionsnummer` #hinweis[(z.B. libmylib.so.2.1)]\
-*Shared Objects:*
-Nahezu alle Executables benötigen _zwei Shared Objects_:
-_`libc.so`:_ Standard C library,
-_`ld-linux.so`:_ ELF Shared Object loader #hinweis[(Lädt Shared Objects und rekursiv alle
-    Dependencies)].\
-*Implementierung dynamischer Bibliotheken:*
-Müssen verschiebbar sein, mehrere müssen in den gleichen Prozess geladen werden.
-Die Aufgabe des Linkers wird in den Loader bzw. Dynamic Linker verschoben
-#hinweis[(Load Time Relocation)].
-
-== Shared Memory
-Dynamische Bibliotheken sollen _Code zwischen Programmen teilen_. Code soll _nicht mehrfach_
-im Speicher abgelegt werden. Mit Shared Memory kann jedes Programm eine _eigene virtuelle
-Page_ für den Code definieren. Diese werden auf denselben Frame im RAM gemappt.
-Benötigt _Position-Independent Code_ #hinweis[(Adressen nur relativ zum Instruction Pointer, Prozessor muss relative Instruktionen anbieten)].\
-
+// == Shared Memory
+/ _Position-Independent Code_: #hinweis[(Adressen nur relativ zum Instruction Pointer, Prozessor muss relative Instruktionen anbieten)] Dynamische Bibliotheken sollen _Code zwischen Programmen teilen_. Code soll _nicht mehrfach_ im Speicher abgelegt werden.
+/ Mit Shared Memory: kann jedes Programm eine _eigene virtuelle Page_ für den Code definieren. Diese werden auf denselben Frame im RAM gemappt.
 / Relative Moves via Relative Calls: Mittels Hilfsfunktion wird Rücksprungadresse in Register abgelegt, somit kann relativ dazu gearbeitet werden.
 / Global Offset Table (GOT): Pro dynamische Bibliothek & Executable vorhanden, enthält pro Symbol einen Eintrag. Der Loader füllt zur Laufzeit die Adressen in die GOT ein.
-/ Procedure Linkage Table (PLT): Implementiert Lazy Binding. Enthält pro Funktion einen Eintrag, dieser enthält Sprungbefehl an Adresse in  GOT-Eintrag. Dieser zeigt auf eine Proxy-Funktion, welche den GOT-Eintrag
-überschreibt. _Vorteil:_ erspart bedingten Sprung.
+/ Procedure Linkage Table (PLT): Implementiert Lazy Binding. Enthält pro Funktion einen Eintrag, dieser enthält Sprungbefehl an Adresse in  GOT-Eintrag. Dieser zeigt auf eine Proxy-Funktion, welche den GOT-Eintrag überschreibt. _Vorteil:_ erspart bedingten Sprung.
 
 = Threads
 Jeder _Prozess_ hat virtuell den _ganzen Rechner_ für _sich alleine_.
@@ -401,6 +437,7 @@ Nur bestimmte Teile eines Algorithmus können parallelisiert werden.
     / $T_s + (T - T_s) / n$: Serieller Teil + Paralleler Teil #hinweis[$= T^'$]
     Die _serielle Variante_ benötigt also höchstens _$f$ mal mehr Zeit_ als die _parallele Variante_:
 ]
+#v(-2em)
 $ f <= T / T^' = T / (T_s + (T - T_s) / n) $
 $f$ heisst auch _Speedup-Faktor_, weil die parallele Variante max. $f$-mal schneller ist als
 die serielle.
@@ -426,6 +463,7 @@ $
         #hinweis[(Kurve flacht ab)]
     *Grenzwert:* Mit höherer Anzahl Prozessoren nähert sich der Speedup $1/s$ an:
 ]
+#v(-1em)
 #grid(
     columns: (1fr, 1fr, 1fr),
     [$ lim_(n -> infinity) (1 - s) / n = 0 $],
@@ -739,8 +777,7 @@ der _Ausführungsreihenfolge_ einzelner Instruktionen abhängen, spricht man von
 Condition_. Threads müssen _synchronisiert_ werden, damit keine _Race Condition_ entsteht.\
 
 / Critical Section: Code-Bereich, in dem Daten mit anderen Threads _geteilt_ werden. Muss unbedingt synchronisiert werden.
-/ Atomare Instruktionen: Eine atomare Instruktion kann vom Prozessor _unterbrechungsfrei_ ausgeführt werden.
-#hinweis[*Achtung:* Selbst einzelne Assembly-Instruktionen nicht immer atomar!]\
+/ Atomare Instruktionen: Eine atomare Instruktion kann vom Prozessor _unterbrechungsfrei_ ausgeführt werden. #hinweis[*Achtung:* Selbst einzelne Assembly-Instruktionen nicht immer atomar!]\
 === Anforderungen an Synchronisations-Mechanismen:
 _Gegenseitiger Ausschluss_ #hinweis[(Nur ein Thread darf in Critical Section sein)],
 _Fortschritt_ #hinweis[(Entscheidung, wer in die Critical Section darf, muss in endlicher Zeit getroffen werden)],
@@ -755,34 +792,48 @@ _Compare-and-Swap_ #hinweis[(Überschreibt einen `int` mit einem spezifizierten 
 
 == Semaphore
 Enthält Zähler $z >= 0$. Wird nur über _`Post(v)`_ #hinweis[(Erhöht $z$ um 1)] und
-_`Wait(v)`_ zugegriffen\ #hinweis[(Wenn $z > 0$, verringert $z$ um $1$ und fährt fort.
-    Wenn $z = 0$, setzt den Thread in waiting, bis anderer Thread $z$ erhöht)].
+_`Wait(v)`_ zugegriffen #hinweis[(Wait: Wenn $z > 0$, verringert $z$ um $1$ und fährt fort.
+    wenn $z = 0$, setzt den Thread in waiting, bis anderer Thread $z$ erhöht)].
 
-*```c int sem_init (sem_t *sem, int pshared, unsigned int value)```:*
-_Initialisiert_ den Semaphor, typischerweise als _globale Variable_.
-`pshared = 1`: Verwendung über mehrere Prozesse: ```c sem_t sem; int main ( int argc, char ** argv ) { sem_init (&sem, 0, 4); }```
-oder als Parameter für den Thread #hinweis[(Speicher auf dem Stack oder Heap)]:
-```c struct T { sem_t *sem; ... };```
+#posix_code_hinweis[ Alle diese Funktionen geben, gemäss *POSIX API* (thread library), den Status "int" zurück, weggekürzt. ]\
+*```c sem_init (sem_t *sem, int pshared, unsigned int value)```:*\
+#indent(
+    [
+        _Initialisiert_ Semaphor vom Typ sem_t #hinweis[sem_t möglich als globale Variable oder member von struct], pshared=0 nur auf einem Prozessor. value=Startwert von Semaphor.
+        // `pshared = 1`: oder als Parameter für den Thread #hinweis[(Speicher auf dem Stack oder Heap)]:
+        // ```c
+        // struct T { sem_t *sem; ... };
+        // int main (int argc, char **argv)
+        // {
+        // sem_t sem;
+        // sem_init (&sem, 0, 4);
+        // struct T t = { &sem , ... };
+        // return 0;
+        // }
+        // ```
+        \ Verwendung globaler Semaphor über mehrere Prozesse: #v(-0.5em)
+        ```c sem_t sem; /*global*/
+        int main (..) { sem_init (&sem, 0, 4); /* pshared=0, Semaphor Wert =4 */ }
+        ```
+    ],
+)
 
-*```c int sem_wait (sem_t *sem); int sem_post (sem_t *sem)```:*
-implementieren _Post_ und _Wait_.
-*```c int sem_trywait (sem_t *sem); int sem_timedwait (sem_t *sem, const struct timespec *abs_timeout)```:*
-Sind wie `sem_wait`, aber _brechen ab_, falls Dekrement _nicht_ durchgeführt werden kann.
-`sem_trywait` bricht sofort ab, `sem_timedwait` nach der angegebenen Zeitdauer.\
-*```c int sem_destroy (sem_t *sem)```:*
-_Entfernt Speicher_, den das OS mit `sem` _assoziiert_ hat.
+
+/ ```c sem_wait (sem_t *sem); sem_post (sem_t *sem)```: implementieren _Post +_ und _Wait -_.
+/ ```c sem_trywait (sem_t *sem); sem_timedwait (sem_t *sem, const struct timespec *abs_timeout)```: Sind wie `sem_wait`, aber _brechen ab_, falls Dekrement _nicht_ durchgeführt werden kann. `sem_trywait` bricht sofort ab, `sem_timedwait` nach der angegebenen Zeitdauer.\
+/ ```c sem_destroy (sem_t *sem)```: _Entfernt Speicher_, den das OS mit `sem` _assoziiert_ hat.
 
 ```c
-semaphore free = n; semaphore used = 0;
+semaphore free = n; semaphore used = 0; // Beispiel mit 1 Producer und 1 Consumer
 ```
 #grid(
     columns: (auto, auto),
+    gutter: 0pt,
     [
         ```c
         // Producer
         while (1) {
-          // Warte, falls Customer zu langsam
-          WAIT (free); // Hat es Platz in Queue?
+          WAIT (free); //warte auf Platz in Queue
           produce_item (&buffer[w], ...);
           POST (used); // 1 Element mehr in Queue
           w = (w+1) % BUFFER_SIZE;
@@ -1080,7 +1131,9 @@ zugreifen. Im Shared Memory müssen _relative Adressen_ verwendet werden.
 Das OS benötigt eine "Datei" _$bold(S)$_, das Informationen über den gemeinsamen Speicher
 verwaltet und eine _Mapping Table_ je Prozess.
 
+/ POSIX (mode für shm_open, mq_open): _`S_IRWXU`_ `= 0700`, _`S_IWUSR`_ `= 0200`, _`S_IRGRP`_ `= 0040`, _`S_IXOTH`_ `= 0001`. Werden mit | verknüpft.
 / ```c int fd = shm_open ("/mysharedmemory", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR)```: Erzeugt (falls nötig) und öffnet Shared Memory `/mysharedmemory` zum Lesen und Schreiben.
+// TODO bei message passing oder shared memory:
 / ```c int ftruncate (int fd, offset_t length)```: _Setzt_ Grösse der "Datei". Muss _zwingend_ nach SM-Erstellung gesetzt werden, um entsprechend viele Frames zu allozieren. \ Wird für Shared Memory mit ganzzahligen Vielfachen der Page-/Framegrösse verwendet.
 / ```c int close (int fd)```: _Schliesst_ "Datei". Shared Memory _bleibt aber im System_.
 / ```c int shm_unlink (const char * name)```: _Löscht_ das Shared Memory mit dem `name`. #hinweis[(bleibt vorhanden, solange noch von Prozess geöffnet)]\
@@ -1130,7 +1183,7 @@ Nullen aufgefüllt. Bei _4 Bytes_ sind #hex("D800") bis #hex("DFFF") #hinweis[(B
 wegen dem Separator _ungültig_ und müssen "umgerechnet" werden.\
 
 #image("img/bsys_45.png")
-
+#v(-4pt)
 ==== Beispiel
 Encoding von U+10'437 (\u{10437})
 #hinweis[#fxcolor("grün", bits("00 0100 0001", suffix: false))
@@ -1309,24 +1362,24 @@ _Symbolische Links_ #hinweis[(Wie eine Datei, Datei enthält Pfad anderer Datei)
         columns: (1fr, 1fr, auto),
         table.header([FAT], [Ext2], [NTFS]),
         [
-            - Verzeichnis enthält alle Daten über die Datei
-            - Datei ist in einem einzigen Verzeichnis
+            - Verzeichnis enthält alle Daten über Datei
+            - Datei in 1 einzigen Verzeichnis
             - Keine Hard-Links möglich
         ],
         [
-            - Dateien werden durch Inodes beschrieben
-            - Kein Link von der Datei zurück zum Verzeichnis
-            - Hard-Links möglich
+            - Dateien durch Inodes beschrieben
+            - Kein Link von Datei zurück zum Verzeichnis
+            // - Hard-Links möglich
         ],
         [
-            - Dateien werden durch File-Records beschrieben
-            - Verzeichnis enthält Namen und Link auf Datei
-            - Link zum Verzeichnis und Name sind in einem Attribut
-            - Hard-Links möglich
+            - Dateien durch File-Records beschrieben
+            - Verzeichnis = Namen und Link auf Datei
+            - Link zum Verzeichnis und Name sind in Attribut
+            // - Hard-Links möglich
         ],
     )
 }
-
+#v(-2pt)
 = Ext4
 // _Vergrössert_ die wichtigen Datenstrukturen, besser für grosse Dateien, erlaubt höhere
 // maximale Dateigrösse. Blöcke werden mit _Extent Trees_ verwaltet, _Journaling_ wird eingeführt.
@@ -1405,6 +1458,7 @@ _Ordered_ #hinweis[(Nur Metadaten ins Journal, Dateiinhalte werden immer vor Com
 _Writeback_ #hinweis[(Nur Metadaten ins Journal, beliebige Reihenfolge, nicht sehr sicher aber schnell).]
 
 = X Window System
+#image("/assets/image.png")
 Setzt _Grundfunktionen der Fensterdarstellung_. Ist austauschbar, realisiert Netzwerktransparenz.
 Plattformunabhängig, legt die GUI-Gestaltung nicht fest.\
 *Programmgesteuerte Interaktion:* Benutzer reagiert auf Programm.\

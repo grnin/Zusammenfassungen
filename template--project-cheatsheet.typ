@@ -13,9 +13,12 @@
     tableofcontents: (enabled: false, depth: "", columns: ""), // (depth: none, columns: 1)
     language: "de",
     font-size: 11pt,
-    display-title-header: true,
+    // display-title-header: true,
+    // display-title-footer: true,
+    // heading-page-number-in-ref: true,
+    display-title-header: false,
     display-title-footer: true,
-    heading-page-number-in-ref: true,
+    heading-page-number-in-ref: false,
     appendix: (), // specifiy path to .typ file to add appendix documents
     body,
 ) = {
@@ -197,7 +200,7 @@
     }
 
 
-    // compact version:
+    // compact version, kompakt
     // /*
     // // H1
     show heading.where(level: 1): h => {
@@ -222,13 +225,13 @@
     }
 
     // H2
-    show heading.where(level: 2): h => {
+    show heading.where(level: 2): heading => {
         block(
             fill: colors.light-blue,
             sticky: true,
             // margin:
-            above: 2pt,
-            below: 0.5pt,
+            above: 2.25pt,
+            below: 0.25pt,
             inset: 1.5pt,
             width: 100%,
             text(
@@ -238,7 +241,8 @@
                 size: 4.5pt,
                 tracking: 0.5pt,
                 // fill: white,
-                upper(h.body),
+                // upper([#h(-3pt) #heading.body]),
+                upper(heading.body),
             ),
         )
         v(0.45em)
@@ -247,13 +251,15 @@
     // H3
     show heading.where(level: 3): h => {
         block(
-            above: 4pt,
-            below: 3pt,
+            above: 4.5pt,
+            below: 2.8pt,
+            inset: (left: -1pt),
             text(
                 font: aptos-font,
                 style: "normal",
                 weight: "semibold",
-                size: 4.5pt,
+                // size: 4.25pt,
+                size: 1em,
                 h.body,
             ),
         )
@@ -317,9 +323,11 @@
     set enum(tight: true, spacing: .5em)
     set list(tight: true, spacing: .5em)
     set terms(
+        // separator: [#h(2pt)],
         separator: [: ],
         hanging-indent: 0.75em,
         tight: true,
+        // tight: false,
         spacing: .5em,
     )
     // // terms with more spacing:
@@ -333,7 +341,6 @@
     //         }))
     //         .join()
     // }
-
 
     // Code, use with ```python print("Hello World")```
     show raw: set text(font: font-special.font, size: 1em)

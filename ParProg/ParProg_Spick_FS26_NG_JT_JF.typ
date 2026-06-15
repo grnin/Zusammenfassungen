@@ -1251,7 +1251,7 @@ to write to array $C$ because they might _corrupt the working memory_ of some ot
 
 == Error Handling
 Some functions have return type `cudaError`. Need to check for `cudaSuccess`. It's best to
-write your own helper function and wrap _every fucking line_ in it. E.g. `handleCudaError()`
+write your own helper function and wrap _every line_ in it. E.g. `handleCudaError()`
 which prints the error and exits the program.
 
 == Unified Memory
@@ -1289,7 +1289,7 @@ void MatrixAddKernel(float *A, float *B, float *C) {
 }
 const int A_COLS, B_COLS, C_COLS = 6;
 const int A_ROWS, B_ROWS, C_ROWS = 4;
-dim 3 block = (2,2); dim3 grid = (3,2);
+dim3 block = (2,2); dim3 grid = (3,2); // (3,2) == (3,2,0)
 MatrixAddKernel<<<grid,block>>>(A,B,C);
 ```
 
@@ -1299,7 +1299,7 @@ Every thread computes one element of the result matrix $C$.
 Can be parallelized because results do not depend on each other.
 ```cpp
 __global__
-void multiply(float *A, float *B, float *C) {
+void MatrixMultiply(float *A, float *B, float *C) {
   int i = blockIdx.x * blockDim.x + threadIdx.x;
   int j = blockIdx.y * blockDim.y + threadIdx.y;
   if (i < N && j < M) { // boundary checking
