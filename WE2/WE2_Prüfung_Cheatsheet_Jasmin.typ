@@ -13,40 +13,20 @@
     landscape: true,
 )
 
-#import "@preview/cheq:0.3.1": checklist
-#show: checklist
-
 #import "./helpers.typ": *
 
 // #let \-\> = sym.arrow.r;
 #show "->": sym.arrow.r;
 
-= JavaScript
 
-=== Functions
-/ Function Declaration: Schlüsselwort `function`, gehoistet #hinweis[Verwendung for Definition möglich], ```js function greet() {..}```
-/ Function Expression: in JSX und überall wo eine Expression reinpasst nutzbar ()
-/ Named Function Expr.: ```js const greet = function greetPerson() {...};```
-/ Anonymous Function Expr.: ```js ... = function () {...}; ```
-/ Arrow Function (Lambda): kompakte Form einer Function Expression, 1 Parameter: ```js ... = x => x * x;
-    ```, mit Rückgabewert: ```js = () => "Hello";``` // ohne Rückgabewert=side effects und deshalb nicht gut: ```js = () => { .. } ```
-/ Callback Function: (relevant in Express Middleware)
+// TODO:
+//  expressjs prüfen ob alles von _code-exp..todo vorhanden, sonst von dort noch Inhalt übernehmen
+//  express middleware konzept genug erklärt?
 
-
-// TODO Beispiel: inline stye beispiel
-
-// Inhalt plan
-//
-// code:
-// - useState?
-// - useEffect
-// - useReduce
-//
-// wieviel vom pizzashop? oder doch besser testat?
-//
-
-// TODO: expressjs
-
+// weggelassen:
+// CSS infos
+// js das ich logisch finde
+// custom react hooks und bisschen react code weggekürzt
 
 #include "/WE2/_react.typ"
 

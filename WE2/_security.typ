@@ -4,8 +4,20 @@
 = security
 <security>
 
+== Security Mindset
+- Vertraue niemals User-Input
+- Alles vom Client kann manipuliert werden
+- Der Server entscheidet
+- Security braucht mehrere Schutzschichten
+«Security bedeutet: nicht nur bauen — sondern hinterfragen.»
+
+== kurzgefasst
+/ XSS: → Wird User-Input zu Code? _Lösung_: Output immer escapen. React escaped automatisch — dangerouslySetInnerHTML vermeiden.
+/ IDOR: → Wird jeder Zugriff serverseitig geprüft? _Lösung_: Authentication (wer bist du?) + Authorization (darfst du das?) — beide serverseitig.
+/ CSRF: → Wer hat diesen Request wirklich ausgelöst? _Lösung_: CSRF-Token verwenden. Keine State Changes via GET
+
 == XSS
-#v(-2em)
+#v(-1em)
 === XSS Schutz
 1. *Output Escaping*: #strike[```js`${input}```], ```js ${xss(input)}```, ```js {input} ```, #strike[```js {{{input}}// hbs```],```js {{input}}// hbs```,
 // React escaped automatisch

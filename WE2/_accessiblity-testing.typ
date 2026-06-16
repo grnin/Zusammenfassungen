@@ -27,7 +27,20 @@
 / manuell prüfen: schlechte UX / Interaktion, unklare Inhalte ("click here") sollten klar verständlich sein, schlechte Screen Reader Experience, Keyboard-Navigation im Kontext (Tabs), Button ist div statt `<button type="button">..`
 / Weitere typische Probleme: _Alt-Text vorhanden_ → aber inhaltlich nutzlos ("image.jpg"), _Label vorhanden_ → aber falsch verknüpft, _Lighthouse Score hoch_ → trotzdem nicht nutzbar, _Drag & Drop_ ohne Alternative
 / Accessibility wird oft falsch gemessen: Tools prüfen, was einfach messbar ist aber Nutzer erleben etwas anderes
-/ die 3 goldenen Regeln: Semantik vor Styling (HTML native Elemente), Bedienbarkeit sicherstellen (Tastatur), Verständliche Benennung
+
+=== 3 goldenen Regeln
+// kurz so:
+// / die 3 goldenen Regeln: Semantik vor Styling (HTML native Elemente), Bedienbarkeit sicherstellen (Tastatur), Verständliche Benennung
+
+/ Semantik vor Styling:
+    Verwende native HTML-Elemente wie button, a und label.
+    Vermeide Custom Controls, wenn ein passendes Standard-Element existiert.
+/ Bedienbarkeit sicherstellen:
+    Alle Funktionen müssen mit der Tastatur bedienbar sein.
+    Der Fokus muss sichtbar und die Navigationsreihenfolge logisch sein.
+/ Verständliche Benennung:
+    Interaktive Elemente benötigen klare, verständliche Namen.
+    Formularfelder müssen eindeutig beschriftet sein.
 
 === Fixed Page
 ```html
@@ -64,6 +77,12 @@
 
 = testing
 <testing>
+
+1. Vier Test-Ebenen: Static, Unit, Integration, E2E -- jede deckt andere Fehler ab.
+2. Testbarkeit = Architekturqualität (kleine, reine Funktionen, Dependency Injection).
+3. Static Checks (TS, ESLint, jsx-a11y) sind günstig und schnell -- immer einschalten.
+4. AI macht automatische Guardrails wichtiger, nicht überflüssig
+
 
 / Warum: Änderungen erzeugen neue Fehler (Regressionen), moderne Webprojekte bestehen aus vielen Teilen, AI generiert schneller neuen Code, manuelles Prüfen skaliert schlecht, automatisierte Checks geben schnelles Feedback.
 // Typfehler führen häufig zu Laufzeitfehlern oder falschem Verhalten. TypeScript verhindert, dass inkonsistente Datenstrukturen unbemerkt weiterverwendet werden.
