@@ -251,7 +251,7 @@
     // H3
     show heading.where(level: 3): h => {
         block(
-            above: 4.5pt,
+            above: 4pt,
             below: 2.8pt,
             inset: (left: -1pt),
             text(
@@ -259,7 +259,8 @@
                 style: "normal",
                 weight: "semibold",
                 // size: 4.25pt,
-                size: 1em,
+                // size: 1em,
+                size: 1.25em,
                 h.body,
             ),
         )
@@ -270,6 +271,7 @@
         block(
             // above: 4pt,
             below: 2pt,
+            inset: (left: -1pt),
             text(
                 size: 1em,
                 fill: colors.bg-dark-blue,
@@ -325,7 +327,7 @@
     set terms(
         // separator: [#h(2pt)],
         separator: [: ],
-        hanging-indent: 0.75em,
+        hanging-indent: 0.6em,
         tight: true,
         // tight: false,
         spacing: .5em,

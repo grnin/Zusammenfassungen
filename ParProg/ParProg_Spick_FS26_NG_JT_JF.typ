@@ -13,50 +13,72 @@
     landscape: true,
 )
 
+
+#let terms-spacing(spacing, body) = [
+    #show terms: set terms(spacing: spacing)
+    #body
+]
+
+
+
 = Multi-Threading
 _Parallelism_ #hinweis[(Subprograms run simultaneously for faster programs)] vs.
 _Concurrency_ #hinweis[(interleaved execution of programs for simpler programs)]
 
-#wrap-content(
-    image("img/parprog_1.png"),
-    align: top + right,
-    columns: (65%, 35%),
-)[
-    *Process:*
-    _Program under Execution_, own address space #hinweis[(heavyweight. Pros: Process isolation
-        and responsiveness, Cons: Interprocess communication overhead, expensive in creation, slow
-        context switching and process termination)].\
-    *Thread:*
-    _Parallel sequence_ within a process. Sharing the same address space, but separate stack and
-    registers #hinweis[(lightweight because most of the overhead already happened in the process
-        creation)].\
-    *Multi-threads:*
-    Changes made by one thread to shared resources will be _seen_ by other threads.\
-    *Context switch:*
-    Required when changing threads. \ _Synchronous_ #hinweis[(Thread waiting for condition)] or\
-    _Asynchronous_ #hinweis[(Thread gets released after defined time)]\
-    *Multitasking:*
-    _Cooperative_ #hinweis[(Threads must explicitly initiate context switches, scheduler can't interrupt)] or\
-    _preemptive_ #hinweis[(scheduler can asynchronously interrupt thread via timer interrupt)]\
-    *JVM Thread Model:*
-    JVM is a _process in the OS_. It runs as long as threads are running #hinweis[(Exception:
-        threads marked as daemon with ```java setDaemon(true)``` will not be waited upon)].
-    Threads are realized by the _thread class_ and the _interface `Runnable`_.
-    Code to be run in a Thread is within a overridden `run()`.
-]
+#grid(
+    // align: top + right,
+    align: top + left,
+    // columns: (65%, 35%),
+    columns: (63%, 37%),
+    [
+        *Process:*
+        _Program under Execution_, own address space #hinweis[(heavyweight. Pros: Process isolation
+            and responsiveness, Cons: Interprocess communication overhead, expensive in creation, slow
+            context switching and process termination)].\
+        *Thread:*
+        _Parallel sequence_ within a process. Sharing the same address space, but separate stack and
+        registers #hinweis[(lightweight because most of the overhead already happened in the process
+            creation)].\
+        // *Multi-threads:* Changes made by 1 thread to shared resources will be _seen_ by other threads.\
+        *Context switch:* Required when changing threads.\
+        _Synchronous_ #hinweis[(Thread waiting for condition)] or _Asynchronous_ #hinweis[(Thread gets released after defined time)]
+    ],
+    [
+        // #image("img/parprog_1.png")
+        #image("img/scheduler.svg")
+    ],
+)
+*Multitasking:*
+_Cooperative_ #hinweis[(Threads must explicitly initiate context switches, scheduler can't interrupt)] or\
+_preemptive_ #hinweis[(scheduler can asynchronously interrupt thread via timer interrupt)]\
+*JVM Thread Model:*
+JVM is a _process in the OS_. It runs as long as threads are running #hinweis[(Exception:
+    threads marked as daemon with ```java setDaemon(true)``` will not be waited upon)].
+Threads are realized by the _thread class_ and the _interface `Runnable`_.
+Code to be run in a Thread is within a overridden `run()`.
+
+/*
+  / Process: _Program under Execution_, own address space #hinweis[(heavyweight. Pros: Process isolation and responsiveness, Cons: Interprocess communication overhead, expensive in creation, slow context switching and process termination)].
+  / Thread: _Parallel sequence_ within a process. Sharing the same address space, but separate stack and registers #hinweis[(lightweight because most of the overhead already happened in the process creation)].
+  / Multi-threads: Changes made by one thread to shared resources will be _seen_ by other threads.\
+  / Context switch: Required when changing threads. \ _Synchronous_ #hinweis[(Thread waiting for condition)] or\ _Asynchronous_ #hinweis[(Thread gets released after defined time)]
+  / Multitasking: _Cooperative_ #hinweis[(Threads must explicitly initiate context switches, scheduler can't interrupt)] or\ _preemptive_ #hinweis[(scheduler can asynchronously interrupt thread via timer interrupt)]
+  / JVM Thread Model: JVM is a _process in the OS_. It runs as long as threads are running #hinweis[(Exception: threads marked as daemon with ```java setDaemon(true)``` will not be waited upon)]. Threads are realized by the _thread class_ and the _interface `Runnable`_. Code to be run in a Thread is within a overridden `run()`.
+*/
 
 == Starting a thread
-*As a anonymous function (Lambda):*\
+*As an anonymous function (Lambda):*\
 ```java var myThread = new Thread(() -> { /* thread behaviour */ }); myThread.start();```\
-*As a named function:*\
-```java var myThread = new Thread(() -> AssyFunction()); myThread.start();```\
+*With a named function:*\
+```java var myThread = new Thread(() -> runAsyncFunction()); myThread.start();```\
 *With explicit `Runnable` implementation:*
 ```java
 class MyThread implements Runnable {
   @Override
   public void run() { /* thread behavior */ }}
   var myThread = new Thread(new MyThread());
-  myThread.start();}
+  myThread.start(); // start creates thread
+}
 ```
 *In C\#:*
 ```cs var myThread = new Thread(() => { ... }); myThread.Start(); ... myThread.Join();```
@@ -134,51 +156,48 @@ class BankAccount {
 )[
     Threads run arbitrarily. _Restriction of concurrency_ for deterministic behavior.\
     *Communication between threads:*
-    Sharing access to fields and the objects they refer to. Efficient, but poses problems:
+    Sharing access to fields and the objects they refer to. Efficient, but problems:
     _Thread interference_ and _memory consistency errors_.\
     *Critical Section:*
     Part of the code which must be executed by only 1 thread at a time for the values to stay
-    consistent. Implementation with _mutual exclusion_.
-
-    *```java synchronized```:*
-    Body of method with the ```java synchronized``` keyword is a critical section.
-    Guarantees _memory consistency_ and a _happens-before relationship_.
-    Impossible for two invocations of a synchronized method on the same object to interleave.
-    Other threads are _blocked_ until the current thread is done with the object.
-    Every object has a _Lock_ #hinweis[(Monitor-Lock)]. Maximum 1 thread can acquire the lock.
-    Entry of a `synchronized` method acquires the lock of the object, the exit releases it.
-    ```java public synchronized void deposit(int amount) { this.balance += amount; }```
-
-    Can also be used within a method, the _object that should be locked_ must be specified.
-    ```java synchronized(this) { this.balance += amount; }```\
-    *Exit synchronized block:*
-    End of the block, `return`, unhandled exceptions
+    consistent.
+    Implementation with _mutual exclusion_.
 ]
+#v(-1.25em)
+*happens-before relationship*: result is same as if executed synchronously (visibility + threadsafe)\
+*```java synchronized```:*
+Body of method with the ```java synchronized``` keyword is a critical section.
+Guarantees _memory consistency_ and a _happens-before relationship_ .
+Impossible for two invocations of a synchronized method on the same object to interleave.
+Other threads are _blocked_ until the current thread is done with the object.
+Every object has a _Lock_ #hinweis[(Monitor-Lock)]. Maximum 1 thread can acquire the lock.
+Entry of a `synchronized` method acquires the lock of the object, the exit releases it.
+```java public synchronized void deposit(int amount) { this.balance += amount; }```
+
+synchronized can also be used within a method, the _object that should be locked_ must be specified.
+```java synchronized(this) { this.balance += amount; }``` (unhandled exceptions exit sync. block)\
+// *Exit synchronized block:*
+// End of the block, `return`, unhandled exceptions
 
 === Monitor Lock
 A monitor is used for _internal mutual exclusion_. Only one thread operates at a time in
 Monitor. All non-private methods are synchronized. Threads can _wait in Monitor_ for condition
 to be fulfilled. Can be _inefficient_ with different waiting conditions, has
 _fairness-problems_ and _no shared locks_.\
-*Recursive Lock:*
-A thread can acquire the same lock through recursive calls.
-Lock will be free by the last release.\
-*Busy Wait:*
-Running `yield` or `sleep` in a loop doesn't release the lock and is inefficient. Use `wait`.\
-*`wait()`:*
-Waits on a condition. Temporarily releases Monitor-Lock so that other threads can run.
-Needs to be _wrapped into a `while` loop_ to check if the wake up condition has been met.\
-*Wakeup signal:*
-Signalling a condition/thread in Monitor. _`notify()`_ signals any waiting thread
-#hinweis[(sufficient if all threads wait for the same thing, so it does not matter which one
-    comes next - uniform waiters or if only one single thread can continue like in a turnstile)],
-_`notifyAll()`_ wakes up all threads #hinweis[(i.e. one deposit can satisfy multiple withdraws,
-    does not guarantee fairness)].
-If a thread is woken up, it goes from the _inner waiting room_ #hinweis[(waiting on a condition)]
-into the _outer waiting room_ #hinweis[(Thread has not started yet)] where it waits
-for entry to the Monitor. There is no shortcut.\
-```java IllegalMonitorStateException``` is thrown if `notify`, `notifyAll` or `wait` is used
-outside synchronized.
+
+
+#terms-spacing(0.7em)[
+    / Recursive Lock: A thread can acquire the same lock through recursive calls. Lock will be free by the last release.
+    / Busy Wait: Running `yield` or `sleep` in a loop doesn't release the lock and is inefficient. Use `wait`.
+    / `wait()`: Waits on a condition. Temporarily releases Monitor-Lock. Needs to be _wrapped into a `while` loop_ to check if the wake up condition has been met.
+    / Wakeup signal: Signalling a condition/thread in Monitor.
+    / _`notify()`_: signals any waiting thread. Turnstile, Only one semantic condition for every thread (Uniform Waiters), change applies to only one thread (One-In/One-Out).
+    // #hinweis[(sufficient if all threads wait for the same thing, so it does not matter which one comes next - uniform waiters or if only one single thread can continue like in a turnstile)],
+    / _`notifyAll()`_: wakes up all threads #hinweis[(i.e. one deposit can satisfy multiple withdraws, does not guarantee fairness)]. If a thread is woken up, it goes from the _inner waiting room_ #hinweis[(waiting on a condition)] into the _outer waiting room_ #hinweis[(Thread has not started yet)] where it waits for entry to the Monitor. There is no shortcut.
+    / ```java IllegalMonitorStateException```: thrown if `notify`, `notifyAll` or `wait` is used outside synchronized.
+    / signal and continue: signaling (notifying) thread still holds monitor, awakened thread comes to outer waiting room.
+    / ```java InterruptedException```: thrown on `interrupt()` while `sleep`, `wait` or `join`.
+]
 
 #colbreak()
 
@@ -236,15 +255,17 @@ Allocation of a limited number of free resources. Is in essence a _counter_.
 If a resource is _acquired_, `count--`, if a resource is _released_, `count++`.
 Can wait until resource becomes available.
 Can also acquire/release multiple permits at once atomically.
+#v(-0.5em)
 
 ```java
 public class Semaphore {
   private int value; public Semaphore(int initial) { value = initial; }
   public synchronized void acquire() throws InterruptedException {
-    while (value <= 0) { wait(); } value--; }
+    while (value <= 0) {
+      wait(); } value--; }
   public synchronized void release() { value++; notify(); } }
 ```
-
+#v(-0.5em)
 *General Semaphore:*
 ```java new Semaphore(N)``` #hinweis[(Counts from 0 to $N$ for limited permits to access a resource)] \
 *Binary Semaphore:*
@@ -260,34 +281,24 @@ class BoundedBuffer<T> {
   private Semaphore upperLimit = new Semaphore(Capacity, true); // how many free?
   private Semaphore lowerLimit = new Semaphore(0, true); // how many full?
   public void put(T item) throws InterruptedException {
-    upperLimit.acquire(); // No. of free places - 1
+    upperLimit.acquire(); // free places - 1
     synchronized (queue) { queue.add(item);}
-    lowerLimit.release(); } // No. of full places + 1
+    lowerLimit.release(); } // full places + 1
   public T get() throws InterruptedException {
     T item;
-    lowerLimit.acquire(); // No. of full places - 1
+    lowerLimit.acquire(); // full places - 1
     synchronized (queue) { item = queue.remove(); }
-    upperLimit.release(); // No. of free places + 1
+    upperLimit.release(); // free places + 1
     return item; }}
 ```
 
 == Lock & Condition
 Monitor with _multiple waiting lists_ and conditions. Independent from Monitor locks.\
-*Lock-Object:*
-Lock for entry in the monitor #hinweis[(outer waiting room)]\
-*Condition-Object:*
-Wait & Signal for a specific condition #hinweis[(inner waiting room)].\
-*ReentrantLock:*
-Class in Java, _alternative to `synchronized`_. Allows multiple locking operations by the same
-thread and supports nested locking #hinweis[(Thread is able to re-enter the same lock)].\
-*Condition:*
-Factors out the Object monitor methods #hinweis[(`wait`, `notify` and `notifyAll`)] into
-distinct objects to give the effect of having multiple wait-sets per object, by combining them
-with the use of arbitrary `Lock` implementations. A _Condition replaces the use of the Object
-monitor methods_. \
-*`condition.await()`:*
-Throws an `InterruptedException` if the current thread has its interrupted status set on entry to
-this method or is interrupted while waiting #hinweis[(`finally` frees the lock in case of interrupt)].
+/ Lock-Object: Lock for entry in the monitor #hinweis[(outer waiting room)]
+/ Condition-Object: Wait & Signal for a specific condition #hinweis[(inner waiting room)].
+/ ReentrantLock: Class in Java, _alternative to `synchronized`_. Allows multiple locking operations by the same thread and supports nested locking #hinweis[(Thread is able to re-enter the same lock)].
+/ Condition: Factors out the Object monitor methods #hinweis[(`wait`, `notify` and `notifyAll`)] into distinct objects to give the effect of having multiple wait-sets per object, by combining them with the use of arbitrary `Lock` implementations. A _Condition replaces the use of the Object monitor methods_.
+/ `condition.await()`: Throws an `InterruptedException` if the current thread has its interrupted status set on entry to this method or is interrupted while waiting #hinweis[(`finally` frees the lock in case of interrupt)]. #hinweis[`myThread.interrupt()`]
 
 ==== Buffer with Lock & Condition
 ```java
@@ -328,8 +339,7 @@ class BoundedBuffer<T> {
     Mutual exclusion is _unnecessary for read-only_ threads.
     So one should allow parallel reading access, but implement mutual exclusion for write access.
 ]
-
-#v(-0.5em)
+#v(-0.75em)
 ```java
 ReadWriteLock rwLock = new ReentrantReadWriteLock(true); // true for fairness
 rwLock.readLock().lock(); // shared Lock
@@ -345,21 +355,21 @@ Synchronization with a counter that can only _count down_. Threads can wait
 until counter $<= 0$, or they can count down. The Latches can only be used once.
 
 ```java
-var ready = new CountDownLatch(N); var start = new CountDownLatch(1);
+var ready = new CountDownLatch(N);   var start = new CountDownLatch(1);
 ```
-
+#v(-0.5em)
 #grid(
     columns: (auto, auto),
-    gutter: 1em,
+    gutter: 0.3em,
     [
         ```java
-        ready.countDown(); // wait for N cars
-        start.await(); // await race start
+        ready.countDown(); // wait for N cars ->
+        start.await(); // await race start <----
         ```
     ],
     [
         ```java
-        ready.await(); // wait for all cars ready
+        ready.await(); // wait 4 all cars ready
         start.countDown(); // start the race
         ```
     ],
@@ -400,36 +410,22 @@ for (int count = 0; count < 2; count++) { // odd number of exch.: last one block
 
 
 = Concurrency hazards
-/*#let racetable = {
-  set par(justify: false)
-  set text(size: 0.8em)
-  table(
-    columns: (0.5fr, 1.1fr, 1fr),
-    table.header([], [Race Condition], [no RC]),
-    [_Data Race_], [Erroneous behavior], [Program works correctly, but formally incorrect],
-    [_No DR_], [Erroneous behavior], [Correct behavior],
-  )
-}
 
-#wrap-content(
-  racetable,
-  align: top + right,
-  columns: (65%, 35%),
-)[*/
-== Race Conditions
+_DR + RC_ = Erroneous behaviour,
+_No DR + RC_ = Erroneous behaviour,
+_No RC + DR_ = Program works correctly, but formally incorrect, _No RC + No DR_ = Correct behaviour
+==== Race Conditions
 _Insufficiently synchronized access to shared resources._ The _order of events_ affects the
 _correctness_ of the program. Leads to _non-deterministic behavior_.
 Can occur without data race, but data race is often the cause.\
-*Race Condition without data race:*
-The critical section is not protected. Data Race is eliminated using synchronization, but there
+*Race Condition without data race:* critical section is not protected. Data Race is eliminated using synchronization, but there
 is no synchronization over larger blocks, so race conditions are still possible
 #hinweis[(i.e. non-atomic incrementing)].
 
-== Data Race
+==== Data Race
 Two threads in a single process _access the same variable_ concurrently without synchronization,
-at least one of them is a _write access_.\
-*Synchronize Everything?* May not help and is expensive. So no.
-//]
+at least one of them is a _write access_.
+
 == Thread Safety
 *Dispensable cases in synchronization:*
 _Immutable Classes_ #hinweis[(Declaring all fields private and final and don't provide setters)],
@@ -487,24 +483,26 @@ consume CPU during deadlock.
 ]
 
 #wrap-content(
-    image("img/parprog_2.png"),
+    // image("img/parprog_2.png"),
+    image("img/resource-graph-cycle.svg"),
     align: top + right,
-    columns: (50%, 50%),
+    columns: (60%, 40%),
 )[
     === Resource Graph
     #grid(
         columns: (1fr, 1fr),
         gutter: 3pt,
-        [Thread T _waits for Lock_ of Resource R\
-            #image("img/parprog_3.png", width: 60%)],
+        [Thread T _waits for Lock_ of Resource R
+            #v(-2pt)
+            #image("img/resource-graph-1.svg", height: 11pt)],
         [Thread T _acquires Lock_ of Resource R\
-            #image("img/parprog_4.png", width: 60%)],
+            #v(-2pt)
+            #image("img/resource-graph-2.svg", height: 11pt)],
     )
     Deadlocks can be identified by _cycles in the resource graph_.\
     *Deadlock Avoidance:*
     Introduce _linear blocking order_, lock nested only in ascending order.
-    Or use _coarse granular locks_ #hinweis[(Used when ordering does not make sense,
-        e.g. block the whole Bank to block all accounts)]
+    Or use _coarse granular locks_ #hinweis[(e.g. block the whole Bank to block all accounts)]
 ]
 
 == Starvation
@@ -547,29 +545,48 @@ Task must not wait for each other #hinweis[(except sub-tasks)], results in deadl
 #hinweis[(if one task $T_1$ is waiting for something the task $T_2$ behind him in the Queue
     should provide, but $T_2$ waits for $T_1$ to finish, a deadlock occurs)]
 
-== Java Thread Pool
+
+==== Java ForkJoinPool
+/ Create explicit thread pool: ```java var threadPool = new ForkJoinPool();``` \ ```java int result = threadPool.invoke(new CountTask(2, N));```
+/ Special Features: *Fire-and-forget* tasks may not finish *LIFO Queue* per worker thread and stealing is FIFO, Automatic degree of parallelism #hinweis[(Default: As much worker threads as Processors)], Optimized for recursive.
+/ Work Stealing: Jobs get submitted into the _global queue_, which distributes the jobs to the _local queues_ of each worker thread. If one thread has no work left, it can _"steal" work from another threads_ local queue instead of the global queue. This _distributes_ the scheduling work over idle processors.
+- worker threads run as daemon threads #hinweis[workers are daemon threads in TPL .NET too]. // in java kann für einen eigenen "expliziten" ForkJoinPool auch eingestellt werden, dass die Threads nicht daemon threads sind. Aber das haben wir nicht angeschaut. Bei uns sind threads im ForkJoinPool immer daemon threads.
+
+
+/ _`invoke(task)`_: blocking
+/ _`submit(task)`_: returns Future
+/ _`execute(task)`_: async but does not return Future #hinweis[fire and forget]
+
+/ _`future.get()`_: wait for result/exception #hinweis[prevent fire and forget by evaluating result]
+/ _`task.fork()`_: schedule async subtask
+/ _`result = task.join()`_: wait and get result
+
+== Java Common ForkJoinPool
+- Default Pool (singleton), a Global shared ForkJoinPool
+- used by `CompletableFuture`
+- Does not always use all processors :(
+- Get the default pool by calling `ForkJoinPool.commonPool()`
+- example: ```java int result = new CountTask(2, N).invoke();```
+
 ```java
 // Task Launch
 var threadPool = new ForkJoinPool();
 Future<Integer> future = threadPool.submit(() -> { // submit task into pool
-  int value = ...; /* long calculation */ return value; });
+  int value = ...; /* long calculation */
+  return value; });
 ```
 #v(-0.5em)
 
 === `Future<T>`
-Represents a _future result_ that is to be computed #hinweis[(asynchronous)].
-Acts as proxy for the result that may be not available yet because the task has not finished.
-Usage via _`.submit()`_ #hinweis[(submits task into pool and launches task)],
-_`.get()`_ #hinweis[(waits if necessary for computation to complete and then retrieves its result)] and
-_`.cancel()`_ #hinweis[(Attempts to cancel execution of this task, removes it from queue)].
-Task ends when a unhandled exception occurs. It is included in the `ExecutionException` thrown
-by `get()`.
+Represents a _future result_ #hinweis[(asynchronous)], Proxy #hinweis[for the result that may be not available yet because the task has not finished.]
 #v(-0.5em)
+/ _`.submit()`_: submits task into pool and launches task
+/ _`.get()`_: waits if necessary for computation to complete and then retrieves its result
+/ _`.cancel()`_: Attempts to cancel execution of this task, removes it from queue Task ends when a unhandled exception occurs. It is included in the `ExecutionException` thrown by `get()`.
+// #v(-0.5em)
 
-=== Fire and Forget
-Task are started _without retrieving results_ later #hinweis[(`submit()` without `get()`)].
-Task is run, but Exceptions will not get caught.
-#v(-0.5em)
+/ Fire and Forget: Task are started _without retrieving results_ later (`submit()` without `get()`).  Task is run, but Exceptions will not get caught.
+
 
 === Count Prime Numbers
 ```java
@@ -586,11 +603,33 @@ class CountTask extends RecursiveTask<Integer> { //RecursiveAction: void functio
     int middle = (lower + upper) / 2;
     var left = new CountTask(lower, middle);
     var right = new CountTask(middle, upper);
-    left.fork(); right.fork();
-    return right.join() + left.join();
+    left.fork(); right.fork(); // fork = new thread
+    return right.join() + left.join(); // join = wait for all threads
 }}
+// (invoke is blocking)
 int result = new CountTask(2, N).invoke(); // invokeAll() to start multiple tasks
 ```
+
+// Avoid Over-Parallelizing:
+// ```java
+// protected Integer compute() {
+//   if (upper - lower > THRESHOLD) {
+//     // parallel count
+//     int middle = (lower + upper) / 2;
+//     var left = new CountTask(lower, middle);
+//     var right = new CountTask(middle, upper);
+//     left.fork(); right.fork();
+//     return right.join() + left.join();
+//   } else {
+//     // sequential count
+//     int count = 0;
+//     for (int number = lower; number < upper; number++) {
+//       if (isPrime(number)) { count++; }
+//     }
+//   return count;
+//   }
+// }
+// ```
 
 === Pairwise sum (recursive)
 ```java
@@ -613,14 +652,6 @@ class PairwiseSum extends RecursiveAction {
 }}}}
 ```
 
-=== Work Stealing Thread Pool
-Jobs get submitted into the _global queue_, which distributes the jobs to the _local queues_ of
-each worker thread. If one thread has no work left, it can _"steal" work from another threads_
-local queue instead of the global queue. This _distributes_ the scheduling work over idle processors.
-
-== Java Fork Join Pool
-*Special Features:* Fire-and-forget tasks may not finish, worker threads run as daemon threads.
-Automatic degree of parallelism #hinweis[(Default: As much worker threads as Processors)].
 
 == .NET Task Parallel Library (TPL)
 Preferred way to write multi-threaded and parallel code.
@@ -751,6 +782,10 @@ This should be executed as soon as the task object is dead #hinweis[(Garbage Col
 *Java `CompletableFuture`:*
 _Modern asynchronous_ programming in Java. Also has _Multi-Continuation_ with
 ```java CompletableFuture.allOf(future1, future2)``` and ```java CompletableFuture.any(...)```
+
+/ ```java future.get()```: can throw CancellationException, ExecutionException, InterruptedException
+
+
 
 == Non-Blocking GUI's
 *Use case:*
@@ -896,7 +931,9 @@ An _unlock_ of a monitor _happens-before_ every subsequent lock of that same mon
 *Java Ordering Guarantees:*
 Writes before Unlock #sym.arrow reads after lock, `volatile` write #sym.arrow `volatile` read,
 Partial Order. Synchronization operations are never reordered.
-#hinweis[(Lock/Unlock, volatile-accesses, Thread-Start/Join.)]
+#hinweis[(Lock/Unlock, volatile-accesses, Thread-Start/Join.)].
+*Read after write dependency*.
+
 
 == Synchronization
 *Rendez-Vous:*
@@ -1349,24 +1386,12 @@ is finished. So branches within one warp should be _avoided_ because of _perform
     ],
 )
 
-*DRAM (Dynamic Random Access Memory):*
-_Global memory of a CUDA device_ is implemented with DRAMs. If a GPU kernel accesses data from
-_consecutive locations_, the DRAMs can supply the data at a much _higher rate_ than if a random
-sequence of locations were accessed. \
-*Memory Coalescing:*
-Thread _access patterns_ are critical for performance. If the threads in a warp
-_simultaneously_ access _consecutive memory locations_, their reads can be combined into a
-single access _(burst)_. Otherwise there are _expensive individual accesses_.\
-*Coalesced Accesses:*
-Read/Write the burst in one transaction per warp burst section, swapped read/write within the
-same burst, only individual elements in the burst accessed.\
-*Not Coalesced Accesses:*
-Read/Write in different warp bursts, one action that spans multiple bursts. _Inperformant, avoid!_\
-*Coalescing in Use:*
-_`data[(Expression without threadId.x) + threadId.x]`_\
-*Coalescing with Matrices:*
-Matrices get linearized to a 1D array. The row of the matrix should be the longer side so that
-there are as many coalescing accesses as possible.
+/ DRAM (Dynamic Random Access Memory): _Global memory of a CUDA device_ is implemented with DRAMs. If a GPU kernel accesses data from _consecutive locations_, the DRAMs can supply the data at a much _higher rate_ than if a random sequence of locations were accessed.
+/ Memory Coalescing: Thread _access patterns_ are critical for performance. If the threads in a *warp* _simultaneously_ access _consecutive memory locations_, their reads can be combined into a single access _(burst)_. Otherwise there are _expensive individual accesses_.
+/ Coalesced Accesses: Read/Write the burst in one transaction per warp burst section, swapped read/write within the same burst, only individual elements in the burst accessed.
+/ Not Coalesced Accesses: Read/Write in different warp bursts, one action that spans multiple bursts. _Inperformant, avoid!_
+/ Use Coalescing access as follows: _`data[(Expression without threadId.x) + threadId.x]`_
+/ Coalescing with Matrices: Matrices get linearized to a 1D array. The row of the matrix should be the longer side so that there are as many coalescing accesses as possible.
 
 == Memory Model
 All threads have the access to the same _global memory_. Each thread block has _shared memory_
@@ -1511,7 +1536,7 @@ Each _send_ should have a matching _receive_.\
 
 *`MPI_Bcast`:*
 Is _efficient_, because the root node does _not send the signal individually_ to each node,
-the _other nodes help_ spread the message to others. #hinweis[(signal spreads like corona)]:
+the _other nodes help_ spread the message to others.:
 ```c MPI_Bcast(void * data, int count, MPI_Datatype datatype, int root, MPI_Comm_World communicator)```\
 *`MPI_Reduce`:*
 Reduction is a classic concept: reducing a set of numbers into a smaller set of numbers via a
