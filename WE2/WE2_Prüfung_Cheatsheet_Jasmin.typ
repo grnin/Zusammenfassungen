@@ -21,18 +21,16 @@
 // #let \-\> = sym.arrow.r;
 #show "->": sym.arrow.r;
 
+= JavaScript
 
-= React
-== React Regeln (Komponente, HTML, JSX)
-- [ ] Nur ein Rückgabewert: 1 parent element (Root Element) oder React.Fragment `<></>`
-- [ ] Naming der Komponente
-    - UpperCamelCase
-    - treffende Beschreibung der Komponente
-        - Beispiele: LinkButton , InfoTooltip , DraftEditor
-- [ ] HTML Attribute in JSX mit camelCase (ausser `aria-*` und `data-*`)
-    - #strike[class] -> `className`, #strike[for] in Formularfeldern -> `htmlFor`, #strike[stroke-width] -> `strokeWidth`
-- [ ] HTML Elemente geschlossen, z.B. `<img />` ,`<input />`
-- [ ] Syntax wie in JS: Wert in `{title}`
+=== Functions
+/ Function Declaration: Schlüsselwort `function`, gehoistet #hinweis[Verwendung for Definition möglich], ```js function greet() {..}```
+/ Function Expression: in JSX und überall wo eine Expression reinpasst nutzbar ()
+/ Named Function Expr.: ```js const greet = function greetPerson() {...};```
+/ Anonymous Function Expr.: ```js ... = function () {...}; ```
+/ Arrow Function (Lambda): kompakte Form einer Function Expression, 1 Parameter: ```js ... = x => x * x;
+    ```, mit Rückgabewert: ```js = () => "Hello";``` // ohne Rückgabewert=side effects und deshalb nicht gut: ```js = () => { .. } ```
+/ Callback Function: (relevant in Express Middleware)
 
 
 // TODO Beispiel: inline stye beispiel
@@ -47,12 +45,10 @@
 // wieviel vom pizzashop? oder doch besser testat?
 //
 
+// TODO: expressjs
 
 
-
-#include "/WE2/_code-to-add-react.typ"
-
-// #include "./_code-to-add-express.typ"
+#include "/WE2/_react.typ"
 
 #include "/WE2/_expressjs.typ"
 #include "/WE2/_code-express-testat.typ"

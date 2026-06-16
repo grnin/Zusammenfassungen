@@ -1,4 +1,16 @@
 
+= React
+== React Regeln (Komponente, HTML, JSX)
+- [ ] Nur ein Rückgabewert: 1 parent element (Root Element) oder React.Fragment `<></>`
+- [ ] Naming der Komponente
+    - UpperCamelCase
+    - treffende Beschreibung der Komponente
+        - Beispiele: LinkButton , InfoTooltip , DraftEditor
+- [ ] HTML Attribute in JSX mit camelCase (ausser `aria-*` und `data-*`)
+    - #strike[class] -> `className`, #strike[for] in Formularfeldern -> `htmlFor`, #strike[stroke-width] -> `strokeWidth`
+- [ ] HTML Elemente geschlossen, z.B. `<img />` ,`<input />`
+- [ ] Syntax wie in JS: Wert in `{title}`
+
 == React Code
 useReducer & UI Libraries
 // Demo vl9

@@ -1,4 +1,4 @@
-// /* zum testen:
+/* zum testen:
 #import "../template_cheatsheet.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
@@ -14,11 +14,10 @@
 )
 
 
-#let terms-spacing(spacing, body) = [
-    #show terms: set terms(spacing: spacing)
-    #body
-]
 // */
+
+
+#import "../template--additional-formatting-templates.typ": *
 
 = accessibility
 <accessibility>

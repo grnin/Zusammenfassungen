@@ -1,27 +1,33 @@
 
 #import "/WE2/helpers.typ": *
 
+
+
+// ```
+// #code-block[
+//     ==== filename.type
+//     ```ts
+
+//     ```
+// ]
+// ```ts
+
+
 = Express Testat Code
 ==== index.js
-see express.js demo
-// ```js
 // import dotenv from 'dotenv';
-
-// // load config-file
-// dotenv.config({
-//     path: `.env${process.env.NODE_ENV ? `-${process.env.NODE_ENV}` : ''}`,
-// });
-// const app = (await import('./app')).app;
-// const hostname = '127.0.0.1';
-// const port = 3001;
-// app.listen(port, hostname, (error: any) => {
-//     if (error) {
-//         console.log(error);
-//     } else {
-//         console.log(`Server running at http://${hostname}:${port}/`);
-//     }
-// });
-// ```
+```js
+dotenv.config({ // load config-file
+    path: `.env${process.env.NODE_ENV ? `-${process.env.NODE_ENV}` : ''}`,
+});
+const app = (await import('./app')).app;
+const hostname = '127.0.0.1';
+const port = 3001;
+app.listen(port, hostname, (error: any) => {
+    if (error) { console.log(error);
+    } else { console.log(`Server running at http://${hostname}:${port}/`); }
+});
+```
 
 ==== app.js
 ```js
@@ -47,11 +53,41 @@ app.use(
         path: [/\/login*/, /\/register/],
     }),
 );
+```
+#code-block[
+    ==== services/user-service.ts
+    ```ts
+    // Aufbau mit class UserService und private db wie anderer Service
+    async register(data: UserRegister): Promise<LoginResult> {
+        const uuid = randomUUID();
+        const newUser: User = {
+            uuid: uuid,
+            name: data.name,
+            email: data.email,
+            pwdHash: CryptoUtil.hashPwd(data.password),
+        };
+        await this.db.insertAsync(newUser);
+        accountService.create(uuid);
+        const token = await CryptoUtil.createJWT({ uuid: uuid });
+        const owner = {
+            uuid: uuid,
+            name: data.name,
+            email: data.email,
+        };
+        return {
+            owner: owner,
+            token: token,
+        };
+    }
+    ```
+]
+```ts
 
 // app.use('/users', userRoutes);
 // app.use('/accounts', accountRoutes);
 app.use('/transactions', transactionRoutes);
 
+// Error Middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof HttpError) {
         return res.status(err.status).json({ message: err.message });
@@ -78,28 +114,47 @@ export const transactionRoutes = router;
 ```
 
 ==== controller/transaction-controller.ts
+// import { Request, Response } from 'express';
+// import { HttpError } from '../services/http-error';
+// import { AddTransactionSchema, FindTransactionSchema, transactionService } from '../services/transaction-service';
 ```ts
-import { Request, Response } from 'express';
-import { HttpError } from '../services/http-error';
-import { SchemaUtil } from '../utils/schema-util';
-import { AddTransactionSchema, FindTransactionSchema, transactionService } from '../services/transaction-service';
-
+// imports hier.
 export class TransactionController {
 public create = async (req: Request, res: Response) => {
     const auth = req.headers.authorization;
     if (!auth) { throw new HttpError(401, 'no token provided'); }
     if (!req.auth?.uuid) { throw new HttpError(401, 'Unauthorized'); }
 
+    // Schema nutzen, um die Body Daten zu validieren "schema.safeParse(data)"
     const data = SchemaUtil.parseOrThrow(AddTransactionSchema, req.body);
+```
+#code-block[
+    ==== utils/schema-util.ts
+    ```ts
+    export class SchemaUtil {
+        static parse<T>(schema: z.ZodType<T>, data: unknown): T | false{
+            const result = schema.safeParse(data);
+            if (!result.success) { return false; }
+            return result.data;
+        }
+        static parseOrThrow<T>(schema: z.ZodType<T>, data: unknown): T {
+            const result = schema.safeParse(data);
+            if (!result.success) {
+                throw new HttpError(400,  result.error, "schema_validation_error");
+            }
+            return result.data;
+    }   }
+    ```
+]
+```ts
+    const userUuid = req.auth.uuid;
 
-const userUuid = req.auth.uuid;
-
-// import { accountService } from '../services/account-service';
-const isOwner = await accountService.isOwner(data.from, userUuid);
+    // import { accountService } from '../services/account-service';
+    const isOwner = await accountService.isOwner(data.from, userUuid);
 ```
 (accountService code at end)
 ```ts
-    if (!isOwner) { throw new HttpError(402, 'Incorrect user'); }
+    if (!isOwner) { throw new HttpError(403, 'Incorrect user'); }
     await transactionService.create(data);
     return res.status(200).json({ success: true });
 };
@@ -114,11 +169,14 @@ const isOwner = await accountService.isOwner(data.from, userUuid);
     import { accountService } from './account-service';
     import { HttpError } from './http-error';
 
+    // Schema definieren für Input Validation:
     const TransactionSchema = z.object({
         from: z.number(), // can be float
         amount: z.number().int(),
         date: z.date(), to:.., total:..
-    }); type Transaction = z.infer<typeof TransactionSchema>;
+    });
+    // Typescript Typ davon ableiten:
+    type Transaction = z.infer<typeof TransactionSchema>;
 
     export const AddTransactionSchema = z.object({
       amount: z.number().int().positive(), from:.., to:..,
@@ -168,25 +226,25 @@ const isOwner = await accountService.isOwner(data.from, userUuid);
         } // transactionService.create
 
         async find(data: FindTransaction): Promise<FindTransactionResult> {
+            const {accountNr, count, skip} = data; // destructured
             const filter = {
-                $or: [{ from: data.accountNr }, { to: data.accountNr }],
-            };
+                $or: [{ from: accountNr, amount: {$lte: 0} }, { to: accountNr, amount: {$gte: 0} }],
+            }; // statt: docs=sortedDocs.slice(skip, skip + count)
 
-            const limit = data.count < 5 ? data.count : 5;
-
-            let transactions: Transaction[] = await this.db
-                .findAsync(filter)
+            let transactions = await this.db.findAsync(filter)
                 .sort({ date: -1 })
-                .skip(data.skip)
-                .limit(limit);
+                .skip(skip)
+                .limit(count);
 
-            const transactionCount = await this.db.countAsync(filter);
+            const docCount = await this.db.countAsync(filter);
+            // optional mit Promise.all() statt db.countAsync danach
+            // const [docCount, docs] = await Promise.all([this.db.countAsync(filter), transactions.execAsync()])
 
             return {
                 docs: transactions,
-                count: transactions.length,
-                skip: data.skip,
-                docCount: transactionCount,
+                count,
+                skip,
+                docCount,
             };
         } // transactionService.find
     } export const transactionService = new TransactionService();
@@ -231,3 +289,17 @@ export class AccountService {
     }
 ```
 // ]
+
+
+
+=== Zusatz von letzter Vorlesung
+
+Weshalb ist die letzte Zeile mit dem cast hier nötig?
+```ts
+const raw = await this.db.find(query).sort({ date: -1 })
+    .skip(validatedData.skip).limit(validatedData.count)
+    .execAsync();
+const docs = (Array.isArray(raw) ? raw : [raw]) as Transaction[];
+```
+> sicherstellen, dass es als Array gesehen wird, nicht einfach any sondern [].. nedb Typ `Cursor<T[]>` nicht wie von `Cursor<T>`.  // TODO, bin mir nicht gaaanz sicher.
+// https://github.com/seald/nedb/issues/71 uff

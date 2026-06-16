@@ -1,6 +1,11 @@
 #import "./template--fonts-colors.typ": *
 
 
+#let terms-spacing(spacing, body) = [
+    #show terms: set terms(spacing: spacing)
+    #body
+]
+
 // "Zusätzlicher Hinweis"-Vorlage
 #let hinweis(style: "italic", t) = {
     set text(style: style, size: 0.8em)

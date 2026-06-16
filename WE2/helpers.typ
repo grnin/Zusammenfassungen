@@ -1,10 +1,10 @@
 
-// TODO: überall hinweis von additional-formatting nehmen
-#let hinweis(style: "italic", t) = {
-    set text(style: style, size: 0.8em)
-    show raw: set text(font: code-font, size: 1.05em)
-    t
-}
+// // TODO: überall hinweis von additional-formatting nehmen
+// #let hinweis(style: "italic", t) = {
+//     set text(style: style, size: 0.8em)
+//     show raw: set text(font: code-font, size: 1.05em)
+//     t
+// }
 
 
 

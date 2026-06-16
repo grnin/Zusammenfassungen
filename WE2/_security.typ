@@ -24,8 +24,10 @@ res.cookie('session', token, {
 Setze user-input auf: `<script>document.body.insertAdjacentHTML('afterbegin','<p style="color:red">HACKED</p>')</script>`
 
 == CORS
-*CORS* (Cross Origin Resource Sharing) : Browser entscheidet ob Response für JS zugänglich ist, #hinweis[nutze Access-Control-Allow-Origin].
+/ CORS: (Cross Origin Resource Sharing) : Browser entscheidet ob Response für JS zugänglich ist, #hinweis[nutze Access-Control-Allow-Origin].
 Nicht verwechseln mit CSP: Content Security Policy (CSP) begrenzt, was der Browser laden und ausführen darf → reduziert Schaden bei XSS (aber ersetzt kein Escaping)
+/ SOP: Same-Origin-Policy erlaubt XMLHttpRequest nur zur Origin.
+/ Cross-Origin Resource Sharing: Mechanismus um Cross-Site-Requests zu ermöglichen, Der Ziel-Server kann dem Client den Zugriff erlauben, Wird vom Browser Enforced
 
 ==== Angriffs-Szenario
 1. User nutzt app.example.com mit Daten von api.example.com.
