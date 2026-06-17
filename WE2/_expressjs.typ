@@ -1,6 +1,6 @@
 #import "../template--additional-formatting-templates.typ": *
 
-// /* zum testen:
+/* zum testen:
 #import "../template_cheatsheet.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
@@ -15,6 +15,17 @@
     landscape: true,
 )
 // */
+
+#let ascii-art(body) = text(
+    font: ("Fira Code", "Fira Mono", "Comic Sans MS", "JetBrains Mono", "JetBrains Mono NL"),
+    ligatures: true,
+    size: 3.7pt,
+    par(
+        justify: false,
+        body,
+    ),
+);
+
 
 = ExpressJS
 // #include "/WE2/_code-express-demo-todo.typ"
@@ -53,7 +64,24 @@ Vorteil beim _Redirect von POST /random nach GET /random?from=…_ gegenüber de
 
 == Cookies und ExpressJS Session
 - Um nach dem Login die Session auf der Website "abzusichern"
-#image("/WE2/assets/express-js-1.png", height: 2cm)
+
+// #image("/WE2/assets/express-js-1.png", height: 2cm)
+#ascii-art(
+    "Client                                             Server
+ |  POST /login                                       |
+ | -------------------------------------------------> |
+ | <------------------------------------------------- |
+ |                set-cookie: session-id:1234         |
+ |                                                    |
+ |  GET /addToCard?id=12  cookie: session-id:1234     |
+ | -------------------------------------------------> |
+ |                                                    |
+ |   GET /submitCard  cookie: session-id:1234         |
+ | -------------------------------------------------> |
+ |                                                    |
+",
+)
+
 Server: `set-cookie:name=value;Expires=Wed, 09 Jun 2029 10:18:14 GMT`
 Client: `cookie:name=value; name2=value2`
 
@@ -90,42 +118,29 @@ app.listen(3000, function () {
 / Inhalt: Header, Payload (Claims), Signatur
 / HTTPS: Token nur über eine sichere Verbindung versenden
 / speichern: Token kann auch im Cookie abgelegt werden #hinweis[mit `httpOnly, secure, SameSite, Lebensdauer` und Achtung CSRF]
-#image("/WE2/assets/jwt.png", height: 2cm)
 
 
-#let ascii-art(body) = text(
-    font: ("Fira Code", "Fira Mono", "Comic Sans MS", "JetBrains Mono", "JetBrains Mono NL"),
-    ligatures: true,
-    size: 3.7pt,
-    par(justify: false, body),
-    // raw(
-    // lang: "txt",
-    // body,
-    // ),
-);
+// #image("/WE2/assets/jwt.png", height: 2cm)
 
 // +-----------+                                  +-----------+
 // |  Browser  |                                  |  Server   |
 // +-----------+                                  +-----------+
 #ascii-art(
-    "Browser                                         Server
- |  1. POST /users/login (username, password)      |
- | ----------------------------------------------> |
- |                                                 | 2. Creates JWT
- |   3. Returns the JWT to Browser                 |
- | <---------------------------------------------- |
- |                                                 |
- |    4. Sends JWT on Authorization Header         |
- | ----------------------------------------------->| 5. Check JWT
- |                                                 |   signature.
- |                                                 | Get user info
- |                                                 |  from the JWT
- |    6. Sends response to the client              |
- | <---------------------------------------------- |
- |                                                 |
+    "Browser                                     Server
+ |  1. POST /users/login (username, pw)  ->   |
+ | -----------------------------------------> |
+ |                                            | 2. Creates JWT
+ |   3. Returns the JWT to Browser  <-        |
+ | <----------------------------------------- |
+ |                                            |
+ |   4. Sends JWT on Authorization Header ->  |
+ | ------------------------------------------>|
+ |                                            | 5. Check JWT signature
+ |   6. Sends response to the client  <-      | Get user info from JWT
+ | <----------------------------------------- |
+ |                                            |
 ",
 )
-
 
 == AJAX mit fetch Repetition
 ```js

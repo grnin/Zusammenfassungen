@@ -541,9 +541,7 @@ const context = useContext(UserContext);
 export const ContextDemo = () => {
 return (
 <ThemeProvider>
-<h1>useContext Demo </h1>
-<ThemeTitle />
-<ThemeButton />
+    <h1>useContext Demo </h1> <ThemeTitle /> <ThemeButton />
 </ThemeProvider>
 );
 ```
@@ -585,16 +583,11 @@ undefined,
 );
 export const useTheme = () => {
     const context = useContext(ThemeContext);
-    if (!context) {
-    throw new Error('useTheme must be used
-    within a ThemeProvider');
-    }
+    if (!context) { throw new Error('useTheme must be used within a ThemeProvider'); }
     return context;
 };
 // theme-provider.tsx
-export const ThemeProvider = (
-{ children }:
-{ children: ReactNode }
+export const ThemeProvider = ( { children }: { children: ReactNode }
 ) => {
     const [theme, setTheme] = useState<Theme>('light');
     const toggleTheme = () => {
@@ -603,9 +596,7 @@ export const ThemeProvider = (
         );
     };
     return (
-    <ThemeContext.Provider
-    value={{ theme, toggleTheme }}
-    >
+    <ThemeContext.Provider value={{ theme, toggleTheme }} >
     {children}
     </ThemeContext.Provider>
     );

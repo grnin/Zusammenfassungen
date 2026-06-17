@@ -15,8 +15,9 @@
 
 #import "./helpers.typ": *
 
-// #let \-\> = sym.arrow.r;
-#show "->": sym.arrow.r;
+// TODO es überschreibt meine ascii-art
+// #show "->": sym.arrow.r;
+
 
 
 
