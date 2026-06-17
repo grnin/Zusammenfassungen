@@ -14,8 +14,6 @@
     font-size: 4pt,
     landscape: true,
 )
-
-
 // */
 
 
@@ -328,7 +326,7 @@ export const Counter = () => {
 
 *Flow of a Controlled Component*
 // TODO
-#image("/assets/image-1.png", height: 1.7cm)
+#image("/WE2/assets/controlled component.png", height: 1.7cm)
 // #image("/WE2/assets/controlled-component.svg", height: 2cm)
 ```tsx
 function Form() {
@@ -368,18 +366,15 @@ type ButtonProps = { label: string; onClick: () => void; };
 export function Button({ label, onClick }: ButtonProps) {
 return <button onClick={onClick}>{label}</button>;
 ```
-*? (Optionales Property)* ist implizites “… | undefined”
-```js
+*? (Optionales Property/Parameter)* ist implizit "… | undefined"
 // Optional parameter (implicitly `string | undefined`)
-function greet(name?: string) {
-return `Hello, ${name || 'stranger'}`; }
+```js
+function greet(name?: string) { return `Hello, ${name || 'stranger'}`; }
 ```
 Typescript prüft die *Struktur*, nicht die Benennung
 ```ts
-type Ball = { diameter: number; }
-type Sphere = { diameter: number; }
-let ball: Ball = { diameter: 10 };
-let sphere: Sphere = { diameter: 20 };
+type Ball = { diameter: number; } type Sphere = { diameter: number; }
+let ball: Ball = { diameter: 10 }; let sphere: Sphere = { diameter: 20 };
 sphere = ball; ball = sphere; // korrekt
 ```
 
@@ -411,6 +406,7 @@ function printValue(value: string | number) {
 // function createPair<T>(v1: T, v2: T): [T, T] { return [v1, v2]; }
 
 *Generics* : Platzhalter für Typen
+#v(-1em)
 // function createPair<T>(v1: T, v2: T): [T, T] { return [v1, v2]; }
 ```js
 function identity<T>(x: T): T { return x; }

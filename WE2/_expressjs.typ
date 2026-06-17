@@ -1,7 +1,53 @@
 #import "../template--additional-formatting-templates.typ": *
 
+// /* zum testen:
+#import "../template_cheatsheet.typ": *
+#import "@preview/wrap-it:0.1.1": wrap-content
+
+#show: project.with(
+    authors: ("Nina Grässli", "Jannis Tschan"),
+    fach: "ParProg",
+    fach-long: "Parallel Programming",
+    semester: "FS24",
+    language: "en",
+    column-count: 5,
+    font-size: 4pt,
+    landscape: true,
+)
+// */
+
 = ExpressJS
 // #include "/WE2/_code-express-demo-todo.typ"
+
+== Express Architektur und Grundlagen
+// • Erklären Sie in eigenen Worten die Patterns von Express.js: MVC, Front-
+Controller und Middleware
+/ MVC Pattern: Model (DB) View (hbs) und Controller (index.js, app.js) getrennt
+/ Front-Controller Pattern:
+     // https://martinfowler.com/eaaCatalog/frontController.html
+    #image("/WE2/assets/front-controller.svg", height: 1.25cm)
+/ Middleware Pattern:
+    Verkettung von Middlewares pro Request, gemäss "Chain of Responsibility" Pattern. Express verwendet Middleware im Front Controller und Routing.
+/ jede Middlware: ist für genau eine Aufgabe verantwortlich, kann eine Aufgabe ausführen, muss den Request beenden oder weitergeben
+/ Chain of Responsibility:
+    is a behavioral design pattern that lets you pass requests along a chain
+    of handlers. Upon receiving a request, each handler decides either to process the request or to
+    pass it to the next handler in the chain.
+
+#image("/assets/image-3.png", height: 2cm, width: auto)
+
+/ Was ist CSR?: Client Side Rendering, rendert im Browser, bei Client, React
+/ Vor- und Nachteile CSR?: schnellere Reaktion, weniger Arbeit auf Server, interaktiv. _Nachteile_: SEO, benötigt JS, Content Seiten die selten ändern rendern neu.
+/ typische Websiten CSR?: Games, Social Media, Google Earth
+#v(-0.2em)
+/ Was ist SSR?: fertige statische Website von Server geliefert an Client, ExpressJS
+/ typische Websiten SSR?: Blogs, statische Webseiten, News Portal
+/ Vor- und Nachteile SSR?: Performance, SEO, einfach, nicht mehrfach die gleiche Seite rendern. #hinweis[siehe Vorteile CSR]
+#v(-0.2em)
+Vorteil beim _Redirect von POST /random nach GET /random?from=…_ gegenüber der direkten Darstellung der Daten in der POST-Route?
+> Formulardarstellung nur 1 mal programmieren, einheitlich, DRY
+> URL kann weitergegeben werden von GET, Lesezeichen kann erstellt werden.
+> Mit F5 (neuladen) werden bei POST die Daten nochmals abgesendet (mit Warnung Popup vom Browser). Bei GET wird nur die Seite neu geladen.
 
 == Cookies und ExpressJS Session
 - Um nach dem Login die Session auf der Website "abzusichern"
@@ -127,7 +173,7 @@ app.use(function(err, req, res, next) {
 ```
 
 == View mit Template Engine - Handlebars
-Statt ```js res.type('text/html'); res.write("<html>"); res.write("<p>..</p>"); ... ```. Template Engines nutzen die Daten und Template zu HTML kombinieren (Hbs, Jade, Pug) // ich denke es gibt auch eine JSX oder HTML Alternative statt handlebars
+Statt ```js res.type('text/html'); res.write("<html>"); res.write("<p>..</p>"); ... ```. Template Engines nutzen die Daten und Template zu HTML kombinieren (Hbs, Pug) // pug hiess früher Jade
 *Begriffe*: Layouts (Definieren wiederverwendbare Grundstrukturen), Partials/Components (Wiederverwendbare Template-Bausteine), Helpers (Hilfsfunktionen, Erweiterung der Template-Sprache)
 // / Layouts: Definieren wiederverwendbare Grundstrukturen
 // / Partials/Components: Wiederverwendbare Template-Bausteine
