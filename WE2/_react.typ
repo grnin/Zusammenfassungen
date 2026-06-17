@@ -321,8 +321,8 @@ export const Counter = () => {
 
 *Flow of a Controlled Component*
 // TODO
-#image("/WE2/assets/controlled component.png", height: 1.7cm)
-// #image("/WE2/assets/controlled-component.svg", height: 2cm)
+// #image("/WE2/assets/controlled component.png", height: 1.7cm)
+#image("/WE2/assets/controlled-component.svg", height: 1.7cm)
 ```tsx
 function Form() {
     const [formData, setFormData] = useState({
