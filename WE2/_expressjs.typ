@@ -1,6 +1,6 @@
 #import "../template--additional-formatting-templates.typ": *
 
-/* zum testen:
+// /* zum testen:
 #import "../template_cheatsheet.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
@@ -26,7 +26,9 @@
      // https://martinfowler.com/eaaCatalog/frontController.html
     // #image("/assets/image-3.png", height: 1.25cm, width: auto)
     Bild: Request -> Front Controller -> Controller (können verschiedene Controller sein) -> controller zu Model für Daten, zu View für Rendering und Response.
-    #image("/WE2/assets/front-controller.svg", height: 1cm)
+    // TODO svg
+    // #image("/WE2/assets/front-controller.svg", height: 1cm)
+    #image("/WE2/assets/front-controller.png", height: 1cm)
 / Middleware Pattern:
     Verkettung von Middlewares pro Request, gemäss "Chain of Responsibility" Pattern. Express verwendet Middleware im Front Controller und Routing. Beispiel wenn nicht angemeldet, kann Auth. Middleware direkt Fehler Response senden und es wird nicht weitergegeben.
 / jede Middlware: ist für genau eine Aufgabe verantwortlich, kann eine Aufgabe ausführen, muss den Request beenden oder weitergeben
@@ -89,6 +91,41 @@ app.listen(3000, function () {
 / HTTPS: Token nur über eine sichere Verbindung versenden
 / speichern: Token kann auch im Cookie abgelegt werden #hinweis[mit `httpOnly, secure, SameSite, Lebensdauer` und Achtung CSRF]
 #image("/WE2/assets/jwt.png", height: 2cm)
+
+
+#let ascii-art(body) = text(
+    font: ("Fira Code", "Fira Mono", "Comic Sans MS", "JetBrains Mono", "JetBrains Mono NL"),
+    ligatures: true,
+    size: 3.7pt,
+    par(justify: false, body),
+    // raw(
+    // lang: "txt",
+    // body,
+    // ),
+);
+
+// +-----------+                                  +-----------+
+// |  Browser  |                                  |  Server   |
+// +-----------+                                  +-----------+
+#ascii-art(
+    "Browser                                         Server
+ |  1. POST /users/login (username, password)      |
+ | ----------------------------------------------> |
+ |                                                 | 2. Creates JWT
+ |   3. Returns the JWT to Browser                 |
+ | <---------------------------------------------- |
+ |                                                 |
+ |    4. Sends JWT on Authorization Header         |
+ | ----------------------------------------------->| 5. Check JWT
+ |                                                 |   signature.
+ |                                                 | Get user info
+ |                                                 |  from the JWT
+ |    6. Sends response to the client              |
+ | <---------------------------------------------- |
+ |                                                 |
+",
+)
+
 
 == AJAX mit fetch Repetition
 ```js

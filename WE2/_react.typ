@@ -217,14 +217,9 @@ return ( <button onClick={clickHandler()}>Click Me</button> )
 ==== Eventhandlers als Props übergeben
 Häufig, wie in der Demo, übergeben wir Eventhandler als Props an Komponenten, um State in
 höhergelegenen Komponenten zu aktualisieren.
-```js
-<SearchInput
-value={searchText}
-onChange={(e) => setSearchText(e.target.value)}
-/>
+```js <SearchInput value={searchText} onChange={(e) => setSearchText(e.target.value)} />
 ```
-Üblicherweise werden diese Props analog der nativen Eventhandler-Props mit
-onThingThatHappens benannt, wie onUpdateSearchText oder onCloseDialog
+// Üblicherweise werden diese Props analog der nativen Eventhandler-Props mit onThingThatHappens benannt, wie onUpdateSearchText oder onCloseDialog
 
 
 === useState
@@ -631,35 +626,30 @@ Cascades vermeiden, stattdessen Composition nutzen
 .button { background-color: var(--color-primary); /* Hier wird der Wert #0070f3 eingesetzt */}
 ```
 
-#grid(
-    columns: (auto, auto),
-    gutter: 0em,
-    [
-        Composition via classname
-        ```css
-        .btn { padding: 10px; border-radius: 4px; }
-        .btn-primary { background: var(--color-primary); }
-        .btn-danger { background: red; }
-        /* HTML Composition */
-        <button class="btn btn-primary">Speichern</button>
-        <button class="btn btn-danger">Löschen</button>
-        ```
+// #grid(
+//     columns: (auto, auto),
+//     gutter: 0em,
+//     [
+Composition via classname
+```css
+.btn { padding: 10px; border-radius: 4px; } .btn-primary { background: var(--color-primary); } .btn-danger { background: red; }
+/* HTML Composition: */ <button class="btn btn-primary">Speichern</button> <button class="btn btn-danger">Löschen</button>
+```
 
+// ],
+// [
 
-    ],
-    [
-
-        ```css
-        .button {
-        /* Basis-Styles */
-        &.primary {
-        /* Styles für Primär-Button */ }
-        &.large {
-        /* Styles für große Buttons */ } }
-        <button class="button primary large">
-        ```
-    ],
-)
+//     ```css
+//     .button {
+//     /* Basis-Styles */
+//     &.primary {
+//     /* Styles für Primär-Button */ }
+//     &.large {
+//     /* Styles für große Buttons */ } }
+//     <button class="button primary large">
+//     ```
+// ],
+// )
 
 / CSS Nesting: Verschachtelung ist ok, muss aber "flach" gehalten werden (maximal 3 Ebenen tief).
 / Einheiten: Verwende konsequent rem anstelle von px, für Barrierefreiheit (Skalierbarkeit)
