@@ -70,8 +70,8 @@ Vorteil beim _Redirect von POST /random nach GET /random?from=…_ gegenüber de
     "Client                                             Server
  |  POST /login                                       |
  | -------------------------------------------------> |
- | <------------------------------------------------- |
  |                set-cookie: session-id:1234         |
+ | <------------------------------------------------- |
  |                                                    |
  |  GET /addToCard?id=12  cookie: session-id:1234     |
  | -------------------------------------------------> |
