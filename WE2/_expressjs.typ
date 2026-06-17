@@ -1,6 +1,6 @@
 #import "../template--additional-formatting-templates.typ": *
 
-// /* zum testen:
+/* zum testen:
 #import "../template_cheatsheet.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
@@ -20,21 +20,21 @@
 // #include "/WE2/_code-express-demo-todo.typ"
 
 == Express Architektur und Grundlagen
-// • Erklären Sie in eigenen Worten die Patterns von Express.js: MVC, Front-
-Controller und Middleware
+// • Erklären Sie in eigenen Worten die Patterns von Express.js: MVC, Front-Controller und Middleware
 / MVC Pattern: Model (DB) View (hbs) und Controller (index.js, app.js) getrennt
 / Front-Controller Pattern:
      // https://martinfowler.com/eaaCatalog/frontController.html
-    #image("/WE2/assets/front-controller.svg", height: 1.25cm)
+    // #image("/assets/image-3.png", height: 1.25cm, width: auto)
+    Bild: Request -> Front Controller -> Controller (können verschiedene Controller sein) -> controller zu Model für Daten, zu View für Rendering und Response.
+    #image("/WE2/assets/front-controller.svg", height: 1cm)
 / Middleware Pattern:
-    Verkettung von Middlewares pro Request, gemäss "Chain of Responsibility" Pattern. Express verwendet Middleware im Front Controller und Routing.
+    Verkettung von Middlewares pro Request, gemäss "Chain of Responsibility" Pattern. Express verwendet Middleware im Front Controller und Routing. Beispiel wenn nicht angemeldet, kann Auth. Middleware direkt Fehler Response senden und es wird nicht weitergegeben.
 / jede Middlware: ist für genau eine Aufgabe verantwortlich, kann eine Aufgabe ausführen, muss den Request beenden oder weitergeben
 / Chain of Responsibility:
     is a behavioral design pattern that lets you pass requests along a chain
     of handlers. Upon receiving a request, each handler decides either to process the request or to
     pass it to the next handler in the chain.
 
-#image("/assets/image-3.png", height: 2cm, width: auto)
 
 / Was ist CSR?: Client Side Rendering, rendert im Browser, bei Client, React
 / Vor- und Nachteile CSR?: schnellere Reaktion, weniger Arbeit auf Server, interaktiv. _Nachteile_: SEO, benötigt JS, Content Seiten die selten ändern rendern neu.
