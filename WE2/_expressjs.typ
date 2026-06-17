@@ -37,7 +37,8 @@
      // https://martinfowler.com/eaaCatalog/frontController.html
     // #image("/assets/image-3.png", height: 1.25cm, width: auto)
     Bild: Request -> Front Controller -> Controller (können verschiedene Controller sein) -> controller zu Model für Daten, zu View für Rendering und Response.
-    #image("/WE2/assets/front-controller.svg", height: 1cm)
+    // #image("/WE2/assets/front-controller.svg", height: 1cm)
+    #image("/WE2/assets/WE2_Diagramme-front-controller.drawio.svg", height: 1cm)
 // #image("/WE2/assets/front-controller.png", height: 1cm)
 / Middleware Pattern:
     Verkettung von Middlewares pro Request, gemäss "Chain of Responsibility" Pattern. Express verwendet Middleware im Front Controller und Routing. Beispiel wenn nicht angemeldet, kann Auth. Middleware direkt Fehler Response senden und es wird nicht weitergegeben.

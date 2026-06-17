@@ -320,8 +320,6 @@ export const Counter = () => {
 == Controlled Forms
 
 *Flow of a Controlled Component*
-// TODO
-// #image("/WE2/assets/WE2_Diagramme-controlled-components.drawio.svg", height: 1.7cm)
 #image("/WE2/assets/WE2_Diagramme-controlled-component.drawio.svg", height: 1.7cm)
 
 ```tsx
