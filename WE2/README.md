@@ -8,4 +8,7 @@ Benutze eine angepasste Version vom Cheatsheet template von Nina und Jannis.
 
 
 ![alt text](assets/drawio-2.png)
+
+Export so: 
+![export bei https://app.diagrams.net/# ](image-6.png)
 pdf export und einfügen testen.
