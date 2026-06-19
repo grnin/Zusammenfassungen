@@ -5,11 +5,11 @@
 #show: project.with(
     authors: ("Jasmin Fässler",),
     fach: "BuRe2",
-    fach-long: "Business und Recht 2 Vorlesung",
-    semester: "FS24",
-    language: "en",
+    fach-long: "OR Allgemeiner Teil",
+    semester: "FS26",
+    language: "de",
     font-size: 10pt,
-    tableofcontents: (enabled: true, depth: 3, columns: 2),
+    tableofcontents: (enabled: true, depth: 2, columns: 2),
 )
 
 // Typst Einstellungen
@@ -35,11 +35,11 @@
 #show grid: set par(justify: false, linebreaks: "optimized")
 
 // ----------
-
-#include "01 Obligationenrecht Allgemeiner Teil.typ"
-
 // #include "00_Diagramme.typ"
-#include "01_OR.typ"
+
+// #include "01 Obligationenrecht Allgemeiner Teil.typ"
+
+// #include "01_OR.typ"
 #include "02_ZGB-Einleitung.typ"
 
 // TODO: export to typst with correct underlines

@@ -8,9 +8,9 @@
 #show: project.with(
     authors: ("Jasmin Fässler",),
     fach: "BuRe2",
-    fach-long: "Business und Recht 2 Vorlesung",
-    semester: "FS24",
-    language: "en",
+    fach-long: "OR Allgemeiner Teil",
+    semester: "FS26",
+    language: "de",
     font-size: 10pt,
     tableofcontents: (enabled: true, depth: 3, columns: 2),
 )
@@ -137,6 +137,7 @@
         - Eigentumsfreiheitsklage (Art. 641 ZGB)
         - Besitzesrechtsklage (Art. 934 ff. ZGB)
         - *Persönlichkeitsverletzung* (Art. 28 ff. ZGB)
+
         - Verwandtenunterstützungspflicht (Art. 328 f. ZGB)
     ],
     // [Notizen hier:],
@@ -219,6 +220,7 @@ Ob ein Vertrag aber tatsächlich gültig ist, hängt von verschiedenen Vorausset
 === Gründe für Formvorschriften
 
 1. Beweissicherung
+
 2. Schutz vor übereiltem Vertragsschluss
 3. Rechtssicherheit
 4. Schutz der schwächeren Partei
@@ -658,3 +660,148 @@ Grundlagenirrtum oder Erklärungsirrtum
         - Gläubiger kann Leistung nicht mehr verlangen oder durchsetzen
     ],
 )
+
+
+#pagebreak();
+= Übungen
+// Lösungen von Dominik und geprüft und OR ergänzt
+1) Petra gefällt beim Einkaufsbummel in einem grossen Möbelhaus eine grosse, farbige Blumenvase. Da der Wagen schon voll ist, nimmt Petra die Vase unter den Arm und macht sich auf den Weg an die Kasse. Auf der Rolltreppe fällt Petra die Vase zu Boden und zerbricht in 1000 Stücke. Gestützt auf welche Rechtsgrundlage(n) könnte Ikea einen Anspruch geltend machen?
+- Schadenersatz OR 41
+\
+\
+#or-block(
+    [
+        (Zweiter Abschnitt: Die Entstehung durch unerlaubte Handlungen -
+        A. Haftung im Allgemeinen -
+        I. Voraussetzungen der Haftung) \
+        *Art. 41*\
+
+        1. Wer einem andern widerrechtlich Schaden zufügt, sei es mit Absicht, sei es aus _Fahrlässigkeit_, wird ihm zum Ersatze verpflichtet.
+        2. Ebenso ist zum Ersatze verpflichtet, wer einem andern in einer gegen die guten Sitten verstossenden Weise absichtlich Schaden zufügt.
+    ],
+)
+\
+
+2) Hans interessiert sich in einem Fachgeschäft für ein bestimmtes
+Mobiltelefon, das aber vor Ort nicht erhältlich ist. Auf Wunsch von
+Hans bestellt die Verkäuferin das gewünschte Gerät und sagt zu Hans,
+dass die Lieferfrist ca. 2 -- 3 Tage beträgt und Hans ein Mail
+erhalte, wenn er es abholen könne. Hans verspricht, dies zu tun.
+Beim Herumschlendern in der Stadt sieht Hans das gewünschte Telefon
+beim Konkurrenz-Unternehmen und kauft es sofort. Als er die Nachricht
+erhält, dass er das Telefon abholen könne, meldet er sich einfach
+nicht mehr. Wie ist die Rechtslage?
+
+- Angenommen Vertrag abgeschlossen, OR 215 abs 1. Weiterverkaufen und differenz zu einkaufswert als schadensaersatz verlangen.
+- OR 215 abs 2. Einkaufspreis als schadensersatz verlangen
+\
+
+#or-block[
+    2. Schadenersatz und Schadenberechnung
+    *Art. 215*
+    1. Kommt der Käufer im kaufmännischen Verkehr seiner Zahlungspflicht nicht nach, so hat der Verkäufer das Recht, seinen Schaden nach der Differenz zwischen dem Kaufpreis und dem Preise zu berechnen, um den er die Sache in guten Treuen weiter verkauft hat.
+    2. Bei Waren, die einen Markt- oder Börsenpreis haben, kann er ohne einen solchen Verkauf die Differenz zwischen dem Vertragspreis und dem Markt- und Börsenpreis zur Erfüllungszeit als Schadenersatz verlangen.
+]
+\
+3) X bringt sein Auto in die Garage Z zur Reparatur. Z offeriert X
+die Reparatur zu einem Preis von CHF 1725.80. Gemäss der detaillierten
+Aufstellung auf der Offerte setzt sich die Reparatur zusammen aus der
+Arbeit (10h à CHF 130.\--) sowie dem Ersatzmaterial für CHF 525.80. X
+findet das Angebot gut und nimmt es an. Wie viel schuldet X nach der
+Reparatur dem Z?
+
+- OR 24 abs 3. rechnungsfehler hindern verbindlichkeit nicht, frage ist jetzt sind die 1700 verbindlich oder die 1800 ?
+- OR 373 abs 1. vergütung im voraus bestimmt muss eingehalten werden, sind die 1700 im voraus bestimmten
+
+\
+
+#or-block[
+    2. Fälle des Irrtums
+    *Art. 24*\
+
+    Der Irrtum ist namentlich in folgenden Fällen ein wesentlicher:
+
+    1.
+        wenn der Irrende einen andern Vertrag eingehen wollte als denjenigen, für den er seine Zustimmung erklärt hat;
+    2.
+        wenn der Wille des Irrenden auf eine andere Sache oder, wo der Vertrag mit Rücksicht auf eine bestimmte Person abgeschlossen wurde, auf eine andere Person gerichtet war, als er erklärt hat;
+    3.
+        wenn der Irrende eine Leistung von erheblich grösserem Umfange versprochen hat oder eine Gegenleistung von erheblich geringerem Umfange sich hat versprechen lassen, als es sein Wille war;
+    4.
+        wenn der Irrtum einen bestimmten Sachverhalt betraf, der vom Irrenden nach Treu und Glauben im Geschäftsverkehr als eine notwendige Grundlage des Vertrages betrachtet wurde.
+    ---
+
+    2 Bezieht sich dagegen der Irrtum nur auf den Beweggrund zum Vertragsabschlusse, so ist er nicht wesentlich.
+
+    3 Blosse Rechnungsfehler hindern die Verbindlichkeit des Vertrages nicht, sind aber zu berichtigen.
+]
+
+#or-block[
+    Höhe der Vergütung
+    a. Feste Übernahme \
+    *Art. 373*
+
+    1. Wurde die Vergütung zum voraus genau bestimmt, so ist der Unternehmer verpflichtet, das Werk um diese Summe fertigzustellen, und darf keine Erhöhung fordern, selbst wenn er mehr Arbeit oder grössere Auslagen gehabt hat, als vorgesehen war.
+
+    2. Falls jedoch ausserordentliche Umstände, die nicht vorausgesehen werden konnten oder die nach den von beiden Beteiligten angenommenen Voraussetzungen ausgeschlossen waren, die Fertigstellung hindern oder übermässig erschweren, so kann der Richter nach seinem Ermessen eine Erhöhung des Preises oder die Auflösung des Vertrages bewilligen.
+
+    3. Der Besteller hat auch dann den vollen Preis zu bezahlen, wenn die Fertigstellung des Werkes weniger Arbeit verursacht, als vorgesehen war.
+]
+\
+4\) Franz hat sich gegenüber verschiedenen Gläubigern massiv
+verschuldet, es drohen Betreibungen, wenn er nicht demnächst die
+Ausstände von CHF 20'000.-- begleichen kann. Franz kann sich aus
+beruflichen Gründen keine Betreibungen leisten. Ein Bekannter namens
+Bert aus dem gleichen Dorf hat Kenntnis dieser Umstände. Bert ist wie
+Franz begeistert von seltenen Kakteen und bietet Franz an, einen Teil
+seiner umfangreichen, exotischen Kakteensammlung für CHF 22'000.--
+abzukaufen. Bei sorgfältiger Planung des Verkaufs der zahlreichen
+seltenen Pflanzen würde man auf dem Markt ohne Weiteres mindestens den
+zwei- bis dreifachen Preis erzielen. Franz nimmt das Angebot
+widerwillig an und unterschreibt den ihm von Bert unterbreiteten
+Vertrag. Wenig später kommt Franz aufgrund guter Börsenspekulationen
+zu viel Geld, mit dem er alle seine finanziellen Probleme lösen kann.
+Bert drängt auf Aushändigung der Pflanzensammlung und weist auf den
+Vertrag hin. Kann Franz etwas tun?
+
+- OR art 21, innerhalb Jahresfrist anfechten gilt übervorteil
+\
+5\) Hans kaufte am 5.7.2023 von seinem Kollegen Willy, der als
+Sachbearbeiter in einem Büro arbeitet, einen Occasions-Sportwagen.
+Willy hatte seinerseits das Auto kurz zuvor von Thomas abgekauft.
+Thomas hat den Kilometerstand manipuliert, wovon Hans und Willy nichts
+wussten. Der manipulierte Kilometerstand wurde am 7.1.2024 vom
+Fahrzeugexperten beim Strassenverkehrsamt bemerkt und Hans
+gleichentags mitgeteilt. Wie ist die Rechtslage?\
+
+*Variante 1:* Wie wäre der Fall zu beurteilen, wenn Willy den
+Kilometerstand selbst manipuliert hätte?\
+
+*Variante 2:* Hans ist beruflich sehr eingespannt und schiebt das
+Problem mit dem manipulierten Kilometerstand auf die lange Bank. Im
+Herbst 2024 wird Hans von einem Familienangehörigen darauf
+hingewiesen, dass er sich aus rechtlichen Gründen besser um das
+Problem kümmern sollte. Was könnte hier allenfalls das Problem sein?
+\
+- . OR 28 abs 2. Willy musste es nicht wissen somit muss Hans mit dem fehler Leben
+    - 1: OR 28 abs 1. willy hat Hans verleiete damit nicht verbindlich
+    - 2: OR 127, innerhal von 10 Jahren,
+        OR 128, falls auto "kleinverkauf von waren" ist dann nur 5 jahre
+        Innerhalb von 3 jahren reagieren, also von 2024-2027
+
+\
+6) Peter kauft beim Juwelier eine Halskette als Geburtstagsgeschenk für
+seine Frau. Leider gefällt seiner Frau die Halskette überhaupt nicht
+und er möchte sie dem Juwelier zurück geben. Ist das möglich?
+- Keine Rechtsgrundlage für die Rückgabe sofern nichts spezielles abgemacht, kein Widerrufsrecht. Es hat keine Mängel, Kaufvertrag vollständig erfüllt. Vlt aber Juwelier nett
+    art. 24 abs2 OR
+
+\
+\
+
+7) Die Inhaberin eines Uhrengeschäfts verwechselt in der Auslage bei
+zwei Uhren die Preisschilder. Sie versieht die Rolex mit dem
+Preisschild der Swatch für CHF 129.-- und bei der günstigen Swatch
+wurde der Preis der Rolex von CHF 9'890.-- angebracht. Was kann Sie
+tun, wenn ein Käufer die Rolex für CHF 129.-- kaufen möchte?
+- Unverbindlicher Antrag, Käufer macht das Angebot und Verkäuferin kann immer noch ablehnen
