@@ -3,36 +3,38 @@
 #import "@preview/wrap-it:0.1.1": wrap-content
 
 #show: project.with(
-  authors: ("Jasmin Fässler", ""),
-  fach: "BuRe2",
-  fach-long: "Business und Recht 2 Vorlesung",
-  semester: "FS24",
-  language: "en",
-  font-size: 10pt,
-  tableofcontents: (enabled: true, depth: 3, columns: 2),
+    authors: ("Jasmin Fässler",),
+    fach: "BuRe2",
+    fach-long: "Business und Recht 2 Vorlesung",
+    semester: "FS24",
+    language: "en",
+    font-size: 10pt,
+    tableofcontents: (enabled: true, depth: 3, columns: 2),
 )
 
+// Typst Einstellungen
 
 #let link_box(content) = block(
-  fill: rgb("#eef2ff"),
-  inset: 10pt,
-  radius: 8pt,
-  spacing: 0.75em,
-  content,
+    fill: rgb("#eef2ff"),
+    inset: 10pt,
+    radius: 8pt,
+    spacing: 0.75em,
+    content,
 )
 
 #let notiz(content) = block(
-  color: rgb("#da05a1"),
-  // fill: rgb("#eef2ff"),
-  // inset: 10pt,
-  // radius: 8pt,
-  // spacing: 0.75em,
-  content,
+    color: rgb("#da05a1"),
+    // fill: rgb("#eef2ff"),
+    // inset: 10pt,
+    // radius: 8pt,
+    // spacing: 0.75em,
+    content,
 )
-
 
 // Document-specific settings
 #show grid: set par(justify: false, linebreaks: "optimized")
+
+// ----------
 
 #include "01 Obligationenrecht Allgemeiner Teil.typ"
 
