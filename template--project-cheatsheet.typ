@@ -88,7 +88,8 @@
         margin: if (column-count < 2) {
             (top: 2cm, left: 1.5cm, right: 1.5cm, bottom: 2cm)
         } else {
-            0.5cm
+            //   0.5cm
+            (top: 0.4cm, left: 0.5cm, right: 0.5cm, bottom: 0.4cm)
         },
     )
 

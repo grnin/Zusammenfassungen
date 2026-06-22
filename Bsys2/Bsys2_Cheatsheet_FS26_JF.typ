@@ -1151,7 +1151,7 @@ void * address = mmap( // maps shared memory into virt. address space of process
 
 = Unicode
 == ASCII - American Standard Code for Information Interchange
-Hat _128 definierte Zeichen_ #hinweis[(erste Hexzahl = Zeile, zweite Hexzahl = Spalte,
+Hat _128 definierte Zeichen_ #hinweis[(erste Hexzahl = Zeile #sym.arrow.b , zweite Hexzahl = Spalte #sym.arrow.r,
     d.h. #hex("41") = `A`)].
 #image("img/bsys_40.png")
 
@@ -1167,6 +1167,8 @@ Einheit, um Zeichen in einem Encoding darzustellen #hinweis[(bietet den Speicher
 #hinweis[_$bold(P_i) =$_ $i$-tes Bit des unkodierten CPs,
     _$bold(U_i) =$_ $i$-tes Code-Unit des kodierten CPs,
     _$bold(B_i) =$_ $i$-tes Byte des kodierten CPs]
+
+*Hex:* ```c 1010=A, 1011=B, 1100=C, 1101=D, 1110=E, 1111=F```
 == UTF-32
 Jede CU ist die ganze  _32 Bit_ gross, jeder CP ist eine CU.
 Wird häufig intern in Programmen verwendet. Obere 11 Bits oft "zweckentfremdet". Endianness gibt an, mit welchem
@@ -1176,35 +1178,57 @@ Ende die Folge anfängt: *Big-Endian*: B3 B2 B1 B0  #hinweis[CP aus Unicode-Tabe
 // #image("img/bsys_43.png")
 
 == UTF-8
-Jede CU umfasst 8 Bit, ein CP benötigt 1 bis 4 CUs. 
-// Encoding muss Endianness _nicht_ berücksichtigen. 
+Jede CU umfasst 8 Bit, ein CP benötigt 1 bis 4 CUs.
+// Encoding muss Endianness _nicht_ berücksichtigen.
 Standard für Webpages. Echte Erweiterung von ASCII. Jedes B (Byte) = U (Code-Unit). Maximal 4 Bytes.
-#let nextCU = bits("10xx xxxx")
-#table(
-    columns: (auto, 1fr, 1fr, 1fr, 1fr, 1fr),
-    table.header([Code-Point in], [$bold(U_3)$], [$bold(U_2)$], [$bold(U_1)$], [$bold(U_0)$], [signifikant]),
-    [#hex("0") - #hex("7F")], [], [], [], [#bits("0xxx xxxx")], [7 bits],
-    [#hex("80") - #hex("7FF")], [], [], [#bits("110x xxxx")], [#nextCU], [11 bits],
-    [#hex("800") - #hex("FFFF")], [], [#bits("1110 xxxx")], [#nextCU], [#nextCU], [16 bits],
-    [#hex("10000") - #hex("10FFFF")], [#bits("1111 0xxx")], [#nextCU], [#nextCU], [#nextCU], [21 bits],
+
+// weiss ich auswendig:
+// *Lesen*: kleiner als 7Fh > ASCII, sonst von rechts nach links, wenn linker Teil `10` ist, dann geht es weiter und sonst sollte es die `vergangenen Anzahl Bytes=Units + 0` sein.\
+// *Schreiben*: von rechts nach links, wenn zu gross: noch ein Byte mit `10` signalisieren, sonst `Anzahl Bytes+0` aufschreiben (oder ASCII).
+
+#block(
+    sticky: true,
+
+    [
+        #let nextCU = bits("10xx xxxx")
+        #table(
+            columns: (auto, 1fr, 1fr, 1fr, 1fr, 1fr),
+            table.header([Code-Point in], [$bold(U_3)$], [$bold(U_2)$], [$bold(U_1)$], [$bold(U_0)$], [signifikant]),
+            [#hex("0") - #hex("7F")], [], [], [], [#bits("0xxx xxxx")], [7 bits],
+            [#hex("80") - #hex("7FF")], [], [], [#bits("110x xxxx")], [#nextCU], [11 bits],
+            [#hex("800") - #hex("FFFF")], [], [#bits("1110 xxxx")], [#nextCU], [#nextCU], [16 bits],
+            [#hex("10000") - #hex("10FFFF")], [#bits("1111 0xxx")], [#nextCU], [#nextCU], [#nextCU], [21 bits],
+        )
+        // #image("img/bsys_44.png")
+    ],
 )
-// #image("img/bsys_44.png")
 
 == UTF-16
 Jede CU umfasst 16 Bit, ein CP benötigt 1 oder 2 CUs.
-//  Encoding muss Endianness berücksichtigen. 
+//  Encoding muss Endianness berücksichtigen.
 Die 2 CUs werden _Surrogate Pair_ genannt, $U_0$: high surrogate,
 $U_1$: low surrogate. Bei _2 Bytes_ #hinweis[(1 CU)] wird direkt gemappt und vorne mit
-Nullen aufgefüllt, #hinweis[CP in [0 - FFFF] ohne [D800 - DFFF]]. 
+Nullen aufgefüllt, #hinweis[CP in [0 - FFFF] ohne [D800 - DFFF]].
 Bei _4 Bytes_ sind #hex("D800") bis #hex("DFFF") #hinweis[(Bits 17-21)] wegen dem Separator _ungültig_ und müssen "umgerechnet" werden.
 \
-*Endianness* (umgedreht innerhalb von CU):
-UTF-16BE: U1 U0 = B3 B2 B1 B0, UTF-16LE: U1 U0 = B2 B3 B0 B1
+// *Endianness* (umgedreht innerhalb von CU):
+*Big-Endian*: U0 = B1 B0, *Little Endian*: U0 = B0 B1 \ // TODO: entferne diese Zeile mit 2B wenn zuwenig Platz
+*Big-Endian*: U1 U0 = B3 B2 B1 B0, *Little Endian*: U1 U0 = B2 B3 B0 B1
 
 
 // #image("img/bsys_45.png")
 #image("img/bsys2-utf16.png")
 #v(-4pt)
+==== Vorgehen
+kleiner als FFFF: ist BE, Bytes anschreiben (1 Byte = 2 Hex. Zeichen)\
+grösser als FFFF:
+1. minus #hex("1 0000") rechnen
++ in Binär umwandeln
++ untere (rechts) 10 Bits nehmen und rechts schreiben
++ Surrogat $110111$ links von den 10 Bits
++ restliche (linker Teil) Bits links vom Surrogat
++ ganz links die $110110$ schreiben
+
 ==== Beispiel
 Encoding von U+10'437 (\u{10437})
 #hinweis[#fxcolor("grün", bits("00 0100 0001", suffix: false))
@@ -1229,23 +1253,22 @@ Encoding von U+10'437 (\u{10437})
     )$
 
 ==== Beispiele
-- _ä_: $P = hex("E4") = #hex("E4") = #hinweis[in Binär umwandeln] #bits("1110 0100", suffix: false) = $\
-  $#hinweis[von rechter Seite her die Bits aufteilen:]
-    // fxcolor("hellblau", #bits("11", suffix: false)) thin 
+- _ä_: $P = hex("E4") = #hex("E4") = #hinweis[in Binär umwandeln] #bits("1110 0100", suffix: false) =$\
+    $#hinweis[von rechter Seite her die Bits aufteilen:]
+    // fxcolor("hellblau", #bits("11", suffix: false)) thin
     #bits("11|10 0100", suffix: false) ->
-    fxcolor("grün", #bits("110", suffix: false)) thin 
+    fxcolor("grün", #bits("110", suffix: false)) thin
     #bits("0 0011", suffix: false)
-    fxcolor("grün", #bits("10", suffix: false)) thin 
-    #bits("10 0100", suffix: false)
-    $ 
+    fxcolor("grün", #bits("10", suffix: false)) thin
+    #bits("10 0100", suffix: false)$
     \ #hinweis[am Schluss zurück in Hex umwandeln] #hex("C3 A4", suffix: false)
-    
-    // fxcolor("gelb", bits("10 0110"))$\
-    // $=> P_10 ... P_6 = fxcolor("grün", bits("00011")) = fxcolor("rot", hex("03")), quad
-    // P_5 ... P_0 = fxcolor("gelb", bits("100100")) = fxcolor("orange", hex("24"))$\
-    // $=> U_1 = hex("C0") (= bits("11000000")) + fxcolor("rot", hex("03")) = hex("C3"), quad
-    // U_0 = hex("80") (= bits("10000000")) + fxcolor("orange", hex("24")) = hex("A4")$\
-    // $=> ä = underline(hex("C3 A4"))$
+
+// fxcolor("gelb", bits("10 0110"))$\
+// $=> P_10 ... P_6 = fxcolor("grün", bits("00011")) = fxcolor("rot", hex("03")), quad
+// P_5 ... P_0 = fxcolor("gelb", bits("100100")) = fxcolor("orange", hex("24"))$\
+// $=> U_1 = hex("C0") (= bits("11000000")) + fxcolor("rot", hex("03")) = hex("C3"), quad
+// U_0 = hex("80") (= bits("10000000")) + fxcolor("orange", hex("24")) = hex("A4")$\
+// $=> ä = underline(hex("C3 A4"))$
 - _ặ_: $P = hex("1EB7") = fxcolor("grün", #bits("0001", suffix: false)) thin
     fxcolor("gelb", #bits("111010", suffix: false)) thin fxcolor("hellblau", bits("110111"))$\
     $=> P_15 ... P_12 = fxcolor("grün", hex("01")), quad
@@ -1306,6 +1329,7 @@ _Volume_ #hinweis[(Ein Datenträger oder eine Partition davon.)],
 _Sektor_ #hinweis[(Kleinste logische Untereinheit eines Volumes.
     Daten werden als Sektoren transferiert. Grösse ist von HW definiert.
     Enthält Header, Daten und Error-Correction-Codes.)],
+//   heisst so wegen Kreissektor von harddisk
 _Format_ #hinweis[(Layout der logischen Strukturen auf dem Datenträger, wird vom Dateisystem definiert.)]\
 
 == Block
@@ -1323,14 +1347,15 @@ _Physische Blocknummern_ #hinweis[(Tatsächliche Blocknummer auf dem Volume)].
     columns: (30%, 70%),
 )[
     Enthält _alle Metadaten_ über die Datei, _ausser Namen oder Pfad_ #hinweis[(Grösse,
-        Anzahl der verwendeten Blöcke, Erzeugungszeit, Zugriffszeit, Modifikationszeit,
-        Löschzeit, Owner-ID, Group-ID, Flags, Permission Bits)].
+        Anzahl der verwendeten Blöcke, Erzeugungs-, Zugriffs-, Modifikations- und
+        Löschzeit, Owner-ID, Group-ID, Flags, Permission Bits)].\
     Hat eine _fixe Grösse_ je Volume: Zweierpotenz, mind. 128 Byte, max. 1 Block.
-    Der Inode _verweist auf die Blöcke_, die _Daten für eine Datei_ enthalten.
+    Inode _verweist auf die Blöcke_, die _Daten für eine Datei_ enthalten.
     Enthält ein Array _`i_block`_ mit 15 Einträgen zu je 32 Bit.
 ]
 *Lokalisierung:*
-Alle Inodes aller Blockgruppen gelten als _eine grosse Tabelle_. Startet mit 1.\
+Alle Inodes aller Blockgruppen gelten als _eine grosse Tabelle_. Startet mit 1.
+Finde Blockgruppe: (Inode-1)/Anz. Inodes pro Gruppe, Finde Index des Inodes in Blockgruppe: (Inode-1) % Anz. Inodes pro Gruppe \
 *Erzeugung:*
 Neue Verzeichnisse werden in der Blockgruppe angelegt, die von allen Blockgruppen mit
 _überdurchschnittlich vielen freien Inodes_ die _meisten Blöcke frei_ hat, Dateien in der

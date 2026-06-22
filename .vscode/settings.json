@@ -18,9 +18,12 @@
         "strokeColor": "#000000",
         "fillColor": "#ffffff",
         // 
-        "spacingLeft": "10",  
-        "spacingTop": "8",  
-        "spacingBottom": "8",  
-        "spacingRight": "5"  
+        "spacingLeft": "10",
+        "spacingTop": "8",
+        "spacingBottom": "8",
+        "spacingRight": "5"
     },
+    // typst
+    // "editor.defaultFormatter": "myriad-dreamin.tinymist",
+    "tinymist.formatterIndentSize": 4,
 }
