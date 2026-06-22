@@ -898,29 +898,32 @@ freigegeben wird.
 #include "./signale.typ"
 
 == Pipes
-Eine geöffnete Datei entspricht einem _Eintrag in der File-Descriptor-Tabelle (FDT)_ im
-Prozess. Zugriff über _File-API_ #hinweis[(`open`, `close`, `read`, `write`, ...)].
-Das OS speichert _je Eintrag der Prozess-FDT_ einen _Verweis auf die globale FDT_.
-Bei `fork()` wird die FDT auch kopiert.\
-*```c int dup (int source_fd); int dup2 (int source_fd, int destination_fd)```:*
-_Duplizieren_ den File-Descriptor `source_fd`. _`dup`_ alloziert einen neuen FD und return, _`dup2`_ überschreibt `destination_fd`.
-#v(-0.5em)
+/ geöffnete Datei:
+    entspricht einem _Eintrag in der File-Descriptor-Tabelle (FDT)_ im
+    Prozess. Zugriff über _File-API_ #hinweis[(`open`, `close`, `read`, `write`, ...)].
+    Das OS speichert _je Eintrag der Prozess-FDT_ einen _Verweis auf die globale FDT_.
+/ `fork()`:
+    die FDT wird auch kopiert.
+/ ```c int dup (int source_fd); int dup2 (int source_fd, int destination_fd)```:
+    Duplizieren und returnen den FD `source_fd`. _`dup`_ alloziert neuen FD, _`dup2`_ überschreibt `destination_fd`.
 
-=== Umleiten des Ausgabestreams
+#v(-0.25em)
+==== Umleiten des Ausgabestreams
+// Umleiten des Ausgabestreams:
 ```c
-int fd = open("log.txt", ...);
-int id = fork();
-if (id == 0) { // child
+int fd = open("log.txt", ...);   int pid = fork();
+if (pid == 0) { // child
   dup2(fd, 1); // duplicate fd for log.txt as standard output
   // e.g. load new image with exec*, fd's remain
 } else { /* parent */ close (fd); }
 ```
-
-Eine *Pipe* ist eine "Datei" #hinweis[(Eine Datei muss nur `open`, `close` etc.
-    unterstützen)] im Hauptspeicher, die über zwei File-Deskriptoren verwendet wird:
-_read end_ und _write end_. Daten, die in _write end_ geschrieben werden, können aus
-_read end_ genau _einmal_ und als _FIFO_ gelesen werden. Pipes erlauben _Kommunikation über
-Prozess-Grenzen hinweg_. Ist unidirektional.
+#hinweis[(Eine Datei muss nur `open` & `close` & `read`/`write` unterstützen) ]
+/ Pipe:
+    "Datei" im Hauptspeicher, die über zwei FD verwendet wird:\
+    _read end_ zum Lesen-, _write end_ zum Schreiben in die Pipe #hinweis[kein `lseek`]. \
+    Daten, die in _write end_ geschrieben werden, können aus _read end_ genau _einmal_ gemäss _FIFO_ gelesen werden.
+    Pipes erlauben Kommunikation über Prozess-Grenzen hinweg. #hinweis[Ist unidirektional]
+    ```c int pipe (int fd [2]); // equivalent to int pipe (int *fd) ```
 #grid(
     columns: (0.95fr, 1fr),
     gutter: 0.5em,
@@ -931,7 +934,7 @@ Prozess-Grenzen hinweg_. Ist unidirektional.
         int id = fork();
         ```
         Pipe lebt nur so lange, wie mind. ein Ende geöffnet ist. Alle Read-Ends geschlossen
-        #sym.arrow `SIGPIPE` an Write-End. Mehrere Writes können zusammengefasst werden.
+        #sym.arrow `SIGPIPE` an Write-End. Mehrere Writes können zusammengefasst werden. \
         Lesen mehrere Prozesse dieselbe Pipe, ist unklar, wer die Daten erhält.
     ],
     [
@@ -948,6 +951,9 @@ Prozess-Grenzen hinweg_. Ist unidirektional.
         ```
     ],
 )
+
+- Sind keine Daten in der Pipe, blockiert read, bis Daten hineingeschrieben werden
+- Sind keine Daten in der Pipe und gibt es kein geöffnetes Write-End mehr, gibt read 0 zurück (EOF)
 
 *```c int mkfifo (const char *path, mode_t mode)```:*
 Erzeugt eine Pipe _mit Namen und Pfad_ im Dateisystem. Hat via `mode` Permission Bits wie
