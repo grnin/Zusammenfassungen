@@ -1160,36 +1160,57 @@ unabhängige Erweiterungen auf 8 Bit. Jede ist unterschiedlich und nicht erkennb
 *Unicode:*
 Hat zum Ziel, einen eindeutigen Code für _jedes vorhandene Zeichen_ zu definieren.
 #hex("D8 00") bis #hex("DF FF") sind wegen UTF-16 keine gültigen Code-Points.\
-*Code-Points (CP):*
-Nummer eines Zeichen - "welches Zeichen?"\
+*Code-Points (CP oder P):*
+Nummer eines Zeichen - "welches Zeichen?" in der Unicode Tabelle \
 *Code-Unit (CU):*
 Einheit, um Zeichen in einem Encoding darzustellen #hinweis[(bietet den Speicherplatz)]\
 #hinweis[_$bold(P_i) =$_ $i$-tes Bit des unkodierten CPs,
     _$bold(U_i) =$_ $i$-tes Code-Unit des kodierten CPs,
     _$bold(B_i) =$_ $i$-tes Byte des kodierten CPs]
-
 == UTF-32
-Jede CU umfasst _32 Bit_, jeder CP kann mit _einer CU_ dargestellt werden. Direkte Kopie der
-Bits in die CU bei Big Endian, bei Little Endian werden $P_0$ bis $P_7$ in $B_3$ kopiert usw.
-Wird häufig intern in Programmen verwendet. Obere 11 Bits oft "zweckentfremdet".
+Jede CU ist die ganze  _32 Bit_ gross, jeder CP ist eine CU.
+Wird häufig intern in Programmen verwendet. Obere 11 Bits oft "zweckentfremdet". Endianness gibt an, mit welchem
+Ende die Folge anfängt: *Big-Endian*: B3 B2 B1 B0  #hinweis[CP aus Unicode-Tabelle], *Little-Endian*: B0 B1 B2 B3
+//  werden $P_0$ bis $P_7$ in $B_3$ kopiert usw.
 
-#image("img/bsys_43.png")
+// #image("img/bsys_43.png")
+
+== UTF-8
+Jede CU umfasst 8 Bit, ein CP benötigt 1 bis 4 CUs. 
+// Encoding muss Endianness _nicht_ berücksichtigen. 
+Standard für Webpages. Echte Erweiterung von ASCII. Jedes B (Byte) = U (Code-Unit). Maximal 4 Bytes.
+#let nextCU = bits("10xx xxxx")
+#table(
+    columns: (auto, 1fr, 1fr, 1fr, 1fr, 1fr),
+    table.header([Code-Point in], [$bold(U_3)$], [$bold(U_2)$], [$bold(U_1)$], [$bold(U_0)$], [signifikant]),
+    [#hex("0") - #hex("7F")], [], [], [], [#bits("0xxx xxxx")], [7 bits],
+    [#hex("80") - #hex("7FF")], [], [], [#bits("110x xxxx")], [#nextCU], [11 bits],
+    [#hex("800") - #hex("FFFF")], [], [#bits("1110 xxxx")], [#nextCU], [#nextCU], [16 bits],
+    [#hex("10000") - #hex("10FFFF")], [#bits("1111 0xxx")], [#nextCU], [#nextCU], [#nextCU], [21 bits],
+)
+// #image("img/bsys_44.png")
 
 == UTF-16
-Jede CU umfasst _16 Bit_, ein CP benötigt _1 oder 2 CUs_. Encoding muss Endianness
-berücksichtigen. Die 2 CUs werden Surrogate Pair genannt, $U_0$: high surrogate,
+Jede CU umfasst 16 Bit, ein CP benötigt 1 oder 2 CUs.
+//  Encoding muss Endianness berücksichtigen. 
+Die 2 CUs werden _Surrogate Pair_ genannt, $U_0$: high surrogate,
 $U_1$: low surrogate. Bei _2 Bytes_ #hinweis[(1 CU)] wird direkt gemappt und vorne mit
-Nullen aufgefüllt. Bei _4 Bytes_ sind #hex("D800") bis #hex("DFFF") #hinweis[(Bits 17-21)]
-wegen dem Separator _ungültig_ und müssen "umgerechnet" werden.\
+Nullen aufgefüllt, #hinweis[CP in [0 - FFFF] ohne [D800 - DFFF]]. 
+Bei _4 Bytes_ sind #hex("D800") bis #hex("DFFF") #hinweis[(Bits 17-21)] wegen dem Separator _ungültig_ und müssen "umgerechnet" werden.
+\
+*Endianness* (umgedreht innerhalb von CU):
+UTF-16BE: U1 U0 = B3 B2 B1 B0, UTF-16LE: U1 U0 = B2 B3 B0 B1
 
-#image("img/bsys_45.png")
+
+// #image("img/bsys_45.png")
+#image("img/bsys2-utf16.png")
 #v(-4pt)
 ==== Beispiel
 Encoding von U+10'437 (\u{10437})
 #hinweis[#fxcolor("grün", bits("00 0100 0001", suffix: false))
     #fxcolor("gelb", bits("00 0011 0111"))]:
 
-+ Code-Point $P$ minus #hex("10000") rechnen und in Binär umwandeln\
++ Q = Code-Point $P$ minus #hex("10000") rechnen, dann in Binär umwandeln\
     $P = hex("10437"), quad Q = hex("10437") - hex("10000") = hex("0437")
     = fxcolor("grün", #bits("00 0000 0001", suffix: false)) fxcolor("gelb", bits("00 0011 0111"))$
 + Obere & untere 10 Bits in Hex umwandeln\
@@ -1207,28 +1228,24 @@ Encoding von U+10'437 (\u{10437})
         fxcolor("hellblau", hex("37DD"))
     )$
 
-== UTF-8
-Jede CU umfasst _8 Bit_, ein CP benötigt _1 bis 4 CUs_. Encoding muss Endianness _nicht_
-berücksichtigen. Standard für Webpages. Echte Erweiterung von ASCII.
-#let nextCU = bits("10xx xxxx")
-#table(
-    columns: (auto, 1fr, 1fr, 1fr, 1fr, 1fr),
-    table.header([Code-Point in], [$bold(U_3)$], [$bold(U_2)$], [$bold(U_1)$], [$bold(U_0)$], [signifikant]),
-    [#hex("0") - #hex("7F")], [], [], [], [#bits("0xxx xxxx")], [7 bits],
-    [#hex("80") - #hex("7FF")], [], [], [#bits("110x xxxx")], [#nextCU], [11 bits],
-    [#hex("800") - #hex("FFFF")], [], [#bits("1110 xxxx")], [#nextCU], [#nextCU], [16 bits],
-    [#hex("10000") - #hex("10FFFF")], [#bits("1111 0xxx")], [#nextCU], [#nextCU], [#nextCU], [21 bits],
-)
-#image("img/bsys_44.png")
-
 ==== Beispiele
-- _ä_: $P = hex("E4") = fxcolor("grün", #bits("00011", suffix: false)) thin
-    fxcolor("gelb", bits("10 0110"))$\
-    $=> P_10 ... P_6 = fxcolor("grün", bits("00011")) = fxcolor("rot", hex("03")), quad
-    P_5 ... P_0 = fxcolor("gelb", bits("100100")) = fxcolor("orange", hex("24"))$\
-    $=> U_1 = hex("C0") (= bits("11000000")) + fxcolor("rot", hex("03")) = hex("C3"), quad
-    U_0 = hex("80") (= bits("10000000")) + fxcolor("orange", hex("24")) = hex("A4")$\
-    $=> ä = underline(hex("C3 A4"))$
+- _ä_: $P = hex("E4") = #hex("E4") = #hinweis[in Binär umwandeln] #bits("1110 0100", suffix: false) = $\
+  $#hinweis[von rechter Seite her die Bits aufteilen:]
+    // fxcolor("hellblau", #bits("11", suffix: false)) thin 
+    #bits("11|10 0100", suffix: false) ->
+    fxcolor("grün", #bits("110", suffix: false)) thin 
+    #bits("0 0011", suffix: false)
+    fxcolor("grün", #bits("10", suffix: false)) thin 
+    #bits("10 0100", suffix: false)
+    $ 
+    \ #hinweis[am Schluss zurück in Hex umwandeln] #hex("C3 A4", suffix: false)
+    
+    // fxcolor("gelb", bits("10 0110"))$\
+    // $=> P_10 ... P_6 = fxcolor("grün", bits("00011")) = fxcolor("rot", hex("03")), quad
+    // P_5 ... P_0 = fxcolor("gelb", bits("100100")) = fxcolor("orange", hex("24"))$\
+    // $=> U_1 = hex("C0") (= bits("11000000")) + fxcolor("rot", hex("03")) = hex("C3"), quad
+    // U_0 = hex("80") (= bits("10000000")) + fxcolor("orange", hex("24")) = hex("A4")$\
+    // $=> ä = underline(hex("C3 A4"))$
 - _ặ_: $P = hex("1EB7") = fxcolor("grün", #bits("0001", suffix: false)) thin
     fxcolor("gelb", #bits("111010", suffix: false)) thin fxcolor("hellblau", bits("110111"))$\
     $=> P_15 ... P_12 = fxcolor("grün", hex("01")), quad
@@ -1280,8 +1297,8 @@ berücksichtigen. Standard für Webpages. Echte Erweiterung von ASCII.
         [#hex("00 D8 30 DF")],
     )
 }
-#hinweis[Bei LE / BE werden nur die Zeichen _innerhalb_ eines Code-Points vertauscht,
-    nicht die Code-Points an sich.]
+#hinweis[Bei LE / BE werden nur die Zeichen _innerhalb_ eines Code-Units vertauscht,
+    nicht die Bytes an sich.]
 
 = Ext2-Dateisystem
 _Partition_ #hinweis[(Ein Teil eines Datenträgers, wird selbst wie ein Datenträger behandelt.)],
@@ -1541,6 +1558,7 @@ Ein Client kann sich für Protokolle _registrieren_. \
 *`WM_DELETE_WINDOW`:*
 Wird beim Drücken des "x" vom Window Manager an den Client geschickt.
 
+// TODO meltdown ist nicht prüfungsrelevant:
 == Performance-Optimierungen
 Mapping des Speichers in jeden virtuellen Adressraum, Out-of-Order Execution (03E),
 Spekulative Ausführung.\
