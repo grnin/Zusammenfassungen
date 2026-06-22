@@ -44,8 +44,8 @@ _Concurrency_ #hinweis[(interleaved execution of programs for simpler programs)]
         _Synchronous_ #hinweis[(Thread waiting for condition)] or _Asynchronous_ #hinweis[(Thread gets released after defined time)]
     ],
     [
-        // #image("img/parprog_1.png")
         #image("img/scheduler.svg")
+        // #image("img/scheduler.png")
     ],
 )
 *Multitasking:*
