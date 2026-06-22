@@ -117,41 +117,6 @@ Code to be run in a Thread is within a overridden `run()`.
     ],
 )
 
-/*
-==== C\# using a Class with composition:
-```cs
-private void Run() {
-  for (int i = 1; i <= 3; i++) {
-    Console.WriteLine($"Thread Running:
- {i}");
- Thread.Sleep(500);
- }
- }
- }
-
-using System;
-using System.Threading;
-class MyThread {
-// Vererbung von Thread nicht möglich, stattdessen ein private Thread member erstellen
-private Thread thread;
-
-public MyThread() {
-thread = new Thread(Run);
-}
-public void Start() {
-thread.Start();
-}
- class Program {
- static void Main() {
- MyThread myThread = new MyThread();
- myThread.Start();
- Console.WriteLine("Main thread
-running...");
-}
-}
-```
-// */
-
 // *Yield:*
 // Thread is done processing for the moment and hints to the scheduler to release the processor.
 // The scheduler can ignore this. Thread enters into ready-state.
@@ -163,11 +128,11 @@ If thread is in `sleep()`, `wait()` or `join()` methods, a ```java InterruptExce
 Exceptions thrown in `run()` can't be propagated to the Main thread.
 The exception needs to be handled within the code executed on the thread.\
 ==== Thread Methods thread.x (Java|C\#)
-_`start() | Start()`_ #hinweis[],
-_`join() | Join()`_ #hinweis[wait till thread finished, timeout: `join(100)`], _`sleep(ms) | Sleep(ms)`_  #hinweis[join+sleep #sym.arrow.r Timed_Waiting state],
+_`start()|Start()`_ #hinweis[],
+_`join()|Join()`_ #hinweis[wait till thread finished, timeout: `join(100)`], _`sleep(ms)|Sleep(ms)`_  #hinweis[join+sleep #sym.arrow.r Timed_Waiting state],
 _`wait() `_ #hinweis[gives processor+lock free],
 _`yield()`_ #hinweis[scheduler can release processor, to Ready state, does not release lock],
-_`setDaemon(true) | isBackground = true;`_ #hinweis[],
+_`setDaemon(true)|isBackground = true;`_ #hinweis[],
 
 // _`currentThread()`_ #hinweis[(Reference to current thread)],
 // _`getId()`/`getName()`_ #hinweis[(Get thread ID/Name)],
@@ -182,6 +147,44 @@ _`Terminated`_,
 _`Timed_Waiting`_ #hinweis[(waiting with a specified waiting time
     ```java Thread.sleep(ms)```/```java Thread.join(ms)```)],
 _`Waiting`_ #hinweis[]\
+
+
+/*
+==== C\# using a Class with composition:
+```cs
+private void Run() {
+    for (int i = 1; i <= 3; i++) {
+        Console.WriteLine($"Thread Running:
+        {i}");
+        Thread.Sleep(500);
+    }
+}
+
+using System;
+using System.Threading;
+class MyThread {
+// Vererbung von Thread nicht möglich, stattdessen ein private Thread member erstellen
+    private Thread thread;
+
+    public MyThread() {
+        thread = new Thread(Run);
+    }
+    public void Start() {
+        thread.Start();
+    }
+    class Program {
+        static void Main() {
+            MyThread myThread = new MyThread();
+            myThread.Start();
+            Console.WriteLine("Main thread
+            running...");
+        }
+    }
+}
+```
+// */
+
+
 
 = Monitor Synchronization
 #wrap-content(
@@ -539,6 +542,7 @@ consume CPU during deadlock.
         gutter: 3pt,
         [Thread T _waits for Lock_ of Resource R
             #v(-2pt)
+            // Text ist nicht mehr mittig :'( muss Grafik anpassen
             #image("img/resource-graph-1.svg", height: 11pt)],
         [Thread T _acquires Lock_ of Resource R\
             #v(-2pt)
