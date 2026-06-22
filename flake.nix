@@ -31,6 +31,9 @@
       default = pkgs.mkShell {
         packages = with pkgs; [ 
           typst
+
+          # für vscode extension nötig? sonst "cannot find valid tinymist binary"
+          tinymist
         ];
         shellHook = ''
           echo ""
