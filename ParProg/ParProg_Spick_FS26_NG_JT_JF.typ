@@ -57,100 +57,145 @@ JVM is a _process in the OS_. It runs as long as threads are running #hinweis[(E
 Threads are realized by the _thread class_ and the _interface `Runnable`_.
 Code to be run in a Thread is within a overridden `run()`.
 
-/*
-  / Process: _Program under Execution_, own address space #hinweis[(heavyweight. Pros: Process isolation and responsiveness, Cons: Interprocess communication overhead, expensive in creation, slow context switching and process termination)].
-  / Thread: _Parallel sequence_ within a process. Sharing the same address space, but separate stack and registers #hinweis[(lightweight because most of the overhead already happened in the process creation)].
-  / Multi-threads: Changes made by one thread to shared resources will be _seen_ by other threads.\
-  / Context switch: Required when changing threads. \ _Synchronous_ #hinweis[(Thread waiting for condition)] or\ _Asynchronous_ #hinweis[(Thread gets released after defined time)]
-  / Multitasking: _Cooperative_ #hinweis[(Threads must explicitly initiate context switches, scheduler can't interrupt)] or\ _preemptive_ #hinweis[(scheduler can asynchronously interrupt thread via timer interrupt)]
-  / JVM Thread Model: JVM is a _process in the OS_. It runs as long as threads are running #hinweis[(Exception: threads marked as daemon with ```java setDaemon(true)``` will not be waited upon)]. Threads are realized by the _thread class_ and the _interface `Runnable`_. Code to be run in a Thread is within a overridden `run()`.
-*/
+// /*
+/ Process: _Program under Execution_, own address space #hinweis[(heavyweight. Pros: Process isolation and responsiveness, Cons: Interprocess communication overhead, expensive in creation, slow context switching and process termination)].
+/ Thread: _Parallel sequence_ within a process. Sharing the same address space, but separate stack and registers #hinweis[(lightweight because most of the overhead already happened in the process creation)].
+/ Multi-threads: Changes made by one thread to shared resources will be _seen_ by other threads.\
+/ Context switch: Required when changing threads. \ _Synchronous_ #hinweis[(Thread waiting for condition)] or\ _Asynchronous_ #hinweis[(Thread gets released after defined time)]
+/ Multitasking: _Cooperative_ #hinweis[(Threads must explicitly initiate context switches, scheduler can't interrupt)] or\ _preemptive_ #hinweis[(scheduler can asynchronously interrupt thread via timer interrupt)]
+/ JVM Thread Model: JVM is a _process in the OS_. It runs as long as threads are running #hinweis[(Exception: threads marked as daemon with ```java setDaemon(true)``` will not be waited upon)]. Threads are realized by the _thread class_ and the _interface `Runnable`_. Code to be run in a Thread is within a overridden `run()`.
+// */
 
-== Starting a thread
-*As an anonymous function (Lambda):*\
-```java var myThread = new Thread(() -> { /* thread behaviour */ }); myThread.start();```\
-*With a named function:*\
-```java var myThread = new Thread(() -> runAsyncFunction()); myThread.start();```\
-*With explicit `Runnable` implementation:*
-```java
-class MyThread implements Runnable {
-  @Override
-  public void run() { /* thread behavior */ }}
-  var myThread = new Thread(new MyThread());
-  myThread.start(); // start creates thread
+
+#grid(
+    columns: (auto, auto),
+    gutter: 0.2em,
+    [
+        ==== create + start a thread
+        ```java
+        // explicit Runnable implementation
+        class myRunnable implements Runnable {
+          @Override
+          public void run() {
+            /* thread behavior */
+          }
+        }
+        var myThread = new Thread(new myRunnable());
+
+        // named function
+        var myThread = new Thread(() -> namedFunction());
+
+        // anonymous function (lambda)
+        var myThread = new Thread(() -> {
+          /* thread behaviour */
+        }); // C# lambda lambda with => arrow
+
+        // start the thread (not run!)
+        myThread.start();
+        ```
+    ],
+    [
+        ==== Multi-Thread Examples Java
+        ```java
+        // no synchronization
+        public static void main(String[] args) {
+          var a = new Thread(() ->
+                multiPrint("A"));
+          var b = new Thread(() ->
+                multiPrint("B"));
+          a.start(); b.start(); System.out.println("main finished");
+        } // varying result, non-deterministic scheduler
+        ```
+
+        ```java
+
+        // with synchronization (a and b from above):
+        System.out.println("Threads start");
+        a.start(); b.start(); // ...
+        a.join(); b.join(); System.out.println("Threads joined");
+        ```
+    ],
+)
+
+/*
+==== C\# using a Class with composition:
+```cs
+private void Run() {
+  for (int i = 1; i <= 3; i++) {
+    Console.WriteLine($"Thread Running:
+ {i}");
+ Thread.Sleep(500);
+ }
+ }
+ }
+
+using System;
+using System.Threading;
+class MyThread {
+// Vererbung von Thread nicht möglich, stattdessen ein private Thread member erstellen
+private Thread thread;
+
+public MyThread() {
+thread = new Thread(Run);
+}
+public void Start() {
+thread.Start();
+}
+ class Program {
+ static void Main() {
+ MyThread myThread = new MyThread();
+ myThread.Start();
+ Console.WriteLine("Main thread
+running...");
+}
 }
 ```
-*In C\#:*
-```cs var myThread = new Thread(() => { ... }); myThread.Start(); ... myThread.Join();```
+// */
 
-==== Multi-Thread Example (no synchronization)
-```java
-public class MultiThreadTest {
-  public static void main(String[] args) {
-    var a = new Thread(() -> multiPrint("A"));
-    var b = new Thread(() -> multiPrint("B"));
-    a.start(); b.start(); System.out.println("main finished");
-  }
-  static void multiPrint(String label) {
-    for (int i = 0; i < 10; i++) { System.out.println(label + ": " + i);
-}}}
-```
-#hinweis[The printout of this function varies. It can be all possible combinations of A's and
-    B's due to the non-deterministic scheduler]
-
-*Thread Join:*
-Waiting for a thread to finish
-#hinweis[(```java thread.join()``` blocks as long as `thread` is running).]
-
-```java
-var a = new Thread(() -> multiPrint("A"));
-var b = new Thread(() -> multiPrint("B"));
-System.out.println("Threads start"); a.start(); b.start(); // ...
-a.join(); b.join(); System.out.println("Threads joined");
-```
-
-*Thread States:*
-_`Blocked`_ #hinweis[(Thread is blocked and waiting for a monitor lock)],
-_`New`_ #hinweis[(Thread has not yet started)],
-_`Runnable`_ #hinweis[(Thread is runnable (Ready to run or running))],
-_`Terminated`_ #hinweis[(Thread is terminated)],
-_`Timed_Waiting`_ #hinweis[(Thread is waiting with a specified waiting time
-    ```java Thread.sleep(ms)```/```java Thread.join(ms)```)],
-_`Waiting`_ #hinweis[(Thread is waiting)]\
-*Yield:*
-Thread is done processing for the moment and hints to the scheduler to release the processor.
-The scheduler can ignore this. Thread enters into ready-state.
-#hinweis[(```java Thread.yield()```)]\
+// *Yield:*
+// Thread is done processing for the moment and hints to the scheduler to release the processor.
+// The scheduler can ignore this. Thread enters into ready-state.
+// #hinweis[(```java Thread.yield()```)]\
 *Interrupts:*
-Threads can also be interrupted from the outside #hinweis[(```java myThread.interrupt()```,
-    Thread can decide what to do upon receiving an interrupt)]. If the thread is in the `sleep()`,
-`wait()` or `join()` methods, a ```java InterruptException``` is thrown.
-Otherwise a flag is set that can be checked with `interrupted()`/`isInterrupted()`\
+Interrupted with:```java myThread.interrupt()```
+If thread is in `sleep()`, `wait()` or `join()` methods, a ```java InterruptException``` is thrown.  Otherwise flag is set, check with: `interrupted()`/`isInterrupted()`\
 *Exceptions:*
 Exceptions thrown in `run()` can't be propagated to the Main thread.
 The exception needs to be handled within the code executed on the thread.\
-*Thread Methods:*
-_`currentThread()`:_ #hinweis[(Reference to current thread)],
-_`setDaemon(true)`:_ #hinweis[(Mark as daemon)],
-_`getId()`/`getName()`:_ #hinweis[(Get thread ID/Name)],
-_`isAlive()`:_ #hinweis[(Tests if thread is alive)],
-_`getState()`:_ #hinweis[(Get thread state)]
+==== Thread Methods thread.x (Java|C\#)
+_`start() | Start()`_ #hinweis[],
+_`join() | Join()`_ #hinweis[wait till thread finished, timeout: `join(100)`], _`sleep(ms) | Sleep(ms)`_  #hinweis[join+sleep #sym.arrow.r Timed_Waiting state],
+_`wait() `_ #hinweis[gives processor+lock free],
+_`yield()`_ #hinweis[scheduler can release processor, to Ready state, does not release lock],
+_`setDaemon(true) | isBackground = true;`_ #hinweis[],
 
+// _`currentThread()`_ #hinweis[(Reference to current thread)],
+// _`getId()`/`getName()`_ #hinweis[(Get thread ID/Name)],
+// _`isAlive()`_ #hinweis[(Tests if thread is alive)],
+// _`getState()`_ #hinweis[(Get thread state)]
+
+*Java Thread States:*
+_`Blocked`_ #hinweis[(blocked and waiting for a monitor lock)],
+_`New`_ #hinweis[(not yet started)],
+_`Runnable`_ #hinweis[(Ready to run or running)],
+_`Terminated`_,
+_`Timed_Waiting`_ #hinweis[(waiting with a specified waiting time
+    ```java Thread.sleep(ms)```/```java Thread.join(ms)```)],
+_`Waiting`_ #hinweis[]\
 
 = Monitor Synchronization
-#let monitor-sync-code = ```java
-class BankAccount {
-  private int balance = 0;
-  public void deposit(int amount){
-    // enter critical section
-    synchronized(this) {
-      this.balance += amount;
-    } // exit critical section
-  }
-}
-```
 #wrap-content(
-    monitor-sync-code,
+    [```java
+    class BankAccount {
+      private int balance = 0;
+      public void deposit(int amount){
+        // enter critical section
+        synchronized(this) {
+          this.balance += amount;
+        } // exit critical section
+      }
+    }
+    ```],
     align: top + right,
     columns: (58%, 42%),
 )[
@@ -187,32 +232,30 @@ _fairness-problems_ and _no shared locks_.\
 
 
 #terms-spacing(0.7em)[
-    / Recursive Lock: A thread can acquire the same lock through recursive calls. Lock will be free by the last release.
-    / Busy Wait: Running `yield` or `sleep` in a loop doesn't release the lock and is inefficient. Use `wait`.
-    / `wait()`: Waits on a condition. Temporarily releases Monitor-Lock. Needs to be _wrapped into a `while` loop_ to check if the wake up condition has been met.
+    / Recursive Lock: thread can acquire same lock through recursive calls, free by last release
+    / Busy Wait: `yield` or `sleep` in a loop, inefficient, not releasing lock. _`wait()`_: Temporarily release Monitor-Lock. wrap in while loop to check if wake up condition has been met.
     / Wakeup signal: Signalling a condition/thread in Monitor.
-    / _`notify()`_: signals any waiting thread. Turnstile, Only one semantic condition for every thread (Uniform Waiters), change applies to only one thread (One-In/One-Out).
-    // #hinweis[(sufficient if all threads wait for the same thing, so it does not matter which one comes next - uniform waiters or if only one single thread can continue like in a turnstile)],
-    / _`notifyAll()`_: wakes up all threads #hinweis[(i.e. one deposit can satisfy multiple withdraws, does not guarantee fairness)]. If a thread is woken up, it goes from the _inner waiting room_ #hinweis[(waiting on a condition)] into the _outer waiting room_ #hinweis[(Thread has not started yet)] where it waits for entry to the Monitor. There is no shortcut.
-    / ```java IllegalMonitorStateException```: thrown if `notify`, `notifyAll` or `wait` is used outside synchronized.
+        _`notify()`_: signals any waiting thread. Turnstile, Only one semantic condition for every thread (Uniform Waiters), change applies to only one thread (One-In/One-Out).
+        _`notifyAll()`_: wakes up all threads (from inner waiting room to outer waiting room to wait for entry in monitor)
+    // #hinweis[(i.e. one deposit can satisfy multiple withdraws, does not guarantee fairness)]. If a thread is woken up, it goes from the _inner waiting room_ #hinweis[(waiting on a condition)] into the _outer waiting room_ #hinweis[(Thread has not started yet)] where it waits for entry to the Monitor. There is no shortcut.
+    / ```java IllegalMonitorStateException```: thrown if `notify/notifyAll/wait` used outside synchronized.
     / signal and continue: signaling (notifying) thread still holds monitor, awakened thread comes to outer waiting room.
-    / ```java InterruptedException```: thrown on `interrupt()` while `sleep`, `wait` or `join`.
+    / ```java InterruptedException```: thrown on `interrupt()` while `sleep/wait/join`.
 ]
 
 #colbreak()
 
 #grid(
     columns: (1fr, 1fr),
-    gutter: 0.5em,
+    gutter: 0.2em,
     [
         ```java
         // Java
         class BankAccount {
           private int balance = 0;
-          // Entry in the monitor
           public synchronized void withdraw
-          (int amount)
-          throws InterruptedException {
+              (int amount)
+              throws InterruptedException {
             while (amount > balance) { // not if
               wait(); // wait on a condition
             }
@@ -221,8 +264,8 @@ _fairness-problems_ and _no shared locks_.\
           public synchronized void deposit
           (int amount) {
             balance += amount;
-            notifyAll(); // Wakes up all waiting threads in monitor inner waiting area
-        }}
+            notifyAll();
+        } }
         ```
     ],
     [
@@ -242,14 +285,16 @@ _fairness-problems_ and _no shared locks_.\
             lock(syncObject) {
               balance += amount;
               Monitor.PulseAll(syncObject);
-        }}}
+        } } }
         ```
     ],
 )
 
 
 = Specific synchronization primitives
-#v(-0.75em)
+#hinweis[C\# has no lock and condition and no fairness flag]
+// #v(-0.75em)
+
 == Semaphore
 Allocation of a limited number of free resources. Is in essence a _counter_.
 If a resource is _acquired_, `count--`, if a resource is _released_, `count++`.
