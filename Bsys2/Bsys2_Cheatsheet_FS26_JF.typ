@@ -1629,7 +1629,8 @@ _Ordered_ #hinweis[(Nur Metadaten ins Journal, Dateiinhalte werden immer vor Com
 _Writeback_ #hinweis[(Nur Metadaten ins Journal, beliebige Reihenfolge, nicht sehr sicher aber schnell).]
 
 = X Window System
-#image("/assets/image.png")
+#image("img/x-window-system.svg")
+
 Setzt _Grundfunktionen der Fensterdarstellung_. Ist austauschbar, realisiert Netzwerktransparenz.
 Plattformunabhängig, legt die GUI-Gestaltung nicht fest.\
 *Programmgesteuerte Interaktion:* Benutzer reagiert auf Programm.\
