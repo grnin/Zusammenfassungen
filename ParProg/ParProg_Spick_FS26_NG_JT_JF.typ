@@ -571,31 +571,35 @@ OS level, Mutex. Collections are _not_ Thread-safe.
 
 
 = Thread Pools
-Threads do have a _cost_. Many threads _slow down_ the system. There is also a _Memory Cost_,
-because there is a stack for each thread. _Recycle_ threads for multiple tasks to avoid this.\
-*Tasks:*
-Define _potentially parallel_ work packages. Passive objects describing the functionality.\
-*Thread Pool:*
-Task are queued. A much smaller number of _working threads_ grab tasks from the queue and
-execute them. A task must run to completion before a thread can grab a new one.\
+Thread costs: performance + memory (stack per thread) #sym.arrow.r recycle threads for multiple tasks.\
+// _Limited number of threads_ #hinweis[(Too many threads slow down the system or exceed available memory)],
+*Tasks:* potentially parallel work packages. Passive objects describing the functionality.\
+*Thread Pool:* Tasks queues. Smaller number of _working threads_ grab tasks from queue and execute them.
+A task must run to completion before worker thread can grab a new one #hinweis[except nested tasks/sub-tasks].\
+// Any task must _complete execution_ before its worker thread is free to grab another task.
+// Exception: nested tasks. \
 *Scalable Performance:*
-Programs with tasks run _faster on parallel machines_. This allows the exploitation of
-parallelism _without thread costs_. The number of threads can be _adapted_ to the system.
 #hinweis[(Rule of thumb: \# of Worker Threads = \# processors + 1 (Pending I/O Calls))]\
-Any task must _complete execution_ before its worker thread is free to grab another task.
-Exception: nested tasks. \
+Programs with tasks run _faster on parallel machines_ #sym.arrow.r allows exploitation of
+parallelism _without thread costs_. Number of threads can be _adapted_ to the system.
 *Advantages:*
-_Limited number of threads_ #hinweis[(Too many threads slow down the system or exceed available memory)],
 _Thread recycling_ #hinweis[(save thread creation and release)],
 _Higher level of abstraction_ #hinweis[(Disconnect task description from execution)],
 _Number of threads configurable_ on a per-system basis.\
 *Limitations:*
-Task must not wait for each other #hinweis[(except sub-tasks)], results in deadlocks
-#hinweis[(if one task $T_1$ is waiting for something the task $T_2$ behind him in the Queue
-    should provide, but $T_2$ waits for $T_1$ to finish, a deadlock occurs)]
+Task must not wait for each other #hinweis[(except sub-tasks)] would result in deadlock in Queue.
+// #hinweis[(if one task $T_1$ is waiting for something the task $T_2$ behind him in the Queue
+//     should provide, but $T_2$ waits for $T_1$ to finish, a deadlock occurs)]
+
+== Java  ForkJoinPool
+- Get the default pool by calling `ForkJoinPool.Pool()`
+- example: ```java int result = new CountTask(2, N).invoke();```
+- Default Pool (singleton), a Global shared ForkJoinPool
+- used by `CompletableFuture`
+- Does not always use all processors :(
 
 
-==== Java ForkJoinPool
+=== Java ForkJoinPool
 / Create explicit thread pool: ```java var threadPool = new ForkJoinPool();``` \ ```java int result = threadPool.invoke(new CountTask(2, N));```
 / Special Features: *Fire-and-forget* tasks may not finish *LIFO Queue* per worker thread and stealing is FIFO, Automatic degree of parallelism #hinweis[(Default: As much worker threads as Processors)], Optimized for recursive.
 / Work Stealing: Jobs get submitted into the _global queue_, which distributes the jobs to the _local queues_ of each worker thread. If one thread has no work left, it can _"steal" work from another threads_ local queue instead of the global queue. This _distributes_ the scheduling work over idle processors.
@@ -610,19 +614,14 @@ Task must not wait for each other #hinweis[(except sub-tasks)], results in deadl
 / _`task.fork()`_: schedule async subtask
 / _`result = task.join()`_: wait and get result
 
-== Java Common ForkJoinPool
-- Default Pool (singleton), a Global shared ForkJoinPool
-- used by `CompletableFuture`
-- Does not always use all processors :(
-- Get the default pool by calling `ForkJoinPool.commonPool()`
-- example: ```java int result = new CountTask(2, N).invoke();```
 
 ```java
 // Task Launch
 var threadPool = new ForkJoinPool();
 Future<Integer> future = threadPool.submit(() -> { // submit task into pool
   int value = ...; /* long calculation */
-  return value; });
+  return value;
+});
 ```
 #v(-0.5em)
 
@@ -639,47 +638,42 @@ Represents a _future result_ #hinweis[(asynchronous)], Proxy #hinweis[for the re
 
 === Count Prime Numbers
 ```java
-// Sequential
+// Sequential:
 int counter = 0; for (int n = 2; n < N; n++) { if (isPrime(n)) { counter++}};
-// Parallel and Recursive
+
+// Parallel and Recursive with RecursiveTask class:
 class CountTask extends RecursiveTask<Integer> { //RecursiveAction: void function
   private final int lower, upper;
-  public CountTask(int lower, int upper)
-    { this.lower = lower; this.upper = upper; }
-  protected Integer compute() {
+  private static final int THRESHOLD = 1; // configurable
+  public CountTask(int lower, int upper) {
+    this.lower = lower;    this.upper = upper;
+  }
+  protected Integer compute() { // TRESHOLD = avoid over-parallelizing
     if (lower == upper) { return 0; }
-    if (lower + 1 == upper) { return isPrime(lower) ? 1 : 0; }
-    int middle = (lower + upper) / 2;
-    var left = new CountTask(lower, middle);
-    var right = new CountTask(middle, upper);
-    left.fork(); right.fork(); // fork = new thread
-    return right.join() + left.join(); // join = wait for all threads
-}}
-// (invoke is blocking)
+    if (lower + 1 == upper) {  return isPrime(lower) ? 1 : 0;  }
+    if (upper - lower > THRESHOLD) { // parallel count
+      int middle = (lower + upper) / 2;
+      var left = new CountTask(lower, middle);
+      var right = new CountTask(middle, upper);
+
+      // V1 mit explizitem fork, blockiert noch nicht
+      left.fork(); right.fork(); // fork = new task
+      // V2 invokeAll, join danach ist sofort fertig
+      invokeAll(left, right);
+
+      return right.join() + left.join(); // join = wait for all threads
+    } else { // sequential count:
+      int count = 0;
+      for (int number = lower; number < upper; number++) {
+        if (isPrime(number)) { count++; }
+      }
+      return count;
+    }
+} }  // .invoke is blocking:
 int result = new CountTask(2, N).invoke(); // invokeAll() to start multiple tasks
 ```
 
-// Avoid Over-Parallelizing:
-// ```java
-// protected Integer compute() {
-//   if (upper - lower > THRESHOLD) {
-//     // parallel count
-//     int middle = (lower + upper) / 2;
-//     var left = new CountTask(lower, middle);
-//     var right = new CountTask(middle, upper);
-//     left.fork(); right.fork();
-//     return right.join() + left.join();
-//   } else {
-//     // sequential count
-//     int count = 0;
-//     for (int number = lower; number < upper; number++) {
-//       if (isPrime(number)) { count++; }
-//     }
-//   return count;
-//   }
-// }
-// ```
-
+/*
 === Pairwise sum (recursive)
 ```java
 class PairwiseSum extends RecursiveAction {
@@ -692,14 +686,17 @@ class PairwiseSum extends RecursiveAction {
   protected void compute() {
     if (upper - lower > THRESHOLD) {
       int middle = (lower + upper) / 2;
+      // ohne return Wert:
       invokeAll(
         new PairwiseSum(array, lower, middle),
-        new PairwiseSum(array, middle, upper));
+        new PairwiseSum(array, middle, upper)
+      );
     } else {
       for (int i = lower; i < upper; i++) {
         array[2*i] += array[2*i+1]; array[2*i+1] = 0;
 }}}}
 ```
+// */
 
 
 == .NET Task Parallel Library (TPL)
@@ -710,6 +707,8 @@ _Efficient default thread pool_ #hinweis[(tasks are queued to the ThreadPool, su
 layers_ #hinweis[(Task Parallelization: use tasks explicitly, Data Parallelization: use
     parallel statements and queries using tasks implicitly)], Asynchronous Programming and PLINQ.
 
+
+// TODO code prüfen:
 ```cs
 // Task with return value in C#
 Task<int> task = Task.Run(() => {
@@ -720,14 +719,53 @@ Console.Write(task.Result); // Blocks until task is done and returns the result
 ```
 
 ```cs
-// Nested Tasks
+// Nested Tasks (von der Vorlesungsfolie)
 var task = Task.Run(() => {
   var left = Task.Run(() => Count(leftPart));
   var right = Task.Run(() => Count(rightPart));
-  return left.Result + right.Result;
+  return left.Result + right.Result; // blockierend
 });
 static Task<int> Count(...part) {...}
 ```
+
+```cs
+// TODO, CountTask von java in c#
+var left = Task.Run(() => Count(leftPart));
+var right = Task.Run(() => Count(rightPart));
+await Task.WhenAll(left, right);
+return left.Result + right.Result;
+
+// oder so?
+class ... compute{
+  var leftTask = Task.Run(() =>
+      new CountTask(lower, middle).Compute());
+
+  var rightTask = Task.Run(() =>
+      new CountTask(middle, upper).Compute());
+
+  return leftTask.Result + rightTask.Result;
+}
+...
+int result = new CountTask(2, N).Compute();
+
+// mit Parallel.For:
+Parallel.For( 2, N,
+    () => 0, // thread-local count
+    (i, state, localCount) =>
+    {
+        // counting logic
+        return localCount + 1;
+    },
+    localCount =>
+    {
+        Interlocked.Add(ref count, localCount);
+    });
+Console.WriteLine(count);
+```
+
+// .NET Code API
+/ `Parallel.Invoke()`:
+/ `Parallel.For()`:
 
 === Parallel Statements in C\#
 #columns(2)[
@@ -1138,7 +1176,7 @@ Throughput = $1\/60$ operations/ms.
 
 == NUMA Model
 NUMA stands for _Non-Uniform Memory Access_. CPUs on host and GPU devices each have local
-memories. There is _no common main memory_ between the two, so _explicit transfer_ between CPU
+memories. There is _no  main memory_ between the two, so _explicit transfer_ between CPU
 and GPU is needed. There is also _no garbage collector_ on the GPU.
 
 == CUDA
@@ -1502,7 +1540,7 @@ Cluster programming is the _highest possible parallel acceleration_ #hinweis[(Fa
 Network of _powerful_ computing nodes, firmly connected at one location.\
 Very _fast interconnect_ #hinweis[(like 100GBit/s)], used for big simulations #hinweis[(Fluids, Weather, Traffic, etc.)]\
 *SPMD:*
-This is the most commonly used programming model, "high level".\
+This is the most ly used programming model, "high level".\
 _Single Program_ #hinweis[(All tasks execute their copy of the same program simultaneously)],
 _Multiple Data_ #hinweis[(all tasks may use different data)].
 The MPI program is started in several processes. All processes start and terminate
@@ -1515,7 +1553,7 @@ _Multiple Data_ #hinweis[(all tasks may use different data)].\
 All processors in a machine can _share_ the memory. They also can _request_ data from other
 computers. #hinweis[(non-uniform memory access: not all accesses take the same time)]\
 *Message Passing Interface (MPI)*:
-Distributed programming model. Is a common choice for Parallelization on a cluster,
+Distributed programming model. Is a  choice for Parallelization on a cluster,
 Industry-Standard libraries for multiple programming languages.\
 *MPI Model:*
 Notion of processes #hinweis[(Process is the running program plus its data)], parallelism is
