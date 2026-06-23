@@ -616,7 +616,8 @@ int main (int argc, char **argv) {
 
 = Scheduling
 #wrap-content(
-    image("img/bsys_27.png"),
+    // image("img/bsys_27.png"),
+    image("img/bsys27-v2.png"),
     align: top + right,
     columns: (50%, 50%),
 )[
@@ -630,7 +631,8 @@ int main (int argc, char **argv) {
     Dieser Teil vom OS heisst _Scheduler_.
 ]
 #wrap-content(
-    image("img/bsys_28.png"),
+    // image("img/bsys_28.png"),
+    image("img/bsys_28.svg"),
     align: top + right,
     columns: (40%, 60%),
 )[
@@ -1467,26 +1469,28 @@ _Physische Blocknummern_ #hinweis[(Tatsächliche Blocknummer auf dem Volume)].
 
 == Inodes
 #wrap-content(
-    image("img/bsys_42.png"),
+    // image("img/bsys_42.png"),
+    image("img/inodes.svg", height: auto),
     align: top + right,
-    columns: (30%, 70%),
+    columns: (60%, 40%),
 )[
-    Enthält _alle Metadaten_ über die Datei, _ausser Namen oder Pfad_ #hinweis[(Grösse,
-        Anzahl der verwendeten Blöcke, Erzeugungs-, Zugriffs-, Modifikations- und
-        Löschzeit, Owner-ID, Group-ID, Flags, Permission Bits)].\
-    Hat eine _fixe Grösse_ je Volume: Zweierpotenz, mind. 128 Byte, max. 1 Block.
+    Enthält _alle Metadaten_ über die Datei, _ausser Namen oder Pfad_ (Grösse,
+    Anzahl der verwendeten Blöcke, Erzeugungs-, Zugriffs-, Modifikations- und Löschzeit, Owner-ID, Group-ID, Flags, Permission Bits). \
+    Hat eine _fixe Grösse_ je Volume: Zweierpotenz, mind. 128 Byte, max. 1 Block.\
     Inode _verweist auf die Blöcke_, die _Daten für eine Datei_ enthalten.
     Enthält ein Array _`i_block`_ mit 15 Einträgen zu je 32 Bit.
 ]
-*Lokalisierung:*
-Alle Inodes aller Blockgruppen gelten als _eine grosse Tabelle_. Startet mit 1.
-Finde Blockgruppe: (Inode-1)/Anz. Inodes pro Gruppe, Finde Index des Inodes in Blockgruppe: (Inode-1) % Anz. Inodes pro Gruppe \
-*Erzeugung:*
-Neue Verzeichnisse werden in der Blockgruppe angelegt, die von allen Blockgruppen mit
-_überdurchschnittlich vielen freien Inodes_ die _meisten Blöcke frei_ hat, Dateien in der
-Blockgruppe des Verzeichnis oder nahen Gruppen. Bestimmung anhand _Inode-Usage-Bitmaps_.\
-*File-Holes:*
-Bereiche in der Datei, in der _nur Nullen_ stehen. Ein solcher Block wird _nicht alloziert_.
+#v(-1.8em)
+/ Lokalisierung:
+    Alle Inodes aller Blockgruppen gelten als _eine grosse Tabelle_. Startet mit 1.
+    _Finde Blockgruppe_: (Inode-1)/Anz. Inodes pro Gruppe, \
+    _Finde Index des Inodes in Blockgruppe_: (Inode-1) % Anz. Inodes pro Gruppe
+/ Erzeugung:
+    Neue Verzeichnisse werden in der Blockgruppe angelegt, die von allen Blockgruppen mit
+    _überdurchschnittlich vielen freien Inodes_ die _meisten Blöcke frei_ hat, Dateien in der
+    Blockgruppe des Verzeichnis oder nahen Gruppen. Bestimmung anhand _Inode-Usage-Bitmaps_.
+/ File-Holes:
+    Bereiche in der Datei, in der _nur Nullen_ stehen. Ein solcher Block wird _nicht alloziert_.
 
 == Blockgruppe
 Eine Blockgruppe besteht aus _mehreren aufeinanderfolgenden Blöcken_ bis zu 8 mal der Anzahl
