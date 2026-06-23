@@ -336,40 +336,40 @@ Segmente werden vom _Loader_ dynamisch _zur Laufzeit_ verwendet.\
 Jeder Eintrag #hinweis[(je 40 Byte)] beschreibt eine Sektion #hinweis[(Name, Section-Typ,
     Flags, Offset und Grösse, ...)].
 Werden vom _Linker_ verwendet: Verschmilzt Sektionen und erzeugt ausführbares Executable.\
-*String-Tabelle:*
-Bereich in der Datei, der nacheinander _null-terminierte Strings enthält_.
-Strings werden relativ zum Beginn der Tabelle referenziert.\
-*Symbole & Symboltabelle:*
-Die Symboltabelle enthält jeweils _einen Eintrag je Symbol_
-#hinweis[(16 Byte: 4B Name, 4B Wert, 4B Grösse, 4B Info)].
+/ String-Tabelle:
+    Bereich in der Datei, der nacheinander _null-terminierte Strings enthält_.
+    Strings werden relativ zum Beginn der Tabelle referenziert.\
+/ Symbole & Symboltabelle:
+    Die Symboltabelle enthält jeweils _einen Eintrag je Symbol_
+    #hinweis[(16 Byte: 4B Name, 4B Wert, 4B Grösse, 4B Info)].
 
 == Bibliotheken
-*Statische Bibliotheken:*
-Archive von Objekt-Dateien. Name: `lib<name>.a`, referenziert wird nur `<name>`.
-_Linker_ behandelt statische Bibliotheken wie _mehrere Objekt-Dateien_. Ursprünglich gab es
-_nur statische Bibliotheken_ #hinweis[(Einfach zu implementieren, aber Funktionalität fix, wie zip vorstellen)].\
-*Dynamische Bibliotheken:*
-Linken erst zur Ladezeit bzw. Laufzeit des Programms.
-Executable enthält nur Referenz auf Bibliothek. Höherer Aufwand.
-_Vorteile_: austauschbar, Entkoppelter Lebenszyklus, Plugin-Mechanismus, (Schnellere Ladezeiten durch Lazy Loading, Flexibler Funktionsumfang).
-_Dynamisches Linken_ explizit im Programm #hinweis[dlopen, dlsym] oder zum Programmstart.
+/ Statische Bibliotheken:
+    Archive von Objekt-Dateien. Name: `lib<name>.a`, referenziert wird nur `<name>`.
+    _Linker_ behandelt statische Bibliotheken wie _mehrere Objekt-Dateien_. Ursprünglich gab es
+    _nur statische Bibliotheken_ #hinweis[(Einfach zu implementieren, aber Funktionalität fix, wie zip vorstellen)].\
+/ Dynamische Bibliotheken:
+    Linken zur Ladezeit bzw. Laufzeit des Programms.
+    Executable enthält nur Referenz auf Bibliothek. Höherer Aufwand.
+    _Vorteile_: austauschbar, Entkoppelter Lebenszyklus, Plugin-Mechanismus, (Schnellere Ladezeiten durch Lazy Loading, Flexibler Funktionsumfang).
+    _Dynamisches Linken_ explizit im Programm #hinweis[dlopen, dlsym] oder zum Programmstart.
 == POSIX Shared Objects API
-*Konventionen:*
-Shared Objects können _automatisch_ bei Bedarf geladen werden.
-Linker->Linker-Namen, Loader->SO-Namen.
-- _Linker-Name:_ `lib + Bibliotheksname + .so` #hinweis[(z.B. libmylib.so)],
-- _SO-Name:_ `Linker-Name + . + Versionsnummer` #hinweis[(z.B. libmylib.so.2)],
-- _Real-Name:_ `SO-name + . + Unterversionsnummer` #hinweis[(z.B. libmylib.so.2.1)]
-#v(-0.5em)
-*Shared Objects:*
-Nahezu alle Executables benötigen _zwei Shared Objects_:
-_`libc.so`:_ Standard C library,
-_`ld-linux.so`:_ ELF Shared Object loader #hinweis[(Lädt Shared Objects und rekursiv alle
-    Dependencies)].\
-*Implementierung dynamischer Bibliotheken:*
-Müssen verschiebbar sein, mehrere müssen in den gleichen Prozess geladen werden.
-Die Aufgabe des Linkers wird in den Loader bzw. Dynamic Linker verschoben
-#hinweis[(Load Time Relocation)].
+/ Konventionen:
+    Shared Objects können _automatisch_ bei Bedarf geladen werden.
+    Linker->Linker-Namen, Loader->SO-Namen.
+    - _Linker-Name:_ `lib + Bibliotheksname + .so` #hinweis[(z.B. libmylib.so)],
+    - _SO-Name:_ `Linker-Name + . + Versionsnummer` #hinweis[(z.B. libmylib.so.2)],
+    - _Real-Name:_ `SO-name + . + Unterversionsnummer` #hinweis[(z.B. libmylib.so.2.1)]
+// #v(-0.5em)
+/ Shared Objects:
+    Nahezu alle Executables benötigen _zwei Shared Objects_:
+    _`libc.so`:_ Standard C library,
+    _`ld-linux.so`:_ ELF Shared Object loader #hinweis[(Lädt Shared Objects und rekursiv alle
+        Dependencies)].
+/ Implementierung dynamischer Bibliotheken:
+    Müssen verschiebbar sein, mehrere müssen in den gleichen Prozess geladen werden.
+    Die Aufgabe des Linkers wird in den Loader bzw. Dynamic Linker verschoben
+    #hinweis[(Load Time Relocation)].
 
 
 *```c void * dlopen (char * filename, int mode)```:*
