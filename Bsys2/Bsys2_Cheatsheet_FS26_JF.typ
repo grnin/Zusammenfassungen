@@ -667,7 +667,7 @@ _Nebenläufig_ #hinweis[(Überbegriff für parallel oder quasiparallel)]
     *Bursts:*
     _Prozessor-Burst_ #hinweis[(Thread belegt Prozessor voll)],
     _I/O-Burst_ #hinweis[(Thread belegt Prozessor nicht)].
-    Jeder Thread kann als _Abfolge_ von _Prozessor-Bursts_ und\ _I/O-Bursts_ betrachtet werden.
+    Jeder Thread = _Abfolge_ von _Prozessor-Bursts_ und _I/O-Bursts_.
 ]
 
 == Scheduling-Strategien
@@ -716,6 +716,12 @@ Bei Wechsel zu `waiting` beginnt nächster Prozess früher, aber erhält keine z
 
 #image("img/bsys_33.png", width: 80%)
 
+*Multi-Level Scheduling mit Feedback:*
+Erschöpft ein Thread seine Zeitscheibe, wird seine Priorität um 1 verringert.
+Typischerweise werden die Zeitscheiben mit _niedrigerer Priorität grösser_ und Threads mit
+_kurzen Prozessor-Bursts bevorzugt_. Threads in tiefen Queues dürfen zum Ausgleich länger am
+Stück laufen.
+#image("img/bsys_34.png", width: 80%)
 
 *Prioritäten-basiert:*
 Jeder Thread erhält _eine Nummer_, seine _Priorität_. Threads mit höherer Priorität werden
@@ -728,12 +734,7 @@ Abhilfe z.B. mit _Aging:_ in bestimmten Abständen wird die Priorität um 1 erh�
 Threads werden in _Level_ aufgeteilt #hinweis[(Priorität, Prozesstyp, Hinter-/Vordergrund)],
 jedes Level hat eigene Ready-Queue und kann individuell gescheduled werden.
 #hinweis[(zB. Timeslice/Queue)]\
-*Multi-Level Scheduling mit Feedback:*
-Erschöpft ein Thread seine Zeitscheibe, wird seine Priorität um 1 verringert.
-Typischerweise werden die Zeitscheiben mit _niedrigerer Priorität grösser_ und Threads mit
-_kurzen Prozessor-Bursts bevorzugt_. Threads in tiefen Queues dürfen zum Ausgleich länger am
-Stück laufen.
-#image("img/bsys_34.png", width: 80%)
+
 
 == Prioritäten in POSIX
 *Nice-Wert:*
@@ -759,9 +760,9 @@ setzt den Nice-Wert.
 // - _`who`:_ ID des Prozesses, der Gruppe oder des Users)
 
 ==== Priorität bei Thread-Erzeugung setzen
-Funktionen ohne `attr` bevor Thread gestartet wird:\
-- ```c int pthread_getschedparam(pthread_t thread, int * policy, struct sched_param * param)```
-- ```c int pthread_setschedparam(pthread_t thread, int policy, const struct sched_param * param)```
+Funktionen ohne `attr` bevor Thread gestartet wird #hinweis[Funktionen geben POSIX int zurück]:\
+```c pthread_getschedparam(pthread_t thread, int* policy, struct sched_param* param)```\
+```c pthread_setschedparam(pthread_t thread, int policy, const struct sched_param* param)```
 ```c
 pthread_attr_t a; pthread_attr_init (&a); // initialize attributes
 struct sched_param p;
@@ -771,6 +772,9 @@ pthread_attr_setschedparam ( &a, &p ); // write modified parameters
 pthread_create ( &id, &a, thread_function, argument );
 pthread_attr_destroy ( &a ); // destroy attributes
 ```
+
+#pagebreak()
+
 = Mutexe und Semaphore
 Jeder Thread hat seinen _eigenen_ Instruction-Pointer und Stack-Pointer. Wenn Ergebnisse von
 der _Ausführungsreihenfolge_ einzelner Instruktionen abhängen, spricht man von einer _Race
@@ -1157,6 +1161,8 @@ void * address = mmap( // maps shared memory into virt. address space of process
 
 = Unicode
 == ASCII - American Standard Code for Information Interchange
+*Hex:* ```c 1010=A, 1011=B, 1100=C, 1101=D, 1110=E, 1111=F```
+
 Hat _128 definierte Zeichen_ #hinweis[(erste Hexzahl = Zeile #sym.arrow.b , zweite Hexzahl = Spalte #sym.arrow.r,
     d.h. #hex("41") = `A`)].
 #image("img/bsys_40.png")
@@ -1174,11 +1180,11 @@ Einheit, um Zeichen in einem Encoding darzustellen #hinweis[(bietet den Speicher
     _$bold(U_i) =$_ $i$-tes Code-Unit des kodierten CPs,
     _$bold(B_i) =$_ $i$-tes Byte des kodierten CPs]
 
-*Hex:* ```c 1010=A, 1011=B, 1100=C, 1101=D, 1110=E, 1111=F```
 == UTF-32
 Jede CU ist die ganze  _32 Bit_ gross, jeder CP ist eine CU.
 Wird häufig intern in Programmen verwendet. Obere 11 Bits oft "zweckentfremdet". Endianness gibt an, mit welchem
-Ende die Folge anfängt: *Big-Endian*: B3 B2 B1 B0  #hinweis[CP aus Unicode-Tabelle], *Little-Endian*: B0 B1 B2 B3
+Ende die Folge anfängt: \
+*Big-Endian*: B3 B2 B1 B0  #hinweis[CP aus Unicode-Tabelle], \ *Little-Endian*: B0 B1 B2 B3
 //  werden $P_0$ bis $P_7$ in $B_3$ kopiert usw.
 
 // #image("img/bsys_43.png")
@@ -1209,6 +1215,35 @@ Standard für Webpages. Echte Erweiterung von ASCII. Jedes B (Byte) = U (Code-Un
     ],
 )
 
+==== Vorgehen UTF-8
+_ä_: $P = hex("E4") =$ \
+$1. #hinweis[in Binär umwandeln] #bits("1110 0100", suffix: false) =$\
+#v(.2em)
+$2. #hinweis[von rechter Seite her die Bits aufteilen und die Separator-Bits korrekt einfügen:]\ // fxcolor("hellblau", #bits("11", suffix: false)) thin
+#bits("11|10 0100", suffix: false) ->
+fxcolor("grün", #bits("110", suffix: false)) thin
+#bits("0 0011", suffix: false)
+fxcolor("grün", #bits("10", suffix: false)) thin
+#bits("10 0100", suffix: false)$
+\ 3. #hinweis[am Schluss zurück in Hex umwandeln: ] #hex("C3 A4", suffix: false)
+
+// fxcolor("gelb", bits("10 0110"))$\
+// $=> P_10 ... P_6 = fxcolor("grün", bits("00011")) = fxcolor("rot", hex("03")), quad
+// P_5 ... P_0 = fxcolor("gelb", bits("100100")) = fxcolor("orange", hex("24"))$\
+// $=> U_1 = hex("C0") (= bits("11000000")) + fxcolor("rot", hex("03")) = hex("C3"), quad
+// U_0 = hex("80") (= bits("10000000")) + fxcolor("orange", hex("24")) = hex("A4")$\
+// $=> ä = underline(hex("C3 A4"))$
+
+// - _ặ_: $P = hex("1EB7") = fxcolor("grün", #bits("0001", suffix: false)) thin
+//     fxcolor("gelb", #bits("111010", suffix: false)) thin fxcolor("hellblau", bits("110111"))$\
+//     $=> P_15 ... P_12 = fxcolor("grün", hex("01")), quad
+//     P_11 ... P_6 = fxcolor("gelb", hex("3A")), quad
+//     P_5 ... P_0 = fxcolor("hellblau", hex("37"))$\
+//     $=> U_2 = hex("E0") (= #bits("11100000")) + fxcolor("grün", hex("01")) = hex("E1"), quad
+//     U_1 = hex("80") + fxcolor("gelb", hex("3A")) = hex("BA"), space
+//     U_0 = hex("80") + fxcolor("hellblau", hex("37")) = hex("B7")$\
+//     $=> ặ = underline(hex("E1 BA B7"))$
+
 == UTF-16
 Jede CU umfasst 16 Bit, ein CP benötigt 1 oder 2 CUs.
 //  Encoding muss Endianness berücksichtigen.
@@ -1216,26 +1251,135 @@ Die 2 CUs werden _Surrogate Pair_ genannt, $U_0$: high surrogate,
 $U_1$: low surrogate. Bei _2 Bytes_ #hinweis[(1 CU)] wird direkt gemappt und vorne mit
 Nullen aufgefüllt, #hinweis[CP in [0 - FFFF] ohne [D800 - DFFF]].
 Bei _4 Bytes_ sind #hex("D800") bis #hex("DFFF") #hinweis[(Bits 17-21)] wegen dem Separator _ungültig_ und müssen "umgerechnet" werden.
-\
+// \
 // *Endianness* (umgedreht innerhalb von CU):
-*Big-Endian*: U0 = B1 B0, *Little Endian*: U0 = B0 B1 \ // TODO: entferne diese Zeile mit 2B wenn zuwenig Platz
-*Big-Endian*: U1 U0 = B3 B2 B1 B0, *Little Endian*: U1 U0 = B2 B3 B0 B1
-
-
+#grid(
+    columns: (1fr, 1fr),
+    [
+        *BE*: U0 = B1 B0,\ *LE*: U0 = B0 B1  // TODO: entferne diese Zeile mit 2B wenn zuwenig Platz
+    ],
+    [
+        *BE*: U1 U0 = B3 B2 B1 B0,\ *LE*: U1 U0 = B2 B3 B0 B1
+    ],
+)
 // #image("img/bsys_45.png")
 #image("img/bsys2-utf16.png")
 #v(-4pt)
-==== Vorgehen
-kleiner als FFFF: ist BE, Bytes anschreiben (1 Byte = 2 Hex. Zeichen)\
-grösser als FFFF:
-1. minus #hex("1 0000") rechnen
-+ in Binär umwandeln
-+ untere (rechts) 10 Bits nehmen und rechts schreiben
-+ Surrogat $110111$ links von den 10 Bits
-+ restliche (linker Teil) Bits links vom Surrogat
-+ ganz links die $110110$ schreiben
 
-==== Beispiel
+#let example-block(body) = text(
+    fill: colors.dunkelblau,
+    [ #h(1em) #body
+    ],
+)
+
+
+==== Vorgehen UTF-16
+*kleiner als FFFF*: ist BE, Bytes anschreiben (1 Byte = 2 Hex. Zeichen)\
+*grösser als FFFF*: #example-block([Beispiel: Encoding von U+10'437 = #hex("10'437") = (\u{10437}) ])
+// TODO mit grid lösen?
+// #grid(
+//     columns: (auto, auto),
+//      gutter: 0em,
+//     [
+
+//     ],
+//     [
+
+//     ],
+// )
+#v(-.5em)
+1. minus #hex("1 0000") rechnen (die 0 behalten!)
+    #example-block([#hex("00'437")])
++ in Binär umwandeln
+    #example-block([
+        // #bits("0000 0000 01|00 0011 0111") ich würde gerne so | Trennzeichen schreiben, aber dann sind die 4 bits nicht mehr schön nebeneinander.. vielleicht von Hand einzeichnen wenn ausgedruckt
+        #bits("0000 0000 0100 0011 0111")
+    ])
++ untere (rechts) 10 Bits nehmen und rechts schreiben
+    #example-block([
+        // #bits("0000 0000 01") #fxcolor("rot", bits("00 0011 0111", suffix: false))
+        // #bits("0000 0000 01") #fxcolor("rot", bits("00 0011 0111", suffix: false))
+        #sym.arrow.r #fxcolor("rot", bits(
+            "00 0011 0111",
+            suffix: false,
+        ))
+    ])
++ Surrogat #fxcolor("grün", [$110111$])  links von den 10 Bits
+    #example-block([
+        // #bits("0000 0000 01|..", suffix: false) #sym.arrow.r #fxcolor("grün", [
+        //     #bits(
+        //         "110111",
+        //         suffix: false,
+        //     )
+        //     #fxcolor("rot", bits("00 0011 0111", suffix: false))
+        // ])
+        //
+        #sym.arrow.r
+        #fxcolor("grün", bits(
+            "110111",
+            suffix: false,
+        ))
+        #bits(
+            "00 0011 0111",
+            suffix: false,
+        )
+    ])
++ restliche (linker Teil) Bits links vom Surrogat schreiben
+    // \
+    // #fxcolor("grün", [
+    //     #bits("0000 0000 01", suffix: false)
+    //         #fxcolor("rot", bits(
+    //             "110111",
+    //             suffix: false,
+    //         ))
+    //         #bits("00 0011 0111", suffix: false)
+    //     ])
+    #example-block([
+        (diese: #fxcolor("rot", [ #bits("0000 0000 01", suffix: false)]))
+        \
+        #sym.arrow.r
+        #fxcolor("rot", [ #bits("0000 0000 01", suffix: false) ])
+        #bits("1101  1100  0011 0111", suffix: false)
+    ])
++ ganz links die #fxcolor("grün", [$110110$]) schreiben
+    #example-block([
+        #sym.arrow.r
+        #fxcolor("grün", bits(
+            "110110",
+            suffix: false,
+        ))
+        // #fxcolor("rot", bits("0000 0000 01", suffix: false))
+        // #fxcolor("grün", bits(
+        //     "110111",
+        //     suffix: false,
+        // ))
+        // #fxcolor("rot", bits("00 0011 0111", suffix: false))
+        #bits("00 0000 0001 1101 1100 0011 0111", suffix: false)
+    ])
++ zurück zu Hex umwandeln\
+    #example-block([
+        #fxcolor("grün", bits("1101-10", suffix: false))
+        #fxcolor("rot", bits("00-0000-0001-", suffix: false))
+        #fxcolor("grün", bits("1101-11", suffix: false))
+        #fxcolor("rot", bits("00-0011-0111", suffix: false))
+        #sym.arrow.r
+        #hex("D8 01 DC 37")
+    ])
++ Endianness
+    $"BE" = underline(
+        fxcolor("orange", #hex("D801", suffix: false)) thin
+        fxcolor("hellblau", hex("DC37"))
+    ), quad
+    "LE" = underline(
+        fxcolor("orange", #hex("01D8", suffix: false)) thin
+        fxcolor("hellblau", hex("37DC"))
+    )$
+
+/*
+// original beispiel
+==== Beispiel UTF-16
+// Hinweis: korrekt ist D801DC37 nicht D801DD37 (getestet bei https://www.branah.com/unicode-converter mit 0x10437 UTF-32) habe ich korrigiert!
+
 Encoding von U+10'437 (\u{10437})
 #hinweis[#fxcolor("grün", bits("00 0100 0001", suffix: false))
     #fxcolor("gelb", bits("00 0011 0111"))]:
@@ -1247,43 +1391,18 @@ Encoding von U+10'437 (\u{10437})
     $fxcolor("grün", #hex("0001", suffix: false)) fxcolor("gelb", hex("0137"))$\
 + Oberer Wert mit #hex("D800") und unterer Wert mit #hex("DC00") addieren, um Code-Units zu erhalten\
     $U_1 = fxcolor("grün", hex("0001")) + hex("D800") = fxcolor("orange", hex("D801")), quad
-    U_2 = fxcolor("gelb", hex("0137")) + hex("DC00") = fxcolor("hellblau", hex("DD37"))$\
+    U_2 = fxcolor("gelb", hex("0137")) + hex("DC00") = fxcolor("hellblau", hex("DC37"))$\
 + Zu BE/LE zusammensetzen\
-    $"BE" = underline(
-        fxcolor("orange", #hex("D801", suffix: false)) thin
-        fxcolor("hellblau", hex("DD37"))
-    ), quad
-    "LE" = underline(
-        fxcolor("orange", #hex("01D8", suffix: false)) thin
-        fxcolor("hellblau", hex("37DD"))
-    )$
-
-==== Beispiele
-- _ä_: $P = hex("E4") = #hex("E4") = #hinweis[in Binär umwandeln] #bits("1110 0100", suffix: false) =$\
-    $#hinweis[von rechter Seite her die Bits aufteilen:]
-    // fxcolor("hellblau", #bits("11", suffix: false)) thin
-    #bits("11|10 0100", suffix: false) ->
-    fxcolor("grün", #bits("110", suffix: false)) thin
-    #bits("0 0011", suffix: false)
-    fxcolor("grün", #bits("10", suffix: false)) thin
-    #bits("10 0100", suffix: false)$
-    \ #hinweis[am Schluss zurück in Hex umwandeln] #hex("C3 A4", suffix: false)
-
-// fxcolor("gelb", bits("10 0110"))$\
-// $=> P_10 ... P_6 = fxcolor("grün", bits("00011")) = fxcolor("rot", hex("03")), quad
-// P_5 ... P_0 = fxcolor("gelb", bits("100100")) = fxcolor("orange", hex("24"))$\
-// $=> U_1 = hex("C0") (= bits("11000000")) + fxcolor("rot", hex("03")) = hex("C3"), quad
-// U_0 = hex("80") (= bits("10000000")) + fxcolor("orange", hex("24")) = hex("A4")$\
-// $=> ä = underline(hex("C3 A4"))$
-- _ặ_: $P = hex("1EB7") = fxcolor("grün", #bits("0001", suffix: false)) thin
-    fxcolor("gelb", #bits("111010", suffix: false)) thin fxcolor("hellblau", bits("110111"))$\
-    $=> P_15 ... P_12 = fxcolor("grün", hex("01")), quad
-    P_11 ... P_6 = fxcolor("gelb", hex("3A")), quad
-    P_5 ... P_0 = fxcolor("hellblau", hex("37"))$\
-    $=> U_2 = hex("E0") (= #bits("11100000")) + fxcolor("grün", hex("01")) = hex("E1"), quad
-    U_1 = hex("80") + fxcolor("gelb", hex("3A")) = hex("BA"), space
-    U_0 = hex("80") + fxcolor("hellblau", hex("37")) = hex("B7")$\
-    $=> ặ = underline(hex("E1 BA B7"))$
+// ==== Beispiel UTF-16 BE/LE
+$"BE" = underline(
+    fxcolor("orange", #hex("D801", suffix: false)) thin
+    fxcolor("hellblau", hex("DC37"))
+), quad
+"LE" = underline(
+    fxcolor("orange", #hex("01D8", suffix: false)) thin
+    fxcolor("hellblau", hex("37DC"))
+)$
+// */
 
 == Encoding-Beispiele
 #{
