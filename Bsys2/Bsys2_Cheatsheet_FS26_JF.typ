@@ -453,7 +453,8 @@ $
 $
 #hinweis[Bringe $s$ und $../n$ auf den gleichen Nenner]
 #wrap-content(
-    image("img/bsys_26.png"),
+    // image("img/bsys_26.png"),
+    image("img/amdahl.svg"),
     align: top + right,
     columns: (61%, 39%),
 )[
@@ -664,7 +665,8 @@ _Quasiparallel_ #hinweis[($n$ Threads auf $<n$ Prozessoren abwechselnd)],
 _Nebenläufig_ #hinweis[(Überbegriff für parallel oder quasiparallel)]
 
 #wrap-content(
-    image("img/bsys_29.png"),
+    // image("img/bsys_29.png"),
+    image("img/scheduling-1.svg"),
     align: top + right,
     columns: (37%, 63%),
 )[
@@ -718,7 +720,8 @@ bis seine _Zeitscheibe erschöpft_ ist, dann wird der in der _Queue hinten angeh
 Notiere: die Ready Queue pro Zeitscheibe, laufender Thread landet (wenn direkt Ready) ganz hinten in nächster Ready-Queue. Am besten pro Zeit die R.Q. notieren.
 Bei Wechsel zu `waiting` beginnt nächster Prozess früher, aber erhält keine zusätzliche Zeit.
 
-#image("img/bsys_33.png", width: 80%)
+// #image("img/bsys_33.png", width: 80%)
+#image("img/scheduling-5.svg", width: 100%)
 
 *Multi-Level Scheduling mit Feedback:*
 Erschöpft ein Thread seine Zeitscheibe, wird seine Priorität um 1 verringert.
@@ -1165,10 +1168,14 @@ void * address = mmap( // maps shared memory into virt. address space of process
 = Unicode
 == ASCII - American Standard Code for Information Interchange
 *Hex:* ```c 1010=A, 1011=B, 1100=C, 1101=D, 1110=E, 1111=F```
+#v(-0.5em)
 
 Hat _128 definierte Zeichen_ #hinweis[(erste Hexzahl = Zeile #sym.arrow.b , zweite Hexzahl = Spalte #sym.arrow.r,
     d.h. #hex("41") = `A`)].
-#image("img/bsys_40.png")
+#v(-0.5em)
+// #image("img/bsys_40.png")
+#image("img/ascii.svg")
+#v(-0.5em)
 
 *Codepages:*
 unabhängige Erweiterungen auf 8 Bit. Jede ist unterschiedlich und nicht erkennbar.\
@@ -1838,19 +1845,25 @@ _Extent Trees_\
 *Header:* $0 arrow.bar (1,0)$ #h(1em)
 *Extent:* $1 arrow.bar (0, #fxcolor("grün", hex("2000")), #fxcolor("rot", hex("300")))$
 
-// zu kompliziert:
-// ==== Beispiel ext2 128 MB #hinweis[Datengrösse = 128MB] grosse, konsekutiv gespeicherte Datei, \
-// bei ext2 mit 4 KB grossen Blöcken #hinweis[Blockgrösse = 4KB] ab Block #hex4(2000) #hinweis[Startindex = #hex4(2000)]
+/*
+zu kompliziert:
+==== Beispiel ext2 128 MB #hinweis[Datengrösse = 128MB] grosse, konsekutiv gespeicherte Datei, \
+bei ext2 mit 4 KB grossen Blöcken #hinweis[Blockgrösse = 4KB] ab Block #hex4(2000) #hinweis[Startindex = #hex4(2000)]
 
-// / Anzahl Bytes in Hex (Datengrösse): 128 MB = #hex4("800 0000")
-// / Anzahl Bytes je Block in hex (Blockgrösse): 4KB = #hex4(1000)
-// / Anzahl Blöcke: Datengrösse/Blockgrösse = $2^27/2^12 = 2^15 = 2^(12+3)$ = _#hex4("8000")_
-//$log_2("Blockgrösse")$ bei 4KB = 2^12 Byte = 12 Bit
+/ Anzahl Bytes in Hex (Datengrösse): 128 MB = #hex4("800 0000")
+/ Anzahl Bytes je Block in hex (Blockgrösse): 4KB = #hex4(1000)
+/ Anzahl Blöcke: Datengrösse/Blockgrösse = $2^27/2^12 = 2^15 = 2^(12+3)$ = _#hex4("8000")_
+$log_2("Blockgrösse")$ bei 4KB = 2^12 Byte = 12 Bit
+// */
 
+// #v(-0.25em)
+// #line(length: 100%, stroke: 0.1pt + colors.dunkelblau)
+// #v(-0.25em)
 
-#v(-0.25em)
-#line(length: 100%, stroke: 0.1pt + colors.dunkelblau)
-#v(-0.25em)
+#v(-0.5em)
+#image("img/extent-tree.svg", height: 2cm)
+#v(-0.5em)
+
 
 ==== ext2 Formeln
 #terms-spacing(1em, [
@@ -1868,7 +1881,6 @@ _Extent Trees_\
     / Inode zu Index der Blockgruppe: (Inode-1) / Anz. Inodes pro Gruppe
     / Inode zu Index des Inodes innerhalb Blockgruppe: (Inode-1) % Anz. Inodes pro Gruppe
 ])
-
 
 
 == Journaling (ext3, ext4)
@@ -1889,3 +1901,4 @@ _Journaling_ verringert Zeit für Überprüfung von Inkonsistenzen #hinweis[z.B.
 / _(Full) Journal_: Metadaten und Datei-Inhalte ins Journal, sehr sicher aber langsam, +Datensicherheit -Geschwindigkeitseinbussen
 / _Ordered_: \1. Transaktion (Metadaten) ins Journal, \2. Dateiinhalte direkt schreiben, \3. Commit ausführen (Metadaten), +Dateien enthalten richtigen Inhalt nach Commit - bisschen langsamer als Writeback -Blockaden bei vielen Transaktionen möglich
 / _Writeback_: Zuerst Metadaten ins Journal, beliebige Reihenfolge von Commit und Datei schreiben, +sehr schnell #hinweis[keine Synchronisation Reihenfolge], -Dateien können Datenmüll enthalten
+

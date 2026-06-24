@@ -1,2 +1,4 @@
 # erst am Schluss versionieren:
 *.pdf
+*~lock~
+*.ignored
