@@ -307,6 +307,8 @@ _Linker:_ Der Linker verknüpft Objekt-Dateien (und statische Bibliotheken) zu E
 oder dynamischen Bibliotheken.
 _Loader_ lädt Executables und eventuelle dynamische Bibliotheken dieser in den Hauptspeicher.
 
+
+
 == ELF (Executable and Linking Format)
 _Binär-Format_, das Kompilate spezifiziert. Besteht aus #tcolor("grün", "Linking View")
 #hinweis[(wichtig für Linker, für Object-Files und Shared Objects, Sektionen)] und
@@ -1651,6 +1653,11 @@ _Sektor_ #hinweis[(Kleinste logische Untereinheit eines Volumes.
 //   heisst so wegen Kreissektor von harddisk
 _Format_ #hinweis[(Layout der logischen Strukturen auf dem Datenträger, wird vom Dateisystem definiert.)]\
 
+/ Inode Aufteilung ext2: $15 "Blocknummern" dot "Inodegrösse"$= $15 dot 4$ Byte = 60 Byte
+/ Referenzen-Block: Synonym für indirekter Block!
+/ Anzahl direkte Blöcke: 12 (bis und mit Block #hex("B"))
+/ Inode-Adressgrösse bei Verzeichnis (Inodegrösse): 4 Byte (immer)
+
 == Inodes
 #wrap-content(
     // image("img/bsys_42.png"),
@@ -1664,7 +1671,7 @@ _Format_ #hinweis[(Layout der logischen Strukturen auf dem Datenträger, wird vo
     Enthält _alle Metadaten_ über die Datei, _ausser Namen oder Pfad_ (Grösse, Anzahl der verwendeten Blöcke, Erzeugungs-, Zugriffs-, Modifikations- und Löschzeit, Owner-ID, Group-ID, Flags, Permission Bits). \
     // Inodes: _fixe Grösse_ je Volume: Zweierpotenz, mind. 128 B #hinweis[in ext4 256 Byte], max. 1 Block.
     Inode _verweist auf die Blöcke_, die _Daten für eine Datei_ enthalten.
-    Enthält ein Array _`i_block`_ mit 15 Einträgen zu je 32 Bit.
+    Enthält ein Array _`i_block`_ (Blockliste) mit 15 Einträgen zu je 32 Bit.
 ]
 #v(-1.8em)
 / Lokalisierung:
@@ -1676,126 +1683,104 @@ _Format_ #hinweis[(Layout der logischen Strukturen auf dem Datenträger, wird vo
 
 #v(-0.5em)
 = Ext4
-// == ext4
-// _Vergrössert_ die wichtigen Datenstrukturen, besser für grosse Dateien, erlaubt höhere
-// maximale Dateigrösse. Blöcke werden mit _Extent Trees_ verwaltet, _Journaling_ wird eingeführt.
-Journaling (für Konsistenz im Dateisystem bei z.B. Stromausfällen) und Blöcke mit Extent Tree. ext2 Blocklisten auch möglich (abwärtskompatibel).
-*Extent Tree Header Aufbau (ist ein Inode)*
-_2 Byte_ Magic Number #hex4("F30A"), _2B_ Anz. Einträge, die direkt auf den Header folgen, _2B_ Anz. Einträge, die maximal auf den Header folgen können, _2B_ Tiefe, _4B_ reserviert\
-*Tiefe*: _0_: Einträge sind Extents, _>=1_: Einträge sind Index Nodes (ab mehr als $3 dot 340 = 1'360$ Extents bei 4KB Blockgrösse). _Baum_: Blätter=Extents #hinweis[zeigen auf Blöcke], Index=zeigen auf Header \
+
+*Extent Tree Header Aufbau (12B)*\
+_2 Byte_ Magic Number #hex4("F30A"), _2B_ Anz. Einträge, die direkt auf den Header folgen, _2B_ Anz. Einträge, die maximal auf den Header folgen können, _2B_ Tiefe, _4B_ reserviert.
+*Tiefe*: _0_: Einträge sind Extents, _>=1_: Einträge sind Index Nodes. \
+// / Tiefe: 0 = Einträge sind Extents, >=1 = Einträge sind Index Nodes
+
 #v(-0.25em)
 
-*Index-Block = `i_block[0..14]`*
-- Enthält Referenzen auf Kind-Knoten: je nach Tiefe _Index-Einträge_ (Index Nodes) oder _Extents_
-// - Block mit Index Nodes: Index Nodes statt Extents im Block
+=== Index-Blöcke (allgemeiner Inode)
+//  = `i_block[0..14]` nein ich glaube i_block gibts bei ext2 / Blocklisten?
+- Index-Node oder Block mit Index-Nodes
+- Enthält Referenzen auf _Index Nodes_ oder _Extents_
 - (Tiefe im Inode = 2 gesetzt, Tiefe in Index-Node-Blöcken = 1)
-- Benötigt man noch mehr Extents, Tiefe im Inode bis auf 5 möglich = Maximal $2^32$ = 4G Blöcke pro Datei.
-#v(-0.25em)
+- Tiefe im Inode bis auf 5 möglich = Maximal $2^32$ = 4G Blöcke pro Datei.
 
-*Index Node (Index-Block, der Extents enthält)*\
+*Block mit Index-Nodes (enthält Index-Nodes, innerer Knoten)*
+Nötig ab mehr als $3 dot 340 = 1'360$ Extents bei 4KB Blockgrösse.
+
+
+*Index Node = Index-Knoten (enthält Extents, Blattknoten)*\
 Der Block enthält am Anfang einen Header (wie im Inode, aber Tiefe = 0) danach die Extents (max. 340 bei 4 KB Blockgrösse)\
-_4B_ Kleinste logische Blocknummer aller Kind-Extents, _6B_ Physische Blocknummer des Blocks, auf den der Index-Node verweist, _2B_ Unbenutzt
-#v(-0.25em)
+// #v(-0.25em)
+*Aufteilung der Daten*: $(1 "Header" + 4 "Extents") dot "Extent-Grösse"$ = $5 dot 12$ Byte = 60 Byte
+*Verweise auf Extent 12B*: _4B_ Kleinste logische Blocknummer aller Kind-Extents, _6B_ Physische Blocknummer des Blocks, auf den der Index-Node verweist, _2B_ Unbenutzt
 
-*Extent*\
-Beschreibt Blockintervall(Blockliste?): _4B_ erste logische Blocknummer, _6B_ erste physische Blocknummer, _2B signed_ Anzahl Blöcke
+#v(-0.25em)
+*Extent = Inhalt im Blattknoten*
+Beschreibt  _Intervall physisch konsekutiver Blöcke_.
+*12 Byte*: _4B_ erste logische Blocknummer, _6B_ erste physische Blocknummer, _2B signed_ Anzahl Blöcke
 
 == Formeln und Zahlen
-#v(-1em)
+#v(-0.5em)
+#table(
+    columns: (auto,) * 5 + (2.75em,) * 4 + (1fr,) * 4,
+    [*$4096$*],
+    [*$2048$*],
+    [*$1024$*],
+    [*$512$*],
+    [*$256$*],
+    [*$128$*],
+    [*$64$*],
+    [*$32$*],
+    [*$16$*],
+    [*$8$*],
+    [*$4$*],
+    [*$2$*],
+    [*$1$*],
+
+    [$2^12$],
+    [$2^11$],
+    [$2^10$],
+    [$2^9$],
+    [$2^8$],
+    [$2^7$],
+    [$2^6$],
+    [$2^5$],
+    [$2^4$],
+    [$2^3$],
+    [$2^2$],
+    [$2^1$],
+    [$2^0$],
+
+    [#hex("1000")],
+    [#hex("800")],
+    [#hex("400")],
+    [#hex("200")],
+    [#hex("100")],
+    [#hex("80")],
+    [#hex("40")],
+    [#hex("20")],
+    [#hex("10")],
+    [#hex("8")],
+    [#hex("4")],
+    [#hex("2")],
+    [#hex("1")],
+)
+#v(-3pt)
+// #grid(
+//     columns: (auto, auto),
+//     [
+Dezimal zu Hex: _1K_ $= 2^10 = #bits("100 0000 0000") = #hex4(400)$, _4K_ $= 2^12 = #bits("1 0000 0000 0000")$ = #hex4("1000"), // Exponent = Anzahl Nullen, die durch vier Teilen für Anzahl Nullen in der Hex Zahl : 12/4 = 3 // 2^8 = 256 = #hex4("100") \
+// 1M = $2^20$ = #hex4("100000"), 128M = $2^20 dot 128$ = #hex4("800 0000")\
+// ],
+// [
+// kann jetzt auch gut von Hand berechnet werden, aber vielleicht brauche ich ja gerade einer dieser Zahlen und würde einen Flüchtigkeitsfehler machen:
+_1G_ = $2^30$ = #hex4("40000000"), _12 Byte_ = 100 Bit,
+24 Bit=3 Byte, 32 Bit=4 Byte, 40 Bit=5 Byte
+//     ],
+// )
+
 ==== Datenstrukturen Grössen ext2 und ext4
-/ Inodes (fixe Grösse je Volume): \
+/ Inodes #hinweis[fixe Grösse je Volume]:
     _ext2_: Zweiterpotenz mind. 128 B, _ext4_: mind. 256 B und max. 1 Block
 / Gruppendeskriptoren: _ext2_: 32 B, _ext4_: 64 B
 / Blockgrösse: _ext2_: 1KB, 2KB oder 4KB (normal), _ext4_: bis 64 KB
-==== Dezimal zu Hexadezimal
-#grid(
-    columns: (auto, auto),
-    [
-        1K = #hex4("400"), 4K = #hex4("1000"), 256 = #hex4("100") \
-        1M = $2^20$ = #hex4("100000"), 128M = $2^20 dot 128$ = #hex4("800 0000")\
-
-    ],
-    [
-        1G = $2^30$ = #hex4("40000000") #h(1em) 12 Byte = 100 Bit \
-        24 Bit = 3 Byte, 32 Bit = 4 Byte, 40 Bit = 5 Byte
-    ],
-)
 
 
-==== Grössen berechnen
-Beispiel 128 MB #hinweis[Datengrösse] grosse, konsekutiv gespeicherte Datei, bei ext2 mit 4 KB grossen Blöcken #hinweis[Blockgrösse = 4KB] ab Block #hex4(2000) #hinweis[Startindex = #hex4(2000)]
-#terms-spacing(1em, [
-    / Anzahl Bytes in Hex (Datengrösse): 128 MB = #hex4("800 0000")
-    / Anzahl Bytes je Block in hex (Blockgrösse): 4KB = #hex4(1000)
-    / _Anzahl Blöcke_: Datengrösse/Blockgrösse = _#hex4("8000")_
-    / Inode-Adressgrösse bei Verzeichnis (Inodegrösse): 4 Byte (immer)
-    //$log_2("Blockgrösse")$ bei 4KB = 2^12 Byte = 12 Bit
-])
-
-==== ext2 Zahlen
-#terms-spacing(1em, [
-    / Referenzen-Block: Synonym für indirekter Block!
-    / Anz. Referenzen pro Referenzen-Block _R_: Blockgrösse / Inodegrösse = 4KB / 4B = 1K = _#hex4("400")_
-    / 1. Referenzblock Index (physische Adresse): Startindex = #hex4(2000)
-    / _letzte Blocknummer_ (physisch): (Startindex + Anzahl Blöcke) - 1 = #hex4("A000") - 1 = #hex4("9FFF")
-    / Anzahl direkte Blöcke: 12 (bis und mit Block #hex("B"))
-    / Anzahl indirekte Blöcke: _R_ (siehe oben Referenzen pro Ref.Block)  = 1K = #hex4("400")
-    / Anzahl doubly indirekte Blöcke: _R_^2  = $1K^2 = 2^(10*2) = 2^20 = 1M$ = #hex4("100000")
-    / Anzahl triply indirekte Blöcke: _R_^3  = $2^30 = 1G$ = #hex4("40000000")
-    / Inode Aufteilung: $15 "Blocknummern" dot "Inodegrösse"$= $15 dot 4$ Byte = 60 Byte
-])
-==== ext4 Zahlen
-#terms-spacing(1em, [
-    / Extent: logische Blocknummer (4B), physische Blocknummer (6B), Anzahl Blöcke = im Beispiel: 0, #hex4(2000), #hex4(8000), *Extent-Grösse*: 12 Byte
-    / Inode Aufteilung: $(1 "Header" + 4 "Extents") dot "Extent-Grösse"$ = $5 dot 12$ Byte = 60 Byte
-    / Tiefe: 0 = Einträge sind Extents, >=1 = Einträge sind Index Nodes
-])
-==== Inode ist bekannt
-#terms-spacing(1em, [
-    / Inode zu Index zu Blockgruppe: (Inode-1) / Anz. Inodes pro Gruppe
-    / Inode zu Index des Inodes in Blockgruppe: (Inode-1) % Anz. Inodes pro Gruppe
-])
-
-
-/*
-== Extents
-Beschreiben ein _Intervall physisch konsekutiver Blöcke_. Ist 12 Byte gross
-#hinweis[(4B logische Blocknummer, 6B physische Blocknummer, 2B Anzahl Blöcke)].
-Positive Zahlen = Block initialisiert, Negativ = Block voralloziert. Im Inode hat es in den
-60 Byte für direkte und indirekte Block-Adressierung Platz für 4 Extents und einen Header.\
-*Extent Trees:*
-_Index-Knoten_ #hinweis[(Innerer Knoten des Baums, besteht aus Index-Eintrag und Index-Block)],\
-_Index-Eintrag_ #hinweis[(Enthält Nummer des physischen Index-Blocks und kleinste logische
-    Blocknummer aller Kindknoten)],
-_Index-Block_ #hinweis[(Enthält eigenen Tree-Header und Referenz auf Kindknoten)]\
-*Extent Tree Header:*
-Benötigt ab 4 Extents, weil zusätzlicher Block.
-Magic Number #hex("F30A") #hinweis[(2B)],
-Anzahl Einträge, die _direkt_ auf den Header folgen #hinweis[(2B)],
-Anzahl Einträge, die _maximal_ auf den Header folgen können #hinweis[(2B)],
-Tiefe des Baums #hinweis[(2B)] - #hinweis[(0: Einträge sind Extents, $>=$1: Einträge sind Index Nodes)],
-Reserviert #hinweis[(4B)]\
-*Index Node:*
-Spezifiziert Block, der _Extents enthält_. Besteht aus einem Header und den Extents
-#hinweis[(max. 340 bei 4 KB Blockgrösse)]. Ab 1'360 (4*340) Extents zusätzlicher Block mit Index Nodes nötig.
-
-// === Notation
-// #{
-//     set text(size: 0.8em)
-//     table(
-//         columns: (1fr, 1fr),
-//         table.header([(in)direkte Adressierung], [Extent-Trees]),
-//         [_direkte Blöcke:_ Index $|->$ Blocknummer],
-//         [_Indexknoten:_ Index $|->$ (Kindblocknummer, kleinste Nummer der 1. logischen Blöcke aller Kinder)],
-
-//         [_indirekte Blöcke:_ indirekter Block.Index $|->$ direkter Block],
-//         [_Blattknoten:_ Index $|->$ (1. logisch. Block, 1. phy. Block, Anz. Blöcke)],
-
-//         [], [_Header:_ Index $|->$ (Anz. Einträge, Tiefe)],
-//     )
-// }
-
-==== Beispiel-Berechnung: 4MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex("1000")
+==== Beispiel (kompakt): 4MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex("1000")
 _(In-)direkte Block-Adressierung_\
 4 MB = $2^22$B, #math.quad 4 KB = $2^12$B, #math.quad $2^(22-12) = 2^10 = #fxcolor("rot", hex("400"))$
 Blöcke von #fxcolor("grün", hex("1000")) bis #fxcolor("orange", hex("13FF"))\
@@ -1809,23 +1794,55 @@ $#hex("1400").#hex("0") arrow.bar #hex("100C"), quad
 #hex("1400").#hex("3F3") arrow.bar #fxcolor("orange", hex("13FF"))$
 
 _Extent Trees_\
-*Header:* $0 arrow.bar (1,0)$\
+*Header:* $0 arrow.bar (1,0)$ #h(1em)
 *Extent:* $1 arrow.bar (0, #fxcolor("grün", hex("1000")), #fxcolor("rot", hex("400")))$
+// ==== Beispiel ext2 128 MB #hinweis[Datengrösse = 128MB] grosse, konsekutiv gespeicherte Datei, \
+// bei ext2 mit 4 KB grossen Blöcken #hinweis[Blockgrösse = 4KB] ab Block #hex4(2000) #hinweis[Startindex = #hex4(2000)]
 
-== Journaling
-Wenn Dateisystem beim _Erweitern_ einer Datei _unterbrochen_ wird, kann es zu
-_Inkonsistenzen_ kommen. _Journaling_ verringert Zeit für Überprüfung von Inkonsistenzen erheblich.\
-*Journal:*
-Datei, in die Daten schnell geschrieben werden können. Bestenfalls 1 Extent.\
-*Transaktion:*
-Folge von Einzelschritten, die gesamtheitlich vorgenommen werden sollten.\
-*Journaling:*
-Daten als Transaktion ins Journal, dann an finale Position schreiben #hinweis[(committing)],\
-Transaktion aus dem Journal entfernen.\
-*Journal Replay:*
-Transaktionen im Journal werden nach Neustart noch einmal ausgeführt.\
-*Journal Modi:*
-_(Full) Journal_ #hinweis[(Metadaten und Datei-Inhalte ins Journal, sehr sicher aber langsam)],
-_Ordered_ #hinweis[(Nur Metadaten ins Journal, Dateiinhalte werden immer vor Commit geschrieben)],
-_Writeback_ #hinweis[(Nur Metadaten ins Journal, beliebige Reihenfolge, nicht sehr sicher aber schnell).]
-*/
+// / Anzahl Bytes in Hex (Datengrösse): 128 MB = #hex4("800 0000")
+// / Anzahl Bytes je Block in hex (Blockgrösse): 4KB = #hex4(1000)
+// / Anzahl Blöcke: Datengrösse/Blockgrösse = $2^27/2^12 = 2^15 = 2^(12+3)$ = _#hex4("8000")_
+//$log_2("Blockgrösse")$ bei 4KB = 2^12 Byte = 12 Bit
+
+
+#v(-0.25em)
+#line(length: 100%, stroke: 0.1pt + colors.dunkelblau)
+#v(-0.25em)
+
+==== ext2 Formeln
+#terms-spacing(1em, [
+    / Anz. Referenzen pro Referenzen-Block _R_: Blockgrösse / Inodegrösse = 4KB / 4B = 1K = _#hex4("400")_
+    / Anzahl indirekte Blöcke: _$R$_ (siehe Referenzen pro Ref.Block) = 1K = #hex4("400")
+    / Anzahl doubly indirekte Blöcke: _$R^2$_  = $1K^2 = 2^(10*2) = 2^20 = 1M$ = #hex4("100000")
+    / Anzahl triply indirekte Blöcke: _$R^3$_  = $2^30 = 1G$ = #hex4("40000000")
+    / 1. Referenzblock Index (physische Adresse): Startindex = #hex4(2000)
+    / _letzte Blocknummer_ (physisch): (Startindex + Anzahl Blöcke) - 1 = #hex4("A000") - 1 = #hex4("9FFF")
+
+])
+
+==== Inode ist bekannt Formeln
+#terms-spacing(1em, [
+    / Inode zu Index der Blockgruppe: (Inode-1) / Anz. Inodes pro Gruppe
+    / Inode zu Index des Inodes innerhalb Blockgruppe: (Inode-1) % Anz. Inodes pro Gruppe
+])
+
+
+
+== Journaling (ext3, ext4)
+// Wenn Dateisystem beim _Erweitern_ einer Datei _unterbrochen_ wird, kann es zu
+// _Inkonsistenzen_ kommen.
+_Journaling_ verringert Zeit für Überprüfung von Inkonsistenzen #hinweis[z.B. Stromausfall/Crash].
+/ Dateierweiterung Änderungen:
+    neue Blöcke, Inode, Block-Usage-Bitmaps, Counter freier/benutzter Blöcke, Daten in Datei.
+/ Journal:
+    Reservierte Datei, Metadaten für Journaling. Typischerweise: Inode 8, 128 MB, bestenfalls 1 Extent. Schnelles schreiben: konsekutive Blöcke.
+/ Transaktion:
+    Folge von Einzelschritten, möglichst gesamtheitlich durchführen von Dateisystem.\
+/ Journaling:
+    Transaktion ins Journal schreiben. #h(1em) #hinweis[Daten nach Commit aus Journal entfernen]
+/ Comitting: (Dateiinhalte +) Metadaten an korrekter Position schreiben
+/ Journal Replay:
+    Transaktionen im Journal nach Neustart noch einmal ausführen oder Fehler finden.
+/ _(Full) Journal_: Metadaten und Datei-Inhalte ins Journal, sehr sicher aber langsam, +Datensicherheit -Geschwindigkeitseinbussen
+/ _Ordered_: \1. Transaktion (Metadaten) ins Journal, \2. Dateiinhalte direkt schreiben, \3. Commit ausführen (Metadaten), +Dateien enthalten richtigen Inhalt nach Commit - bisschen langsamer als Writeback -Blockaden bei vielen Transaktionen möglich
+/ _Writeback_: Zuerst Metadaten ins Journal, beliebige Reihenfolge von Commit und Datei schreiben, +sehr schnell #hinweis[keine Synchronisation Reihenfolge], -Dateien können Datenmüll enthalten
