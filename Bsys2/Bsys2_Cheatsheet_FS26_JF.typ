@@ -1897,7 +1897,7 @@ _Journaling_ verringert Zeit für Überprüfung von Inkonsistenzen #hinweis[z.B.
 / Comitting: (Dateiinhalte +) Metadaten an korrekter Position schreiben
 / Journal Replay:
     Transaktionen im Journal nach Neustart noch einmal ausführen oder Fehler finden.
-/ _(Full) Journal_: Metadaten und Datei-Inhalte ins Journal, sehr sicher aber langsam, +Datensicherheit -Geschwindigkeitseinbussen
+/ _(Full) Journal_: Metadaten und Datei-Inhalte zuerst ins Journal dann von dort in den Speicher, sehr sicher aber langsam, +Datensicherheit -Geschwindigkeitseinbussen
 / _Ordered_: \1. Transaktion (Metadaten) ins Journal, \2. Dateiinhalte direkt schreiben, \3. Commit ausführen (Metadaten), +Dateien enthalten richtigen Inhalt nach Commit - bisschen langsamer als Writeback -Blockaden bei vielen Transaktionen möglich
 / _Writeback_: Zuerst Metadaten ins Journal, beliebige Reihenfolge von Commit und Datei schreiben, +sehr schnell #hinweis[keine Synchronisation Reihenfolge], -Dateien können Datenmüll enthalten
 
