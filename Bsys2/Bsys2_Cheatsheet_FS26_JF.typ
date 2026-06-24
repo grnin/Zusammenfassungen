@@ -1407,6 +1407,7 @@ $"BE" = underline(
 )$
 // */
 
+#colbreak()
 == Encoding-Beispiele
 #{
     set text(size: 0.94em)
@@ -1448,18 +1449,10 @@ $"BE" = underline(
         [#hex("00 D8 30 DF")],
     )
 }
+#v(-0.5em)
 #hinweis[Bei LE / BE werden nur die Zeichen _innerhalb_ eines Code-Units vertauscht,
     nicht die Bytes an sich.]
-
-
-
-
-
-
-
-
-
-
+#v(-0.5em)
 
 = X Window System
 #image("img/x-window-system.svg", height: 2cm)
@@ -1652,10 +1645,9 @@ _Sektor_ #hinweis[(Kleinste logische Untereinheit eines Volumes.
     Enthält Header, Daten und Error-Correction-Codes.)],
 //   heisst so wegen Kreissektor von harddisk
 _Format_ #hinweis[(Layout der logischen Strukturen auf dem Datenträger, wird vom Dateisystem definiert.)]\
-
 / Inode Aufteilung ext2: $15 "Blocknummern" dot "Inodegrösse"$= $15 dot 4$ Byte = 60 Byte
 / Referenzen-Block: Synonym für indirekter Block!
-/ Anzahl direkte Blöcke: 12 (bis und mit Block #hex("B"))
+/ Anzahl direkte Blöcke: 12 (bis und mit Block #hex("B")), 1024 indirekt Blöcke möglich
 / Inode-Adressgrösse bei Verzeichnis (Inodegrösse): 4 Byte (immer)
 
 == Inodes
@@ -1686,33 +1678,42 @@ _Format_ #hinweis[(Layout der logischen Strukturen auf dem Datenträger, wird vo
 
 *Extent Tree Header Aufbau (12B)*\
 _2 Byte_ Magic Number #hex4("F30A"), _2B_ Anz. Einträge, die direkt auf den Header folgen, _2B_ Anz. Einträge, die maximal auf den Header folgen können, _2B_ Tiefe, _4B_ reserviert.
-*Tiefe*: _0_: Einträge sind Extents, _>=1_: Einträge sind Index Nodes. \
-// / Tiefe: 0 = Einträge sind Extents, >=1 = Einträge sind Index Nodes
+*Tiefe*: _0_: Einträge sind Extent-Blöcke, _>=1_: Einträge sind Index Nodes. \
 
 #v(-0.25em)
 
-=== Index-Blöcke (allgemeiner Inode)
+== Index-Blöcke (ext4) _Index-Node / Extent_
 //  = `i_block[0..14]` nein ich glaube i_block gibts bei ext2 / Blocklisten?
-- Index-Node oder Block mit Index-Nodes
-- Enthält Referenzen auf _Index Nodes_ oder _Extents_
-- (Tiefe im Inode = 2 gesetzt, Tiefe in Index-Node-Blöcken = 1)
-- Tiefe im Inode bis auf 5 möglich = Maximal $2^32$ = 4G Blöcke pro Datei.
-
-*Block mit Index-Nodes (enthält Index-Nodes, innerer Knoten)*
-Nötig ab mehr als $3 dot 340 = 1'360$ Extents bei 4KB Blockgrösse.
+- Jeder Index-Block ist Teil vom Baum, haben Grösse von einem Blöck #hinweis[ausser Inode]
+- Enthält Referenzen auf Index Nodes #hinweis[Block mit Index-Nodes] oder Extents #hinweis[Index-Node]
+// - _Grössen_ Inode fix je Volume #hinweis[256B], Index-Block (Extent/Index-Node) Grösse eines Blockes #hinweis[4KB]
 
 
-*Index Node = Index-Knoten (enthält Extents, Blattknoten)*\
-Der Block enthält am Anfang einen Header (wie im Inode, aber Tiefe = 0) danach die Extents (max. 340 bei 4 KB Blockgrösse)\
-// #v(-0.25em)
-*Aufteilung der Daten*: $(1 "Header" + 4 "Extents") dot "Extent-Grösse"$ = $5 dot 12$ Byte = 60 Byte
-*Verweise auf Extent 12B*: _4B_ Kleinste logische Blocknummer aller Kind-Extents, _6B_ Physische Blocknummer des Blocks, auf den der Index-Node verweist, _2B_ Unbenutzt
+===== Inode = Wurzel des Extent Baums
+- Tiefe im Extent Tree Header bis 5 möglich #hinweis[deshalb Maximal $2^32$ = 4G Blöcke pro Datei].
+- 256 Bytes mit Metadaten und `i_block`, der `i_block` ist 60 Byte gross
+- `i_block` ist _Index-Node_ oder _Extent_.
+    - Bei Extent: $(1 "Header" + 4 "Extents") dot "Extent-Grösse"$ = $5 dot 12$ Byte = 60 Byte
 
-#v(-0.25em)
-*Extent = Inhalt im Blattknoten*
-Beschreibt  _Intervall physisch konsekutiver Blöcke_.
-*12 Byte*: _4B_ erste logische Blocknummer, _6B_ erste physische Blocknummer, _2B signed_ Anzahl Blöcke
+===== Index-Node _Tiefe > 0_  innerer Knoten
+// enthält weitere Index-Einträge, ist ein Block mit Index-Nodes, innerer Knoten \
+// *Block mit Index-Nodes (enthält Index-Nodes, innerer Knoten)*
+- Nötig ab mehr als $4 dot 340 = 1'360$ Extents bei 4KB Blockgrösse.
+- Header mit Tiefe grösser als 0 + Index-Einträge // oder Extent-Einträge
+- Vereinfacht die Suche nach logischen Blocknummern im Baum
+- *Index-Einträge* #hinweis[verweist auf Kindknoten]:
+    kleinste logische Blocknummer der Kindknoten, Nummer des physischen Index-Blocks
+// bessere Formulierung als die in der Folie "Besteht aus Index-Eintrag (12 Bytes) und Index-Block", es ist nämlich ein Index-Block und hat Index-Einträge
 
+// - *Extent-Eintrag 12B*: _4B_ Kleinste logische Blocknummer aller Kind-Extents, _6B_ Physische Blocknummer des Blocks, auf den der Index-Node verweist, _2B_ Unbenutzt.
+
+===== Extent _Tiefe == 0_ Blattknoten
+- Der Block enthält am Anfang einen Header (wie im Inode, aber _Tiefe = 0_) danach die Extent-Einträge (max. 340 bei 4 KB Blockgrösse)
+// - *Extent-Eintrag 12B*:
+- *Extent-Einträge* beschreiben  _Intervall physisch konsekutiver Blöcke_, *12 Byte*: _4B_ erste logische Blocknummer, _6B_ erste physische Blocknummer, _2B signed_ Anzahl Blöcke
+
+
+#v(-0.2em)
 == Formeln und Zahlen
 #v(-0.5em)
 #table(
@@ -1779,7 +1780,8 @@ _1G_ = $2^30$ = #hex4("40000000"), _12 Byte_ = 100 Bit,
 / Gruppendeskriptoren: _ext2_: 32 B, _ext4_: 64 B
 / Blockgrösse: _ext2_: 1KB, 2KB oder 4KB (normal), _ext4_: bis 64 KB
 
-
+/*
+// ist eine Übungsaufgabe, nicht erlaubt!
 ==== Beispiel (kompakt): 4MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex("1000")
 _(In-)direkte Block-Adressierung_\
 4 MB = $2^22$B, #math.quad 4 KB = $2^12$B, #math.quad $2^(22-12) = 2^10 = #fxcolor("rot", hex("400"))$
@@ -1796,6 +1798,47 @@ $#hex("1400").#hex("0") arrow.bar #hex("100C"), quad
 _Extent Trees_\
 *Header:* $0 arrow.bar (1,0)$ #h(1em)
 *Extent:* $1 arrow.bar (0, #fxcolor("grün", hex("1000")), #fxcolor("rot", hex("400")))$
+// */
+
+/* Vorlesungsvariante, ist leider dreifach indirekt
+==== Beispiel (kompakt): 128MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex4("2000")
+_(In-)direkte Block-Adressierung (ext2)_\
+#hinweis[Erster Referenzen-Block (Metadaten) #hex4(800), danach fortlaufend, sonst wäre es nach letzter Adresse: #hex4(10000) ]\
+128 MB = $2^27$B, #math.quad 4 KB = $2^12$B, #math.quad $2^(27-12) = 2^15 = #fxcolor("rot", hex4("8000"))$
+Blöcke von #fxcolor("grün", hex4("2000")) bis #fxcolor("orange", hex4("9FFF")) #h(1em) #hinweis[ $#hex4("A000")-1$]\
+$0 arrow.bar #fxcolor("grün", hex4("2000")), quad
+1 arrow.bar #hex4("2002"), space ..., space
+#hex4("B") arrow.bar #hex4("200B"), quad
+#hex4("C") arrow.bar #hex4("800")$ #hinweis[(indirekter Block)]\
+$#hex4("800", suffix: false).#hex4("0") arrow.bar #hex4("200C"), quad
+#hex4("800", suffix: false).#hex4("1") arrow.bar #hex4("200D"), space
+..., space
+#hex4("800", suffix: false).#hex4("3F3") arrow.bar #fxcolor("orange", hex4("9FFF"))$
+.......
+// hier gibt es doppelt indirekte Blöcke.. ist mir zu mühsam, ich hoffe das kommt nicht so an der Prüfung :(
+*/
+
+
+// ist aus der Vorlesung aber auf 3MB gekürzt, im Stil von Ninas kompakter Zusammenfassung und nicht meine zu umständlichen Formeln unten
+// nur einmal indirekte Variante
+==== Beispiel (kompakt) 3MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex4("2000")
+_(In-)direkte Block-Adressierung (ext2)_\
+#hinweis[Erster Referenzen-Block (Metadaten) #hex4(800), danach fortlaufend, sonst wäre es nach letzter Adresse: #hex4("2300") ]\
+3 MB = $3 dot 2^20$B, #math.quad 4 KB = $2^12$B, #math.quad $3 dot 2^(20-12) = 3 dot 2^8 = #fxcolor("rot", hex4("300"))$
+Blöcke, von #fxcolor("grün", hex4("2000")) bis #fxcolor("orange", hex4("22FF")) \ // #h(1em) #hinweis[ $#hex4("2100")-1$]\
+$0 arrow.bar #fxcolor("grün", hex4("2000")), quad
+1 arrow.bar #hex4("2001"), space ..., space
+#hex4("B") arrow.bar #hex4("200B"), quad
+#hex4("C") arrow.bar #hex4("800")$ #hinweis[(indirekter Block)]\
+$#hex4("800", suffix: false).#hex4("0") arrow.bar #hex4("200C"), quad
+#hex4("800", suffix: false).#hex4("1") arrow.bar #hex4("200D"), space
+..., space
+#hex4("800", suffix: false).#hex4("22F3") arrow.bar #fxcolor("orange", hex4("22FF"))$ \
+_Extent Trees_\
+*Header:* $0 arrow.bar (1,0)$ #h(1em)
+*Extent:* $1 arrow.bar (0, #fxcolor("grün", hex("2000")), #fxcolor("rot", hex("300")))$
+
+// zu kompliziert:
 // ==== Beispiel ext2 128 MB #hinweis[Datengrösse = 128MB] grosse, konsekutiv gespeicherte Datei, \
 // bei ext2 mit 4 KB grossen Blöcken #hinweis[Blockgrösse = 4KB] ab Block #hex4(2000) #hinweis[Startindex = #hex4(2000)]
 
@@ -1815,7 +1858,7 @@ _Extent Trees_\
     / Anzahl indirekte Blöcke: _$R$_ (siehe Referenzen pro Ref.Block) = 1K = #hex4("400")
     / Anzahl doubly indirekte Blöcke: _$R^2$_  = $1K^2 = 2^(10*2) = 2^20 = 1M$ = #hex4("100000")
     / Anzahl triply indirekte Blöcke: _$R^3$_  = $2^30 = 1G$ = #hex4("40000000")
-    / 1. Referenzblock Index (physische Adresse): Startindex = #hex4(2000)
+    // / 1. Referenzblock Index (physische Adresse): Startindex = #hex4(2000)
     / _letzte Blocknummer_ (physisch): (Startindex + Anzahl Blöcke) - 1 = #hex4("A000") - 1 = #hex4("9FFF")
 
 ])
