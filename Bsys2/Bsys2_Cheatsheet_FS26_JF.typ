@@ -79,7 +79,7 @@ int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
 - OS schreibt Argumente als null-terminierte Strings in den Speicherbereich des Programms.
 - Zusätzlich legt das OS ein Array `argv` an, dessen Elemente jeweils auf das erste Zeichen eines Arguments zeigen.
 - Der Pointer auf dieses Array und die Anzahl der Elemente wird dem Progamm an einer vom OS definierten Stelle zur Verfügung gestellt, z.B. in Registern oder auf dem Stack.
-- ```c int main(int argc, char ** argv) { ... } // argv[0] = program path```
+- ```c int main(int argc, char * argv[]) { ... } // argv[0] = program path```
 // Die Art und Weise, wie das gehandhabt wird, ist die Calling Convention.
 
 == Umgebungsvariablen
@@ -134,7 +134,7 @@ jedes laufenden Prozesses. Werden initial festgelegt. Das OS legt die Variablen 
     // code kombiniert:
     ```c
     #define N 32
-    int main (int argc, char ** argv) {
+    int main (int argc, char * argv[]) {
         // Gibt Arbeitsverzeichnis aus
         char *wd = malloc(PATH_MAX);
         getcwd(wd, PATH_MAX); printf("Current WD is %s", wd);
@@ -609,7 +609,7 @@ void *thread_function (void *) {
   set_up_error();
   if (force_error () == -1) { print_error (); }
 }
-int main (int argc, char **argv) {
+int main (int argc, char * argv[]) {
   pthread_key_create (&error, NULL); // Key erzeugen
   pthread_t tid;
   pthread_create (&tid, NULL, &thread_function, NULL); // Threads erzeugen
