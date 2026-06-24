@@ -72,9 +72,9 @@ int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
 / POSIX: Portable Operating System Interface. Sammlung von IEEE Standards, welche die Kompatibilität zwischen OS gewährleistet. Windows ist nicht POSIX-konform.
 
 == Programmargumente
-`clang` *`-c abc.c -o abc.o`*. Shell teilt Programmargumente in Strings auf
-// #hinweis[(Trennung durch Leerzeichen, sonst Quotes)].
-- Werden explizit angegeben, nützlich für Informationen, die bei jedem Aufruf anders sind.
+`clang` *`-c abc.c`*. Shell teilt Programmargumente in Strings auf
+#hinweis[(Trennung durch Leerzeichen, sonst Quotes)]. Programmarg. explizit angeben, nützlich für Informationen, die bei jedem Aufruf anders sind.
+
 === Calling Convention
 - OS schreibt Argumente als null-terminierte Strings in den Speicherbereich des Programms.
 - Zusätzlich legt das OS ein Array `argv` an, dessen Elemente jeweils auf das erste Zeichen eines Arguments zeigen.
@@ -620,18 +620,16 @@ int main (int argc, char * argv[]) {
 = Scheduling
 #wrap-content(
     // image("img/bsys_27.png"),
-    image("img/bsys27-v2.png"),
+    image("img/scheduler.svg"),
     align: top + right,
-    columns: (50%, 50%),
+    columns: (60%, 40%),
 )[
     Auf einem Prozessor läuft zu einem Zeitpunkt immer _höchstens ein Thread_.
     Es gibt folgende Zustände:
     - _Running_ #hinweis[(der Thread, der gerade läuft)]
     - _Ready_ #hinweis[(Threads die laufen können, es aber gerade nicht tun)]
-    - _Waiting:_ #hinweis[(Threads, die auf ein Ereignis warten, können nicht direkt in den
-            Running State wechseln)]
-    _Übergänge_ von einem Status zum anderen werden _immer vom OS_ vorgenommen.
-    Dieser Teil vom OS heisst _Scheduler_.
+    - _Waiting:_ #hinweis[(Threads, die auf ein Ereignis warten, können nicht direkt in den Running State wechseln)]
+    _Übergänge_ von einem Status zum anderen werden _immer vom OS_ vorgenommen.  Dieser Teil vom OS heisst _Scheduler_.
 ]
 #wrap-content(
     // image("img/bsys_28.png"),
