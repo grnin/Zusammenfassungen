@@ -8,6 +8,8 @@ Credits: Nina Grässli und Jannis Tschan und Jasmin Fässler (je nach Modul)
 
 ### Zusammenfassungen erstellt/bearbeitet von mir (Jasmin)
 
+- [ ] ergänze 4. Semester Zusammenfassungen
+
 3. Semester
 
 - [WE1](WE1) neu erstellt
