@@ -1053,6 +1053,7 @@ _Shared Memory_ ist schneller zu realisieren, aber schwer wartbar.
 _Message-Passing_ erfordert mehr Engineering-Aufwand, schlussendlich aber in Mehr-Prozessor-Systemen bald performanter.
 
 // ==== Vergleich Message-Queues und Pipes
+#v(-0.5em)
 #table(
     columns: (auto, 1fr),
     table.header([Message-Queues], [Pipes]),
