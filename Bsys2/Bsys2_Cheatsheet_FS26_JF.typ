@@ -336,40 +336,40 @@ Segmente werden vom _Loader_ dynamisch _zur Laufzeit_ verwendet.\
 Jeder Eintrag #hinweis[(je 40 Byte)] beschreibt eine Sektion #hinweis[(Name, Section-Typ,
     Flags, Offset und Grösse, ...)].
 Werden vom _Linker_ verwendet: Verschmilzt Sektionen und erzeugt ausführbares Executable.\
-*String-Tabelle:*
-Bereich in der Datei, der nacheinander _null-terminierte Strings enthält_.
-Strings werden relativ zum Beginn der Tabelle referenziert.\
-*Symbole & Symboltabelle:*
-Die Symboltabelle enthält jeweils _einen Eintrag je Symbol_
-#hinweis[(16 Byte: 4B Name, 4B Wert, 4B Grösse, 4B Info)].
+/ String-Tabelle:
+    Bereich in der Datei, der nacheinander _null-terminierte Strings enthält_.
+    Strings werden relativ zum Beginn der Tabelle referenziert.\
+/ Symbole & Symboltabelle:
+    Die Symboltabelle enthält jeweils _einen Eintrag je Symbol_
+    #hinweis[(16 Byte: 4B Name, 4B Wert, 4B Grösse, 4B Info)].
 
 == Bibliotheken
-*Statische Bibliotheken:*
-Archive von Objekt-Dateien. Name: `lib<name>.a`, referenziert wird nur `<name>`.
-_Linker_ behandelt statische Bibliotheken wie _mehrere Objekt-Dateien_. Ursprünglich gab es
-_nur statische Bibliotheken_ #hinweis[(Einfach zu implementieren, aber Funktionalität fix, wie zip vorstellen)].\
-*Dynamische Bibliotheken:*
-Linken erst zur Ladezeit bzw. Laufzeit des Programms.
-Executable enthält nur Referenz auf Bibliothek. Höherer Aufwand.
-_Vorteile_: austauschbar, Entkoppelter Lebenszyklus, Plugin-Mechanismus, (Schnellere Ladezeiten durch Lazy Loading, Flexibler Funktionsumfang).
-_Dynamisches Linken_ explizit im Programm #hinweis[dlopen, dlsym] oder zum Programmstart.
+/ Statische Bibliotheken:
+    Archive von Objekt-Dateien. Name: `lib<name>.a`, referenziert wird nur `<name>`.
+    _Linker_ behandelt statische Bibliotheken wie _mehrere Objekt-Dateien_. Ursprünglich gab es
+    _nur statische Bibliotheken_ #hinweis[(Einfach zu implementieren, aber Funktionalität fix, wie zip vorstellen)].\
+/ Dynamische Bibliotheken:
+    Linken zur Ladezeit bzw. Laufzeit des Programms.
+    Executable enthält nur Referenz auf Bibliothek. Höherer Aufwand.
+    _Vorteile_: austauschbar, Entkoppelter Lebenszyklus, Plugin-Mechanismus, (Schnellere Ladezeiten durch Lazy Loading, Flexibler Funktionsumfang).
+    _Dynamisches Linken_ explizit im Programm #hinweis[dlopen, dlsym] oder zum Programmstart.
 == POSIX Shared Objects API
-*Konventionen:*
-Shared Objects können _automatisch_ bei Bedarf geladen werden.
-Linker->Linker-Namen, Loader->SO-Namen.
-- _Linker-Name:_ `lib + Bibliotheksname + .so` #hinweis[(z.B. libmylib.so)],
-- _SO-Name:_ `Linker-Name + . + Versionsnummer` #hinweis[(z.B. libmylib.so.2)],
-- _Real-Name:_ `SO-name + . + Unterversionsnummer` #hinweis[(z.B. libmylib.so.2.1)]
-#v(-0.5em)
-*Shared Objects:*
-Nahezu alle Executables benötigen _zwei Shared Objects_:
-_`libc.so`:_ Standard C library,
-_`ld-linux.so`:_ ELF Shared Object loader #hinweis[(Lädt Shared Objects und rekursiv alle
-    Dependencies)].\
-*Implementierung dynamischer Bibliotheken:*
-Müssen verschiebbar sein, mehrere müssen in den gleichen Prozess geladen werden.
-Die Aufgabe des Linkers wird in den Loader bzw. Dynamic Linker verschoben
-#hinweis[(Load Time Relocation)].
+/ Konventionen:
+    Shared Objects können _automatisch_ bei Bedarf geladen werden.
+    Linker->Linker-Namen, Loader->SO-Namen.
+    - _Linker-Name:_ `lib + Bibliotheksname + .so` #hinweis[(z.B. libmylib.so)],
+    - _SO-Name:_ `Linker-Name + . + Versionsnummer` #hinweis[(z.B. libmylib.so.2)],
+    - _Real-Name:_ `SO-name + . + Unterversionsnummer` #hinweis[(z.B. libmylib.so.2.1)]
+// #v(-0.5em)
+/ Shared Objects:
+    Nahezu alle Executables benötigen _zwei Shared Objects_:
+    _`libc.so`:_ Standard C library,
+    _`ld-linux.so`:_ ELF Shared Object loader #hinweis[(Lädt Shared Objects und rekursiv alle
+        Dependencies)].
+/ Implementierung dynamischer Bibliotheken:
+    Müssen verschiebbar sein, mehrere müssen in den gleichen Prozess geladen werden.
+    Die Aufgabe des Linkers wird in den Loader bzw. Dynamic Linker verschoben
+    #hinweis[(Load Time Relocation)].
 
 
 *```c void * dlopen (char * filename, int mode)```:*
@@ -616,7 +616,8 @@ int main (int argc, char **argv) {
 
 = Scheduling
 #wrap-content(
-    image("img/bsys_27.png"),
+    // image("img/bsys_27.png"),
+    image("img/bsys27-v2.png"),
     align: top + right,
     columns: (50%, 50%),
 )[
@@ -630,7 +631,8 @@ int main (int argc, char **argv) {
     Dieser Teil vom OS heisst _Scheduler_.
 ]
 #wrap-content(
-    image("img/bsys_28.png"),
+    // image("img/bsys_28.png"),
+    image("img/bsys_28.svg"),
     align: top + right,
     columns: (40%, 60%),
 )[
@@ -667,7 +669,7 @@ _Nebenläufig_ #hinweis[(Überbegriff für parallel oder quasiparallel)]
     *Bursts:*
     _Prozessor-Burst_ #hinweis[(Thread belegt Prozessor voll)],
     _I/O-Burst_ #hinweis[(Thread belegt Prozessor nicht)].
-    Jeder Thread kann als _Abfolge_ von _Prozessor-Bursts_ und\ _I/O-Bursts_ betrachtet werden.
+    Jeder Thread = _Abfolge_ von _Prozessor-Bursts_ und _I/O-Bursts_.
 ]
 
 == Scheduling-Strategien
@@ -716,6 +718,12 @@ Bei Wechsel zu `waiting` beginnt nächster Prozess früher, aber erhält keine z
 
 #image("img/bsys_33.png", width: 80%)
 
+*Multi-Level Scheduling mit Feedback:*
+Erschöpft ein Thread seine Zeitscheibe, wird seine Priorität um 1 verringert.
+Typischerweise werden die Zeitscheiben mit _niedrigerer Priorität grösser_ und Threads mit
+_kurzen Prozessor-Bursts bevorzugt_. Threads in tiefen Queues dürfen zum Ausgleich länger am
+Stück laufen.
+#image("img/bsys_34.png", width: 80%)
 
 *Prioritäten-basiert:*
 Jeder Thread erhält _eine Nummer_, seine _Priorität_. Threads mit höherer Priorität werden
@@ -728,12 +736,7 @@ Abhilfe z.B. mit _Aging:_ in bestimmten Abständen wird die Priorität um 1 erh�
 Threads werden in _Level_ aufgeteilt #hinweis[(Priorität, Prozesstyp, Hinter-/Vordergrund)],
 jedes Level hat eigene Ready-Queue und kann individuell gescheduled werden.
 #hinweis[(zB. Timeslice/Queue)]\
-*Multi-Level Scheduling mit Feedback:*
-Erschöpft ein Thread seine Zeitscheibe, wird seine Priorität um 1 verringert.
-Typischerweise werden die Zeitscheiben mit _niedrigerer Priorität grösser_ und Threads mit
-_kurzen Prozessor-Bursts bevorzugt_. Threads in tiefen Queues dürfen zum Ausgleich länger am
-Stück laufen.
-#image("img/bsys_34.png", width: 80%)
+
 
 == Prioritäten in POSIX
 *Nice-Wert:*
@@ -759,9 +762,9 @@ setzt den Nice-Wert.
 // - _`who`:_ ID des Prozesses, der Gruppe oder des Users)
 
 ==== Priorität bei Thread-Erzeugung setzen
-Funktionen ohne `attr` bevor Thread gestartet wird:\
-- ```c int pthread_getschedparam(pthread_t thread, int * policy, struct sched_param * param)```
-- ```c int pthread_setschedparam(pthread_t thread, int policy, const struct sched_param * param)```
+Funktionen ohne `attr` bevor Thread gestartet wird #hinweis[Funktionen geben POSIX int zurück]:\
+```c pthread_getschedparam(pthread_t thread, int* policy, struct sched_param* param)```\
+```c pthread_setschedparam(pthread_t thread, int policy, const struct sched_param* param)```
 ```c
 pthread_attr_t a; pthread_attr_init (&a); // initialize attributes
 struct sched_param p;
@@ -771,6 +774,9 @@ pthread_attr_setschedparam ( &a, &p ); // write modified parameters
 pthread_create ( &id, &a, thread_function, argument );
 pthread_attr_destroy ( &a ); // destroy attributes
 ```
+
+#pagebreak()
+
 = Mutexe und Semaphore
 Jeder Thread hat seinen _eigenen_ Instruction-Pointer und Stack-Pointer. Wenn Ergebnisse von
 der _Ausführungsreihenfolge_ einzelner Instruktionen abhängen, spricht man von einer _Race
@@ -988,8 +994,7 @@ _`close`_ #hinweis[(Schliessen der Verbindung)]\
 struct sockaddr_in ip_addr;
 ip_addr.sin_port = htons (443); // default HTTPS port
 inet_pton (AF_INET, "192.168.0.1", &ip_addr.sin_addr.s_addr);
-// IP address in memory: 0xC0 0xA8 0x00 0x01
-// Port in memory: 0x01 0xBB
+// IP address in memory: 0xC0 0xA8 0x00 0x01, Port in memory: 0x01 0xBB
 ```
 
 _`htons()`_ konvertiert 16 Bit von Host-Byte-order #hinweis[(LE)] zu Network-Byte-Order
@@ -1033,18 +1038,18 @@ Erweitern `read()` bzw. `write()` um Socket-Funktionalitäten
 durch den `flags`-Parameter. Puffern der Daten ist Aufgabe des Netzwerkstacks.\
 // flags einfach `0` setzen.
 
-/ `int close (int socket)`: Schliesst Socket für den aufrufenden Prozess. Hat ein anderer Prozess den Socket noch geöffnet, bleibt Verbindung bestehen. Gegenseite wird nicht benachrichtigt. Gegenseite erhält bei einem read kein EOF und verlässt die Lese-Schleife nicht.
+/ `int close (int socket)`: Schliesst Socket für den aufrufenden Prozess. Hat anderer Prozess den Socket geöffnet, bleibt Verbindung bestehen. Gegenseite wird nicht benachrichtigt. Gegenseite erhält bei einem read kein EOF und verlässt die Lese-Schleife nicht.
 / `int shutdown (int socket, int mode)`: Schliesst  Socket für alle Prozesse und baut die entsprechende Verbindung ab. `mode`: _`SHUT_RD`_ #hinweis[(Keine Lese-Zugriffe mehr)], _`SHUT_WR`_ #hinweis[(Keine Schreib-Zugriffe mehr)], _`SHUT_RDWR`_ #hinweis[(Keine Lese- oder Schreib-Zugriffe mehr)]
 
 
-= Message Passing und Shared Memory
+= Message Passing und Shared Memory und Pipes
 Prozesse sind voneinander isoliert, müssen jedoch trotzdem miteinander interagieren.
 
-=== Vergleich Message-Passing und Shared Memory
+// ==== Vergleich Message-Passing und Shared Memory
 _Shared Memory_ ist schneller zu realisieren, aber schwer wartbar.
 _Message-Passing_ erfordert mehr Engineering-Aufwand, schlussendlich aber in Mehr-Prozessor-Systemen bald performanter.
 
-=== Vergleich Message-Queues und Pipes
+// ==== Vergleich Message-Queues und Pipes
 #table(
     columns: (auto, 1fr),
     table.header([Message-Queues], [Pipes]),
@@ -1133,7 +1138,7 @@ zugreifen. Im Shared Memory müssen _relative Adressen_ verwendet werden.
 
 // #colbreak()
 
-=== POSIX API
+==== POSIX API
 Das OS benötigt eine "Datei" _$bold(S)$_, das Informationen über den gemeinsamen Speicher
 verwaltet und eine _Mapping Table_ je Prozess.
 
@@ -1157,6 +1162,8 @@ void * address = mmap( // maps shared memory into virt. address space of process
 
 = Unicode
 == ASCII - American Standard Code for Information Interchange
+*Hex:* ```c 1010=A, 1011=B, 1100=C, 1101=D, 1110=E, 1111=F```
+
 Hat _128 definierte Zeichen_ #hinweis[(erste Hexzahl = Zeile #sym.arrow.b , zweite Hexzahl = Spalte #sym.arrow.r,
     d.h. #hex("41") = `A`)].
 #image("img/bsys_40.png")
@@ -1174,11 +1181,11 @@ Einheit, um Zeichen in einem Encoding darzustellen #hinweis[(bietet den Speicher
     _$bold(U_i) =$_ $i$-tes Code-Unit des kodierten CPs,
     _$bold(B_i) =$_ $i$-tes Byte des kodierten CPs]
 
-*Hex:* ```c 1010=A, 1011=B, 1100=C, 1101=D, 1110=E, 1111=F```
 == UTF-32
 Jede CU ist die ganze  _32 Bit_ gross, jeder CP ist eine CU.
 Wird häufig intern in Programmen verwendet. Obere 11 Bits oft "zweckentfremdet". Endianness gibt an, mit welchem
-Ende die Folge anfängt: *Big-Endian*: B3 B2 B1 B0  #hinweis[CP aus Unicode-Tabelle], *Little-Endian*: B0 B1 B2 B3
+Ende die Folge anfängt: \
+*Big-Endian*: B3 B2 B1 B0  #hinweis[CP aus Unicode-Tabelle], \ *Little-Endian*: B0 B1 B2 B3
 //  werden $P_0$ bis $P_7$ in $B_3$ kopiert usw.
 
 // #image("img/bsys_43.png")
@@ -1209,6 +1216,35 @@ Standard für Webpages. Echte Erweiterung von ASCII. Jedes B (Byte) = U (Code-Un
     ],
 )
 
+==== Vorgehen UTF-8
+_ä_: $P = hex("E4") =$ \
+1. in Binär umwandeln #bits("1110 0100", suffix: false)\
+// #v(.2em)
+2. von rechter Seite her die Bits aufteilen und Separator-Bits korrekt einfügen: \
+    #bits("11|10 0100", suffix: false) #sym.arrow.r
+    #fxcolor("grün", bits("110", suffix: false)) #bits("0 0011", suffix: false) #fxcolor("grün", bits(
+        "10",
+        suffix: false,
+    )) #bits("10 0100", suffix: false)
+3. am Schluss zurück in Hex umwandeln: #hex("C3 A4", suffix: false)
+
+// fxcolor("gelb", bits("10 0110"))$\
+// $=> P_10 ... P_6 = fxcolor("grün", bits("00011")) = fxcolor("rot", hex("03")), quad
+// P_5 ... P_0 = fxcolor("gelb", bits("100100")) = fxcolor("orange", hex("24"))$\
+// $=> U_1 = hex("C0") (= bits("11000000")) + fxcolor("rot", hex("03")) = hex("C3"), quad
+// U_0 = hex("80") (= bits("10000000")) + fxcolor("orange", hex("24")) = hex("A4")$\
+// $=> ä = underline(hex("C3 A4"))$
+
+// - _ặ_: $P = hex("1EB7") = fxcolor("grün", #bits("0001", suffix: false)) thin
+//     fxcolor("gelb", #bits("111010", suffix: false)) thin fxcolor("hellblau", bits("110111"))$\
+//     $=> P_15 ... P_12 = fxcolor("grün", hex("01")), quad
+//     P_11 ... P_6 = fxcolor("gelb", hex("3A")), quad
+//     P_5 ... P_0 = fxcolor("hellblau", hex("37"))$\
+//     $=> U_2 = hex("E0") (= #bits("11100000")) + fxcolor("grün", hex("01")) = hex("E1"), quad
+//     U_1 = hex("80") + fxcolor("gelb", hex("3A")) = hex("BA"), space
+//     U_0 = hex("80") + fxcolor("hellblau", hex("37")) = hex("B7")$\
+//     $=> ặ = underline(hex("E1 BA B7"))$
+
 == UTF-16
 Jede CU umfasst 16 Bit, ein CP benötigt 1 oder 2 CUs.
 //  Encoding muss Endianness berücksichtigen.
@@ -1216,26 +1252,135 @@ Die 2 CUs werden _Surrogate Pair_ genannt, $U_0$: high surrogate,
 $U_1$: low surrogate. Bei _2 Bytes_ #hinweis[(1 CU)] wird direkt gemappt und vorne mit
 Nullen aufgefüllt, #hinweis[CP in [0 - FFFF] ohne [D800 - DFFF]].
 Bei _4 Bytes_ sind #hex("D800") bis #hex("DFFF") #hinweis[(Bits 17-21)] wegen dem Separator _ungültig_ und müssen "umgerechnet" werden.
-\
+// \
 // *Endianness* (umgedreht innerhalb von CU):
-*Big-Endian*: U0 = B1 B0, *Little Endian*: U0 = B0 B1 \ // TODO: entferne diese Zeile mit 2B wenn zuwenig Platz
-*Big-Endian*: U1 U0 = B3 B2 B1 B0, *Little Endian*: U1 U0 = B2 B3 B0 B1
-
-
+#grid(
+    columns: (1fr, 1fr),
+    [
+        *BE*: U0 = B1 B0,\ *LE*: U0 = B0 B1  // TODO: entferne diese Zeile mit 2B wenn zuwenig Platz
+    ],
+    [
+        *BE*: U1 U0 = B3 B2 B1 B0,\ *LE*: U1 U0 = B2 B3 B0 B1
+    ],
+)
 // #image("img/bsys_45.png")
 #image("img/bsys2-utf16.png")
 #v(-4pt)
-==== Vorgehen
-kleiner als FFFF: ist BE, Bytes anschreiben (1 Byte = 2 Hex. Zeichen)\
-grösser als FFFF:
-1. minus #hex("1 0000") rechnen
-+ in Binär umwandeln
-+ untere (rechts) 10 Bits nehmen und rechts schreiben
-+ Surrogat $110111$ links von den 10 Bits
-+ restliche (linker Teil) Bits links vom Surrogat
-+ ganz links die $110110$ schreiben
 
-==== Beispiel
+#let example-block(body) = text(
+    fill: colors.dunkelblau,
+    [ #h(1em) #body
+    ],
+)
+
+
+==== Vorgehen UTF-16
+*kleiner als FFFF*: ist BE, Bytes anschreiben (1 Byte = 2 Hex. Zeichen)\
+*grösser als FFFF*: #example-block([Beispiel: Encoding von U+10'437 = #hex("10'437") = (\u{10437}) ])
+// TODO mit grid lösen?
+// #grid(
+//     columns: (auto, auto),
+//      gutter: 0em,
+//     [
+
+//     ],
+//     [
+
+//     ],
+// )
+#v(-.5em)
+1. minus #hex("1 0000") rechnen (die 0 behalten!)
+    #example-block([#hex("00'437")])
++ in Binär umwandeln
+    #example-block([
+        // #bits("0000 0000 01|00 0011 0111") ich würde gerne so | Trennzeichen schreiben, aber dann sind die 4 bits nicht mehr schön nebeneinander.. vielleicht von Hand einzeichnen wenn ausgedruckt
+        #bits("0000 0000 0100 0011 0111")
+    ])
++ untere (rechts) 10 Bits nehmen und rechts schreiben
+    #example-block([
+        // #bits("0000 0000 01") #fxcolor("rot", bits("00 0011 0111", suffix: false))
+        // #bits("0000 0000 01") #fxcolor("rot", bits("00 0011 0111", suffix: false))
+        #sym.arrow.r #fxcolor("rot", bits(
+            "00 0011 0111",
+            suffix: false,
+        ))
+    ])
++ Surrogat #fxcolor("grün", [$110111$])  links von den 10 Bits
+    #example-block([
+        // #bits("0000 0000 01|..", suffix: false) #sym.arrow.r #fxcolor("grün", [
+        //     #bits(
+        //         "110111",
+        //         suffix: false,
+        //     )
+        //     #fxcolor("rot", bits("00 0011 0111", suffix: false))
+        // ])
+        //
+        #sym.arrow.r
+        #fxcolor("grün", bits(
+            "110111",
+            suffix: false,
+        ))
+        #bits(
+            "00 0011 0111",
+            suffix: false,
+        )
+    ])
++ restliche (linker Teil) Bits links vom Surrogat schreiben
+    // \
+    // #fxcolor("grün", [
+    //     #bits("0000 0000 01", suffix: false)
+    //         #fxcolor("rot", bits(
+    //             "110111",
+    //             suffix: false,
+    //         ))
+    //         #bits("00 0011 0111", suffix: false)
+    //     ])
+    #example-block([
+        (diese: #fxcolor("rot", [ #bits("0000 0000 01", suffix: false)]))
+        \
+        #sym.arrow.r
+        #fxcolor("rot", [ #bits("0000 0000 01", suffix: false) ])
+        #bits("1101  1100  0011 0111", suffix: false)
+    ])
++ ganz links die #fxcolor("grün", [$110110$]) schreiben
+    #example-block([
+        #sym.arrow.r
+        #fxcolor("grün", bits(
+            "110110",
+            suffix: false,
+        ))
+        // #fxcolor("rot", bits("0000 0000 01", suffix: false))
+        // #fxcolor("grün", bits(
+        //     "110111",
+        //     suffix: false,
+        // ))
+        // #fxcolor("rot", bits("00 0011 0111", suffix: false))
+        #bits("00 0000 0001 1101 1100 0011 0111", suffix: false)
+    ])
++ zurück zu Hex umwandeln\
+    #example-block([
+        #fxcolor("grün", bits("1101-10", suffix: false))
+        #fxcolor("rot", bits("00-0000-0001-", suffix: false))
+        #fxcolor("grün", bits("1101-11", suffix: false))
+        #fxcolor("rot", bits("00-0011-0111", suffix: false))
+        #sym.arrow.r
+        #hex("D8 01 DC 37")
+    ])
++ Endianness
+    $"BE" = underline(
+        fxcolor("orange", #hex("D801", suffix: false)) thin
+        fxcolor("hellblau", hex("DC37"))
+    ), quad
+    "LE" = underline(
+        fxcolor("orange", #hex("01D8", suffix: false)) thin
+        fxcolor("hellblau", hex("37DC"))
+    )$
+
+/*
+// original beispiel
+==== Beispiel UTF-16
+// Hinweis: korrekt ist D801DC37 nicht D801DD37 (getestet bei https://www.branah.com/unicode-converter mit 0x10437 UTF-32) habe ich korrigiert!
+
 Encoding von U+10'437 (\u{10437})
 #hinweis[#fxcolor("grün", bits("00 0100 0001", suffix: false))
     #fxcolor("gelb", bits("00 0011 0111"))]:
@@ -1247,43 +1392,18 @@ Encoding von U+10'437 (\u{10437})
     $fxcolor("grün", #hex("0001", suffix: false)) fxcolor("gelb", hex("0137"))$\
 + Oberer Wert mit #hex("D800") und unterer Wert mit #hex("DC00") addieren, um Code-Units zu erhalten\
     $U_1 = fxcolor("grün", hex("0001")) + hex("D800") = fxcolor("orange", hex("D801")), quad
-    U_2 = fxcolor("gelb", hex("0137")) + hex("DC00") = fxcolor("hellblau", hex("DD37"))$\
+    U_2 = fxcolor("gelb", hex("0137")) + hex("DC00") = fxcolor("hellblau", hex("DC37"))$\
 + Zu BE/LE zusammensetzen\
-    $"BE" = underline(
-        fxcolor("orange", #hex("D801", suffix: false)) thin
-        fxcolor("hellblau", hex("DD37"))
-    ), quad
-    "LE" = underline(
-        fxcolor("orange", #hex("01D8", suffix: false)) thin
-        fxcolor("hellblau", hex("37DD"))
-    )$
-
-==== Beispiele
-- _ä_: $P = hex("E4") = #hex("E4") = #hinweis[in Binär umwandeln] #bits("1110 0100", suffix: false) =$\
-    $#hinweis[von rechter Seite her die Bits aufteilen:]
-    // fxcolor("hellblau", #bits("11", suffix: false)) thin
-    #bits("11|10 0100", suffix: false) ->
-    fxcolor("grün", #bits("110", suffix: false)) thin
-    #bits("0 0011", suffix: false)
-    fxcolor("grün", #bits("10", suffix: false)) thin
-    #bits("10 0100", suffix: false)$
-    \ #hinweis[am Schluss zurück in Hex umwandeln] #hex("C3 A4", suffix: false)
-
-// fxcolor("gelb", bits("10 0110"))$\
-// $=> P_10 ... P_6 = fxcolor("grün", bits("00011")) = fxcolor("rot", hex("03")), quad
-// P_5 ... P_0 = fxcolor("gelb", bits("100100")) = fxcolor("orange", hex("24"))$\
-// $=> U_1 = hex("C0") (= bits("11000000")) + fxcolor("rot", hex("03")) = hex("C3"), quad
-// U_0 = hex("80") (= bits("10000000")) + fxcolor("orange", hex("24")) = hex("A4")$\
-// $=> ä = underline(hex("C3 A4"))$
-- _ặ_: $P = hex("1EB7") = fxcolor("grün", #bits("0001", suffix: false)) thin
-    fxcolor("gelb", #bits("111010", suffix: false)) thin fxcolor("hellblau", bits("110111"))$\
-    $=> P_15 ... P_12 = fxcolor("grün", hex("01")), quad
-    P_11 ... P_6 = fxcolor("gelb", hex("3A")), quad
-    P_5 ... P_0 = fxcolor("hellblau", hex("37"))$\
-    $=> U_2 = hex("E0") (= #bits("11100000")) + fxcolor("grün", hex("01")) = hex("E1"), quad
-    U_1 = hex("80") + fxcolor("gelb", hex("3A")) = hex("BA"), space
-    U_0 = hex("80") + fxcolor("hellblau", hex("37")) = hex("B7")$\
-    $=> ặ = underline(hex("E1 BA B7"))$
+// ==== Beispiel UTF-16 BE/LE
+$"BE" = underline(
+    fxcolor("orange", #hex("D801", suffix: false)) thin
+    fxcolor("hellblau", hex("DC37"))
+), quad
+"LE" = underline(
+    fxcolor("orange", #hex("01D8", suffix: false)) thin
+    fxcolor("hellblau", hex("37DC"))
+)$
+// */
 
 == Encoding-Beispiele
 #{
@@ -1328,81 +1448,7 @@ Encoding von U+10'437 (\u{10437})
 }
 #hinweis[Bei LE / BE werden nur die Zeichen _innerhalb_ eines Code-Units vertauscht,
     nicht die Bytes an sich.]
-
-= Ext2-Dateisystem
-_Partition_ #hinweis[(Ein Teil eines Datenträgers, wird selbst wie ein Datenträger behandelt.)],
-_Volume_ #hinweis[(Ein Datenträger oder eine Partition davon.)],
-_Sektor_ #hinweis[(Kleinste logische Untereinheit eines Volumes.
-    Daten werden als Sektoren transferiert. Grösse ist von HW definiert.
-    Enthält Header, Daten und Error-Correction-Codes.)],
-//   heisst so wegen Kreissektor von harddisk
-_Format_ #hinweis[(Layout der logischen Strukturen auf dem Datenträger, wird vom Dateisystem definiert.)]\
-
-== Block
-Ein Block besteht aus _mehreren aufeinanderfolgenden Sektoren_ #hinweis[(1 KB, 2 KB oder
-    4 KB (normal))]. Das gesamte Volume ist in _Blöcke aufgeteilt_ und Speicher wird _nur in
-Form von Blöcken_ alloziert. Ein Block enthält nur Daten einer _einzigen Datei_. Es gibt
-_Logische Blocknummern_ #hinweis[(Blocknummer vom Anfang der Datei aus gesehen, wenn Datei
-    eine ununterbrochene Abfolge von Blöcken wäre)] und
-_Physische Blocknummern_ #hinweis[(Tatsächliche Blocknummer auf dem Volume)].
-
-== Inodes
-#wrap-content(
-    image("img/bsys_42.png"),
-    align: top + right,
-    columns: (30%, 70%),
-)[
-    Enthält _alle Metadaten_ über die Datei, _ausser Namen oder Pfad_ #hinweis[(Grösse,
-        Anzahl der verwendeten Blöcke, Erzeugungs-, Zugriffs-, Modifikations- und
-        Löschzeit, Owner-ID, Group-ID, Flags, Permission Bits)].\
-    Hat eine _fixe Grösse_ je Volume: Zweierpotenz, mind. 128 Byte, max. 1 Block.
-    Inode _verweist auf die Blöcke_, die _Daten für eine Datei_ enthalten.
-    Enthält ein Array _`i_block`_ mit 15 Einträgen zu je 32 Bit.
-]
-*Lokalisierung:*
-Alle Inodes aller Blockgruppen gelten als _eine grosse Tabelle_. Startet mit 1.
-Finde Blockgruppe: (Inode-1)/Anz. Inodes pro Gruppe, Finde Index des Inodes in Blockgruppe: (Inode-1) % Anz. Inodes pro Gruppe \
-*Erzeugung:*
-Neue Verzeichnisse werden in der Blockgruppe angelegt, die von allen Blockgruppen mit
-_überdurchschnittlich vielen freien Inodes_ die _meisten Blöcke frei_ hat, Dateien in der
-Blockgruppe des Verzeichnis oder nahen Gruppen. Bestimmung anhand _Inode-Usage-Bitmaps_.\
-*File-Holes:*
-Bereiche in der Datei, in der _nur Nullen_ stehen. Ein solcher Block wird _nicht alloziert_.
-
-== Blockgruppe
-Eine Blockgruppe besteht aus _mehreren aufeinanderfolgenden Blöcken_ bis zu 8 mal der Anzahl
-Bytes in einem Block.\
-*Layout:*
-_Block 0_ #hinweis[(Kopie des Superblocks)],
-_Block $bold(1)$ bis $bold(n)$_ #hinweis[(Kopie der Gruppendeskriptorentabelle)],
-_Block $bold(n+1)$_ #hinweis[(Block-Usage-Bitmap mit einem Bit je Block der Gruppe)],
-_Block $bold(n+2)$_ #hinweis[(Inode-Usage-Bitmap mit einem Bit je Inode der Gruppe)],
-_Block $bold(n+3)$ bis $bold(n+m+2)$_ #hinweis[(Tabelle aller Inodes in dieser Gruppe)],
-_Block $bold(n+m+3)$ bis Ende der Gruppe_ #hinweis[(Blöcke der eigentlichen Daten)]\
-*Superblock:*
-Enthält _alle Metadaten_ über das Volume #hinweis[(Anzahlen, Zeitpunkte, Statusbits,
-    Erster Inode, ...)] \ immer an Byte 1024, wegen möglicher Bootdaten vorher.\
-*Sparse Superblock:*
-Kopien des Superblocks werden nur in Blockgruppe 0, 1 und allen reinen Potenzen von 3, 5
-oder 7 gehalten #hinweis[(Sehr hoher Wiederherstellungsgrad, aber deutlich weniger
-    Platzverbrauch)].\
-*Gruppendeskriptor:*
-32 Byte _Beschreibung einer Blockgruppe_. #hinweis[(Blocknummer des Block-Usage-Bitmaps,
-    Blocknummer des Inode-Usage-Bitmaps, Nummer des ersten Blocks der Inode-Tabelle,
-    Anzahl freier Blöcke und Inodes in der Gruppe, Anzahl der Verzeichnisse in der Gruppe)]\
-*Gruppendeskriptortabelle:*
-Tabelle mit Gruppendeskriptor pro Blockgruppe im Volume. Folgt direkt auf Superblock(-kopie).
-$32 dot n$ Bytes gross. Anzahl Sektoren $= (32 dot n)\/"Sektorgrösse"$\
-*Verzeichnisse:*
-Enthält _Dateieinträge_ mit variabler Länge von 8 - 263 Byte
-#hinweis[(4B Inode, 2B Eintraglänge, 1B Dateinamenlänge, 1B Dateityp, 0 - 255B Dateiname
-    aligned auf 4B).] Defaulteinträge: "." und ".."\
-*Links:*
-Es gibt _Hard-Links_ #hinweis[(gleicher Inode, verschiedene Pfade:
-    Wird von verschiedenen Dateieinträgen referenziert)] und
-_Symbolische Links_ #hinweis[(Wie eine Datei, Datei enthält Pfad anderer Datei)].
-
-
+= Dateisysteme
 == Vergleich FAT, NTFS, Ext2
 #{
     set text(size: 0.8em)
@@ -1428,10 +1474,169 @@ _Symbolische Links_ #hinweis[(Wie eine Datei, Datei enthält Pfad anderer Datei)
     )
 }
 #v(-2pt)
+
+
+== Blockgruppe
+Eine Blockgruppe besteht aus _mehreren aufeinanderfolgenden Blöcken_ bis zu 8 mal der Anzahl
+Bytes in einem Block.\
+*Layout:*
+_Block 0_ #hinweis[(Kopie des Superblocks)],
+_Block $bold(1)$ bis $bold(n)$_ #hinweis[(Kopie der Gruppendeskriptorentabelle)],
+_Block $bold(n+1)$_ #hinweis[(Block-Usage-Bitmap mit einem Bit je Block der Gruppe)],
+_Block $bold(n+2)$_ #hinweis[(Inode-Usage-Bitmap mit einem Bit je Inode der Gruppe)],
+_Block $bold(n+3)$ bis $bold(n+m+2)$_ #hinweis[(Tabelle aller Inodes in dieser Gruppe)],
+_Block $bold(n+m+3)$ bis Ende der Gruppe_ #hinweis[(Blöcke der eigentlichen Daten)]\
+*Superblock:*
+Enthält _alle Metadaten_ über das Volume #hinweis[(Anzahlen, Zeitpunkte, Statusbits,
+    Erster Inode, ...)] \ immer an Byte 1024, wegen möglicher Bootdaten vorher.\
+*Sparse Superblock:*
+Kopien des Superblocks werden nur in Blockgruppe 0, 1 und allen reinen Potenzen von 3, 5
+oder 7 gehalten #hinweis[(Sehr hoher Wiederherstellungsgrad, aber deutlich weniger
+    Platzverbrauch)].\
+*Gruppendeskriptor:*
+// 32 Byte #hinweis[64B in ext4]
+_Beschreibung einer Blockgruppe_. #hinweis[(Blocknummer des Block-Usage-Bitmaps,
+    Blocknummer des Inode-Usage-Bitmaps, Nummer des ersten Blocks der Inode-Tabelle,
+    Anzahl freier Blöcke und Inodes in der Gruppe, Anzahl der Verzeichnisse in der Gruppe)]\
+*Gruppendeskriptortabelle:*
+Tabelle mit Gruppendeskriptor pro Blockgruppe im Volume. Folgt direkt auf Superblock(-kopie).
+$32 dot n$ Bytes gross. Anzahl Sektoren $= (32 dot n)\/"Sektorgrösse"$\
+*Verzeichnisse:*
+Enthält _Dateieinträge_ mit variabler Länge von 8 - 263 Byte
+#hinweis[(4B Inode, 2B Eintraglänge, 1B Dateinamenlänge, 1B Dateityp, 0 - 255B Dateiname
+    aligned auf 4B).] Defaulteinträge: "." und ".."\
+*Links:*
+Es gibt _Hard-Links_ #hinweis[(gleicher Inode, verschiedene Pfade:
+    Wird von verschiedenen Dateieinträgen referenziert)] und
+_Symbolische Links_ #hinweis[(Wie eine Datei, Datei enthält Pfad anderer Datei)].
+
+== Block
+Ein Block besteht aus _mehreren aufeinanderfolgenden Sektoren_.
+// #hinweis[(1 KB, 2 KB oder 4 KB (normal) in ext2, bis 64 KB in Ext4]
+Das gesamte Volume ist in _Blöcke aufgeteilt_ und Speicher wird _nur in
+Form von Blöcken_ alloziert. Ein Block enthält nur Daten einer _einzigen Datei_. Es gibt
+_Logische Blocknummern_ #hinweis[(Blocknummer vom Anfang der Datei aus gesehen, wenn Datei
+    eine ununterbrochene Abfolge von Blöcken wäre)] und
+_Physische Blocknummern_ #hinweis[(Tatsächliche Blocknummer auf dem Volume)].
+/ File-Holes:
+    Bereiche in der Datei, in der _nur Nullen_ stehen. Ein solcher Block wird _nicht alloziert_.
+#v(-0.5em)
+= Ext2-Dateisystem
+_Partition_ #hinweis[(Ein Teil eines Datenträgers, wird selbst wie ein Datenträger behandelt.)],
+_Volume_ #hinweis[(Ein Datenträger oder eine Partition davon.)],
+_Sektor_ #hinweis[(Kleinste logische Untereinheit eines Volumes.
+    Daten werden als Sektoren transferiert. Grösse ist von HW definiert.
+    Enthält Header, Daten und Error-Correction-Codes.)],
+//   heisst so wegen Kreissektor von harddisk
+_Format_ #hinweis[(Layout der logischen Strukturen auf dem Datenträger, wird vom Dateisystem definiert.)]\
+
+== Inodes
+#wrap-content(
+    // image("img/bsys_42.png"),
+    [
+        #v(-1.2em)
+        #image("img/inodes.svg", height: 1.5cm)
+    ],
+    align: top + right,
+    columns: (60%, 40%),
+)[
+    Enthält _alle Metadaten_ über die Datei, _ausser Namen oder Pfad_ (Grösse, Anzahl der verwendeten Blöcke, Erzeugungs-, Zugriffs-, Modifikations- und Löschzeit, Owner-ID, Group-ID, Flags, Permission Bits). \
+    // Inodes: _fixe Grösse_ je Volume: Zweierpotenz, mind. 128 B #hinweis[in ext4 256 Byte], max. 1 Block.
+    Inode _verweist auf die Blöcke_, die _Daten für eine Datei_ enthalten.
+    Enthält ein Array _`i_block`_ mit 15 Einträgen zu je 32 Bit.
+]
+#v(-1.8em)
+/ Lokalisierung:
+    Alle Inodes aller Blockgruppen gelten als _eine grosse Tabelle_. Startet mit 1.
+/ Erzeugung:
+    Neue Verzeichnisse werden in der Blockgruppe angelegt, die von allen Blockgruppen mit
+    _überdurchschnittlich vielen freien Inodes_ die _meisten Blöcke frei_ hat, Dateien in der
+    Blockgruppe des Verzeichnis oder nahen Gruppen. Bestimmung anhand _Inode-Usage-Bitmaps_.
+
+#v(-0.5em)
 = Ext4
+// == ext4
 // _Vergrössert_ die wichtigen Datenstrukturen, besser für grosse Dateien, erlaubt höhere
 // maximale Dateigrösse. Blöcke werden mit _Extent Trees_ verwaltet, _Journaling_ wird eingeführt.
+Journaling (für Konsistenz im Dateisystem bei z.B. Stromausfällen) und Blöcke mit Extent Tree. ext2 Blocklisten auch möglich (abwärtskompatibel).
+*Extent Tree Header Aufbau (ist ein Inode)*
+_2 Byte_ Magic Number #hex4("F30A"), _2B_ Anz. Einträge, die direkt auf den Header folgen, _2B_ Anz. Einträge, die maximal auf den Header folgen können, _2B_ Tiefe, _4B_ reserviert\
+*Tiefe*: _0_: Einträge sind Extents, _>=1_: Einträge sind Index Nodes (ab mehr als $3 dot 340 = 1'360$ Extents bei 4KB Blockgrösse). _Baum_: Blätter=Extents #hinweis[zeigen auf Blöcke], Index=zeigen auf Header \
+#v(-0.25em)
 
+*Index-Block = `i_block[0..14]`*
+- Enthält Referenzen auf Kind-Knoten: je nach Tiefe _Index-Einträge_ (Index Nodes) oder _Extents_
+// - Block mit Index Nodes: Index Nodes statt Extents im Block
+- (Tiefe im Inode = 2 gesetzt, Tiefe in Index-Node-Blöcken = 1)
+- Benötigt man noch mehr Extents, Tiefe im Inode bis auf 5 möglich = Maximal $2^32$ = 4G Blöcke pro Datei.
+#v(-0.25em)
+
+*Index Node (Index-Block, der Extents enthält)*\
+Der Block enthält am Anfang einen Header (wie im Inode, aber Tiefe = 0) danach die Extents (max. 340 bei 4 KB Blockgrösse)\
+_4B_ Kleinste logische Blocknummer aller Kind-Extents, _6B_ Physische Blocknummer des Blocks, auf den der Index-Node verweist, _2B_ Unbenutzt
+#v(-0.25em)
+
+*Extent*\
+Beschreibt Blockintervall(Blockliste?): _4B_ erste logische Blocknummer, _6B_ erste physische Blocknummer, _2B signed_ Anzahl Blöcke
+
+== Formeln und Zahlen
+#v(-1em)
+==== Datenstrukturen Grössen ext2 und ext4
+/ Inodes (fixe Grösse je Volume): \
+    _ext2_: Zweiterpotenz mind. 128 B, _ext4_: mind. 256 B und max. 1 Block
+/ Gruppendeskriptoren: _ext2_: 32 B, _ext4_: 64 B
+/ Blockgrösse: _ext2_: 1KB, 2KB oder 4KB (normal), _ext4_: bis 64 KB
+==== Dezimal zu Hexadezimal
+#grid(
+    columns: (auto, auto),
+    [
+        1K = #hex4("400"), 4K = #hex4("1000"), 256 = #hex4("100") \
+        1M = $2^20$ = #hex4("100000"), 128M = $2^20 dot 128$ = #hex4("800 0000")\
+
+    ],
+    [
+        1G = $2^30$ = #hex4("40000000") #h(1em) 12 Byte = 100 Bit \
+        24 Bit = 3 Byte, 32 Bit = 4 Byte, 40 Bit = 5 Byte
+    ],
+)
+
+
+==== Grössen berechnen
+Beispiel 128 MB #hinweis[Datengrösse] grosse, konsekutiv gespeicherte Datei, bei ext2 mit 4 KB grossen Blöcken #hinweis[Blockgrösse = 4KB] ab Block #hex4(2000) #hinweis[Startindex = #hex4(2000)]
+#terms-spacing(1em, [
+    / Anzahl Bytes in Hex (Datengrösse): 128 MB = #hex4("800 0000")
+    / Anzahl Bytes je Block in hex (Blockgrösse): 4KB = #hex4(1000)
+    / _Anzahl Blöcke_: Datengrösse/Blockgrösse = _#hex4("8000")_
+    / Inode-Adressgrösse bei Verzeichnis (Inodegrösse): 4 Byte (immer)
+    //$log_2("Blockgrösse")$ bei 4KB = 2^12 Byte = 12 Bit
+])
+
+==== ext2 Zahlen
+#terms-spacing(1em, [
+    / Referenzen-Block: Synonym für indirekter Block!
+    / Anz. Referenzen pro Referenzen-Block _R_: Blockgrösse / Inodegrösse = 4KB / 4B = 1K = _#hex4("400")_
+    / 1. Referenzblock Index (physische Adresse): Startindex = #hex4(2000)
+    / _letzte Blocknummer_ (physisch): (Startindex + Anzahl Blöcke) - 1 = #hex4("A000") - 1 = #hex4("9FFF")
+    / Anzahl direkte Blöcke: 12 (bis und mit Block #hex("B"))
+    / Anzahl indirekte Blöcke: _R_ (siehe oben Referenzen pro Ref.Block)  = 1K = #hex4("400")
+    / Anzahl doubly indirekte Blöcke: _R_^2  = $1K^2 = 2^(10*2) = 2^20 = 1M$ = #hex4("100000")
+    / Anzahl triply indirekte Blöcke: _R_^3  = $2^30 = 1G$ = #hex4("40000000")
+    / Inode Aufteilung: $15 "Blocknummern" dot "Inodegrösse"$= $15 dot 4$ Byte = 60 Byte
+])
+==== ext4 Zahlen
+#terms-spacing(1em, [
+    / Extent: logische Blocknummer (4B), physische Blocknummer (6B), Anzahl Blöcke = im Beispiel: 0, #hex4(2000), #hex4(8000), *Extent-Grösse*: 12 Byte
+    / Inode Aufteilung: $(1 "Header" + 4 "Extents") dot "Extent-Grösse"$ = $5 dot 12$ Byte = 60 Byte
+    / Tiefe: 0 = Einträge sind Extents, >=1 = Einträge sind Index Nodes
+])
+==== Inode ist bekannt
+#terms-spacing(1em, [
+    / Inode zu Index zu Blockgruppe: (Inode-1) / Anz. Inodes pro Gruppe
+    / Inode zu Index des Inodes in Blockgruppe: (Inode-1) % Anz. Inodes pro Gruppe
+])
+
+
+/*
 == Extents
 Beschreiben ein _Intervall physisch konsekutiver Blöcke_. Ist 12 Byte gross
 #hinweis[(4B logische Blocknummer, 6B physische Blocknummer, 2B Anzahl Blöcke)].
@@ -1450,25 +1655,24 @@ Anzahl Einträge, die _maximal_ auf den Header folgen können #hinweis[(2B)],
 Tiefe des Baums #hinweis[(2B)] - #hinweis[(0: Einträge sind Extents, $>=$1: Einträge sind Index Nodes)],
 Reserviert #hinweis[(4B)]\
 *Index Node:*
-Spezifiziert einen Block, der _Extents enthält_. Besteht aus einem Header und den Extents
-#hinweis[(max. 340 bei 4 KB Blockgrösse)]. Ab 1360 Extents zusätzlicher Block mit Index
-Nodes nötig.
+Spezifiziert Block, der _Extents enthält_. Besteht aus einem Header und den Extents
+#hinweis[(max. 340 bei 4 KB Blockgrösse)]. Ab 1'360 (4*340) Extents zusätzlicher Block mit Index Nodes nötig.
 
-=== Notation
-#{
-    set text(size: 0.8em)
-    table(
-        columns: (1fr, 1fr),
-        table.header([(in)direkte Adressierung], [Extent-Trees]),
-        [_direkte Blöcke:_ Index $|->$ Blocknummer],
-        [_Indexknoten:_ Index $|->$ (Kindblocknummer, kleinste Nummer der 1. logischen Blöcke aller Kinder)],
+// === Notation
+// #{
+//     set text(size: 0.8em)
+//     table(
+//         columns: (1fr, 1fr),
+//         table.header([(in)direkte Adressierung], [Extent-Trees]),
+//         [_direkte Blöcke:_ Index $|->$ Blocknummer],
+//         [_Indexknoten:_ Index $|->$ (Kindblocknummer, kleinste Nummer der 1. logischen Blöcke aller Kinder)],
 
-        [_indirekte Blöcke:_ indirekter Block.Index $|->$ direkter Block],
-        [_Blattknoten:_ Index $|->$ (1. logisch. Block, 1. phy. Block, Anz. Blöcke)],
+//         [_indirekte Blöcke:_ indirekter Block.Index $|->$ direkter Block],
+//         [_Blattknoten:_ Index $|->$ (1. logisch. Block, 1. phy. Block, Anz. Blöcke)],
 
-        [], [_Header:_ Index $|->$ (Anz. Einträge, Tiefe)],
-    )
-}
+//         [], [_Header:_ Index $|->$ (Anz. Einträge, Tiefe)],
+//     )
+// }
 
 ==== Beispiel-Berechnung: 4MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex("1000")
 _(In-)direkte Block-Adressierung_\
@@ -1487,7 +1691,6 @@ _Extent Trees_\
 *Header:* $0 arrow.bar (1,0)$\
 *Extent:* $1 arrow.bar (0, #fxcolor("grün", hex("1000")), #fxcolor("rot", hex("400")))$
 
-
 == Journaling
 Wenn Dateisystem beim _Erweitern_ einer Datei _unterbrochen_ wird, kann es zu
 _Inkonsistenzen_ kommen. _Journaling_ verringert Zeit für Überprüfung von Inkonsistenzen erheblich.\
@@ -1504,9 +1707,11 @@ Transaktionen im Journal werden nach Neustart noch einmal ausgeführt.\
 _(Full) Journal_ #hinweis[(Metadaten und Datei-Inhalte ins Journal, sehr sicher aber langsam)],
 _Ordered_ #hinweis[(Nur Metadaten ins Journal, Dateiinhalte werden immer vor Commit geschrieben)],
 _Writeback_ #hinweis[(Nur Metadaten ins Journal, beliebige Reihenfolge, nicht sehr sicher aber schnell).]
+*/
 
 = X Window System
-#image("/assets/image.png")
+#image("img/x-window-system.svg", height: 2cm)
+#v(-0.5em)
 Setzt _Grundfunktionen der Fensterdarstellung_. Ist austauschbar, realisiert Netzwerktransparenz.
 Plattformunabhängig, legt die GUI-Gestaltung nicht fest.\
 *Programmgesteuerte Interaktion:* Benutzer reagiert auf Programm.\
@@ -1602,3 +1807,8 @@ Speicherzugriff benötigt, kann man herausfinden, ob etwas im Cache ist oder nic
 Verschiedene CPUs #hinweis[(Intel, einige ARMs, keine AMDs)] und verschiedene OS
 #hinweis[(Linux, Windows 10)] sind betroffen.
 _Geschwindigkeit_ bis zu 500 KB pro Sekunde bei 0.02% Fehlerrate.\
+
+
+
+
+
