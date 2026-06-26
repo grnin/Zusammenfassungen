@@ -42,7 +42,7 @@
     Interaktive Elemente benötigen klare, verständliche Namen.
     Formularfelder müssen eindeutig beschriftet sein.
 
-=== Fixed Page
+=== Fixed Page (korrektes HTML)
 ```html
 <main class="page">
   <h1>Broken Demo</h1>

@@ -37,8 +37,9 @@
      // https://martinfowler.com/eaaCatalog/frontController.html
     // #image("/assets/image-3.png", height: 1.25cm, width: auto)
     Bild: Request -> Front Controller -> Controller (können verschiedene Controller sein) -> controller zu Model für Daten, zu View für Rendering und Response.
-    // #image("/WE2/assets/front-controller.svg", height: 1cm)
-    #image("/WE2/assets/WE2_Diagramme-front-controller.drawio.svg", height: 1cm)
+// #image("/WE2/assets/front-controller.svg", height: 1cm)
+#v(-0.5em)
+#image("/WE2/assets/WE2_Diagramme-front-controller.drawio.svg", width: 100%)
 // #image("/WE2/assets/front-controller.png", height: 1cm)
 / Middleware Pattern:
     Verkettung von Middlewares pro Request, gemäss "Chain of Responsibility" Pattern. Express verwendet Middleware im Front Controller und Routing. Beispiel wenn nicht angemeldet, kann Auth. Middleware direkt Fehler Response senden und es wird nicht weitergegeben.
@@ -55,12 +56,13 @@
 #v(-0.2em)
 / Was ist SSR?: fertige statische Website von Server geliefert an Client, ExpressJS
 / typische Websiten SSR?: Blogs, statische Webseiten, News Portal
-/ Vor- und Nachteile SSR?: Performance, SEO, einfach, nicht mehrfach die gleiche Seite rendern. #hinweis[siehe Vorteile CSR]
-#v(-0.2em)
+/ Vor- und Nachteile SSR?: Performance, SEO, einfach, nicht mehrfach die gleiche Seite rendern. // #hinweis[siehe Vorteile CSR]
+
+== POST Redirect zu GET
 Vorteil beim _Redirect von POST /random nach GET /random?from=…_ gegenüber der direkten Darstellung der Daten in der POST-Route?
-> Formulardarstellung nur 1 mal programmieren, einheitlich, DRY
-> URL kann weitergegeben werden von GET, Lesezeichen kann erstellt werden.
-> Mit F5 (neuladen) werden bei POST die Daten nochmals abgesendet (mit Warnung Popup vom Browser). Bei GET wird nur die Seite neu geladen.
+- Formulardarstellung nur 1 mal programmieren, einheitlich, DRY
+- URL kann weitergegeben werden von GET, Lesezeichen kann erstellt werden.
+- Mit F5 (neuladen) werden bei POST die Daten nochmals abgesendet (mit Warnung Popup vom Browser). Bei GET wird nur die Seite neu geladen.
 
 == Cookies und ExpressJS Session
 - Um nach dem Login die Session auf der Website "abzusichern"
@@ -170,10 +172,12 @@ fetch(myRequest) /*…*/
 #v(-1.25em)
 === Routing
 Middleware befindet sich auf dem Express Objekt
+#v(-0.5em)
 ```js
 import express from 'express'; const router = express.Router();
 ```
 Wichtige Methoden
+#v(-0.5em)
 ```js
 // Wird unabhängig vom der HTTP-Methode aufgerufen
 router.all(path, [callback, ...] callback)
@@ -182,6 +186,7 @@ router.all(path, [callback, ...] callback)
 Wird aufgerufen, falls die jeweilige HTTP-Methode verwendet wurde\
 *METHOD* = .all, .get\
 *path* = `/*, /{*} (optional), /:id (wird in req.params.id gespeichert)`
+#v(-0.5em)
 ```js
 router.METHOD(path, [callback, ...] callback)
 router.get('/', function(req, res){ res.send('hello world'); });
@@ -189,6 +194,7 @@ router.get('/', function(req, res){ res.send('hello world'); });
 // − Express.js verwendet path-to-regexp
 
 Es können mehrere Callbacks als Chain übergeben werden
+#v(-0.5em)
 ```js
 router.get("/admin", ensureAdmin, renderAdmin);
 router.get("/profile/:id", ensureUser, renderProfile)
@@ -196,6 +202,7 @@ router.get("/profile/:id", ensureUser, renderProfile)
 
 === Static-Middleware
 Statische Files ausliefern (Es sind mehrere static-routes möglich)
+#v(-0.5em)
 ```js
 app.use(express.static('public'))
 ```
@@ -204,19 +211,21 @@ app.use(express.static('public'))
 ==== 3 Parameter (request, response, next)
 - `next` zeigt auf die nächste Middleware im Stack, kann aufgerufen werden, um die nächste Middleware aufzurufen.
 // • Dies kann auch unterlassen werden. In diesem Falle sollte die Anfrage beantwortet werden.
+#v(-0.5em)
 ```js
 function myDummyLoggerMiddleware(options = {}) {
     options = {timestamp: true, ...options};
     return function myInnerDummyLogger(req, res, next) {
-        const timestamp = options.timestamp ? new Date().toISOString() + " " : "";
+        const timestamp = options.timestamp ? new Date().toISOString() + " " :"";
         console.log(`${timestamp}${req.method} ${req.url}`)
-    next();
+        next();
 }   }
 ```
 
 ==== Error-Middleware
 - muss 4 Parameter haben, die letzte (Error) Middleware muss die Anfrage beenden
 - aufgerufen bei: `next(new Error("…"));`, `Promise.reject(new Error("..."))`, `throw new Error("...")`
+#v(-0.5em)
 ```js
 app.use(function(err, req, res, next) {
     console.error(err.stack);
@@ -240,7 +249,9 @@ render("template", {pizzaName: "Hawaii", _id: 3, state: "OK"});
 {{#if pizzaName}}
     <p>Ordered Pizza: {{pizzaName}}</p>
     {{#if_eq state "OK"}}
-        <form action='/orders/{{_id}}' method='post'><input type='hidden' name='_method' value='delete'><input type='submit' value='Delete order'>
+        <form action='/orders/{{_id}}' method='post'>
+            <input type='hidden' name='_method' value='delete'>
+            <input type='submit' value='Delete order'>
         </form>
     {{/if_eq}}
 {{/if}}
@@ -283,11 +294,13 @@ export class IndexController {
 ```html
 // Layout.hbs:
 <!doctype html><html lang="en"><head>
-<meta charset="UTF-8"><title>Pizza</title>{{#if dark}}<style>body {background: black; color: white; }</style>{{/if}}
+    <meta charset="UTF-8">
+    <title>Pizza</title>{{#if dark}}<style>body {background: black; color: white; }</style>{{/if}}
 </head>
-<body>{{{body}}}</body>
+<body>{{{body}}}</body> // body mit html, {{body}} wäre ohne html
 </html>
 ```
+
 
 // /*
 ===== Beispiel als Express View

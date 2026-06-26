@@ -18,7 +18,14 @@
 // TODO es überschreibt meine ascii-art
 // #show "->": sym.arrow.r;
 
-
+#set terms(
+    // separator: [#h(2pt)],
+    separator: [: ],
+    hanging-indent: 0.6em,
+    tight: true,
+    // tight: false,
+    spacing: 0.6em,
+)
 
 
 

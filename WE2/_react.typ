@@ -20,23 +20,34 @@
 #import "@preview/cheq:0.3.1": checklist
 #show: checklist
 
+#let terms-spacing(spacing, body) = [
+    #show terms: set terms(spacing: spacing)
+    #body
+]
+
+
 
 = JavaScript
+#v(.2em)
+// === JS + Functions + Expressions
 
-=== JS + Functions + Expressions
-/ Function Declaration: Schlüsselwort `function`, gehoistet #hinweis[Verwendung for Definition möglich], ```js function greet() {..}```
-/ Function Expression: in JSX und überall wo eine Expression reinpasst nutzbar ()
-/ Named Function Expr.: ```js const greet = function greetPerson() {...};```
-/ Anonymous Function Expr.: ```js ... = function () {...}; ```
+
+/ Function Declaration:
+     // Schlüsselwort `function`,
+    gehoistet #hinweis[Verwendung for Definition möglich], ```js function greet() {..}```
+/ Function Expression: in JSX und überall wo eine Expression reinpasst nutzbar //()
+/ Named Function Expr.: ```js const greet = function greetPerson() {...};```, nützlich um useEffects zu benennen ```js useEffect( function useEffectNamedFunction(){ ... }, []);  ```
+/ Anonymous Function Expr.: ```js const greet = function () {...}; ```
+
 / Arrow Function (Lambda): kompakte Form einer Function Expression, 1 Parameter: ```js ... = x => x * x; ```, mit Rückgabewert: ```js = () => "Hello";``` // ohne Rückgabewert=side effects und deshalb nicht gut: ```js = () => { .. } ```
-/ Callback Function: (relevant in Express Middleware) TODO
+/ Callback Function: A JavaScript callback is a function passed as an argument to another function, which is then executed (or "called back") at a later point in time to complete a specific task. //(relevant in Express Middleware)
+
 / Was sind Expressions?: Expressions sind Werte oder Kombinationen von Werten, Variablen und Operatoren, die ein Resultat ergeben. Alles was etwas zurück gibt.
 / Expressions: Wie man Werte im JSX ausgeben kann u.v.m.
 / keine Expressions: `const a = [1,2]`, statements wie `if` sind keine Expression // TODO
 / Spread Syntax: `...` kopiert Array und Objekt Inhalte. Nur 1 Level tief.
 
-Arrays im State ändern:
-add `[...arr]`, remove `filter` `slice`, replacing `map`, sorting `toReversed` `toSorted`
+
 
 = React
 == React Regeln (Komponente, HTML, JSX)
@@ -80,8 +91,10 @@ people.length // 3
 / sicheres State Update: weil in Eventhandler und Funktion wartet React bis ausgeführt worden, bevor State Updates verarbeitet werden. ```js setCount(prev => prev + 1); ```
 // / useState: Beispiel mit hochzählen, mehrmals nacheinander in einer Funktion `setCount(count+1)` erhöht count erst nach Render und deshalb nur um 1.
 
+#v(-0.5em)
 React rendering Fehler:
-```js
+#v(-0.5em)
+```tsx
 <p>{obj}</p> {/* Error "Objects are not valid as a React child" */}
 <p>{fn}</p> {/* Error "Functions are not valid as a React child" */}
 ```
@@ -89,7 +102,7 @@ React rendering Fehler:
 === Persistence
 Möglichkeiten für Persistence: localStorage, URL Parameter, sessionStorage, Cookies, indexedDB, externe DB/API.
 Sensible Daten (z. B. Kreditkarteninfos) nur auf externer DB/API geeignet.
-==== localStorage:
+==== localStorage
 Speichert Daten dauerhaft im Browser + ist isoliert nach Seite, aber für mehrere Sessions (Tabs/Fensters) übergreifend verfügbar.
 Daten bleiben erhalten nach Page Reload und Browser Neustart (kein Ablaufdatum).
 Ist ein einfacher key/value Speicher mit Strings (Tipp: JSON.stringify() für Objekte).
@@ -107,7 +120,7 @@ toggleTheme(() => {
     localStorage.setItem("theme", !theme);
 });
 ```
-==== sessionStorage:
+==== sessionStorage
 Daten existieren nur während der Browser Session #hinweis[Tab oder Browser geschlossen -> Daten gelöscht, Page Reload -> Daten noch da].
 Isoliert nach einer Seite und eines Tabs/Fenster.
 API gleich wie bei localStorage (`getItem, removeItem, setItem, clear`)
@@ -129,7 +142,12 @@ Daten können auch ausserhalb des Browsers gespeichert werden, zbsp. in "Cloud" 
 _Vorteile_: Daten für viele User speicherbar, Mehr Logik und Datenverarbeitung möglich, Synchronisation zwischen Geräten, Kommunikation zwischen Nutzern
 
 ==== URL
-
+/ (1.) Daten in URL: #hinweis[uniform resource locator] speichern, Pfad Nutzer sich befindet/welche web resource offen #sym.arrow.r Zustand.
+/ (2.) Zustand der Seite in Suchparameter speichern: #sym.arrow.r z.B. was gesucht wurde
+/ (3.) Search Params/Query String: für Filter, Pagination, Suchanfragen. `https://www.google.com/search?client=firefox-b-d&channel=entpr&q=indexed+collections`. _Plaintext_ auch über HTTPS, nur ASCII, begrenzte Länge (nicht standardisiert)
+/ Clean URLs: keine Informationen über die Interna der Server (z.B. Dateitypen) #hinweis[nutzerfreundlicher, SEO, Links bleiben bei Änderung der Implementation]. _Nicht clean_: `http://example.com/user.php?id=1`, _clean_: `http://example.com/user/1`
+#v(-1em)
+#image("assets/url.svg")
 /*
 === Async Promise
 // code MovieSearch für Prüfungsvorbereitung enthält Promise.resolve(), aber wir müssen es nur lesen können.
@@ -153,25 +171,37 @@ function mockSearch(query: string): Promise<string[]> {
 
 
 ==== JS Array map und filter + list und conditional rendering
-/ List Rendering: Eine Anzahl gleicher Komponenten darstellen, aber mit unterschiedlichen
-Inhalten `.map()`
-/ Conditional Rendering: Das Layout anpassen `.filter()`
-```js
-arr2.map(x => 2*x);
-arr2.filter(x => x == 'a');
-const arr = [ 'a', 'b', 'c' ];
-arr.push("d"); //['a','b','c','d']
-arr.forEach((e, i) => console.log(i +":"+e));
-arr.sort((a,b)=>a-b).map(e=>`<li>e</li>`).join('');
-// list rendering:
-{list.map((item) => (
-    <PacklistItem key={item} item={item} />
-))}
-// conditional rendering:
-{isInStock ? ' ja' : ' nä'} {isInStock && 'ja'}
-```
+
+/ List Rendering:
+    Eine Anzahl gleicher Komponenten darstellen, aber mit unterschiedlichen Inhalten ```tsx { arr2.map(x => <li key={x}>x</li>); }  ```
+// ```tsx
+// {list.map((item) => (
+//     <PacklistItem key={item} item={item} />
+// ))}
+// ```
+/ Conditional Rendering: Das Layout anpassen `.filter()`, ```js {isInStock ? 'ja' : 'nä'}``` \ ```js {isInStock && 'ja'} ```
+// #v(-0.75em)
+
+// / Arrays im State ändern:
+//     _add_ `[...arr]`, _remove_ `filter` `slice`, _replacing_ `map`, _sorting_ `toReversed` `toSorted`
+/ List Filtering:
+    #v(-0.75em)
+    ```tsx const people = [ {name: 'Creola', prof: 'math'}, {name: 'Percy', prof: 'chemist'}];
+    const chemists = people.filter(person => person.prof === 'chemist');
+    ```
+/ Sorting: arr.toSorted() / arr.toReversed()
+
+// mehr Codebeispiele:
+// ```js
+// arr2.filter(x => x == 'a');
+// const arr = [ 'a', 'b', 'c' ];
+// arr.push("d"); //['a','b','c','d']
+// arr.forEach((e, i) => console.log(i +":"+e));
+// arr.sort((a,b)=>a-b).map(e=>`<li>e</li>`).join('');
+// ```
 
 == Komponenten, JSX, Props
+#v(-1em)
 ==== Props (Properties)
 Props sind Eingabewerte für Komponenten (Tatsächlich ist das Props Objekt der einzige akzeptierte Parameter)
 - als Attribute übergeben und in Komponentenfunktion als Parameter auslesen
@@ -179,7 +209,7 @@ Props sind Eingabewerte für Komponenten (Tatsächlich ist das Props Objekt der 
 - immutable
 - Es können nicht nur Strings, sondern alle JS Datentypen als Props übergeben werden, auch andere Komponenten, JSX-Fragmente, Objekte, Listen, oder Funktionen.
 == State/Zustand (useState), Eventhandler
-
+#v(-1em)
 // // Code zu unwichtig / auswendig
 // ```js
 // const [count, setCount] = useState(0);
@@ -198,32 +228,29 @@ Eventhandler-Funktionen bekommen ein Eventobjekt `e` , das analog zum Event in J
 funktioniert und Informationen zum Event enthält
 
 Es gibt verschiedene Möglichkeiten, Eventhandler zu platzieren:
-```js
+```tsx
 // separat -> für längere Handler, oder mehrfach verwendete (Demo 1)
 const clickHandler = () => { alert('submitted') }
-return (
-<button onClick={clickHandler}>Click Me</button>
-)
+return ( <button onClick={clickHandler}>Click Me</button> )
 // inline -> für kurze Handler
 return ( <button onClick={() => alert("submitted")}>Click Me</button> )
 ```
-Stolperfalle: Funktionen, die an Eventhandler Attribute übergeben werden, dürfen nicht
-aufgerufen werden. Der Eventhandler ruft die Funktion auf. Beispiel, wie nicht:
-```js
-// Falsch
+// Stolperfalle: Funktionen, die an Eventhandler Attribute übergeben werden, dürfen nicht
+// aufgerufen werden. Der Eventhandler ruft die Funktion auf. Beispiel, wie nicht:
+```tsx
+// Falsch, Aufruf im onClick mit ()
 return ( <button onClick={clickHandler()}>Click Me</button> )
 ```
 
 ==== Eventhandlers als Props übergeben
 Häufig, wie in der Demo, übergeben wir Eventhandler als Props an Komponenten, um State in
 höhergelegenen Komponenten zu aktualisieren.
-```js <SearchInput value={searchText} onChange={(e) => setSearchText(e.target.value)} />
+```tsx <SearchInput value={searchTxt} onChange={(e) => setSearchTxt(e.target.value)} />
 ```
 // Üblicherweise werden diese Props analog der nativen Eventhandler-Props mit onThingThatHappens benannt, wie onUpdateSearchText oder onCloseDialog
 
 
 === useState
-
 
 #grid(
     // columns: (auto, auto),
@@ -251,7 +278,7 @@ höhergelegenen Komponenten zu aktualisieren.
             <input value={name}
             onChange={(e) => onUpdate(e.target.value) }
             />
-        </div>);
+            </div>);
         }
         ```
     ],
@@ -294,7 +321,7 @@ const reducer = (
   }
 };
 ```
-```js
+```tsx
 export const Counter = () => {
   // use reducer with useReducer hook
   const [state, dispatch] = useReducer(reducer, { count: 0 });
@@ -305,7 +332,7 @@ export const Counter = () => {
     </div>);
 };
 ```
-// ```js
+// ```tsx
 // export const StaticCounter = () => {
 //   const actions: Record<'type', ReducerActionTypes>[] = [
 //     { type: 'increment' }, { type: 'increment' }, { type: 'increment' }, { type: 'decrement' },
@@ -319,28 +346,42 @@ export const Counter = () => {
 
 == Controlled Forms
 
-*Flow of a Controlled Component*
-#image("/WE2/assets/WE2_Diagramme-controlled-component.drawio.svg", height: 1.7cm)
+#grid(
+    columns: (auto, 52%),
+    gutter: 0em,
+    [
+        ```tsx
+        function Form() {
+            const [formData, setFormData] =
+                useState({
+                    firstName: "",
+                    lastName: "",
+                    email: "",
+                });
+        ```
+    ],
+    [
+        #move(dy: 0em, dx: 1.5em, [
+            *Flow of a Controlled Component*
+            #v(-0.8em)
+            #image("/WE2/assets/WE2_Diagramme-controlled-component.drawio.svg")
+        ])
+    ],
+)
+#v(-1em)
 
 ```tsx
-function Form() {
-    const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-    });
-// generalized changehandler
+// generalized changehandler:
 const handleChange = (e: React.SubmitEvent<HTMLFormElement>): void => {
     const { name, value } = e.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
 };
-// oder mit typed eventhandler statt typed event ^:
-// const handleChange: React.SubmitEventHandler<HTMLFormElement> = (e) => {
-// ...
+// statt typed event ^, auch mit typed eventhandler möglich:
+const handleChange: React.SubmitEventHandler<HTMLFormElement> = (e) => {..}
+...
 <label htmlFor="firstName">First Name:</label>
 <input type="text" name="firstName" id="firstName"
-    value={formData.firstName} onChange={handleChange}
-/>
+    value={formData.firstName} onChange={handleChange} />
 ```
 
 == TypeScript
@@ -362,10 +403,12 @@ return <button onClick={onClick}>{label}</button>;
 ```
 *? (Optionales Property/Parameter)* ist implizit "… | undefined"
 // Optional parameter (implicitly `string | undefined`)
+#v(-0.5em)
 ```js
 function greet(name?: string) { return `Hello, ${name || 'stranger'}`; }
 ```
 Typescript prüft die *Struktur*, nicht die Benennung
+#v(-0.5em)
 ```ts
 type Ball = { diameter: number; } type Sphere = { diameter: number; }
 let ball: Ball = { diameter: 10 }; let sphere: Sphere = { diameter: 20 };
@@ -383,6 +426,7 @@ sphere = ball; ball = sphere; // korrekt
 *Unknown*
 Kann alles sein und muss überprüft werden (mit typeof oder parse, etc).
 Type Checking während Runtime nennt man Type Narrowing. // doppelt erwähnt aber egal
+#v(-0.5em)
 ```ts
 function printValue(value: string | number) {
     if (typeof value === "string") {
@@ -400,7 +444,7 @@ function printValue(value: string | number) {
 // function createPair<T>(v1: T, v2: T): [T, T] { return [v1, v2]; }
 
 *Generics* : Platzhalter für Typen
-#v(-1em)
+#v(-0.5em)
 // function createPair<T>(v1: T, v2: T): [T, T] { return [v1, v2]; }
 ```js
 function identity<T>(x: T): T { return x; }
@@ -474,44 +518,41 @@ an sich nichts schlechtes.
 
 #grid(
     columns: (auto, auto),
-    gutter: 0em,
+    // gutter: 0em,
     [
-        ```js
+        ```tsx
         // vorher
         const Layout = ({ posts }) => {
         return (
-        <div className="layout">
-        <Header />
-        <Posts posts={posts} />
-        </div>
-        );
-        }
-
+            <div className="layout">
+                <Header />
+                <Posts posts={posts} />
+            </div>
+        );  }
         // --- Verwendung
         <Layout posts={posts} />
         ```
 
     ],
     [
-        ```js
+        ```tsx
         // nachher
         const Layout = ({ children }) => {
         return (
-        <div className="layout">
-        <Header />
-        {children}
-        </div>
-        );
-        }
+            <div className="layout">
+                <Header />
+                {children}
+            </div>
+        );  }
         // --- Verwendung
         <Layout>
-        <Posts posts={posts} />
+            <Posts posts={posts} />
         </Layout>
         ```],
 )
 
 ==== Context API
-```js
+```tsx
 // Erstellen des Context
 const UserContext = createContext(initialValue)
 // Bereitstellen des Kontexts im Komponenten-Tree
@@ -536,27 +577,26 @@ const context = useContext(UserContext);
     ],
 )
 
-```js
+```tsx
 export const ContextDemo = () => {
-return (
-<ThemeProvider>
-    <h1>useContext Demo </h1> <ThemeTitle /> <ThemeButton />
-</ThemeProvider>
-);
+return ( <ThemeProvider>
+            <h1>useContext Demo </h1> <ThemeTitle /> <ThemeButton />
+        </ThemeProvider> );
 ```
 
 
 / Warum die Unterteilung in zwei Files?:
     Fast refresh only works when a file only
     exports components. Use a new file to share
-    constants or functions between components.
-    eslint(react-refresh/only-export-components)
+    constants or functions between components. \
+    `eslint(react-refresh/only-export-components)`
     Der Grund ist, dass das Hot Module Reloading von Vite kaputtgeht, wenn man man in
     Komponentenfiles (.tsx) Funktionen exportiert.
 
 Setup:
-```js
-};
+#v(-0.5em)
+// };
+```tsx
 const ThemeTitle = () => {
     // Es müssen nicht alle Elemente
     // des Context verwendet werden:
@@ -574,31 +614,27 @@ const ThemeButton = () => {
 ```
 
 Implementation Context
-```js
+#v(-0.5em)
+```tsx
 // theme-context.ts
-export const ThemeContext = createContext
-<ThemeContextValue | undefined>(
-undefined,
-);
+export const ThemeContext =
+    createContext<ThemeContextValue | undefined>( undefined );
 export const useTheme = () => {
     const context = useContext(ThemeContext);
-    if (!context) { throw new Error('useTheme must be used within a ThemeProvider'); }
+    if (!context) {
+        throw new Error('useTheme must be used within a ThemeProvider');
+    }
     return context;
 };
 // theme-provider.tsx
-export const ThemeProvider = ( { children }: { children: ReactNode }
-) => {
+export const ThemeProvider = ( { children }: { children: ReactNode } ) => {
     const [theme, setTheme] = useState<Theme>('light');
     const toggleTheme = () => {
-        setTheme((prev) =>
-        (prev === 'light' ? 'dark' : 'light')
-        );
+        setTheme((prev) => (prev === 'light' ? 'dark' : 'light') );
     };
-    return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }} >
-    {children}
-    </ThemeContext.Provider>
-    );
+    return ( <ThemeContext.Provider value={{ theme, toggleTheme }} >
+                {children}
+            </ThemeContext.Provider> );
 };
 ```
 
@@ -610,6 +646,7 @@ variables.css (tokens, colors),
 layout.css (top-level page layout)
 \
 Cascades vermeiden, stattdessen Composition nutzen
+#v(-0.5em)
 ```css
 :root { --color-primary: #0070f3; } /* Definition in der variables.css */
 /* Nutzung in einer anderen Datei: */
@@ -621,6 +658,7 @@ Cascades vermeiden, stattdessen Composition nutzen
 //     gutter: 0em,
 //     [
 Composition via classname
+#v(-0.5em)
 ```css
 .btn { padding: 10px; border-radius: 4px; } .btn-primary { background: var(--color-primary); } .btn-danger { background: red; }
 /* HTML Composition: */ <button class="btn btn-primary">Speichern</button> <button class="btn btn-danger">Löschen</button>
