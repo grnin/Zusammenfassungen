@@ -221,7 +221,6 @@ Unabhängig vom Betriebssystem (POSIX/Windows), Stream-basiert = zeichen-orienti
 ```c int fseek (FILE *stream, long offset, int origin)``` setzt den FPI, analog zu `lseek`,
 ```c int rewind (FILE *stream)``` setzt den Stream zurück.
 
-
 = Prozesse
 #terms-spacing(0.7em)[
     / Modell Monoprogrammierung: Prozess sieht System, als gäbe es nur ihn und OS.
