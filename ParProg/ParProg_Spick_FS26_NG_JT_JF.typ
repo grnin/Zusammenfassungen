@@ -19,11 +19,13 @@
     #body
 ]
 
-
+#let hinweis2(body) = [
+    body
+]
 
 = Multi-Threading
-_Parallelism_ #hinweis[(Subprograms run simultaneously for faster programs)] vs.
-_Concurrency_ #hinweis[(interleaved execution of programs for simpler programs)]
+_Parallelism_ #hinweis2[(Subprograms run simultaneously for faster programs)] vs.
+_Concurrency_ #hinweis2[(interleaved execution of programs for simpler programs)]
 
 #grid(
     // align: top + right,
@@ -52,8 +54,7 @@ _Concurrency_ #hinweis[(interleaved execution of programs for simpler programs)]
 _Cooperative_ #hinweis[(Threads must explicitly initiate context switches, scheduler can't interrupt)] or\
 _preemptive_ #hinweis[(scheduler can asynchronously interrupt thread via timer interrupt)]\
 *JVM Thread Model:*
-JVM is a _process in the OS_. It runs as long as threads are running #hinweis[(Exception:
-    threads marked as daemon with ```java setDaemon(true)``` will not be waited upon)].
+JVM is a _process in the OS_. It runs as long as threads are running #hinweis[(Exception: threads marked as daemon with ```java setDaemon(true)``` will not be waited upon)].
 Threads are realized by the _thread class_ and the _interface `Runnable`_.
 Code to be run in a Thread is within a overridden `run()`.
 
@@ -202,17 +203,15 @@ class MyThread {
     align: top + right,
     columns: (58%, 42%),
 )[
-    Threads run arbitrarily. _Restriction of concurrency_ for deterministic behavior.\
+    Threads run arbitrarily. _Synchronization_ (=Restriction of concurrency) for deterministic behavior.\
     *Communication between threads:*
-    Sharing access to fields and the objects they refer to. Efficient, but problems:
-    _Thread interference_ and _memory consistency errors_.\
+    Sharing access to fields and the objects they refer to. Efficient, but problems: _Thread interference_ and _memory consistency errors_.\
     *Critical Section:*
-    Part of the code which must be executed by only 1 thread at a time for the values to stay
-    consistent.
-    Implementation with _mutual exclusion_.
+    code must be executed by only 1 thread at a time. Implementation with _mutual exclusion_.
 ]
 #v(-1.25em)
 *happens-before relationship*: result is same as if executed synchronously (visibility + threadsafe)\
+==== Java synchronized
 *```java synchronized```:*
 Body of method with the ```java synchronized``` keyword is a critical section.
 Guarantees _memory consistency_ and a _happens-before relationship_ .
@@ -221,7 +220,6 @@ Other threads are _blocked_ until the current thread is done with the object.
 Every object has a _Lock_ #hinweis[(Monitor-Lock)]. Maximum 1 thread can acquire the lock.
 Entry of a `synchronized` method acquires the lock of the object, the exit releases it.
 ```java public synchronized void deposit(int amount) { this.balance += amount; }```
-
 synchronized can also be used within a method, the _object that should be locked_ must be specified.
 ```java synchronized(this) { this.balance += amount; }``` (unhandled exceptions exit sync. block)\
 // *Exit synchronized block:*
@@ -238,12 +236,18 @@ _fairness-problems_ and _no shared locks_.\
     / Recursive Lock: thread can acquire same lock through recursive calls, free by last release
     / Busy Wait: `yield` or `sleep` in a loop, inefficient, not releasing lock. _`wait()`_: Temporarily release Monitor-Lock. wrap in while loop to check if wake up condition has been met.
     / Wakeup signal: Signalling a condition/thread in Monitor.
-        _`notify()`_: signals any waiting thread. Turnstile, Only one semantic condition for every thread (Uniform Waiters), change applies to only one thread (One-In/One-Out).
-        _`notifyAll()`_: wakes up all threads (from inner waiting room to outer waiting room to wait for entry in monitor)
+    / One-In/One-Out: change applies to only one thread
+    / Uniform Waiters: Only one semantic condition for every thread
+
+    // _`notify()`_: signals any waiting thread. Turnstile,
+    // _`notifyAll()`_: wakes up all threads (from inner waiting room to outer waiting room to wait for entry in monitor)
     // #hinweis[(i.e. one deposit can satisfy multiple withdraws, does not guarantee fairness)]. If a thread is woken up, it goes from the _inner waiting room_ #hinweis[(waiting on a condition)] into the _outer waiting room_ #hinweis[(Thread has not started yet)] where it waits for entry to the Monitor. There is no shortcut.
-    / ```java IllegalMonitorStateException```: thrown if `notify/notifyAll/wait` used outside synchronized.
+
     / signal and continue: signaling (notifying) thread still holds monitor, awakened thread comes to outer waiting room.
+    / ```java IllegalMonitorStateException```: thrown if `notify/notifyAll/wait` used outside synchronized.
     / ```java InterruptedException```: thrown on `interrupt()` while `sleep/wait/join`.
+    / spurious Wakeup in Java: threads can wakeup from `wait` without a reason
+
 ]
 
 #colbreak()
@@ -295,8 +299,19 @@ _fairness-problems_ and _no shared locks_.\
 
 
 = Specific synchronization primitives
+#v(-0.75em)
+== .NET Synchronization Primitives
 #hinweis[C\# has no lock and condition and no fairness flag]
-// #v(-0.75em)
+=== .NET Monitor
+- use sync object: ```cs private object sync = new(); lock(sync){ ... }```.
+- ```cs Monitor.Wait(sync)```, ```cs Monitor.PulseAll(sync)```, ```cs Monitor.Pulse(sync)```.
+- Wait in Loop: without loop: overtaking problem (in signal and continue).
+// - .NET has no spurious wakeup, so threads do not wakeup unless notified or interrupted,
+
+Uses fair FIFO-Queue.
+_Lacks:_ No fairness flag, no Lock & Condition.
+_Additional:_ `ReadWriteLockSlim` for Upgradeable Read/Write, Semaphores can also be used at
+OS level, Mutex. Collections are _not_ Thread-safe.
 
 == Semaphore
 Allocation of a limited number of free resources. Is in essence a _counter_.
@@ -562,12 +577,6 @@ _Avoidance:_ Use fair synchronization constructs. #hinweis[(Aging, Enable fairne
 == Parallelism Correctness Criteria
 _Safety:_ No race conditions and no deadlocks, _Liveness:_ No starvation
 
-== .NET Synchronization Primitives
-Monitor with sync object: ```cs private object sync = new(); lock(sync){ ... }```.\
-Uses ```cs Monitor.Wait(sync)```, ```cs Monitor.PulseAll(sync)```. Uses fair FIFO-Queue.
-_Lacks:_ No fairness flag, no Lock & Condition.
-_Additional:_ `ReadWriteLockSlim` for Upgradeable Read/Write, Semaphores can also be used at
-OS level, Mutex. Collections are _not_ Thread-safe.
 
 
 = Thread Pools
@@ -1120,6 +1129,7 @@ specific slower processors. It is optimized for throughput. Programming is more 
 *GPU Structure:*
 A GPU consists of multiple _Streaming Multiprocessors (SM)_ which in turn consist of multiple
 _Streaming Processors (SP)_ #hinweis[(e.g. 1-30 SM, 8-192 SPs per SM)].\
+
 *SIMD:*
 Single Instruction Multiple Data. The _same instruction_ is executed simultaneously on
 _multiple cores_ working on _different data elements_ #hinweis[(Vector parallelism)].
@@ -1129,6 +1139,7 @@ Single Instruction Single Data. Purely _sequential_ calculations.\
 *SIMT:*
 Single Instruction Multiple Threads. The same instruction is executed in different threads over different data.
 #image("img/parprog_7.png")
+
 
 == Latency vs. Throughput
 *Latency:*

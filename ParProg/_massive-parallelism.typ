@@ -1,0 +1,33 @@
+
+
+
+// /*
+// Compiled with Typst 0.13.1
+#import "../template_cheatsheet.typ": *
+#import "@preview/wrap-it:0.1.1": wrap-content
+
+#show: project.with(
+    authors: ("Nina Grässli", "Jannis Tschan"),
+    fach: "ParProg",
+    fach-long: "Parallel Programming",
+    semester: "FS24",
+    language: "en",
+    column-count: 5,
+    font-size: 4pt,
+    landscape: true,
+)
+// */
+
+#let terms-spacing(spacing, body) = [
+    #show terms: set terms(spacing: spacing)
+    #body
+]
+
+#let hinweis2(body) = [
+    #set text(
+        style: "italic",
+    )
+    #body
+]
+
+= Massive Parallelism
