@@ -1271,7 +1271,7 @@ Bei _4 Bytes_ sind #hex("D800") bis #hex("DFFF") #hinweis[(Bits 17-21)] wegen de
     ],
 )
 // #image("img/bsys_45.png")
-#image("img/bsys2-utf16.png")
+#image("img/bsys2-utf16.svg")
 #v(-4pt)
 
 #let example-block(body) = text(
