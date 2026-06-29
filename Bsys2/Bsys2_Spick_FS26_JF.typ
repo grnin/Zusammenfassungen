@@ -974,6 +974,7 @@ hinweg. Muss explizit mit `unlink` gelöscht werden.
 Ein Socket _repräsentiert einen Endpunkt auf einer Maschine_.
 Kommunikation findet im Regelfall zwischen zwei Sockets statt
 #hinweis[(UDP, TCP über IP sowie Unix-Domain-Sockets)].
+\
 Sockets benötigen für Kommunikation einen Namen: #hinweis[(IP: IP-Adresse & Portnummer)]\
 *```c int socket(int domain, int type, int protocol)```: *
 _Erzeugt_ einen neuen Socket als "Datei". Socket sind nach Erzeugung zunächst _unbenannt_.
@@ -1458,117 +1459,6 @@ $"BE" = underline(
     nicht die Bytes an sich.]
 #v(-0.5em)
 
-= X Window System
-#image("img/x-window-system.svg", height: 2cm)
-#v(-0.5em)
-Setzt _Grundfunktionen der Fensterdarstellung_. Ist austauschbar, realisiert Netzwerktransparenz.
-Plattformunabhängig, legt die GUI-Gestaltung nicht fest.\
-*Programmgesteuerte Interaktion:* Benutzer reagiert auf Programm.\
-*Ereignisgesteuerte Interaktion:* Programm reagiert auf Benutzer.\
-*Fenster:*
-Rechteckiger Bereich des Bildschirms. Es gibt eine Baumstruktur aller Fenster,
-der Bildschirm ist die Wurzel #hinweis[(z.B. Dialogbox, Scrollbar, Button...)].\
-*Display:* Rechner mit Tastatur, Zeigegerät und $1..m$ Bildschirme\
-*X Client:* Applikation, die einen Display nutzen will. Kann lokal oder entfernt laufen.\
-*X Server:* Softwareteil des X Window System, der ein Display ansteuert. Beim Nutzer.
-
-== GUI Architektur
-Nicht nur X Window System, sondern auch _Window Manager_ #hinweis[(Verwaltung der sichtbaren
-    Fenster, Umrandung, Knöpfe. Läuft im Client und realisiert Window Layout Policy)] und
-_Desktop Manager_ #hinweis[(Desktop-Hilfsmittel wie Taskleiste, Dateimanager, Papierkorb etc.)].\
-
-== Xlib
-Ist das _C Interface_ für das X Protocol. Wird meist nicht direkt verwendet.\
-*Funktionen:*
-```c XOpenDisplay()``` #hinweis[öffnet Verbindung zum Display,
-    NULL = Wert von `DISPLAY` Umgebungsvariabel)],
-```c XCloseDisplay()``` #hinweis[schliesst Verbindung],
-```c XCreateSimpleWindow()``` #hinweis[erzeugt ein Fenster],
-```c XDestroyWindow()``` #hinweis[entfernt ein Fenster & Unterfenster],
-```c XMapWindow()``` #hinweis[bestimmt, dass ein Fenster angezeigt werden soll (unhide)],
-```c XMapRaised()``` #hinweis[bringt Fenster in den Vordergrund],
-```c XMapSubwindows()``` #hinweis[zeigt alle Unterfenster an, `Expose` Event],
-```c XUnmapWindow()``` #hinweis[versteckt Fenster],
-```c XUnmapSubwindows()``` #hinweis[versteckt Unterfenster, `UnmapNotify` Event]
-
-*X Protocol:*
-Legt die _Formate für Nachrichten_ zwischen X Client und Server fest.
-_Requests_ #hinweis[(Dienstanforderungen, Client #sym.arrow Server)],
-_Replies_ #hinweis[( Antworten auf Requests, Client #sym.arrow.l Server)],
-_Events_ #hinweis[(Ereignismeldungen, Client #sym.arrow.l Server, doppelt gepuffert)],
-_Errors_ #hinweis[(Fehlermeldungen auf vorangegangene Requests, Client #sym.arrow.l Server)]\
-*Request Buffer:*
-Nachrichtenpufferung auf der Client Seite. Möglichst wenig Anforderungsübertragungen an X Server.  _Ziel_: möglichst wenige "Anforderungsübertragungen" an Server. Gruppierung für Kommunikationseffizienz. \
-*Pufferung bei Ereignissen:*
-Werden beim X Server und beim Client gepuffert.
-_Server Puffer_ berücksichtigt Netzwerkverfügbarkeit, _Client Puffer_ wartet bis Client Events abholt `XNextEvent()` .\
-*Puffer-Leerung*: Client: wartet blockierend auf Event, benötigt Client-Request Reply von Server, `XFlush`
-*X Event Handling:*
-Ereignisse werden vom Client verarbeitet oder weitergeleitet.
-Muss _festlegen, welche_ Typen er empfangen will.
-```c XSelectInput()``` #hinweis[legt fest, welche Events via Event-Masken empfangen werden,
-    z.B. `ExposureMask`],
-```c XNextEvent()``` #hinweis[kopiert den nächsten Event aus dem Buffer].
-
-== Zeichnen
-*Ressourcen:*
-Server-seitige Datenhaltung zur Reduktion des Netzwerkverkehrs.
-Halten Informationen im Auftrag von Clients. Diese identifizieren Informationen mit IDs.
-Kein Hin- und Herkopieren komplexer Datenstrukturen nötig.
-#hinweis[(z.B. Window, Pixmap, Colormap, Font, Graphics-Context)]\
-*Pufferung verdeckter Fensterinhalte:*
-_Minimal_ #hinweis[(keine Pufferung)] oder
-_Optional_ #hinweis[(Hintergrundspeicher zum Sichern vorhanden)]\
-*Pixmap:*
-Server-Seitiger _Grafikspeicher_, wird immer gecached.\
-*X Grafikfunktionen:*
-Bilddarstellung mittels _Rastergrafik_ und _Farbtabelle_. Erlauben das Zeichnen von Figuren,
-Strings und Texten. _Ziele_ für das Zeichnen können Fenster oder Pixmap sein.\
-*Graphics Context:*
-Legt diverse _Eigenschaften_ fest, die Systemaufrufe nicht direkt unterstützen
-#hinweis[(z.B. Liniendicke, Farben, Füllmuster)].
-Client kann mehrere GCs gleichzeitig nutzen.
-
-== Fenster Schliessen
-Schaltfläche wird vom _Window Manager_ erzeugt. X weiss _nichts_ über spezielle Bedeutung
-der Schaltfläche, der Window Manager schliesst das Fenster. Es gibt ein _Protokoll_ zwischen
-Window Manager und Applikation. `ClientMessage` Event mit `WM_DELETE_MESSAGE`.\
-*Atoms:*
-_ID eines Strings_, der für _Meta-Zwecke_ benötigt wird. Erspart Parsen der Strings.\
-*Properties:*
-Werden mit jedem Fenster assoziiert.
-_Generischer Kommunikations-Mechanismus_ zwischen Applikation und Window Manager.\
-*`WM_PROTOCOLS`:*
-Von X Standard definierte Anzahl an Protokollen, die der Window Manager verstehen soll.
-Ein Client kann sich für Protokolle _registrieren_. \
-*`WM_DELETE_WINDOW`:*
-Wird beim Drücken des "x" vom Window Manager an den Client geschickt.
-
-// meltdown ist nicht prüfungsrelevant:
-/*
-== Performance-Optimierungen
-Mapping des Speichers in jeden virtuellen Adressraum, Out-of-Order Execution (03E),
-Spekulative Ausführung.\
-*Seiteneffekte O3E:*
-Cache weiss nicht, ob Wert spekulativ angefordert wurde und speichert alles.
-Da Wert als Teil des Tags gespeichert und die _Zeit gemessen_ werden kann, die ein
-Speicherzugriff benötigt, kann man herausfinden, ob etwas im Cache ist oder nicht
-\
-*Tests:*
-Verschiedene CPUs #hinweis[(Intel, einige ARMs, keine AMDs)] und verschiedene OS
-#hinweis[(Linux, Windows 10)] sind betroffen.
-_Geschwindigkeit_ bis zu 500 KB pro Sekunde bei 0.02% Fehlerrate.\
-*/
-
-
-
-
-// Reihenfolge geändert, damit Dateisysteme auf eigener Spalte stehen
-
-
-
-
-
 = Dateisysteme
 == Vergleich FAT, NTFS, Ext2
 #{
@@ -1839,28 +1729,32 @@ $#hex4("800", suffix: false).#hex4("0") arrow.bar #hex4("200C"), quad
 .......
 // hier gibt es doppelt indirekte Blöcke.. ist mir zu mühsam, ich hoffe das kommt nicht so an der Prüfung :(
 */
-#v(-1em)
+// #v(-1em)
 // ist aus der Vorlesung aber auf 3MB gekürzt, im Stil von Ninas kompakter Zusammenfassung und nicht meine zu umständlichen Formeln unten
 // nur einmal indirekte Variante
-==== 3MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex4("2000")
-_(In-)direkte Block-Adressierung (ext2)_\
-#hinweis[Erster Referenzen-Block (Metadaten) #hex4(800), danach fortlaufend. Sonst nach letzter Adresse bei: #hex4("2300") ]\
-3 MB = $3 dot 2^20$B, #math.quad 4 KB = $2^12$B, #math.quad $3 dot 2^(20-12) = 3 dot 2^8 = #fxcolor("rot", hex4("300"))$
-Blöcke, von #fxcolor("grün", hex4("2000")) bis #fxcolor("orange", hex4("22FF")) \ // #h(1em) #hinweis[ $#hex4("2100")-1$]\
-$0 arrow.bar #fxcolor("grün", hex4("2000")), quad
-1 arrow.bar #hex4("2001"), space ..., space
-#hex4("B") arrow.bar #hex4("200B"), quad
-#hex4("C") arrow.bar #hex4("800")$ #hinweis[(indirekter Block)]\
-$#hex4("800", suffix: false).#hex4("0") arrow.bar #hex4("200C"), quad
-#hex4("800", suffix: false).#hex4("1") arrow.bar #hex4("200D"), space
-..., space
-#hex4("800", suffix: false).#hex4("22F3") arrow.bar #fxcolor("orange", hex4("22FF"))$ \
-_Extent Trees_\
-*Header:* $0 arrow.bar (1 #hinweis[Anz. Einträge],0 #hinweis[Tiefe])$ \
-*Extent:* $1 arrow.bar (0 #hinweis[1. logischer Block],
-    #fxcolor("grün", hex("2000")) #hinweis[1. physischer Block], #fxcolor("rot", hex("300")) #hinweis[Anz. Blöcke]
-)$
-
+#block(
+    sticky: true,
+    [
+        ==== 3MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex4("2000")
+        _(In-)direkte Block-Adressierung (ext2)_\
+        #hinweis[Erster Referenzen-Block (Metadaten) #hex4(800), danach fortlaufend. Sonst nach letzter Adresse bei: #hex4("2300") ]\
+        3 MB = $3 dot 2^20$B, #math.quad 4 KB = $2^12$B, #math.quad $3 dot 2^(20-12) = 3 dot 2^8 = #fxcolor("rot", hex4("300"))$
+        Blöcke, von #fxcolor("grün", hex4("2000")) bis #fxcolor("orange", hex4("22FF")) \ // #h(1em) #hinweis[ $#hex4("2100")-1$]\
+        $0 arrow.bar #fxcolor("grün", hex4("2000")), quad
+        1 arrow.bar #hex4("2001"), space ..., space
+        #hex4("B") arrow.bar #hex4("200B"), quad
+        #hex4("C") arrow.bar #hex4("800")$ #hinweis[(indirekter Block)]\
+        $#hex4("800", suffix: false).#hex4("0") arrow.bar #hex4("200C"), quad
+        #hex4("800", suffix: false).#hex4("1") arrow.bar #hex4("200D"), space
+        ..., space
+        #hex4("800", suffix: false).#hex4("22F3") arrow.bar #fxcolor("orange", hex4("22FF"))$ \
+        _Extent Trees_\
+        *Header:* $0 arrow.bar (1 #hinweis[Anz. Einträge],0 #hinweis[Tiefe])$ \
+        *Extent:* $1 arrow.bar (0 #hinweis[1. logischer Block],
+            #fxcolor("grün", hex("2000")) #hinweis[1. physischer Block], #fxcolor("rot", hex("300")) #hinweis[Anz. Blöcke]
+        )$
+    ],
+)
 /*
 zu kompliziert:
 ==== Beispiel ext2 128 MB #hinweis[Datengrösse = 128MB] grosse, konsekutiv gespeicherte Datei, \
@@ -1898,4 +1792,108 @@ _Journaling_ verringert Zeit für Überprüfung von Inkonsistenzen #hinweis[z.B.
 / _(Full) Journal_: Metadaten und Datei-Inhalte zuerst ins Journal dann von dort in den Speicher, sehr sicher aber langsam, +Datensicherheit -Geschwindigkeitseinbussen
 / _Ordered_: \1. Transaktion (Metadaten) ins Journal, \2. Dateiinhalte direkt schreiben, \3. Commit ausführen (Metadaten), +Dateien enthalten richtigen Inhalt nach Commit - bisschen langsamer als Writeback -Blockaden bei vielen Transaktionen möglich
 / _Writeback_: Zuerst Metadaten ins Journal, beliebige Reihenfolge von Commit und Datei schreiben, +sehr schnell #hinweis[keine Synchronisation Reihenfolge], -Dateien können Datenmüll enthalten
+
+
+= X Window System
+#image("img/x-window-system.svg", height: 2cm)
+#v(-0.5em)
+Setzt _Grundfunktionen der Fensterdarstellung_. Ist austauschbar, realisiert Netzwerktransparenz.
+Plattformunabhängig, legt die GUI-Gestaltung nicht fest.\
+*Programmgesteuerte Interaktion:* Benutzer reagiert auf Programm.\
+*Ereignisgesteuerte Interaktion:* Programm reagiert auf Benutzer.\
+*Fenster:*
+Rechteckiger Bereich des Bildschirms. Es gibt eine Baumstruktur aller Fenster,
+der Bildschirm ist die Wurzel #hinweis[(z.B. Dialogbox, Scrollbar, Button...)].\
+*Display:* Rechner mit Tastatur, Zeigegerät und $1..m$ Bildschirme\
+*X Client:* Applikation, die einen Display nutzen will. Kann lokal oder entfernt laufen.\
+*X Server:* Softwareteil des X Window System, der ein Display ansteuert. Beim Nutzer.
+
+== GUI Architektur
+Nicht nur X Window System, sondern auch _Window Manager_ #hinweis[(Verwaltung der sichtbaren
+    Fenster, Umrandung, Knöpfe. Läuft im Client und realisiert Window Layout Policy)] und
+_Desktop Manager_ #hinweis[(Desktop-Hilfsmittel wie Taskleiste, Dateimanager, Papierkorb etc.)].\
+
+== Xlib
+Ist das _C Interface_ für das X Protocol. Wird meist nicht direkt verwendet.\
+*Funktionen:*
+```c XOpenDisplay()``` #hinweis[öffnet Verbindung zum Display,
+    NULL = Wert von `DISPLAY` Umgebungsvariabel)],
+```c XCloseDisplay()``` #hinweis[schliesst Verbindung],
+```c XCreateSimpleWindow()``` #hinweis[erzeugt ein Fenster],
+```c XDestroyWindow()``` #hinweis[entfernt ein Fenster & Unterfenster],
+```c XMapWindow()``` #hinweis[bestimmt, dass ein Fenster angezeigt werden soll (unhide)],
+```c XMapRaised()``` #hinweis[bringt Fenster in den Vordergrund],
+```c XMapSubwindows()``` #hinweis[zeigt alle Unterfenster an, `Expose` Event],
+```c XUnmapWindow()``` #hinweis[versteckt Fenster],
+```c XUnmapSubwindows()``` #hinweis[versteckt Unterfenster, `UnmapNotify` Event]
+
+*X Protocol:*
+Legt die _Formate für Nachrichten_ zwischen X Client und Server fest.
+_Requests_ #hinweis[(Dienstanforderungen, Client #sym.arrow Server)],
+_Replies_ #hinweis[( Antworten auf Requests, Client #sym.arrow.l Server)],
+_Events_ #hinweis[(Ereignismeldungen, Client #sym.arrow.l Server, doppelt gepuffert)],
+_Errors_ #hinweis[(Fehlermeldungen auf vorangegangene Requests, Client #sym.arrow.l Server)]\
+*Request Buffer:*
+Nachrichtenpufferung auf der Client Seite. Möglichst wenig Anforderungsübertragungen an X Server.  _Ziel_: möglichst wenige "Anforderungsübertragungen" an Server. Gruppierung für Kommunikationseffizienz. \
+*Pufferung bei Ereignissen:*
+Werden beim X Server und beim Client gepuffert.
+_Server Puffer_ berücksichtigt Netzwerkverfügbarkeit, _Client Puffer_ wartet bis Client Events abholt `XNextEvent()` .\
+*Puffer-Leerung*: Client: wartet blockierend auf Event, benötigt Client-Request Reply von Server, `XFlush`
+*X Event Handling:*
+Ereignisse werden vom Client verarbeitet oder weitergeleitet.
+Muss _festlegen, welche_ Typen er empfangen will.
+```c XSelectInput()``` #hinweis[legt fest, welche Events via Event-Masken empfangen werden,
+    z.B. `ExposureMask`],
+```c XNextEvent()``` #hinweis[kopiert den nächsten Event aus dem Buffer].
+
+== Zeichnen
+*Ressourcen:*
+Server-seitige Datenhaltung zur Reduktion des Netzwerkverkehrs.
+Halten Informationen im Auftrag von Clients. Diese identifizieren Informationen mit IDs.
+Kein Hin- und Herkopieren komplexer Datenstrukturen nötig.
+#hinweis[(z.B. Window, Pixmap, Colormap, Font, Graphics-Context)]\
+*Pufferung verdeckter Fensterinhalte:*
+_Minimal_ #hinweis[(keine Pufferung)] oder
+_Optional_ #hinweis[(Hintergrundspeicher zum Sichern vorhanden)]\
+*Pixmap:*
+Server-Seitiger _Grafikspeicher_, wird immer gecached.\
+*X Grafikfunktionen:*
+Bilddarstellung mittels _Rastergrafik_ und _Farbtabelle_. Erlauben das Zeichnen von Figuren,
+Strings und Texten. _Ziele_ für das Zeichnen können Fenster oder Pixmap sein.\
+*Graphics Context:*
+Legt diverse _Eigenschaften_ fest, die Systemaufrufe nicht direkt unterstützen
+#hinweis[(z.B. Liniendicke, Farben, Füllmuster)].
+Client kann mehrere GCs gleichzeitig nutzen.
+
+== Fenster Schliessen
+Schaltfläche wird vom _Window Manager_ erzeugt. X weiss _nichts_ über spezielle Bedeutung
+der Schaltfläche, der Window Manager schliesst das Fenster. Es gibt ein _Protokoll_ zwischen
+Window Manager und Applikation. `ClientMessage` Event mit `WM_DELETE_MESSAGE`.\
+*Atoms:*
+_ID eines Strings_, der für _Meta-Zwecke_ benötigt wird. Erspart Parsen der Strings.\
+*Properties:*
+Werden mit jedem Fenster assoziiert.
+_Generischer Kommunikations-Mechanismus_ zwischen Applikation und Window Manager.\
+*`WM_PROTOCOLS`:*
+Von X Standard definierte Anzahl an Protokollen, die der Window Manager verstehen soll.
+Ein Client kann sich für Protokolle _registrieren_. \
+*`WM_DELETE_WINDOW`:*
+Wird beim Drücken des "x" vom Window Manager an den Client geschickt.
+
+// meltdown ist nicht prüfungsrelevant:
+/*
+== Performance-Optimierungen
+Mapping des Speichers in jeden virtuellen Adressraum, Out-of-Order Execution (03E),
+Spekulative Ausführung.\
+*Seiteneffekte O3E:*
+Cache weiss nicht, ob Wert spekulativ angefordert wurde und speichert alles.
+Da Wert als Teil des Tags gespeichert und die _Zeit gemessen_ werden kann, die ein
+Speicherzugriff benötigt, kann man herausfinden, ob etwas im Cache ist oder nicht
+\
+*Tests:*
+Verschiedene CPUs #hinweis[(Intel, einige ARMs, keine AMDs)] und verschiedene OS
+#hinweis[(Linux, Windows 10)] sind betroffen.
+_Geschwindigkeit_ bis zu 500 KB pro Sekunde bei 0.02% Fehlerrate.\
+*/
+
 
