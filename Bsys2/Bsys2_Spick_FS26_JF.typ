@@ -180,7 +180,7 @@ Enthält _Index in systemweite Tabelle_ #sym.arrow Enthält Daten zur Identifika
 
 / ```c int close (int fd)```: schliesst Datei = dealloziert den FD. FD kann von `open` für andere Dateien verwendet werden. Returned 0 oder -1. #hinweis[Wenn mehrere FDs die gleiche Datei öffnen, können sie sich gegenseitig Daten überschreiben.]
 // Wenn FD's nicht geschlossen werden, kann das FD-Limit erreicht werden, dann können keine weiteren Dateien mehr geöffnet werden.
-/ ```c ssize_t read(int fd, void * buffer, size_t n)```: Versucht die nächsten $n$ Bytes am aktuellen Offset von fd in den Buffer zu kopieren, erhöht FD offset, blockierend
+/ ```c ssize_t read(int fd, void * buffer, size_t n)```: Versucht die nächsten $n$ Bytes am aktuellen Offset von fd in den Buffer zu kopieren, erhöht FD offset, blockierend. returned: Anzahl gel. Bytes.
 / ```c ssize_t write(int fd, void * buffer, size_t n)```: Versucht die nächsten n Byte vom buffer an aktuellen Offset von fd zu kopieren, erhöht FD offset, blockierend
 // \ kopiert die nächsten $n$ Byte vom `buffer` an den aktuellen Offset von `fd`
 / ```c off_t lseek(int fd, off_t offset, int origin)```: Setzt offset auf `offset` und gibt neuen Offset zurück. *`origin`* = wozu Offset relativ ist: _`SEEK_SET`:_ Beginn der Datei, _`SEEK_CUR`:_ Aktueller Offset, _`SEEK_END`:_ Dateieende. \ *Beispiele*: _`lseek(fd, 0, SEEK_CUR)`_ aktueller Offset, _`lseek(fd, 0, SEEK_END)`:_ Grösse der Datei. `lseek (fd, n, SEEK_END)` hängt, bei nachfolgendem write, n Nullen an Datei.
@@ -339,7 +339,7 @@ Jeder Eintrag #hinweis[(je 40 Byte)] beschreibt eine Sektion #hinweis[(Name, Sec
 Werden vom _Linker_ verwendet: Verschmilzt Sektionen und erzeugt ausführbares Executable.\
 / String-Tabelle:
     Bereich in der Datei, der nacheinander _null-terminierte Strings enthält_.
-    Strings werden relativ zum Beginn der Tabelle referenziert.\
+    Strings werden relativ zum Beginn der Tabelle referenziert. enthält z.B. Namen von Symbolen. Keine "String-Literale", die sind in .rodata.\
 / Symbole & Symboltabelle:
     Die Symboltabelle enthält jeweils _einen Eintrag je Symbol_
     #hinweis[(16 Byte: 4B Name, 4B Wert, 4B Grösse, 4B Info)].
@@ -473,6 +473,7 @@ $
     [$ lim_(n -> infinity) 1 / (s + (1 - s) / n) = 1 / s $],
 );
 
+#colbreak()
 == POSIX THREAD API
 *```c
 int pthread_create(
@@ -725,7 +726,7 @@ Erschöpft ein Thread seine Zeitscheibe, wird seine Priorität um 1 verringert.
 Typischerweise werden die Zeitscheiben mit _niedrigerer Priorität grösser_ und Threads mit
 _kurzen Prozessor-Bursts bevorzugt_. Threads in tiefen Queues dürfen zum Ausgleich länger am
 Stück laufen.
-#image("img/bsys_34.png", width: 80%)
+// #image("img/bsys_34.png", width: 80%)
 
 *Prioritäten-basiert:*
 Jeder Thread erhält _eine Nummer_, seine _Priorität_. Threads mit höherer Priorität werden
@@ -960,8 +961,9 @@ if (pid == 0) { // child
     ],
 )
 
-- Sind keine Daten in der Pipe, blockiert read, bis Daten hineingeschrieben werden
-- Sind keine Daten in der Pipe und gibt es kein geöffnetes Write-End mehr, gibt read 0 zurück (EOF)
+- keine Daten in der Pipe #sym.arrow.r read blockiert, bis Daten hineingeschrieben werden
+- keine Daten in der Pipe + kein geöffnetes Write-End  #sym.arrow.r read gibt 0 zurück (EOF)
+- Default Pipe Grösse = 16 Pages, meistens 64KB
 
 *```c int mkfifo (const char *path, mode_t mode)```:*
 Erzeugt eine Pipe _mit Namen und Pfad_ im Dateisystem. Hat via `mode` Permission Bits wie
@@ -1051,27 +1053,6 @@ Prozesse sind voneinander isoliert, müssen jedoch trotzdem miteinander interagi
 _Shared Memory_ ist schneller zu realisieren, aber schwer wartbar.
 _Message-Passing_ erfordert mehr Engineering-Aufwand, schlussendlich aber in Mehr-Prozessor-Systemen bald performanter.
 
-// ==== Vergleich Message-Queues und Pipes
-#v(-0.5em)
-#table(
-    columns: (auto, 1fr),
-    table.header([Message-Queues], [Pipes]),
-
-    [
-        - bidirektional
-        - Daten sind in einzelnen Messages organisiert
-        - beliebiger Zugriff
-        - Haben immer einen Namen
-    ],
-    [
-        - unidirektional
-        - übermittelt Bytestrom an Daten
-        - FIFO-Zugriff
-        - Müssen keinen Namen haben
-    ],
-)
-
-
 == Message-Passing
 ist ein Mechanismus mit zwei Operationen:
 - _Send_ #hinweis[(Kopiert die Nachricht aus dem Prozess: ```c send (message)```)],
@@ -1124,14 +1105,33 @@ _Unbeschränkte_ #hinweis[(Beliebig viele Nachrichten, Sender blockiert nie)].\
 In manchen Systemen können Nachrichten mit _Prioritäten_ versehen werden.
 Der Empfänger holt die Nachricht mit der _höchsten Priorität zuerst_ aus der Queue.
 
-=== POSIX Message-Passing
-OS-Message-Queues mit _variabler Länge_, haben mind. 32 Prioritäten und können
-_synchron und asynchron_ verwendet werden.\
+=== POSIX Message-Passing = OS Message Queue API
+Nutzt OS-Message-Queues mit _variabler Länge_, haben mind. 32 Prioritäten und können _synchron und asynchron_ verwendet werden, indirekte Kommunikation.\
 / ```c mqd_t mq_open (const char *name, int flags, mode_t mode, struct mq_attr *attr)```: _Öffnet_ eine Message-Queue mit systemweitem `name`, returnt Message-Queue-Descriptor. #hinweis[(`name` mit "`/`" beginnen, `flags` & `mode` wie bei Dateien, `mq_attr`: Div. Konfigs & Queue-Status, R/W mit `mp_getattr`/`mq_setattr`)]
 / ```c int mq_close (mqd_t queue)```: _Schliesst_ die Queue mit dem Descriptor `queue` für diesen Prozess.
 / ```c int mq_unlink (const char *name)```: _Entfernt_ die Queue mit dem Namen `name` aus dem System. _Name_ wird _sofort entfernt_ und Queue kann anschliessend _nicht mehr geöffnet_ werden.
 / ```c int mq_send (mqd_t queue, const char *msg, size_t length, unsigned int priority)```: _Sendet_ die Nachricht, die an Adresse `msg` beginnt und `length` Bytes lang ist, in die `queue`.
 / ```c int mq_receive (mqd_t queue, const char *msg, size_t length, unsigned int *priority)```: _Kopiert_ die nächste Nachricht aus der Queue in den Puffer, der an Adresse `msg` beginnt und `length` Bytes lang ist. _Blockiert_, wenn die Queue _leer_ ist.
+
+// ==== Vergleich Message-Queues und Pipes
+#v(-0.5em)
+#table(
+    columns: (auto, 1fr),
+    table.header([Message-Queues], [Pipes]),
+
+    [
+        - bidirektional
+        - Daten sind in einzelnen Messages organisiert
+        - beliebiger Zugriff
+        - Haben immer einen Namen
+    ],
+    [
+        - unidirektional
+        - übermittelt Bytestrom an Daten
+        - FIFO-Zugriff
+        - Müssen keinen Namen haben
+    ],
+)
 
 == Shared Memory
 Frames des Hauptspeichers werden _zwei (oder mehr) Prozessen_ $P_1$ und $P_2$ _zugänglich_
@@ -1496,13 +1496,14 @@ Ist das _C Interface_ für das X Protocol. Wird meist nicht direkt verwendet.\
 Legt die _Formate für Nachrichten_ zwischen X Client und Server fest.
 _Requests_ #hinweis[(Dienstanforderungen, Client #sym.arrow Server)],
 _Replies_ #hinweis[( Antworten auf Requests, Client #sym.arrow.l Server)],
-_Events_ #hinweis[(Ereignismeldungen, Client #sym.arrow.l Server)],
+_Events_ #hinweis[(Ereignismeldungen, Client #sym.arrow.l Server, doppelt gepuffert)],
 _Errors_ #hinweis[(Fehlermeldungen auf vorangegangene Requests, Client #sym.arrow.l Server)]\
 *Request Buffer:*
-Nachrichtenpufferung auf der Client Seite. Für _Effizienz_.\
+Nachrichtenpufferung auf der Client Seite. Möglichst wenig Anforderungsübertragungen an X Server.  _Ziel_: möglichst wenige "Anforderungsübertragungen" an Server. Gruppierung für Kommunikationseffizienz. \
 *Pufferung bei Ereignissen:*
 Werden beim X Server und beim Client gepuffert.
-_Server-Seitig_ berücksichtigt Netzwerkverfügbarkeit, _Client-Seitige_ hält Events bereit.\
+_Server Puffer_ berücksichtigt Netzwerkverfügbarkeit, _Client Puffer_ wartet bis Client Events abholt `XNextEvent()` .\
+*Puffer-Leerung*: Client: wartet blockierend auf Event, benötigt Client-Request Reply von Server, `XFlush`
 *X Event Handling:*
 Ereignisse werden vom Client verarbeitet oder weitergeleitet.
 Muss _festlegen, welche_ Typen er empfangen will.
@@ -1636,9 +1637,9 @@ Ein Block besteht aus _mehreren aufeinanderfolgenden Sektoren_.
 // #hinweis[(1 KB, 2 KB oder 4 KB (normal) in ext2, bis 64 KB in Ext4]
 Das gesamte Volume ist in _Blöcke aufgeteilt_ und Speicher wird _nur in
 Form von Blöcken_ alloziert. Ein Block enthält nur Daten einer _einzigen Datei_. Es gibt
-_Logische Blocknummern_ #hinweis[(Blocknummer vom Anfang der Datei aus gesehen, wenn Datei
-    eine ununterbrochene Abfolge von Blöcken wäre)] und
-_Physische Blocknummern_ #hinweis[(Tatsächliche Blocknummer auf dem Volume)].
+_Logische Blocknummern_ (Blocknummer vom Anfang der Datei aus gesehen, wenn Datei
+eine ununterbrochene Abfolge von Blöcken wäre) und \
+_Physische Blocknummern_ (Tatsächliche Blocknummer auf dem Volume).
 / File-Holes:
     Bereiche in der Datei, in der _nur Nullen_ stehen. Ein solcher Block wird _nicht alloziert_.
 #v(-0.5em)
@@ -1649,11 +1650,10 @@ _Sektor_ #hinweis[(Kleinste logische Untereinheit eines Volumes.
     Daten werden als Sektoren transferiert. Grösse ist von HW definiert.
     Enthält Header, Daten und Error-Correction-Codes.)],
 //   heisst so wegen Kreissektor von harddisk
-_Format_ #hinweis[(Layout der logischen Strukturen auf dem Datenträger, wird vom Dateisystem definiert.)]\
-/ Inode Aufteilung ext2: $15 "Blocknummern" dot "Inodegrösse"$= $15 dot 4$ Byte = 60 Byte
+\ _Format_ #hinweis[(Layout der logischen Strukturen auf dem Datenträger, wird vom Dateisystem definiert.)]\
+/ Inode Aufteilung ext2: $15 "Blocknummern" dot "Inodenummer-Grösse"$= $15 dot 4$ Byte = 60 Byte
 / Referenzen-Block: Synonym für indirekter Block!
 / Anzahl direkte Blöcke: 12 (bis und mit Block #hex("B")), 1024 indirekt Blöcke möglich
-/ Inode-Adressgrösse bei Verzeichnis (Inodegrösse): 4 Byte (immer)
 
 == Inodes
 #wrap-content(
@@ -1670,7 +1670,8 @@ _Format_ #hinweis[(Layout der logischen Strukturen auf dem Datenträger, wird vo
     Inode _verweist auf die Blöcke_, die _Daten für eine Datei_ enthalten.
     Enthält ein Array _`i_block`_ (Blockliste) mit 15 Einträgen zu je 32 Bit.
 ]
-#v(-1.8em)
+#v(-2em)
+/ Inodenummer-Grösse (im Verzeichnis): 4 Byte #hinweis[immer]
 / Lokalisierung:
     Alle Inodes aller Blockgruppen gelten als _eine grosse Tabelle_. Startet mit 1.
 / Erzeugung:
@@ -1719,7 +1720,7 @@ _2 Byte_ Magic Number #hex4("F30A"), _2B_ Anz. Einträge, die direkt auf den Hea
 
 
 #v(-0.2em)
-== Formeln und Zahlen
+= ext2 + ext4 Formeln und Zahlen
 #v(-0.5em)
 #table(
     columns: (auto,) * 5 + (2.75em,) * 4 + (1fr,) * 4,
@@ -1785,6 +1786,24 @@ _1G_ = $2^30$ = #hex4("40000000"), _12 Byte_ = 100 Bit,
 / Gruppendeskriptoren: _ext2_: 32 B, _ext4_: 64 B
 / Blockgrösse: _ext2_: 1KB, 2KB oder 4KB (normal), _ext4_: bis 64 KB
 
+==== ext2 Formeln
+#terms-spacing(1em, [
+    / Anz. Referenzen pro Referenzen-Block _R_: Blockgrösse / 4B #hinweis[Inodenummer-Grösse] = 4KB / 4B = 1K = _#hex4("400")_
+    / Anzahl indirekte Blöcke: _$R$_ (siehe Referenzen pro Ref.Block) = 1K = #hex4("400")
+    / Anzahl doubly indirekte Blöcke: _$R^2$_  = $1K^2 = 2^(10*2) = 2^20 = 1M$ = #hex4("100000")
+    / Anzahl triply indirekte Blöcke: _$R^3$_  = $2^30 = 1G$ = #hex4("40000000")
+    // / 1. Referenzblock Index (physische Adresse): Startindex = #hex4(2000)
+    / _letzte Blocknummer_ (physisch): (Startindex + Anzahl Blöcke) - 1 = #hex4("A000") - 1 = #hex4("9FFF")
+
+])
+
+==== Inode ist bekannt Formeln
+#terms-spacing(1em, [
+    / Inode zu Index der Blockgruppe: (Inode-1) / Anz. Inodes pro Gruppe
+    / Inode zu Index des Inodes innerhalb Blockgruppe: (Inode-1) % Anz. Inodes pro Gruppe
+])
+
+== Beispiel Rechnung
 /*
 // ist eine Übungsaufgabe, nicht erlaubt!
 ==== Beispiel (kompakt): 4MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex("1000")
@@ -1804,7 +1823,6 @@ _Extent Trees_\
 *Header:* $0 arrow.bar (1,0)$ #h(1em)
 *Extent:* $1 arrow.bar (0, #fxcolor("grün", hex("1000")), #fxcolor("rot", hex("400")))$
 // */
-
 /* Vorlesungsvariante, ist leider dreifach indirekt
 ==== Beispiel (kompakt): 128MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex4("2000")
 _(In-)direkte Block-Adressierung (ext2)_\
@@ -1822,13 +1840,12 @@ $#hex4("800", suffix: false).#hex4("0") arrow.bar #hex4("200C"), quad
 .......
 // hier gibt es doppelt indirekte Blöcke.. ist mir zu mühsam, ich hoffe das kommt nicht so an der Prüfung :(
 */
-
-
+#v(-1em)
 // ist aus der Vorlesung aber auf 3MB gekürzt, im Stil von Ninas kompakter Zusammenfassung und nicht meine zu umständlichen Formeln unten
 // nur einmal indirekte Variante
-==== Beispiel (kompakt) 3MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex4("2000")
+==== 3MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex4("2000")
 _(In-)direkte Block-Adressierung (ext2)_\
-#hinweis[Erster Referenzen-Block (Metadaten) #hex4(800), danach fortlaufend, sonst wäre es nach letzter Adresse: #hex4("2300") ]\
+#hinweis[Erster Referenzen-Block (Metadaten) #hex4(800), danach fortlaufend. Sonst nach letzter Adresse bei: #hex4("2300") ]\
 3 MB = $3 dot 2^20$B, #math.quad 4 KB = $2^12$B, #math.quad $3 dot 2^(20-12) = 3 dot 2^8 = #fxcolor("rot", hex4("300"))$
 Blöcke, von #fxcolor("grün", hex4("2000")) bis #fxcolor("orange", hex4("22FF")) \ // #h(1em) #hinweis[ $#hex4("2100")-1$]\
 $0 arrow.bar #fxcolor("grün", hex4("2000")), quad
@@ -1840,8 +1857,10 @@ $#hex4("800", suffix: false).#hex4("0") arrow.bar #hex4("200C"), quad
 ..., space
 #hex4("800", suffix: false).#hex4("22F3") arrow.bar #fxcolor("orange", hex4("22FF"))$ \
 _Extent Trees_\
-*Header:* $0 arrow.bar (1,0)$ #h(1em)
-*Extent:* $1 arrow.bar (0, #fxcolor("grün", hex("2000")), #fxcolor("rot", hex("300")))$
+*Header:* $0 arrow.bar (1 #hinweis[Anz. Einträge],0 #hinweis[Tiefe])$ \
+*Extent:* $1 arrow.bar (0 #hinweis[1. logischer Block],
+    #fxcolor("grün", hex("2000")) #hinweis[1. physischer Block], #fxcolor("rot", hex("300")) #hinweis[Anz. Blöcke]
+)$
 
 /*
 zu kompliziert:
@@ -1861,24 +1880,6 @@ $log_2("Blockgrösse")$ bei 4KB = 2^12 Byte = 12 Bit
 #v(-0.5em)
 #image("img/extent-tree.svg", height: 2cm)
 #v(-0.5em)
-
-
-==== ext2 Formeln
-#terms-spacing(1em, [
-    / Anz. Referenzen pro Referenzen-Block _R_: Blockgrösse / Inodegrösse = 4KB / 4B = 1K = _#hex4("400")_
-    / Anzahl indirekte Blöcke: _$R$_ (siehe Referenzen pro Ref.Block) = 1K = #hex4("400")
-    / Anzahl doubly indirekte Blöcke: _$R^2$_  = $1K^2 = 2^(10*2) = 2^20 = 1M$ = #hex4("100000")
-    / Anzahl triply indirekte Blöcke: _$R^3$_  = $2^30 = 1G$ = #hex4("40000000")
-    // / 1. Referenzblock Index (physische Adresse): Startindex = #hex4(2000)
-    / _letzte Blocknummer_ (physisch): (Startindex + Anzahl Blöcke) - 1 = #hex4("A000") - 1 = #hex4("9FFF")
-
-])
-
-==== Inode ist bekannt Formeln
-#terms-spacing(1em, [
-    / Inode zu Index der Blockgruppe: (Inode-1) / Anz. Inodes pro Gruppe
-    / Inode zu Index des Inodes innerhalb Blockgruppe: (Inode-1) % Anz. Inodes pro Gruppe
-])
 
 
 == Journaling (ext3, ext4)
