@@ -439,18 +439,32 @@ Nur bestimmte Teile eines Algorithmus können parallelisiert werden.
     Die _serielle Variante_ benötigt also höchstens _$f$ mal mehr Zeit_ als die _parallele Variante_:
 ]
 #v(-2em)
-$ f <= T / T^' = T / (T_s + (T - T_s) / n) $
+#text(
+    size: 1.2em,
+    [
+        #v(-1em)
+        $ f <= T / T^' = T / (T_s + (T - T_s) / n) $
+        #v(-1em)
+    ],
+)
 $f$ heisst auch _Speedup-Faktor_, weil die parallele Variante max. $f$-mal schneller ist als
 die serielle.
 
 Definiert man $s = T_s\/T$, also den seriellen Anteil am Algorithmus, dann ist
 $s dot T = T_s$. Dadurch erhält man $f$ unabhängig von der Zeit:
+#text(
+    size: 1.2em,
+    [
+        #v(-1em)
+        $
+            f <= T / (T_s + (T - T_s) / n) = T / (s dot T + (T - s dot T) / n)
+            = T / (s dot T + (1 - s) / n dot T) quad => quad f <= 1 / (s + (1 - s) / n)
+        $
+        #v(-0.8em)
+    ],
+)
+Bringe $s$ und $../n$ auf den gleichen Nenner.
 
-$
-    f <= T / (T_s + (T - T_s) / n) = T / (s dot T + (T - s dot T) / n)
-    = T / (s dot T + (1 - s) / n dot T) quad => quad f <= 1 / (s + (1 - s) / n)
-$
-#hinweis[Bringe $s$ und $../n$ auf den gleichen Nenner]
 #wrap-content(
     // image("img/bsys_26.png"),
     image("img/amdahl.svg"),
@@ -465,7 +479,7 @@ $
         #hinweis[(Kurve flacht ab)]
     *Grenzwert:* Mit höherer Anzahl Prozessoren nähert sich der Speedup $1/s$ an:
 ]
-#v(-1em)
+#v(-1.4em)
 #grid(
     columns: (1fr, 1fr, 1fr),
     [$ lim_(n -> infinity) (1 - s) / n = 0 $],
