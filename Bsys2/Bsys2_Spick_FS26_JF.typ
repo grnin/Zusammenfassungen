@@ -78,7 +78,7 @@ int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
 === Calling Convention
 - OS schreibt Argumente als null-terminierte Strings in den Speicherbereich des Programms.
 - Zusätzlich legt das OS ein Array `argv` an, dessen Elemente jeweils auf das erste Zeichen eines Arguments zeigen.
-- Der Pointer auf dieses Array und die Anzahl der Elemente wird dem Progamm an einer vom OS definierten Stelle zur Verfügung gestellt, z.B. in Registern oder auf dem Stack.
+- Der Pointer auf dieses Array und die Anzahl der Elemente wird dem Programm an einer vom OS definierten Stelle zur Verfügung gestellt, z.B. in Registern oder auf dem Stack.
 - ```c int main(int argc, char * argv[]) { ... } // argv[0] = program path```
 // Die Art und Weise, wie das gehandhabt wird, ist die Calling Convention.
 
