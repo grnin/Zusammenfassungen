@@ -1609,90 +1609,9 @@ _2 Byte_ Magic Number #hex4("F30A"), _2B_ Anz. Einträge, die direkt auf den Hea
 
 
 #v(-0.2em)
-= ext2 + ext4 Formeln und Zahlen
-#v(-0.5em)
-#table(
-    columns: (auto,) * 5 + (2.75em,) * 4 + (1fr,) * 4,
-    [*$4096$*],
-    [*$2048$*],
-    [*$1024$*],
-    [*$512$*],
-    [*$256$*],
-    [*$128$*],
-    [*$64$*],
-    [*$32$*],
-    [*$16$*],
-    [*$8$*],
-    [*$4$*],
-    [*$2$*],
-    [*$1$*],
+// = ext2 + ext4 Formeln, Zahlen und Beispiel
 
-    [$2^12$],
-    [$2^11$],
-    [$2^10$],
-    [$2^9$],
-    [$2^8$],
-    [$2^7$],
-    [$2^6$],
-    [$2^5$],
-    [$2^4$],
-    [$2^3$],
-    [$2^2$],
-    [$2^1$],
-    [$2^0$],
-
-    [#hex("1000")],
-    [#hex("800")],
-    [#hex("400")],
-    [#hex("200")],
-    [#hex("100")],
-    [#hex("80")],
-    [#hex("40")],
-    [#hex("20")],
-    [#hex("10")],
-    [#hex("8")],
-    [#hex("4")],
-    [#hex("2")],
-    [#hex("1")],
-)
-#v(-3pt)
-// #grid(
-//     columns: (auto, auto),
-//     [
-Dezimal zu Hex: _1K_ $= 2^10 = #bits("100 0000 0000") = #hex4(400)$, _4K_ $= 2^12 = #bits("1 0000 0000 0000")$ = #hex4("1000"), // Exponent = Anzahl Nullen, die durch vier Teilen für Anzahl Nullen in der Hex Zahl : 12/4 = 3 // 2^8 = 256 = #hex4("100") \
-// 1M = $2^20$ = #hex4("100000"), 128M = $2^20 dot 128$ = #hex4("800 0000")\
-// ],
-// [
-// kann jetzt auch gut von Hand berechnet werden, aber vielleicht brauche ich ja gerade einer dieser Zahlen und würde einen Flüchtigkeitsfehler machen:
-_1G_ = $2^30$ = #hex4("40000000"), _12 Byte_ = 100 Bit,
-24 Bit=3 Byte, 32 Bit=4 Byte, 40 Bit=5 Byte
-//     ],
-// )
-
-==== Datenstrukturen Grössen ext2 und ext4
-/ Inodes #hinweis[fixe Grösse je Volume]:
-    _ext2_: Zweiterpotenz mind. 128 B, _ext4_: mind. 256 B und max. 1 Block
-/ Gruppendeskriptoren: _ext2_: 32 B, _ext4_: 64 B
-/ Blockgrösse: _ext2_: 1KB, 2KB oder 4KB (normal), _ext4_: bis 64 KB
-
-==== ext2 Formeln
-#terms-spacing(0.8em, [
-    / Anz. Referenzen pro Referenzen-Block _R_: Blockgrösse / 4B #hinweis[Inodenummer-Grösse] = 4KB / 4B = 1K = _#hex4("400")_
-    / Anzahl indirekte Blöcke: _$R$_ (siehe Referenzen pro Ref.Block) = 1K = #hex4("400")
-    / Anzahl doubly indirekte Blöcke: _$R^2$_  = $1K^2 = 2^(10*2) = 2^20 = 1M$ = #hex4("100000")
-    / Anzahl triply indirekte Blöcke: _$R^3$_  = $2^30 = 1G$ = #hex4("40000000")
-    // / 1. Referenzblock Index (physische Adresse): Startindex = #hex4(2000)
-    / _letzte Blocknummer_ (physisch): (Startindex + Anzahl Blöcke) - 1 = #hex4("A000") - 1 = #hex4("9FFF")
-
-])
-
-==== Inode ist bekannt Formeln
-#terms-spacing(0.8em, [
-    / Inode zu Index der Blockgruppe: (Inode-1) / Anz. Inodes pro Gruppe
-    / Inode zu Index des Inodes innerhalb Blockgruppe: (Inode-1) % Anz. Inodes pro Gruppe
-])
-
-== Beispiel
+== Beispiel ext2 + ext4
 /*
 // ist eine Übungsaufgabe, nicht erlaubt!
 ==== Beispiel (kompakt): 4MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex("1000")
@@ -1774,6 +1693,90 @@ $log_2("Blockgrösse")$ bei 4KB = 2^12 Byte = 12 Bit
 #image("img/extent-tree.svg", height: 2cm)
 #v(-0.5em)
 - Bei Berechnung von genutzten Metadaten, doppelt indirekte Blöcke aufzeichnen, damit ein "Wurzelblock" nicht vergessen geht.
+
+#colbreak()
+== Formeln ext2+ext4
+#table(
+    columns: (auto,) * 5 + (2.75em,) * 4 + (1fr,) * 4,
+    [*$4096$*],
+    [*$2048$*],
+    [*$1024$*],
+    [*$512$*],
+    [*$256$*],
+    [*$128$*],
+    [*$64$*],
+    [*$32$*],
+    [*$16$*],
+    [*$8$*],
+    [*$4$*],
+    [*$2$*],
+    [*$1$*],
+
+    [$2^12$],
+    [$2^11$],
+    [$2^10$],
+    [$2^9$],
+    [$2^8$],
+    [$2^7$],
+    [$2^6$],
+    [$2^5$],
+    [$2^4$],
+    [$2^3$],
+    [$2^2$],
+    [$2^1$],
+    [$2^0$],
+
+    [#hex("1000")],
+    [#hex("800")],
+    [#hex("400")],
+    [#hex("200")],
+    [#hex("100")],
+    [#hex("80")],
+    [#hex("40")],
+    [#hex("20")],
+    [#hex("10")],
+    [#hex("8")],
+    [#hex("4")],
+    [#hex("2")],
+    [#hex("1")],
+)
+#v(-3pt)
+// #grid(
+//     columns: (auto, auto),
+//     [
+Dezimal zu Hex: _1K_ $= 2^10 = #bits("100 0000 0000") = #hex4(400)$, _4K_ $= 2^12 = #bits("1 0000 0000 0000")$ = #hex4("1000"), // Exponent = Anzahl Nullen, die durch vier Teilen für Anzahl Nullen in der Hex Zahl : 12/4 = 3 // 2^8 = 256 = #hex4("100") \
+// 1M = $2^20$ = #hex4("100000"), 128M = $2^20 dot 128$ = #hex4("800 0000")\
+// ],
+// [
+// kann jetzt auch gut von Hand berechnet werden, aber vielleicht brauche ich ja gerade einer dieser Zahlen und würde einen Flüchtigkeitsfehler machen:
+_1G_ = $2^30$ = #hex4("40000000"), _12 Byte_ = 100 Bit,
+24 Bit=3 Byte, 32 Bit=4 Byte, 40 Bit=5 Byte
+//     ],
+// )
+
+==== Datenstrukturen Grössen ext2 und ext4
+/ Inodes #hinweis[fixe Grösse je Volume]:
+    _ext2_: Zweiterpotenz mind. 128 B, _ext4_: mind. 256 B und max. 1 Block
+/ Gruppendeskriptoren: _ext2_: 32 B, _ext4_: 64 B
+/ Blockgrösse: _ext2_: 1KB, 2KB oder 4KB (normal), _ext4_: bis 64 KB
+
+==== ext2 Formeln
+#terms-spacing(0.8em, [
+    / Anz. Referenzen pro Referenzen-Block _R_: Blockgrösse / 4B #hinweis[Inodenummer-Grösse] = 4KB / 4B = 1K = _#hex4("400")_
+    / Anzahl indirekte Blöcke: _$R$_ (siehe Referenzen pro Ref.Block) = 1K = #hex4("400")
+    / Anzahl doubly indirekte Blöcke: _$R^2$_  = $1K^2 = 2^(10*2) = 2^20 = 1M$ = #hex4("100000")
+    / Anzahl triply indirekte Blöcke: _$R^3$_  = $2^30 = 1G$ = #hex4("40000000")
+    // / 1. Referenzblock Index (physische Adresse): Startindex = #hex4(2000)
+    / _letzte Blocknummer_ (physisch): (Startindex + Anzahl Blöcke) - 1 = #hex4("A000") - 1 = #hex4("9FFF")
+
+])
+
+==== Inode ist bekannt Formeln
+#terms-spacing(0.8em, [
+    / Inode zu Index der Blockgruppe: (Inode-1) / Anz. Inodes pro Gruppe
+    / Inode zu Index des Inodes innerhalb Blockgruppe: (Inode-1) % Anz. Inodes pro Gruppe
+])
+
 == Journaling (ext3, ext4)
 // Wenn Dateisystem beim _Erweitern_ einer Datei _unterbrochen_ wird, kann es zu
 // _Inkonsistenzen_ kommen.
@@ -1809,9 +1812,9 @@ der Bildschirm ist die Wurzel #hinweis[(z.B. Dialogbox, Scrollbar, Button...)].\
 *X Server:* Softwareteil des X Window System, der ein Display ansteuert. Beim Nutzer.
 
 == GUI Architektur
-Nicht nur X Window System, sondern auch _Window Manager_ #hinweis[(Verwaltung der sichtbaren
-    Fenster, Umrandung, Knöpfe. Läuft im Client und realisiert Window Layout Policy)] und
-_Desktop Manager_ #hinweis[(Desktop-Hilfsmittel wie Taskleiste, Dateimanager, Papierkorb etc.)].\
+Nicht nur X Window System, sondern auch: _Window Manager_ Verwaltung der sichtbaren
+Fenster, Umrandung, Knöpfe. Läuft im Client und realisiert Window Layout Policy \
+_Desktop Manager_ Desktop-Hilfsmittel wie Taskleiste, Dateimanager, Papierkorb etc.
 
 == Xlib
 Ist das _C Interface_ für das X Protocol. Wird meist nicht direkt verwendet.\
@@ -1876,9 +1879,15 @@ Werden mit jedem Fenster assoziiert.
 _Generischer Kommunikations-Mechanismus_ zwischen Applikation und Window Manager.\
 *`WM_PROTOCOLS`:*
 Von X Standard definierte Anzahl an Protokollen, die der Window Manager verstehen soll.
-Ein Client kann sich für Protokolle _registrieren_. \
+Ein Client kann sich für Protokolle _registrieren_ #hinweis[z.B. WM_DELETE_WINDOW]. \
 *`WM_DELETE_WINDOW`:*
 Wird beim Drücken des "x" vom Window Manager an den Client geschickt.
+// Das Protokoll dann als Atom registrieren und das Atom abschicken:
+#v(-0.5em)
+```c
+Atom atom = XInternAtom (display, "WM_DELETE_WINDOW", /* only_if_exists: */ False);
+XSetWMProtocols (display, window, &atom, 1);
+```
 
 // meltdown ist nicht prüfungsrelevant:
 /*
