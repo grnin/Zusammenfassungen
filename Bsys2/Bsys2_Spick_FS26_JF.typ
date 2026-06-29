@@ -778,7 +778,7 @@ pthread_create ( &id, &a, thread_function, argument );
 pthread_attr_destroy ( &a ); // destroy attributes
 ```
 
-#pagebreak()
+// #pagebreak() // platzverschwendung
 
 = Mutexe und Semaphore
 Jeder Thread hat seinen _eigenen_ Instruction-Pointer und Stack-Pointer. Wenn Ergebnisse von
@@ -1205,10 +1205,9 @@ Standard für Webpages. Echte Erweiterung von ASCII. Jedes B (Byte) = U (Code-Un
 // weiss ich auswendig:
 // *Lesen*: kleiner als 7Fh > ASCII, sonst von rechts nach links, wenn linker Teil `10` ist, dann geht es weiter und sonst sollte es die `vergangenen Anzahl Bytes=Units + 0` sein.\
 // *Schreiben*: von rechts nach links, wenn zu gross: noch ein Byte mit `10` signalisieren, sonst `Anzahl Bytes+0` aufschreiben (oder ASCII).
-
+#v(-0.5em)
 #block(
     sticky: true,
-
     [
         #let nextCU = bits("10xx xxxx")
         #table(
@@ -1412,7 +1411,7 @@ $"BE" = underline(
 )$
 // */
 
-#colbreak()
+// #colbreak()
 == Encoding-Beispiele
 #{
     set text(size: 0.94em)
@@ -1787,7 +1786,7 @@ _1G_ = $2^30$ = #hex4("40000000"), _12 Byte_ = 100 Bit,
 / Blockgrösse: _ext2_: 1KB, 2KB oder 4KB (normal), _ext4_: bis 64 KB
 
 ==== ext2 Formeln
-#terms-spacing(1em, [
+#terms-spacing(0.8em, [
     / Anz. Referenzen pro Referenzen-Block _R_: Blockgrösse / 4B #hinweis[Inodenummer-Grösse] = 4KB / 4B = 1K = _#hex4("400")_
     / Anzahl indirekte Blöcke: _$R$_ (siehe Referenzen pro Ref.Block) = 1K = #hex4("400")
     / Anzahl doubly indirekte Blöcke: _$R^2$_  = $1K^2 = 2^(10*2) = 2^20 = 1M$ = #hex4("100000")
@@ -1798,12 +1797,12 @@ _1G_ = $2^30$ = #hex4("40000000"), _12 Byte_ = 100 Bit,
 ])
 
 ==== Inode ist bekannt Formeln
-#terms-spacing(1em, [
+#terms-spacing(0.8em, [
     / Inode zu Index der Blockgruppe: (Inode-1) / Anz. Inodes pro Gruppe
     / Inode zu Index des Inodes innerhalb Blockgruppe: (Inode-1) % Anz. Inodes pro Gruppe
 ])
 
-== Beispiel Rechnung
+== Beispiel
 /*
 // ist eine Übungsaufgabe, nicht erlaubt!
 ==== Beispiel (kompakt): 4MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex("1000")
@@ -1880,8 +1879,7 @@ $log_2("Blockgrösse")$ bei 4KB = 2^12 Byte = 12 Bit
 #v(-0.5em)
 #image("img/extent-tree.svg", height: 2cm)
 #v(-0.5em)
-
-
+- Bei Berechnung von genutzten Metadaten, doppelt indirekte Blöcke aufzeichnen, damit ein "Wurzelblock" nicht vergessen geht.
 == Journaling (ext3, ext4)
 // Wenn Dateisystem beim _Erweitern_ einer Datei _unterbrochen_ wird, kann es zu
 // _Inkonsistenzen_ kommen.
