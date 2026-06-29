@@ -34,7 +34,7 @@
         font: calibri-font,
         lang: language,
         region: "ch",
-        size: font-size,
+        size: font-size, // 11p
     )
 
     let font-special = (
@@ -73,7 +73,11 @@
                     it.level == 3 and it.location().page() == current_page
                 ))
                 if (headingsLowerLevel.len() > 0) {
-                    set text(font: font-default.font, size: 0.7em, fill: colors.grey)
+                    set text(
+                        font: font-default.font,
+                        size: 0.7em,
+                        fill: colors.grey,
+                    )
                     headingsLowerLevel.map(it => it.body).join(", ")
                 }
             }
