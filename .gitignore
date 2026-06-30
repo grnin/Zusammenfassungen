@@ -1,5 +1,7 @@
 # custom gitignores here
 
+# affinity designer:
+*~lock~*
 
 
 # -----------------------------

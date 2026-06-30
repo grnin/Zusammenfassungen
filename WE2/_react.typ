@@ -364,7 +364,7 @@ export const Counter = () => {
         #move(dy: 0em, dx: 1.5em, [
             *Flow of a Controlled Component*
             #v(-0.8em)
-            #image("/WE2/assets/WE2_Diagramme-controlled-component.drawio.svg")
+            #image("/WE2/assets/controlled-component.svg")
         ])
     ],
 )
