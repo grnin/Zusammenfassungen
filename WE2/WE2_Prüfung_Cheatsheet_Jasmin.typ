@@ -45,5 +45,6 @@
 #include "/WE2/_code-express-testat.typ"
 #include "/WE2/_accessiblity-testing.typ"
 #include "/WE2/_security.typ"
-#include "/WE2/_pwa-zustand.typ"
+#include "/WE2/_pwa.typ"
+#include "/WE2/_context-zustand.typ"
 

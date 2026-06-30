@@ -28,8 +28,6 @@
 = PWA (für progressive enhancement)
 Progressive web apps use modern web APIs along with traditional progressive enhancement strategy to create _cross-platform web applications_. These apps work everywhere and provide several features that give them the same user experience advantages as _native apps_.
 
-
-
 == Native App
 / Vorteile: Native UX, Performance, Hardware Zugriff, iOS: PWA haben zusätzliche Einschränkungen.
 / Nachteile: Nicht jeder möchte eine App installieren, App ersetzt keine schlechte Website
@@ -64,6 +62,7 @@ Progressive web apps use modern web APIs along with traditional progressive enha
 //   #image("/WE2/assets/pwa-2.png")
 / Web App Manifest: definiert die Meta-Informationen der PWA. App-Name & Kurzname, Icons, Anzeige-Modus (z. B. fullscreen, standalone). ```html <link rel="manifest" href="/manifest.webmanifest">```
 / Installation: _JS-API_: Android/Edge/Chrome, _komplex, Anleitung nötig_: iOS/Safari
+/ VitePWA: definiert Manifest mit `vite.config.ts`, cached automatisch alles, konfiguriert Offline-Modus `services/index.ts`, ermöglicht re-engageable `user-notification.tsx` und `fcmSend`
 
 ==== Service Worker Code
 ```js
@@ -119,5 +118,3 @@ if ('serviceWorker' in navigator) {
     ],
 )
 */
-
-= Zustand / State Management
