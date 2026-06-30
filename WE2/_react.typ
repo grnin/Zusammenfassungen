@@ -34,7 +34,7 @@
 
 / Function Declaration:
      // Schlüsselwort `function`,
-    gehoistet #hinweis[Verwendung for Definition möglich], ```js function greet() {..}```
+    gehoistet #hinweis[Verwendung vor Definition möglich], ```js function greet() {..}```
 / Function Expression: in JSX und überall wo eine Expression reinpasst nutzbar //()
 / Named Function Expr.: ```js const greet = function greetPerson() {...};```, nützlich um useEffects zu benennen ```js useEffect( function useEffectNamedFunction(){ ... }, []);  ```
 / Anonymous Function Expr.: ```js const greet = function () {...}; ```
