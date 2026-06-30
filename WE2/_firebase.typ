@@ -24,7 +24,7 @@
     • Document kann wiederum Collections beinhalten, etc.
 
 
-==== Daten erstellen und schreiben
+== Daten erstellen und schreiben
 Auf Collections und Dokumente wird per Referenz zugegriffen:
 ```js
 const app = initializeApp(firebaseConfig);
@@ -40,7 +40,7 @@ addDoc(collectionRef, ({ text: "Learn Firebase" }));
 updateDoc(documentRef, { text: "Learn Firestore" })
 ```
 
-==== Daten abfragen
+== Daten abfragen
 Collection- und Dokument-Referenzen müssen nicht zwingend existieren
 Abfragen sind immer asynchron und können auch fehlschlagen:
 ```js
@@ -68,7 +68,7 @@ querySnapshot.forEach((doc) => {
 Bei Abfragen erhalten wir die _id_ und _data_ = den Dokumentinhalt als Snapshot.
 
 
-==== Realtime Updates
+== Realtime Updates
 Clients werden über Updates der Collections benachrichtigt:
 ```js
 // change in document
@@ -86,7 +86,7 @@ onSnapshot(q, (querySnapshot) => {
 });
 ```
 
-==== Indexes
+== Indexes
 Firebase erstellt automatische Indizes für einzelne Datenfelder
 - Sortierung: Ascending und Descending
 - <, <=, ==, >=, und > Abfragen
@@ -95,13 +95,13 @@ Erfolgt eine Abfrage über mehrere Felder, *muss* ein Index erstellt werden:
 query(collectionRef, where("checked", "==", true), orderBy("date", "desc"), limit(3));
 ```
 
-==== NoSQL
+== NoSQL
 / One-To-Many:
     Wenn Collection immer über Parent abgefragt wird, dann diese in Collection einbetten, ansonsten eigene Collection, oder wenn klein, Subcollection erstellen.
 / Many-To-Many:
     Wie in relationaler Datenbank mit Assoziationstabelle lösen oder Daten kopieren und einbetten.
 
-==== CRUD
+== CRUD
 CRUD ist Standardmässig deaktiviert:
 • Zugriff erlauben:
 // • https://firebase.google.com/docs/firestore/security/get-started
@@ -123,7 +123,7 @@ service cloud.firestore {
 }
 ```
 
-==== Security Beispiel
+== Security Beispiel
 ```js
 function isConnectedCoach(profileUid, toCheckUid) {
   return isCoach() && get(/databases/$(database)/documents/profiles/$(profileUid)).data.tokens[toCheckUid] == true;
@@ -190,18 +190,18 @@ onDocumentCreated("item/{itemId}", async (event) => {
 });
 ```
 
-==== Testing
+== Testing
 - Security Testing: https://firebase.google.com/docs/firestore/security/test-rules-emulator
 - Firebase Function Testing: https://firebase.google.com/docs/functions/unit-testing
 - E2E Test mit Simulator
 
 == Alternativen
-- Supabase
-• Functions: https://supabase.com/docs/guides/functions
-• AUTH: https://supabase.com/docs/guides/auth
-• DB: https://supabase.com/docs/guides/database PostgreSQL
-• Emulator: https://supabase.com/docs/guides/cli/local-development
-• Kein Static Hosting: https://github.com/orgs/supabase/discussions/991
+- Supabase \
+    - Functions: https://supabase.com/docs/guides/functions
+    - AUTH: https://supabase.com/docs/guides/auth
+    - DB: https://supabase.com/docs/guides/database PostgreSQL
+    - Emulator: https://supabase.com/docs/guides/cli/local-development
+    - Kein Static Hosting: https://github.com/orgs/supabase/discussions/991
 - AWS
 - MongoDB Cloud
 - Azure

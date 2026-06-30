@@ -181,6 +181,9 @@ describe('Account Service', () => {
 ```
 
 
+===== Was testen wenn Backend/DB noch nicht existiert
+Endpunkte, Methoden, Request-Body, Response-Body, Statuscodes, Fehlerformate
+
 
 /*
 // entfernen wenn kein Platz
