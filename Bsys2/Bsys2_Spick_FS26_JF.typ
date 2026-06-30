@@ -346,14 +346,20 @@ Werden vom _Linker_ verwendet: Verschmilzt Sektionen und erzeugt ausführbares E
 
 == Bibliotheken
 / Statische Bibliotheken:
-    Archive von Objekt-Dateien. Name: `lib<name>.a`, referenziert wird nur `<name>`.
-    _Linker_ behandelt statische Bibliotheken wie _mehrere Objekt-Dateien_. Ursprünglich gab es
-    _nur statische Bibliotheken_ #hinweis[(Einfach zu implementieren, aber Funktionalität fix, wie zip vorstellen)].\
+    Archive von Objekt-Dateien. `lib<name>.a`, referenziert wird nur `-l <name>`.
+    _Linker_ behandelt statische Bibliotheken wie _mehrere Objekt-Dateien_: gelinkte statische Bibliotheken werden im Programm-Image verteilt. Variablen und Funktionen werden auf absolute Adressen fixiert. \
+    Früher gab es nur statische Bibliotheken, _Vorteile:_ Einfach zu verwenden und implementieren für Programmierer und Linker, _Nachteile:_ Programme müssen bei Änderungen neu erstellt werden (auch Bugfix), Funktionalität ist fix (keine Plugins) \
 / Dynamische Bibliotheken:
     Linken zur Ladezeit bzw. Laufzeit des Programms.
     Executable enthält nur Referenz auf Bibliothek. Höherer Aufwand.
-    _Vorteile_: austauschbar, Entkoppelter Lebenszyklus, Plugin-Mechanismus, (Schnellere Ladezeiten durch Lazy Loading, Flexibler Funktionsumfang).
-    _Dynamisches Linken_ explizit im Programm #hinweis[dlopen, dlsym] oder zum Programmstart.
+    _Vorteile_: Entkoppelter Lebenszyklus (Updates bei mehreren libr. unabhängig voneinander, Bugfixes direkt zur Anwenderin), Verzögertes Laden (nur Bibliothek laden, die es braucht z.B. spezielle Dateiformate erst wenn nötig), Flexibler Funktionsumfang (Plugin-Mechanismus, Beispiel unten), (Schnellere Ladezeiten durch Lazy Loading).
+    _Dynamisches Linken_ explizit im Programm `dlopen, dlsym` oder zum Programmstart.
+/ Flexibler Funktionsumfang:
+    Programme können um Funktionalität ergänzt werden, die beim Schreiben nicht vorgesehen war:
+    Programm definiert allgemeine Schnittstelle für Plugin-Bibliotheken (d.h. Funktionsnamen und Signaturen)
+    #sym.arrow.r Jede Plugin-Bibliothek implementiert diese Schnittstelle.
+    Programm enthält Mechanismus, anhand des Modulnamens Bibliothek zu finden #sym.arrow.r Nach Angabe des Bibliotheksnamen öffnet das Programm die Bibliothek und ruft die allgemeine Schnittstelle auf
+    #sym.arrow.r Spezifische Bibliotheksfunktionalität wird ausgeführt
 == POSIX Shared Objects API
 / Konventionen:
     Shared Objects können _automatisch_ bei Bedarf geladen werden.
@@ -369,17 +375,14 @@ Werden vom _Linker_ verwendet: Verschmilzt Sektionen und erzeugt ausführbares E
         Dependencies)].
 / Implementierung dynamischer Bibliotheken:
     Müssen verschiebbar sein, mehrere müssen in den gleichen Prozess geladen werden.
-    Die Aufgabe des Linkers wird in den Loader bzw. Dynamic Linker verschoben
+    Aufgabe des Linkers wird in den Loader bzw. Dynamic Linker verschoben
     #hinweis[(Load Time Relocation)].
 
 
 *```c void * dlopen (char * filename, int mode)```:*
 _öffnet_ eine dynamische Bibliothek und gibt ein Handle darauf zurück.
 `mode` ist einer der folgenden Werte:
-- _`RTLD_NOW`:_ Alle Symbole werden beim Laden gebunden
-- _`RTLD_LAZY`:_ Symbole werden bei Bedarf gebunden
-- _`RTLD_GLOBAL`:_ Symbole können beim Binden anderer Objektdateien verwendet werden
-- _`RTLD_LOCAL`:_ Symbole werden nicht für andere Objektdateien verwendet\
+_`RTLD_NOW`:_ Alle Symbole werden beim Laden gebunden, _`RTLD_LAZY`:_ Symbole werden bei Bedarf gebunden, _`RTLD_GLOBAL`:_ Symbole können beim Binden anderer Objektdateien verwendet werden, _`RTLD_LOCAL`:_ Symbole werden nicht für andere Objektdateien verwendet\
 *```c void * dlsym (void * handle, char * name)```:*
 gibt die _Adresse des Symbols_ `name` aus der mit `handle` bezeichneten _Bibliothek_ zurück.
 Keine Typinformationen #hinweis[(Variable? Funktion?)]
@@ -399,11 +402,12 @@ schliesst das durch `handle` bezeichnete, zuvor geöffnete Objekt.\
 gibt Fehlermeldung als null-terminierten String zurück.
 
 // == Shared Memory
-/ _Position-Independent Code_: #hinweis[(Adressen nur relativ zum Instruction Pointer, Prozessor muss relative Instruktionen anbieten)] Dynamische Bibliotheken sollen _Code zwischen Programmen teilen_. Code soll _nicht mehrfach_ im Speicher abgelegt werden.
-/ Mit Shared Memory: kann jedes Programm eine _eigene virtuelle Page_ für den Code definieren. Diese werden auf denselben Frame im RAM gemappt.
-/ Relative Moves via Relative Calls: Mittels Hilfsfunktion wird Rücksprungadresse in Register abgelegt, somit kann relativ dazu gearbeitet werden.
+/ Mit Shared Memory: jedes Programm hat eine _eigene virtuelle Page_ für den Code. Diese werden auf denselben Frame im RAM gemappt. _Problem_: dyn. Bibliothek muss verschiebbar sein, schwierig mit absoluten Adressen, Adressen mappen an welchen Prozess?
+/ Position-Independent Code (PIC): Code hängt nicht von Adresse ab, Adresse relativ zum Instruction Pointer. Prozesssor muss _relative Moves_ anbieten: können über relative Calls mit GOT emuliert werden . _Vorteile_ Dynamische Bibliotheken können Code zwischen Programmen teilen. Code wird nicht mehrfach im Speicher abgelegt.
+/ Relative Moves via Relative Calls + GOT: Mittels Hilfsfunktion wird Rücksprungadresse in Register abgelegt, somit kann relativ dazu gearbeitet werden.
 / Global Offset Table (GOT): Pro dynamische Bibliothek & Executable vorhanden, enthält pro Symbol einen Eintrag. Der Loader füllt zur Laufzeit die Adressen in die GOT ein.
 / Procedure Linkage Table (PLT): Implementiert Lazy Binding. Enthält pro Funktion einen Eintrag, dieser enthält Sprungbefehl an Adresse in  GOT-Eintrag. Dieser zeigt auf eine Proxy-Funktion, welche den GOT-Eintrag überschreibt. _Vorteil:_ erspart bedingten Sprung.
+
 
 = Threads
 Jeder _Prozess_ hat virtuell den _ganzen Rechner_ für _sich alleine_.
