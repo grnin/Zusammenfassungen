@@ -30,7 +30,7 @@
 = Context API
 ```tsx
 // Erstellen des Context
-const UserContext = createContext(initialValue)
+const UserContext = createContext<ThemeContextValue | undefined>(initialValue);
 // Bereitstellen des Kontexts im Komponenten-Tree
 // Der Value kann zum Beispiel von einem Prop oder State kommen
 <UserContext.Provider value={user}>
@@ -38,6 +38,9 @@ const UserContext = createContext(initialValue)
 </UserContext.Provider>
 // Verwenden des Kontexts
 const context = useContext(UserContext);
+const ThemeButton =()=>{
+  const { theme, toggleTheme } = useTheme();
+..}
 ```
 ==== ThemeProvider Context
 #grid(
@@ -47,14 +50,14 @@ const context = useContext(UserContext);
         ```tsx
         export const ContextDemo = () => {
         return ( <ThemeProvider>
-            <h1>useContext Demo </h1>
-            <ThemeTitle />
-            <ThemeButton />
-        </ThemeProvider> );
+                    <h1>useContext</h1>
+                    <ThemeTitle />
+                    <ThemeButton />
+                </ThemeProvider>  );
         ```
     ],
     [
-        #v(-6.25em)
+        #v(-8.25em)
         // #align(right, [
         // #image("/WE2/assets/we2-1.png", height: 2cm)
         #image("/WE2/assets/themeprovider.svg")
@@ -63,18 +66,6 @@ const context = useContext(UserContext);
     ],
 )
 
-
-
-
-
-
-/ Warum die Unterteilung in zwei Files?:
-    Fast refresh only works when a file only
-    exports components. Use a new file to share
-    constants or functions between components. \
-    `eslint(react-refresh/only-export-components)`
-    Der Grund ist, dass das Hot Module Reloading von Vite kaputtgeht, wenn man man in
-    Komponentenfiles (.tsx) Funktionen exportiert.
 
 Setup:
 #v(-0.5em)
@@ -121,5 +112,45 @@ export const ThemeProvider = ( { children }: { children: ReactNode } ) => {
 };
 ```
 
+/ Warum die Unterteilung in zwei Files (ThemeContext, ThemeProvider)?:
+     // Fast refresh only works when a file only
+    // exports components. Use a new file to share
+    // constants or functions between components. \
+    `eslint(react-refresh/only-export-components)`
+    Der Grund ist, dass das Hot Module Reloading "fast refresh" von Vite kaputtgeht, wenn man man in Komponentenfiles (.tsx) Funktionen exportiert.
 
 = Zustand / State Management
+Ein State-Management …
+- verwaltet Applikationsdaten und Datenfluss zentral
+- stellt globale Daten konsistent bereit (z.B. User-, Stamm-, Konfigurationsdaten)
+- definiert klare Regeln zur Datenmanipulation
+
+/ Context Api: Transportmechanismus für Daten
+    _Vorteile:_ vorinstalliert \
+    _Nachteile:_ Boilerplate Code
+
+/ State Management:
+    _Vorteile:_ Wartbarkeit, Struktur, Performance \
+    _Nachteile:_
+
+```tsx
+// store contains the state ( data ) and also the actions for manipulation
+export const useAuthStore = create < AuthState > ()((set) => ({
+  currentUser: undefined, // state = Daten
+  actions: { // actions: Only actions are allowed to change the state
+    updateProfile: async (data) => {
+      await authService.updateProfile(data);
+      set({ currentUser: authService.auth.currentUser });
+    },
+    login: (email, pwdOld, pwd) => {
+      await authService.login(email, pwdOld, pwd),
+        set({ currentUser: authService.auth.currentUser });
+    }
+}) );
+// Lesen der Daten via Hook (konsistente Daten) :
+const currentUser = useAuthStore((s) => s.currentUser);
+<label>{currentUser?.email}</label>
+// Ändern der Daten (Action -> State Änderung -> UI-Update via Hooks) :
+const authActions = useAuthActions();
+authActions.updateProfile({ displayName: 'Jasmin :)' })
+```

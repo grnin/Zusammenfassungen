@@ -1,6 +1,6 @@
 #import "../template--additional-formatting-templates.typ": *
 
-// /* zum testen:
+/* zum testen:
 #import "../template_cheatsheet.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
@@ -73,7 +73,7 @@ if ('serviceWorker' in navigator) {
 }
 ```
 
-/*
+// /*
 // kein Platz:
 ==== Manifest.json Beispiel
 #grid(
@@ -117,4 +117,4 @@ if ('serviceWorker' in navigator) {
         ```
     ],
 )
-*/
+// */

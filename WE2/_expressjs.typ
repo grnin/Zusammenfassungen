@@ -138,8 +138,8 @@ app.listen(3000, function () {
  |                                            | 5. Check JWT signature
  |   6. Sends response to the client  <-      | Get user info from JWT
  | <----------------------------------------- |
- |                                            |
 ",
+    //  |                                            |
 )
 
 == AJAX mit fetch Repetition

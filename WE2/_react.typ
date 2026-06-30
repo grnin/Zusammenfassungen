@@ -1,6 +1,6 @@
 #import "../template--additional-formatting-templates.typ": *
 
-// /* zum testen:
+/* zum testen:
 #import "../template_cheatsheet.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
@@ -391,6 +391,7 @@ Typisierung von Objekten, Props, Funktionen.
 / Discriminated Union: ```js switch (shape.kind) { case "circle": ... } ```
 / weitere Typprüfungen: ```js instanceof(HttpError) ```, ```js if (var == null)```
 
+#v(-0.5em)
 // mit bitzli von finns zusammenfassung und angepasst :)
 ```ts
 type Status = "idle" | "loading" | "success" | "error";
@@ -401,6 +402,33 @@ type ButtonProps = { label: string; onClick: () => void; };
 export function Button({ label, onClick }: ButtonProps) {
 return <button onClick={onClick}>{label}</button>;
 ```
+#v(-0.5em)
+
+*Never* Bedeutet der Wert soll nicht existieren. (z. B. Rückgabetyp bei Exceptions)
+*Undefined* Eine Variable wurde deklariert, ihr aber nie ein Wert zugewiesen.
+*Null* Expliziter Wert, der sagt, das ist kein Objekt oder Wert
+*Generics* : Platzhalter für Typen
+#v(-0.5em)
+```js
+function identity<T>(x: T): T { return x; }
+// Generics werden auch von useState und Array verwendet:
+const [name, setName] = useState<string | null>('alice');
+const names: string[] = []; // Kurzschreibweise
+const names: Array<string> = []; // Langschreibweise
+```
+// ```js
+// console.log(createPair('hellow', 'mellow')); // ["hellow", "mellow"]
+// console.log(createPair(3, 4)); // [3, 4]
+// console.log(createPair('hellow', 4)); // Argument of type 'number'
+// // is not assignable to parameter of type 'string'.
+// let [a, b] = [6, 8]
+// console.log(createPair<number>(a, b))
+// // in den <> kann man den Typ definieren, den die Funktion haben soll
+// ```
+//
+
+
+// /* // auskommentieren wenn kein Platz
 *? (Optionales Property/Parameter)* ist implizit "… | undefined"
 // Optional parameter (implicitly `string | undefined`)
 #v(-0.5em)
@@ -435,34 +463,8 @@ function printValue(value: string | number) {
         console.log(value.toFixed(2)); // value : number
 }   }
 ```
+// */
 
-*Never* Bedeutet der Wert soll nicht existieren. (z. B. Rückgabetyp bei Exceptions)
-*Undefined* Eine Variable wurde deklariert, ihr aber nie ein Wert zugewiesen.
-*Null* Expliziter Wert, der sagt, das ist kein Objekt oder Wert
-
-// *Generics*
-// function createPair<T>(v1: T, v2: T): [T, T] { return [v1, v2]; }
-
-*Generics* : Platzhalter für Typen
-#v(-0.5em)
-// function createPair<T>(v1: T, v2: T): [T, T] { return [v1, v2]; }
-```js
-function identity<T>(x: T): T { return x; }
-// Generics werden auch von useState und Array verwendet:
-const [name, setName] = useState<string | null>('alice');
-const names: string[] = []; // Kurzschreibweise
-const names: Array<string> = []; // Langschreibweise
-```
-// ```js
-// console.log(createPair('hellow', 'mellow')); // ["hellow", "mellow"]
-// console.log(createPair(3, 4)); // [3, 4]
-// console.log(createPair('hellow', 4)); // Argument of type 'number'
-// // is not assignable to parameter of type 'string'.
-// let [a, b] = [6, 8]
-// console.log(createPair<number>(a, b))
-// // in den <> kann man den Typ definieren, den die Funktion haben soll
-// ```
-//
 
 == React Routing mit ReactRouter
 Mit React Router: ```js <Route path="/" element={<Home />} /> ``` Kann: Mehrere Seiten darstellen #hinweis[es sieht dann aus wie eine "traditionelle" Webseite, inklusive änderung der URL, aber ohne Reloads (Client Side Routing)], URL parameter und Query Strings verwenden,
@@ -540,8 +542,7 @@ an sich nichts schlechtes.
         const Layout = ({ children }) => {
         return (
             <div className="layout">
-                <Header />
-                {children}
+                <Header /> {children}
             </div>
         );  }
         // --- Verwendung
@@ -557,42 +558,40 @@ an sich nichts schlechtes.
 *Trennung von Page- und Komponentenlayouts*:
 styles/base.css (resets, typography),
 variables.css (tokens, colors),
-layout.css (top-level page layout)
-\
-Cascades vermeiden, stattdessen Composition nutzen
+layout.css (top-level page layout). _Cascades_ vermeiden #sym.arrow.r _Composition_ nutzen. Z.B. via classname (anstatt ```css.button--primary``` #sym.arrow.r ```css.button .primary```)
+
+/*
 #v(-0.5em)
 ```css
 :root { --color-primary: #0070f3; } /* Definition in der variables.css */
 /* Nutzung in einer anderen Datei: */
 .button { background-color: var(--color-primary); /* Hier wird der Wert #0070f3 eingesetzt */}
 ```
-
-// #grid(
-//     columns: (auto, auto),
-//     gutter: 0em,
-//     [
-Composition via classname
-#v(-0.5em)
-```css
-.btn { padding: 10px; border-radius: 4px; } .btn-primary { background: var(--color-primary); } .btn-danger { background: red; }
-/* HTML Composition: */ <button class="btn btn-primary">Speichern</button> <button class="btn btn-danger">Löschen</button>
-```
-
-// ],
-// [
-
-//     ```css
-//     .button {
-//     /* Basis-Styles */
-//     &.primary {
-//     /* Styles für Primär-Button */ }
-//     &.large {
-//     /* Styles für große Buttons */ } }
-//     <button class="button primary large">
-//     ```
-// ],
-// )
-
+#grid(
+    columns: (auto, auto),
+    gutter: 0em,
+    [
+        Composition via classname
+        #v(-0.5em)
+        ```css
+        .btn { padding: 10px; border-radius: 4px; } .btn-primary { background: var(--color-primary); } .btn-danger { background: red; }
+        /* HTML Composition: */ <button class="btn btn-primary">Speichern</button> <button class="btn btn-danger">Löschen</button>
+        ```
+    ],
+    [
+        ```css
+        .button {
+        /* Basis-Styles */
+        &.primary {
+        /* Styles für Primär-Button */ }
+        &.large {
+        /* Styles für große Buttons */ } }
+        <button class="button primary large">
+        ```
+    ],
+)
+// */
+#v(-1em)
 / CSS Nesting: Verschachtelung ist ok, muss aber "flach" gehalten werden (maximal 3 Ebenen tief).
 / Einheiten: Verwende konsequent rem anstelle von px, für Barrierefreiheit (Skalierbarkeit)
 / Gruppierung: Deklarationen innerhalb einer Regel sollten in einer logischen Reihenfolge stehen (z. B.erst Positionierung, dann Box-Modell wie Display/Padding, dann Farben/Text).

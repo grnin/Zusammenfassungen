@@ -30,18 +30,18 @@ app.listen(port, hostname, (error: any) => {
 ```
 
 ==== app.js
+// import express, { NextFunction, Request, Response } from 'express';
+// import path from 'path';
+// import cors from 'cors';
+
+// import { userRoutes } from './routes/user-routes';
+// import { accountRoutes } from './routes/account-routes';
+// import { transactionRoutes } from './routes/transaction-routes';
+// import { CONFIG } from './config';
+// import { expressjwt } from 'express-jwt';
+// import { HttpError } from './services/http-error';
 ```js
-import express, { NextFunction, Request, Response } from 'express';
-import path from 'path';
-import cors from 'cors';
-
-import { userRoutes } from './routes/user-routes';
-import { accountRoutes } from './routes/account-routes';
-import { transactionRoutes } from './routes/transaction-routes';
-import { CONFIG } from './config';
-import { expressjwt } from 'express-jwt';
-import { HttpError } from './services/http-error';
-
+// imports (express, path, cors, ..Routes, CONFIG, expressjwt, HttpError)
 export const app = express();
 
 app.use(cors());
@@ -61,28 +61,19 @@ app.use(
     async register(data: UserRegister): Promise<LoginResult> {
         const uuid = randomUUID();
         const newUser: User = {
-            uuid: uuid,
-            name: data.name,
-            email: data.email,
-            pwdHash: CryptoUtil.hashPwd(data.password),
+            uuid: uuid, name: data.name,
+            email: data.email, pwdHash: CryptoUtil.hashPwd(data.password)
         };
         await this.db.insertAsync(newUser);
         accountService.create(uuid);
         const token = await CryptoUtil.createJWT({ uuid: uuid });
-        const owner = {
-            uuid: uuid,
-            name: data.name,
-            email: data.email,
-        };
-        return {
-            owner: owner,
-            token: token,
-        };
+        const owner = { uuid: uuid, name: data.name, email: data.email };
+        return { owner: owner, token: token };
     }
     ```
 ]
+#v(-0.25em)
 ```ts
-
 // app.use('/users', userRoutes);
 // app.use('/accounts', accountRoutes);
 app.use('/transactions', transactionRoutes);
@@ -100,16 +91,14 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 ```
 
 ==== routes/transaction-routes.ts
+// import express from 'express';
 ```tsx
-import express from 'express';
 import { transactionController } from '../controller/transaction-controller';
 
 const router = express.Router();
-
 router.post('/', transactionController.create);
 // router.get('/', transactionController.getTransactions);
 // router.get('/:accountNr', transactionController.getTransactions);
-
 export const transactionRoutes = router;
 ```
 
@@ -201,8 +190,7 @@ public create = async (req: Request, res: Response) => {
             const from = await accountService.get(data.from);
             if (from.balance < data.amount) {
                 throw new HttpError(400, 'Insufficient funds');
-            }
-          //  throw error if amount < 0, sending to yourself..
+            } //  throw error if amount < 0, sending to yourself..
 
             const newFromBalance = from.balance - data.amount;
             const to = await accountService.get(data.to);
@@ -282,24 +270,22 @@ export class AccountService {
     // await accountService.update(to.accountNr, { balance: newToBalance });
     async update(accountNr: number, data: Update) {
         const account = await this.db.updateAsync(
-            { accountNr }, { $set: data }, { multi: false, returnUpdatedDocs: true },
+            { accountNr }, { $set: data },
+            { multi: false, returnUpdatedDocs: true },
         );
         if (!account.affectedDocuments) { throw new HttpError(404, `${accountNr} not Found`); }
         return true;
     }
 ```
 // ]
-
-
-
-=== Zusatz von letzter Vorlesung
-
-Weshalb ist die letzte Zeile mit dem cast hier nötig?
+==== TS nedb Problem bei Transaction[]
+// Weshalb ist die letzte Zeile mit dem cast hier nötig?
 ```ts
 const raw = await this.db.find(query).sort({ date: -1 })
     .skip(validatedData.skip).limit(validatedData.count)
     .execAsync();
 const docs = (Array.isArray(raw) ? raw : [raw]) as Transaction[];
 ```
+#v(-1em)
 > sicherstellen, dass es als Array gesehen wird, nicht einfach any sondern [].. nedb Typ `Cursor<T[]>` nicht wie von `Cursor<T>`.  // TODO, bin mir nicht gaaanz sicher.
 // https://github.com/seald/nedb/issues/71 uff
