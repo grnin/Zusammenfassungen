@@ -268,7 +268,7 @@ Programmargumente müssen spezifiziert werden. #hinweis[(`..l` als Liste, `..v` 
     columns: (auto, 1fr, auto, auto),
     table.header(
         [Aufrufen der\ Executable],
-        [Zustand der Environment-Variabeln],
+        [Zustand der Environment-Variablen],
         [Programmargumente\ als Liste],
         [Programmargumente\ als Array],
     ),
@@ -382,7 +382,7 @@ _öffnet_ eine dynamische Bibliothek und gibt ein Handle darauf zurück.
 - _`RTLD_LOCAL`:_ Symbole werden nicht für andere Objektdateien verwendet\
 *```c void * dlsym (void * handle, char * name)```:*
 gibt die _Adresse des Symbols_ `name` aus der mit `handle` bezeichneten _Bibliothek_ zurück.
-Keine Typinformationen #hinweis[(Variabel? Funktion?)]
+Keine Typinformationen #hinweis[(Variable? Funktion?)]
 
 ```c
 // type "func_t" is an address of a function with a int param and int return type
@@ -536,8 +536,8 @@ Argumente für `start_function`.
 *Thread-Attribute:*
 #v(-0.5em)
 ```c
-pthread_attr_t attr; // Variabel erstellen
-pthread_attr_init (&attr); // Variabel initialisieren
+pthread_attr_t attr; // Variable erstellen
+pthread_attr_init (&attr); // Variable initialisieren
 pthread_attr_setstacksize (&attr, 1 << 16); // 64kb Stackgrösse
 pthread_create (..., &attr, ...); // Thread erstellen
 pthread_attr_destroy (&attr); // Attribute löschen
@@ -1834,7 +1834,7 @@ _Desktop Manager_ Desktop-Hilfsmittel wie Taskleiste, Dateimanager, Papierkorb e
 Ist das _C Interface_ für das X Protocol. Wird meist nicht direkt verwendet.\
 *Funktionen:*
 ```c XOpenDisplay()``` #hinweis[öffnet Verbindung zum Display,
-    NULL = Wert von `DISPLAY` Umgebungsvariabel)],
+    NULL = Wert von `DISPLAY` Umgebungsvariable)],
 ```c XCloseDisplay()``` #hinweis[schliesst Verbindung],
 ```c XCreateSimpleWindow()``` #hinweis[erzeugt ein Fenster],
 ```c XDestroyWindow()``` #hinweis[entfernt ein Fenster & Unterfenster],
