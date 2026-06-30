@@ -44,7 +44,7 @@
 
 / Was sind Expressions?: Expressions sind Werte oder Kombinationen von Werten, Variablen und Operatoren, die ein Resultat ergeben. Alles was etwas zurück gibt.
 / Expressions: Wie man Werte im JSX ausgeben kann u.v.m.
-/ keine Expressions: `const a = [1,2]`, statements wie `if` sind keine Expression // TODO
+/ keine Expressions: `const a = [1,2]`, statements wie `if` sind keine Expression
 / Spread Syntax: `...` kopiert Array und Objekt Inhalte. Nur 1 Level tief.
 
 
@@ -208,7 +208,7 @@ Props sind Eingabewerte für Komponenten (Tatsächlich ist das Props Objekt der 
 - Props können immer nur von Parent zum Child übergeben werden
 - immutable
 - Es können nicht nur Strings, sondern alle JS Datentypen als Props übergeben werden, auch andere Komponenten, JSX-Fragmente, Objekte, Listen, oder Funktionen.
-== State/Zustand (useState), Eventhandler
+== useState, Eventhandler
 #v(-1em)
 // // Code zu unwichtig / auswendig
 // ```js
@@ -216,18 +216,15 @@ Props sind Eingabewerte für Komponenten (Tatsächlich ist das Props Objekt der 
 // ```
 //
 === Eventhandler
-Wir brauchen Funktionen, die Interaktionen im UI mit dem State verbinden -> Eventhandler.
-`<button onClick={() => setCounter(counter+1)}>Click Me</button>`
+Funktionen, die Interaktionen im UI mit dem State verbinden.
+```html <button onClick={() => setCounter(counter+1)}>Click Me</button>```
 Native HTML Elemente haben in React spezielle Attribute/Props, die Eventhandler aufnehmen.
-Einige der häufig verwendeten:
-onClick für Buttons
-onChange für Inputfelder
-onFocus/onBlur
-Diesen Attributen können wir Eventhandler-Funktionen übergeben.
-Eventhandler-Funktionen bekommen ein Eventobjekt `e` , das analog zum Event in JS
-funktioniert und Informationen zum Event enthält
+Einige der häufig verwendeten: `onClick` für Buttons, `onChange` für Inputfelder, `onFocus`/`onBlur`.
+// Diesen Attributen können wir Eventhandler-Funktionen übergeben.
+// Eventhandler-Funktionen bekommen ein Eventobjekt `e` , das analog zum Event in JS
+// funktioniert und Informationen zum Event enthält
 
-Es gibt verschiedene Möglichkeiten, Eventhandler zu platzieren:
+// Es gibt verschiedene Möglichkeiten, Eventhandler zu platzieren:
 ```tsx
 // separat -> für längere Handler, oder mehrfach verwendete (Demo 1)
 const clickHandler = () => { alert('submitted') }
@@ -361,15 +358,14 @@ export const Counter = () => {
         ```
     ],
     [
-        #move(dy: 0em, dx: 1.5em, [
+        #move(dy: -2em, dx: 1.5em, [
             *Flow of a Controlled Component*
             #v(-0.8em)
             #image("/WE2/assets/controlled-component.svg")
         ])
     ],
 )
-#v(-1em)
-
+#v(-3em)
 ```tsx
 // generalized changehandler:
 const handleChange = (e: React.SubmitEvent<HTMLFormElement>): void => {
@@ -559,7 +555,6 @@ an sich nichts schlechtes.
 styles/base.css (resets, typography),
 variables.css (tokens, colors),
 layout.css (top-level page layout). _Cascades_ vermeiden #sym.arrow.r _Composition_ nutzen. Z.B. via classname (anstatt ```css.button--primary``` #sym.arrow.r ```css.button .primary```)
-
 /*
 #v(-0.5em)
 ```css
@@ -590,8 +585,8 @@ layout.css (top-level page layout). _Cascades_ vermeiden #sym.arrow.r _Compositi
         ```
     ],
 )
-// */
 #v(-1em)
+// */
 / CSS Nesting: Verschachtelung ist ok, muss aber "flach" gehalten werden (maximal 3 Ebenen tief).
 / Einheiten: Verwende konsequent rem anstelle von px, für Barrierefreiheit (Skalierbarkeit)
 / Gruppierung: Deklarationen innerhalb einer Regel sollten in einer logischen Reihenfolge stehen (z. B.erst Positionierung, dann Box-Modell wie Display/Padding, dann Farben/Text).

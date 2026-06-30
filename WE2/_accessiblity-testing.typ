@@ -90,6 +90,12 @@
 / Gute Tests prüfen Grenzfälle: 0, negativ, sehr gross, leer, null, falscher Typ und unerwartete Eingaben.
 / Test-Smells: Flaky Tests #hinweis[Abhängig von Zeit, Netzwerk, Reihenfolge], Implementation Detail Testing #hinweis[z.B. jeder 2. funktioniert], übermässiges Mocking #hinweis[dann refactor, Architektur prüfen]
 
+==== API Tests, Unit Tests, gute Testbarkeit
+/ API Tests: liegen zwischen Unit Tests und E2E Tests. Sie prüfen das Zusammenspiel von Routing, Request-Verarbeitung und Response-Format. #hinweis[nicht produktive DB, Frontend Darstellung, UX]
+// / (API Tests): ist Unit- oder Integration Test, z.B. request mit Supertest durchführen und testen mit vitest, damit routes testen
+/ (Unit Tests) Arrange-Act-Assert: Was war vorbereitet? Was wurde getan? Was ist herausgekommen?
+/ Gut testbar = gute Architektur: kleine Funktionen, Funktionen ohne Nebeneffekte (pure), klare Schnittstellen, lose Kopplung, Dependency Injection (statt direkte Abhängigkeiten), Zustände nicht global
+
 === Arten von Checks
 / tsconfig.json mit `"compilerOptions": { "strict": true,..`: strengere Typprüfung, ungenutzte Variablen erkennen, Compiler-Regeln definieren
 / eslint.config.js mit `rules: { "no-unused-vars": "error", "jsx-a11y/alt-text": "warn"..`: Coding Standards, Accessibility-Regeln, Qualitätsregeln für React
@@ -103,11 +109,6 @@
 / Integration Tests: prüft Zusammenspiel (API + Daten), (z.B. für Frontend mit Playwright, React Testing Lib, MSV), #hinweis[Unit Tests + falsche API Antwort, Login]
 / E2E Tests: prüft User Flows (Login), mit Playwright/React Testing Lib, langsam, #hinweis[Integr. Tests + fehlendes Label wie Static checks]
 
-==== weitere Infos
-/ API Tests: liegen zwischen Unit Tests und E2E Tests. Sie prüfen das Zusammenspiel von Routing, Request-Verarbeitung und Response-Format. #hinweis[nicht produktive DB, Frontend Darstellung, UX]
-// / (API Tests): ist Unit- oder Integration Test, z.B. request mit Supertest durchführen und testen mit vitest, damit routes testen
-/ (Unit Tests) Arrange-Act-Assert: Was war vorbereitet? Was wurde getan? Was ist herausgekommen?
-/ Gut testbar = gute Architektur: kleine Funktionen, Funktionen ohne Nebeneffekte (pure), klare Schnittstellen, lose Kopplung, Dependency Injection (statt direkte Abhängigkeiten), Zustände nicht global
 
 ==== Test Coverage
 / Statement Coverage: Wurden alle Anweisungen ausgeführt?
@@ -140,7 +141,7 @@ test("user can log in", async ({ page }) => {
 // - Label
 // Test Selektoren sollen sich an Bedeutung und zugängliche Namen orientieren und nicht an Styling
 
-// TODO Frage: Wenn die Selektoren von E2E Tests mit Playwright sich an die Namen vom Inhalt orientieren, ist die Idee für mehrsprachige Webseiten die Tests zu übersetzen?
+// Frage: Wenn die Selektoren von E2E Tests mit Playwright sich an die Namen vom Inhalt orientieren, ist die Idee für mehrsprachige Webseiten die Tests zu übersetzen?
 
 ==== Unit + API Test mit Vitest und request von Supertest
 ```js

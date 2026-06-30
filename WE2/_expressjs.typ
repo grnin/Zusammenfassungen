@@ -242,6 +242,7 @@ Statt ```js res.type('text/html'); res.write("<html>"); res.write("<p>..</p>"); 
 ```js
 render("template", {pizzaName: "Hawaii", _id: 3, state: "OK"});
 ```
+#v(-0.5em)
 ```html
 <p>Order-Infos</p>
 {{#if pizzaName}}
@@ -251,11 +252,11 @@ render("template", {pizzaName: "Hawaii", _id: 3, state: "OK"});
             <input type='hidden' name='_method' value='delete'>
             <input type='submit' value='Delete order'>
         </form>
-    {{/if_eq}}
-{{/if}}
+{{/if_eq}} {{/if}}
 ```
 
 ```js render("template", {description: "List of some Movies", items: songs}); ```
+#v(-0.5em)
 ```html
 <figure><ul>
     {{#each items}}// title == this.title = bezieht sich auf items

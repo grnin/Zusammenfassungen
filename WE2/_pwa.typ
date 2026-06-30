@@ -49,7 +49,7 @@ Progressive web apps use modern web APIs along with traditional progressive enha
     Die Web Applikation mit Icon auf den Startbildschirm speichern. _Web App Manifest_
 / Network independent:
     Die App soll auch mit schlechter, langsamer oder sogar gar keiner Verbindung funktionieren.\
-    _Einfach:_ Nutzer über Status informieren (eigene Seite für fehlendes Internet). _Schwieriger:_ Website funktioniert komplett Offline: Daten im Browser speichern (LocalStorage, IndexedDB) und Synchronisation Workflow.
+    _Einfach:_ Nutzer über Status informieren (eigene Seite für fehlendes Internet). \ _Schwieriger:_ Website funktioniert komplett Offline: Daten im Browser speichern (LocalStorage, IndexedDB) und Synchronisation Workflow.
 / Re-engageable:
     Es soll möglich sein das die Verbindung zum Benutzer der Seite wieder aufgenommen werden, obwohl der Benutzer die Seite nicht geöffnet hat. _Service Workers, Push-API_.\
     Permissions sind nötig, nur eine Chance.\
@@ -64,7 +64,7 @@ Progressive web apps use modern web APIs along with traditional progressive enha
 / Installation: _JS-API_: Android/Edge/Chrome, _komplex, Anleitung nötig_: iOS/Safari
 / VitePWA: definiert Manifest mit `vite.config.ts`, cached automatisch alles, konfiguriert Offline-Modus `services/index.ts`, ermöglicht re-engageable `user-notification.tsx` und `fcmSend`
 
-==== Service Worker Code
+==== Service Worker und Manifest Code
 ```js
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js')
@@ -72,12 +72,13 @@ if ('serviceWorker' in navigator) {
     .catch(error => {console.error('Fehler', error); });
 }
 ```
-
+#v(-0.5em)
 // /*
 // kein Platz:
-==== Manifest.json Beispiel
+// ==== Manifest.json Beispiel
 #grid(
     columns: (auto, auto),
+    gutter: 0em,
     [
         ```json
         {
@@ -88,32 +89,29 @@ if ('serviceWorker' in navigator) {
           "background_color": "#fafafa",
           "theme_color": "#1976d2",
           "lang": "en",
-          "screenshots": [
-            {
-              "src": "screenshots/screenshot-wide.png",
-              "sizes": "1280x720",
-              "type": "image/png",
-              "form_factor": "wide"
-            },
-            /*...*/
-          ],
         ```
     ],
     [
         ```json
+          "screenshots": [{
+              "src": "img/screenshot-wide.png",
+        ```
+        //   "sizes": "1280x720",
+        //   "type": "image/png",
+        //   "form_factor": "wide"
+        ```json
+                /*...*/
+            }, /*...*/ ],
+        ```
+        ```json
             "icons": [
-              {
+            {
                 "src": "icons/icon-192x192.png",
                 "sizes": "192x192",
                 "type": "image/png"
-              },
-              {
-                "src": "icons/icon-384x384.png",
-                "sizes": "384x384",
-                "type": "image/png"
-              }, /*...*/
-            ]
-        }
+            },
+            /*...*/
+        ]}
         ```
     ],
 )

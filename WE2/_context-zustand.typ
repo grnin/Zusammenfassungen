@@ -1,6 +1,6 @@
 #import "../template--additional-formatting-templates.typ": *
 
-// /* zum testen:
+/* zum testen:
 #import "../template_cheatsheet.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
@@ -28,21 +28,10 @@
 
 
 = Context API
-```tsx
-// Erstellen des Context
-const UserContext = createContext<ThemeContextValue | undefined>(initialValue);
-// Bereitstellen des Kontexts im Komponenten-Tree
-// Der Value kann zum Beispiel von einem Prop oder State kommen
-<UserContext.Provider value={user}>
-...
-</UserContext.Provider>
-// Verwenden des Kontexts
-const context = useContext(UserContext);
-const ThemeButton =()=>{
-  const { theme, toggleTheme } = useTheme();
-..}
-```
+
+#v(-0.5em)
 ==== ThemeProvider Context
+
 #grid(
     columns: (auto, 55%),
     gutter: 0em,
@@ -57,49 +46,34 @@ const ThemeButton =()=>{
         ```
     ],
     [
-        #v(-8.25em)
+        // #v(-8.25em)
+        #v(-4em)
         // #align(right, [
         // #image("/WE2/assets/we2-1.png", height: 2cm)
         #image("/WE2/assets/themeprovider.svg")
         // ])
-        // #v(-2em)
+        #v(-4em)
     ],
 )
 
-
-Setup:
-#v(-0.5em)
-// };
 ```tsx
-const ThemeTitle = () => {
-    // Es müssen nicht alle Elemente
-    // des Context verwendet werden:
-    const { theme } = useTheme();
-    return <h2>Current theme in title: {theme}</h2>;
-};
 const ThemeButton = () => {
     const { theme, toggleTheme } = useTheme();
-    return (
-    <button onClick={toggleTheme}>
-    Current theme: {theme} (click to toggle)
-    </button>
-    );
+    return (<button onClick={toggleTheme}>Current theme: {theme}</button> );
 };
 ```
 
-Implementation Context
-#v(-0.5em)
 ```tsx
 // theme-context.ts
-export const ThemeContext =
-    createContext<ThemeContextValue | undefined>( undefined );
+export const ThemeContext = createContext<ThemeContextValue |
+  undefined>( undefined );
 export const useTheme = () => {
     const context = useContext(ThemeContext);
-    if (!context) {
-        throw new Error('useTheme must be used within a ThemeProvider');
-    }
+    if (!context) { throw new Error('useTheme only within ThemeProvider'); }
     return context;
 };
+```
+```tsx
 // theme-provider.tsx
 export const ThemeProvider = ( { children }: { children: ReactNode } ) => {
     const [theme, setTheme] = useState<Theme>('light');
@@ -111,6 +85,32 @@ export const ThemeProvider = ( { children }: { children: ReactNode } ) => {
             </ThemeContext.Provider> );
 };
 ```
+
+
+/*
+```tsx
+// Erstellen des Context
+const UserContext = createContext<ThemeContextValue | undefined>(initialValue);
+// Bereitstellen des Kontexts im Komponenten-Tree
+// Der Value kann zum Beispiel von einem Prop oder State kommen
+<UserContext.Provider value={user}>
+...
+</UserContext.Provider>
+// Verwenden des Kontexts
+const context = useContext(UserContext);
+const ThemeButton =()=>{
+  const { theme, toggleTheme } = useTheme();
+..}
+```
+
+Setup:
+#v(-0.5em)
+// };
+
+
+Implementation Context
+
+*/
 
 / Warum die Unterteilung in zwei Files (ThemeContext, ThemeProvider)?:
      // Fast refresh only works when a file only
@@ -125,28 +125,27 @@ Ein State-Management …
 - stellt globale Daten konsistent bereit (z.B. User-, Stamm-, Konfigurationsdaten)
 - definiert klare Regeln zur Datenmanipulation
 
-/ Context Api: Transportmechanismus für Daten
+/ Context API: Transportmechanismus für Daten
     _Vorteile:_ vorinstalliert \
     _Nachteile:_ Boilerplate Code
 
 / State Management:
     _Vorteile:_ Wartbarkeit, Struktur, Performance \
     _Nachteile:_
-
 ```tsx
 // store contains the state ( data ) and also the actions for manipulation
-export const useAuthStore = create < AuthState > ()((set) => ({
+export const useAuthStore = create<AuthState>()((set) => ({
   currentUser: undefined, // state = Daten
   actions: { // actions: Only actions are allowed to change the state
     updateProfile: async (data) => {
       await authService.updateProfile(data);
       set({ currentUser: authService.auth.currentUser });
     },
-    login: (email, pwdOld, pwd) => {
-      await authService.login(email, pwdOld, pwd),
-        set({ currentUser: authService.auth.currentUser });
+    changePassword: async (email, pwdOld, pwd) => { // muss async sein, für await
+      await authService.changePassword(email, pwdOld, pwd);
+      set({ currentUser: authService.auth.currentUser });
     }
-}) );
+} }) );
 // Lesen der Daten via Hook (konsistente Daten) :
 const currentUser = useAuthStore((s) => s.currentUser);
 <label>{currentUser?.email}</label>
@@ -154,3 +153,36 @@ const currentUser = useAuthStore((s) => s.currentUser);
 const authActions = useAuthActions();
 authActions.updateProfile({ displayName: 'Jasmin :)' })
 ```
+
+== Zustand vs Context
+/ Welche Vor- und Nachteile:
+    _Zustand:_ zentraler, kein Context Provider nötig
+    _Context:_ gut um Prop passing zu ersetzen, einfacher
+/ Einfacher zu verwenden? Und warum?:
+    Zustand, kein React Komponent `ContextProvider` nötig
+/ Welchen Ansatz würden Sie in einem Projekt verwenden? Und warum?:
+    Zustand, skalierbarer. Context nur, wenn es sich ergibt mit prop passing
+/ Welcher Ansatz ist performanter? Und warum?:
+     // Context, weil bereits eingebaut und keine zusätzliche Library?
+    // Zustand ist ein Hook und hat vielleicht performance Verbesserungen eingebaut?
+    Bei Zustand werden nur die Komponenten neu gerendert, die den geänderten State nutzen.
+/ Welcher Ansatz ist einfacher zu testen? Und warum?:
+    _Zustand_, ist global und deshalb immer zugreifbar. Bei context muss es einen Context Provider haben.
+    "Der Store ist unabhängig von React-Komponenten."
+
+
+
+/ Welche Vor- und Nachteile:
+    _Zustand:_ zentral/global, kein Context Provider nötig, einfacher für State-Management.
+    _Context:_ gut um Prop passing zu ersetzen, wenige Werte (Theme) die sich wenig ändern.
+/ Einfacher zu verwenden? Und warum?:
+    Zustand, kein React Komponent `ContextProvider` nötig
+/ Welchen Ansatz würden Sie in einem Projekt verwenden? Und warum?:
+    Zustand, skalierbarer. Context nur, wenn es sich ergibt mit prop passing
+/ Welcher Ansatz ist performanter? Und warum?:
+     // Context, weil bereits eingebaut und keine zusätzliche Library?
+    // Zustand ist ein Hook und hat vielleicht performance Verbesserungen eingebaut?
+    Bei Zustand werden nur die Komponenten neu gerendert, die den geänderten "State" nutzen.
+/ Welcher Ansatz ist einfacher zu testen? Und warum?:
+    _Zustand_, ist global und deshalb immer zugreifbar. Bei _Context_ ist Provider Wrapper nötigt.
+    "Der Store ist unabhängig von React-Komponenten."
