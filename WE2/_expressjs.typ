@@ -5,11 +5,11 @@
 #import "@preview/wrap-it:0.1.1": wrap-content
 
 #show: project.with(
-    authors: ("Nina Grässli", "Jannis Tschan"),
-    fach: "ParProg",
-    fach-long: "Parallel Programming",
-    semester: "FS24",
-    language: "en",
+    authors: ("Jasmin Fässler",),
+    fach: "WE2",
+    fach-long: "Web Engineering 2",
+    semester: "FS26",
+    language: "de",
     column-count: 5,
     font-size: 4pt,
     landscape: true,

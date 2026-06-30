@@ -1,18 +1,17 @@
-/* zum testen:
+// /* zum testen:
 #import "../template_cheatsheet.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
 #show: project.with(
-    authors: ("Nina Grässli", "Jannis Tschan"),
-    fach: "ParProg",
-    fach-long: "Parallel Programming",
-    semester: "FS24",
-    language: "en",
+    authors: ("Jasmin Fässler",),
+    fach: "WE2",
+    fach-long: "Web Engineering 2",
+    semester: "FS26",
+    language: "de",
     column-count: 5,
     font-size: 4pt,
     landscape: true,
 )
-
 
 // */
 
@@ -144,10 +143,6 @@ test("user can log in", async ({ page }) => {
 // TODO Frage: Wenn die Selektoren von E2E Tests mit Playwright sich an die Namen vom Inhalt orientieren, ist die Idee für mehrsprachige Webseiten die Tests zu übersetzen?
 
 ==== Unit + API Test mit Vitest und request von Supertest
-// #grid(
-//     columns: (auto, auto),
-//     gutter: 0em,
-// [
 ```js
 describe("calc", () => { test("calculates ...", () => {
     const getCurrentHour = () => 10; // Arrange
@@ -155,21 +150,35 @@ describe("calc", () => { test("calculates ...", () => {
     expect(() => calc(0, false)).toThrow();
 }); });
 ```
-// ],
-// [
-```js
-describe("accounts API", () => {
-    test("GET /accounts/1 returns an account", async () => {
-    const res = await request(app).get("/accounts/1");
-    // request(app).post("/accounts/1/deposit").send({ amount: -50 });
-    expect(res.status).toBe(200);
-    expect(res.body).toMatchObject({ id: 1, owner: "Ada" });// Object({error: ""}
-    expect(typeof res.body.balance).toBe("number");
-}); });
-```
-// ],
-// ) // grid
 
+// ```js
+// describe("accounts API", () => {
+//     test("GET /accounts/1 returns an account", async () => {
+//     const res = await request(app).get("/accounts/1");
+//     // request(app).post("/accounts/1/deposit").send({ amount: -50 });
+//     expect(res.status).toBe(200);
+//     expect(res.body).toMatchObject({ id: 1, owner: "Ada" });// Object({error: ""}
+//     expect(typeof res.body.balance).toBe("number");
+// }); });
+// ```
+
+```js
+describe('Account Service', () => {
+ beforeEach(async () => {
+     return () => {
+         // cleanup
+         (userService as any).db = new Datastore();
+         (accountService as any).db = new Datastore();
+         (transactionService as any).db = new Datastore();
+  };  });
+ describe('create', () => {
+     it('create an account with a valid account number', async () => {
+         expect((await accountService.create(crypto.randomUUID())).accountNr)
+          .toEqual(1000002);
+         expect((await accountService.create(crypto.randomUUID())).accountNr)
+          .toEqual(1000003);
+});   });
+```
 
 
 
