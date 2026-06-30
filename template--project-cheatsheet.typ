@@ -115,6 +115,7 @@
         hanging-indent: 30pt,
     )
 
+    /*
     // H1
     show heading.where(level: 1): h => {
         block(
@@ -164,6 +165,8 @@
         )
         v(0.45em)
     }
+    // */
+
 
     // H3
     show heading.where(level: 3): h => {
@@ -252,6 +255,58 @@
         )
         v(0.45em)
     }
+    // */
+
+    /*
+    // Druckeroptimierung heading 1 und 2:
+    // die Farben waren nicht das Problem------------------------------------------------------------
+
+    // H1
+    show heading.where(level: 1): h => {
+        block(
+            fill: rgb("#e5fa60"),
+            sticky: true,
+            // margin:
+            above: 4pt,
+            below: 1pt,
+            inset: (top: 2pt, right: 1pt, bottom: 2pt, left: 1pt),
+            width: 100%,
+            text(
+                font: calibri-font,
+                style: "normal",
+                weight: "light",
+                size: 5pt,
+                tracking: 0.5pt,
+                fill: black,
+                upper(h.body),
+            ),
+        )
+    }
+
+    // H2
+    show heading.where(level: 2): heading => {
+        block(
+            fill: rgb("#f7ffc4"),
+            sticky: true,
+            // margin:
+            above: 2.25pt,
+            below: 0.25pt,
+            inset: 1.5pt,
+            width: 100%,
+            text(
+                font: calibri-font,
+                style: "normal",
+                weight: "light",
+                size: 4.5pt,
+                tracking: 0.5pt,
+                fill: black,
+                // upper([#h(-3pt) #heading.body]),
+                upper(heading.body),
+            ),
+        )
+        v(0.45em)
+    }
+    // ------------------------------------------------------------*/
 
     // H3
     show heading.where(level: 3): h => {

@@ -50,6 +50,8 @@
 // end temp typst functions ----------------
 
 
+// /* 1. Seite:
+
 ```c
 int *px = &x; // &x = Adresse des ints, * = Pointer-Bezeichner
 int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
@@ -305,8 +307,6 @@ Makros, Kommentare oder Präprozessor-Direktiven.
 _Linker:_ Der Linker verknüpft Objekt-Dateien (und statische Bibliotheken) zu Executables
 oder dynamischen Bibliotheken.
 _Loader_ lädt Executables und eventuelle dynamische Bibliotheken dieser in den Hauptspeicher.
-
-
 
 == ELF (Executable and Linking Format)
 _Binär-Format_, das Kompilate spezifiziert. Besteht aus #tcolor("grün", "Linking View")
@@ -805,6 +805,14 @@ Condition_. Threads müssen _synchronisiert_ werden, damit keine _Race Condition
 
 / Critical Section: Code-Bereich, in dem Daten mit anderen Threads _geteilt_ werden. Muss unbedingt synchronisiert werden.
 / Atomare Instruktionen: Eine atomare Instruktion kann vom Prozessor _unterbrechungsfrei_ ausgeführt werden. #hinweis[*Achtung:* Selbst einzelne Assembly-Instruktionen nicht immer atomar!]\
+
+// */
+
+// #colbreak()
+// #colbreak()
+// #colbreak()
+// /* 1. Hälfte PDF Druck
+
 === Anforderungen an Synchronisations-Mechanismen:
 _Gegenseitiger Ausschluss_ #hinweis[(Nur ein Thread darf in Critical Section sein)],
 _Fortschritt_ #hinweis[(Entscheidung, wer in die Critical Section darf, muss in endlicher Zeit getroffen werden)],
@@ -1152,6 +1160,14 @@ Nutzt OS-Message-Queues mit _variabler Länge_, haben mind. 32 Prioritäten und 
     ],
 )
 
+
+
+// */
+// #colbreak()
+// #colbreak()
+// #colbreak()
+// /* 2. Hälfte PDF Druck
+
 == Shared Memory
 Frames des Hauptspeichers werden _zwei (oder mehr) Prozessen_ $P_1$ und $P_2$ _zugänglich_
 gemacht. In $P_1$ wird Page $V_1$ auf einen Frame $F$ abgebildet. In $P_2$ wird Page $V_2$
@@ -1477,6 +1493,11 @@ $"BE" = underline(
     nicht die Bytes an sich.]
 #v(-0.5em)
 
+
+// */
+// /* 3. Hälfte PDF Druck
+
+
 = Dateisysteme
 == Vergleich FAT, NTFS, Ext2
 #{
@@ -1684,7 +1705,7 @@ $#hex4("800", suffix: false).#hex4("0") arrow.bar #hex4("200C"), quad
         $#hex4("800", suffix: false).#hex4("0") arrow.bar #hex4("200C"), quad
         #hex4("800", suffix: false).#hex4("1") arrow.bar #hex4("200D"), space
         ..., space
-        #hex4("800", suffix: false).#hex4("22F3") arrow.bar #fxcolor("orange", hex4("22FF"))$ \
+        #hex4("800", suffix: false).#hex4("2F3") arrow.bar #fxcolor("orange", hex4("22FF"))$ \
         _Extent Trees_\
         *Header:* $0 arrow.bar (1 #hinweis[Anz. Einträge],0 #hinweis[Tiefe])$ \
         *Extent:* $1 arrow.bar (0 #hinweis[1. logischer Block],
@@ -1924,3 +1945,5 @@ _Geschwindigkeit_ bis zu 500 KB pro Sekunde bei 0.02% Fehlerrate.\
 */
 
 
+
+// */
