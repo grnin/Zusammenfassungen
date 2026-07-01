@@ -39,8 +39,8 @@
 // custom react hooks und bisschen react code weggekürzt
 // /WE2/assets/image.png URL Beschreibung
 
-#include "/WE2/_react.typ"
-#include "/WE2/_context-zustand.typ"
+// #include "/WE2/_react.typ"
+// #include "/WE2/_context-zustand.typ"
 #include "/WE2/_expressjs.typ"
 #include "/WE2/_code-express-testat.typ"
 #include "/WE2/_accessiblity-testing.typ"
