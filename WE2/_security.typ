@@ -111,9 +111,14 @@ ermöglichen. Der Server vertraut darauf, dass der Request legitim ist.
 / Ursache: CSRF nutzt das Vertrauen des Servers in Cookies aus.  Der Server prüft nicht die Herkunft des Requests.
 
 ==== Angriffs-Szenario CORS und CSRF-Token
-1. User nutzt app.example.com mit Daten von api.example.com.
-2. Nutzer öffnet aus Versehen evil.com im Browser
-3. evil.com Seite versucht request: `fetch("https://api.example.com/user", {credentials: "include"}) // Cookies mitgesendet`
+#block(
+    sticky: true,
+    [
+        1. User nutzt app.example.com mit Daten von api.example.com.
+        2. Nutzer öffnet aus Versehen evil.com im Browser
+        3. evil.com Seite versucht request: `fetch("https://api.example.com/user", {credentials: "include"}) // Cookies mitgesendet`
+    ],
+)
 
 ==== CSRF Schutz
 / CSRF Token: Server prüft ob Request aus eigener App, wenn kein CSRF-Token vorhanden wird Anfrage abgelehnt. Schützt vor: Form-submit und fetch CSRF Angriff.

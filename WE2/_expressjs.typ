@@ -26,7 +26,6 @@
     ),
 );
 
-
 = ExpressJS
 // #include "/WE2/_code-express-demo-todo.typ"
 
@@ -56,12 +55,6 @@
 / typische Websiten SSR?: Blogs, statische Webseiten, News Portal
 / Vor- und Nachteile SSR?: Performance, SEO, einfach, nicht mehrfach die gleiche Seite rendern. // #hinweis[siehe Vorteile CSR]
 
-== POST Redirect zu GET
-Vorteil beim _Redirect von POST /random nach GET /random?from=…_ gegenüber der direkten Darstellung der Daten in der POST-Route?
-- Formulardarstellung nur 1 mal programmieren, einheitlich, DRY
-- URL kann weitergegeben werden von GET, Lesezeichen kann erstellt werden.
-- Mit F5 (neuladen) werden bei POST die Daten nochmals abgesendet (mit Warnung Popup vom Browser). Bei GET wird nur die Seite neu geladen.
-
 == Cookies und ExpressJS Session
 - Um nach dem Login die Session auf der Website "abzusichern"
 
@@ -78,8 +71,8 @@ Vorteil beim _Redirect von POST /random nach GET /random?from=…_ gegenüber de
  |                                                    |
  |   GET /submitCard  cookie: session-id:1234         |
  | -------------------------------------------------> |
- |                                                    |
 ",
+    //  |                                                    |
 )
 
 Server: `set-cookie:name=value;Expires=Wed, 09 Jun 2029 10:18:14 GMT`
@@ -98,11 +91,10 @@ app.get("/cookieDemo/{*splat}", function (req, res) {
     console.log(JSON.stringify(req.signedCookies));
     res.cookie("url", req.url);
     res.cookie("signedUrl", req.url, {signed: true});
-
     if (req.cookies.url) {
         res.end(`das war dein letzter Besuch:
-Cookie: ${req.cookies.url}
-SignedCookie: ${req.signedCookies.signedUrl || "---"}`);
+        Cookie: ${req.cookies.url}
+        SignedCookie: ${req.signedCookies.signedUrl || "---"}`);
     } else { res.end("erster Besuch?!") }
 });
 
@@ -119,14 +111,18 @@ app.listen(3000, function () {
 / HTTPS: Token nur über eine sichere Verbindung versenden
 / speichern: Token kann auch im Cookie abgelegt werden #hinweis[mit `httpOnly, secure, SameSite, Lebensdauer` und Achtung CSRF]
 
+#block(
+    sticky: true,
+    [
 
-// #image("/WE2/assets/jwt.png", height: 2cm)
 
-// +-----------+                                  +-----------+
-// |  Browser  |                                  |  Server   |
-// +-----------+                                  +-----------+
-#ascii-art(
-    "Browser                                     Server
+        // #image("/WE2/assets/jwt.png", height: 2cm)
+
+        // +-----------+                                  +-----------+
+        // |  Browser  |                                  |  Server   |
+        // +-----------+                                  +-----------+
+        #ascii-art(
+            "Browser                                     Server
  |  1. POST /users/login (username, pw)  ->   |
  | -----------------------------------------> |
  |                                            | 2. Creates JWT
@@ -139,96 +135,26 @@ app.listen(3000, function () {
  |   6. Sends response to the client  <-      | Get user info from JWT
  | <----------------------------------------- |
 ",
-    //  |                                            |
+            //  |                                            |
+        )
+    ],
 )
 
 == AJAX mit fetch Repetition
 ```js
 fetch(url, {
-    method: method,
-    headers: { 'Content-Type': 'application/json'},
-    body: JSON.stringify(data),
-    credentials: 'include', // cookies mitsenden
+    method: method, headers: { 'Content-Type': 'application/json'},
+    body: JSON.stringify(data), credentials: 'include', // cookies mitsenden
 }).then(x => {
-    return x.json();
-// statt json() -> arrayBuffer(), blob(), formData(), text()
+    return x.json(); // statt json() -> arrayBuffer(), blob(), formData(), text()
 });
 
 // Hilfsklasse für Request von Fetch API
 const myHeaders = new Headers();
 myHeaders.append('Content-Type', 'text/plain');
-    const myInit = {
-    method: 'GET',
-    headers: myHeaders,
-    cache: 'default'
+    const myInit = { method: 'GET', headers: myHeaders, cache: 'default'
 };
-const myRequest = new Request('/example', myInit);
-fetch(myRequest) /*…*/
-```
-
-== Middlewares
-#v(-1.25em)
-=== Routing
-Middleware befindet sich auf dem Express Objekt
-#v(-0.5em)
-```js
-import express from 'express'; const router = express.Router();
-```
-Wichtige Methoden
-#v(-0.5em)
-```js
-// Wird unabhängig vom der HTTP-Methode aufgerufen
-router.all(path, [callback, ...] callback)
-```
-
-Wird aufgerufen, falls die jeweilige HTTP-Methode verwendet wurde\
-*METHOD* = .all, .get\
-*path* = `/*, /{*} (optional), /:id (wird in req.params.id gespeichert)`
-#v(-0.5em)
-```js
-router.METHOD(path, [callback, ...] callback)
-router.get('/', function(req, res){ res.send('hello world'); });
-```
-// − Express.js verwendet path-to-regexp
-
-Es können mehrere Callbacks als Chain übergeben werden
-#v(-0.5em)
-```js
-router.get("/admin", ensureAdmin, renderAdmin);
-router.get("/profile/:id", ensureUser, renderProfile)
-```
-
-=== Static-Middleware
-Statische Files ausliefern (Es sind mehrere static-routes möglich)
-#v(-0.5em)
-```js
-app.use(express.static('public'))
-```
-
-=== Custom-Middleware
-==== 3 Parameter (request, response, next)
-- `next` zeigt auf die nächste Middleware im Stack, kann aufgerufen werden, um die nächste Middleware aufzurufen.
-// • Dies kann auch unterlassen werden. In diesem Falle sollte die Anfrage beantwortet werden.
-#v(-0.5em)
-```js
-function myDummyLoggerMiddleware(options = {}) {
-    options = {timestamp: true, ...options};
-    return function myInnerDummyLogger(req, res, next) {
-        const timestamp = options.timestamp ? new Date().toISOString() + " " :"";
-        console.log(`${timestamp}${req.method} ${req.url}`)
-        next();
-}   }  app.use(myDummyLoggerMiddleware());
-```
-
-==== Error-Middleware
-- muss 4 Parameter haben, die letzte (Error) Middleware muss die Anfrage beenden
-- aufgerufen bei: `next(new Error("…"));`, `Promise.reject(new Error("..."))`, `throw new Error("...")`
-#v(-0.5em)
-```js
-app.use(function(err, req, res, next) {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
-});
+const myRequest = new Request('/example', myInit); fetch(myRequest) /*…*/
 ```
 
 == View mit Template Engine - Handlebars
@@ -326,8 +252,84 @@ app.set('views', path.resolve('views'));
 // */
 
 
-== Model = Service
+== Middlewares
+#v(-1.25em)
+=== Routing
+Middleware befindet sich auf dem Express Objekt
+#v(-0.5em)
+```js
+import express from 'express'; const router = express.Router();
+```
+Wichtige Methoden
+#v(-0.5em)
+```js
+// Wird unabhängig vom der HTTP-Methode aufgerufen
+router.all(path, [callback, ...] callback)
+```
+
+Wird aufgerufen, falls die jeweilige HTTP-Methode verwendet wurde\
+*METHOD* = .all, .get\
+*path* = `/*, /{*} (optional), /:id (wird in req.params.id gespeichert)`
+#v(-0.5em)
+```js
+router.METHOD(path, [callback, ...] callback)
+router.get('/', function(req, res){ res.send('hello world'); });
+```
+// − Express.js verwendet path-to-regexp
+
+Es können mehrere Callbacks als Chain übergeben werden
+#v(-0.5em)
+```js
+router.get("/admin", ensureAdmin, renderAdmin);
+router.get("/profile/:id", ensureUser, renderProfile)
+```
+
+=== Static-Middleware
+Statische Files ausliefern (Es sind mehrere static-routes möglich)
+#v(-0.5em)
+```js
+app.use(express.static('public'))
+```
+
+=== Custom-Middleware
+==== 3 Parameter (request, response, next)
+- `next` zeigt auf die nächste Middleware im Stack, kann aufgerufen werden, um die nächste Middleware aufzurufen.
+// • Dies kann auch unterlassen werden. In diesem Falle sollte die Anfrage beantwortet werden.
+#v(-0.5em)
+```js
+function myDummyLoggerMiddleware(options = {}) {
+    options = {timestamp: true, ...options};
+    return function myInnerDummyLogger(req, res, next) {
+        const timestamp = options.timestamp ? new Date().toISOString() + " " :"";
+        console.log(`${timestamp}${req.method} ${req.url}`)
+        next();
+}   }  app.use(myDummyLoggerMiddleware());
+```
+
+==== Error-Middleware
+- muss 4 Parameter haben, die letzte (Error) Middleware muss die Anfrage beenden
+- aufgerufen bei: `next(new Error("…"));`, `Promise.reject(new Error("..."))`, `throw new Error("...")`
+#v(-0.5em)
+```js
+app.use(function(err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+```
+
+
+
+
+
+
+
+
+#pagebreak()
+
+
+== Model = Service (ExpressJS)
 / Möglichkeiten, um Daten zu speichern: In Memory: Array, JSON, NoSQL-Datenbanken = Dokumentorientierte Datenbanken (nedb), SQL-Datenbanken
+(siehe auch Persistence bei React)
 
 ==== nedb NoSQL
 ```js
@@ -345,3 +347,9 @@ const order = db.findOneAsync({_id: id});
 // Updaten -  z.B. Einzelne Werte ändern, Array von einem «document» anpassen, ganzes Objekt ersetzen
 await db.updateAsync({_id: id}, {$set: {"state": OrderState.DELETED}});
 ```
+
+== POST Redirect zu GET
+Vorteil beim _Redirect von POST /random nach GET /random?from=…_ gegenüber der direkten Darstellung der Daten in der POST-Route?
+- Formulardarstellung nur 1 mal programmieren, einheitlich, DRY
+- URL kann weitergegeben werden von GET, Lesezeichen kann erstellt werden.
+- Mit F5 (neuladen) werden bei POST die Daten nochmals abgesendet (mit Warnung Popup vom Browser). Bei GET wird nur die Seite neu geladen.

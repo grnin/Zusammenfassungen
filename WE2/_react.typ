@@ -100,8 +100,8 @@ React rendering Fehler:
 ```
 
 === Persistence
-Möglichkeiten für Persistence: localStorage, URL Parameter, sessionStorage, Cookies, indexedDB, externe DB/API.
-Sensible Daten (z. B. Kreditkarteninfos) nur auf externer DB/API geeignet.
+/ Möglichkeiten für Persistence: localStorage, URL Parameter, sessionStorage, Cookies, indexedDB, externe DB/API.
+    Sensible Daten (z. B. Kreditkarteninfos) nur auf externer DB/API geeignet.
 ==== localStorage
 Speichert Daten dauerhaft im Browser + ist isoliert nach Seite, aber für mehrere Sessions (Tabs/Fensters) übergreifend verfügbar.
 Daten bleiben erhalten nach Page Reload und Browser Neustart (kein Ablaufdatum).
@@ -208,6 +208,9 @@ Props sind Eingabewerte für Komponenten (Tatsächlich ist das Props Objekt der 
 - Props können immer nur von Parent zum Child übergeben werden
 - immutable
 - Es können nicht nur Strings, sondern alle JS Datentypen als Props übergeben werden, auch andere Komponenten, JSX-Fragmente, Objekte, Listen, oder Funktionen.
+
+#colbreak()
+
 == useState, Eventhandler
 #v(-1em)
 // // Code zu unwichtig / auswendig

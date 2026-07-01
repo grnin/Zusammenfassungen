@@ -10,8 +10,9 @@
 
 #let code-block(body) = {
     block(
-        fill: rgb("#fbfcff"), // jetzt ohne transparenz, vielleicht Druckerproblem (unscharf) deswegen
-        stroke: (paint: rgb("#0b033845"), thickness: 0.5pt),
+        // jetzt ohne transparenz und als cmyk, vielleicht Druckerproblem (unscharf) deswegen
+        fill: rgb("#f9fbff"),
+        stroke: (paint: rgb("#a8a1d1"), thickness: 0.5pt),
         inset: 5pt,
         radius: 4pt,
         above: 0.5em,
