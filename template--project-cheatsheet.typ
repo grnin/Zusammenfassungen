@@ -317,10 +317,14 @@
             text(
                 font: aptos-font,
                 style: "normal",
-                weight: "semibold",
+                weight: "bold",
                 // size: 4.25pt,
                 // size: 1em,
-                size: 1.25em,
+                // size: 1.25em,
+
+                size: 1.2em,
+                fill: rgb("#580069"),
+
                 h.body,
             ),
         )
