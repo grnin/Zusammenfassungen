@@ -34,6 +34,8 @@
     )
     #body
 ]
+
+
 #let hinweis2(body) = [
     #set text(
         style: "italic",
@@ -626,13 +628,14 @@ Thread costs: performance + memory (stack per thread) #sym.arrow.r recycle threa
 / _`result = task.join()`_: wait and get result
 
 ```java
-// Task Launch
+// Task Launch, Async but without CompletableFuture
 var threadPool = new ForkJoinPool();
 Future<Integer> future = threadPool.submit(() -> { // submit task into pool, async
   int value = ...; /* long calculation */ return value;
 });
 T result = future.get(); // blocks until task terminated
 ```
+
 ==== Recursive Action/Task
 ```java
 // Sequential:
@@ -693,18 +696,21 @@ class PairwiseSum extends RecursiveAction {
         array[2*i] += array[2*i+1]; array[2*i+1] = 0;
 }}}}
 ```
+// #v(-0.5em)
+
 // */
 
 
 
 
 
-#v(-0.5em)
-== Parallel For (.NET)
+== Thread Pool with `Parallel For` (.NET)
 // .NET Code API
 // // TODO
 // / `Parallel.Invoke()`:
 // / `Parallel.For()`:
+// TODO code von Vorlesungen?
+
 #v(-1em)
 === .NET Task Parallel Library (TPL)
 Preferred way to write multi-threaded and parallel code.
@@ -739,10 +745,13 @@ layers_ #hinweis[(Task Parallelization: use tasks explicitly, Data Parallelizati
 *Parallel Loop Partitioning:*
 Loop with lots of quickly executing bodies, inefficient to execute each iteration as parallel task #sym.arrow.r TPL _automatically groups multiple bodies_ into a single task.
 
-Split according to available worker threads:
-- Range Partitioner with indexing (Parallel.For)
-- Chunk Partitioner with iteration (Parallel.ForEach)
-#image("/assets/image.png")
+
+// // TODO
+// Split according to available worker threads:
+// - Range Partitioner with indexing (Parallel.For)
+// - Chunk Partitioner with iteration (Parallel.ForEach)
+// #image("/assets/image.png", height: 0.5cm)
+
 
 === PLINQ
 *LINQ:*
@@ -816,6 +825,26 @@ This should be executed as soon as the task object is dead #hinweis[(Garbage Col
 
 
 
+
+== Java Async
+/ Java `CompletableFuture`:
+    _Modern asynchronous_ programming in Java. Also has _Multi-Continuation_ with
+    ```java CompletableFuture.allOf(future1, future2)``` and ```java CompletableFuture.any(...)```
+// / ```java future.get()```: can throw CancellationException, ExecutionException, InterruptedException
+
+/ Java `invokeLater`:
+    To be executed _asynchronously_ on the event dispatching thread.
+    Should be used when an _application thread_ needs to _update the GUI_.\
+
+=== `Future<T>`
+Represents a _future result_ #hinweis[(asynchronous)], Proxy #hinweis[for the result that may be not available yet because the task has not finished.]
+#v(-0.5em)
+/ _`.submit()`_: submits task into pool and launches task
+/ _`.get()`_: waits if necessary for computation to complete and then retrieves its result
+/ _`.cancel()`_: Attempts to cancel execution of this task, removes it from queue Task ends when a unhandled exception occurs. It is included in the `ExecutionException` thrown by `get()`.
+// #v(-0.5em)
+
+
 == Non-Blocking GUI's
 *Use case:*
 If a UI is doing a long task, it should not freeze.\
@@ -823,7 +852,8 @@ If a UI is doing a long task, it should not freeze.\
 Only _single-threading_ #hinweis[(Only a special UI-thread is allowed to access
     UI-components)]. The _UI thread_ loops to process the _event queue_.
 
-#image("img/parprog_5.png", width: 87%)
+// #image("img/parprog_5.png", width: 87%)
+#image("img/parprog_5.png", height: 1.25cm)
 
 *GUI Premise:*
 _No long operations_ in UI events, or else blocks UI.
@@ -864,26 +894,6 @@ _No access to UI-elements by other threads_, or else incorrect
         ```
     ],
 )
-
-
-== Java Async
-/ Java `CompletableFuture`:
-    _Modern asynchronous_ programming in Java. Also has _Multi-Continuation_ with
-    ```java CompletableFuture.allOf(future1, future2)``` and ```java CompletableFuture.any(...)```
-// / ```java future.get()```: can throw CancellationException, ExecutionException, InterruptedException
-
-/ Java `invokeLater`:
-    To be executed _asynchronously_ on the event dispatching thread.
-    Should be used when an _application thread_ needs to _update the GUI_.\
-
-=== `Future<T>`
-Represents a _future result_ #hinweis[(asynchronous)], Proxy #hinweis[for the result that may be not available yet because the task has not finished.]
-#v(-0.5em)
-/ _`.submit()`_: submits task into pool and launches task
-/ _`.get()`_: waits if necessary for computation to complete and then retrieves its result
-/ _`.cancel()`_: Attempts to cancel execution of this task, removes it from queue Task ends when a unhandled exception occurs. It is included in the `ExecutionException` thrown by `get()`.
-// #v(-0.5em)
-
 
 == C\# Async/Await
 More _readable_ than the "spaghetti code" in the chapter before.
@@ -963,6 +973,11 @@ _`await` for tasks_: "Non-blocking wait" on task-end / result.\
     #hinweis[(Order of execution cannot be changed. Too strong a consistency model)]
     and the _Java Memory Model_\ #hinweis[(a "weak" memory model)].
 
+
+
+== Java Memory Model (JMM)
+Interleaving-based semantics. Minimum warranties: _Atomicity, Visibility and Ordering_.
+
 === Atomicity
 An _atomic_ action is one that happens _all at once_ #hinweis[(So no thread interference)].
 Java guarantees that read/writes to primitive data types up to 32 Bit, Object-References
@@ -977,11 +992,6 @@ _`volatile` Variable_ #hinweis[(Memory writes up to and including the write to v
 _Thread/Task-Start and Join_ #hinweis[(Start: input to thread; Join: thread result)],
 _Initialization of `final` variables_ #hinweis[(Visible after completion of the constructor)],
 _`final` fields_.\
-
-
-
-== Java Memory Model (JMM)
-Interleaving-based semantics. Minimum warranties: _Atomicity, Visibility and Ordering_.
 
 === Java Ordering
 *Java Happens Before:*
@@ -1078,3 +1088,4 @@ do { oldV = v.get(); newV = result; } while(!v.compareAndSet(oldV, newV));
 === Full Fence (Memory Barrier)
 Disallows reordering in both directions. ```cs Thread.MemoryBarrier();```
 
+#pagebreak()

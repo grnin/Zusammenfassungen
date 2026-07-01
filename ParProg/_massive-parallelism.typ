@@ -26,12 +26,12 @@
     #body
 ]
 
-#let hinweis(body) = [
-    #set text(
-        style: "italic",
-    )
-    #body
-]
+// #let hinweis(body) = [
+//     #set text(
+//         style: "italic",
+//     )
+//     #body
+// ]
 
 #let hinweis2(body) = [
     #set text(
@@ -72,8 +72,8 @@
     calculations where the results rely on the previous results #hinweis[(like Fibonacci)].\
 / High Parallelization:
     A _CPU_ offers few cores #hinweis[(4, 8, 16, 64)] and is very fast. Programming is easier.
-A _GPU_ offers a very large number of cores #hinweis[(512, 1024, 3584, 5760)] and has very
-specific slower processors. It is optimized for throughput. Programming is more difficult.\
+    A _GPU_ offers a very large number of cores #hinweis[(512, 1024, 3584, 5760)] and has very
+    specific slower processors. It is optimized for throughput. Programming is more difficult.\
 / GPU Structure:
     A GPU consists of multiple _Streaming Multiprocessors (SM)_ which in turn consist of multiple
     _Streaming Processors (SP)_ #hinweis[(e.g. 1-30 SM, 8-192 SPs per SM)].\
@@ -86,7 +86,17 @@ specific slower processors. It is optimized for throughput. Programming is more 
     Single Instruction Single Data. Purely _sequential_ calculations.\
 / SIMT:
     Single Instruction Multiple Threads. The same instruction is executed in different threads over different data.
-    #image("img/parprog_7.png")
+
+
+// #place(
+//     top + left,
+//     dy: 2em,
+//     scope: "column",
+//     image("img/parprog_7.png"),
+// )
+#v(-1em)
+#image("img/parprog_7.png"),
+#v(-2em)
 
 
 == Latency vs. Throughput
@@ -163,21 +173,16 @@ void VectorAddKernel(float *A, float *B, float *C) {
 void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
   size_t size = N * sizeof(float);
   float *d_A, *d_B, *d_C; // data on GPU
-
-  // GPU memory allocate
+  // 1. GPU memory allocate:
   cudaMalloc(&d_A, size); cudaMalloc(&d_B, size); cudaMalloc(&d_C, size);
-
-  // Data transfer to GPU (HostToDevice)
+  // 2. Data transfer to GPU (HostToDevice):
   cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
   cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
-
-  // Kernel execution, N is amount of threads
+  // 3. Kernel execution, N is amount of threads:
   VectorAddKernel<<<1, N>>>(d_A, d_B, d_C, N);
-
-  // Transfer results from GPU to CPU (DeviceToHost)
+  // 4. Transfer results from GPU to CPU (DeviceToHost):
   cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost);
-
-  // Deallocate GPU memory
+  // 5. Deallocate GPU memory:
   cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
 }
 ```
@@ -310,14 +315,15 @@ different CUDA threads.
     executed _on one device_. CUDA supports running _multiple kernels on a device_ at one time.
 
 == CUDA Kernel specification
-/ Specifying Kernel:
-    ```cpp VectorAddKernel<<<GRID_dimension, BLOCK_dimension>>>(A,B,C)```\
-    Dimensions can be 1D, 2D or 3D and specified via `dim3` which is a structure designed for
-    storing block and grid dimensions: ```cpp struct dim3{x; y; z}```.\
-    ```cpp dim3 dimGrid(2) == dim3 dimGrid(2,1,1)``` #hinweis[(Unassigned components are set to 1)]\
-    ```cpp VectorAddKernel<<<dimGrid, dimBlock>>>(A,B,C);```\
-    _Number of blocks in a grid:_ ```cpp dimGrid.x * dimGrid.y * dimGrid.z ```\
-    _Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
+*Specifying Kernel*:
+```cpp VectorAddKernel<<<GRID_dimension, BLOCK_dimension>>>(A,B,C)```\
+Dimensions can be 1D, 2D or 3D and specified via `dim3` which is a structure designed for
+storing block and grid dimensions: ```cpp struct dim3{x; y; z}```.\
+```cpp dim3 dimGrid(2) == dim3 dimGrid(2,1,1)``` #hinweis[(Unassigned components are set to 1)]\
+```cpp VectorAddKernel<<<dimGrid, dimBlock>>>(A,B,C);```\
+_Number of blocks in a grid:_ ```cpp dimGrid.x * dimGrid.y * dimGrid.z ```\
+_Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
+
 / 1D Grid:
     We can simply use integers. ```cpp VectorAddKernel<<<1, N>>>``` creates 1 Block with N Threads.\
 / 2D Grid:
@@ -381,7 +387,7 @@ Unified memory allows automatic transfer from CPU to GPU and vice versa.
 No explicit Memory Copy (cudaMemCpy) needed, but other new rules. Error handling still needed.
 #grid2(
     [
-        CPU Code
+        ==== CPU Code
         ```cpp
         A = (float*)malloc(size);// same for &B and &C
         vectorAdd(A, B, C, N);
@@ -389,7 +395,7 @@ No explicit Memory Copy (cudaMemCpy) needed, but other new rules. Error handling
         ```
     ],
     [
-        GPU Code
+        ==== GPU Code
         ```cpp
         // same for &B and &C:
         cudaMallocManaged(&A, size);
@@ -428,8 +434,7 @@ void MatrixAddKernel(float *A, float *B, float *C) {
   int row = blockIdx.y * blockDim.y + threadIdx.y;
   if (row < A_ROWS && col < A_COLS) { // boundary checking
     C[row * A_COLS + col] = A[row * A_COLS + col] + B[row * A_COLS + col];
-  }
-}
+} }
 const int A_COLS, B_COLS, C_COLS = 6;
 const int A_ROWS, B_ROWS, C_ROWS = 4;
 dim3 block = (2,2); dim3 grid = (3,2); // (3,2) == (3,2,0)
@@ -451,8 +456,7 @@ void MatrixMultiply(float *A, float *B, float *C) {
       sum += A[i * K + k] * B[k * M + j];
     }
     C[i * M + j] = sum;
-  }
-}
+} }
 ```
 
 == Mapping Threads / Blocks to GPU Warps
@@ -480,7 +484,7 @@ is finished. So branches within one warp should be _avoided_ because of _perform
     gutter: 1em,
     [
         ```cpp
-        // bad case, divergence in same wrap
+        // bad case, divergence in same warp
         if (threadIdx.x > 1) { } else {  }
         ```
     ],
@@ -644,6 +648,7 @@ Each _send_ should have a matching _receive_.\
     Is _efficient_, because the root node does _not send the signal individually_ to each node,
     the _other nodes help_ spread the message to others.:
     ```c MPI_Bcast(void * data, int count, MPI_Datatype datatype, int root, MPI_Comm_World communicator)```\
+    // TODO:
     #image("/assets/image-1.png")
 / `MPI_Reduce`:
     Reduction is a classic concept: reducing a set of numbers into a smaller set of numbers via a
@@ -719,7 +724,7 @@ Each _send_ should have a matching _receive_.\
             ```c
             // Sequential
             long count_hits(long trials) { long hits = 0, i;
-            for (i = 0; i < trials; i++) {
+              for (i = 0; i < trials; i++) {
                 double x = (double)rand()/RAND_MAX;
                 double y = (double)rand()/RAND_MAX;
                 // distance to center bigger than radius=1 :
@@ -760,7 +765,7 @@ int main(int argc, char* argv[]) {
     const int np = omp_get_num_threads(); // executed in parallel
     printf("Hello from thread %d\n", omp_get_thread_num()); // executed in paral.
   } // thread order not fixed. after execution, threads synchronize & terminate
-  return 0; }
+return 0; }
 ```
 
 ==== For loops
@@ -854,8 +859,7 @@ long count_hits(long trials) {
       for (i = 0; i < trials; i++) {
         double x = random_double(); double y = random_double();
         if (x * x + y * y <= 1) { hits +; }
-      }
-    }
+    } /* for */ } /* parallel */
   return hits;
 }
 ```
