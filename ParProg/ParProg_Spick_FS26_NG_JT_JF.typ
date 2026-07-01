@@ -1021,7 +1021,7 @@ _`final` fields_.\
 
 === Ordering
 *Java Happens Before:*
-“Happens before” defines the _ordering and visibility guarantees_ between actions in a program.
+"Happens before" defines the _ordering and visibility guarantees_ between actions in a program.
 It ensures that changes made by one thread become visible to others.
 An _unlock_ of a monitor _happens-before_ every subsequent lock of that same monitor.\
 *Java Ordering Guarantees:*
