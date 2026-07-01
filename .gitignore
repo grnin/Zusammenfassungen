@@ -1,5 +1,8 @@
 # custom gitignores here
 
+# temporär
+*.pdf
+
 # affinity designer:
 *~lock~*
 

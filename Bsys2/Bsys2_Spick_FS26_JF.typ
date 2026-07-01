@@ -87,7 +87,7 @@ int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
 == Umgebungsvariablen
 Umgebungsv.: Strings, die mindestens ein `Key=Value` enthalten #hinweis[`OPTER=1`, `PATH=/home/ost/bin`].
 Unter POSIX verwaltet das OS die Umgebungsvariablen innerhalb
-jedes laufenden Prozesses. Werden initial festgelegt. Das OS legt die Variablen als ein null-terminiertes Array von Pointern auf null-terminierte Strings ab.\ Unter C zeigt die Variable ```c extern char **environ``` darauf.
+jedes laufenden Prozesses. Werden initial festgelegt. Das OS legt die Variablen als ein null-terminiertes Array von Pointern auf null-terminierte Strings ab.\ Unter C zeigt die Variable ```c extern char **environ``` darauf. Case sensitive (keys).
 // Sollte nur über untenstehende Funktionen manipuliert werden.
 
 / ```c char *value = getenv("PATH")```: Abfragen einer Umgebungsv. #hinweis[returns Adresse von 1. Zeichen oder 0 wenn nicht vorhanden]
@@ -1581,7 +1581,7 @@ _Sektor_ #hinweis[(Kleinste logische Untereinheit eines Volumes.
 \ _Format_ #hinweis[(Layout der logischen Strukturen auf dem Datenträger, wird vom Dateisystem definiert.)]\
 / Inode Aufteilung ext2: $15 "Blocknummern" dot "Inodenummer-Grösse"$= $15 dot 4$ Byte = 60 Byte
 / Referenzen-Block: Synonym für indirekter Block!
-/ Anzahl direkte Blöcke: 12 (bis und mit Block #hex("B")), 1024 indirekt Blöcke möglich
+/ Anzahl direkte Blöcke: 12 (bis und mit Block #hex("B")), 1024 indirekte Blöcke möglich
 
 == Inodes
 #wrap-content(
