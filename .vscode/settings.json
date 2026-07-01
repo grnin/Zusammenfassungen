@@ -26,4 +26,8 @@
     // typst
     // "editor.defaultFormatter": "myriad-dreamin.tinymist",
     "tinymist.formatterIndentSize": 4,
+    // "tinymist.exportPdf": "onSave",
+    // "tinymist.typstExtraArgs": [
+    //     // "--pdf-standard=pdf/x-4",
+    // ],
 }
