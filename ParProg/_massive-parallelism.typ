@@ -40,55 +40,73 @@
     #body
 ]
 
+#let grid2(body1, body2) = [
+    #grid(
+        columns: (auto, auto),
+        [
+            #body1
+        ],
+        [
+            #body2
+        ],
+    )
+]
+
+#let mt() = [
+    #v(-0.5em)
+]
+#let mt1() = [
+    #v(-1em)
+]
 // = Massive Parallelism
 
 = GPU (Graphics Processing Unit)
-*End of Moores Law:*
-We can no longer gain performance by "growing" sequential processors. Instead, we _improve
-performance_ by running code in _parallel_ on _multi-core (CPUs)_ #hinweis[(Low Latency)] and
-many-core or _massively parallel co-processors (GPUs)_ #hinweis[(high throughput)].\
-*GPU's*
-are specialized electronic circuits designed to accelerate the computation of _computer graphics_.
-They are faster than CPUs for suitable algorithms on large datasets. _Useful_ for
-calculations which consist of _multiple independent sub-calculations_, not very useful for
-calculations where the results rely on the previous results #hinweis[(like Fibonacci)].\
-*High Parallelization:*
-A _CPU_ offers few cores #hinweis[(4, 8, 16, 64)] and is very fast. Programming is easier.
+/ End of Moores Law:
+    We can no longer gain performance by "growing" sequential processors (and same price). Instead, _improve
+    performance_ by running code in _parallel_ on _multi-core (CPUs)_ #hinweis[(Low Latency)] and
+    many-core or _massively parallel co-processors (GPUs)_ #hinweis[(high throughput)].\
+/ GPU's:
+    specialized electronic circuits designed to accelerate the computation of _computer graphics_.
+    They are faster than CPUs for suitable algorithms on large datasets. _Useful_ for
+    calculations which consist of _multiple independent sub-calculations_, not very useful for
+    calculations where the results rely on the previous results #hinweis[(like Fibonacci)].\
+/ High Parallelization:
+    A _CPU_ offers few cores #hinweis[(4, 8, 16, 64)] and is very fast. Programming is easier.
 A _GPU_ offers a very large number of cores #hinweis[(512, 1024, 3584, 5760)] and has very
 specific slower processors. It is optimized for throughput. Programming is more difficult.\
-*GPU Structure:*
-A GPU consists of multiple _Streaming Multiprocessors (SM)_ which in turn consist of multiple
-_Streaming Processors (SP)_ #hinweis[(e.g. 1-30 SM, 8-192 SPs per SM)].\
+/ GPU Structure:
+    A GPU consists of multiple _Streaming Multiprocessors (SM)_ which in turn consist of multiple
+    _Streaming Processors (SP)_ #hinweis[(e.g. 1-30 SM, 8-192 SPs per SM)].\
 
-*SIMD:*
-Single Instruction Multiple Data. The _same instruction_ is executed simultaneously on
-_multiple cores_ working on _different data elements_ #hinweis[(Vector parallelism)].
-Saves fetch & decode instructions.\
-*SISD:*
-Single Instruction Single Data. Purely _sequential_ calculations.\
-*SIMT:*
-Single Instruction Multiple Threads. The same instruction is executed in different threads over different data.
-#image("img/parprog_7.png")
+/ SIMD:
+    Single Instruction Multiple Data. The _same instruction_ is executed simultaneously on
+    _multiple cores_ working on _different data elements_ #hinweis[(Vector parallelism)].
+    Saves fetch & decode instructions.\
+/ SISD:
+    Single Instruction Single Data. Purely _sequential_ calculations.\
+/ SIMT:
+    Single Instruction Multiple Threads. The same instruction is executed in different threads over different data.
+    #image("img/parprog_7.png")
 
 
 == Latency vs. Throughput
-*Latency:*
-_Elapsed time_ of an event
-#hinweis[(Walking from point A to B takes one minute, the latency is one minute)].\
-*Throughput:*
-_The number of events_ that can be executed per unit of time #hinweis[(Bandwidth)]\
-There is a _tradeoff_ between latency and throughput. Increasing throughput by pipelined
-processing, latency most often also increases. All pipeline stages must operate in _lockstep_.
-The _rate of processing_ is determined by the _slowest step_.\
-*Pipelining:*
-Run processes in an overlapping manner.\
-*Example:*
-A program consists of two operations:
-Transfer data from CPU memory to GPU memory ($T_1$ units = #tcolor("grün", "20ms")),
-Execute computation on the device ($T_2$ units = #tcolor("orange", "60ms")). \
-What is the _latency_ (non-pipelined)? $fxcolor("grün", 20) + fxcolor("orange", 60) = underline(80"ms")$.\
-What is the _throughput_ (pipelined)? Every #tcolor("orange", "60ms") an operation is finished.\
-Throughput = $1\/60$ operations/ms.
+/ Latency:
+    _Elapsed time_ of an event
+    #hinweis[(Walking from point A to B takes one minute, the latency is one minute)].\
+/ Throughput:
+    _The number of events_ that can be executed per unit of time #hinweis[(Bandwidth)]\
+    There is a _tradeoff_ between latency and throughput. Increasing throughput by pipelined
+    processing, latency most often also increases. All pipeline stages must operate in _lockstep_.
+    The _rate of processing_ is determined by the _slowest step_.\
+/ Pipelining:
+    Run processes in an overlapping manner.\
+/ Example:
+    A program consists of two operations:
+    Transfer data from CPU memory to GPU memory ($T_1$ units = #tcolor("grün", "20ms")),
+    Execute computation on the device ($T_2$ units = #tcolor("orange", "60ms")). \
+    What is the _latency_ (non-pipelined)? $fxcolor("grün", 20) + fxcolor("orange", 60) = underline(80"ms")$.\
+    What is the _throughput_ (pipelined)? Every #tcolor("orange", "60ms") an operation is finished.\
+    Throughput = $1\/60$ operations/ms.
 
 == CPU vs GPU
 #table(
@@ -124,6 +142,76 @@ and GPU is needed. There is also _no garbage collector_ on the GPU.
 Computer Unified Device Architecture. Is a _parallel computing platform and an API_ for Nvidia
 GPU that allows the host program to use GPUs for general purpose processing.
 
+==== CUDA Kernel
+A kernel is a function that is executed $n$ times in parallel by $m$ different CUDA threads.
+Only the GPU knows when the task is finished.
+
+
+== CUDA Code and CUDA Flow
+// ```cpp
+// for (int i = 0; i < N; i++) { C[i] = A[i] + B[i]; } // sequential
+// ```
+```cpp
+// kernel definition on GPU
+__global__
+void VectorAddKernel(float *A, float *B, float *C) {
+  int i = threadIdx.x;
+  C[i] = A[i] + B[i];
+}
+```
+```cpp
+void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
+  size_t size = N * sizeof(float);
+  float *d_A, *d_B, *d_C; // data on GPU
+
+  // GPU memory allocate
+  cudaMalloc(&d_A, size); cudaMalloc(&d_B, size); cudaMalloc(&d_C, size);
+
+  // Data transfer to GPU (HostToDevice)
+  cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
+  cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
+
+  // Kernel execution, N is amount of threads
+  VectorAddKernel<<<1, N>>>(d_A, d_B, d_C, N);
+
+  // Transfer results from GPU to CPU (DeviceToHost)
+  cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost);
+
+  // Deallocate GPU memory
+  cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
+}
+```
+
+/* jetzt in Code integriert
+==== Example: Array addition
+#grid2(
+    // columns: (auto, auto),
+    [
+        ```cpp
+        // kernel definition on GPU
+        __global__
+        void VectorAddKernel(float *A, float *B, float *C) {
+          int i = threadIdx.x; C[i] = A[i] + B[i];
+        }
+        ```
+    ],
+    [
+        ```cpp
+        for (int i = 0; i < N; i++) {
+          C[i] = A[i] + B[i];
+        } // sequential
+        ```
+        ```
+
+        // kernel invocation on CPU
+        // N is amount of threads
+        VectorAddKernel<<<1, N>>>(A, B, C);
+        ```
+    ],
+)
+*/
+
+/* jetzt im code integriert, anstatt doppelt
 ==== CUDA Execution steps
 #grid(
     columns: (auto, 1fr),
@@ -138,39 +226,7 @@ GPU that allows the host program to use GPUs for general purpose processing.
         + _`cudaFree`:_ Deallocate GPU memory
     ],
 )
-
-==== Example: Array addition
-```cpp
-for (int i = 0; i < N; i++) { C[i] = A[i] + B[i]; } // sequential
-(i = 0 .. N-1): C[i] = A[i] + B[i]; // parallel using n threads
-```
-
-==== CUDA Kernel
-A kernel is a function that is executed $n$ times in parallel by $m$ different CUDA threads.
-```cpp
-// kernel definition on GPU
-__global__
-void VectorAddKernel(float *A, float *B, float *C) {
-  int i = threadIdx.x; C[i] = A[i] + B[i];
-}
-// kernel invocation on CPU
-VectorAddKernel<<<1, N>>>(A, B, C); // N is amount of threads
-```
-Only the GPU knows when the task is finished.
-
-==== Boilerplate Orchestration Code
-```cpp
-void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
-  size_t size = N * sizeof(float);
-  float *d_A, *d_B, *d_C; // data on GPU
-  cudaMalloc(&d_A, size); cudaMalloc(&d_B, size); cudaMalloc(&d_C, size);
-  cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
-  cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
-  VectorAddKernel<<<1, N>>>(d_A, d_B, d_C, N);
-  cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost);
-  cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
-}
-```
+*/
 
 #wrap-content(
     image("img/parprog_8.png"),
@@ -179,33 +235,32 @@ void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
 )[
     == Performance Metrics
     The performance is either limited by _memory bandwidth_ or _computation_.
-    *Compute Bound:*
-    Throughput is limited by calculation #hinweis[(Cores are at the limit, but the memory bus
-        could transfer more data)].\ _This is better and reached if AI Kernel > AI GPU_.\
-    *Memory Bound:*
-    Throughput is limited by data transfer #hinweis[(Memory bus bandwidth is at its limit, but
-        cores could process more data)].\
-    *Arithmetic intensity:*
-    Defined as FLOPS #hinweis[(Floating Point Operations per Second)] per Byte.
-    The higher, the better.\
-    #box($ "Number of operations" / "Number of transferred bytes" = "FLOPS" / "Bytes" $)
-
-    *Example:*
-    ```cpp for(i=0; i<N, i++) { z[i] = x[i] + y[i] * x[i]; }```\
-    Read `x` and `y` from memory, write `z` to memory.
-    That's 2 reads and 1 write #hinweis[(`x` is used twice but read only once)].
-    In case `x`, `y` and `z` are `int`s, we have #fxcolor("grün", "12") #hinweis($(3 dot 4)$) bytes
-    transferred and $#fxcolor("orange", "2")$ arithmetic ops ($+$, $*$).
-    The arithmetic intensity is therefore $#fxcolor("orange", "2") / #fxcolor("grün", "12") =
-    #fxcolor("orange", "1") / #fxcolor("grün", "6")$.
+    / Compute Bounds:
+        Throughput is limited by calculation #hinweis[(Cores are at the limit, but the memory bus
+            could transfer more data)].\ _This is better and reached if AI Kernel > AI GPU_.\
+    / Memory Bounds:
+        Throughput is limited by data transfer #hinweis[(Memory bus bandwidth is at its limit, but
+            cores could process more data)].\
+    / Arithmetic intensitys:
+        Defined as FLOPS #hinweis[(Floating Point Operations per Second)] per Byte.
+        The higher, the better.\
+        #box($ "Number of operations" / "Number of transferred bytes" = "FLOPS" / "Bytes" $)
+    / Examples:
+        ```cpp for(i=0; i<N, i++) { z[i] = x[i] + y[i] * x[i]; }```\
+        Read `x` and `y` from memory, write `z` to memory.
+        That's 2 reads and 1 write #hinweis[(`x` is used twice but read only once)].
+        In case `x`, `y` and `z` are `int`s, we have #fxcolor("grün", "12") #hinweis($(3 dot 4)$) bytes
+        transferred and $#fxcolor("orange", "2")$ arithmetic ops ($+$, $*$).
+        The arithmetic intensity is therefore $#fxcolor("orange", "2") / #fxcolor("grün", "12") =
+        #fxcolor("orange", "1") / #fxcolor("grün", "6")$.
 ]
-
+#mt1()
 === Roofline model
 Provides performance estimates of a kernel running on differently sized architectures.
 Has three parameters: Peak performance, peak bandwidth vs. arithmetic intensity.\
 _Peak performance_ is derived from benchmarking FLOPS or GFLOPS #hinweis[(Giga-FLOPS , $10^9$
     FLOPS)]. The _peak bandwidth_ from manuals of the memory subsystem. The _ridge point_ is where
-the horizontal and diagonal lines meet = minimum AI required to achieve the peak performance.
+the horizontal and diagonal lines meet = minimum Ar.Int. required to achieve the peak performance.
 
 #image("img/parprog_9.png", width: 90%)
 
@@ -214,64 +269,65 @@ Because there are so _many cores_ on GPUs, it is possible to run many threads in
 _without context switches_. This allows better parallelism without a performance penalty.
 
 == Compilation
-*Just-in-time Compilation:*
-The _NVCC compiler_ compiles the non-CUDA code with the host C compiler and translates code
-written in CUDA into _PTX instructions_ #hinweis[(assembly language represented as ASCII
-    text)]. The graphics driver compiles the PTX into _executable binary code_.
-The assembly of PTX code is _postponed until application runtime_, at which time the target
-GPU is known. The _disadvantage_ of this is the _increased application startup delay_.
-However, thanks to cache this only happens once #hinweis[(warmup)].\
-*Programming Interface:*
-_Runtime_ #hinweis[(The `cudart` library provides functions that execute on the host to
-    (de-)allocate device memory, transfer data etc.)] or _driver API_ #hinweis[(The CUDA driver API
-    is implemented in the `cuda.dll` or `cuda.so` which is copied on the system during installation
-    of the driver. This provides an additional level of control by exposing lower-level concepts
-    such as CUDA contexts. Often overkill)]. \
-*Asynchronous Execution:*
-The command pipeline in CUDA works asynchronous, commands and data can be transferred from/to
-the GPU at the same time.
+/ Just-in-time Compilation:
+    The _NVCC compiler_ compiles the non-CUDA code with the host C compiler and translates code
+    written in CUDA into _PTX instructions_ #hinweis[(assembly language represented as ASCII
+        text)]. The graphics driver compiles the PTX into _executable binary code_.
+    The assembly of PTX code is _postponed until application runtime_, at which time the target
+    GPU is known. The _disadvantage_ of this is the _increased application startup delay_.
+    However, thanks to cache this only happens once #hinweis[(warmup)].\
+/ Programming Interface:
+    _Runtime_ #hinweis[(The `cudart` library provides functions that execute on the host to
+        (de-)allocate device memory, transfer data etc.)] or _driver API_ #hinweis[(The CUDA driver API
+        is implemented in the `cuda.dll` or `cuda.so` which is copied on the system during installation
+        of the driver. This provides an additional level of control by exposing lower-level concepts
+        such as CUDA contexts. Often overkill)]. \
+/ Asynchronous Execution:
+    The command pipeline in CUDA works asynchronous, commands and data can be transferred from/to
+    the GPU at the same time.
 
 == CUDA SIMT Execution Model
-Single instruction, multiple Threads. The kernel is executed $N$ times in parallel by $N$
-different CUDA threads.\
-*Blocks:*
-Threads are _grouped_ in blocks. The host can define how many threads each block has
-#hinweis[(up to 1024)]. Threads in one block can _interact_ with each other but not with
-threads in other blocks. \
-*Execution Model:*
-_One thread_ runs on _one virtual scalar processor_ #hinweis[(one GPU core)].
-_One block_ runs on _one virtual multi-processor_ #hinweis[(one GPU Streaming Multiprocessor)].
-Blocks must be _independent_.\
-*Thread Pool Abstraction:*
-The compiled CUDA program has e.g. 8 CUDA blocks. The _runtime_ can _choose how to allocate_
-these blocks to multiprocessors. For a larger GPU with 8 SMs, each SM gets one CUDA block.
-This enables performance scalability without code changes.\
-*Guarantees:*
-CUDA guarantees that _all threads in a block_ run on the _same SM_ at the _same time_ and that
-the blocks in a kernel _finish before_ any block from a new, _dependent kernel_ is _started_.\
-*Mapping:*
-One SM can run several _concurrent_ blocks depending on the resources needed. Each _kernel_ is
-executed _on one device_. CUDA supports running _multiple kernels on a device_ at one time.
+*S* #h(-0.2em)ingle *i* #h(-0.2em)nstruction, *M* #h(-0.2em)ultiple *T* #h(-0.2em)hreads.
+The kernel is executed $N$ times in parallel by $N$
+different CUDA threads.
+/ Blocks:
+    Threads are _grouped_ in blocks. The host can define how many threads each block has
+    #hinweis[(up to 1024)]. Threads in one block can _interact_ with each other but not with
+    threads in other blocks. \
+/ Execution Model:
+    _One thread_ runs on _one virtual scalar processor_ #hinweis[(one GPU core)].
+    _One block_ runs on _one virtual multi-processor_ #hinweis[(one GPU Streaming Multiprocessor)].
+    Blocks must be _independent_.\
+/ Thread Pool Abstraction:
+    The compiled CUDA program has e.g. 8 CUDA blocks. The _runtime_ can _choose how to allocate_
+    these blocks to multiprocessors. For a larger GPU with 8 SMs, each SM gets one CUDA block.
+    This enables performance scalability without code changes.\
+/ Guarantees:
+    CUDA guarantees that _all threads in a block_ run on the _same SM_ at the _same time_ and that
+    the blocks in a kernel _finish before_ any block from a new, _dependent kernel_ is _started_.\
+/ Mapping:
+    One SM can run several _concurrent_ blocks depending on the resources needed. Each _kernel_ is
+    executed _on one device_. CUDA supports running _multiple kernels on a device_ at one time.
 
 == CUDA Kernel specification
-*Specifying Kernel:*
-```cpp VectorAddKernel<<<GRID_dimension, BLOCK_dimension>>>(A,B,C)```\
-Dimensions can be 1D, 2D or 3D and specified via `dim3` which is a structure designed for
-storing block and grid dimensions: ```cpp struct dim3{x; y; z}```.\
-```cpp dim3 dimGrid(2) == dim3 dimGrid(2,1,1)``` #hinweis[(Unassigned components are set to 1)]\
-```cpp VectorAddKernel<<<dimGrid, dimBlock>>>(A,B,C);```\
-_Number of blocks in a grid:_ ```cpp dimGrid.x * dimGrid.y * dimGrid.z ```\
-_Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
-*1D Grid:*
-We can simply use integers. ```cpp VectorAddKernel<<<1, N>>>``` creates 1 Block with N Threads.\
-*2D Grid:*
-```cpp dim3 gridS(3,3); dim3 blockS(3,3); VectorAddKernel<<<gridS, blockS>>>```\
-*3D Grid:*
-```cpp dim3 gridS(3,2,1); dim3 blockS(4,3,1); VectorAddKernel<<<gridS, blockS>>>```\
-*Device Limits:*
-_Max threads per block:_ 1024,
-_Max thread dimensions per block:_ (1024, 1024, 64)
-_Max grid size:_ (2'147'483'647, 65'535, 65'535)
+/ Specifying Kernel:
+    ```cpp VectorAddKernel<<<GRID_dimension, BLOCK_dimension>>>(A,B,C)```\
+    Dimensions can be 1D, 2D or 3D and specified via `dim3` which is a structure designed for
+    storing block and grid dimensions: ```cpp struct dim3{x; y; z}```.\
+    ```cpp dim3 dimGrid(2) == dim3 dimGrid(2,1,1)``` #hinweis[(Unassigned components are set to 1)]\
+    ```cpp VectorAddKernel<<<dimGrid, dimBlock>>>(A,B,C);```\
+    _Number of blocks in a grid:_ ```cpp dimGrid.x * dimGrid.y * dimGrid.z ```\
+    _Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
+/ 1D Grid:
+    We can simply use integers. ```cpp VectorAddKernel<<<1, N>>>``` creates 1 Block with N Threads.\
+/ 2D Grid:
+    ```cpp dim3 gridS(3,3); dim3 blockS(3,3); VectorAddKernel<<<gridS, blockS>>>```\
+/ 3D Grid:
+    ```cpp dim3 gridS(3,2,1); dim3 blockS(4,3,1); VectorAddKernel<<<gridS, blockS>>>```\
+/ Device Limits:
+    _Max threads per block:_ 1024,
+    _Max thread dimensions per block:_ (1024, 1024, 64)
+    _Max grid size:_ (2'147'483'647, 65'535, 65'535)
 
 #wrap-content(
     image("img/matrices.svg"),
@@ -291,28 +347,29 @@ _Max grid size:_ (2'147'483'647, 65'535, 65'535)
 #v(-0.75em)
 
 == Data Partitioning within threads
-*Data Access:*
-Each kernel decides which data to work on. The programmers decide data partitioning scheme.
-`threadId.x/y/z` #hinweis[(Thread no. in block)],
-`blockId.x` #hinweis[(Block no.)],
-`blockDim.x` #hinweis[(Block size)]\
-*Partitioning in Blocks:*
-```cpp
-__global__
-void VectorAddKernel(float *A, float *B, float *C) {
-  int i = blockIdx.x * blockDim.x + threadIdx.x; //index based on (blockID, threadID)
-  if (i < N) {
-    C[i] = A[i] + B[i]; // without this if, some threads will be idle
-  } }
-// kernel invocation
-N = 4097; int blockSize = 1024; int gridSize = (N + blockSize - 1) / blockSize;
-VectorAddKernel<<<gridSize, blockSize>>>(A, B, C);
-```
+/ Data Access:
+    Each kernel decides which data to work on. The programmers decide data partitioning scheme.
+    `threadId.x/y/z` #hinweis[(Thread no. in block)],
+    `blockId.x` #hinweis[(Block no.)],
+    `blockDim.x` #hinweis[(Block size)]\
+/ Partitioning in Blocks:
+    ```cpp
+    __global__
+    void VectorAddKernel(float *A, float *B, float *C) {
+      //index based on (blockID, threadID):
+      int i = blockIdx.x * blockDim.x + threadIdx.x;
+      if (i < N) {
+        C[i] = A[i] + B[i]; // without this if, some threads will be idle
+      } }
+    // kernel invocation
+    N = 4097; int blockSize = 1024; int gridSize = (N + blockSize - 1) / blockSize;
+    VectorAddKernel<<<gridSize, blockSize>>>(A, B, C);
+    ```
 
-*Boundary Check:*
-More threads than necessary work on the data. If $N = 4097$, 5 Blocks with 1024 Threads are
-needed which results in _1023 unused threads_. Threads with $i >= N$ must _not be allowed_
-to write to array $C$ because they might _corrupt the working memory_ of some other thread.
+/ Boundary Check:
+    More threads than necessary work on the data. If $N = 4097$, 5 Blocks with 1024 Threads are
+    needed which results in _1023 unused threads_. Threads with $i >= N$ must _not be allowed_
+    to write to array $C$ because they might _corrupt the working memory_ of some other thread.
 
 == Error Handling
 Some functions have return type `cudaError`. Need to check for `cudaSuccess`. It's best to
@@ -321,18 +378,39 @@ which prints the error and exits the program.
 
 == Unified Memory
 Unified memory allows automatic transfer from CPU to GPU and vice versa.
-No explicit Memory Copy needed, but other new rules.
-
-```cpp
-cudaMallocManaged(&A, size); // ... same for &B and &C ...
-A[0] = 8; ... // initialize A and B assuming they reside on the host
-// A and B are automatically transferred to the device
-VectorAddKernel<<<..,..>>>(A,B,C,N);
-cudaDeviceSynchronize(); // wait for the GPU to finish
-// C is transferred automatically to the host and can be read directly
-std::cout << C[0]; ...
-cudaFree(A); cudaFree(B); cudaFree(C);
-```
+No explicit Memory Copy (cudaMemCpy) needed, but other new rules. Error handling still needed.
+#grid2(
+    [
+        CPU Code
+        ```cpp
+        A = (float*)malloc(size);// same for &B and &C
+        vectorAdd(A, B, C, N);
+        free(A); free(B); free(C);
+        ```
+    ],
+    [
+        GPU Code
+        ```cpp
+        // same for &B and &C:
+        cudaMallocManaged(&A, size);
+        // data for A,B,C automatically transferred to device (CPU)
+        VectorAddKernel<<<..,..>>>(A, B, C, N);
+        // wait for GPU, because not blocking:
+        cudaDeviceSynchronize();
+        cudaFree(A); cudaFree(B); cudaFree(C);
+        ```
+    ],
+)
+// ```cpp
+// cudaMallocManaged(&A, size); // ... same for &B and &C ...
+// A[0] = 8; ... // initialize A and B assuming they reside on the host
+// // A and B are automatically transferred to the device
+// VectorAddKernel<<<..,..>>>(A,B,C,N);
+// cudaDeviceSynchronize(); // wait for the GPU to finish
+// // C is transferred automatically to the host and can be read directly
+// std::cout << C[0]; ...
+// cudaFree(A); cudaFree(B); cudaFree(C);
+// ```
 
 
 = GPU Performance Optimizations
@@ -622,6 +700,23 @@ Each _send_ should have a matching _receive_.\
         columns: (auto, auto),
         [
             ```c
+            // Parallel, the trials are split across different nodes
+            int rank, size;
+            MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+            MPI_Comm_size(MPI_COMM_WORLD, &size);
+            srand(rank * 4711); // each process receives a different seed
+            // Each process computes a subtask:
+            long hits = count_hits(TRIALS / size);
+            long total;
+            MPI_Reduce(&hits, &total, 1, MPI_LONG,
+              MPI_SUM, 0, MPI_COMM_WORLD);
+            if (rank == 0) {
+              double pi = 4 * ((double)total / TRIALS);
+            }
+            ```
+        ],
+        [
+            ```c
             // Sequential
             long count_hits(long trials) { long hits = 0, i;
             for (i = 0; i < trials; i++) {
@@ -631,20 +726,6 @@ Each _send_ should have a matching _receive_.\
                 if (x * x + y * y <= 1) { hits++;}
               }
             return hits; }
-            ```
-        ],
-        [
-            ```c
-            // Parallel, the trials are split across different nodes
-            int rank, size;
-            MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-            MPI_Comm_size(MPI_COMM_WORLD, &size);
-            srand(rank * 4711); // each process receives a different seed
-            // Each process computes a subtask:
-            long hits = count_hits(TRIALS / size);
-            long total;
-            MPI_Reduce(&hits, &total, 1, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
-            if (rank == 0) { double pi = 4 * ((double)total / TRIALS); }
             ```
         ],
     )

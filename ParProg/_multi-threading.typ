@@ -34,7 +34,12 @@
     )
     #body
 ]
-
+#let hinweis2(body) = [
+    #set text(
+        style: "italic",
+    )
+    #body
+]
 
 // /*
 
@@ -103,9 +108,6 @@
         var myT = new Thread(() -> {
           /* thread behaviour */
         }); // C# lambda lambda with => arrow
-
-        // start the thread (not run!)
-        myT.start();
         ```
     ],
     [
@@ -133,7 +135,7 @@
 
 
 ==== Thread Java &  .NET
-/ ```java t.start() == t.Start() ```:
+/ ```java t.start() == t.Start() ```: Start the thread (not run!)
 / ```java t.join() == t.Join() ```: wait till thread finished, timeout: `join(ms)`,
 / ```java t.sleep(ms) == t.Sleep(ms) ```: join+sleep #sym.arrow.r Timed-Waiting state,
 / ```java t.wait()  ```: gives processor+lock free, call in synchronized block.
@@ -374,8 +376,8 @@ consume CPU during deadlock.
             #image("img/resource-graph-2.svg", height: 11pt)],
     )
     Deadlocks can be identified by _cycles in the resource graph_.\
-    *Deadlock Avoidance:*
-    Introduce _linear blocking order_, lock nested
+    / Deadlock Avoidance:
+        Introduce _linear blocking order_, lock nested
     // fix umbruch
     #v(-1.5em)
     only in ascending order.
@@ -576,68 +578,133 @@ Wovon hängt die Anzahl Tasks bei beiden Verfahren ab?
 / .NET Parallel For: Anzahl freier Worker Threads
 / Java ForkJoinPool: Array-Länge und Threshold (bei RecursiveAction)
 
-// .NET Code API
-// // TODO
-// / `Parallel.Invoke()`:
-// / `Parallel.For()`:
-
 == Thread Pools Basics
 Thread costs: performance + memory (stack per thread) #sym.arrow.r recycle threads for multiple tasks.\
-// _Limited number of threads_ #hinweis[(Too many threads slow down the system or exceed available memory)],
-*Tasks:* potentially parallel work packages. Passive objects describing the functionality.\
-*Thread Pool:* Tasks queues. Smaller number of _working threads_ grab tasks from queue and execute them.
-A task must run to completion before worker thread can grab a new one #hinweis[except nested tasks/sub-tasks].\
+/ Tasks: potentially parallel work packages. Passive objects describing the functionality.\
+/ Thread Pool: Tasks queues. Smaller number of _working threads_ grab tasks from queue and execute them.
+    A task must run to completion before worker thread can grab a new one #hinweis[except nested tasks/sub-tasks].\
 // Any task must _complete execution_ before its worker thread is free to grab another task.
 // Exception: nested tasks. \
-*Scalable Performance:*
-#hinweis[(Rule of thumb: \# of Worker Threads = \# processors + 1 (Pending I/O Calls))]\
-Programs with tasks run _faster on parallel machines_ #sym.arrow.r allows exploitation of
-parallelism _without thread costs_. Number of threads can be _adapted_ to the system.
-*Advantages:*
-_Thread recycling_ #hinweis[(save thread creation and release)],
-_Higher level of abstraction_ #hinweis[(Disconnect task description from execution)],
-_Number of threads configurable_ on a per-system basis.\
-*Limitations:*
-Task must not wait for each other #hinweis[(except sub-tasks)] would result in deadlock in Queue.
+/ Scalable Performance:
+    #hinweis[(Rule of thumb: \# of Worker Threads = \# processors + 1 (Pending I/O Calls))]\
+    Programs with tasks run _faster on parallel machines_ #sym.arrow.r allows exploitation of
+    parallelism _without thread costs_. Number of threads can be _adapted_ to the system.
+/ Advantages:
+     // _Limited number of threads_ #hinweis[(Too many threads slow down the system or exceed available memory)],
+    _Thread recycling_ #hinweis[(save thread creation and release)],
+    _Higher level of abstraction_ #hinweis[(Disconnect task description from execution)],
+    _Number of threads configurable_ on a per-system basis.\
+/ Limitations:
+    Task must not wait for each other #hinweis[(except sub-tasks)] would result in deadlock in Queue.
 // #hinweis[(if one task $T_1$ is waiting for something the task $T_2$ behind him in the Queue
 //     should provide, but $T_2$ waits for $T_1$ to finish, a deadlock occurs)]
+/ LIFO Queue: per worker thread and stealing is *FIFO*, Automatic degree of parallelism #hinweis[(Default: As much worker threads as Processors)], Optimized for recursive.
+/ Fire-and-forget:
+    Tasks may not finish (tasks are started without retrieving results). Async: `submit()` without `get()`.  Task is run, but Exception will not get caught.
+// / Fire and Forget: Task are started _without retrieving results_ later (`submit()` without `get()`).  Task is run, but Exceptions will not get caught.
 
-== Java ForkJoinPool
-- Get the default pool by calling `ForkJoinPool.Pool()`
-- example: ```java int result = new CountTask(2, N).invoke();```
-- Default Pool (singleton), a Global shared ForkJoinPool
-- used by `CompletableFuture`
-- Does not always use all processors :(
+== Java ForkJoinPool Thread Pool
+/ ForkJoinPool: Thread Pool for recursive Tasks (Divide and Conquer), work stealing, Subclass of ExecutorService
+/ `ForkJoinPool.commonPool()`: static global Pool, singleton, used by `CompletableFuture`
+// - ForkJoinPool does not always use all processors :(
 
 / Create explicit thread pool: ```java var threadPool = new ForkJoinPool();``` \ ```java int result = threadPool.invoke(new CountTask(2, N));```
-/ Special Features: *Fire-and-forget* tasks may not finish *LIFO Queue* per worker thread and stealing is FIFO, Automatic degree of parallelism #hinweis[(Default: As much worker threads as Processors)], Optimized for recursive.
+// / TODO: ```java int result = new CountTask(2, N).invoke();```
+
 / Work Stealing: Jobs get submitted into the _global queue_, which distributes the jobs to the _local queues_ of each worker thread. If one thread has no work left, it can _"steal" work from another threads_ local queue instead of the global queue. This _distributes_ the scheduling work over idle processors.
-- worker threads run as daemon threads #hinweis[workers are daemon threads in TPL .NET too]. // in java kann für einen eigenen "expliziten" ForkJoinPool auch eingestellt werden, dass die Threads nicht daemon threads sind. Aber das haben wir nicht angeschaut. Bei uns sind threads im ForkJoinPool immer daemon threads.
+    Worker threads run as daemon threads (in TPL .NET too). // in java kann für einen eigenen "expliziten" ForkJoinPool auch eingestellt werden, dass die Threads nicht daemon threads sind. Aber das haben wir nicht angeschaut. Bei uns sind threads im ForkJoinPool immer daemon threads.
 
-
+== Java ForkJoinPool
+// tODO: kürzen?
 / _`invoke(task)`_: blocking
+/ _`invokeAll(task1, task2)`_: blocking, creates fork and starts task
 / _`submit(task)`_: returns Future
 / _`execute(task)`_: async but does not return Future #hinweis[fire and forget]
 
-/ _`future.get()`_: wait for result/exception #hinweis[prevent fire and forget by evaluating result]
+/ _`future.get()`_: wait for result/exception #hinweis[prevent fire and forget by evaluating result], can throw CancellationException, ExecutionException, InterruptedException
 / _`task.fork()`_: schedule async subtask
 / _`result = task.join()`_: wait and get result
-
 
 ```java
 // Task Launch
 var threadPool = new ForkJoinPool();
-Future<Integer> future = threadPool.submit(() -> { // submit task into pool
-  int value = ...; /* long calculation */
-  return value;
+Future<Integer> future = threadPool.submit(() -> { // submit task into pool, async
+  int value = ...; /* long calculation */ return value;
 });
+T result = future.get(); // blocks until task terminated
 ```
+==== Recursive Action/Task
+```java
+// Sequential:
+int counter = 0; for (int n = 2; n < N; n++) { if (isPrime(n)) { counter++}};
+
+// Parallel and Recursive with RecursiveTask class:
+class CountTask extends RecursiveTask<Integer> { //RecursiveAction: void function
+  private final int lower, upper;
+  private static final int THRESHOLD = 1; // configurable
+  public CountTask(int lower, int upper) {
+    this.lower = lower;    this.upper = upper;
+  }
+  protected Integer compute() { // TRESHOLD = avoid over-parallelizing
+    if (lower == upper) { return 0; }
+    if (lower + 1 == upper) {  return isPrime(lower) ? 1 : 0;  }
+    if (upper - lower > THRESHOLD) { // parallel count
+      int middle = (lower + upper) / 2;
+      var left = new CountTask(lower, middle);
+      var right = new CountTask(middle, upper);
+
+      // V1 mit explizitem fork, blockiert noch nicht
+      left.fork(); right.fork(); // fork = new task
+      // V2 invokeAll, join danach ist sofort fertig
+      invokeAll(left, right);
+
+      return right.join() + left.join(); // join = wait for all threads
+    } else { // sequential count:
+      int count = 0;
+      for (int number = lower; number < upper; number++) {
+        if (isPrime(number)) { count++; }
+      }
+      return count;
+    }
+} }  // .invoke is blocking:
+int result = new CountTask(2, N).invoke(); // invokeAll() to start multiple tasks
+```
+
+/*
+=== Pairwise sum (recursive)
+```java
+class PairwiseSum extends RecursiveAction {
+  private final int[] array;
+  private final int lower, upper;
+  private static final int THRESHOLD = 1; // configurable
+  public PairwiseSum(int[] array, int lower, int upper) {
+    this.array = array; this.lower = lower; this.upper = upper;
+  }
+  protected void compute() {
+    if (upper - lower > THRESHOLD) {
+      int middle = (lower + upper) / 2;
+      // ohne return Wert:
+      invokeAll(
+        new PairwiseSum(array, lower, middle),
+        new PairwiseSum(array, middle, upper)
+      );
+    } else {
+      for (int i = lower; i < upper; i++) {
+        array[2*i] += array[2*i+1]; array[2*i+1] = 0;
+}}}}
+```
+// */
+
+
+
+
+
 #v(-0.5em)
-
-
-
-
 == Parallel For (.NET)
+// .NET Code API
+// // TODO
+// / `Parallel.Invoke()`:
+// / `Parallel.For()`:
 #v(-1em)
 === .NET Task Parallel Library (TPL)
 Preferred way to write multi-threaded and parallel code.
@@ -647,59 +714,7 @@ _Efficient default thread pool_ #hinweis[(tasks are queued to the ThreadPool, su
 layers_ #hinweis[(Task Parallelization: use tasks explicitly, Data Parallelization: use
     parallel statements and queries using tasks implicitly)], Asynchronous Programming and PLINQ.
 
-
-// TODO code prüfen:
-```cs
-// Task with return value in C#
-Task<int> task = Task.Run(() => {
-  int total = ... // some calculation
-  return total;
-});
-Console.Write(task.Result); // Blocks until task is done and returns the result
-```
-
-```cs
-// Nested Tasks (von der Vorlesungsfolie)
-var task = Task.Run(() => {
-  var left = Task.Run(() => Count(leftPart));
-  var right = Task.Run(() => Count(rightPart));
-  return left.Result + right.Result; // blockierend
-});
-static Task<int> Count(...part) {...}
-```
-
-// TODO,
-```cs
-// CountTask von java in c#
-var left = Task.Run(() => Count(leftPart)); var right = Task.Run(() => Count(rightPart));
-await Task.WhenAll(left, right);
-return left.Result + right.Result;
-
-// oder so?
-class ... compute{
-  var leftTask = Task.Run(() => new CountTask(lower, middle).Compute());
-  var rightTask = Task.Run(() => new CountTask(middle, upper).Compute());
-  return leftTask.Result + rightTask.Result;
-}
-...
-int result = new CountTask(2, N).Compute();
-
-// mit Parallel.For:
-Parallel.For( 2, N,
-    () => 0, // thread-local count
-    (i, state, localCount) =>
-    {
-        // counting logic
-        return localCount + 1;
-    },
-    localCount =>
-    {
-        Interlocked.Add(ref count, localCount);
-    });
-Console.WriteLine(count);
-```
-
-
+// === C\# Thread Pool Code
 === Parallel Statements in C\#
 #columns(2)[
     Execute _independent_ statements _potentially in parallel_
@@ -752,16 +767,16 @@ We should keep _parallel tasks short_ to better profit from this automatic perfo
 
 
 = Asynchronous programming
-*Unnecessary Synchrony:*
-Blocking method calls are often used without need #hinweis[(Long running calculations, I/O
-    calls, database or file accesses)]. With an _asynchronous call_, other work can continue while
-waiting on the result of the long operation.\
+/ Unnecessary Synchrony:
+    Blocking method calls are often used without need #hinweis[(Long running calculations, I/O
+        calls, database or file accesses)]. With an _asynchronous call_, other work can continue while
+    waiting on the result of the long operation.\
 ```cs var task = Task.Run(LongOperation); /* other work */ int result = task.Result;```\
-*Kinds of Asynchronisms:*
-_Caller-centric_ #hinweis[("pull", caller waits for the task end and gets the result, blocking call)],
-_Callee-Centric_ #hinweis[("push", Task hands over the result directly to successor / follower task)]\
-*Task Continuations:*
-Define task whose start is linked to the end of the predecessor task.
+/ Kinds of Asynchronisms:
+    _Caller-centric_ #hinweis2[("pull", caller waits for the task end and gets the result, blocking call)],
+    _Callee-Centric_ #hinweis2[("push", Task hands over the result directly to successor / follower task)]\
+/ Task Continuations:
+    Define task whose start is linked to the end of the predecessor task.
 
 #grid(
     columns: (auto, auto),
@@ -852,17 +867,14 @@ _No access to UI-elements by other threads_, or else incorrect
 
 
 == Java Async
+/ Java `CompletableFuture`:
+    _Modern asynchronous_ programming in Java. Also has _Multi-Continuation_ with
+    ```java CompletableFuture.allOf(future1, future2)``` and ```java CompletableFuture.any(...)```
+// / ```java future.get()```: can throw CancellationException, ExecutionException, InterruptedException
 
-*Java `CompletableFuture`:*
-_Modern asynchronous_ programming in Java. Also has _Multi-Continuation_ with
-```java CompletableFuture.allOf(future1, future2)``` and ```java CompletableFuture.any(...)```
-
-/ ```java future.get()```: can throw CancellationException, ExecutionException, InterruptedException
-
-
-*Java `invokeLater`:*
-To be executed _asynchronously_ on the event dispatching thread.
-Should be used when an _application thread_ needs to _update the GUI_.\
+/ Java `invokeLater`:
+    To be executed _asynchronously_ on the event dispatching thread.
+    Should be used when an _application thread_ needs to _update the GUI_.\
 
 === `Future<T>`
 Represents a _future result_ #hinweis[(asynchronous)], Proxy #hinweis[for the result that may be not available yet because the task has not finished.]
@@ -871,72 +883,6 @@ Represents a _future result_ #hinweis[(asynchronous)], Proxy #hinweis[for the re
 / _`.get()`_: waits if necessary for computation to complete and then retrieves its result
 / _`.cancel()`_: Attempts to cancel execution of this task, removes it from queue Task ends when a unhandled exception occurs. It is included in the `ExecutionException` thrown by `get()`.
 // #v(-0.5em)
-
-/ Fire and Forget: Task are started _without retrieving results_ later (`submit()` without `get()`).  Task is run, but Exceptions will not get caught.
-
-
-=== Recursive Action/Task
-```java
-// Sequential:
-int counter = 0; for (int n = 2; n < N; n++) { if (isPrime(n)) { counter++}};
-
-// Parallel and Recursive with RecursiveTask class:
-class CountTask extends RecursiveTask<Integer> { //RecursiveAction: void function
-  private final int lower, upper;
-  private static final int THRESHOLD = 1; // configurable
-  public CountTask(int lower, int upper) {
-    this.lower = lower;    this.upper = upper;
-  }
-  protected Integer compute() { // TRESHOLD = avoid over-parallelizing
-    if (lower == upper) { return 0; }
-    if (lower + 1 == upper) {  return isPrime(lower) ? 1 : 0;  }
-    if (upper - lower > THRESHOLD) { // parallel count
-      int middle = (lower + upper) / 2;
-      var left = new CountTask(lower, middle);
-      var right = new CountTask(middle, upper);
-
-      // V1 mit explizitem fork, blockiert noch nicht
-      left.fork(); right.fork(); // fork = new task
-      // V2 invokeAll, join danach ist sofort fertig
-      invokeAll(left, right);
-
-      return right.join() + left.join(); // join = wait for all threads
-    } else { // sequential count:
-      int count = 0;
-      for (int number = lower; number < upper; number++) {
-        if (isPrime(number)) { count++; }
-      }
-      return count;
-    }
-} }  // .invoke is blocking:
-int result = new CountTask(2, N).invoke(); // invokeAll() to start multiple tasks
-```
-
-/*
-=== Pairwise sum (recursive)
-```java
-class PairwiseSum extends RecursiveAction {
-  private final int[] array;
-  private final int lower, upper;
-  private static final int THRESHOLD = 1; // configurable
-  public PairwiseSum(int[] array, int lower, int upper) {
-    this.array = array; this.lower = lower; this.upper = upper;
-  }
-  protected void compute() {
-    if (upper - lower > THRESHOLD) {
-      int middle = (lower + upper) / 2;
-      // ohne return Wert:
-      invokeAll(
-        new PairwiseSum(array, lower, middle),
-        new PairwiseSum(array, middle, upper)
-      );
-    } else {
-      for (int i = lower; i < upper; i++) {
-        array[2*i] += array[2*i+1]; array[2*i+1] = 0;
-}}}}
-```
-// */
-
 
 
 == C\# Async/Await
@@ -967,44 +913,55 @@ This is the same code as before.
 
 _`async` for methods_: Caller may not be blocked during the entire execution of the async method.
 _`await` for tasks_: "Non-blocking wait" on task-end / result.\
-*Execution Model:*
-Async methods run partly _synchronous_ #hinweis[(as long as there is no blocking await)],\
-partly _asynchronous_ #hinweis[(until the awaited task is complete)].\
-*Mechanism:*
-Compiler dissects method into _segments_ which are then executed completely synchronously or asynchronously.\
-*Different Execution Scenarios:*
-_Case 1:_ Caller is a "normal" thread #hinweis[(Usual case, Continuation is executed by a TPL-Worker-Thread)],
-_Case 2:_ Caller is a UI-thread #hinweis[(Continuation is dispatched to the UI thread and processed by the UI-Thread as event)]\
-*Async Return Value Types:*
-_`void`_ #hinweis[("fire-and-forget")],
-_`Task`_ #hinweis[(No return value, allows waiting for end)],\
-_`Task<T>`_ #hinweis[(For methods having return value of type T)].\
-*Async without await:*
-Execute long running operation explicitly in task with ```cs await Task.Run()```.
-```cs
-public async Task<bool> IsPrimeAsync(long number) {
-  return await Task.Run(() => {
-    for (long i = 2; i*i <= number; i++) {
-      if (number % i == 0) { return false; }
-    } return true;
-  }); }
-```
+/ Execution Model:
+    Async methods run partly _synchronous_ #hinweis[(as long as there is no blocking await)],\
+    partly _asynchronous_ #hinweis[(until the awaited task is complete)].\
+/ Mechanism:
+    Compiler dissects method into _segments_ which are then executed completely synchronously or asynchronously.\
+/ Different Execution Scenarios:
+    _Case 1:_ Caller is a "normal" thread #hinweis[(Usual case, Continuation is executed by a TPL-Worker-Thread)],
+    _Case 2:_ Caller is a UI-thread #hinweis[(Continuation is dispatched to the UI thread and processed by the UI-Thread as event)]\
+/ Async Return Value Types:
+    _`void`_ #hinweis[("fire-and-forget")],
+    _`Task`_ #hinweis[(No return value, allows waiting for end)],\
+    _`Task<T>`_ #hinweis[(For methods having return value of type T)].\
+/ Async without await:
+    Execute long running operation explicitly in task with ```cs await Task.Run()```.
+    ```cs
+    public async Task<bool> IsPrimeAsync(long number) {
+      return await Task.Run(() => {
+        for (long i = 2; i*i <= number; i++) {
+          if (number % i == 0) { return false; }
+        } return true;
+      }); }
+    ```
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 = Memory Models
-*Lock-Free Programming:*
-_Correct_ concurrent interactions _without using locks_. Use guarantees of memory models.
-Goal is _efficient synchronization_.\
-*Problems:*
-Memory accesses are seen in _different order_ by different threads, except when _synchronized_
-and at _memory barriers_ #hinweis[(weak consistency)]. Optimizations by compiler, runtime
-system and CPU. Instructions are reordered or eliminated by optimization.\
-*Memory model:*
-Part of language semantics, there exist different models: _sequential consistency (SC)_
-#hinweis[(Order of execution cannot be changed. Too strong a consistency model)]
-and the _Java Memory Model_\ #hinweis[(a "weak" memory model)].
+/ Lock-Free Programming:
+    _Correct_ concurrent interactions _without using locks_. Use guarantees of memory models.
+    Goal is _efficient synchronization_.\
+/ Problems:
+    Memory accesses are seen in _different order_ by different threads, except when _synchronized_
+    and at _memory barriers_ #hinweis[(weak consistency)]. Optimizations by compiler, runtime
+    system and CPU. Instructions are reordered or eliminated by optimization.\
+/ Memory model:
+    Part of language semantics, there exist different models: _sequential consistency (SC)_
+    #hinweis[(Order of execution cannot be changed. Too strong a consistency model)]
+    and the _Java Memory Model_\ #hinweis[(a "weak" memory model)].
 
 === Atomicity
 An _atomic_ action is one that happens _all at once_ #hinweis[(So no thread interference)].
