@@ -71,8 +71,8 @@
  |                                                    |
  |   GET /submitCard  cookie: session-id:1234         |
  | -------------------------------------------------> |
+ |                                                    |
 ",
-    //  |                                                    |
 )
 
 Server: `set-cookie:name=value;Expires=Wed, 09 Jun 2029 10:18:14 GMT`
@@ -158,32 +158,26 @@ const myRequest = new Request('/example', myInit); fetch(myRequest) /*…*/
 ```
 
 == View mit Template Engine - Handlebars
-Statt ```js res.type('text/html'); res.write("<html>"); res.write("<p>..</p>"); ... ```. Template Engines nutzen die Daten und Template zu HTML kombinieren (Hbs, Pug) // pug hiess früher Jade
-*Begriffe*: Layouts (Definieren wiederverwendbare Grundstrukturen), Partials/Components (Wiederverwendbare Template-Bausteine), Helpers (Hilfsfunktionen, Erweiterung der Template-Sprache)
-// / Layouts: Definieren wiederverwendbare Grundstrukturen
-// / Partials/Components: Wiederverwendbare Template-Bausteine
-// / Helpers: Hilfsfunktionen, Erweiterung der Template-Sprache
-
+// Statt ```js res.type('text/html'); res.write("<html>"); res.write("<p>..</p>"); ... ```.
+Statt ```js app.get('/', (req, res) => { res.type('text/html'); res.write("<html>");... res.end(); });```, Template Engines nutzen, kombinieren Daten und Template zu HTML (Hbs, Pug) // pug hiess früher Jade
+\ *Begriffe*: _Layouts_ Definieren wiederverwendbare Grundstrukturen, _Partials/Components_ Wiederverwendbare Template-Bausteine, _Helpers_ Hilfsfunktionen, Erweiterung der Template-Sprache
 ===== Beispiel Template:
 ```js
-render("template", {pizzaName: "Hawaii", _id: 3, state: "OK"});
+res.render("template", { pizzaName: "Hawaii", _id: 3, state: "OK",
+                        description: "Movies", items: songs     });
 ```
 #v(-0.5em)
 ```html
+// template.hbs, pizza und movies Beispiel kombiniert:
 <p>Order-Infos</p>
 {{#if pizzaName}}
     <p>Ordered Pizza: {{pizzaName}}</p>
     {{#if_eq state "OK"}}
-        <form action='/orders/{{_id}}' method='post'>
+        <form action='/orders/{{_id}}' method='post'> // nicht accessible form:
             <input type='hidden' name='_method' value='delete'>
             <input type='submit' value='Delete order'>
         </form>
 {{/if_eq}} {{/if}}
-```
-
-```js render("template", {description: "List of some Movies", items: songs}); ```
-#v(-0.5em)
-```html
 <figure><ul>
     {{#each items}}// title == this.title = bezieht sich auf items
         <li><h3>{{title}}</h3><p>{{this.artist}}</p></li>
@@ -191,42 +185,8 @@ render("template", {pizzaName: "Hawaii", _id: 3, state: "OK"});
     </ul><figcaption><p>{{description}}</p></figcaption>
 </figure>
 ```
-
-
-// ```js render("template", {description: "List of some Movies", items: songs}); ```
-// ```html
-// <figure>
-// <ul>
-// {{#each items}}
-// // ist title und artist hier das gleiche wie this.title und this.artist?
-// <li><h3>{{title}}</h3><p>{{artist}}</p></li>
-// {{/each}}
-// </ul>
-// <figcaption>
-// <p>{{description}}</p>
-// </figcaption>
-// </figure>
-// ```
-
-
-
-===== Beispiel Layout - Trennung View und Controller
-```js
-export class IndexController {
-    index(req, res) { res.render("index", {data: "Hello World", dark: true}); };
-}
-```
-```html
-// Layout.hbs:
-<!doctype html><html lang="en"><head>
-    <meta charset="UTF-8">
-    <title>Pizza</title>{{#if dark}}<style>body {background: black; color: white; }</style>{{/if}}
-</head>
-<body>{{{body}}}</body> // body mit html, {{body}} wäre ohne html
-</html>
-```
-
-
+#v(-0.5em)
+*Helpers / Variablen*: ```html {{@root}} {{@root.foo}} {{#if @first}} {{@index}} {{#with person}} ```
 // /*
 ===== Beispiel als Express View
 ```js
@@ -235,23 +195,56 @@ import exphbs from 'express-handlebars';
 const app = express();
 // 2. configure
 const hbs = exphbs.create({
-    extname: '.hbs',
-    defaultLayout: "default",
-    helpers: { ...helpers }
+    extname: '.hbs', defaultLayout: "default", helpers: { ...helpers }
 });
 // 3. set engine and global values
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
-// 4. path to views
-app.set('views', path.resolve('views'));
+app.set('views', path.resolve('views')); // 4. path to views
+app.use(orderRoutes); // von order-routes.js importiert, siehe unten
 ```
-// // express macht: app.render(view, [locals], callback)
-// createPizza = async (req, res) => {
-//     res.render("succeeded", [DATA]);
-// };
+// implizit: app.render(view, [locals], callback) // das rendert hbs zu string ???
+//
+// app.render gibt html als string zurück, beispiel:
+// const html = await new Promise((resolve, reject) => {
+//     app.render('home', { pizzaName: 'Hawaii' }, (err, html) => {
+//         if (err) reject(err);
+//         else resolve(html);
+//     });
+// });
+// console.log(html); // HTML string
 // */
-
-
+```html
+// views/layouts/default.hbs:
+<!doctype html><html lang="en">  <head>
+    <meta charset="UTF-8"> <title>Pizza</title>
+    {{#if dark}}<style>body {background: black; color: white; }</style>{{/if}}
+</head> <body>{{{body}}}</body> // body mit html, {{body}} wäre ohne html
+</html>
+```
+===== Beispiel Layout - Trennung View und Controller
+```js
+export class OrdersController {
+    showIndex = (req, res) => { res.render("index") }; // views/index.hbs
+    createPizza = async (req, res) => { res.render("succeeded", [DATA]); };
+}   export const ordersController = new OrdersController();
+```
+```js
+// order-routes.js, (importiert ordersController)
+router.get("/", ordersController.showIndex); // html string an Nutzer gesendet
+router.post("/orders", ordersController.createPizza);
+```
+/*
+===== eigener Helper
+```js
+//Usage: {{? hasError 'error' 'ok'}}
+Handlebars.registerHelper('?', function(exp, value1, value2, options) {
+    if(exp) { return value1; }
+    return value2;
+});
+{{? hasError 'FEHLER' 'OK' }}
+```
+*/
 == Middlewares
 #v(-1.25em)
 === Routing
@@ -328,8 +321,12 @@ app.use(function(err, req, res, next) {
 
 
 == Model = Service (ExpressJS)
-/ Möglichkeiten, um Daten zu speichern: In Memory: Array, JSON, NoSQL-Datenbanken = Dokumentorientierte Datenbanken (nedb), SQL-Datenbanken
-(siehe auch Persistence bei React)
+/ Möglichkeiten, um Daten zu speichern (Server): \
+    _In Memory_ (Array, temporär),
+    _JSON_ (Datei),
+    _NoSQL-DB_ (Dokumentorientierte DB (nedb, MongoDB)),
+    _SQL-DB_ (SQLite)
+    (siehe auch Persistence bei React)
 
 ==== nedb NoSQL
 ```js

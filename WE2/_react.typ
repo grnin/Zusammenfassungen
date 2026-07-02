@@ -111,14 +111,9 @@ _Anwendung_: Warenkorb oder Einstellungen.
 ```js theme = localStorage.getItem("theme")```,  ```js localStorage.removeItem("theme")```, ```js localStorage.setItem("theme", "dark")```, ```js localStorage.clear();```
 ```js
 // localStorage React useState:
-const [theme, setTheme] = useState(
-localStorage.getItem("theme") || "light"
-);
+const [theme, setTheme] = useState( localStorage.getItem("theme") || "light");
 // Beim Ändern speichern:
-toggleTheme(() => {
-    setTheme(!theme);
-    localStorage.setItem("theme", !theme);
-});
+toggleTheme(() => { setTheme(!theme); localStorage.setItem("theme", !theme); });
 ```
 ==== sessionStorage
 Daten existieren nur während der Browser Session #hinweis[Tab oder Browser geschlossen -> Daten gelöscht, Page Reload -> Daten noch da].
@@ -146,8 +141,10 @@ _Vorteile_: Daten für viele User speicherbar, Mehr Logik und Datenverarbeitung 
 / (2.) Zustand der Seite in Suchparameter speichern: #sym.arrow.r z.B. was gesucht wurde
 / (3.) Search Params/Query String: für Filter, Pagination, Suchanfragen. `https://www.google.com/search?client=firefox-b-d&channel=entpr&q=indexed+collections`. _Plaintext_ auch über HTTPS, nur ASCII, begrenzte Länge (nicht standardisiert)
 / Clean URLs: keine Informationen über die Interna der Server (z.B. Dateitypen) #hinweis[nutzerfreundlicher, SEO, Links bleiben bei Änderung der Implementation]. _Nicht clean_: `http://example.com/user.php?id=1`, _clean_: `http://example.com/user/1`
-#v(-1em)
-#image("assets/url.svg")
+#v(-0.75em)
+// #image("assets/url.svg")
+#image("assets/url.png")
+#v(-0.2em)
 /*
 === Async Promise
 // code MovieSearch für Prüfungsvorbereitung enthält Promise.resolve(), aber wir müssen es nur lesen können.
@@ -186,7 +183,8 @@ function mockSearch(query: string): Promise<string[]> {
 //     _add_ `[...arr]`, _remove_ `filter` `slice`, _replacing_ `map`, _sorting_ `toReversed` `toSorted`
 / List Filtering:
     #v(-0.75em)
-    ```tsx const people = [ {name: 'Creola', prof: 'math'}, {name: 'Percy', prof: 'chemist'}];
+    ```tsx const people = [
+        {name: 'Creola', prof: 'math'}, {name: 'Percy', prof: 'chemist'}    ];
     const chemists = people.filter(person => person.prof === 'chemist');
     ```
 / Sorting: arr.toSorted() / arr.toReversed()
@@ -232,19 +230,20 @@ Einige der häufig verwendeten: `onClick` für Buttons, `onChange` für Inputfel
 // separat -> für längere Handler, oder mehrfach verwendete (Demo 1)
 const clickHandler = () => { alert('submitted') }
 return ( <button onClick={clickHandler}>Click Me</button> )
-// inline -> für kurze Handler
+// inline -> für kurze Handler, Function nicht aufrufen bei Übergabe
 return ( <button onClick={() => alert("submitted")}>Click Me</button> )
 ```
 // Stolperfalle: Funktionen, die an Eventhandler Attribute übergeben werden, dürfen nicht
 // aufgerufen werden. Der Eventhandler ruft die Funktion auf. Beispiel, wie nicht:
-```tsx
-// Falsch, Aufruf im onClick mit ()
-return ( <button onClick={clickHandler()}>Click Me</button> )
-```
+// ```tsx
+// // Falsch, Aufruf im onClick mit ()
+// return ( <button onClick={clickHandler()}>Click Me</button> )
+// ```
 
 ==== Eventhandlers als Props übergeben
 Häufig, wie in der Demo, übergeben wir Eventhandler als Props an Komponenten, um State in
 höhergelegenen Komponenten zu aktualisieren.
+#v(-0.5em)
 ```tsx <SearchInput value={searchTxt} onChange={(e) => setSearchTxt(e.target.value)} />
 ```
 // Üblicherweise werden diese Props analog der nativen Eventhandler-Props mit onThingThatHappens benannt, wie onUpdateSearchText oder onCloseDialog
@@ -260,10 +259,10 @@ höhergelegenen Komponenten zu aktualisieren.
         ```tsx
         function ElternComp() {
           const [name, setName] =
-        useState("Max");
+                    useState("Max");
           return (
             <KindComp name={name}
-            onUpdate={setName}
+                    onUpdate={setName}
             />
           );
         }
@@ -286,6 +285,7 @@ höhergelegenen Komponenten zu aktualisieren.
 
 ==== weitere Hooks
 *useRef*: um DOM-Nodes zu tracken und damit zum Beispiel _Fokus-Management_ zu betreiben. Änderung von Wert triggered nicht rerender.
+
 /*  unwichtig TODO löschen wenn zuwenig Platz
 ```js
 const UseRefDemo = () => {
@@ -300,7 +300,6 @@ return <>
 };
 ```
 // */
-
 ==== useReducer
 useReducer z.B. für Tennismatch-Scoring, komplexe Zustandslogik.
 // Demo vl9
@@ -385,10 +384,13 @@ const handleChange: React.SubmitEventHandler<HTMLFormElement> = (e) => {..}
 
 == TypeScript
 Typisierung von Objekten, Props, Funktionen.
-/ typeof: für Type narrowing ```js (typeof val === "string") ``` (und Typ Inferenz von Typescript), _mögliche Typen_: `string`, `number`, `bigint`, `boolean`, `symbol`, `undefined`, `object`, `function`
+/ typeof: für Type narrowing ```js (typeof val === "string") ``` (und Typ Inferenz von Typescript), _mögliche Typen_: `string`, `number`, `bigint`, `boolean`, `symbol`, `undefined`, `object`, `function`. (Achtung: `typeof` `null` und `array` ist `object`)
+// enum ist kompliziert, es existiert zur Laufzeit nicht mehr und kann deshalb nicht mit typeof geprüftwerden. Es ist nach kompilieren ein Objekt.
 / Array: ```js Array.isArray(data) ```,
 / Discriminated Union: ```js switch (shape.kind) { case "circle": ... } ```
 / weitere Typprüfungen: ```js instanceof(HttpError) ```, ```js if (var == null)```
+/ declare: existierende Variable deklarieren, sagen, dass es die gibt
+/ as: ```js let len = (x as string).length;``` Typ neu zuweisen: Typprüfung ändern, Fehler möglich
 
 #v(-0.5em)
 // mit bitzli von finns zusammenfassung und angepasst :)
@@ -403,10 +405,10 @@ return <button onClick={onClick}>{label}</button>;
 ```
 #v(-0.5em)
 
-*Never* Bedeutet der Wert soll nicht existieren. (z. B. Rückgabetyp bei Exceptions)
-*Undefined* Eine Variable wurde deklariert, ihr aber nie ein Wert zugewiesen.
-*Null* Expliziter Wert, der sagt, das ist kein Objekt oder Wert
-*Generics* : Platzhalter für Typen
+/ Never: Bedeutet der Wert soll nicht existieren. (z. B. Rückgabetyp bei Exceptions)
+/ Undefined: Eine Variable wurde deklariert, ihr aber nie ein Wert zugewiesen.
+/ Null: Expliziter Wert, der sagt, das ist kein Objekt oder Wert
+/ Generics: : Platzhalter für Typen
 #v(-0.5em)
 ```js
 function identity<T>(x: T): T { return x; }
@@ -456,14 +458,14 @@ Type Checking während Runtime nennt man Type Narrowing. // doppelt erwähnt abe
 #v(-0.5em)
 ```ts
 function printValue(value: string | number) {
-    if (typeof value === "string") {
-        console.log(value.toUpperCase()); // value : string
-    } else {
-        console.log(value.toFixed(2)); // value : number
-}   }
+    if (typeof value === "string") { console.log(value.toUpperCase());
+    } else { console.log(value.toFixed(2)); /* value : number */ } }
 ```
 // */
-
+```ts
+function myFunc (callbackFn: (result: string) => void) : void {
+    ...  callbackFn(result); }
+```
 
 == React Routing mit ReactRouter
 Mit React Router: ```js <Route path="/" element={<Home />} /> ``` Kann: Mehrere Seiten darstellen #hinweis[es sieht dann aus wie eine "traditionelle" Webseite, inklusive änderung der URL, aber ohne Reloads (Client Side Routing)], URL parameter und Query Strings verwenden,

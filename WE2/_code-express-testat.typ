@@ -84,7 +84,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         return res.status(err.status).json({ message: err.message });
     }
     if (err.name === 'UnauthorizedError') {
-        return res.status(401).json({ message: 'No token / Invalid token provided' });
+        return res.status(401).json({ message: 'No/Invalid token' });
     }
     return res.status(400).json({ message: 'something went wrong', err });
 });
@@ -286,6 +286,6 @@ const raw = await this.db.find(query).sort({ date: -1 })
     .execAsync();
 const docs = (Array.isArray(raw) ? raw : [raw]) as Transaction[];
 ```
-#v(-1em)
+#v(-0.5em)
 > sicherstellen, dass es als Array gesehen wird, nicht einfach any sondern [].. nedb Typ `Cursor<T[]>` nicht wie von `Cursor<T>`.  // TODO, bin mir nicht gaaanz sicher.
 // https://github.com/seald/nedb/issues/71 uff

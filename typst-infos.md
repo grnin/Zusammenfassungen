@@ -57,6 +57,7 @@ Einstellungen
 - Farbig, A4, Scale: Fit to page width
 - Margins: Default
 
+Drucker in der Schule: mit 600dpi (standard) wird Schrift etwas "dick" aber mit 1200dpi sind die hellgrauen Code-Kommentare bisschen schwer lesbar (viell. Farbe ändern in typst?)
 
 ### Schriften
 Stelle sicher, dass du die Schriften installiert hast, ansonsten passt der Spick möglicherweise nicht auf die 2 Seiten. \

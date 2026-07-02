@@ -54,20 +54,10 @@ Header definiert
 / CORS: (Cross Origin Resource Sharing) : Browser entscheidet ob Response für JS zugänglich ist, #hinweis[nutze Access-Control-Allow-Origin, steuere SOP]. // mit CORS fetch request zu gewissen domains erlaubt aber inhalt wird nicht gezeigt. standardmässig nur eigene domain erlaubt.
 Nicht verwechseln mit CSP: Content Security Policy (CSP) begrenzt, was der Browser laden und ausführen darf → reduziert Schaden bei XSS (aber ersetzt kein Escaping) // z.B. ob inline js ausgeführt werden darf oder .js dateien von welchen domains erlaubt sind https://stackoverflow.com/questions/39488241/what-is-the-difference-between-cors-and-csps
 / Cross-Origin Resource Sharing: Mechanismus um Cross-Site-Requests zu ermöglichen, Der Ziel-Server kann dem Client den Zugriff erlauben, Wird vom Browser Enforced
+/ origin: scheme (protocol), hostname (domain), und port der URL // https://developer.mozilla.org/en-US/docs/Glossary/Origin
 
 // ==== Cross-Origin Resource Sharing (CORS)
-// CORS Header ermöglichen Ressourcen (wie z.B. Bilder, Skripte oder Daten) von einem anderen Ursprungsort als der eigenen “Origin” zu laden.
-
-
-
-
-
-
-
-
-
-
-
+// CORS Header ermöglichen Ressourcen (wie z.B. Bilder, Skripte oder Daten) von einem anderen Ursprungsort als der eigenen "Origin" zu laden.
 
 == XSS
 #v(-1em)
@@ -105,8 +95,7 @@ Weitere XSS Gegenmassnahmen:
 4. Browser sendet _automatisch_ das Session-Cookie mit
 5. Server führt die Aktion aus (denkt: legitimer Nutzer)
 #sym.arrow.r Cookie und so gültig, da Nutzer es (unfreiwillig) ausführte.
-/ Warum?: Cookies werden automatisch für passende Domains mitgeschickt, um Sessions zu
-ermöglichen. Der Server vertraut darauf, dass der Request legitim ist.
+/ Warum?: Cookies werden automatisch für passende Domains mitgeschickt, um Sessions zu ermöglichen. Der Server vertraut darauf, dass der Request legitim ist.
 / Schutz: CSRF-Token und SameSite Cookies
 / Ursache: CSRF nutzt das Vertrauen des Servers in Cookies aus.  Der Server prüft nicht die Herkunft des Requests.
 
@@ -121,7 +110,7 @@ ermöglichen. Der Server vertraut darauf, dass der Request legitim ist.
 )
 
 ==== CSRF Schutz
-/ CSRF Token: Server prüft ob Request aus eigener App, wenn kein CSRF-Token vorhanden wird Anfrage abgelehnt. Schützt vor: Form-submit und fetch CSRF Angriff.
+/ CSRF Token: Server prüft ob Request aus eigener App, wenn kein CSRF-Token vorhanden wird Anfrage abgelehnt. Schützt vor: Form-submit und fetch CSRF Angriff. Als _Middleware_ geeignet.
 / Keine State Changes: vorallem nicht via GET.
 / CORS: verhindert CSRF nicht!
 / SameSite Cookie: `Set-Cookie: session=...; SameSite=Lax`. Das reduziert das Risiko, schützt aber nicht vollständig, insbesondere bei bestimmten Navigationen

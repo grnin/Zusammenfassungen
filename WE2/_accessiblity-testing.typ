@@ -43,11 +43,10 @@
 
 === Fixed Page (korrektes HTML)
 ```html
-<main class="page">
-  <h1>Broken Demo</h1>
+<main class="page">  <h1>Fixed Demo</h1>
   <nav class="card"> // semantic nav
     <h2>Navigation</h2> // text for link v
-    <a class="icon-link home-icon“ href=" index.html" aria-label="Zur Startseite"></a>
+    <a class="icon-link home-icon" href="index.html" aria-label="Zur Startseite"></a>
   </nav>
   <div class="card">
     <h2 id="search-heading">Suche</h2>
@@ -56,8 +55,7 @@
       <input type="search"> // has a label ^
       <button class="icon-btn search-icon" type="button" aria-label="Suche starten">
       </button>
-    </form>
-  </div>
+  </form> </div>
   <div class="card">
     <h2 id="form-heading">Formular</h2>
     <form class="form" aria-labelledby="form-heading">
@@ -97,10 +95,29 @@
 / Gut testbar = gute Architektur: kleine Funktionen, Funktionen ohne Nebeneffekte (pure), klare Schnittstellen, lose Kopplung, Dependency Injection (statt direkte Abhängigkeiten), Zustände nicht global
 
 === Arten von Checks
-/ tsconfig.json mit `"compilerOptions": { "strict": true,..`: strengere Typprüfung, ungenutzte Variablen erkennen, Compiler-Regeln definieren
+/ tsconfig.json mit "Compiler Regeln": ```json "compilerOptions": { "strict": true,..}```: strengere Typprüfung (NullChecks, kein implizites `any` oder `this`), ungenutzte Variablen erkennen, `use strict` überall, unknown und null unterscheiden
+/*
+```js
+// https://www.devbolt.dev/tools/tsconfig-builder/tsconfig-strict-mode
+"compilerOptions": {
+    "strict": true,
+    // Equivalent to enabling ALL of these:
+    // "strictNullChecks": true,       — null/undefined are distinct types
+    // "strictFunctionTypes": true,    — stricter function type checking
+    // "strictBindCallApply": true,    — type-check bind/call/apply
+    // "strictPropertyInitialization": true, — class properties must init
+    // "noImplicitAny": true,          — error on implicit any
+    // "noImplicitThis": true,         — error on implicit this
+    // "alwaysStrict": true,           — emit "use strict"
+    // "useUnknownInCatchVariables": true — catch(e) → e is unknown
+  }
+```
+*/
 / eslint.config.js mit `rules: { "no-unused-vars": "error", "jsx-a11y/alt-text": "warn"..`: Coding Standards, Accessibility-Regeln, Qualitätsregeln für React
+/ "Typenkorrektheit": Typescript
 / Static Checks (Qualität): erkennen potenzielle Probleme, prüfen Typen, prüfen Regeln, prüfen Accessibility, helfen Fehler vermeiden. _Erkennen: falschen Typ, unbenutzter Code, fehlendes Label, fehlendes Accessibility-label, falsche HTML Struktur, ungültige Props_. TypeScript #hinweis[Typen und Schnittstellen], ESLint #hinweis[Code-Regeln und problematische Patterns], Accessibility-Linting #hinweis[semantische UI-Probleme]
 / Prettier (Lesbarkeit): formatiert Code automatisch, keine Qualitätsprüfung, keine Typprüfung, keine fachlichen Regeln
+
 
 === Testebenen - bei React als Test Trophäe
 / Static Checks: prüft Struktur (TypeScript), soviel wie möglich, #hinweis[siehe oben]
@@ -125,14 +142,15 @@
 / Fake: Funktionierende, z.B. vereinfachte Implementierung In-Memory DB statt Postgres
 
 ==== E2E Test mit Playwright
+_`getByRole`_ nutzt semantische Rolle z.B. `h3` ist heading und `type="checkbox"` ist Rolle checkbox. _`getByLabel`_ nutzt zugänglichen Namen. Diese entsprechen der Sicht von Screen Readern und sind weniger abhängig von CSS, IDs und Layoutänderungen.
 ```js
-test("user can log in", async ({ page }) => {
+test("user can log in", async ({ page }) => { // page von playwright
   await page.goto("/");
   // getByLabel nutzt sichtbare Labels und fördert dadurch zugängliche Forms.
   await page.getByLabel("Passwort").fill("secret");
   // getByRole = semantischer und robuster als CSS oder generische Selektoren.
-  await page.getByRole("button", { name: "Login" }).click();
-  await expect(page.getByRole("status")).toHaveText("Login erfolgreich");
+  await page.getByRole("button", { name: "Login" }).click(); // <button>
+  await expect(page.getByRole("status")).toHaveText("erfolg"); // role="status"
 });
 ```
 // Playwrights `getByRole` und `getByLabel` nutzen ähnliche Informationen wie Assistive Technologies:
@@ -144,14 +162,6 @@ test("user can log in", async ({ page }) => {
 // Frage: Wenn die Selektoren von E2E Tests mit Playwright sich an die Namen vom Inhalt orientieren, ist die Idee für mehrsprachige Webseiten die Tests zu übersetzen?
 
 ==== Unit + API Test mit Vitest und request von Supertest
-```js
-describe("calc", () => { test("calculates ...", () => {
-    const getCurrentHour = () => 10; // Arrange
-    expect(calc(1000, getCurrentHour)).toBe(10); // Act and Assert
-    expect(() => calc(0, false)).toThrow();
-}); });
-```
-
 // ```js
 // describe("accounts API", () => {
 //     test("GET /accounts/1 returns an account", async () => {
@@ -162,29 +172,40 @@ describe("calc", () => { test("calculates ...", () => {
 //     expect(typeof res.body.balance).toBe("number");
 // }); });
 // ```
+// ```js
+// describe("some tests", () => {
+//   test("calculates ...", () => {
+//     const getCurrentHour = () => 10; // Arrange
+//     expect(calc(1000, getCurrentHour)).toBe(10); // Act and Assert
+//     expect(() => calc(0, false)).toThrow();
+// }); }); // gruppieren mit describe
+// ```
 
 ```js
-describe('Account Service', () => {
- beforeEach(async () => {
-     return () => {
-         // cleanup
-         (userService as any).db = new Datastore();
-         (accountService as any).db = new Datastore();
-         (transactionService as any).db = new Datastore();
-  };  });
- describe('create', () => {
-     it('create an account with a valid account number', async () => {
-         expect((await accountService.create(crypto.randomUUID())).accountNr)
-          .toEqual(1000002);
-         expect((await accountService.create(crypto.randomUUID())).accountNr)
-          .toEqual(1000003);
-});   });
+describe('AccountService, calculations, ..', () => {
+  let ownerToken: string; // global variable
+  beforeEach(async () => { // (gibt auch afterEach)
+        // before every test in this "describe group"
+        (userService as any).db = new Datastore(); // cleanup
+        const ownerResult = await userService.register(ownerUser);
+        ownerToken = ownerResult.token; // create token
+  };
+  // it() ist gleich wie test()
+  it('create an account with a valid account number', async () => {
+      expect((await accountService.create(crypto.randomUUID())).accountNr)
+      .toEqual(1000002);
+      expect((await accountService.create(crypto.randomUUID())).accountNr)
+      .toEqual(1000003);
+  });
+  test("calculates ...", () => {
+    const getCurrentHour = () => 10; // Arrange
+    expect(calc(1000, getCurrentHour)).toBe(10); // Act and Assert
+    expect(() => calc(0, false)).toThrow();
+}); });  // describe gruppe für UI und um zusammen auszuführen
 ```
-
 
 ===== Was testen wenn Backend/DB noch nicht existiert
 Endpunkte, Methoden, Request-Body, Response-Body, Statuscodes, Fehlerformate
-
 
 /*
 // entfernen wenn kein Platz

@@ -125,13 +125,6 @@ Ein State-Management …
 - stellt globale Daten konsistent bereit (z.B. User-, Stamm-, Konfigurationsdaten)
 - definiert klare Regeln zur Datenmanipulation
 
-/ Context API: Transportmechanismus für Daten
-    _Vorteile:_ vorinstalliert \
-    _Nachteile:_ Boilerplate Code
-
-/ State Management:
-    _Vorteile:_ Wartbarkeit, Struktur, Performance \
-    _Nachteile:_
 ```tsx
 // store contains the state ( data ) and also the actions for manipulation
 export const useAuthStore = create<AuthState>()((set) => ({
@@ -154,7 +147,7 @@ const authActions = useAuthActions();
 authActions.updateProfile({ displayName: 'Jasmin :)' })
 ```
 
-== Zustand vs Context
+== Zustand (state management) vs Context API
 / Welche Vor- und Nachteile:
     _Zustand:_ zentraler, kein Context Provider nötig
     _Context:_ gut um Prop passing zu ersetzen, einfacher
@@ -170,11 +163,12 @@ authActions.updateProfile({ displayName: 'Jasmin :)' })
     _Zustand_, ist global und deshalb immer zugreifbar. Bei context muss es einen Context Provider haben.
     "Der Store ist unabhängig von React-Komponenten."
 
-
-
-/ Welche Vor- und Nachteile:
-    _Zustand:_ zentral/global, kein Context Provider nötig, einfacher für State-Management.
-    _Context:_ gut um Prop passing zu ersetzen, wenige Werte (Theme) die sich wenig ändern.
+/ Vorteile:
+    _Zustand:_ zentral/global, kein Context Provider nötig, einfacher für State-Management. Wartbarkeit, Struktur, Performance, gut skalierbar
+    _Context:_ vorinstalliert (keine library nötig), gut um Prop passing zu ersetzen, wenige Werte (Theme) die sich wenig ändern.
+/ Nachteile:
+    _Zustand:_ zusätzliche Libraries, je nach Lösung mehr Boilerplate Code, schwieriger zu lernen
+    _Context:_ bei komplexen Anwendungen schnell unübersichtlich, weniger Performance (unnötige Re-renders)
 / Einfacher zu verwenden? Und warum?:
     Zustand, kein React Komponent `ContextProvider` nötig
 / Welchen Ansatz würden Sie in einem Projekt verwenden? Und warum?:
@@ -186,3 +180,11 @@ authActions.updateProfile({ displayName: 'Jasmin :)' })
 / Welcher Ansatz ist einfacher zu testen? Und warum?:
     _Zustand_, ist global und deshalb immer zugreifbar. Bei _Context_ ist Provider Wrapper nötigt.
     "Der Store ist unabhängig von React-Komponenten."
+
+
+// / Context API: Transportmechanismus für Daten
+//     _Vorteile:_ vorinstalliert,
+//     _Nachteile:_ Boilerplate Code
+// / State Management (Zustand):
+//     _Vorteile:_ Wartbarkeit, Struktur, Performance \
+// // _Nachteile:_
