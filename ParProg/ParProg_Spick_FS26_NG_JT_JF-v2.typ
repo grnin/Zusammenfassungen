@@ -13,11 +13,5 @@
     landscape: true,
 )
 
-
-/ Motivation: Word (GUI), Moore's Law end #sym.arrow.r Multi-Core Era, scale horizontal
-/ Multi-core: a processor chip containing multiple cores (processing units)
-/ Caches: L1: inside core, L2: inside core, sometimes shared between some cores, L3: on CPU chip, shared between all cores
-
-
 #include "01_multi-threading.typ"
 #include "02_massive-parallelism.typ"

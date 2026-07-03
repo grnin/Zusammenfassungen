@@ -233,15 +233,17 @@ void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
     ],
 )
 */
-
-#wrap-content(
-    // image("img/parprog_8.png"),
+#let bound-content = {
     [
         Compute Bound
         #image("img/compute-bound.svg")
         Memory Bound
         #image("img/memory-bound.svg")
-    ],
+    ]
+}
+#wrap-content(
+    // image("img/parprog_8.png"),
+    bound-content,
     align: top + right,
     columns: (68%, 32%),
 )[

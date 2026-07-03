@@ -45,6 +45,10 @@
 
 // /*
 
+/ Motivation: Word (GUI), Moore's Law end #sym.arrow.r Multi-Core Era, scale horizontal
+/ Multi-core: a processor chip containing multiple cores (processing units)
+/ Caches: L1: inside core, L2: inside core, sometimes shared between some cores, L3: on CPU chip, shared between all cores
+
 
 // = Multi-Threading
 = Concepts of Concurrency
@@ -359,12 +363,9 @@ consume CPU during deadlock.
     ```
 ]
 
+
 #wrap-content(
-    // image("img/parprog_2.png"),
-    [
-        #image("img/resource-graph-cycle.svg")
-        #v(-3em)
-    ],
+    image("img/resource-graph-cycle.svg"),
     align: top + right,
     columns: (70%, 30%),
 )[
@@ -1068,11 +1069,16 @@ do { oldV = v.get(); newV = result; } while(!v.compareAndSet(oldV, newV));
 *Lambda-Variants:*
 ```java AtomicInteger s = new AtomicInteger(2); s.updateAndGet(x -> x * x);```
 
-#wrap-content(
+
+#let dotnet-half-fence-content = {
     [
         .Net Half Fence:
-        #image("img/parprog_6.png"),
-    ],
+        image("img/parprog_6.png"),
+    ]
+}
+
+#wrap-content(
+    dotnet-half-fence-content,
     align: top + right,
     columns: (75%, 25%),
 )[
