@@ -2,7 +2,7 @@
 
 #import "@preview/wrap-it:0.1.1": wrap-content
 
-/*
+// /*
 // Compiled with Typst 0.13.1
 #import "../template_cheatsheet.typ": *
 
@@ -17,10 +17,10 @@
     landscape: true,
 )
 
-#colbreak()
-#colbreak()
-#colbreak()
-#colbreak()
+// #colbreak()
+// #colbreak()
+// #colbreak()
+// #colbreak()
 // */
 
 #let terms-spacing(spacing, body) = [
@@ -379,11 +379,7 @@ consume CPU during deadlock.
     )
     Deadlocks can be identified by _cycles in the resource graph_.\
     / Deadlock Avoidance:
-        Introduce _linear blocking order_, lock nested
-    // fix umbruch
-    #v(-1.5em)
-    only in ascending order.
-    Or use _coarse granular locks_ #hinweis[(e.g. block the whole Bank to block all accounts)]
+        Introduce _linear blocking order_, lock nested only in ascending order.  Or use _coarse granular locks_ #hinweis[(e.g. block the whole Bank to block all accounts)]
 ]
 
 == Starvation
