@@ -7,10 +7,10 @@
 #import "../template_cheatsheet.typ": *
 
 #show: project.with(
-    authors: ("Nina Grässli", "Jannis Tschan"),
+    authors: ("Jasmin Fässler", "Nina Grässli", "Jannis Tschan"),
     fach: "ParProg",
     fach-long: "Parallel Programming",
-    semester: "FS24",
+    semester: "FS26",
     language: "en",
     column-count: 5,
     font-size: 4pt,
@@ -625,8 +625,8 @@ Thread costs: performance + memory (stack per thread) #sym.arrow.r recycle threa
 / _`submit(task)`_: returns Future
 / _`execute(task)`_: async but does not return Future #hinweis[fire and forget]
 
-/ _`future.get()`_: wait for result/exception #hinweis[prevent fire and forget by evaluating result], can throw CancellationException, ExecutionException, InterruptedException
 / _`task.fork()`_: schedule async subtask
+/ _`future.get()`_: wait for result/exception #hinweis[prevent fire and forget by evaluating result], can throw CancellationException, ExecutionException, InterruptedException
 / _`result = task.join()`_: wait and get result
 
 ```java
@@ -636,6 +636,13 @@ Future<Integer> future = threadPool.submit(() -> { // submit task into pool, asy
   int value = ...; /* long calculation */ return value;
 });
 T result = future.get(); // blocks until task terminated
+```
+
+```java
+var threadPool = new ForkJoinPool();
+var left = threadPool.submit(() -> countPrimes(2, INPUT_SIZE / 2));
+var right = threadPool.submit(() -> countPrimes(INPUT_SIZE / 2, INPUT_SIZE));
+int result = left.get() + right.get();
 ```
 
 ==== Recursive Action/Task
@@ -701,9 +708,6 @@ class PairwiseSum extends RecursiveAction {
 // #v(-0.5em)
 
 // */
-
-
-
 
 
 == Thread Pool with `Parallel For` (.NET)
@@ -856,7 +860,7 @@ Only _single-threading_ #hinweis[(Only a special UI-thread is allowed to access
 
 // #image("img/parprog_5.png", width: 87%)
 // #image("img/parprog_5.png", height: 1.25cm)
-#image("img/gui.svg", height: 1.25cm)
+#image("img/gui.svg", width: 87%)
 
 *GUI Premise:*
 _No long operations_ in UI events, or else blocks UI.
@@ -1099,4 +1103,4 @@ do { oldV = v.get(); newV = result; } while(!v.compareAndSet(oldV, newV));
 === Full Fence (Memory Barrier)
 Disallows reordering in both directions. ```cs Thread.MemoryBarrier();```
 
-#pagebreak()
+// #pagebreak()

@@ -3,15 +3,15 @@
 #import "../template--additional-formatting-templates.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
-/*
+// /*
 // Compiled with Typst 0.13.1
 #import "../template_cheatsheet.typ": *
 
 #show: project.with(
-    authors: ("Nina Grässli", "Jannis Tschan"),
+    authors: ("Jasmin Fässler", "Nina Grässli", "Jannis Tschan"),
     fach: "ParProg",
     fach-long: "Parallel Programming",
-    semester: "FS24",
+    semester: "FS26",
     language: "en",
     column-count: 5,
     font-size: 4pt,
