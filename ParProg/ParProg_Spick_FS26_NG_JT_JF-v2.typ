@@ -19,5 +19,5 @@
 / Caches: L1: inside core, L2: inside core, sometimes shared between some cores, L3: on CPU chip, shared between all cores
 
 
-#include "_multi-threading.typ"
-#include "_massive-parallelism.typ"
+#include "01_multi-threading.typ"
+#include "02_massive-parallelism.typ"
