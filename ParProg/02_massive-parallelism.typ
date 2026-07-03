@@ -95,7 +95,8 @@
 //     image("img/parprog_7.png"),
 // )
 #v(-1em)
-#image("img/parprog_7.png"),
+// #image("img/parprog_7.png"),
+#image("img/cuda-thread-pool.svg"),
 #v(-2em)
 
 
@@ -234,7 +235,13 @@ void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
 */
 
 #wrap-content(
-    image("img/parprog_8.png"),
+    // image("img/parprog_8.png"),
+    [
+        Compute Bound
+        #image("img/compute-bound.svg")
+        Memory Bound
+        #image("img/memory-bound.svg")
+    ],
     align: top + right,
     columns: (68%, 32%),
 )[
@@ -267,7 +274,8 @@ _Peak performance_ is derived from benchmarking FLOPS or GFLOPS #hinweis[(Giga-F
     FLOPS)]. The _peak bandwidth_ from manuals of the memory subsystem. The _ridge point_ is where
 the horizontal and diagonal lines meet = minimum Ar.Int. required to achieve the peak performance.
 
-#image("img/parprog_9.png", width: 90%)
+// #image("img/parprog_9.png", width: 90%)
+#image("img/roofline-model.svg", width: 90%)
 
 = GPU Architecture
 Because there are so _many cores_ on GPUs, it is possible to run many threads in parallel
@@ -649,7 +657,8 @@ Each _send_ should have a matching _receive_.\
     the _other nodes help_ spread the message to others.:
     ```c MPI_Bcast(void * data, int count, MPI_Datatype datatype, int root, MPI_Comm_World communicator)```\
     // TODO:
-    #image("/assets/image-1.png")
+    // #image("/assets/image-1.png")
+    #image("img/mpi_bcast.svg", height: 5pt)
 / `MPI_Reduce`:
     Reduction is a classic concept: reducing a set of numbers into a smaller set of numbers via a
     function #hinweis[(e.g. `[1,2,3,4,5] => sum => 15`)]. Each process contains one integer,

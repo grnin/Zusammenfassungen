@@ -361,7 +361,10 @@ consume CPU during deadlock.
 
 #wrap-content(
     // image("img/parprog_2.png"),
-    image("img/resource-graph-cycle.svg"),
+    [
+        #image("img/resource-graph-cycle.svg")
+        #v(-3em)
+    ],
     align: top + right,
     columns: (70%, 30%),
 )[
@@ -375,7 +378,9 @@ consume CPU during deadlock.
             #image("img/resource-graph-1.svg", height: 11pt)],
         [Thread T _acquires Lock_ of Resource R\
             #v(-2pt)
-            #image("img/resource-graph-2.svg", height: 11pt)],
+            #image("img/resource-graph-2.svg", height: 11pt)
+            #v(-3em)
+        ],
     )
     Deadlocks can be identified by _cycles in the resource graph_.\
     / Deadlock Avoidance:
@@ -849,7 +854,8 @@ Only _single-threading_ #hinweis[(Only a special UI-thread is allowed to access
     UI-components)]. The _UI thread_ loops to process the _event queue_.
 
 // #image("img/parprog_5.png", width: 87%)
-#image("img/parprog_5.png", height: 1.25cm)
+// #image("img/parprog_5.png", height: 1.25cm)
+#image("img/gui.svg", height: 1.25cm)
 
 *GUI Premise:*
 _No long operations_ in UI events, or else blocks UI.
@@ -1063,7 +1069,10 @@ do { oldV = v.get(); newV = result; } while(!v.compareAndSet(oldV, newV));
 ```java AtomicInteger s = new AtomicInteger(2); s.updateAndGet(x -> x * x);```
 
 #wrap-content(
-    image("img/parprog_6.png"),
+    [
+        .Net Half Fence:
+        #image("img/parprog_6.png"),
+    ],
     align: top + right,
     columns: (75%, 25%),
 )[
