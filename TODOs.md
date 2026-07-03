@@ -10,3 +10,4 @@ TODO:
 - [ ] typst vorlage verbessern, vereinheitlichen (z.B. or-box)
 - [ ] Texte schöner schreiben (aktuell nur schnelle Notizen)
 - [ ] alle folien in kurzform bringen?
+- [ ] typst update (schauen was sich geändert hat)
