@@ -1,3 +1,7 @@
+=== TODO
+- wenn ich Zeit habe, hier alle Quizze aus der Vorlesung notieren
+
+=== Java
 Alive Thread State: Ready To Run, Running, Timed_Waiting or Waiting
 
 Java Thread State after... :
