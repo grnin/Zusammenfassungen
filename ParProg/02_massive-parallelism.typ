@@ -179,7 +179,7 @@ void VectorAddKernel(float *A, float *B, float *C) {
 void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
   size_t size = N * sizeof(float);
   float *d_A, *d_B, *d_C; // data on GPU
-  // 1. GPU memory allocate:
+  // 1. GPU memory allocate, error handling: handleCudaError(cudaMalloc(..))
   cudaMalloc(&d_A, size); cudaMalloc(&d_B, size); cudaMalloc(&d_C, size);
   // 2. Data transfer to GPU (HostToDevice):
   cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
@@ -240,9 +240,9 @@ void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
 */
 #let bound-content = {
     [
-        Compute Bound
+        *Compute Bound*
         #image("img/compute-bound.svg")
-        Memory Bound
+        *Memory Bound*
         #image("img/memory-bound.svg")
     ]
 }
@@ -254,13 +254,13 @@ void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
 )[
     == Performance Metrics
     The performance is either limited by _memory bandwidth_ or _computation_.
-    / Compute Bounds:
+    / Compute Bound:
         Throughput is limited by calculation #hinweis[(Cores are at the limit, but the memory bus
             could transfer more data)].\ _This is better and reached if AI Kernel > AI GPU_.\
-    / Memory Bounds:
+    / Memory Bound:
         Throughput is limited by data transfer #hinweis[(Memory bus bandwidth is at its limit, but
             cores could process more data)].\
-    / Arithmetic intensitys:
+    / Arithmetic intensity:
         Defined as FLOPS #hinweis[(Floating Point Operations per Second)] per Byte.
         The higher, the better.\
         #box($ "Number of operations" / "Number of transferred bytes" = "FLOPS" / "Bytes" $)
@@ -338,7 +338,9 @@ different CUDA threads.
 ```cpp VectorAddKernel<<<GRID_dimension, BLOCK_dimension>>>(A,B,C)```\
 Dimensions can be 1D, 2D or 3D and specified via `dim3` which is a structure designed for
 storing block and grid dimensions: ```cpp struct dim3{x; y; z}```.\
-```cpp dim3 dimGrid(2) == dim3 dimGrid(2,1,1)``` #hinweis[(Unassigned components are set to 1)]\
+#gekuerzt[
+    ```cpp dim3 dimGrid(2) == dim3 dimGrid(2,1,1)``` #hinweis[(Unassigned components are set to 1)]\
+]
 ```cpp VectorAddKernel<<<dimGrid, dimBlock>>>(A,B,C);```\
 _Number of blocks in a grid:_ ```cpp dimGrid.x * dimGrid.y * dimGrid.z ```\
 _Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
@@ -349,6 +351,12 @@ _Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
     ```cpp dim3 gridS(3,3); dim3 blockS(3,3); VectorAddKernel<<<gridS, blockS>>>```\
 / 3D Grid:
     ```cpp dim3 gridS(3,2,1); dim3 blockS(4,3,1); VectorAddKernel<<<gridS, blockS>>>```\
+    // ist gleich wie (3,2) und (4,3)
+    #v(-1em)
+    #image("img/3d-thread-hierarchy.svg")
+
+
+
 / Device Limits:
     _Max threads per block:_ 1024,
     _Max thread dimensions per block:_ (1024, 1024, 64)
@@ -371,25 +379,27 @@ _Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
 ]
 #v(-0.75em)
 
-== Data Partitioning within threads
+
+=== Data Partitioning within threads
 / Data Access:
     Each kernel decides which data to work on. The programmers decide data partitioning scheme.
     `threadId.x/y/z` #hinweis[(Thread no. in block)],
     `blockId.x` #hinweis[(Block no.)],
     `blockDim.x` #hinweis[(Block size)]\
-/ Partitioning in Blocks:
+/ Partitioning in Blocks: \
+    #v(-0.6em)
     ```cpp
     __global__
     void VectorAddKernel(float *A, float *B, float *C) {
-      //index based on (blockID, threadID):
+      //index based on (blockID, threadID),   1D/2D Grid
       int i = blockIdx.x * blockDim.x + threadIdx.x;
-      if (i < N) {
-        C[i] = A[i] + B[i]; // without this if, some threads will be idle
-      } }
+      if (i < N) {  C[i] = A[i] + B[i];  }
+    }
     // kernel invocation
     N = 4097; int blockSize = 1024; int gridSize = (N + blockSize - 1) / blockSize;
     VectorAddKernel<<<gridSize, blockSize>>>(A, B, C);
     ```
+// N = 4097 = 4*1024 + 1 = threads?
 
 / Boundary Check:
     More threads than necessary work on the data. If $N = 4097$, 5 Blocks with 1024 Threads are
@@ -452,6 +462,9 @@ multiple _thread blocks_ can execute _concurrently_ on one multiprocessor.
 When thread blocks _terminate_, new blocks are launched on the free multiprocessors.
 
 == Matrix Addition
+
+
+
 ```cpp
 __global__
 void MatrixAddKernel(float *A, float *B, float *C) {
@@ -462,7 +475,7 @@ void MatrixAddKernel(float *A, float *B, float *C) {
 } }
 const int A_COLS, B_COLS, C_COLS = 6;
 const int A_ROWS, B_ROWS, C_ROWS = 4;
-dim3 block = (2,2); dim3 grid = (3,2); // (3,2) == (3,2,0)
+dim3 block = (2,2); dim3 grid = (3,2); // (3,2) == (3,2,1)
 MatrixAddKernel<<<grid,block>>>(A,B,C);
 ```
 
