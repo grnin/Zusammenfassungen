@@ -860,7 +860,7 @@ Only _single-threading_ #hinweis[(Only a special UI-thread is allowed to access
 
 // #image("img/parprog_5.png", width: 87%)
 // #image("img/parprog_5.png", height: 1.25cm)
-#image("img/gui.svg", width: 87%)
+#image("img/gui.svg", width: 1cm)
 
 *GUI Premise:*
 _No long operations_ in UI events, or else blocks UI.

@@ -26,6 +26,10 @@
     #body
 ]
 
+#let gekuerzt(body) = [
+    // nicht anzeigen
+]
+
 // #let hinweis(body) = [
 //     #set text(
 //         style: "italic",
@@ -87,18 +91,18 @@
 / SIMT:
     Single Instruction Multiple Threads. The same instruction is executed in different threads over different data.
 
-
-// #place(
-//     top + left,
-//     dy: 2em,
-//     scope: "column",
-//     image("img/parprog_7.png"),
-// )
-#v(-1em)
-// #image("img/parprog_7.png"),
-#image("img/cuda-thread-pool.svg"),
-#v(-2em)
-
+#gekuerzt[
+    // #place(
+    //     top + left,
+    //     dy: 2em,
+    //     scope: "column",
+    //     image("img/parprog_7.png"),
+    // )
+    #v(-1em)
+    // #image("img/parprog_7.png"),
+    #image("img/cuda-thread-pool.svg"),
+    #v(-2em)
+]
 
 == Latency vs. Throughput
 / Latency:
@@ -107,7 +111,8 @@
 / Throughput:
     _The number of events_ that can be executed per unit of time #hinweis[(Bandwidth)]\
     There is a _tradeoff_ between latency and throughput. Increasing throughput by pipelined
-    processing, latency most often also increases. All pipeline stages must operate in _lockstep_.
+    processing, latency most often also increases.
+    All pipeline stages must operate in _lockstep_.
     The _rate of processing_ is determined by the _slowest step_.\
 / Pipelining:
     Run processes in an overlapping manner.\
@@ -283,23 +288,26 @@ the horizontal and diagonal lines meet = minimum Ar.Int. required to achieve the
 Because there are so _many cores_ on GPUs, it is possible to run many threads in parallel
 _without context switches_. This allows better parallelism without a performance penalty.
 
-== Compilation
-/ Just-in-time Compilation:
-    The _NVCC compiler_ compiles the non-CUDA code with the host C compiler and translates code
-    written in CUDA into _PTX instructions_ #hinweis[(assembly language represented as ASCII
-        text)]. The graphics driver compiles the PTX into _executable binary code_.
-    The assembly of PTX code is _postponed until application runtime_, at which time the target
-    GPU is known. The _disadvantage_ of this is the _increased application startup delay_.
-    However, thanks to cache this only happens once #hinweis[(warmup)].\
-/ Programming Interface:
-    _Runtime_ #hinweis[(The `cudart` library provides functions that execute on the host to
-        (de-)allocate device memory, transfer data etc.)] or _driver API_ #hinweis[(The CUDA driver API
-        is implemented in the `cuda.dll` or `cuda.so` which is copied on the system during installation
-        of the driver. This provides an additional level of control by exposing lower-level concepts
-        such as CUDA contexts. Often overkill)]. \
-/ Asynchronous Execution:
-    The command pipeline in CUDA works asynchronous, commands and data can be transferred from/to
-    the GPU at the same time.
+
+#gekuerzt[
+    == Compilation
+    / Just-in-time Compilation:
+        The _NVCC compiler_ compiles the non-CUDA code with the host C compiler and translates code
+        written in CUDA into _PTX instructions_ #hinweis[(assembly language represented as ASCII
+            text)]. The graphics driver compiles the PTX into _executable binary code_.
+        The assembly of PTX code is _postponed until application runtime_, at which time the target
+        GPU is known. The _disadvantage_ of this is the _increased application startup delay_.
+        However, thanks to cache this only happens once #hinweis[(warmup)].\
+    / Programming Interface:
+        _Runtime_ #hinweis[(The `cudart` library provides functions that execute on the host to
+            (de-)allocate device memory, transfer data etc.)] or _driver API_ #hinweis[(The CUDA driver API
+            is implemented in the `cuda.dll` or `cuda.so` which is copied on the system during installation
+            of the driver. This provides an additional level of control by exposing lower-level concepts
+            such as CUDA contexts. Often overkill)]. \
+    / Asynchronous Execution:
+        The command pipeline in CUDA works asynchronous, commands and data can be transferred from/to
+        the GPU at the same time.
+]
 
 == CUDA SIMT Execution Model
 *S* #h(-0.2em)ingle *i* #h(-0.2em)nstruction, *M* #h(-0.2em)ultiple *T* #h(-0.2em)hreads.
@@ -309,21 +317,22 @@ different CUDA threads.
     Threads are _grouped_ in blocks. The host can define how many threads each block has
     #hinweis[(up to 1024)]. Threads in one block can _interact_ with each other but not with
     threads in other blocks. \
-/ Execution Model:
-    _One thread_ runs on _one virtual scalar processor_ #hinweis[(one GPU core)].
-    _One block_ runs on _one virtual multi-processor_ #hinweis[(one GPU Streaming Multiprocessor)].
-    Blocks must be _independent_.\
-/ Thread Pool Abstraction:
-    The compiled CUDA program has e.g. 8 CUDA blocks. The _runtime_ can _choose how to allocate_
-    these blocks to multiprocessors. For a larger GPU with 8 SMs, each SM gets one CUDA block.
-    This enables performance scalability without code changes.\
-/ Guarantees:
-    CUDA guarantees that _all threads in a block_ run on the _same SM_ at the _same time_ and that
-    the blocks in a kernel _finish before_ any block from a new, _dependent kernel_ is _started_.\
-/ Mapping:
-    One SM can run several _concurrent_ blocks depending on the resources needed. Each _kernel_ is
-    executed _on one device_. CUDA supports running _multiple kernels on a device_ at one time.
-
+#gekuerzt[
+    / Execution Model:
+        _One thread_ runs on _one virtual scalar processor_ #hinweis[(one GPU core)].
+        _One block_ runs on _one virtual multi-processor_ #hinweis[(one GPU Streaming Multiprocessor)].
+        Blocks must be _independent_.\
+    / Thread Pool Abstraction:
+        The compiled CUDA program has e.g. 8 CUDA blocks. The _runtime_ can _choose how to allocate_
+        these blocks to multiprocessors. For a larger GPU with 8 SMs, each SM gets one CUDA block.
+        This enables performance scalability without code changes.\
+    / Guarantees:
+        CUDA guarantees that _all threads in a block_ run on the _same SM_ at the _same time_ and that
+        the blocks in a kernel _finish before_ any block from a new, _dependent kernel_ is _started_.\
+    / Mapping:
+        One SM can run several _concurrent_ blocks depending on the resources needed. Each _kernel_ is
+        executed _on one device_. CUDA supports running _multiple kernels on a device_ at one time.
+]
 == CUDA Kernel specification
 *Specifying Kernel*:
 ```cpp VectorAddKernel<<<GRID_dimension, BLOCK_dimension>>>(A,B,C)```\
@@ -348,7 +357,7 @@ _Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
 #wrap-content(
     image("img/matrices.svg"),
     align: top + right,
-    columns: (60%, 40%),
+    columns: (50%, 50%),
 )[
     ==== Calculation Examples
     ```cpp VectorAddKernel<<<dim3(8,4,2), dim3(16,16)>>>(d_A, d_B, d_C);```\
@@ -388,10 +397,17 @@ _Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
     to write to array $C$ because they might _corrupt the working memory_ of some other thread.
 
 == Error Handling
-Some functions have return type `cudaError`. Need to check for `cudaSuccess`. It's best to
-write your own helper function and wrap _every line_ in it. E.g. `handleCudaError()`
-which prints the error and exits the program.
-
+#gekuerzt[
+    Some functions have return type `cudaError`. Need to check for `cudaSuccess`. It's best to
+    write your own helper function and wrap _every line_ in it. E.g. `handleCudaError()`
+    which prints the error and exits the program.
+]
+```cpp
+void handleCudaError(cudaError error) { if (error != cudaSuccess) {
+        fprintf(stderr, "CUDA error: %s!\n", cudaGetErrorString(error));
+        exit(EXIT_FAILURE);
+} }
+```
 == Unified Memory
 Unified memory allows automatic transfer from CPU to GPU and vice versa.
 No explicit Memory Copy (cudaMemCpy) needed, but other new rules. Error handling still needed.
@@ -427,7 +443,6 @@ No explicit Memory Copy (cudaMemCpy) needed, but other new rules. Error handling
 // std::cout << C[0]; ...
 // cudaFree(A); cudaFree(B); cudaFree(C);
 // ```
-
 
 = GPU Performance Optimizations
 *Hardware:*
