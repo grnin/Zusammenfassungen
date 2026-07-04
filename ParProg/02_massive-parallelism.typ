@@ -656,24 +656,8 @@ Cluster programming is the _highest possible parallel acceleration_ #hinweis[(Fa
         _Scatter_: Split data and send each chunk to different node,
         _Gather_: Collect the chunks back at the originating node)].\
 
-== MPI Boilerplate Code
-```c
-int main(int argc, char * argv[]) {
-    // first MPI call, broadcasts to all processes, communicator formed,..
-    MPI_Init(&argc, &argv);
-    int rank; int size; int len;
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank); // Process Identification by rank
-    MPI_Comm_size(MPI_COMM_WORLD, &size); // number of processes in comm.
 
-    char name[MPI_MAX_PROCESSOR_NAME]; MPI_Get_processor_name(name, &len);
-    printf("MPI process %i on %s\n", rank, name);
 
-    MPI_Barrier(MPI_COMM_WORLD); // blocks/waits for processes in communicator
-
-    MPI_Finalize(); // MPI Finalization, clean up
-}
-```
-//   return 0; weggelassen, ist ja nicht unbedingt nötig
 
 #gekuerzt[
     / `MPI_Init`:
@@ -711,22 +695,26 @@ int main(int argc, char * argv[]) {
 / Array send: ```c int array[LENGTH];``` \
     ```c MPI_Send(array, LENGTH, MPI_INT, receiverRank, tag, MPI_COMM_WORLD);``` \
     ```c MPI_Recv(array, LENGTH, MPI_INT, senderRank, tag, MPI_COMM_WORLD, MPI_STATUS_IGN);```
-
-/ `MPI_Bcast`:
-    #grid2(
-        [
-            #v(-0.7em)
-            Efficient, because root node does _not send the signal individually_ to each node,
-            the _other nodes help_ spread the message to others.:
-            ```c MPI_Bcast(void * data, int count, MPI_Datatype datatype, int root, MPI_COMM_WORLD)```\
-        ],
-        [
-            #v(-1.7em)
-            // TODO:
-            // #image("/assets/image-1.png")
-            #image("img/mpi_bcast.svg", width: 50pt)
-        ],
-    )
+#block(
+    sticky: true,
+    [
+        / `MPI_Bcast`:
+            #grid2(
+                [
+                    #v(-0.7em)
+                    Efficient, because root node does _not send the signal individually_ to each node,
+                    the _other nodes help_ spread the message to others.:
+                    ```c MPI_Bcast(void * data, int count, MPI_Datatype datatype, int root, MPI_COMM_WORLD)```\
+                ],
+                [
+                    #v(-1.7em)
+                    // TODO:
+                    // #image("/assets/image-1.png")
+                    #image("img/mpi_bcast.svg", width: 50pt)
+                ],
+            )
+    ],
+)
 / `MPI_Reduce`:
     Reduction is a classic concept: reducing a set of numbers into a smaller set of numbers via a
     function #hinweis[(e.g. `[1,2,3,4,5] => sum => 15`)]. Each process contains one integer,
@@ -770,6 +758,67 @@ that owns it.
 // #grid(
 //     columns: (auto, auto),
 //     [
+//
+//
+
+== MPI Boilerplate Code
+```c
+int main(int argc, char * argv[]) {
+    // first MPI call, broadcasts to all processes, communicator formed,..
+    MPI_Init(&argc, &argv);
+    int rank; int size; int len;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank); // Process Identification by rank
+    MPI_Comm_size(MPI_COMM_WORLD, &size); // number of processes in comm.
+
+    char name[MPI_MAX_PROCESSOR_NAME]; MPI_Get_processor_name(name, &len);
+    printf("MPI process %i on %s\n", rank, name);
+
+    MPI_Barrier(MPI_COMM_WORLD); // blocks/waits for processes in communicator
+
+    MPI_Finalize(); // MPI Finalization, clean up
+}
+```
+//   return 0; weggelassen, ist ja nicht unbedingt nötig
+
+==== Global Average of elements in array
+// von Prüfung 2023
+Write a complete MPI program to find the global average of elements spread in arrays across multiple
+processes. Each process has its own array called anArray of size aSize and each process fills it up with
+random numbers as shown below. The task is to find the global average across all the arrays.
+```c
+int main(int argc, char **argv) {
+  if (argc != 2) {
+    fprintf(stderr, "Usage: size of the array\n");
+    exit(1);
+  }
+  float avg;
+  int aSize = atoi(argv[1]); // size of anArray
+
+  MPI_Init(NULL, NULL);
+  int world_rank; MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+  int world_size; MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+  // Create a random array of elements on all processes.
+  srand(time(NULL) * world_rank);
+  float *anArray = create_rand_nums(aSize); // assume given
+  float local_sum = 0;
+  int i;
+  for (i = 0; i < aSize; i++) {
+    local_sum += rand_nums[i];
+  }
+  // Print the random numbers on each process
+  printf("Local sum for process %d - %f, avg = %f\n", world_rank, local_sum, local_sum / asize);
+  // Reduce all of the local sums into the global sum
+  float global_sum;
+  MPI_Reduce(&local_sum, &global_sum, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
+  float avg = global_sum / (world_size * asize);
+
+  if (world_rank == 0) { printf("average = %f\n", avg); }
+
+  MPI_Finalize();
+  // free??
+}
+```
+
 == Approximation of $bold(pi)$ via Monte Carlo Simulation <pi-approx>
 Draw a circle inside of a square and randomly place dots in the square. The ratio of dots
 inside the circle to the total number of dots will approximately equal $pi \/ 4$.
