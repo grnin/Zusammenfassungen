@@ -507,39 +507,58 @@ Thread blocks are scheduled in _parallel_ or _sequentially_. Once a thread block
 on a SM, _all of its warps are resident_ until their execution finishes. Therefore, a _new
 block on a SM_ is _not launched until_ there is a _sufficient number_ of free registers and
 shared memory for _all warps_ of the new block.\
-*Warp Execution:*
-All threads in a warp execute the same instruction #hinweis[(SIMD)]. A SM can accommodate all
-warps of a block, but only _a subset_ is _running in parallel_ at the same time
-#hinweis[(1 to 24)].\
-*Divergence:*
-_Not_ all threads of a warp may _branch the same way_.
-The branches do _not run simultaneously_, so the other threads need to _wait_ until one branch
-is finished. So branches within one warp should be _avoided_ because of _performance problems_
-#hinweis[(Branches are born at `if` / `switch` / ...)] \
+/ Warp Execution:
+    All threads in a warp execute the same instruction #hinweis[(SIMD)]. A SM can accommodate all
+    warps of a block, but only _a subset_ is _running in parallel_ at the same time
+    #hinweis[(1 to 24)].\
+/ Warps are split: sequentially by threadIdx.x/y/z in 32 steps
+/ Divergence:
+    Different branches in same warp. #hinweis[if/switch/while/do/for]. Performance problem, because SM can execute only instruction of one branch and the other threads have to wait.
+    // _Not_ all threads of a warp may _branch the same way_.
+    // The branches do _not run simultaneously_, so the other threads need to _wait_ until one branch
+    // is finished. So branches within one warp should be _avoided_ because of _performance problems_
+    // #hinweis[(Branches are born at `if` / `switch` / ...)] \
+    // Abzweigungen vermeiden, "same instruction multiple threads"
 
-#grid(
-    columns: (1.75fr, 2fr),
-    gutter: 1em,
-    [
-        ```cpp
-        // bad case, divergence in same warp
-        if (threadIdx.x > 1) { } else {  }
-        ```
-    ],
-    [
-        ```cpp
-        // good case, all t in warp in same branch
-        if (threadIdx.x / 32 > 1) { } else { }
-        ```
-    ],
-)
+    #v(-0.5em)
+    #grid(
+        columns: (1.75fr, 2fr),
+        gutter: 0.1em,
+        [
+            ```cpp
+            // bad case, divergence in same warp
+            if (threadIdx.x > 1) { } else {  }
+            ```
+        ],
+        [
+            ```cpp
+            // good case, all t in warp in same branch
+            if (threadIdx.x / 32 > 1) { } else { }
+            ```
+        ],
+    )
 
-/ DRAM (Dynamic Random Access Memory): _Global memory of a CUDA device_ is implemented with DRAMs. If a GPU kernel accesses data from _consecutive locations_, the DRAMs can supply the data at a much _higher rate_ than if a random sequence of locations were accessed.
-/ Memory Coalescing: Thread _access patterns_ are critical for performance. If the threads in a *warp* _simultaneously_ access _consecutive memory locations_, their reads can be combined into a single access _(burst)_. Otherwise there are _expensive individual accesses_.
-/ Coalesced Accesses: Read/Write the burst in one transaction per warp burst section, swapped read/write within the same burst, only individual elements in the burst accessed.
-/ Not Coalesced Accesses: Read/Write in different warp bursts, one action that spans multiple bursts. _Inperformant, avoid!_
-/ Use Coalescing access as follows: _`data[(Expression without threadId.x) + threadId.x]`_
-/ Coalescing with Matrices: Matrices get linearized to a 1D array. The row of the matrix should be the longer side so that there are as many coalescing accesses as possible.
+/ DRAM (Dynamic Random Access Memory):
+    _Global memory of a CUDA device_ is implemented with DRAMs. If a GPU kernel accesses data from _consecutive locations_, the DRAMs can supply the data at a much _higher rate_ than if a random sequence of locations were accessed.
+/ Memory Coalescing:
+    Improve performance by using Cache of DRAM. If threads in warp _simultaneously_ access _consecutive memory locations_  (32 byte areas), their reads can be combined into a single access _(burst)_.
+// Thread _access patterns_ are critical for performance.
+// If threads in a *warp* _simultaneously_ access _consecutive memory locations_, their reads can be combined into a single access _(burst)_.
+// Otherwise there are _expensive individual accesses_.
+/ Coalesced Accesses:
+    All threads should Read/Write from same burst section in warp, but doesn't matter if only individual elements of burst or swapped access in burst.
+// Read/Write the burst in one transaction per warp burst section, swapped read/write within the same burst, only individual elements in the burst accessed.
+// #image("/assets/image-6.png")
+// // coalesced, solange die Daten im gleichen burst vom warp sind.
+/ Not Coalesced Accesses (strided):
+    Avoid inperformant read/write action over different warp bursts.
+// Read/Write in different warp bursts, one action that spans multiple bursts. _Inperformant, avoid!_
+/ Use Coalescing access as follows:
+    _`data[(Expression without threadId.x) + threadId.x]`_
+/ Coalescing with Matrices:
+    Matrices get linearized to a 1D array. The row of the matrix should be the longer side so that there are as many coalescing accesses as possible.
+
+#image("/assets/image-9.png")
 
 == Memory Model
 All threads have the access to the same _global memory_. Each thread block has _shared memory_
@@ -551,7 +570,8 @@ Each thread has _private local memory_ #hinweis[(in device memory, high latency 
 / Memory Hierarchy:
     _Shared Memory_ #hinweis[(per SM, fast, shared between threads in 1 block, a few KB, `__shared__ float x`)],
     _Global Memory_ #hinweis[("Main Memory" in GPU Device, slow, accessible to all threads, in GB, `cudaMalloc()`)]
-_Registers_ #hinweis[(private to a thread, fastest but very limited storage)]\
+    _Registers_ #hinweis[(private to a thread, fastest but very limited storage)]\
+// / Global Memory: is slow (approx. 600 cycles), DRAM accesses consecutive locations, _increase efficiency with Cache_
 / Constant memory:
     Constant variables are stored in the _global memory_ but are _cached_.\
 / Shared Memory Declaration:
@@ -605,7 +625,7 @@ Cluster programming is the _highest possible parallel acceleration_ #hinweis[(Fa
     _Single Program_ #hinweis[(All tasks execute their copy of the same program simultaneously)],
     _Multiple Data_ #hinweis[(all tasks may use different data)].
     The MPI program is started in several processes. All processes start and terminate
-synchronously. Synchronization is done with barriers.\
+    synchronously. Synchronization is done with barriers.\
 / MPMD:
     Also a "high level" programming model.
     _Multiple Program_ #hinweis[(Tasks may execute different programs simultaneously)],
@@ -646,8 +666,9 @@ int main(int argc, char * argv[]) {
   MPI_Get_processor_name(name, &len);
   printf("MPI process %i on %s\n", rank, name);
   MPI_Finalize(); // MPI Finalization
-  return 0; }
+}
 ```
+//   return 0; weggelassen, ist ja nicht unbedingt nötig
 
 / `MPI_Init`:
     Must be the _first_ MPI call. Allows the `mpi_init` to broadcast to all the processes.
@@ -683,12 +704,20 @@ Each _send_ should have a matching _receive_.\
     ```c MPI_Recv(array, LENGTH, MPI_INT, senderRank, tag, MPI_COMM_WORLD, MPI_STATUS_IGN);```
 
 / `MPI_Bcast`:
-    Is _efficient_, because the root node does _not send the signal individually_ to each node,
-    the _other nodes help_ spread the message to others.:
-    ```c MPI_Bcast(void * data, int count, MPI_Datatype datatype, int root, MPI_Comm_World communicator)```\
-    // TODO:
-    // #image("/assets/image-1.png")
-    #image("img/mpi_bcast.svg", height: 5pt)
+    #grid2(
+        [
+            #v(-0.7em)
+            Is _efficient_, because the root node does _not send the signal individually_ to each node,
+            the _other nodes help_ spread the message to others.:
+            ```c MPI_Bcast(void * data, int count, MPI_Datatype datatype, int root, MPI_Comm_World communicator)```\
+        ],
+        [
+            #v(-1em)
+            // TODO:
+            // #image("/assets/image-1.png")
+            #image("img/mpi_bcast.svg", width: 50pt)
+        ],
+    )
 / `MPI_Reduce`:
     Reduction is a classic concept: reducing a set of numbers into a smaller set of numbers via a
     function #hinweis[(e.g. `[1,2,3,4,5] => sum => 15`)]. Each process contains one integer,
