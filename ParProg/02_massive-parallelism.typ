@@ -373,8 +373,9 @@ _Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
     _Amount of threads per block:_ $16 dot 16 = 256$ \
     _Threads in total:_ $64 dot 256 = 16'384$
 
+    // threadsPerBlock = blockSize
     If we have $1024$ threads in a block, how many blocks are needed to launch $N$ threads?\
-    _`int blocksPerGrid = (N + threadsPerBlock - 1) / threadsPerBlock;`_ \
+    _`int blocksPerGrid = (N + blockSize - 1) / blockSize;`_ \
     #hinweis[Rounding up is necessary because for 1025 threads, 2 blocks are required]
 ]
 #v(-0.75em)
@@ -780,44 +781,47 @@ int main(int argc, char * argv[]) {
 ```
 //   return 0; weggelassen, ist ja nicht unbedingt nötig
 
-==== Global Average of elements in array
-// von Prüfung 2023
-Write a complete MPI program to find the global average of elements spread in arrays across multiple
-processes. Each process has its own array called anArray of size aSize and each process fills it up with
-random numbers as shown below. The task is to find the global average across all the arrays.
-```c
-int main(int argc, char **argv) {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: size of the array\n");
-    exit(1);
-  }
-  float avg;
-  int aSize = atoi(argv[1]); // size of anArray
 
-  MPI_Init(NULL, NULL);
-  int world_rank; MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
-  int world_size; MPI_Comm_size(MPI_COMM_WORLD, &world_size);
-  // Create a random array of elements on all processes.
-  srand(time(NULL) * world_rank);
-  float *anArray = create_rand_nums(aSize); // assume given
-  float local_sum = 0;
-  int i;
-  for (i = 0; i < aSize; i++) {
-    local_sum += rand_nums[i];
-  }
-  // Print the random numbers on each process
-  printf("Local sum for process %d - %f, avg = %f\n", world_rank, local_sum, local_sum / asize);
-  // Reduce all of the local sums into the global sum
-  float global_sum;
-  MPI_Reduce(&local_sum, &global_sum, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
-  float avg = global_sum / (world_size * asize);
+#gekuerzt[
+    ==== Global Average of elements in array
+    // von Prüfung 2023
+    Write a complete MPI program to find the global average of elements spread in arrays across multiple
+    processes. Each process has its own array called anArray of size aSize and each process fills it up with
+    random numbers as shown below. The task is to find the global average across all the arrays.
+    ```c
+    int main(int argc, char **argv) {
+      if (argc != 2) {
+        fprintf(stderr, "Usage: size of the array\n");
+        exit(1);
+      }
+      float avg;
+      int aSize = atoi(argv[1]); // size of anArray
 
-  if (world_rank == 0) { printf("average = %f\n", avg); }
+      MPI_Init(NULL, NULL);
+      int world_rank; MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+      int world_size; MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+      // Create a random array of elements on all processes.
+      srand(time(NULL) * world_rank);
+      float *anArray = create_rand_nums(aSize); // assume given
+      float local_sum = 0;
+      int i;
+      for (i = 0; i < aSize; i++) {
+        local_sum += rand_nums[i];
+      }
+      // Print the random numbers on each process
+      printf("Local sum for process %d - %f, avg = %f\n", world_rank, local_sum, local_sum / asize);
+      // Reduce all of the local sums into the global sum
+      float global_sum;
+      MPI_Reduce(&local_sum, &global_sum, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
+      float avg = global_sum / (world_size * asize);
 
-  MPI_Finalize();
-  // free??
-}
-```
+      if (world_rank == 0) { printf("average = %f\n", avg); }
+
+      MPI_Finalize();
+      // free??
+    }
+    ```
+]
 
 == Approximation of $bold(pi)$ via Monte Carlo Simulation <pi-approx>
 Draw a circle inside of a square and randomly place dots in the square. The ratio of dots
@@ -868,97 +872,176 @@ inside the circle to the total number of dots will approximately equal $pi \/ 4$
     ],
 )
 = OpenMP
-*Node:*
-A standalone _"computer in a box"_. Usually comprised of multiple CPU/processors/cores, memory,
-network interfaces etc. Nodes are _networked together_ to comprise a _supercomputer_.
-Each node consists of 20 cores. The processes do _not share memory_, they must use messages.\
-*Threads:*
-Default are 24 on a single Node in OST cluster. Can be set with `omp_set_num_threads()` or with
-the `OMP_NUM_THREADS` environment variable. Threads range from 0 #hinweis[(master thread)] to N-1.\
-*HPC Hybrid memory model:*
-Run a program on multiple nodes. No Shared Memory #hinweis[(NUMA)] between Nodes.
-Shared Memory #hinweis[(SMP)] for Cores inside a Node.\
-*OpenMP:*
-Is a programming model for different languages.
-_Allows to run multiple threads_, distribute work using synchronization and reduction constructs.
-_Shared Memory_ #hinweis[(shared memory process consists of multiple threads)],
-_Explicit Parallelism_ #hinweis[(Programmer has full control over parallelization)] and
-_Compiler Directives_ #hinweis[(Most OpenMP parallelism is specified through the use of compiler
-    directives (`pragmas`) in the source code)].\
+/ Node:
+    A standalone _"computer in a box"_. Usually comprised of multiple CPU/processors/cores, memory,
+    network interfaces etc. Nodes are _networked together_ to comprise a _supercomputer_.
+    Each node consists of 20 cores. The processes do _not share memory_, they must use messages.\
+/ Threads:
+    Default are 24 on a single Node in OST cluster. Can be set with `omp_set_num_threads()` or with
+    the `OMP_NUM_THREADS` environment variable. Threads range from 0 #hinweis[(master thread)] to N-1.\
+/ HPC Hybrid memory model:
+    Run a program on multiple nodes. No Shared Memory #hinweis[(NUMA)] between Nodes.
+    Shared Memory #hinweis[(SMP)] for Cores inside a Node.\
+/ OpenMP:
+    Is a programming model for different languages.
+    _Allows to run multiple threads_, distribute work using synchronization and reduction constructs.
+    _Shared Memory_ #hinweis[(shared memory process consists of multiple threads)],
+    _Explicit Parallelism_ #hinweis[(Programmer has full control over parallelization)] and
+    _Compiler Directives_ #hinweis[(Most OpenMP parallelism is specified through the use of compiler
+        directives (`pragmas`) in the source code)].\
 
-==== Fork and Join
+#gekuerzt[
+    // code einzeln
+    ==== Fork and Join
+    ```c
+    #include <stdio.h>
+    #include <omp.h>
+    int main(int argc, char* argv[]) {
+      const int np = omp_get_max_threads(); // executed by initial thread
+      printf("OpenMP with threads %d\n", np); // executed by initial thread
+      #pragma omp parallel // pragma spawns multiple threads (fork)
+      {
+        const int np = omp_get_num_threads(); // executed in parallel
+        printf("Hello from thread %d\n", omp_get_thread_num()); // executed in paral.
+      } // thread order not fixed. after execution, threads synchronize & terminate
+    return 0; }
+    ```
+
+    ==== For loops
+    ```c
+    #pragma omp parallel for
+      for (i=0; i<n; i++) { ... }
+    ```
+
+    Each thread processes _one loop-iteration_ at a time. Execution returns to the initial threads.
+    _Oversubscription_ #hinweis[(too many threads for a problem)] is handled by OpenMP.
+    The iteration variable #hinweis[(i.e. `i`)] is implicitly made private for the duration of the loop.
+
+    ==== Memory Model
+    ```c
+    int A, B, C // automatically global because outside of pragma
+    #pragma omp parallel for private(A) shared(B) firstprivate(C)
+      for(...)
+    ```
+
+    Each thread has a _private copy of `A`_ and use the _same memory location for `B`_.
+    `C` is also private, but gets its initial value from the global variable. After the loop is
+    over, threads die and both `A` and `B` will be cleared/removed from memory.
+
+    ```c
+    #pragma omp parallel
+      int A = 0 // automatically private because inside of pragma
+    #pragma omp for ...
+    ```
+
+    ==== Avoiding Race conditions: Mutex
+    ```c
+    int sum = 0;
+    #pragma omp parallel for
+      for (int i = 0; i < n; i++)
+    #pragma omp critical { sum += i; } // only one thread at a time
+    ```
+
+    This is _extremely slow_ due to serialization, slower than single threading. Critical section
+    is _overkill_ for this code, with a heavy weight mutex the performance overhead is large.
+
+    ==== Lightweight mutex: Atomic
+    ```c
+    int sum = 0; int i;
+    #pragma omp parallel for
+      for (i = 0; i < n; i++)
+      #pragma omp atomic { sum += i }
+    ```
+
+    ==== Reduction across threads
+    When using `reduction(operator: variable)`, a _copy_ of the reduction variable per thread is created,
+    initialized to the identity of the reduction operator #hinweis[($+ = 0$, $* = 1$)].
+    Each thread will then _reduce_ into its local variable. At the end of the `parallel` region, the local
+    results are _combined into the global variable_. Only associative operators allowed
+    #hinweis[($+, *$ not $-, div$)].
+
+    ```c
+    // Code using the reduction clause
+    int sum = 0;
+    #pragma omp parallel for reduction(+: sum)
+      for (int i = 0; i < n; i++) { sum += i; }
+
+    // The same code without the reduction clause
+    int sum = 0;
+    #pragma omp parallel {
+      int intermediate_sum = 0; // private
+      #pragma omp for
+        for (int i = 0; i < n; i++) { intermediate_sum += i; } // thread partial sum
+      #pragma omp atomic // reduction is protected with atomic
+        final_sum += intermediate_sum; }
+    ```
+]
+
+
+// Code kombiniert in ein Beispiel
 ```c
 #include <stdio.h>
 #include <omp.h>
 int main(int argc, char* argv[]) {
-  const int np = omp_get_max_threads(); // executed by initial thread
-  printf("OpenMP with threads %d\n", np); // executed by initial thread
-  #pragma omp parallel // pragma spawns multiple threads (fork)
-  {
-    const int np = omp_get_num_threads(); // executed in parallel
-    printf("Hello from thread %d\n", omp_get_thread_num()); // executed in paral.
-  } // thread order not fixed. after execution, threads synchronize & terminate
-return 0; }
+
+    const int np = omp_get_max_threads(); // executed by initial thread
+    printf("OpenMP with threads %d\n", np); // executed by initial thread
+    #pragma omp parallel // pragma spawns multiple threads (fork)
+    {
+        const int np = omp_get_num_threads(); // executed in parallel < v
+        printf("Hello from thread %d\n", omp_get_thread_num());
+    } // thread order not fixed. after execution, threads synchronize & terminate
+
+
+    // for loop, iteration variable i is implicitly private during loop
+    #pragma omp parallel for
+        for (i=0; i<n; i++) { ... }
+
+    // memory model:
+    int A, B, C // automatically global because outside of pragma
+    #pragma omp parallel for private(A) shared(B) firstprivate(C)
+        for(...)
+        // private copy of A per thread,
+        // C is private but gets initial value from global C.
+        // after loop is over, threads die + A and B cleared/removed from memory
+
+    int A; // setting A private:
+    #pragma omp parallel for private (A)
+        for (...) // is equal to:
+    #pragma omp parallel
+        int A = 0 // automatically private because inside of pragma
+    #pragma omp for ...
+        for (...)
+
+    // Mutex (avoid Race conditions)
+    // performance overhead, single threading is faster than this:
+    int sum = 0;
+    #pragma omp parallel for
+        for (int i = 0; i < n; i++)
+    #pragma omp critical { sum += i; } // only one thread at a time
+
+    // Lightweight Mutex (Atomic)
+    int sum = 0; int i;
+    #pragma omp parallel for
+        for (i = 0; i < n; i++)
+        #pragma omp atomic { sum += i }
+
+    return 0;
+}
 ```
 
-==== For loops
-```c
-#pragma omp parallel for
-  for (i=0; i<n; i++) { ... }
-```
-
-Each thread processes _one loop-iteration_ at a time. Execution returns to the initial threads.
-_Oversubscription_ #hinweis[(too many threads for a problem)] is handled by OpenMP.
-The iteration variable #hinweis[(i.e. `i`)] is implicitly made private for the duration of the loop.
-
-==== Memory Model
-```c
-int A, B, C // automatically global because outside of pragma
-#pragma omp parallel for private (A) shared (B) firstprivate (C)
-  for(...)
-```
-
-Each thread has a _private copy of `A`_ and use the _same memory location for `B`_.
-`C` is also private, but gets its initial value from the global variable. After the loop is
-over, threads die and both `A` and `B` will be cleared/removed from memory.
-
-```c
-#pragma omp parallel
-  int A = 0 // automatically private because inside of pragma
-#pragma omp for ...
-```
-
-==== Avoiding Race conditions: Mutex
-```c
-int sum = 0;
-#pragma omp parallel for
-  for (int i = 0; i < n; i++)
-#pragma omp critical { sum += i; } // only one thread at a time
-```
-
-This is _extremely slow_ due to serialization, slower than single threading. Critical section
-is _overkill_ for this code, with a heavy weight mutex the performance overhead is large.
-
-==== Lightweight mutex: Atomic
-```c
-int sum = 0; int i;
-#pragma omp parallel for
-  for (i = 0; i < n; i++)
-  #pragma omp atomic { sum += i }
-```
-
-==== Reduction across threads
-When using `reduction(operator: variable)`, a _copy_ of the reduction variable per thread is created,
-initialized to the identity of the reduction operator #hinweis[($+ = 0$, $* = 1$)].
-Each thread will then _reduce_ into its local variable. At the end of the `parallel` region, the local
-results are _combined into the global variable_. Only associative operators allowed
-#hinweis[($+, *$ not $-, div$)].
-
+/ For Loop: OpenMP handles oversubscription (too many threads).
+/ Reduction across threads:
+    When using `reduction(operator: variable)`, a _copy_ of the reduction variable per thread is created,
+    initialized to the identity of the reduction operator #hinweis[($+ = 0$, $* = 1$)].
+    Each thread will then _reduce_ into its local variable. At the end of the `parallel` region, the local
+    results are _combined into the global variable_. Only associative operators allowed
+    #hinweis[($+, *$ not $-, div$)].
 ```c
 // Code using the reduction clause
 int sum = 0;
 #pragma omp parallel for reduction(+: sum)
-  for (int i = 0; i < n; i++) { sum += i; }
+    for (int i = 0; i < n; i++) { sum += i; }
 
 // The same code without the reduction clause
 int sum = 0;
@@ -970,6 +1053,7 @@ int sum = 0;
     final_sum += intermediate_sum; }
 ```
 
+
 ==== Hybrid: OpenMP + MPI
 ```c
 int numprocs, rank; int iam = 0, np = 1;
@@ -977,8 +1061,7 @@ MPI_Init(&argc, &argv);
 MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
 MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 #pragma omp parallel default(shared) private(iam, np) {
-  np = omp_get_num_threads();
-  iam = omp_get_thread_num();
+  np = omp_get_num_threads(); iam = omp_get_thread_num();
   printf("I am T %d out of %d from P %d out of %d\n", iam, np, rank, numprocs);
 } MPI_Finalize();
 ```

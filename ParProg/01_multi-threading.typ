@@ -45,13 +45,10 @@
 
 // /*
 
+= Concepts of Concurrency
 / Motivation: Word (GUI), Moore's Law end #sym.arrow.r Multi-Core Era, scale horizontal
 / Multi-core: a processor chip containing multiple cores (processing units)
 / Caches: L1: inside core, L2: inside core, sometimes shared between some cores, L3: on CPU chip, shared between all cores
-
-
-// = Multi-Threading
-= Concepts of Concurrency
 / Parallelism: Subprograms run simultaneously on multiple cores, goal: faster programs
 / Concurrency: interleaved execution of programs (time-slicing or parallel), goal: simpler programs + non blocking GUI
 
@@ -86,8 +83,8 @@
 / Time-Sliced Scheduling (preemptive): Each thread has the processor for maximum time interval
 
 == JVM Thread Model
-/ Java: single process system
-/ Java Virtual Machine (JVM): is a process
+// / Java: single process system
+/ Java Virtual Machine (JVM): is a process, Java = single process system
 / threads: main thread which calls the main function, programmer can start more threads, Subsystems / Runtime System also start their own threads (e.g. RMI, AWT, Garbage Collector)
 / Termination: after all (not daemon) threads are finished or System.exit/Runtime.exit
 / Thread class: override the `run` method of the Runnable interface with the code to be executed in parallel.
@@ -127,9 +124,7 @@
           a.start(); b.start(); System.out.println("main finished");
         } // varying result, non-deterministic scheduler
         ```
-
         ```java
-
         // with synchronization (a and b from above):
         System.out.println("Threads start");
         a.start(); b.start(); // ...
@@ -201,17 +196,17 @@ _`Waiting`_ #hinweis[]\
 #v(-1.25em)
 / happens-before relationship: result is same as if executed synchronously (visibility + threadsafe)
 
-==== Java synchronized
-*```java synchronized```:*
-Body of method with the ```java synchronized``` keyword is a critical section.
+==== Java synchronized (Monitor)
+// *```java synchronized```:*
+// ```java synchronized``` keyword for critical section.
 Guarantees _memory consistency_, _happens-before relationship_ and _reentrancy_.
 // Impossible for two invocations of a synchronized method on the same object to interleave.
-Other threads are _blocked_ until the current thread is done with the object.
-Every object has a _Lock_ #hinweis[(Monitor-Lock)]. Maximum 1 thread can acquire the lock.
-Entry of a `synchronized` method acquires the lock of the object, the exit releases it.
+// Other threads _blocked_ until current thread is done with the (synchronized) object.
+Every object has a _Lock_ #hinweis[(Monitor-Lock)]. Maximum 1 thread can acquire it.
+Entry of `synchronized` method acquires lock of the object, exit releases it.
 ```java public synchronized void deposit(int amount) { this.balance += amount; }```
-synchronized can also be used within a method, the _object that should be locked_ must be specified.
-```java synchronized(this) { this.balance += amount; }``` (unhandled exceptions exit sync. block)\
+synchronized can be used within method, specify object to lock.
+```java synchronized(this) { this.balance++; }``` (unhandled exceptions exit sync. block)\
 // *Exit synchronized block:*
 // End of the block, `return`, unhandled exceptions
 
@@ -227,7 +222,7 @@ has _fairness-problems_ and _no shared locks_.\
     / Recursive Lock: thread can acquire same lock through recursive calls, free by last release
     / Busy Wait:
         is repeatedly checking a condition without giving CPU free
-        ```java while (locked) { }``` (does not work)
+    // ```java while (locked) { }``` (does not work)
     // `yield` or `sleep` in a loop, inefficient, not releasing lock. _`wait()`_: Temporarily release Monitor-Lock.
     // solution: wrap in while loop to check if wake up condition has been met.
     / Wakeup signal: Signalling a thread in Monitor (inner waiting room). `notify()` and `notiyAll`
@@ -295,10 +290,11 @@ has _fairness-problems_ and _no shared locks_.\
 _DR + RC_ = Erroneous behaviour,
 _No DR + RC_ = Erroneous behaviour,
 _No RC + DR_ = Program works correctly, but formally incorrect, _No RC + No DR_ = Correct behaviour
-==== Race Conditions
+==== Race Conditions (safety)
 _Insufficiently synchronized access to shared resources._ The _order of events_ affects the
 _correctness_ of the program. Leads to _non-deterministic behavior_.
-Can occur without data race, but data race is often the cause.\
+// Can occur without data race, but data race is often the cause.
+\
 *Race Condition without data race:* critical section is not protected. Data Race is eliminated using synchronization, but there
 is no synchronization over larger blocks, so race conditions are still possible
 #hinweis[(i.e. non-atomic incrementing)].
@@ -308,22 +304,21 @@ Two threads in a single process _access the same variable_ concurrently without 
 at least one of them is a _write access_.
 
 == Thread Safety
-*Dispensable cases in synchronization:*
-_Immutable Classes_ #hinweis[(Declaring all fields private and final and don't provide setters)],
-_Read-only Objects_ #hinweis[(Read-only accesses are thread-safe)]\
-*Confinement:*
-Object belongs to only one thread at a time.
-_Thread Confinement_ #hinweis[(Object belongs to only one thread)],
-_Object Confinement_ #hinweis[(Object is encapsulated in other synchronized objects)]\
-*Thread safe:*
-A data type or method that behaves correctly when used from multiple threads as if it was
-running in a single thread without any additional coordination
-#hinweis[(Java concurrent collections)].\
-*Thread Safety:*
-Avoidance of Data Races. When no sharing is intended, give each thread a private copy of the
-data. When sharing is important, provide explicit synchronization.
+/ Dispensable cases in synchronization:
+    _Immutable Classes_ #hinweis[(Declaring all fields private and final and don't provide setters)],
+    _Read-only Objects_ #hinweis[(Read-only accesses are thread-safe)]\
+/ Confinement:
+    Object belongs to only one thread at a time.
+    _Thread Confinement_ #hinweis[(Object belongs to only one thread)],
+    _Object Confinement_ #hinweis[(Object is encapsulated in other synchronized objects)]\
+/ Thread safe:
+    A data type or method behaves correctly, when same behaviour when used from multiple threads as if running in a single thread
+// ??? #hinweis[(Java concurrent collections)].\
+/ Thread Safety:
+    Avoidance of Data Races (and for parallelism correctness also no deadlock). _No sharing intended_: give each threada  private copy of the
+    data. _Sharing is important_: provide explicit synchronization.
 
-== Deadlocks
+== Deadlocks (safety)
 Happens when threads lock each other out, prohibiting both from running.
 Programs with potential deadlock are not considered correct.
 Threads can suddenly block each other.
@@ -388,19 +383,169 @@ consume CPU during deadlock.
         Introduce _linear blocking order_, lock nested only in ascending order.  Or use _coarse granular locks_ #hinweis[(e.g. block the whole Bank to block all accounts)]
 ]
 
-== Starvation
-A thread never gets chance to access a resource.
+== Starvation (liveness)
+Thread never gets chance to access a resource.
 _Avoidance:_ Use fair synchronization constructs. #hinweis[(Aging, Enable fairness in previous
     synchronization constructs. Monitor and Thread priorities have a fairness problem.)]
 
-== Parallelism Correctness Criteria
-_Safety:_ No race conditions and no deadlocks, _Liveness:_ No starvation
+// == Parallelism Correctness Criteria
+// _Safety:_ No race conditions and no deadlocks, _Liveness:_ No starvation
+
+
+
+
+
+
+
+= Memory Models
+/ Lock-Free Programming:
+    _Correct_ concurrent interactions _without using locks_. Use guarantees of memory models.
+    Goal is _efficient synchronization_.
+/ Problems:
+    Memory accesses are seen in _different order_ by different threads, except when _synchronized_
+    and at _memory barriers_ #hinweis[(weak consistency)]. Optimizations by compiler, runtime
+    system and CPU. Instructions are reordered or eliminated by optimization.\
+/ Memory model:
+    Part of language semantics, there exist different models: _sequential consistency (SC)_
+    #hinweis[(Order of execution cannot be changed. Too strong a consistency model)]
+    and the _Java Memory Model_ #hinweis[(a "weak" memory model)].
+
+== Java Memory Model (JMM)
+Interleaving-based semantics. Minimum warranties: _Atomicity, Visibility and Ordering_.
+
+=== Atomicity
+An _atomic_ action is one that happens _all at once_ #hinweis[(So no thread interference)].
+Java guarantees that read/writes to primitive data types up to 32 Bit, Object-References
+#hinweis[(strings etc.)] and long and double #hinweis[(with `volatile` keyword)] are atomic.
+_A single read/write is atomic._ Atomicity does _not imply visibility_.
+
+=== Visibility
+Guaranteed visibility between threads.
+_Lock Release & Acquire_ #hinweis[(Memory writes before release are visible after acquire)],
+_`volatile` Variable_ #hinweis[(Memory writes up to and including the write to volatile
+    variables are visible when reading the variable)],
+_Thread/Task-Start and Join_ #hinweis[(Start: input to thread; Join: thread result)],
+_Initialization of `final` variables_ #hinweis[(Visible after completion of the constructor)],
+_`final` fields_.\
+
+=== Java Ordering
+/ Java Happens Before:
+    "Happens before" defines the _ordering and visibility guarantees_ between actions in a program.
+    It ensures that changes made by one thread become visible to others.
+    An _unlock_ of a monitor _happens-before_ every subsequent lock of that same monitor.\
+/ Java Ordering Guarantees:
+    Writes before Unlock #sym.arrow reads after lock, `volatile` write #sym.arrow `volatile` read,
+    Partial Order. Synchronization operations are never reordered.
+    #hinweis[(Lock/Unlock, volatile-accesses, Thread-Start/Join.)].
+
+
+// *Read after write dependency*.
+// TODO
+
+== Synchronization in Memory Model
+/ Rendez-Vous:
+    Primitive attempt to synchronize threads.
+    #grid(
+        columns: (auto, auto),
+        gutter: 10pt,
+        [
+            ```java
+            // Java
+            volatile boolean a = false, b = false;
+            // Thread 1
+            a = true; while( !b ) { ... }
+            // Thread 2
+            b = true; while( !a ) { ... }
+            ```
+            No reordering because `a` and `b` are `volatile`.\
+        ],
+        [
+            ```cs
+            // C# .NET
+            volatile bool a = false, b = false;
+            // Thread 1
+            a = true; Thread.MemoryBarrier();
+            while (!b) { ... }
+            // Thread 2
+            b = true; Thread.MemoryBarrier();
+            while (!a) { ... }
+            ```
+        ],
+    )
+
+
+/ Spin-Lock with atomic Operation:
+    ```java
+    public class SpinLock {
+      private final AtomicBoolean locked = new AtomicBoolean(false); // unlocked
+      public void acquire() { while( locked.getAndSet(true) ) {...} }
+      public void release() { locked.set(false); }
+    }
+    ```
+
+/ Java Atomic Classes:
+    Classes for boolean, Integer, Long, References and Array-Elements.
+    Different kinds of atomic operations, _`addAndGet()`_, _`getAndAdd()`_ etc.\
+/ Operations on atomic data classes:
+    ```java boolean getAndSet(boolean newValue)```\
+    Atomically sets to the given value and returns the previous value.\
+    ```java boolean compareAndSet(boolean expect, boolean update)```\
+    Sets `update` only when read value is equal to `expect`. Returns true when successful.\
+/ Optimistic Synchronization:
+    #hinweis[(Read old value and then compare before writing if value is still the same. If not, retry)]
+    #v(-0.75em)
+    ```java
+    do { oldV = v.get(); newV = result; } while(!v.compareAndSet(oldV, newV));
+    ```
+    #v(0.5em)
+/ Lambda-Variants:
+    ```java AtomicInteger s = new AtomicInteger(2); s.updateAndGet(x -> x * x);```
+
+
+#let dotnet-half-fence-content = {
+    [
+        // .Net Half Fence:
+        #image("img/parprog_6.png"),
+        #v(-2em)
+    ]
+}
+#wrap-content(
+    dotnet-half-fence-content,
+    align: top + right,
+    columns: (70%, 30%),
+)[
+    == .NET Memory Model
+    Differences to JMM:
+    _Atomicity_ #hinweis2[(long/double not atomic with volatile)],
+    _Ordering and Visibility_ #hinweis2[(only half and full fences)].
+    _Atomic Instructions_ with the `Interlocked` class
+
+    ==== Half Fence (Volatile)
+    Reordering in one direction still possible.
+    _Volatile Write:_ Release semantics #hinweis[(Preceding memory accesses NOT moved below it, but later operations can be executed before write)].
+]
+#v(-1em)
+_Volatile Read:_ Acquire semantics #hinweis[(Subsequent memory accesses NOT moved above it, but previous operations can be executed after the read)]
+==== Full Fence (Memory Barrier)
+Disallows reordering in both directions. ```cs Thread.MemoryBarrier();```
+
+
+
+
+
+
+
+
+
+
+
+
 
 = Specific synchronization primitives
 #v(-0.75em)
 == .NET Synchronization Primitives
 #hinweis[C\# has no lock and condition and no fairness flag]
-=== .NET Monitor
+==== .NET Monitor
 - use sync object: ```cs private object sync = new(); lock(sync){ ... }```.
 - ```cs Monitor.Wait(sync)```, ```cs Monitor.PulseAll(sync)```, ```cs Monitor.Pulse(sync)```.
 - Wait in Loop: without loop: overtaking problem (in signal and continue).
@@ -551,37 +696,26 @@ OS level, Mutex. Collections are _not_ Thread-safe.
     == Exchanger
     *Rendez-Vous:*
     Barrier with _information exchange_ for 2 parties.
-    Without exchange: ```java new CyclicBarrier(2)```,
-    with exchange: ```java Exchanger.exchange(something)```.
+    // Without exchange: ```java new CyclicBarrier(2)```,
+    // with exchange: ```java Exchanger.exchange(something)```.
     The Exchanger blocks until another thread also calls `exchange()`,
     returns argument `x` of the other thread.
 
     ```java
     var exchanger = new Exchanger<Integer>();
     for (int count = 0; count < 2; count++) { // odd number of exch.: last one blocks
-      new Thread(() -> {
-        for (int in = 0; in < 5; in++) {
+      new Thread(() -> { for (int in = 0; in < 5; in++) {
           try {
-            int out = exchanger.exchange(in);
+            int out = exchanger.exchange(in); // exchange "in" data
             System.out.println(Thread.currentThread().getName() + " got " + out);
           } catch (InterruptedException e) { }
-        }
-      }).start();
-    }
+    } /* inner for loop */ }).start(); /* thread */ } /* outer for loop */
     ```
-
 ]
 
 
-
-
 = Thread Pools
-
-==== Java and .NET
-Wovon hängt die Anzahl Tasks bei beiden Verfahren ab?
-/ .NET Parallel For: Anzahl freier Worker Threads
-/ Java ForkJoinPool: Array-Länge und Threshold (bei RecursiveAction)
-
+#v(-0.5em)
 == Thread Pools Basics
 Thread costs: performance + memory (stack per thread) #sym.arrow.r recycle threads for multiple tasks.\
 / Tasks: potentially parallel work packages. Passive objects describing the functionality.\
@@ -710,13 +844,7 @@ class PairwiseSum extends RecursiveAction {
 // */
 
 
-== Thread Pool with `Parallel For` (.NET)
-// .NET Code API
-// // TODO
-// / `Parallel.Invoke()`:
-// / `Parallel.For()`:
-// TODO code von Vorlesungen?
-
+== Thread Pool | `Parallel For` (.NET)
 #v(-1em)
 === .NET Task Parallel Library (TPL)
 Preferred way to write multi-threaded and parallel code.
@@ -728,25 +856,39 @@ layers_ #hinweis[(Task Parallelization: use tasks explicitly, Data Parallelizati
 
 // === C\# Thread Pool Code
 === Parallel Statements in C\#
-#columns(2)[
-    Execute _independent_ statements _potentially in parallel_
-    #hinweis[(Start all tasks, implicit barrier at the end)].
-    ```cs
-    Parallel.Invoke(
-      () => MergeSort(l, m),
-      () => MergeSort(m, r)
-    );
-    ```
-    #colbreak()
-    Execute _loop-bodies potentially in parallel_\
-    #hinweis[(Queue a task for each item, implicit barrier at the end)].
-    ```cs
-    Parallel.ForEach(list,
-      file => Convert(file));
-    Parallel.For(0, array.Length,
-      i => DoComputation(array[i]));
-    ```
-]
+#grid(
+    gutter: 1em,
+    [
+        Execute _independent_ statements _potentially parallel_
+        #hinweis[(Start all tasks, implicit barrier at end)].
+    ],
+    [
+        ```cs
+        Parallel.Invoke(
+          () => MergeSort(l, m),
+          () => MergeSort(m, r)
+        );
+        ```
+    ],
+)
+#v(-0.5em)
+
+#grid(
+    columns: (40%, auto),
+    gutter: 1em,
+    [
+        Execute _loop-bodies potentially parallel_
+        #hinweis[(Queue a task for each item, implicit barrier at the end)].
+    ],
+    [
+        ```cs
+        Parallel.ForEach(list, file => Convert(file));
+        Parallel.For(0, array.Length,
+            i => DoComputation(array[i]));
+        ```
+    ],
+)
+
 
 *Parallel Loop Partitioning:*
 Loop with lots of quickly executing bodies, inefficient to execute each iteration as parallel task #sym.arrow.r TPL _automatically groups multiple bodies_ into a single task.
@@ -759,78 +901,88 @@ Loop with lots of quickly executing bodies, inefficient to execute each iteratio
 // #image("/assets/image.png", height: 0.5cm)
 
 
-=== PLINQ
+=== PLINQ (and Java Stream API)
 *LINQ:*
 Set of technologies based on the integration of SQL-like query capabilities directly into C\#.\
 *PLINQ:*
-Is a parallel implementation of LINQ. Benefits from _simplicity_ and _readability_ of LINQ with
-the power of parallel programming by creating segments from its data. Analog to Java Stream API.
-
-_`from`_ `book` _`in`_ `bookCollection.AsParallel()` _`where`_ `book.Title.Contains("Concurrency")` _`select`_ ```cs book.ISBN // Random Order```
-
-_`from`_ `number` _`in`_ `inputList.AsParallel().AsOrdered()` _`select`_ `IsPrime(number)`\
-```cs // Maintains order but is slower```
-
+Parallel LINQ implementation, simple, readable and parallel by creating segments from its data. Analog to Java Stream API.
+```cs
+// Get ISBN of all books with title «Concurrency»
+from book in bookCollection.AsParallel() // parallel version
+  where book.Title.Contains("Concurrency") select book.ISBN
+// Map each number in a list to a bool value (isPrime=true):
+from number in inputList.AsParallel().AsOrdered() // maintains order but slower
+  select IsPrime(number)
+```
+```java
+// Java Stream API is implicitly ordered
+bookCollection.parallelStream().unordered() // unordered explicit
+.filter(book -> book.getTitle().contains("Concurrency")) .map(book -> book.getISBN());
+```
 
 === Thread Injection
-TPL adds new worker threads _at runtime_ every time a work item completes or every 500ms.\
-*Hill Climbing Algorithm:*
-_Maximize throughput_ while using as _few threads_ as possible. Measures throughput & _varies_
-number of worker threads. _Avoids deadlock_ with task-dependencies #hinweis[(but inefficiently
-    since not designed for this. Deadlocks with `ThreadPool.SetMaxThreads()` are still possible).]
+TPL adds new worker threads _at runtime_ every time a work item completes or every 500ms.
+_Maximize throughput_ while using as _few threads_ as possible.
+_Avoids deadlock_ with task-dependencies #hinweis[(but inefficiently since not designed for this. Deadlocks with `ThreadPool.SetMaxThreads()` are still possible).]
 We should keep _parallel tasks short_ to better profit from this automatic performance improvement.
+/ Hill Climbing Algorithm: Measures throughput & varies number of worker threads
 
+== Java and .NET | Anzahl Tasks im Threadpool
+Wovon hängt die Anzahl Tasks bei beiden Verfahren ab?
+/ .NET Parallel For: Anzahl freier Worker Threads
+/ Java ForkJoinPool: Array-Länge und Threshold (bei RecursiveAction)
 
 = Asynchronous programming
 / Unnecessary Synchrony:
-    Blocking method calls are often used without need #hinweis[(Long running calculations, I/O
-        calls, database or file accesses)]. With an _asynchronous call_, other work can continue while
-    waiting on the result of the long operation.\
-```cs var task = Task.Run(LongOperation); /* other work */ int result = task.Result;```\
+    Blocking method calls are often used without need #hinweis[(Long running calculations, I/O calls, database or file accesses)]. With an _asynchronous call_, other work can continue while
+    waiting on the result of the long operation.
+    #v(-0.5em)
+    ```cs
+    // C# .NET
+    var task = Task.Run(LongOperation); /* other work */ int result = task.Result;
+    ```
+
 / Kinds of Asynchronisms:
     _Caller-centric_ #hinweis2[("pull", caller waits for the task end and gets the result, blocking call)],
-    _Callee-Centric_ #hinweis2[("push", Task hands over the result directly to successor / follower task)]\
+    _Callee-Centric_ #hinweis2[("push", Task hands over the result directly to successor / follower task)]
+
 / Task Continuations:
     Define task whose start is linked to the end of the predecessor task.
-
-#grid(
-    columns: (auto, auto),
-    [
-        ```cs
-        // C# .NET
-        Task
-          .Run(task1)
-          .ContinueWith(task2)
-          .ContinueWith(task3);
-        ```
-    ],
-    [
-        ```java
-        // Java (there can be multiple Apply/AcceptAsync calls)
-        CompletableFuture
-          .supplyAsync(() -> longOP) // runAsync for return void
-          .thenApplyAsync(v -> 2 * v) // returns value
-          .thenAcceptAsync(v -> ... .println(v)); // returns void
-        ```
-    ],
-)
-
-*Multi-Continuation:*
-Continue when _all_ tasks are finished:\
-```cs Task.WhenAll(task1, task2).ContinueWith(continuation);```\
-Continue when _any_ of the tasks are finished
-#hinweis[(other threads get lost after first thread is done)]:\
-```cs Task.WhenAny(task1, task2).ContinueWith(continuation);```\
-#hinweis[(Exceptions in fire & forget task get ignored,
-    i.e. ```cs Task.Run(() => { ...; throw e; })```)]\
-*Exception Handling:*
-Synchronously _`Wait()`_ for the _whole task-chain_ at the end.
-_Register for unobserved exceptions_ with _`TaskScheduler.UnobservedTaskException`_
-#hinweis[(Receives unhandled exceptions from fire & forget tasks)].
-This should be executed as soon as the task object is dead #hinweis[(Garbage Collector)].
-
-
-
+    #v(-0.5em)
+    #grid(
+        columns: (auto, auto),
+        [
+            ```cs
+            // C# .NET
+            Task
+              .Run(task1)
+              .ContinueWith(task2)
+              .ContinueWith(task3);
+            ```
+        ],
+        [
+            ```java
+            // Java (there can be multiple Apply/AcceptAsync calls)
+            CompletableFuture    // tasks laufen im commonPool
+              .supplyAsync(() -> longOP) // returns CompletableFut.
+              .thenApplyAsync(v -> 2 * v) // returns value
+              .thenAcceptAsync(v -> ...println(v)); // prints value
+            ```
+        ],
+    )
+/ Multi-Continuation:
+    Continue when _all_ tasks are finished:\
+    ```cs Task.WhenAll(task1, task2).ContinueWith(continuation);```\
+    Continue when _any_ of the tasks are finished
+    #hinweis[(other threads get lost after first thread is done)]:\
+    ```cs Task.WhenAny(task1, task2).ContinueWith(continuation);```\
+    #hinweis[(Exceptions in fire & forget task get ignored,
+        i.e. ```cs Task.Run(() => { ...; throw e; })```)]\
+/ Exception Handling:
+    Synchronously _`Wait()`_ for the _whole task-chain_ at the end.
+    _Register for unobserved exceptions_ with _`TaskScheduler.UnobservedTaskException`_
+    #hinweis[(Receives unhandled exceptions from fire & forget tasks)].
+    Should be executed as soon as task object is dead #hinweis[(Garbage Collector)].
 
 == Java Async
 / Java `CompletableFuture`:
@@ -842,7 +994,7 @@ This should be executed as soon as the task object is dead #hinweis[(Garbage Col
     To be executed _asynchronously_ on the event dispatching thread.
     Should be used when an _application thread_ needs to _update the GUI_.\
 
-=== `Future<T>`
+=== `Future<T>` `(implemented by CompletableFuture)`
 Represents a _future result_ #hinweis[(asynchronous)], Proxy #hinweis[for the result that may be not available yet because the task has not finished.]
 #v(-0.5em)
 / _`.submit()`_: submits task into pool and launches task
@@ -860,13 +1012,21 @@ Only _single-threading_ #hinweis[(Only a special UI-thread is allowed to access
 
 // #image("img/parprog_5.png", width: 87%)
 // #image("img/parprog_5.png", height: 1.25cm)
-#image("img/gui.svg", width: 1cm)
 
-*GUI Premise:*
-_No long operations_ in UI events, or else blocks UI.
-_No access to UI-elements by other threads_, or else incorrect
-#hinweis[(Exception in .NET & Android, Race Condition in Javas Swing)].
-#v(-0.5em)
+#grid(
+    columns: (auto, 70%),
+    gutter: 0em,
+    [
+        *GUI Premise:*
+        _No long operations_ in UI events, or else blocks UI.
+        _No access to UI-elements by other threads_, or else incorrect
+        #hinweis[(Exception in .NET & Android, Race Condition in Javas Swing)].
+    ],
+    [
+        #image("img/gui.svg")
+    ],
+)
+// #v(-0.5em)
 
 === Non-Blocking UI Implementation
 #grid(
@@ -903,13 +1063,13 @@ _No access to UI-elements by other threads_, or else incorrect
 )
 
 == C\# Async/Await
-More _readable_ than the "spaghetti code" in the chapter before.
-This is the same code as before.
-
+// More _readable_ than the "spaghetti code" in the chapter before.
+// This is the same code as before.
 #grid(
     columns: (3fr, 4fr),
     [
         ```cs
+        // same UI code, but in C#
         ...
         var url = textBox.Text;
         var text = await DownloadAsync(url);
@@ -946,161 +1106,47 @@ _`await` for tasks_: "Non-blocking wait" on task-end / result.\
     Execute long running operation explicitly in task with ```cs await Task.Run()```.
     ```cs
     public async Task<bool> IsPrimeAsync(long number) {
-      return await Task.Run(() => {
+      return await Task.Run(() => { // ohne diesen return nicht async
         for (long i = 2; i*i <= number; i++) {
           if (number % i == 0) { return false; }
         } return true;
       }); }
     ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-= Memory Models
-/ Lock-Free Programming:
-    _Correct_ concurrent interactions _without using locks_. Use guarantees of memory models.
-    Goal is _efficient synchronization_.\
-/ Problems:
-    Memory accesses are seen in _different order_ by different threads, except when _synchronized_
-    and at _memory barriers_ #hinweis[(weak consistency)]. Optimizations by compiler, runtime
-    system and CPU. Instructions are reordered or eliminated by optimization.\
-/ Memory model:
-    Part of language semantics, there exist different models: _sequential consistency (SC)_
-    #hinweis[(Order of execution cannot be changed. Too strong a consistency model)]
-    and the _Java Memory Model_\ #hinweis[(a "weak" memory model)].
-
-
-
-== Java Memory Model (JMM)
-Interleaving-based semantics. Minimum warranties: _Atomicity, Visibility and Ordering_.
-
-=== Atomicity
-An _atomic_ action is one that happens _all at once_ #hinweis[(So no thread interference)].
-Java guarantees that read/writes to primitive data types up to 32 Bit, Object-References
-#hinweis[(strings etc.)] and long and double #hinweis[(with `volatile` keyword)] are atomic.
-_A single read/write is atomic._ Atomicity does _not imply visibility_.
-
-=== Visibility
-Guaranteed visibility between threads.
-_Lock Release & Acquire_ #hinweis[(Memory writes before release are visible after acquire)],
-_`volatile` Variable_ #hinweis[(Memory writes up to and including the write to volatile
-    variables are visible when reading the variable)],
-_Thread/Task-Start and Join_ #hinweis[(Start: input to thread; Join: thread result)],
-_Initialization of `final` variables_ #hinweis[(Visible after completion of the constructor)],
-_`final` fields_.\
-
-=== Java Ordering
-*Java Happens Before:*
-"Happens before" defines the _ordering and visibility guarantees_ between actions in a program.
-It ensures that changes made by one thread become visible to others.
-An _unlock_ of a monitor _happens-before_ every subsequent lock of that same monitor.\
-*Java Ordering Guarantees:*
-Writes before Unlock #sym.arrow reads after lock, `volatile` write #sym.arrow `volatile` read,
-Partial Order. Synchronization operations are never reordered.
-#hinweis[(Lock/Unlock, volatile-accesses, Thread-Start/Join.)].
-
-
-// *Read after write dependency*.
-// TODO
-
-== Synchronization in Memory Model
-*Rendez-Vous:*
-Primitive attempt to synchronize threads.
-
-#grid(
-    columns: (auto, auto),
-    gutter: 10pt,
-    [
-        ```java
-        // Java
-        volatile boolean a = false, b = false;
-        // Thread 1
-        a = true; while( !b ) { ... }
-        // Thread 2
-        b = true; while( !a ) { ... }
-        ```
-        No reordering because `a` and `b` are `volatile`.\
-    ],
-    [
-        ```cs
-        // C# .NET
-        volatile bool a = false, b = false;
-        // Thread 1
-        a = true; Thread.MemoryBarrier();
-        while (!b) { ... }
-        // Thread 2
-        b = true; Thread.MemoryBarrier();
-        while (!a) { ... }
-        ```
-    ],
-)
-
-
-*Spin-Lock with atomic Operation:*
-```java
-public class SpinLock {
-  private final AtomicBoolean locked = new AtomicBoolean(false); // unlocked
-  public void acquire() { while( locked.getAndSet(true) ) {...} }
-  public void release() { locked.set(false); }
-}
+= Lock-free bank account
+```cs
+public bool Withdraw(int amount) { int localBalance;
+  while (true) { localBalance = Balance; // _balance is volatile
+    Thread.MemoryBarrier();
+    if (amount > localBalance) { return false; }
+    // when original balance is the same as our original local balance, the operation worked:
+    if (Interlocked.CompareExchange(ref _balance, localBalance - amount, localBalance) == localBalance) { return true; }
+} /* while */ }
 ```
-
-*Java Atomic Classes:*
-Classes for boolean, Integer, Long, References and Array-Elements.
-Different kinds of atomic operations, _`addAndGet()`_, _`getAndAdd()`_ etc.\
-*Operations on atomic data classes:*
-```java boolean getAndSet(boolean newValue)```\
-Atomically sets to the given value and returns the previous value.\
-```java boolean compareAndSet(boolean expect, boolean update)```\
-Sets `update` only when read value is equal to `expect`. Returns true when successful.\
-*Optimistic Synchronization:*
-#hinweis[(Read old value and then compare before writing if value is still the same. If not, retry)]
-```java
-do { oldV = v.get(); newV = result; } while(!v.compareAndSet(oldV, newV));
-```
-
-*Lambda-Variants:*
-```java AtomicInteger s = new AtomicInteger(2); s.updateAndGet(x -> x * x);```
+// ```java
+// // in java:
+// public boolean withdraw(int amount) {
+//   int localBalance;
+//   do {
+//     localBalance = balance.get();
+//     if (amount > localBalance) { // no reordering of this check, because atomic read above and below
+//       // we do not check if another thread has deposited enough money exactly at this point (after the read and before the return)
+//       return false;
+//     }
+//   } while(!balance.compareAndSet(localBalance, localBalance - amount));
+//   return true;
+// }
+// ```
 
 
-#let dotnet-half-fence-content = {
-    [
-        .Net Half Fence:
-        image("img/parprog_6.png"),
-    ]
-}
 
-#wrap-content(
-    dotnet-half-fence-content,
-    align: top + right,
-    columns: (75%, 25%),
-)[
-    == .NET Memory Model
-    Main differences to JMM:
-    _Atomicity_ #hinweis[(long/double also not atomic with volatile)],
-    _Ordering and Visibility_ #hinweis[(only half and full fences)].
-    _Atomic Instructions_ with the `Interlocked` class
 
-    === Half Fence (Volatile)
-    Reordering in one direction still possible.
-    _Volatile Write:_ Release semantics #hinweis[(Preceding memory accesses are not moved below
-        it, but later operations can be executed before the write)].
-    _Volatile Read:_ Acquire semantics #hinweis[(Subsequent memory accesses are not moved above
-        it, but previous operations can be executed after the read)]
-]
 
-=== Full Fence (Memory Barrier)
-Disallows reordering in both directions. ```cs Thread.MemoryBarrier();```
+
+
+
+
+
+
+
 
 // #pagebreak()
