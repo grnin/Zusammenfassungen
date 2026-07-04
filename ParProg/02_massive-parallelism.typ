@@ -659,46 +659,55 @@ Cluster programming is the _highest possible parallel acceleration_ #hinweis[(Fa
 == MPI Boilerplate Code
 ```c
 int main(int argc, char * argv[]) {
-  MPI_Init(&argc, &argv); // MPI Initialization
-  int rank; int len;
-  MPI_Comm_rank(MPI_COMM_WORLD, &rank); // Process Identification
-  char name[MPI_MAX_PROCESSOR_NAME];
-  MPI_Get_processor_name(name, &len);
-  printf("MPI process %i on %s\n", rank, name);
-  MPI_Finalize(); // MPI Finalization
+    // first MPI call, broadcasts to all processes, communicator formed,..
+    MPI_Init(&argc, &argv);
+    int rank; int size; int len;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank); // Process Identification by rank
+    MPI_Comm_size(MPI_COMM_WORLD, &size); // number of processes in comm.
+
+    char name[MPI_MAX_PROCESSOR_NAME]; MPI_Get_processor_name(name, &len);
+    printf("MPI process %i on %s\n", rank, name);
+
+    MPI_Barrier(MPI_COMM_WORLD); // blocks/waits for processes in communicator
+
+    MPI_Finalize(); // MPI Finalization, clean up
 }
 ```
 //   return 0; weggelassen, ist ja nicht unbedingt nötig
 
-/ `MPI_Init`:
-    Must be the _first_ MPI call. Allows the `mpi_init` to broadcast to all the processes.
-    Does _not_ create processes, they are only created at launch time.
-    All MPI _global and internal variables are constructed_.
-    A _communicator_ is formed around all the processes that were spawned and _unique ranks_
-    #hinweis[(IDs)] are assigned to each process.
-_`MPI_COMM_WORLD`_ encloses all processes in the job.\
-/ Communicator:
-    Group of MPI processes, allows inter-process-communication.\
-/ `MPI_Comm_rank`:
-    _Returns the rank_ of a process in a communicator. Used for sender/receiver IDs.\
-/ `MPI_Comm_size`:
-    _Returns the total number_ of processes in a communicator.\
-/ `MPI_Finalize`:
-    Is used to _clean up_ the environment. No more MPI calls after that.\
-/ `MPI_Barrier`:
-    Blocks until all processes in the communicator have reached the barrier.\
+#gekuerzt[
+    / `MPI_Init`:
+        Must be _first_ MPI call. Allows the `mpi_init` to broadcast to all the processes.
+        Does _not_ create processes, they are only created at launch time.
+        All MPI _global and internal variables are constructed_.
+        A _communicator_ is formed around all the processes that were spawned and _unique ranks_
+        #hinweis[(IDs)] are assigned to each process.
+        _`MPI_COMM_WORLD`_ encloses all processes in the job.\
+    / Communicator:
+        #hinweis[MPI_COMM_WORLD], Group of MPI processes, allows inter-process-communication.\
+    / `MPI_Comm_rank(..)`:
+        _rank_ of a process in a communicator. Used for sender/receiver IDs.\
+    / `MPI_Comm_size(..)`:
+        _total number_ of processes in a communicator.\
+    / `MPI_Finalize()`:
+        Used to _clean up_ the environment. No more MPI calls after that.\
+    / `MPI_Barrier`:
+        Blocks until all processes in the communicator have reached the barrier.\
+]
+
 / Compilation & Execution: ```sh mpicc HelloCluster.c && mpiexec -c 24 a.out && sbatch -hi.sub```
 / Process Identification:
     _Rank_ = number within a group, incremental numbering from 0.\
     _Unique Identification_ = (Rank, Communicator)
 
-```c MPI_Send(void * data, int count, MPI_Datatype datatype, int destination, int tag, MPI_Comm communicator) // tag: freely selectable number for msg type (>= 0)```\
-```c MPI_Recv(void * data, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm communicator, MPI_Status* status) // status: error information```
+/ Send and Receive: \
+    // Each _send_ should have a matching _receive_.\
+    ```c MPI_Send(void * data, int count, MPI_Datatype datatype, int destination, int tag, MPI_Comm communicator) // tag: freely selectable number for msg type (>= 0)```\
+    ```c MPI_Recv(void * data, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm communicator, MPI_Status* status) // status: error information```
 
-Each _send_ should have a matching _receive_.\
 / Example direct communication: \
-```c MPI_Send(&value, 1, MPI_INT, receiverRank, tag, MPI_COMM_WORLD);```\
-```c MPI_Recv(&value, 1, MPI_INT, senderRank, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);```\
+    ```c MPI_Send(&value, 1, MPI_INT, receiverRank, tag, MPI_COMM_WORLD);```\
+    ```c MPI_Recv(&value, 1, MPI_INT, senderRank, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);```\
 / Array send: ```c int array[LENGTH];``` \
     ```c MPI_Send(array, LENGTH, MPI_INT, receiverRank, tag, MPI_COMM_WORLD);``` \
     ```c MPI_Recv(array, LENGTH, MPI_INT, senderRank, tag, MPI_COMM_WORLD, MPI_STATUS_IGN);```
@@ -707,12 +716,12 @@ Each _send_ should have a matching _receive_.\
     #grid2(
         [
             #v(-0.7em)
-            Is _efficient_, because the root node does _not send the signal individually_ to each node,
+            Efficient, because root node does _not send the signal individually_ to each node,
             the _other nodes help_ spread the message to others.:
-            ```c MPI_Bcast(void * data, int count, MPI_Datatype datatype, int root, MPI_Comm_World communicator)```\
+            ```c MPI_Bcast(void * data, int count, MPI_Datatype datatype, int root, MPI_COMM_WORLD)```\
         ],
         [
-            #v(-1em)
+            #v(-1.7em)
             // TODO:
             // #image("/assets/image-1.png")
             #image("img/mpi_bcast.svg", width: 50pt)
@@ -724,14 +733,14 @@ Each _send_ should have a matching _receive_.\
     `MPI_Reduce` is called with a root process of 0 and using `MPI_SUM` as the reduction operation.
     The four numbers are added and stored on the root process.
     Job is done in a _distributed manner_.\
-    ```c MPI_Reduce(void* send_data, void* recv_data, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm)```
-    #hinweis[
-        (_`send_data`_: array of elements of type `datatype` to reduce from each process,
-        _`recv_data`_: relevant on the root process. contains the reduced result and has a size of `sizeof(datatype) * count`.
-        _`op`_: the operation you wish to apply to your data: `MPI_MAX`, `MPI_MIN`, `MPI_SUM`,
-        `MPI_PROD`: multiplies all, `MPI_BAND`/`MPI_LAND`: Bitwise/Logical AND, `MPI_LOR`: Logical OR,
-        `MPI_MAXLOC`: Same as max plus rank of process that owns it)
-    ]\
+    ```c MPI_Reduce(void* send_data, void* recv_data, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_COMM_WORLD)```\
+    #hinweis2[
+        _`send_data`_: array of elements of type `datatype` to reduce from each process,
+        _`recv_data`_: relevant on the root process. contains the reduced result and has a size of `sizeof(datatype) * count`. \ ]
+    _MPI_OP_: `MPI_MAX`, `MPI_MIN`, `MPI_SUM`,
+    `MPI_PROD` (multiplies all), `MPI_BAND`/`MPI_LAND` (Bitwise/Logical AND), `MPI_LOR` (Logical OR),
+    `MPI_MAXLOC` (Same as max plus rank of process that owns it)
+    \
 / `MPI_AllReduce`:
     Many parallel applications require accessing the reduced results _across all processes_.
     This function reduces the values and distributes the result to all processes.
@@ -741,67 +750,74 @@ Each _send_ should have a matching _receive_.\
     Gather together multiple values from different processors.\
     ```c MPI_Gather(&input_value, 1, MPI_INT, &output_array, 1, MPI_INT, 0, MPI_COMM_WORLD)```
 
-    /*
-        Hoffentlich im Anhang vorhanden:
-        The reduction operations defined by MPI include
-        MPI_MAX - Returns the maximum element.
-        MPI_MIN - Returns the minimum element.
-        MPI_SUM - Sums the elements.
-        MPI_PROD - Multiplies all elements.
-        MPI_LAND - Performs a logical and across the elements.
-        MPI_LOR - Performs a logical or across the elements.
-        MPI_BAND - Performs a bitwise and across the bits of the elements.
-    MPI_BOR - Performs a bitwise or across the bits of the elements.
-    MPI_MAXLOC - Returns the maximum value and the rank of the process
-    that owns it.
-    MPI_MINLOC - Returns the minimum value and the rank of the process
-    that owns it.
-    */
+/*
+    Hoffentlich im Anhang vorhanden:
+    The reduction operations defined by MPI include
+    MPI_MAX - Returns the maximum element.
+    MPI_MIN - Returns the minimum element.
+    MPI_SUM - Sums the elements.
+    MPI_PROD - Multiplies all elements.
+    MPI_LAND - Performs a logical and across the elements.
+    MPI_LOR - Performs a logical or across the elements.
+    MPI_BAND - Performs a bitwise and across the bits of the elements.
+MPI_BOR - Performs a bitwise or across the bits of the elements.
+MPI_MAXLOC - Returns the maximum value and the rank of the process
+that owns it.
+MPI_MINLOC - Returns the minimum value and the rank of the process
+that owns it.
+*/
 
-    // #grid(
-    //     columns: (auto, auto),
-    //     [
-    == Approximation of $bold(pi)$ via Monte Carlo Simulation <pi-approx>
-    Draw a circle inside of a square and randomly place dots in the square. The ratio of dots
-    inside the circle to the total number of dots will approximately equal $pi \/ 4$.
-    // ],
-    // [
+// #grid(
+//     columns: (auto, auto),
+//     [
+== Approximation of $bold(pi)$ via Monte Carlo Simulation <pi-approx>
+Draw a circle inside of a square and randomly place dots in the square. The ratio of dots
+inside the circle to the total number of dots will approximately equal $pi \/ 4$.
+// ],
+// [
 
 
-    #v(-0.5em)
-    #grid(
-        columns: (auto, auto),
-        [
-            ```c
-            // Parallel, the trials are split across different nodes
-            int rank, size;
-            MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-            MPI_Comm_size(MPI_COMM_WORLD, &size);
-            srand(rank * 4711); // each process receives a different seed
-            // Each process computes a subtask:
-            long hits = count_hits(TRIALS / size);
-            long total;
-            MPI_Reduce(&hits, &total, 1, MPI_LONG,
-              MPI_SUM, 0, MPI_COMM_WORLD);
-            if (rank == 0) {
-              double pi = 4 * ((double)total / TRIALS);
-            }
-            ```
-        ],
-        [
-            ```c
-            // Sequential
-            long count_hits(long trials) { long hits = 0, i;
-              for (i = 0; i < trials; i++) {
-                double x = (double)rand()/RAND_MAX;
-                double y = (double)rand()/RAND_MAX;
-                // distance to center bigger than radius=1 :
-                if (x * x + y * y <= 1) { hits++;}
-              }
-            return hits; }
-            ```
-        ],
-    )
+#v(-0.5em)
+#grid(
+    columns: (auto, auto),
+    // gutter: 0em,
+    [
+        ```c
+        // Parallel, the trials are split across different nodes
+        int rank, size;
+        MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+        MPI_Comm_size(MPI_COMM_WORLD, &size);
+        // each process recv. a different seed:
+        srand(rank * 4711);
+        // Each process computes a subtask:
+        long hits = count_hits(TRIALS / size);
+        long total;
+        MPI_Reduce(&hits, &total, 1, MPI_LONG,
+          MPI_SUM, 0, MPI_COMM_WORLD);
+        if (rank == 0) {
+          double pi = 4 * ((double)total
+                                / TRIALS);
+          printf("Pi approx. %f", pi);
+        }
+        ```
+    ],
+    [
+        ```c
+
+
+
+        // Sequential
+        long count_hits(long trials) { long hits = 0, i;
+          for (i = 0; i < trials; i++) {
+            double x = (double)rand()/RAND_MAX;
+            double y = (double)rand()/RAND_MAX;
+            // distance to center bigger than radius=1 :
+            if (x * x + y * y <= 1) { hits++;}
+          }
+        return hits; }
+        ```
+    ],
+)
 = OpenMP
 *Node:*
 A standalone _"computer in a box"_. Usually comprised of multiple CPU/processors/cores, memory,
