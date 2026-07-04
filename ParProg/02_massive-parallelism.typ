@@ -264,14 +264,14 @@ void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
         Defined as FLOPS #hinweis[(Floating Point Operations per Second)] per Byte.
         The higher, the better.\
         #box($ "Number of operations" / "Number of transferred bytes" = "FLOPS" / "Bytes" $)
-    / Examples:
-        ```cpp for(i=0; i<N, i++) { z[i] = x[i] + y[i] * x[i]; }```\
-        Read `x` and `y` from memory, write `z` to memory.
-        That's 2 reads and 1 write #hinweis[(`x` is used twice but read only once)].
-        In case `x`, `y` and `z` are `int`s, we have #fxcolor("grün", "12") #hinweis($(3 dot 4)$) bytes
-        transferred and $#fxcolor("orange", "2")$ arithmetic ops ($+$, $*$).
-        The arithmetic intensity is therefore $#fxcolor("orange", "2") / #fxcolor("grün", "12") =
-        #fxcolor("orange", "1") / #fxcolor("grün", "6")$.
+    ==== Examples:
+    ```cpp for(i=0; i<N, i++) { z[i] = x[i] + y[i] * x[i]; }```\
+    Read `x` and `y` from memory, write `z` to memory.
+    That's 2 reads and 1 write #hinweis[(`x` is used twice but read only once)].
+    In case `x`, `y` and `z` are `int`s, we have #fxcolor("grün", "12") #hinweis($(3 dot 4)$) bytes
+    transferred and $#fxcolor("orange", "2")$ arithmetic ops ($+$, $*$).
+    The arithmetic intensity is therefore $#fxcolor("orange", "2") / #fxcolor("grün", "12") =
+    #fxcolor("orange", "1") / #fxcolor("grün", "6")$.
 ]
 #mt1()
 === Roofline model
@@ -949,53 +949,53 @@ long count_hits(long trials) {
 ```
 
 = Performance Scaling
-*Difficulties with parallel programs*:
-Finding parallelism, granularity of a parallel task, moving data is expensive, load balancing,
-coordination & synchronization, performance debugging.\
-*Scalability:*
-The ability of hard- and software to deliver _greater computational power_ when the number of
-_resources is increased_.\
-*Scalability Testing:*
-Primary challenge of parallel computing is _deciding how best to break up a problem_ into
-individual pieces that can be computed separately.
-It is _impractical_ to develop and test large applications using the _full problem size_.
-The problem and number of processors are _scaled down_ at first.
-_Scalability testing:_ measuring the ability of an application to perform well or better with
-varying problem sizes and numbers of processors. It does _not_ test the applications _general
-functionality_ or correctness.
+/ Difficulties with parallel programs:
+    Finding parallelism, granularity of a parallel task, moving data is expensive, load balancing,
+    coordination & synchronization, performance debugging.\
+/ Scalability:
+    The ability of hard- and software to deliver _greater computational power_ when the number of
+    _resources is increased_.\
+/ Scalability Testing:
+    Measuring the ability of an application to perform well or better with
+    varying problem sizes and numbers of processors (strong scaling/weak scaling). Does _not_ test the applications _general
+    functionality_ or correctness.\
+    Primary challenge of parallel computing is _deciding how best to break up a problem_ into
+    individual pieces that can be computed separately.
+    It is _impractical_ to develop and test large applications using the _full problem size_.
+    The problem and number of processors are _scaled down_ at first.
 
-== Strong scaling
+== Strong scaling (CPU bound applications)
 _The number of processors is increased while the problem size remains constant_.
 Results in a reduced workload per processor. Mostly used for long running CPU bound applications.\
-*Amdahls Law:*
-The speedup is _limited by the fraction of the serial part_ of the software that is not
-amenable to parallelization. Sweet spot needs to be found. It is reasonable to use _small
-amounts of resources for small problems_ and _larger quantities of resources for big problems._\
-$T =$ total time, $p =$ part of the program that can be parallelized., $N =$ amount of processors\
-$T = (1-p)T + T_p = T_s + T_p$\
-$T_N = T_p \/ N + (1-p)T$, Speedup $<= 1\/(s + p \/ N)$, Efficiency = $T\/(N dot T_N)$\
-Amdahls law _ignores the parallel overhead_. Because of that, it is _the upper limit_ of
-speedup for a problem of fixed size. This seems to be a _bottleneck_ for parallel computing.\
-*Examples:*
-$90%$ of the computation can run parallel, what is the max speedup with $8$ processors?
+/ Amdahls Law:
+    The speedup is _limited by the fraction of the serial part_ of the software that is not
+    amenable to parallelization. Sweet spot needs to be found. It is reasonable to use _small
+    amounts of resources for small problems_ and _larger quantities of resources for big problems._\
+    $T =$ total time, $p =$ part of the program that can be parallelized., $N =$ amount of processors\
+    $T = (1-p)T + T_p = T_s + T_p$\
+    $T_N = T_p \/ N + (1-p)T$, Speedup $<= 1\/(s + p \/ N)$, Efficiency = $T\/(N dot T_N)$\
+    Amdahls law _ignores the parallel overhead_. Because of that, it is _the upper limit_ of
+    speedup for a problem of fixed size. This seems to be a _bottleneck_ for parallel computing.\
+==== Examples:
+$90%$ of the computation can run parallel, max speedup with $8$ processors?\
 $1 \/ (0.1 + 0.9\/8) approx underline(4.7)$ \
-25% of the computation must be serial. What is the max speedup with $infinity$ Processors? \
+
+25% of the computation must be serial. Max speedup with $infinity$ Processors? \
 $1\/ (0.25 + 0.75\/infinity) approx 1 \/0.25 = 4$ \
-To gain a $500 times$ speedup on $1000$ processors,
-Amdahls law requires that the proportion of serial part cannot exceed what?\
-$500 = 1\/(s + (1-s) / 1000) => s + (1-s) / 1000 = 1 / 500
+
+To gain a $500 times$ speedup on $1000$ processors, Amdahls law requires that the proportion of serial part cannot exceed what?\
+$500 = 1\/(s + (1-s) / 1000) => s + (1-s) / 1000 = 1 / 500 \
 => 1000s + (1-s) = 2 => 999s = 1 => s = 1 / 999 approx underline(0.1%)$
 
-== Weak scaling
-_The number of processors and the problem size is increased_. Mostly used for large
-_memory-bound_ applications where the required memory cannot be satisfied by a single node.\
-*Gustafson's law:*
-Based on the approximations that the _parallel part scales linearly_ with the amount of
-resources, and that the _serial part_ does _not increase_ with respect to the size of the problem.
-_Speedup_ $= s + p dot N = s + (1-s) dot N$\
-In this case, the problem size assigned to each processing element stays _constant_ and
-_additional elements_ are used to solve a _larger total problem_. Therefore, this type of
-measurement is justification for programs that take a lot of memory or other system resources.\
-*Example:*
-$64$ Processors. $5%$ of the program is serial, What is the scaled weak speedup?\
+== Weak scaling (Memory bound applications)
+_The number of processors and the problem size is increased_. Mostly used for large memory-bound applications where the required memory cannot be satisfied by a single node.\
+/ Gustafson's law:
+    Based on the approximations that the _parallel part scales linearly_ with the amount of
+    resources, and that the _serial part_ does _not increase_ with respect to the size of the problem.
+    _Speedup_ $= s + p dot N = s + (1-s) dot N$\
+    In this case, the problem size assigned to each processing element stays _constant_ and
+    _additional elements_ are used to solve a _larger total problem_. Therefore, this type of
+    measurement is justification for programs that take a lot of memory or other system resources.\
+==== Example:
+$64$ Processors. $5%$ of the program is serial, Scaled weak speedup?\
 $0.05 + 0.95 dot 64 = underline(60.85)$
