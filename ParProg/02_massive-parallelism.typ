@@ -32,6 +32,12 @@
     // nicht anzeigen
 ]
 
+#let print-image(body, replacement) = [
+    // global variable: print-images and then show body or replacement
+    // #replacement
+    #body
+]
+
 #let hinweis(body) = [
     #set text(
         style: "italic",
@@ -65,6 +71,9 @@
     #v(-1em)
 ]
 
+
+
+
 // = Massive Parallelism
 
 = GPU (Graphics Processing Unit)
@@ -95,14 +104,7 @@
     Single Instruction Multiple Threads. The same instruction is executed in different threads over different data.
 
 #gekuerzt[
-    // #place(
-    //     top + left,
-    //     dy: 2em,
-    //     scope: "column",
-    //     image("img/parprog_7.png"),
-    // )
     #v(-1em)
-    // #image("img/parprog_7.png"),
     #image("img/cuda-thread-pool.svg"),
     #v(-2em)
 ]
@@ -249,7 +251,6 @@ void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
     ]
 }
 #wrap-content(
-    // image("img/parprog_8.png"),
     bound-content,
     align: top + right,
     columns: (68%, 32%),
@@ -302,10 +303,17 @@ arithmetic intensity. x and y need to be fetched from memory and the result z is
 / Maximum Threads = 1024: `VectorAddKernel<<<1, numElements>>>(d_A, d_B, d_C);`.
 // #mt1()
 === Roofline model
-// #image("img/parprog_9.png", width: 90%)
-#v(-1em)
-#image("img/roofline-model.svg", width: 130pt)
-#v(-1em)
+
+#print-image(
+    [
+        // svg enthält ein eingebettetes Bild, sollte eigentlich gut druckbar sein
+        #v(-1em)
+        #image("img/roofline-model.svg", height: 65pt)
+        #v(-1em)
+    ],
+    colbreak(),
+)
+
 Provides performance estimates of a kernel running on differently sized architectures.
 Has three parameters: Peak performance, peak bandwidth vs. arithmetic intensity.\
 _Peak performance_ is derived from benchmarking FLOPS or GFLOPS #hinweis[(Giga-FLOPS , $10^9$
@@ -381,10 +389,9 @@ _Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
 / 3D Grid:
     ```cpp dim3 gridS(3,2,1); dim3 blockS(4,3,1); VectorAddKernel<<<gridS, blockS>>>```\
     // ist gleich wie (3,2) und (4,3)
-    #v(-0.8em)
-    #image("img/3d-thread-hierarchy.svg")
-
-
+    // #v(-0.8em)
+    #image("img/3d-thread-hierarchy.svg", height: 32pt)
+// #v(37pt) // Bildersatz
 
 / Device Limits:
     _Max threads per block:_ 1024,
@@ -408,6 +415,7 @@ _Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
     #hinweis[Rounding up is necessary because for 1025 threads, 2 blocks are required]
 ]
 #v(-2em)
+
 === Data Partitioning within threads
 / Data Access:
     Each kernel decides which data to work on. The programmers decide data partitioning scheme.
@@ -455,7 +463,8 @@ __global__ void pairwise_sum(int* array, int length) {
         array[2*i + 1] = 0;
 }   }
 ```
-// */
+
+
 /*
 // prüfung fs 2020, TODO:
 // bin nicht sicher wie korrekt der code ist. besser ein eigenes Beispiel finden.
@@ -619,7 +628,6 @@ shared memory for _all warps_ of the new block.\
 / Coalesced Accesses:
     All threads should Read/Write from same burst section in warp, but doesn't matter if only individual elements of burst or swapped access in burst.
 // Read/Write the burst in one transaction per warp burst section, swapped read/write within the same burst, only individual elements in the burst accessed.
-// #image("/assets/image-6.png")
 // // coalesced, solange die Daten im gleichen burst vom warp sind.
 / Not Coalesced Accesses (strided):
     Avoid inperformant read/write action over different warp bursts.
@@ -628,8 +636,14 @@ shared memory for _all warps_ of the new block.\
     _`data[(Expression without threadId.x) + threadId.x]`_
 / Coalescing with Matrices:
     Matrices get linearized to a 1D array. The row of the matrix should be the longer side so that there are as many coalescing accesses as possible.
-#v(-1em)
-#image("/assets/image-9.png")
+// #v(-1em)
+
+#print-image(
+    [
+        #image("/assets/image-9.png")
+    ],
+    v(40pt),
+)
 
 == Memory Model
 All threads have the access to the same _global memory_. Each thread block has _shared memory_

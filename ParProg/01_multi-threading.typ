@@ -16,11 +16,6 @@
     font-size: 4pt,
     landscape: true,
 )
-
-// #colbreak()
-// #colbreak()
-// #colbreak()
-// #colbreak()
 // */
 
 #let terms-spacing(spacing, body) = [
@@ -44,10 +39,12 @@
 ]
 
 
+#let print-image(body, replacement) = [
+    // global variable: print-images and then show body or replacement
+    // #replacement
+    #body
+]
 
-// /*
-// /*
-// /*
 
 
 = Concepts of Concurrency
@@ -80,7 +77,6 @@
     ],
     [
         #image("img/scheduler.svg")
-        // #image("img/scheduler.png")
     ],
 )
 #v(-0.5em)
@@ -290,6 +286,8 @@ has _fairness-problems_ and _no shared locks_.\
     ],
 )
 
+#colbreak()
+
 = Hazards and conditions of correctness
 _DR + RC_ = Erroneous behaviour,
 _No DR + RC_ = Erroneous behaviour,
@@ -365,7 +363,12 @@ Both threads in this scenario have _locked each other out_, the program cannot c
 / Resource Graph:
     #v(-0.5em)
     #wrap-content(
-        image("img/resource-graph-cycle.svg"),
+        print-image(
+            [
+                #image("img/resource-graph-cycle.svg")
+            ],
+            v(25pt),
+        ),
         align: top + right,
         columns: (70%, 30%),
     )[
@@ -374,10 +377,21 @@ Both threads in this scenario have _locked each other out_, the program cannot c
             gutter: 3pt,
             [Thread T _waits for Lock_ \ of Resource R
                 #v(-2pt)
-                #image("img/resource-graph-1.svg", height: 10pt)],
+                #print-image(
+                    [
+                        #image("img/resource-graph-1.svg", height: 10pt)
+                    ],
+                    v(10pt),
+                ),
+            ],
             [Thread T _acquires Lock_  \ of Resource R\
                 #v(-2pt)
-                #image("img/resource-graph-2.svg", height: 10pt)
+                #print-image(
+                    [
+                        #image("img/resource-graph-2.svg", height: 10pt)
+                    ],
+                    v(10pt),
+                )
                 #v(-3em)
             ],
         )
@@ -533,9 +547,6 @@ public bool Withdraw(int amount) { int localB;  while (true) {
 // }
 // ```
 
-
-// */
-/*
 
 #colbreak()
 #let dotnet-half-fence-content = {
@@ -945,7 +956,6 @@ layers_ #hinweis[(Task Parallelization: use tasks explicitly, Data Parallelizati
     ],
 )
 
-
 *Parallel Loop Partitioning:*
 Loop with lots of quickly executing bodies, inefficient to execute each iteration as parallel task #sym.arrow.r TPL _automatically groups multiple bodies_ into a single task.
 
@@ -954,7 +964,6 @@ Loop with lots of quickly executing bodies, inefficient to execute each iteratio
 // Split according to available worker threads:
 // - Range Partitioner with indexing (Parallel.For)
 // - Chunk Partitioner with iteration (Parallel.ForEach)
-// #image("/assets/image.png", height: 0.5cm)
 
 
 === PLINQ (and Java Stream API)
@@ -1078,9 +1087,6 @@ If a UI is doing a long task, it should not freeze.\
 *GUI Thread Model:*
 Only _single-threading_ #hinweis[(Only a special UI-thread is allowed to access
     UI-components)]. The _UI thread_ loops to process the _event queue_.
-
-// #image("img/parprog_5.png", width: 87%)
-// #image("img/parprog_5.png", height: 1.25cm)
 
 #grid(
     columns: (auto, 70%),
