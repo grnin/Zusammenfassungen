@@ -785,16 +785,13 @@ Thread costs: performance + memory (stack per thread) #sym.arrow.r recycle threa
 //     should provide, but $T_2$ waits for $T_1$ to finish, a deadlock occurs)]
 / LIFO Queue: per worker thread and stealing is *FIFO*, Automatic degree of parallelism #hinweis[(Default: As much worker threads as Processors)], Optimized for recursive.
 / Fire-and-forget:
-    Tasks may not finish (tasks are started without retrieving results). Async: `submit()` without `get()`.  Task is run, but Exception will not get caught.
+    Tasks may not finish (tasks are started without retrieving results). Async: `submit()` without `get()` oder CompletableFuture without `join()`.  Task is run, but Exception will not get caught.
 // / Fire and Forget: Task are started _without retrieving results_ later (`submit()` without `get()`).  Task is run, but Exceptions will not get caught.
 
 == Java ForkJoinPool Thread Pool
 / ForkJoinPool: Thread Pool for recursive Tasks (Divide and Conquer), work stealing, Subclass of ExecutorService
 / `ForkJoinPool.commonPool()`: static global Pool, singleton, used by `CompletableFuture`
 // - ForkJoinPool does not always use all processors :(
-
-/ Create explicit thread pool: ```java var threadPool = new ForkJoinPool();``` \ ```java int result = threadPool.invoke(new CountTask(2, N));```
-// / TODO: ```java int result = new CountTask(2, N).invoke();```
 
 / Work Stealing: Jobs get submitted into the _global queue_, which distributes the jobs to the _local queues_ of each worker thread. If one thread has no work left, it can _"steal" work from another threads_ local queue instead of the global queue. This _distributes_ the scheduling work over idle processors.
     Worker threads run as daemon threads (in TPL .NET too). // in java kann für einen eigenen "expliziten" ForkJoinPool auch eingestellt werden, dass die Threads nicht daemon threads sind. Aber das haben wir nicht angeschaut. Bei uns sind threads im ForkJoinPool immer daemon threads.
@@ -808,7 +805,7 @@ Thread costs: performance + memory (stack per thread) #sym.arrow.r recycle threa
 
 / _`task.fork()`_: schedule async subtask
 / _`future.get()`_: wait for result/exception #hinweis[prevent fire and forget by evaluating result], can throw CancellationException, ExecutionException, InterruptedException
-/ _`result = task.join()`_: wait and get result
+/ _`result = task.join()`_: wait and get result #hinweis[prevent fire and forget]
 
 ```java
 // Task Launch, Async but without CompletableFuture
@@ -880,8 +877,10 @@ class CountTask extends RecursiveTask<Integer> { // RecursiveAction: void functi
       return count;
     }
 } }  // .invoke is blocking:
-int result = new CountTask(2, N).invoke(); // invokeAll() to start multiple tasks
 ```
+#v(-1em)
+/ Create explicit thread pool + invoke: ```java var threadPool = new ForkJoinPool();``` \
+    #v(-0.8em) ```java int result = threadPool.invoke(new CountTask(2, N));``` ```java int result = new CountTask(2, N).invoke(); // invokeAll() to start multiple tasks ```
 
 /*
 === Pairwise sum (recursive)
