@@ -46,6 +46,9 @@
 
 
 // /*
+// /*
+// /*
+
 
 = Concepts of Concurrency
 / Motivation: Word (GUI), Moore's Law end #sym.arrow.r Multi-Core Era, scale horizontal
@@ -531,7 +534,10 @@ public bool Withdraw(int amount) { int localB;  while (true) {
 // ```
 
 
+// */
+/*
 
+#colbreak()
 #let dotnet-half-fence-content = {
     [
         // .Net Half Fence:
@@ -833,7 +839,6 @@ public static void main(String[] args) throws Exception {
 ```java
 // Sequential:
 int counter = 0; for (int n = 2; n < N; n++) { if (isPrime(n)) { counter++}};
-
 // Parallel and Recursive with RecursiveTask class:
 class CountTask extends RecursiveTask<Integer> { // RecursiveAction: void function
   private final int lower, upper;
@@ -1130,19 +1135,22 @@ Only _single-threading_ #hinweis[(Only a special UI-thread is allowed to access
 // More _readable_ than the "spaghetti code" in the chapter before.
 // This is the same code as before.
 #grid(
-    columns: (3fr, 4fr),
+    columns: (2fr, 4fr),
+    gutter: 1em,
     [
         ```cs
         // same UI code, but in C#
         ...
         var url = textBox.Text;
-        var text = await DownloadAsync(url);
+        var text = await
+            DownloadAsync(url);
         label.Context = text;
         ...
         ```
     ],
     [
         ```cs
+
         async Task<string> DownloadAsync(string url) {
           var web = new HttpClient();
           string result = await web.GetStringAsync(url);

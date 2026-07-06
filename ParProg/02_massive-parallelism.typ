@@ -165,7 +165,6 @@ GPU that allows the host program to use GPUs for general purpose processing.
 A kernel is a function that is executed $n$ times in parallel by $m$ different CUDA threads.
 Only the GPU knows when the task is finished.
 
-
 == CUDA Code and CUDA Flow
 // ```cpp
 // for (int i = 0; i < N; i++) { C[i] = A[i] + B[i]; } // sequential
@@ -174,14 +173,13 @@ Only the GPU knows when the task is finished.
 // kernel definition on GPU
 __global__
 void VectorAddKernel(float *A, float *B, float *C) {
-  int i = threadIdx.x;
-  C[i] = A[i] + B[i];
+  int i = threadIdx.x; C[i] = A[i] + B[i];
 }
 ```
 ```cpp
 void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
   size_t size = N * sizeof(float);
-  float *d_A, *d_B, *d_C; // data on GPU
+  float *d_A, *d_B, *d_C; // for data on GPU:
   // 1. GPU memory allocate, error handling: handleCudaError(cudaMalloc(..))
   cudaMalloc(&d_A, size); cudaMalloc(&d_B, size); cudaMalloc(&d_C, size);
   // 2. Data transfer to GPU (HostToDevice):
@@ -268,26 +266,53 @@ void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
         Defined as FLOPS #hinweis[(Floating Point Operations per Second)] per Byte.
         The higher, the better.\
         #box($ "Number of operations" / "Number of transferred bytes" = "FLOPS" / "Bytes" $)
-    ==== Examples:
-    ```cpp for(i=0; i<N, i++) { z[i] = x[i] + y[i] * x[i]; }```\
+]
+#v(-1em)
+==== Exercise (Arithmetic intensity = operational intensity)
+Assume 32-bit integer addition and multiplication. The components of z, x, and y are 4 bytes. Calculate the
+arithmetic intensity. x and y need to be fetched from memory and the result z is written back. \
+#hinweis2[(Arrayzugriff = 4 Byte (pro int Wert). Operationen `+,*..`, Zuweisung `=` ist keine Operation)]
+1. ```cpp for(i=0; i<N, ++i) { z[i] = x[i] + y[i] * x[i]; }```\
     Read `x` and `y` from memory, write `z` to memory.
     That's 2 reads and 1 write #hinweis[(`x` is used twice but read only once)].
     In case `x`, `y` and `z` are `int`s, we have #fxcolor("grün", "12") #hinweis($(3 dot 4)$) bytes
     transferred and $#fxcolor("orange", "2")$ arithmetic ops ($+$, $*$).
-    The arithmetic intensity is therefore $#fxcolor("orange", "2") / #fxcolor("grün", "12") =
-    #fxcolor("orange", "1") / #fxcolor("grün", "6")$.
-]
+    The arithmetic intensity is
+    #text(
+        size: 1.2em,
+        [
+            $#fxcolor("orange", "2") / #fxcolor("grün", "12") =
+            #fxcolor("orange", "1") / #fxcolor("grün", "6")$.
+            //  $2/12 = 1/6$
+        ],
+    )
+    #v(0.5em)
+2. ```cpp for(i=0; i<N, ++i) { z[i] = x[i] + y[i]; }```\
+    1 Operation (Compute).
+    3 Zugriffe (access Memory) = $3*4=12$ Bytes.\
+    // Read `x`, `y` and write to `z` = $3*4=12$ Bytes. Calculate plus (`+`) is 1 Operation.\
+    The arithmetic intensity is
+    #text(
+        size: 1.2em,
+        [
+            $#fxcolor("orange", "1") / #fxcolor("grün", "12")$
+        ],
+    )
+#v(-0.5em)
+/ Maximum Threads = 1024: `VectorAddKernel<<<1, numElements>>>(d_A, d_B, d_C);`.
 // #mt1()
 === Roofline model
+// #image("img/parprog_9.png", width: 90%)
+#v(-1em)
+#image("img/roofline-model.svg", width: 130pt)
+#v(-1em)
 Provides performance estimates of a kernel running on differently sized architectures.
 Has three parameters: Peak performance, peak bandwidth vs. arithmetic intensity.\
 _Peak performance_ is derived from benchmarking FLOPS or GFLOPS #hinweis[(Giga-FLOPS , $10^9$
     FLOPS)]. The _peak bandwidth_ from manuals of the memory subsystem. The _ridge point_ is where
 the horizontal and diagonal lines meet = minimum Ar.Int. required to achieve the peak performance.
 
-// #image("img/parprog_9.png", width: 90%)
-#image("img/roofline-model.svg", width: 90%)
-#colbreak()
+// #colbreak()
 = GPU Architecture
 Because there are so _many cores_ on GPUs, it is possible to run many threads in parallel
 _without context switches_. This allows better parallelism without a performance penalty.
@@ -356,7 +381,7 @@ _Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
 / 3D Grid:
     ```cpp dim3 gridS(3,2,1); dim3 blockS(4,3,1); VectorAddKernel<<<gridS, blockS>>>```\
     // ist gleich wie (3,2) und (4,3)
-    #v(-1em)
+    #v(-0.8em)
     #image("img/3d-thread-hierarchy.svg")
 
 
@@ -382,9 +407,7 @@ _Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
     _`int blocksPerGrid = (N + blockSize - 1) / blockSize;`_ \
     #hinweis[Rounding up is necessary because for 1025 threads, 2 blocks are required]
 ]
-#v(-0.75em)
-
-
+#v(-2em)
 === Data Partitioning within threads
 / Data Access:
     Each kernel decides which data to work on. The programmers decide data partitioning scheme.
@@ -394,22 +417,65 @@ _Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
 / Partitioning in Blocks: \
     #v(-0.6em)
     ```cpp
-    __global__
-    void VectorAddKernel(float *A, float *B, float *C) {
-      // index based on (blockID, threadID),   1D/2D Grid
-      int i = blockIdx.x * blockDim.x + threadIdx.x;
-      if (i < N) {  C[i] = A[i] + B[i];  }
-    }
     // kernel invocation
-    N = 4097; int blockSize = 1024; int gridSize = (N + blockSize - 1) / blockSize;
+    N = 4097; int blockSize = 1024;
+    int gridSize = (N + blockSize - 1) / blockSize;
     VectorAddKernel<<<gridSize, blockSize>>>(A, B, C);
     ```
-// N = 4097 = 4*1024 + 1 = threads?
-
 / Boundary Check:
     More threads than necessary work on the data. If $N = 4097$, 5 Blocks with 1024 Threads are
     needed which results in _1023 unused threads_. Threads with $i >= N$ must _not be allowed_
     to write to array $C$ because they might _corrupt the working memory_ of some other thread.
+    #v(-0.5em)
+    ```cpp
+        __global__
+        void VectorAddKernel(float *A, float *B, float *C) {
+          // index based on (blockID, threadID),   1D/2D Grid
+          int i = blockIdx.x * blockDim.x + threadIdx.x;
+          if (i < N) {  C[i] = A[i] + B[i];  } // boundary check
+        }
+    ```
+// N = 4097 = 4*1024 + 1 threads = 5 Blöcke
+
+
+// /*
+// prüfung fs 2020
+```cpp
+// Strided coaliscing Beispiel:
+// Kernel invocation for Array d_a (Pointer im Device Memory) with length len.
+int N = len/2;
+int blockSize = 1024; int gridSize = (N + blockSize - 1) / blockSize;
+pairwise_sum<<<gridSize, blockSize>>>(d_a, len);
+```
+```cpp
+__global__ void pairwise_sum(int* array, int length) {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+    if (2*i + 1 < length) {
+        array[2*i] += array[2*i + 1];
+        array[2*i + 1] = 0;
+}   }
+```
+// */
+/*
+// prüfung fs 2020, TODO:
+// bin nicht sicher wie korrekt der code ist. besser ein eigenes Beispiel finden.
+```cpp
+// Full coaliscing, Coalesced Kernel mit Shared Memory:
+__shared__ int cache[1024];
+__global__ void pairwise_sum(int* array, int length) {
+    int i = blockIdx.x * blockDim.x + threadIdx.x; int t = threadIdx.x;
+    int even_length = length - length % 2;
+    if (i < even_length) { cache[t] = array[i]; }
+    __syncthreads();
+    if (i < even_length) {
+        int value = 0;
+        if (i % 2 == 0) { value = cache[t] + cache[t + 1]; }
+        array[i] = value;
+}   }
+int blockSize = 1024; int gridSize = (len + blockSize - 1) / blockSize;
+pairwise_sum<<<gridSize, blockSize>>>(d_a, len);
+```
+// */
 
 == Error Handling
 #gekuerzt[
@@ -562,7 +628,7 @@ shared memory for _all warps_ of the new block.\
     _`data[(Expression without threadId.x) + threadId.x]`_
 / Coalescing with Matrices:
     Matrices get linearized to a 1D array. The row of the matrix should be the longer side so that there are as many coalescing accesses as possible.
-
+#v(-1em)
 #image("/assets/image-9.png")
 
 == Memory Model
@@ -596,8 +662,7 @@ __global__ void MatrixMulKernel(float* d_M, float* d_N, float* d_P, int Width) {
   int bx = blockIdx.x; int by = blockIdx.y;
   int tx = threadIdx.x; int ty = threadIdx.y;
   // identify row and column of the d_P element to work on
-  int Row = by * TILE_WIDTH + ty;
-  int Col = bx * TILE_WIDTH + tx;
+  int Row = by * TILE_WIDTH + ty;   int Col = bx * TILE_WIDTH + tx;
   float Pvalue = 0;
   // loop over d_M and d_N tiles required to compute d_P element
   for (int m = 0; m < Width/TILE_WIDTH; ++m) {
@@ -684,7 +749,6 @@ Cluster programming is the _highest possible parallel acceleration_ #hinweis[(Fa
         Blocks until all processes in the communicator have reached the barrier.\
 ]
 
-/ Compilation & Execution: ```sh mpicc HelloCluster.c && mpiexec -c 24 a.out && sbatch -hi.sub```
 / Process Identification:
     _Rank_ = number within a group, incremental numbering from 0.\
     _Unique Identification_ = (Rank, Communicator)
@@ -994,7 +1058,6 @@ int main(int argc, char* argv[]) {
         printf("Hello from thread %d\n", omp_get_thread_num());
     } // thread order not fixed. after execution, threads synchronize & terminate
 
-
     // for loop, iteration variable i is implicitly private during loop
     #pragma omp parallel for
         for (i=0; i<n; i++) { ... }
@@ -1027,10 +1090,9 @@ int main(int argc, char* argv[]) {
     #pragma omp parallel for
         for (i = 0; i < n; i++)
         #pragma omp atomic { sum += i }
-
-    return 0;
 }
 ```
+// return 0; // weggelassen
 
 / For Loop: OpenMP handles oversubscription (too many threads).
 / Reduction across threads:
@@ -1060,8 +1122,7 @@ int sum = 0;
 ```c
 int numprocs, rank; int iam = 0, np = 1;
 MPI_Init(&argc, &argv);
-MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
-MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+MPI_Comm_size(MPI_COMM_WORLD, &numprocs); MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 #pragma omp parallel default(shared) private(iam, np) {
   np = omp_get_num_threads(); iam = omp_get_thread_num();
   printf("I am T %d out of %d from P %d out of %d\n", iam, np, rank, numprocs);
@@ -1161,3 +1222,4 @@ $0.05 + 0.95 dot 64 = underline(60.85)$
     mpiexec -n $SLURM_NTASKS --mca btl self,vader ./hello
     ```
 }
+/ Compilation & Execution: ```sh mpicc HelloCluster.c && mpiexec -c 24 a.out && sbatch -hi.sub```
