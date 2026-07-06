@@ -3,6 +3,8 @@
 #import "../template--additional-formatting-templates.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
+// #import "./helpers.typ": *
+
 // /*
 // Compiled with Typst 0.13.1
 #import "../template_cheatsheet.typ": *
@@ -30,12 +32,12 @@
     // nicht anzeigen
 ]
 
-// #let hinweis(body) = [
-//     #set text(
-//         style: "italic",
-//     )
-//     #body
-// ]
+#let hinweis(body) = [
+    #set text(
+        style: "italic",
+    )
+    #body
+]
 
 #let hinweis2(body) = [
     #set text(
@@ -62,6 +64,7 @@
 #let mt1() = [
     #v(-1em)
 ]
+
 // = Massive Parallelism
 
 = GPU (Graphics Processing Unit)
@@ -124,7 +127,7 @@
     What is the _throughput_ (pipelined)? Every #tcolor("orange", "60ms") an operation is finished.\
     Throughput = $1\/60$ operations/ms.
 
-== CPU vs GPU
+// == CPU vs GPU
 #table(
     columns: (39%, auto),
     table.header[CPUs][GPUs],
@@ -240,6 +243,7 @@ void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
 */
 #let bound-content = {
     [
+        #v(-8em)
         *Compute Bound*
         #image("img/compute-bound.svg")
         *Memory Bound*
@@ -273,7 +277,7 @@ void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
     The arithmetic intensity is therefore $#fxcolor("orange", "2") / #fxcolor("grün", "12") =
     #fxcolor("orange", "1") / #fxcolor("grün", "6")$.
 ]
-#mt1()
+// #mt1()
 === Roofline model
 Provides performance estimates of a kernel running on differently sized architectures.
 Has three parameters: Peak performance, peak bandwidth vs. arithmetic intensity.\
@@ -283,7 +287,7 @@ the horizontal and diagonal lines meet = minimum Ar.Int. required to achieve the
 
 // #image("img/parprog_9.png", width: 90%)
 #image("img/roofline-model.svg", width: 90%)
-
+#colbreak()
 = GPU Architecture
 Because there are so _many cores_ on GPUs, it is possible to run many threads in parallel
 _without context switches_. This allows better parallelism without a performance penalty.
@@ -392,7 +396,7 @@ _Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
     ```cpp
     __global__
     void VectorAddKernel(float *A, float *B, float *C) {
-      //index based on (blockID, threadID),   1D/2D Grid
+      // index based on (blockID, threadID),   1D/2D Grid
       int i = blockIdx.x * blockDim.x + threadIdx.x;
       if (i < N) {  C[i] = A[i] + B[i];  }
     }
@@ -622,11 +626,9 @@ Cluster programming is the _highest possible parallel acceleration_ #hinweis[(Fa
     Network of _powerful_ computing nodes, firmly connected at one location.\
     Very _fast interconnect_ #hinweis[(like 100GBit/s)], used for big simulations #hinweis[(Fluids, Weather, Traffic, etc.)]\
 / SPMD:
-    This is the most ly used programming model, "high level".\
+    This is the mostly used programming model, "high level".\
     _Single Program_ #hinweis[(All tasks execute their copy of the same program simultaneously)],
-    _Multiple Data_ #hinweis[(all tasks may use different data)].
-    The MPI program is started in several processes. All processes start and terminate
-    synchronously. Synchronization is done with barriers.\
+    _Multiple Data_ #hinweis[(all tasks may use different data)]. (with MPI below) \
 / MPMD:
     Also a "high level" programming model.
     _Multiple Program_ #hinweis[(Tasks may execute different programs simultaneously)],
@@ -643,8 +645,10 @@ Cluster programming is the _highest possible parallel acceleration_ #hinweis[(Fa
     _direct access_ only to its _own data_ #hinweis[(variables are private)].
     Inter-Process-Communication by sending and receiving messages.\
 / SPMD in MPI:
+     // The MPI program is started in several processes.
     All processes run their _own local copy_ of the program & data. Each process has a _unique
-    identifier_, processes can take _different paths_ through the program depending on their IDs.
+    identifier_ (rank), processes can take _different paths_ through the program depending on their IDs.
+    All processes start and terminate synchronously. Synchronization is done with barriers.
     Usually, _one process per core_ is used #hinweis[(to maximize the benefit of parallelization)].\
 / Formalizing Message:
     A message transfers a number of data items from the memory of one process to the memory of
@@ -709,8 +713,6 @@ Cluster programming is the _highest possible parallel acceleration_ #hinweis[(Fa
                 ],
                 [
                     #v(-1.7em)
-                    // TODO:
-                    // #image("/assets/image-1.png")
                     #image("img/mpi_bcast.svg", width: 50pt)
                 ],
             )
@@ -1131,3 +1133,31 @@ _The number of processors and the problem size is increased_. Mostly used for la
 ==== Example:
 $64$ Processors. $5%$ of the program is serial, Scaled weak speedup?\
 $0.05 + 0.95 dot 64 = underline(60.85)$
+
+= CLI Commands
+#{
+    // color comment for shell:
+    let color_comment = rgb("#008209")
+    show raw.line: it => {
+        let t = it.text
+        if t.starts-with("#") {
+            text(fill: color_comment)[#t]
+        } else {
+            it
+        }
+    }
+    ```bash
+    mpicc -o hello hello.c
+    sbatch script.sub
+    # with slurm for workload distribution, result as slurm file
+    #!/usr/bin/env bash
+    #SBATCH --job-name=compare
+    #SBATCH --time=01:00:00
+    #SBATCH --ntasks=60
+    #SBATCH --nodes=3
+    #SBATCH --partition=nodes
+    module purge
+    module load gcc-toolchain openmpi # -n = number of processes
+    mpiexec -n $SLURM_NTASKS --mca btl self,vader ./hello
+    ```
+}

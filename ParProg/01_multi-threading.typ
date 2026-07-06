@@ -43,6 +43,8 @@
     #body
 ]
 
+
+
 // /*
 
 = Concepts of Concurrency
@@ -286,22 +288,22 @@ has _fairness-problems_ and _no shared locks_.\
 )
 
 = Hazards and conditions of correctness
-
 _DR + RC_ = Erroneous behaviour,
 _No DR + RC_ = Erroneous behaviour,
 _No RC + DR_ = Program works correctly, but formally incorrect, _No RC + No DR_ = Correct behaviour
-==== Race Conditions (safety)
-_Insufficiently synchronized access to shared resources._ The _order of events_ affects the
-_correctness_ of the program. Leads to _non-deterministic behavior_.
+#v(-0.5em)
+/ Race Conditions (safety):
+    _Insufficiently synchronized access to shared resources._ The _order of events_ affects the
+    _correctness_ of the program. Leads to _non-deterministic behavior_.
 // Can occur without data race, but data race is often the cause.
-\
-*Race Condition without data race:* critical section is not protected. Data Race is eliminated using synchronization, but there
-is no synchronization over larger blocks, so race conditions are still possible
-#hinweis[(i.e. non-atomic incrementing)].
+/ Race Condition without data race:
+    critical section is not protected. Data Race is eliminated using synchronization, but there
+    is no synchronization over larger blocks, so race conditions are still possible
+    #hinweis[(i.e. non-atomic incrementing)].
 
-==== Data Race
-Two threads in a single process _access the same variable_ concurrently without synchronization,
-at least one of them is a _write access_.
+/ Data Race:
+    Two threads in a single process _access the same variable_ concurrently without synchronization,
+    at least one of them is a _write access_.
 
 == Thread Safety
 / Dispensable cases in synchronization:
@@ -323,65 +325,64 @@ Happens when threads lock each other out, prohibiting both from running.
 Programs with potential deadlock are not considered correct.
 Threads can suddenly block each other.
 
+#v(-0.5em)
 #columns(2)[
     ```java
     // Thread 1
     synchronized(listA) {
       synchronized(listB) {
-        listB.addAll(listA);
-    }}
+        listB.addAll(listA); }}
     ```
     #colbreak()
     ```java
     // Thread 2
     synchronized(listB) {
       synchronized(listA) {
-        listA.addALl(listB);
-    }}
+        listA.addALl(listB); }}
     ```
 ]
-
+#v(-0.25em)
 Both threads in this scenario have _locked each other out_, the program cannot continue.\
-*Livelock:*
-Threads have blocked each other permanently, but still execute wait instructions and therefore
-consume CPU during deadlock.
 
-#columns(2)[
-    ```java
-    // Thread 1
-    b = false; while(!a) { } ... b = true;
-    ```
-    #colbreak();
-    ```java
-    // Thread 2
-    a = false; while(!b) { } ... a = true;
-    ```
-]
-
-
-#wrap-content(
-    image("img/resource-graph-cycle.svg"),
-    align: top + right,
-    columns: (70%, 30%),
-)[
-    === Resource Graph
-    #grid(
-        columns: (1fr, 1fr),
-        gutter: 3pt,
-        [Thread T _waits for Lock_ of Resource R
-            #v(-2pt)
-            // Text ist nicht mehr mittig :'( muss Grafik anpassen
-            #image("img/resource-graph-1.svg", height: 11pt)],
-        [Thread T _acquires Lock_ of Resource R\
-            #v(-2pt)
-            #image("img/resource-graph-2.svg", height: 11pt)
-            #v(-3em)
-        ],
-    )
-    Deadlocks can be identified by _cycles in the resource graph_.\
-    / Deadlock Avoidance:
-        Introduce _linear blocking order_, lock nested only in ascending order.  Or use _coarse granular locks_ #hinweis[(e.g. block the whole Bank to block all accounts)]
-]
+/ Livelock:
+    Threads have blocked each other permanently, but still execute wait instructions and therefore
+    consume CPU during deadlock.
+    #v(-0.5em)
+    #columns(2)[
+        ```java
+        // Thread 1
+        b = false; while(!a) { } ... b = true;
+        ```
+        #colbreak();
+        ```java
+        // Thread 2
+        a = false; while(!b) { } ... a = true;
+        ```
+    ]
+/ Resource Graph:
+    #v(-0.5em)
+    #wrap-content(
+        image("img/resource-graph-cycle.svg"),
+        align: top + right,
+        columns: (70%, 30%),
+    )[
+        #grid(
+            columns: (1fr, 1fr),
+            gutter: 3pt,
+            [Thread T _waits for Lock_ \ of Resource R
+                #v(-2pt)
+                #image("img/resource-graph-1.svg", height: 10pt)],
+            [Thread T _acquires Lock_  \ of Resource R\
+                #v(-2pt)
+                #image("img/resource-graph-2.svg", height: 10pt)
+                #v(-3em)
+            ],
+        )
+    ]
+    #v(-2.8em)
+    Deadlocks can be identified by _cycles in the resource graph_.
+/ Deadlock Avoidance:
+    Introduce _linear blocking order_, lock nested only in ascending order.  Or use _coarse granular locks_ #hinweis[(e.g. block the whole Bank to block all accounts)]
 
 == Starvation (liveness)
 Thread never gets chance to access a resource.
@@ -413,13 +414,13 @@ _Avoidance:_ Use fair synchronization constructs. #hinweis[(Aging, Enable fairne
 == Java Memory Model (JMM)
 Interleaving-based semantics. Minimum warranties: _Atomicity, Visibility and Ordering_.
 
-=== Atomicity
+==== Atomicity
 An _atomic_ action is one that happens _all at once_ #hinweis[(So no thread interference)].
 Java guarantees that read/writes to primitive data types up to 32 Bit, Object-References
 #hinweis[(strings etc.)] and long and double #hinweis[(with `volatile` keyword)] are atomic.
 _A single read/write is atomic._ Atomicity does _not imply visibility_.
 
-=== Visibility
+==== Visibility
 Guaranteed visibility between threads.
 _Lock Release & Acquire_ #hinweis[(Memory writes before release are visible after acquire)],
 _`volatile` Variable_ #hinweis[(Memory writes up to and including the write to volatile
@@ -428,7 +429,7 @@ _Thread/Task-Start and Join_ #hinweis[(Start: input to thread; Join: thread resu
 _Initialization of `final` variables_ #hinweis[(Visible after completion of the constructor)],
 _`final` fields_.\
 
-=== Java Ordering
+==== Java Ordering
 / Java Happens Before:
     "Happens before" defines the _ordering and visibility guarantees_ between actions in a program.
     It ensures that changes made by one thread become visible to others.
@@ -442,9 +443,10 @@ _`final` fields_.\
 // *Read after write dependency*.
 // TODO
 
-== Synchronization in Memory Model
+== Synchronization in Memory Model (Lock-Free, Atomic)
 / Rendez-Vous:
     Primitive attempt to synchronize threads.
+    #v(-0.5em)
     #grid(
         columns: (auto, auto),
         gutter: 10pt,
@@ -475,6 +477,7 @@ _`final` fields_.\
 
 
 / Spin-Lock with atomic Operation:
+    #v(-0.5em)
     ```java
     public class SpinLock {
       private final AtomicBoolean locked = new AtomicBoolean(false); // unlocked
@@ -482,24 +485,51 @@ _`final` fields_.\
       public void release() { locked.set(false); }
     }
     ```
-
 / Java Atomic Classes:
     Classes for boolean, Integer, Long, References and Array-Elements.
     Different kinds of atomic operations, _`addAndGet()`_, _`getAndAdd()`_ etc.\
-/ Operations on atomic data classes:
+/ Java Operations on atomic data classes:
     ```java boolean getAndSet(boolean newValue)```\
     Atomically sets to the given value and returns the previous value.\
     ```java boolean compareAndSet(boolean expect, boolean update)```\
     Sets `update` only when read value is equal to `expect`. Returns true when successful.\
+    #v(0.25em)
 / Optimistic Synchronization:
     #hinweis[(Read old value and then compare before writing if value is still the same. If not, retry)]
     #v(-0.75em)
     ```java
     do { oldV = v.get(); newV = result; } while(!v.compareAndSet(oldV, newV));
     ```
-    #v(0.5em)
+    #v(0.25em)
 / Lambda-Variants:
     ```java AtomicInteger s = new AtomicInteger(2); s.updateAndGet(x -> x * x);```
+
+==== C\# Lock-free bank account
+// #v(-0.5em)
+```cs
+public bool Withdraw(int amount) { int localB;  while (true) {
+    localB = Balance; /* Balance => Volatile.Read(ref _balance); */
+    Thread.MemoryBarrier(); if (amount > localB)  { return false; }
+    // if original _balance equals original local balance, the operation worked:
+    if (Interlocked.CompareExchange(ref _balance, localB - amount, localB)
+        == localB) { return true; }
+} /* while */ }
+```
+// ```java
+// // in java:
+// public boolean withdraw(int amount) {
+//   int localBalance;
+//   do {
+//     localBalance = balance.get();
+//     if (amount > localBalance) { // no reordering of this check, because atomic read above and below
+//       // we do not check if another thread has deposited enough money exactly at this point (after the read and before the return)
+//       return false;
+//     }
+//   } while(!balance.compareAndSet(localBalance, localBalance - amount));
+//   return true;
+// }
+// ```
+
 
 
 #let dotnet-half-fence-content = {
@@ -779,18 +809,39 @@ var right = threadPool.submit(() -> countPrimes(INPUT_SIZE / 2, INPUT_SIZE));
 int result = left.get() + right.get();
 ```
 
+==== Parallel Counting Example
+/ What is a good choice for number of submitted tasks and why?: the number of available processor cores, because we want to be able to achieve maximum performance, but also not to create unnecessarily many tasks, which would also degrade performance
+#v(-0.5em)
+// Demo Woche 4
+// System.out.println("Start");
+// long startTime = System.currentTimeMillis();
+```java
+public class FlatParallelCount { // parallel counting
+public static void main(String[] args) throws Exception {
+    var threadPool = new ForkJoinPool();  // countPrimes returns int:
+    Future<Integer> left = threadPool.submit(() -> countPrimes(2, SIZE / 2));
+    var right = threadPool.submit(() -> countPrimes(SIZE / 2, SIZE));
+    int result = left.get() + right.get();
+} }
+```
+// long endTime = System.currentTimeMillis();
+// System.out.println("Result: " + result + " primes");
+// System.out.println("Time: " + (endTime - startTime) + " ms");
+
+
 ==== Recursive Action/Task
 ```java
 // Sequential:
 int counter = 0; for (int n = 2; n < N; n++) { if (isPrime(n)) { counter++}};
 
 // Parallel and Recursive with RecursiveTask class:
-class CountTask extends RecursiveTask<Integer> { //RecursiveAction: void function
+class CountTask extends RecursiveTask<Integer> { // RecursiveAction: void function
   private final int lower, upper;
   private static final int THRESHOLD = 1; // configurable
   public CountTask(int lower, int upper) {
     this.lower = lower;    this.upper = upper;
   }
+  @Override
   protected Integer compute() { // TRESHOLD = avoid over-parallelizing
     if (lower == upper) { return 0; }
     if (lower + 1 == upper) {  return isPrime(lower) ? 1 : 0;  }
@@ -931,77 +982,90 @@ We should keep _parallel tasks short_ to better profit from this automatic perfo
 Wovon hängt die Anzahl Tasks bei beiden Verfahren ab?
 / .NET Parallel For: Anzahl freier Worker Threads
 / Java ForkJoinPool: Array-Länge und Threshold (bei RecursiveAction)
-
+// / Java Threshold: vermeide Überparallelisierung (over-parallelizing) > siehe code
 = Asynchronous programming
 / Unnecessary Synchrony:
     Blocking method calls are often used without need #hinweis[(Long running calculations, I/O calls, database or file accesses)]. With an _asynchronous call_, other work can continue while
     waiting on the result of the long operation.
-    #v(-0.5em)
-    ```cs
-    // C# .NET
-    var task = Task.Run(LongOperation); /* other work */ int result = task.Result;
-    ```
-
 / Kinds of Asynchronisms:
     _Caller-centric_ #hinweis2[("pull", caller waits for the task end and gets the result, blocking call)],
     _Callee-Centric_ #hinweis2[("push", Task hands over the result directly to successor / follower task)]
 
-/ Task Continuations:
-    Define task whose start is linked to the end of the predecessor task.
-    #v(-0.5em)
-    #grid(
-        columns: (auto, auto),
-        [
-            ```cs
-            // C# .NET
-            Task
-              .Run(task1)
-              .ContinueWith(task2)
-              .ContinueWith(task3);
-            ```
-        ],
-        [
-            ```java
-            // Java (there can be multiple Apply/AcceptAsync calls)
-            CompletableFuture    // tasks laufen im commonPool
-              .supplyAsync(() -> longOP) // returns CompletableFut.
-              .thenApplyAsync(v -> 2 * v) // returns value
-              .thenAcceptAsync(v -> ...println(v)); // prints value
-            ```
-        ],
-    )
+/ Task Continuations: C\#: ```cs Task .Run(task1) .ContinueWith(task2) .ContinueWith(task3) .Wait(); ```
+// Define task whose start is linked to the end of the predecessor task.
+// #v(-0.5em)
+// #grid(
+//     columns: (auto, auto),
+//     [
+//         ```cs
+//         // C# .NET
+//         Task
+//           .Run(task1)
+//           .ContinueWith(task2)
+//           .ContinueWith(task3)
+//           .Wait();// exception
+//         ```
+//     ],
+//     [
+//         ```java
+//         // Java (there can be multiple Apply/AcceptAsync calls)
+//         var future = CompletableFuture // tasks im commonPool
+//           .supplyAsync(() -> longOP) // returns CompletableFut.
+//           .thenApplyAsync(v -> 2 * v) // returns value
+//           .thenAcceptAsync(v -> ...println(v)); // prints value
+//         try { future.get(); } catch (ExecutionException e) {..}
+//         ```
+//     ],
+// )
+=== C\# Async Task
+```cs
+var task = Task.Run(LongOperation); /* other work */ int result = task.Result;
+```
+#v(-0.5em)
 / Multi-Continuation:
-    Continue when _all_ tasks are finished:\
+     // Continue when _all_ tasks are finished:\
     ```cs Task.WhenAll(task1, task2).ContinueWith(continuation);```\
-    Continue when _any_ of the tasks are finished
-    #hinweis[(other threads get lost after first thread is done)]:\
+    // Continue when _any_ of the tasks are finished
     ```cs Task.WhenAny(task1, task2).ContinueWith(continuation);```\
-    #hinweis[(Exceptions in fire & forget task get ignored,
-        i.e. ```cs Task.Run(() => { ...; throw e; })```)]\
+    (other threads get lost after first thread is done),
+    Exceptions in fire&forget task get ignored
+// i.e. ```cs Task.Run(() => { ...; throw e; }```\
 / Exception Handling:
-    Synchronously _`Wait()`_ for the _whole task-chain_ at the end.
-    _Register for unobserved exceptions_ with _`TaskScheduler.UnobservedTaskException`_
-    #hinweis[(Receives unhandled exceptions from fire & forget tasks)].
+     // Synchronously _`Wait()`_ for the _whole task-chain_ at the end.
+    _`Wait()`_ or _`TaskScheduler.UnobservedTaskException`_ (Registers for unobserved exceptions).
+    #hinweis[(Receives unhandled exceptions from fire&forget tasks)].
     Should be executed as soon as task object is dead #hinweis[(Garbage Collector)].
 
-== Java Async
-/ Java `CompletableFuture`:
-    _Modern asynchronous_ programming in Java. Also has _Multi-Continuation_ with
+=== Java Modern Async `CompletableFuture`
+// Java (there can be multiple Apply/AcceptAsync calls)
+```java
+var future = CompletableFuture // tasks im commonPool
+    .supplyAsync(() -> longOP) /* returns CompletableFut. */
+    .thenApplyAsync(v -> 2 * v).thenAcceptAsync(v -> ...println(v));
+try { future.get(); } catch (ExecutionException e) {..}
+```
+// / Java `CompletableFuture`:
+// _Modern asynchronous_ programming in Java. Also has _Multi-Continuation_ with
+/ Async: ```java runAsync()``` void Operation #hinweis[(can be nested)] ```java supplyAsync()``` returns value,\
+/ Continuation: \ ```java thenAccept()/``` ```java thenAcceptAsync()``` void Op., ```java thenApply()/``` ```java thenApplyAsync()``` returns value,\
+/ Multi-Continuation: \
     ```java CompletableFuture.allOf(future1, future2)``` and ```java CompletableFuture.any(...)```
-// / ```java future.get()```: can throw CancellationException, ExecutionException, InterruptedException
+// weitere Methoden, nicht angeschaut: https://hellokoding.com/java-8-completablefuture-supplyasync-tutorial-with-examples/
+// _takes result from supplyAsync and transforms it async:_ ```java thenApplyAsync() ```
+/ `future.get()`: can throw CancellationException, ExecutionException, InterruptedException
 
-/ Java `invokeLater`:
-    To be executed _asynchronously_ on the event dispatching thread.
-    Should be used when an _application thread_ needs to _update the GUI_.\
+/ Java `SwingUtilities.invokeLater(Runnable)`:
+    Executed _asynchronously_ on event dispatching thread.
+    Should be used when an _application thread_ needs to _update the GUI_.
 
-=== `Future<T>` `(implemented by CompletableFuture)`
-Represents a _future result_ #hinweis[(asynchronous)], Proxy #hinweis[for the result that may be not available yet because the task has not finished.]
+==== Future\<T\> (implemented by CompletableFuture)
+Represents _future result_ #hinweis[(asynchronous)], Proxy for result.
+//that may be not available yet because task has not finished.
 #v(-0.5em)
-/ _`.submit()`_: submits task into pool and launches task
-/ _`.get()`_: waits if necessary for computation to complete and then retrieves its result
-/ _`.cancel()`_: Attempts to cancel execution of this task, removes it from queue Task ends when a unhandled exception occurs. It is included in the `ExecutionException` thrown by `get()`.
+_`.submit()`_ submit task into pool + launch task, _`.get()`_ waits for computation to complete and then retrieves result (throws `InterruptedException`, `ExecutionException`), _`.cancel(boolean mayInterruptIfRunning)`_ Attempts to cancel task, but fails if already completed, cancelled or if running and argument false. Removes task from queue. `ExecutionException`
+// Attempts to cancel execution of task, removes it from queue,
+// Task ends when unhandled exception occurs. Is included in the `ExecutionException` thrown by `get()`.
 // #v(-0.5em)
-
 
 == Non-Blocking GUI's
 *Use case:*
@@ -1104,6 +1168,7 @@ _`await` for tasks_: "Non-blocking wait" on task-end / result.\
     _`Task<T>`_ #hinweis[(For methods having return value of type T)].\
 / Async without await:
     Execute long running operation explicitly in task with ```cs await Task.Run()```.
+    #v(-0.5em)
     ```cs
     public async Task<bool> IsPrimeAsync(long number) {
       return await Task.Run(() => { // ohne diesen return nicht async
@@ -1112,33 +1177,6 @@ _`await` for tasks_: "Non-blocking wait" on task-end / result.\
         } return true;
       }); }
     ```
-= Lock-free bank account
-```cs
-public bool Withdraw(int amount) { int localBalance;
-  while (true) { localBalance = Balance; // _balance is volatile
-    Thread.MemoryBarrier();
-    if (amount > localBalance) { return false; }
-    // when original balance is the same as our original local balance, the operation worked:
-    if (Interlocked.CompareExchange(ref _balance, localBalance - amount, localBalance) == localBalance) { return true; }
-} /* while */ }
-```
-// ```java
-// // in java:
-// public boolean withdraw(int amount) {
-//   int localBalance;
-//   do {
-//     localBalance = balance.get();
-//     if (amount > localBalance) { // no reordering of this check, because atomic read above and below
-//       // we do not check if another thread has deposited enough money exactly at this point (after the read and before the return)
-//       return false;
-//     }
-//   } while(!balance.compareAndSet(localBalance, localBalance - amount));
-//   return true;
-// }
-// ```
-
-
-
 
 
 
