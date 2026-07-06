@@ -303,16 +303,9 @@ arithmetic intensity. x and y need to be fetched from memory and the result z is
 / Maximum Threads = 1024: `VectorAddKernel<<<1, numElements>>>(d_A, d_B, d_C);`.
 // #mt1()
 === Roofline model
-
-#print-image(
-    [
-        // svg enthält ein eingebettetes Bild, sollte eigentlich gut druckbar sein
-        #v(-1em)
-        #image("img/roofline-model.svg", height: 65pt)
-        #v(-1em)
-    ],
-    colbreak(),
-)
+#v(-1em)
+#image("img/roofline-model.svg", height: 65pt)
+#v(-1em)
 
 Provides performance estimates of a kernel running on differently sized architectures.
 Has three parameters: Peak performance, peak bandwidth vs. arithmetic intensity.\
@@ -419,7 +412,7 @@ _Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
 === Data Partitioning within threads
 / Data Access:
     Each kernel decides which data to work on. The programmers decide data partitioning scheme.
-    `threadId.x/y/z` #hinweis[(Thread no. in block)],
+    `threadIdx.x/y/z` #hinweis[(Thread no. in block)],
     `blockId.x` #hinweis[(Block no.)],
     `blockDim.x` #hinweis[(Block size)]\
 / Partitioning in Blocks: \
@@ -633,7 +626,7 @@ shared memory for _all warps_ of the new block.\
     Avoid inperformant read/write action over different warp bursts.
 // Read/Write in different warp bursts, one action that spans multiple bursts. _Inperformant, avoid!_
 / Use Coalescing access as follows:
-    _`data[(Expression without threadId.x) + threadId.x]`_
+    _`data[(Expression without threadIdx.x) + threadIdx.x]`_
 / Coalescing with Matrices:
     Matrices get linearized to a 1D array. The row of the matrix should be the longer side so that there are as many coalescing accesses as possible.
 // #v(-1em)
