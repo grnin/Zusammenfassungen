@@ -1,6 +1,5 @@
-// Compiled with Typst 0.13.1
+// Compiled with Typst 0.15.1
 #import "../template_zusammenf.typ": *
-#import "@preview/wrap-it:0.1.1": wrap-content
 
 #show: project.with(
   authors: ("Nina Grässli", "Jannis Tschan"),
@@ -25,7 +24,6 @@
 
 #{
   set quote(block: true, quotes: false)
-  show quote: set par(justify: false)
   show quote: set align(center)
   show quote: set pad(x: 14em, y: 20em)
   quote(attribution: [eure Nina])[
@@ -36,8 +34,10 @@
 
 #pagebreak()
 
-#hinweis[*Hinweis:* In der Zusammenfassung werden Anweisungen zur Taschenrechnerbenutzung gegeben. Diese beziehen sich auf
-den TI nSpire CX II-T und das Skript auf #underline[https://github.com/takotori/StudentenportalSpick].]
+#hinweis[
+  *Hinweis:* In der Zusammenfassung werden Anweisungen zur Taschenrechnerbenutzung gegeben. Diese beziehen sich auf
+  den TI nSpire CX II-T und das Skript auf #underline[https://github.com/takotori/StudentenportalSpick].
+]
 
 = Grundlagen
 Durch Experimente soll ein besseres Verständnis der realen Welt und deren Zusammenhänge erhalten werden,
@@ -57,7 +57,7 @@ Praktisches Problem #sym.arrow Statistisches Problem #sym.arrow Statistische Lö
 - _Zufälliger Fehler:_ nicht kontrollierbar, schwankendes Ergebnis #hinweis[(Messfehler)]
 
 == Modell nach Design of Experiments (DoE)
-Methodik zur systematischen Planung und statistischen Auswertung von Experimenten
+Das DoE ist eine Methodik zur systematischen Planung und statistischen Auswertung von Experimenten.
 - _Zielgrössen:_ Ergebnis eines Versuchs, Messwerte oder daraus berechnete Grössen, mehrere pro Versuch möglich
 - _Einflussgrössen:_ Können Zielgrössen in Experiment beeinflussen
   - _Steuergrössen:_ Können beeinflusst werden #hinweis[(z.B. Temperatur in Schmelzofen, RAM-Grösse etc.)]
@@ -69,28 +69,25 @@ Methodik zur systematischen Planung und statistischen Auswertung von Experimente
 - _Simulation:_ Durchführen von Experimenten am Modell anstatt am realen System
 
 === Vorgehensweise
-#{
-  set par(justify: false)
-  grid(
-    [
-      + Ausgangssituation und Problem beschreiben
-      + Untersuchungsziel festlegen
-      + Zielgrössen und Faktoren festlegen
-      + Entscheidung treffen, ob das Problem _analytisch-mathematisch_ oder _experimentell_ gelöst werden soll
-      Falls das Problem _experimentell_ gelöst wird:
-      5. Versuchsplan aufstellen
-      + Blockbildung #hinweis[(Aufteilung der Versuchsobjekte anhand eines Merkmals in Blöcke, vermindert Fehlervarianz)]
-    ],
-    [
-      7. Aufwandsabschätzung
-      + _Durchführungsplanung_, falls Experiment _am realen Objekt_, _Modell erstellen_, falls Experiment am _Modell_
-      + Versuche durchführen
-      + Versuchsergebnisse auswerten
-      + Ergebnisse interpretieren und Massnahmen ableiten
-      + Absicherung, Dokumentation und weiteres Vorgehen
-    ],
-  )
-}
+#grid(
+  [
+    + Ausgangssituation und Problem beschreiben
+    + Untersuchungsziel festlegen
+    + Zielgrössen und Faktoren festlegen
+    + Entscheidung treffen, ob das Problem _analytisch-mathematisch_ oder _experimentell_ gelöst werden soll
+    Falls das Problem _experimentell_ gelöst wird:
+    5. Versuchsplan aufstellen
+    + Blockbildung #hinweis[(Aufteilung der Versuchsobjekte anhand eines Merkmals in Blöcke, vermindert Fehlervarianz)]
+  ],
+  [
+    7. Aufwandsabschätzung
+    + _Durchführungsplanung_, falls Experiment _am realen Objekt_ bzw. _Modell erstellen_, falls Experiment am _Modell_
+    + Versuche durchführen
+    + Versuchsergebnisse auswerten
+    + Ergebnisse interpretieren und Massnahmen ableiten
+    + Absicherung, Dokumentation und weiteres Vorgehen
+  ],
+)
 
 ==== Ausgangssituation und Problem beschreiben (1)
 - Wer ist Kunde? Wer ist Konkurrenz? Was braucht der Kunde? Was ist die Verbesserung?
@@ -105,10 +102,9 @@ Methodik zur systematischen Planung und statistischen Auswertung von Experimente
 #pagebreak()
 
 ==== Untersuchungsziel festlegen (2)
-- _Optimale Lage des Mittelwerts:_ Das Prozessergebnis oder ein Produktparameter sollen einen
-  bestimmten Wert annehmen
+- _Optimale Lage des Mittelwerts:_ Das Prozessergebnis oder ein Produktparameter sollen einen bestimmten Wert annehmen
 - _Reduzierung der Streuung/Robustheit:_ Oft ist weniger die Lage des Mittelwerts des Prozessergebnisses
-  problematisch als dessen Streuung
+  problematisch, als dessen Streuung
 - _Erkennen der wichtigsten Störgrössen:_ Durch systematische Beobachtungen (der Fertigung) und einfache Versuche herausfinden
 - _Gleichzeitig machen und lernen:_ Durch systematische Veränderung der Prozessparameter im laufenden Prozess
   können Verbesserungsmöglichkeiten erkannt werden
@@ -120,8 +116,8 @@ Methodik zur systematischen Planung und statistischen Auswertung von Experimente
 - _Vollständigkeit:_ Alle wesentlichen Prozessergebnisse bzw. Produkteigenschaften müssen als Zielgrössen erfasst werden
 - _Verschiedenheit:_ Möglichst wenige und möglichst unterschiedliche Zielgrössen definieren
 
-_Auswahl der Zielgrössen:_ Auswahl erfolgt in zwei Schritten: Zuerst möglichst viele Einflussgrössen mittels Brainstorming
-sammeln und anschliessend auf eine handhabbare Anzahl reduzieren.\
+_Auswahl der Zielgrössen:_ Die Auswahl erfolgt in zwei Schritten: Zuerst möglichst viele Einflussgrössen mittels Brainstorming
+sammeln und anschliessend diese auf eine handhabbare Anzahl reduzieren.\
 Beim Brainstorming helfen Prozessablaufdiagramme, Ursache-Wirkungs-Diagramme, Einflussgrössen-Zielgrössen-Matrizen etc.
 
 === Beispiel
@@ -129,8 +125,9 @@ Zur Fertigung einer bestimmten Chemikalie werden mehrere Ausgangsstoffe einschli
 vermischt. Die Mischung wird anschliessend über längere Zeit unter Rühren erhitzt, dabei erfolgt die Reaktion.
 Dann wird das Reaktionsprodukt abgetrennt.
 
-Ziel ist eine _Erhöhung der Ausbeute bei möglichst geringen Kosten_. Unten ein Auszug aus der Liste der Einflussgrössen,
-mit den Einschätzungen des Teams zur Grösse ihres Einflusses auf die beiden Zielgrössen "Ausbeute" und "Kosten".
+Ziel ist eine _Erhöhung der Ausbeute bei möglichst geringen Kosten_. Unten in der Tabelle befindet sich ein Auszug
+aus der Liste der Einflussgrössen, zusammen mit den Einschätzungen des Teams zur Grösse ihres Einflusses auf die beiden
+Zielgrössen "Ausbeute" und "Kosten".
 Aus der Fertigungsüberwachung ist bekannt, dass die Standardabweichung der Ausbeute aufgrund der Zufallsstreuung
 $sigma = 1%$ beträgt, wenn ein Ausbeute-Unterschied von $2%$ relevant ist.
 
@@ -154,7 +151,8 @@ Im Beispiel werden die obersten 3, _Temperatur_, _Reaktionszeit_ und _Katalysato
 ==== Faktorstufen
 - _Kleiner Abstand_ zwischen den Stufen ergibt ein _kleiner Unterschied der Ergebnisse_. Ein _grosser Abstand_ führt zu
   _Abweichungen der Ergebnisse_ von der Linearität.
-- Kann ein Faktor _nicht genau gemessen_ werden, sollte der Abstand der Faktorstufe _mindestens *$6 sigma$*_ sein.
+- Kann ein Faktor _nicht genau gemessen_ werden, sollte der Abstand der Faktorstufe _mindestens *$6 sigma$*_ sein
+  #hinweis[(in diesem Beispiel also $>6%$)].
 - Eine _Extrapolation_ der Ergebnisse über den untersuchten Bereich hinaus ist nicht zulässig, daher sollte
   die Untersuchung _den interessanten Bereich_ enthalten.
 
@@ -162,7 +160,7 @@ Im Beispiel werden die obersten 3, _Temperatur_, _Reaktionszeit_ und _Katalysato
 = Fehlerfortpflanzung
 Fehler können nur _geschätzt_, nicht berechnet werden. Um den Bereich abzuschätzen, in denen der tatsächliche Wert
 maximal oder mit einer gewissen Wahrscheinlichkeit liegt, verwendet man _Fehlerrechnung_ bzw. Fehlerfortpflanzung.
-Der Fehler wird jeweils mit $Delta$ gekennzeichnet.\
+Der Fehler wird jeweils mit $Delta$ #hinweis[(grosses Delta)] gekennzeichnet.\
 Man unterscheidet zwischen dem _maximalen_ und dem _wahrscheinlichen_ Fehler.
 
 == Impliziter Fehler
@@ -170,20 +168,22 @@ Oft wird der Fehler nicht explizit angegeben. Dann basiert die Genauigkeit auf d
 Mindestens 0.5 Einheiten _nach der letzten Stelle_ bis maximal 2-4 Einheiten _der letzten Stelle_ nach dem Punkt.
 
 *Beispiele:*
-- $t = 15.32s => Delta t = [plus.minus 0.005s; plus.minus 0.04s]$
-- $t = 15.3s => Delta t = [plus.minus 0.05s; plus.minus 0.4s]$
-- $t = 15.320s => Delta t = [plus.minus 0.0005s; plus.minus 0.004s]$
+$
+   t = 15.32s quad => quad Delta t & = [plus.minus 0.005s; plus.minus 0.04s] \
+    t = 15.3s quad => quad Delta t & = [plus.minus 0.05s; plus.minus 0.4s] \
+  t = 15.320s quad => quad Delta t & = [plus.minus 0.0005s; plus.minus 0.004s]
+$
 
 == Maximaler Fehler
 Der maximale Fehler in der Fehlerfortpflanzung bezeichnet den _grössten möglichen Fehler_, der bei der Berechnung
 eines Ergebnisses von mehreren Messwerten entstehen kann. Will man diesen _Fehler reduzieren_, verbessert man
 möglichst diejenigen Messwerte, welche in der Berechnung am grössten sind.
 #hinweis[(z.B. in einer Formel $a\/b^2$ sollte man die Genauigkeit von $b$ verbessern, da es durch das Quadrieren einen
-grösseren Einfluss auf das Resultat als $a$ hat)]
+  grösseren Einfluss auf das Resultat als $a$ hat)]
 
 === Absoluter Fehler
 Beim absoluten Fehler wird die Abweichung in _derselben Masseinheit_ angegeben wie der Wert.
-Wird meist bei _Messergebnissen_ angegeben. Wird auch als $m_"abs"$ bezeichnet.
+Wird meist bei _Messergebnissen_ angegeben. Wird mit $m_"abs"$ bezeichnet.
 
 *Beispiel:*
 $
@@ -194,8 +194,8 @@ $
 === Relativer Fehler
 Der relative Fehler ist ein _Prozentwert_, also _einheitslos_. Durch den relativen Fehler kann bestimmt werden,
 welcher Wert den _grössten Anteil am Gesamtfehler_ hat, also am ehesten optimiert werden sollte.
-Er wird sowohl verwendet, um ein _Gefühl für die Messgenauigkeit_ zu bekommen als auch bei _Messgeräten_ als _Angabe_
-auf den _eingestellten Messbereich_. Wird auch als $m_"rel"$ bezeichnet.
+Er wird sowohl verwendet, um ein _Gefühl für die Messgenauigkeit_ zu bekommen, als auch bei _Messgeräten_ als _Angabe_
+auf den _eingestellten Messbereich_. Wird mit $m_"rel"$ bezeichnet.
 
 *Absoluten in relativen Fehler umwandeln:*
 $
@@ -213,10 +213,10 @@ $
 Partielle Differentiation ($(delta f)/(delta x)$) ist eine _Ableitung_ eines Terms mit _mehreren Variablen_.
 Dabei wird nach jeder Variable in einer eigenen Rechnung abgeleitet, wobei die anderen Variablen wie Konstanten behandelt werden.
 Mithilfe dieser Methode kann der Gesamtfehler eines Terms mit mehreren Variablen bestimmt werden.\
-#hinweis[TR: Wie normale Ableitung (Menü #sym.arrow 4 #sym.arrow 1), aber es müssen explizit Mal-Zeichen gesetzt werden.] \
+#hinweis[TR: Wie normale Ableitung berechnen (Menü #sym.arrow 4 #sym.arrow 1), aber es müssen explizit Mal-Zeichen gesetzt werden.] \
 
 #hinweis[Anmerkung: Im Skript wird die Notation $display((delta x)/(delta y))$ bzw. $delta x$ für eine
-partielle Ableitung verwendet. $space display((delta f)/(delta x) equiv dif/(dif x)(f))$]
+  partielle Ableitung verwendet. $space display((delta f)/(delta x) equiv dif/(dif x)(f))$]
 
 #pagebreak()
 
@@ -230,9 +230,9 @@ in den absoluten Fehler _umwandeln_. Bei _Produkten & Quotienten addieren_ sich 
   #grid(
     columns: (0.6fr, 1fr),
     align: horizon,
-    [$ Delta f = sum_(i=1)^n abs((delta f)/(delta x_i) dot Delta x_i) $],
+    $ Delta f = sum_(i=1)^n abs((delta f)/(delta x_i) dot Delta x_i) $,
     [
-      *_$x_i$_*: Steuergrösse(n) ohne absolutem Fehler\
+      *_$x_i$_*: Steuergrösse(n) ohne absoluten Fehler\
       *_$f$_*: Formel, welche Multiplikation/Division mit Steuergrössen enthält\
       *_$delta f\/delta x_i$_*: Partielle Ableitung von $f$ mit $x_i$\
       *_$Delta x_i$_*: Absoluter Fehler der Steuergrösse $x_i$
@@ -245,30 +245,30 @@ in den absoluten Fehler _umwandeln_. Bei _Produkten & Quotienten addieren_ sich 
 
 *Gegeben:* $W = display(m/2 - D/8), quad m = 0.300"kg" plus.minus 0.002"kg", quad D = 10.0"kg" plus.minus 0.5"kg"$
 
-+ Fehler in Formel einsetzen, ausrechnen.
++ Den absoluten Fehler als Werte in die Formel einsetzen und ausrechnen.
 $ W = m_"abs"/ 2 - D_"abs" / 8 = 0.002 / 2 + 0.5 / 8 = 0.001 + 0.0625 = underline(0.0635"kg") $
 
 *Beispiel Multiplikation und Division: Was ist der gesamte relative Fehler?* \
 #hinweis[Relativer Fehler für die Berechnung verwenden]\
 *Ausgangslage:*
-Es gibt meist eine Formel mit Multiplikation/Division sowie mehrere Steuergrössen mit einem absoluten Fehler.\
+Es gibt meist eine Formel mit Multiplikation/Division, sowie mehrere Steuergrössen mit einem absoluten Fehler.\
 *Gegeben:*
-Formel $g = display((4 pi^2 l)/t^2), quad l = 784"mm" plus.minus 2"mm", quad t = 17.7s plus.minus 0.1s$
+Formel: $g = display((4 pi^2 l)/t^2), space$ Steuergrössen: $space l = 784"mm" plus.minus 2"mm", quad t = 17.7"s" plus.minus 0.1"s"$
 
-1. Partielle Ableitung der Formel nach Steuergrössen ($l,t$) durchführen #hinweis[(siehe Kapitel @part-diff)]
-$ (delta g)/(delta t) = (-8 pi^2 l)/t^3, quad (delta g)/(delta l) = (4 pi^2)/t^2 $
+1. Partielle Ableitung der Formel nach Steuergrössen ($l,t$) durchführen #hinweis[(siehe Kapitel @part-diff)].
+$ (delta g)/(delta t) = (-8 pi^2 l)/t^3 quad quad quad (delta g)/(delta l) = (4 pi^2)/t^2 $
 
 2. Formel anwenden, um den absoluten Fehler $Delta g$ der Formel $g$ zu erhalten.
 $
   Delta g = abs((-8 pi^2 l)/t^3 dot Delta t) + abs((4 pi^2)/t^2 dot Delta l)
-  = abs((-8 pi^2 dot 784"mm")/(17.7s^3) dot 0.1s) + abs((4 pi^2)/(17.7^2) dot 2"mm")
-  = 1.368 "mm"\/s^2
+  = abs((-8 pi^2 dot 784"mm")/((17.7"s")^3) dot 0.1"s") + abs((4 pi^2)/((17.7"s")^2) dot 2"mm")
+  = 1.368 "mm/s"^2
 $
 
-3. Relative Fehler der gewünschten Formel ausrechnen
+3. Relativer Fehler der gewünschten Formel ausrechnen.
 $ (Delta g) / g = 1.368 \/ (4 pi^2 dot 784)/(17.7^2) = 0.01385 = underline(1.38%) $
 
-#hinweis[TR: Seite 2.3 - Formel und Werte eingeben, gibt den relativen Fehler zurück]
+#hinweis[TR: Skript auf Seite 2.3 -- Formel und Werte eingeben, gibt den relativen Fehler zurück]
 
 *Beispiel Multiplikation und Division: Was ist der gesamte absolute Fehler?*\
 #hinweis[Relativer Fehler für die Berechnung verwenden]
@@ -279,51 +279,51 @@ Formel $g = display((4 pi^2 l)/t^2), quad g_"rel" = 1.383%, quad l = 784"mm" plu
 1. Werte ohne Verwendung des Fehlers in Formel einsetzen\
 $ g = (4 pi^2 dot 784) / (17.7)^2 = 98.794 "mm"\/s^2 $
 2. Resultat durch 100 teilen und mit relativem Fehler multiplizieren\
-$ g_"abs" = 98.794 \/ 100 dot 1.383% = 1.366 space => space underline(98.789 "mm"\/s^2 plus.minus 1.366 "mm"\/s^2) $
+$
+  g_"abs" = g/100 dot g_"rel" = 98.794 / 100 dot 1.383% = 1.366 quad => quad underline(98.789 "mm"\/s^2 plus.minus 1.366 "mm"\/s^2)
+$
 
 
 == Fehlergrenzen
 Die Fehlergrenzen bestimmen die _maximal mögliche Abweichung_ von einem Wert innerhalb einer _festen Intervallgrenze_.
-Sie können für _relative & absolute Fehler_ bestimmt werden.\
+Sie können für _relative und absolute Fehler_ bestimmt werden.\
 Aus dem _absoluten Fehler_ können die Intervallgrenzen gebildet werden, indem der absolute Fehler auf den Messwert
 angewendet wird und der Maximal- & Minimalwert des Messwertes _als Intervall_ angegeben wird.
 
-Zur Bestimmung gibt es _2 Methoden_: Minimal-/Maximalwert und partielle Differentiation.
+Zur Bestimmung gibt es _zwei Methoden_: Minimal-/Maximalwert und partielle Differentiation.
 Ersteres wird nicht empfohlen, da es bei mehreren Variablen schnell komplex wird.
 
 *Beispiel mit partieller Differentiation:*\
-Bei einer Messung werden folgende Werte gemessen. $W$ stellt eine Beziehung der gemessenen Werte dar.\
+Bei einer Messung werden folgende Werte gemessen. $W$ stellt eine _Beziehung_ der gemessenen Werte dar.\
 $
-  m = 0.300"kg" plus.minus 0.002"kg", space h = 0.3m plus.minus 0.002m, \
+  m = 0.300"kg" plus.minus 0.002"kg", quad h = 0.3m plus.minus 0.002m, \
   D = 10.0"kg"/s^2 plus.minus 0.5"kg"/s^2, quad g = 9.81m/s^2 plus.minus 0.01m/s^2, quad
   W = (m dot g dot h)/2+(D dot h^2)/8
 $
 
-+ Nach jeder Variable ableiten
-
-  #{
-    set list(spacing: 1.3em)
-    [
-      $
-        (delta W)/(delta m) & = dif/(dif m) ((m dot g dot h)/2 + (D dot h^2)/8) = (g dot h)/2 \
-        (delta W)/(delta g) & = dif/(dif g) ((m dot g dot h)/2 + (D dot h^2)/8) = (m dot h)/2 \
-        (delta W)/(delta h) & = dif/(dif h) ((m dot g dot h)/2 + (D dot h^2)/8) = (m dot g)/2
-                              + (D dot 2h) / 8 = (m dot g) / 2 + (D dot h) / 4 \
-        (delta W)/(delta D) & = dif/(dif D) ((m dot g dot h)/2 + (D dot h^2)/8) = h^2/8
-      $
-    ]
-  }
++ Die Formel nach jeder Variable ableiten
+  $
+    (delta W)/(delta m) & = dif/(dif m) ((m dot g dot h)/2 + (D dot h^2)/8) = (g dot h)/2 \
+    (delta W)/(delta g) & = dif/(dif g) ((m dot g dot h)/2 + (D dot h^2)/8) = (m dot h)/2 \
+    (delta W)/(delta h) & = dif/(dif h) ((m dot g dot h)/2 + (D dot h^2)/8) = (m dot g)/2
+                          + (D dot 2h) / 8 = (m dot g) / 2 + (D dot h) / 4 \
+    (delta W)/(delta D) & = dif/(dif D) ((m dot g dot h)/2 + (D dot h^2)/8) = h^2/8
+  $
 
 + Ableitungen und Fehler in Formel einsetzen
-
   $
     Delta W & = abs((g dot h)/2 dot Delta m) + abs(((m dot g)/2 + (D dot h)/4) dot Delta h)
               + abs(h^2/8 dot Delta D) + abs((m dot h)/2 dot Delta g) \
             & = abs((9.81 dot 0.3)/2 dot 0.002) + abs(((0.3 dot 9.81)/2 + (10 dot 0.3)/4) dot 0.002) + abs(0.3^2/8 dot 0.5)
               + abs((0.3 dot 0.3)/2 dot 0.01) \
-            & = 0.00294 + 0.00444 + 0.005626 + 0.00045 = plus.minus 0.0135 thin ("km" dot m^2)/s^2 \
-          W & = (0.554 plus.minus 0.0135) ("km" dot m^2)/s^2 = [0.541, 0.568] ("km" dot m^2)/s^2
+            & = 0.00294 + 0.00444 + 0.005626 + 0.00045 = plus.minus 0.0135 thin ("km" dot m^2)/s^2
   $
+
++ Nun können aus $Delta W$ die Fehlergrenzen gebildet werden
+  $
+    W = (0.554 plus.minus 0.0135) ("km" dot m^2)/s^2 quad => quad underline([0.541, 0.568] ("km" dot m^2)/s^2)
+  $
+
 
 == Wahrscheinlicher Fehler
 Der wahrscheinliche Fehler gibt ähnlich wie der maximale Fehler ein Fehlerintervall zu einem Messwert an.
@@ -339,8 +339,8 @@ dessen Wert sich definitiv in diesem Intervall befindet.
 - _Beschreibende Statistik:_ Vollständige Kenntnis über Untersuchungsobjekt
   #hinweis[(z.B. CPU-Load für alle Server der Firma bekannt)]
 - _Schliessende Statistik:_ Untersuchungsdaten liegen nur teilweise vor #hinweis[(z.B. repräsentative Umfragen)]
-- _Merkmalsträger:_ Gegenstand einer statistischen Untersuchung. Besitzt Merkmale.\
-  #hinweis[(Beispiele: Server, Werkmaschine, Personengruppe)]
+- _Merkmalsträger:_ Gegenstand einer statistischen Untersuchung. Besitzt Merkmale
+  #hinweis[(z.B. Server, Werkmaschine, Personengruppe)]
 - _Merkmal:_ Eine Eigenschaft, die bei einer statistischen Untersuchung eines Merkmalträgers von Bedeutung ist\
   #hinweis[(z.B. Ausfallzeit, Servicedauer, Kosten, Latenz, Geschlecht, Bildungsgrad...)]
 - _Merkmalswert:_ Der Wert eines Merkmals, der aufgrund Beobachtung, Messung oder Befragung festgestellt wurde.
@@ -352,7 +352,7 @@ dessen Wert sich definitiv in diesem Intervall befindet.
   - _Sachlich:_ Merkmalträger gleichen Typus #hinweis[(z.B. alle Maschinen eines Herstellers, alle Schüler einer Klasse, ...)]
 - _Urliste:_ Unsortierte, nicht aufbereitete Daten, die direkt von der Messung stammen.
 - _Primärstatistik:_ Erheben neuer Daten für die Untersuchung. Die erhobenen Daten sind optimal auf die Untersuchungsfrage
-  zugeschnitten, aber die Erhebung ist teuer & aufwändig.
+  zugeschnitten, aber die Erhebung ist teuer und aufwändig.
 - _Sekundärstatistik:_ Verwenden bereits vorhandener Daten für die Untersuchung. Günstiger, aber die Daten sind nicht auf
   die Fragestellung ausgerichtet und evtl. veraltet.
 - _Empirische Daten:_ Am realen Objekt gemessene Daten #hinweis[(durch Experiment, Messungen etc.)]
@@ -377,14 +377,18 @@ Die Merkmalswerte können nach einem bestimmten Ordnungsprinzip als _Werte_ in e
   [*Intervallskala*],
   [reelle Zahlen, Nullpunkt ist willkürlich, negative Werte möglich],
   [Der absolute Abstand zwischen Werten kann gemessen werden],
-  [Temperatur in °C #hinweis[-12, 0, 25,...] \ Uhrzeit #hinweis[20:00, 0:00, 09:35, ...]\
-    #hinweis[8:00 ist nicht doppelt so spät wie 4:00]],
+  [
+    Temperatur in °C #hinweis[(-12, 0, 25,...)]\
+    Uhrzeit #hinweis[(20:00, 0:00, 09:35, ...)]\ #hinweis[8:00 ist nicht doppelt so spät wie 4:00]
+  ],
 
   [*Verhältnisskala*],
   [reelle Zahlen, Nullpunkt ist absolut Null, keine negativen Werte],
-  [Der verhältnismässige Abstand (vielfaches) kann gemessen werden],
-  [Gewicht in kg #hinweis[0, 25, 98, ...]\ Temperatur in °K: #hinweis[0, 1, 300, ...]\
-    #hinweis[50kg ist doppelt so schwer wie 25kg]],
+  [Der verhältnismässige Abstand (Vielfaches) kann gemessen werden],
+  [
+    Gewicht in kg #hinweis[(0, 25, 98, ...)]\
+    Temperatur in °K #hinweis[(0, 1, 300, ...)]\ #hinweis[50kg ist doppelt so schwer wie 25kg]
+  ],
 )
 
 Die Intervall- & Verhältnisskala werden unter dem Oberbegriff _Kardinalskala (metrische Skala)_ zusammengefasst.
@@ -401,63 +405,65 @@ Die Intervall- & Verhältnisskala werden unter dem Oberbegriff _Kardinalskala (m
 )
 
 == Ablauf der Untersuchung
-Die _Experimentplanung_ besteht aus 3 Phasen: _Datenerhebung_, _Datenaufbereitung & -darstellung_ und
-_Datenanalyse & -interpretation_. In der Planungsphase muss festgelegt werden, welche _Merkmale_ bei welchen Merkmalsträgern
-mit welcher Technik zu erheben sind, welche _Aufbereitungsverfahren_ einzusetzen sind, welche _Daten-Darstellungsformen_
-zu verwenden ist und welche _statistischen Analyseverfahren_ angewendet werden.\
-Werden die Daten _gezielt und periodisch_ durch Experimente erfasst & gepflegt, spricht man von _Data Farming_.
+Die _Experimentplanung_ besteht aus 3 Phasen:
++ _Datenerhebung_
++ _Datenaufbereitung und Datendarstellung_
++ _Datenanalyse und Dateninterpretation_
+
+In der Planungsphase muss festgelegt werden, welche _Merkmale_ bei welchen Merkmalsträgern mit welcher Technik zu
+erheben sind, welche _Aufbereitungsverfahren_ einzusetzen sind, welche _Daten-Darstellungsformen_ zu verwenden sind
+und welche _statistischen Analyseverfahren_ angewendet werden.\
+Werden die Daten _gezielt und periodisch_ durch Experimente erfasst und gepflegt, spricht man von _Data Farming_.
 
 == Einfache Häufigkeitsverteilung
 Gibt an, _wie häufig_ ein Merkmalswert $x_i$ aufgetreten ist.
-#definition[
-  #grid(
+#definition(
+  grid(
     columns: (0.25fr, 1fr),
     inset: (left: 1em, top: 0.25em),
     align: horizon,
-    [
-      $
-                      n & = sum^v_(i=1) h_i \
-                    f_i & = h_i/n \
-        sum^n_(i=1) f_i & = 1
-      $
-    ],
+    $
+                    n & = sum^v_(i=1) h_i \
+                  f_i & = h_i/n \
+      sum^n_(i=1) f_i & = 1
+    $,
     [
       _$bold(h_i)$:_ Absolute einfache Häufigkeit, Anzahl Merkmalsträger mit Wert $x_i$\
       _$bold(f_i)$:_ Relative einfache Häufigkeit, Prozentanteil der Merkmalsträger mit Wert $x_i$\
       _$bold(n)$:_ Gesamtanzahl aller Merkmalsträger\
       _$bold(v)$:_ Anzahl verschiedener Merkmalswerte
+
+      Die Summe aller relativen einfachen Häufigkeiten ergibt immer 1, also 100%.
     ],
-  )
-]
+  ),
+)
+
 *Beispiel:* Verteilung der Alterskategorien der Mitarbeiter eines Spitals mit $n = 50$ Personen:\
 - *$h_1$:* $10$ Mitarbeiter in der Altersklasse $30 quad => quad bold(f_1) = h_1 \/ n = 10 \/ 50 = 20%$
 - *$h_2$:* $15$ Mitarbeiter in der Altersklasse $40 quad => quad bold(f_2) = h_2 \/ n = 15 \/ 50 = 30%$
 - *$h_3$:* $25$ Mitarbeiter in der Altersklasse $50 quad => quad bold(f_3) = h_3 \/ n = 25 \/ 50 = 50%$
 
-
 == Kumulierte Häufigkeitsverteilung
 Auch _Summenhäufigkeit_ genannt. Misst die Häufigkeit über verschiedene Messungen hinweg, indem sie alle bisherigen Messungen
 (die einfache Häufigkeit $h_i$ bzw. $f_i$) aufsummiert.
 
-#definition[
-  #grid(
+#definition(
+  grid(
     columns: (25%, 75%),
     align: horizon,
-    [
-      $
-                    H_i & = sum^i_(a=1) h_a \
-                    F_i & = sum^i_(a=1) f_a = H_i / n = 1 \
-        sum^n_(i=1) f_i & = 1
-      $
-    ],
+    $
+                  H_i & = sum^i_(a=1) h_a \
+                  F_i & = sum^i_(a=1) f_a = H_i / n = 1 \
+      sum^n_(i=1) f_i & = 1
+    $,
     [
       _$bold(H_i)$:_ Absolute kumulierte Häufigkeit, Anzahl Messungen mit Merkmalswert $<= x_i$\
       _$bold(F_i)$:_ Relative kumulierte Häufigkeit, Prozentanteil der Messungen mit Wert $i$\
       _$bold(n)$:_ Gesamtanzahl aller Messungen\
       _$bold(k)$:_ Anzahl verschiedener Merkmalswerte
     ],
-  )
-]
+  ),
+)
 
 *Beispiel:* Gleiche Aufgabenstellung wie bei der einfachen Häufigkeit
 $
@@ -476,14 +482,14 @@ _Klassen_ zusammengefasst. Die Differenz zwischen der Ober- und Untergrenze eine
   columns: (1fr,) * 2,
   align: horizon,
   table.header([Klassenbreite nach Sturges #hinweis[(*$m$* aufrunden auf Ganzzahl)]], [Faustregel für Anzahl Klassen]),
-  [$ m approx 1 + 3.32 dot log(n) \ K_b = (x_max - x_min)/m $], [$ j_max = sqrt(n) $],
+  $ m approx 1 + 3.32 dot log(n) \ K_b = (x_max - x_min)/m $, $ j_max = sqrt(n) $,
 )
 
 _*$j$:*_ Anzahl Klassen, _*$K_b$:*_ Klassenbreite, _*$x^u_j$:*_ untere Klassengrenze, _*$x^o_j$:*_ obere Klassengrenze.
 
 *Beispiel: Alter der Bewohner einer Nachbarschaft*
 #table(
-  columns: (auto,) * 6,
+  columns: (auto,) + (1fr,) * 5,
   align: (x, y) => if (x >= 2 and y > 0) { right } else { center },
   table.header(
     [$bold(j)$],
@@ -493,55 +499,58 @@ _*$j$:*_ Anzahl Klassen, _*$K_b$:*_ Klassenbreite, _*$x^u_j$:*_ untere Klassengr
     [Relative einfache Häufigkeit $bold(f_j)$],
     [Relative kumul. Häufigkeit $bold(F_j)$],
   ),
-  [$1$], [$0$ bis $20$], [$8$], [$8$], [$0.05$], [$0.05$],
-  [$2$], [$20$ bis $40$], [$40$], [$48$], [$0.25$], [$0.3$],
-  [$3$], [$40$ bis $60$], [$80$], [$128$], [$0.5$], [$0.8$],
-  [$4$], [$60$ bis $80$], [$32$], [$160$], [$0.2$], [$1$],
+  $1$, [$0$ bis $20$ Jahre alt], $8$, $8$, $0.05$, $0.05$,
+  $2$, [$20$ bis $40$ Jahre alt], $40$, $48$, $0.25$, $0.3$,
+  $3$, [$40$ bis $60$ Jahre alt], $80$, $128$, $0.5$, $0.8$,
+  $4$, [$60$ bis $80$ Jahre alt], $32$, $160$, $0.2$, $1$,
   table.hline(stroke: 1.5pt),
-  [$Sigma$], [], [$160$], [], [], [],
+  table.footer($Sigma$, [], $160$, [], [], []),
 )
 
 === Klassenrechnungen
 Um den Anteil der Klassen _unterhalb_ eines Wertes $g$ zu bestimmen, kann die _lineare Interpolation_ zwischen
-Klassengrenzen genutzt werden:
+Klassengrenzen genutzt werden. Diese Methode funktioniert nur, wenn alle Klassen gleich breit sind.
 
-#definition[
-  #grid(
+#definition(
+  grid(
     align: horizon,
-    [$ F(x < g) = F_j + (F_(j+1) - F_j) / (x^o_(j+1) - x^u_(j+1)) dot (x - x^u_(j+1)) $],
+    $ F(x < g) = F_j + (F_(j+1) - F_j) / (x^o_(j+1) - x^u_(j+1)) dot (x - x^u_(j+1)) $,
     [
       _*$g$*:_ Grenzwert\
       _*$j$*:_ Klasse unterhalb des Grenzwertes\
       _*$j+1$*:_ Klasse, in welcher sich der Grenzwert befindet
     ],
-  )
-]
+  ),
+)
 
 *Beispiel:* Anteil Bewohner unter $50$ Jahre in der obigen Tabelle:
 $space g = 50, space j = 2, space j+1 = 3$
 
-$F(x < 50) = F_2 + display((F_3 - F_2)/(x^o_3 - x^u_3)) dot (x - x^u_3)
-= 0.3 + display((0.8 - 0.3)/(60 - 40)) dot (50 - 40) = 0.55 = underline(55%)$
+$
+  F(x < 50) & = F_2 + (F_3 - F_2)/(x^o_3 - x^u_3) dot (x - x^u_3) \
+            & = 0.3 + (0.8 - 0.3)/(60 - 40) dot (50 - 40) = 0.55 = underline(55%)
+$
 
-Für den Anteil der Klassen _überhalb_ eines Wertes wird zuerst die lineare Interpolation durchgeführt und
-dann 1 minus dieses Resultat gerechnet.\
-$F(x > 50) = 1 - F(x < 50) = 1 - 0.55 = 0.45 = underline(45%)$
+Für den Anteil der Klassen _überhalb_ eines Wertes wird zuerst die lineare Interpolation durchgeführt,
+dann 1 minus dieses Resultat gerechnet.
+
+$ F(x > 50) = 1 - F(x < 50) = 1 - 0.55 = 0.45 = underline(45%) $
 
 Liegen _unterschiedliche Klassenbreiten_ vor, kann nicht mehr mit der absoluten Häufigkeit $h_i$ gearbeitet werden.
-Je breiter die Klasse, desto mehr Elemente könnten sich darin befinden. Hier muss auf die _Häufigkeitsdichte $d_i$_
+Je breiter die Klasse, desto mehr Elemente könnten sich darin befinden. Hier muss auf die _Häufigkeitsdichte $bold(d_i)$_
 ausgewichen werden.
 
-#definition[
-  #grid(
+#definition(
+  grid(
     align: horizon,
-    [$ d_i = h_i / (x^o_i - x^u_i) $],
+    $ d_i = h_i / (x^o_i - x^u_i) $,
     [
       _*$h_i$*_: Absolute Häufigkeit der Klasse\
       _*$x^u_j$:*_ untere Klassengrenze\
       _*$x^o_j$:*_ obere Klassengrenze
     ],
-  )
-]
+  ),
+)
 
 #pagebreak()
 
@@ -555,21 +564,21 @@ Lageparameter sind _Kennzahlen_, welche eine zentrale Tendenz der Messwerte aufz
 === Modus
 _Derjenige Merkmalswert, der am häufigsten beobachtet wird._ Sind das mehrere, gibt es mehrere Modi (_Multimodi_).
 Kann für jede Verteilungsart bzw. jedes Skalenniveau bestimmt werden. Ist von Ausreissern unbeeinflusst.\
-Um bei einer klassifizierten Häufigkeit einen einzigen Wert zu erhalten #hinweis[(und nicht nur die häufigste Klasse)],
+Um bei einer _klassifizierten Häufigkeit_ einen einzigen Wert zu erhalten #hinweis[(und nicht nur die häufigste Klasse)],
 kann der Modus mit dieser Formel geschätzt werden:
 
-#definition[
-  #grid(
+#definition(
+  grid(
     columns: (1.2fr, 1fr),
     align: horizon,
-    [$ "Mo" = x^u_m + (h_m - h_(m-1)) / ((h_m - h_(m-1)) + (h_m - h_(m+1))) dot (x^o_m - x^u_m) $],
+    $ "Mo" = x^u_m + (h_m - h_(m-1)) / ((h_m - h_(m-1)) + (h_m - h_(m+1))) dot (x^o_m - x^u_m) $,
     [
       _*$m$:*_ Klassennummer der häufigsten Klasse\
-      _*$h_m$:*_ Modusklasse ($h_j$ Wert der häufigsten Klasse)\
+      _*$h_m$:*_ Modusklasse ($h_j$-Wert der häufigsten Klasse)\
       _*$x^o_m$/$x^u_m$:*_ Obere/Untere Klassengrenze
     ],
-  )
-]
+  ),
+)
 
 Sind die Klassen unterschiedlich breit, muss zuerst noch die Klasse mit der höchsten Dichte $d_i$ gefunden werden:
 $
@@ -577,14 +586,14 @@ $
   "Mo" = x^u_i + (h_i - h_(i-1)) / ((h_i - h_(i-1)) + (h_i - h_(i+1))) dot (x^o_i - x^u_i)
 $
 
-*Beispiele ohne Klasse:*\
+*Beispiele ohne Klassen:*\
 $
   ["Löwe", "Giraffe", "Affe", "Löwe"] => "Mo" = underline("Löwe"), quad
   [1,2,6,5,3,4,3] => "Mo" = underline(3), quad
   [1,2,6,3,4,3,2] => "Mo" = underline([2, 3])
 $
 
-*Beispiel mit Klassen:* \
+*Beispiel mit Klassen:*\
 Daten siehe Beispiel-Tabelle in @klassifizierte-häufigkeit
 
 1. Klasse auswählen, die am meisten auftaucht (grösster $h_j$-Wert)
@@ -602,24 +611,26 @@ Um den Median berechnen zu können, müssen die Merkmale zuerst _sortiert_ werde
 ordinalskaliert sein #hinweis[(keine Nominalwerte)]. Der Median ist _unbeeinflusst von Ausreissern_, darum gut geeignet
 für _schiefe Verteilungen_ #hinweis[(asymmetrische/ungerade Graphen)].
 
-Es wird unterschieden zwischen einer _geraden_ und _ungeraden_ Anzahl Werte. Ergibt die Berechnung des mittleren Index
-eine Kommazahl, müssen die Werte darunter und darüber addiert und durch 2 geteilt werden.
+Es wird unterschieden zwischen einer _geraden_ und _ungeraden_ Anzahl Werte. Bei einer geraden Anzahl muss jeweils der Wert
+über und unter dem Mittelpunkt addiert und durch zwei geteilt werden.
 
 #table(
   columns: (1fr,) * 2,
   align: horizon,
   table.header([ungerade Anzahl Werte], [gerade Anzahl Werte]),
-  [$ "Me" = x_((n+1)\/2) $], [$ "Me" = (x_(n\/2) + x_((n\/2)+1)) / 2 $],
+  $ "Me" = x_((n+1)\/2) $, $ "Me" = (x_(n\/2) + x_((n\/2)+1)) / 2 $,
 )
 
 #pagebreak()
 
-Wie beim Modus wird der Median bei der klassifizierten Häufigkeit wieder durch eine Formel abgeschätzt:
-$ "Me" = x^u_m + (n/2 - H_(m-1)) / (H_m - H_(m-1)) dot (x^o_m - x^u_m) $
+Wie beim Modus wird der Median bei der klassifizierten Häufigkeit wieder durch eine eigene Formel abgeschätzt:
+$ "Me" = x^u_m + (n\/2 - H_(m-1)) / (H_m - H_(m-1)) dot (x^o_m - x^u_m) $
 
-*Beispiele ohne Klassen:* \
-#hinweis[Auf TR: Menü $->$ 6 $->$ 3 $->$ 4: Median. Werte in geschwungene Klammer packen (CTRL + "`)`").
-Müssen nicht sortiert sein.]
+*Beispiele ohne Klassen:*\
+#hinweis[
+  Auf TR: Menü #sym.arrow 6 #sym.arrow 3 #sym.arrow 4: Median. Werte in geschwungene Klammer packen (CTRL + "`)`").
+  Werte müssen nicht sortiert sein.
+]
 
 *Ungerade:*
 $
@@ -633,11 +644,11 @@ $
   = (x_2 + x_3) / 2 = (42% + 43.5%) / 2 = underline(42.75%)
 $
 
-*Beispiel mit Klassen:* \
+*Beispiel mit Klassen:*\
 Daten siehe Beispiel-Tabelle in @klassifizierte-häufigkeit.
 
 1. Klasse ermitteln, die sich von der Anzahl Merkmalsträger in der Mitte befindet
-$ n / 2 = h_n / 2 = H_4 / 2 = 160 / 2 = 80 space => space 48 < 80 < 128 space => space m = 3 $
+$ n / 2 = h_n / 2 = H_4 / 2 = 160 / 2 = 80 quad => quad 48 < 80 < 128 quad => quad m = 3 $
 
 2. Grenzen & absolute kumulierte Häufigkeiten ($H_j$) aus Tabelle ablesen
 $ x^u_m = x^u_3 = 40, quad x^o_m = x^o_3 = 60, quad H_(m-1) = H_2 = 48, quad H_m = H_3 = 128 $
@@ -648,26 +659,26 @@ $ "Me" = 40 + (160\/2 - 48) / (128 - 48) dot (60-40) = underline(48) $
 === Quantile & Quartile
 _Quantile_ zerlegen Merkmalswerte in eine _gewisse Anzahl Teile_, _Quartile_ in _vier Teile_.
 Ebenfalls geläufig sind _Dezile_ #hinweis[(10 Teile)] und _Perzentile_ #hinweis[(100 Teile)].
-Das 1. Quantil wird auch als 25% Quantil/Perzentil bezeichnet. Die Berechnung erfolgt analog des Medians,
-anstatt $n\/2$ wird einfach $n\/4$ gerechnet. Soll also zb. das 3. Quartil (75% Quantil) ausgerechnet werden,
-muss $(3n)\/4$ gerechnet werden.
+Das 1. Quartil $Q_1$ wird auch als 25% Quantil/Perzentil bezeichnet.
+
+Die Berechnung erfolgt analog des Medians, anstatt $n\/2$ wird einfach $n\/4$ gerechnet.
+Soll also z.B. das 3. Quartil $Q_3$ (75% Quantil) ausgerechnet werden, muss $(3n)\/4$ gerechnet werden.
 
 #table(
   columns: (auto, auto, auto),
   align: horizon,
   table.header([ungerade], [gerade], [klassifizierte Häufigkeit]),
   [
-    $
-      Q_1 = x_((n+1)\/4)
-    $ #hinweis[falls $(n+1) \/ 4$ keine Ganzzahl ist, muss das arithmetische Mittel von den zwei angrenzenden Werten
-    verwendet werden.]
+    $ Q_1 = x_((n+1)\/4) $
+    #hinweis[falls $(n+1)\/4$ keine Ganzzahl ist, muss das arithmetische Mittel der zwei angrenzenden Werten
+      verwendet werden.]
   ],
-  [$ Q_1 = (x_(n\/4) + x_((n\/4)+1))/2 $],
-  [$ Q_1 = x^u_m + (n/4 - H_(m-1))/(H_m - H_(m-1)) dot (x^o_m - x^u_m) $],
+  $ Q_1 = (x_(n\/4) + x_((n\/4) + 1)) / 2 $,
+  $ Q_1 = x^u_m + (n\/4 - H_(m-1))/(H_m - H_(m-1)) dot (x^o_m - x^u_m) $,
 
-  [$ Q_3 = x_(((n+1) dot 3)\/4) $],
-  [$ Q_3 = (x_(3n\/4) + x_((3n\/4) +1)) / 2 $],
-  [$ Q_3 = x^u_m + ((3n) / 4 - H_(m-1)) / (H_m - H_(m-1)) dot (x^o_m - x^u_m) $],
+  $ Q_3 = x_(((n+1) #fxcolor("rot")[$dot 3$])\/4) $,
+  $ Q_3 = (x_(#fxcolor("rot")[3]n\/4) + x_((#fxcolor("rot")[3]n\/4) +1)) / 2 $,
+  $ Q_3 = x^u_m + ((#fxcolor("rot")[3]n)\/4 - H_(m-1)) / (H_m - H_(m-1)) dot (x^o_m - x^u_m) $,
 )
 
 #pagebreak()
@@ -678,7 +689,7 @@ muss $(3n)\/4$ gerechnet werden.
     *Berechnung des zentralen 80%-Dezilabstand:*\
     Dazu muss das 9. Dezentil minus das 1. Dezentil gerechnet werden
     #hinweis[(beim 60%-Dezilabstand wären es 8. Dezentil minus 2. Dezentil)].
-    Das erste Dezil liegt in der 2. Klasse ($fxcolor("rot", 400)\/10 = 40$),
+    Das erste Dezil liegt in der 2. Klasse ($(1 dot fxcolor("rot", 400))\/10 = 40$),
     das letzte in der 5. Klasse ($(9 dot fxcolor("rot", 400)) \/ 10 = 360$).
 
     $
@@ -687,81 +698,76 @@ muss $(3n)\/4$ gerechnet werden.
                                              I_80 = D 9 - D 1 & = 67.27 - 11.25 = underline(56.02)
     $
   ],
-  [
-    #small[
-      #table(
-        align: end,
-        columns: (auto,) * 3 + (1fr,) + (auto,) * 2,
-        table.header([*$i$*], [von ($bold(x^u_i)$)], [bis ($bold(x^o_i)$)], [*$h_i$*], [*$d_i$*], [*$H_i$*]),
-        [$1$], [$4$], [$10$], [$20$], [$3.3$], [$20$],
-        [$2$], [$10$], [$20$], [$160$], [$16.0$], [$180$],
-        [$3$], [$20$], [$30$], [$80$], [$8.0$], [$260$],
-        [$4$], [$30$], [$40$], [$40$], [$4.0$], [$300$],
-        [$5$], [$40$], [$80$], [$88$], [$2.2$], [$388$],
-        [$6$], [$80$], [$120$], [$12$], [$0.3$], [$400$],
-        table.hline(stroke: 1.5pt + black),
-        [], [], [], [$n = fxcolor("rot", 400)$], [], [],
-      )
-    ]
-  ],
+  small(
+    table(
+      align: end,
+      columns: (auto,) * 3 + (1fr,) + (auto,) * 2,
+      table.header([*$i$*], [von ($bold(x^u_i)$)], [bis ($bold(x^o_i)$)], [*$h_i$*], [*$d_i$*], [*$H_i$*]),
+      $1$, $4$, $10$, $20$, $3.3$, $20$,
+      $2$, $10$, $20$, $160$, $16.0$, $180$,
+      $3$, $20$, $30$, $80$, $8.0$, $260$,
+      $4$, $30$, $40$, $40$, $4.0$, $300$,
+      $5$, $40$, $80$, $88$, $2.2$, $388$,
+      $6$, $80$, $120$, $12$, $0.3$, $400$,
+      table.hline(stroke: 1.5pt + black),
+      table.footer([], [], [], $n = fxcolor("rot", 400)$, [], []),
+    ),
+  ),
 )
 
 === Arithmetisches Mittel (Durchschnitt) <arith-mittel>
 De Durchschnitt halt, de söttsch kenne Kolleg. Häufig benutzt, kann aber zu starken Verzerrungen und Fehlschlüssen führen,
 da Ausreisser den Durchschnitt stark verändern können. Darum nicht geeignet für schiefe Verteilungen, sondern nur
-für eingipflige, symmetrische Verteilungen #hinweis[(z.B. Bell Curve, Normalverteilung)]
-
+für eingipflige, symmetrische Verteilungen #hinweis[(z.B. Bell Curve, Normalverteilung)]\
 #hinweis[Auf TR: Menü $->$ 6 $->$ 3 $->$ 3: Mittelwert. Werte in geschwungene Klammer schreiben (CTRL + "`)`")]
 
-#definition[
-  #grid(
+#definition(
+  grid(
     align: horizon,
-    [$ #x- = 1/n sum_(i=1)^n x_i dot h_i $],
+    $ #x- = 1/n sum_(i=1)^n x_i dot h_i $,
     [
-      _$bold(#x-)$:_ Arithmetisches Mittel \
+      _$bold(#x-)$:_ Arithmetisches Mittel\
       _*$n$*:_ Anzahl der Werte\
-      _*$x_i$*:_ Datenwerte \
+      _*$x_i$*:_ Datenwerte\
       _*$h_i$*:_ Häufigkeit der Datenwerte #hinweis[(1, wenn nichts angegeben)]
     ],
-  )
-]
+  ),
+)
 
 ==== Klassifiziertes Arithmetisches Mittel
 Auch hier muss die _klassifizierte Häufigkeit_ wieder speziell behandelt werden:
 Zuerst muss die _Klassenmitte $bold(acute(x_i))$_ für jede Klasse berechnet werden, dann die Summe von
 allen $acute(x_i) dot h_i$ mit $1/n$ multiplizieren.
 
-#definition[
-  #grid(
+#definition(
+  grid(
     align: horizon,
+    $
+      #x- = 1/n sum^v_(i=1) acute(x_i) dot h_i\ \
+      acute(x_i) = (x^o_i + x^u_i)/2
+    $,
     [
-      $
-        #x- = 1/n sum^v_(i=1) acute(x_i) dot h_i\ \
-        acute(x_i) = (x^o_i + x^u_i)/2
-      $
-    ],
-    [
-      _$bold(#x-)$:_ Arithmetisches Mittel \
+      _$bold(#x-)$:_ Arithmetisches Mittel\
       _*$n$*:_ Anzahl der Werte\
-      _*$acute(x_i)$*:_ Klassenmitte von Klasse $i$ \
+      _*$acute(x_i)$*:_ Klassenmitte von Klasse $i$\
       _*$h_i$*:_ Häufigkeit von Klasse $i$
     ],
-  )
-]
+  ),
+)
 
 *Beispiel mit Klassen:* \
 Daten siehe Beispiel-Tabelle in @klassifizierte-häufigkeit
 
 1. Klassenmitten berechnen
 $
-  acute(x_i) = ((x^u_i + x^o_i) / 2) => { (0+20)/2 = 10, quad (20+40)/2 = 30, quad (40+60)/2 = 50, quad (60+80)/2 = 70}
+  acute(x_i) = ((x^u_i + x^o_i) / 2) => { (0 + 20)/2 = 10, quad (20 + 40)/2 = 30, quad (40 + 60)/2 = 50, quad (60 + 0)/2 = 70}
 $
 
 2. Produkte $acute(x_i) dot h_i$ für alle Klassen berechnen
 $ acute(x_i) dot h_i => {10 dot 8 = 80, quad 30 dot 40 = 1'200, quad 50 dot 80 = 4'000, quad 70 dot 32 = 2'240} $
 
 3. Summen von allen $h_i$ und allen $acute(x_i) dot h_i$ bestimmen
-$ sum^n_(i=1) h_i = 160 quad sum^n_(i=1) acute(x_i) dot h_i = 7520 $
+$ sum^n_(i=1) h_i = 160 quad sum^n_(i=1) acute(x_i) dot h_i = 7'520 $
 
 4. Werte in Formel einsetzen
 $ #x- = 1/160 dot 7'520 = underline(47.023) $
@@ -771,7 +777,7 @@ Um den _Durchschnitt verhältnisskalierter Zahlen_ zu berechnen, verwendet man d
 Die Merkmalswerte dürfen untereinander keine gemischten Vorzeichen haben. Das einfache Harmonische Mittel wird
 bei einheitslosen oder beziehungslosen Zahlen verwendet #hinweis[(siehe @gewichtet-harmonisch-mittel)].
 
-$ overline("MH") = n / (sum^n_(i=1) 1 / x_i) $
+$ overline("MH") = n / (sum^n_(i=1) 1 \/ x_i) $
 
 In den allermeisten Fällen verwendet man jedoch das gewichtete harmonische Mittel.
 
@@ -783,12 +789,12 @@ Bei diesen muss das _gewichtete Harmonische Mittel_ verwendet werden:
 $ overline("MH") = (sum^v_(i=1) h_i) / (sum^v_(i=1) h_i \/ x_i) $
 
 #example-block[
-  *Beispiele für gewichtetes HM:*\
+  *Beispiele für gewichtetes harmonisches Mittel:*\
   + _Ein Kipplaster fährt auf dem $5"km"$ Hinweg $10 "km/h"$ und auf dem Rückweg $30 "km/h"$.
     Was ist die mittlere Geschwindigkeit_?
 
-    $ h_1 = h_2 = 5"km", quad x_1 = (5"km") / (10"km/h"), quad x_2 = (5"km") / (30"km/h") $
     $
+      h_1 = h_2 = 5"km", quad x_1 = (5"km") / (10"km/h"), quad x_2 = (5"km") / (30"km/h")\
       overline("MH") = (sum^v_(i=1) h_i) / (sum^v_(i=1) h_i \/ x_i) = (5+5) / ((5\/10) + (5\/30)) = underline(15"km/h")
     $
 
@@ -817,31 +823,32 @@ Nicht sinnvoll für klassifizierte Häufigkeiten.
 #table(
   columns: (1fr,) * 2,
   table.header([Formel für durchschnittlichen Merkmalswert], [Formel für durchschnittliche Veränderung]),
-  [$ "MG" = root(n, product^n_(i=1) x_i) $], [$ "MG" = root(n-1, "Endwert"/"Anfangswert") $],
+  $ "MG" = root(n, product^n_(i=1) x_i) $, $ "MG" = root(n-1, "Endwert"/"Anfangswert") $,
 )
 
 
-#columns(2)[
-  *Beispiel für durchschnittlichen Merkmalswert*\
-  $x_i = (3.2, 3.1, 3.4, 3.6, 3.4, 3.1, 3.3, 1.9, 2.0)$
+#grid(
+  [
+    *Beispiel für durchschnittlichen Merkmalswert*\
+    $x_i = (3.2, 3.1, 3.4, 3.6, 3.4, 3.1, 3.3, 1.9, 2.0)$
 
-  + Anzahl Werte zählen\
-    $n = 9$
-  + Werte multiplizieren\
-    $product^n_(i=1) x_i = 16048.38$
-  + Geometrisches Mittel berechnen\
-    $root(9, 16048.38) = 2.93$
+    + Anzahl Werte zählen\
+      $n = 9$
+    + Werte multiplizieren\
+      $product^n_(i=1) x_i = 16048.38$
+    + Geometrisches Mittel berechnen\
+      $root(9, 16048.38) = 2.93$
+  ],
+  [
+    *Beispiel für durchschnittliche Veränderung*\
+    $[40] space arrow(dot 1.2) space [48] space arrow(dot 1.25) space [60] space arrow(dot 0.95) space [57]$
 
-  #colbreak()
-
-  *Beispiel für durchschnittliche Veränderung*\
-  $[40] space arrow(dot 1.2) space [48] space arrow(dot 1.25) space [60] space arrow(dot 0.95) space [57]$
-
-  + Anzahl Werte zählen\
-    $n = 4$
-  + Anfangs- und Endwert in Formel einfügen\
-    $root(3, 57/40) = underline(1.125)$
-]
+    + Anzahl Werte zählen\
+      $n = 4$
+    + Anfangs- und Endwert in Formel einfügen\
+      $root(3, 57/40) = underline(1.125)$
+  ],
+)
 
 == Streumasse
 Streumasse sind Kennzahlen, die die _Verteilung_ der Messwerte _um ein Zentrum_ angeben.
@@ -855,14 +862,14 @@ des Streubereiches interessiert, da es keine Information über die Streuung an s
 #table(
   columns: (1fr,) * 2,
   table.header([Normale Berechnung], [Klassifizierte Häufigkeit]),
-  [$ R = "grösster Wert" - "kleinster Wert" $], [$ R = x^o_v - x^u_1 $],
+  $ R = "grösster Wert" - "kleinster Wert" $, $ R = x^o_v - x^u_1 $,
 )
 
 *Beispiel ohne Klassen:*\
 $
-  x_i = (3.2, 3.1, 3.4, 3.6, 3.4, 3.1, 3.3, 1.9, 2.0) overbracket(=>, "sortieren") (1.9, 2.0, 3.1, 3.1, 3.2, 3.3, 3.4, 3.4, 3.6)
+  x_i = (3.2, 3.1, 3.4, 3.6, 3.4, 3.1, 3.3, 1.9, 2.0) overbracket(=>, "sortieren") (1.9, 2.0, 3.1, 3.1, 3.2, 3.3, 3.4, 3.4, 3.6)\
+  x_"min" = 1.9, quad x_"max" = 3.6 quad R = 3.6 - 1.9 = 1.7
 $
-$ x_"min" = 1.9, quad x_"max" = 3.6 quad R = 3.6 - 1.9 = 1.7 $
 
 *Beispiel mit Klassen:*\
 Daten siehe Beispiel-Tabelle in @klassifizierte-häufigkeit\
@@ -877,29 +884,27 @@ $ "ZQA" = Q_3 - Q_1 $
 
 #pagebreak()
 
-*Beispiel Ausfallzeiten (in h) von $20$ Maschinen:* \
-*Frage:* Wie streut die Ausfallzeit der Maschinen in Abhängigkeit von der Wahrscheinlichkeit um das Mittel $0.5$?
+#example-block[
+  *Beispiel Ausfallzeiten (in h) von $20$ Maschinen:* \
+  _Wie streut die Ausfallzeit der Maschinen in Abhängigkeit von der Wahrscheinlichkeit um das Mittel $0.5$?_
+]
 
 #grid(
-  columns: (1fr, 1.0fr),
-  [
-    $
-        Q_1 & = x_[1\/4 dot n] = x_[1\/4 dot 20] = fxcolor("rot", x_[5]) = 2h \
-        Q_3 & = x_[3\/4 dot n] = x_[3\/4 dot 20] = fxcolor("grün", x_[15]) = 11h \
-      "ZQA" & = 11h - 2h = underline(9h)
-    $
-  ],
-  [
-    #small[
-      #table(
-        columns: (auto,) + (1fr,) * 8,
-        align: (x, _) => if (x > 0) { right } else { auto },
-        table.header([Ausfallzeit (h)], [$0$], [$2$], [$5$], [$6$], [$7$], [$11$], [$12$], [$14$]),
-        [$h_i$], [$4$], [$2$], [$2$], [$2$], [$4$], [$3$], [$2$], [$1$],
-        [$H_i$], [$4$], [$fxcolor("rot", 6)$], [$8$], [$10$], [$14$], [$fxcolor("grün", 17)$], [$19$], [$20$],
-      )
-    ]
-  ],
+  columns: (1fr, 1fr),
+  $
+      Q_1 & = x_[1\/4 dot n] = x_[1\/4 dot 20] = fxcolor("rot", x_[5]) = 2"h" \
+      Q_3 & = x_[3\/4 dot n] = x_[3\/4 dot 20] = fxcolor("grün", x_[15]) = 11"h" \
+    "ZQA" & = 11"h" - 2"h" = underline(9"h")
+  $,
+  small(
+    table(
+      columns: (auto,) + (1fr,) * 8,
+      align: (x, _) => if (x > 0) { right } else { auto },
+      table.header([Ausfallzeit (h)], [*$0$*], [*$2$*], [*$5$*], [*$6$*], [*$7$*], [*$11$*], [*$12$*], [*$14$*]),
+      $h_i$, $4$, $2$, $2$, $2$, $4$, $3$, $2$, $1$,
+      $H_i$, $4$, $fxcolor("rot", 6)$, $8$, $10$, $14$, $fxcolor("grün", 17)$, $19$, $20$,
+    ),
+  ),
 )
 
 === Mittlere absolute Abweichung
@@ -907,11 +912,11 @@ _Durchschnittliche Entfernung der Merkmalswerte vom arithmetischen Mittel._ Ist 
 Wird häufig bei der Beschreibung der erfassten Datenmenge mit angegeben. Besser geeignet als Varianz/Standardabweichung.
 Ausreisser werden erfasst, Gefahr einer verzerrten Beschreibung entsteht.
 
-#definition[
-  #grid(
+#definition(
+  grid(
     columns: (1fr, 1.2fr),
     align: horizon,
-    [$ delta = 1 / n sum^v_(i=1) abs(x_i - #x-) $],
+    $ delta = 1 / n sum^v_(i=1) abs(x_i - #x-) $,
     [
       _*$n$*:_ Anzahl der Merkmalsträger\
       _*$v$*:_ Anzahl der verschiedenen Merkmalswerte\
@@ -919,17 +924,17 @@ Ausreisser werden erfasst, Gefahr einer verzerrten Beschreibung entsteht.
       _*$h_i$*:_ absolute einfache Häufigkeit beim Merkmalswert $x_i$\
       _$bold(#x-)$:_ arithmetisches Mittel der Merkmalswerte
     ],
-  )
-]
+  ),
+)
 
 Bei der Klassifizierten Häufigkeit wird die Klassenmitte $acute(x)$ verwendet und zusätzlich noch die
 absolute einfache Häufigkeit $h_i$ dazugerechnet:
 
-#definition[
-  #grid(
+#definition(
+  grid(
     columns: (1fr, 1.2fr),
     align: horizon,
-    [$ delta = 1 / n sum^v_(i=1) abs(acute(x_i) - #x-) dot h_i $],
+    $ delta = 1 / n sum^v_(i=1) abs(acute(x_i) - #x-) dot h_i $,
     [
       _*$n$*:_ Anzahl der Merkmalsträger\
       _*$v$*:_ Anzahl der verschiedenen Merkmalswerte\
@@ -937,10 +942,10 @@ absolute einfache Häufigkeit $h_i$ dazugerechnet:
       _$bold(#x-)$:_ arithmetisches Mittel der Merkmalswerte \
       _*$acute(x_i)$*:_ Klassenmitte
     ],
-  )
-]
+  ),
+)
 
-*Beispiel ohne Klassen:* \
+*Beispiel ohne Klassen:*\
 Urliste: $x_i = (3.2, 3.1, 3.4, 3.1, 1.9, 2.0)$
 1. Arithmetisches Mittel berechnen #hinweis[(Berechnung des Werts siehe @arith-mittel)]
 $ n = 6, quad #x- = 2.78 $
@@ -948,12 +953,12 @@ $ n = 6, quad #x- = 2.78 $
 #v(-0.5em)
 2. Werte in Formel einsetzen
 $
-  delta & = 1/6 dot abs(3.2 - 2.78) + abs(3.1 - 2.78) + abs(3.4 - 2.78) + abs(3.1 - 2.78) + abs(1.9 - 2.78) + abs(2.0 - 2.78)\
-        & = 1/6 dot 3.34 = underline(0.556)
+  delta & = 1/6 dot abs(3.2 - 2.78) + abs(3.1 - 2.78) + abs(3.4 - 2.78) + abs(3.1 - 2.78) + abs(1.9 - 2.78) + abs(2.0 - 2.78) \
+  & = 1/6 dot 3.34 = underline(0.556)
 $
 
 #v(-0.5em)
-*Beispiel mit Klassen:* \
+*Beispiel mit Klassen:*\
 Daten siehe Beispiel-Tabelle in @klassifizierte-häufigkeit\:
 1. Arithmetisches Mittel berechnen #hinweis[(Berechnung des Werts siehe @arith-mittel)]:
 $ #x- = 47.023 $
@@ -962,13 +967,13 @@ $ #x- = 47.023 $
 2. Für jede Klasse $abs(acute(x_i) - #x-)$ berechnen
 $
   abs(acute(x_i) - #x-) => {abs(10 - 47.023) = 37.023, abs(30 - 47.023) = 17.023, abs(50 - 47.023) = 2.977,
-  abs(70 - 47.023) = 22.977}
+    abs(70 - 47.023) = 22.977}
 $
 
 3. Für jede Klasse $abs(acute(x_i) - #x-) dot h_i$ berechnen
 $
-  abs(acute(x_i) - #x-) dot h_i => {8 dot 37.023 = 296.184, 40 dot 17.023 = 680.92, 80 dot 2.977 = 239.76,
-  32 dot 22.977 = 735.264}
+  abs(acute(x_i) - #x-) dot h_i => {37.023 dot 8 = 296.184, 17.023 dot 40 = 680.92, 2.977 dot 80 = 239.76,
+    22.977 dot 32 = 735.264}
 $
 
 4. Summieren und in Formel einfügen
@@ -983,7 +988,7 @@ für konkrete Aussagen verwendet werden #hinweis[(z.B. $"Jahre"^2$)].
 
 _Die Standardabweichung $bold(sigma)$ ist die durchschnittliche Entfernung aller Werte vom arithmetischen Mittel_ und
 die Quadratwurzel der Varianz. Dadurch ist die Standardabweichung wieder in derselben Einheit wie die Messwerte und
-kann konkrete Angaben liefern #hinweis[(z.B. die Länge weicht durchschnittlich 5.2cm vom Mittelwert 25cm ab.)]
+kann konkrete Angaben liefern #hinweis[(z.B. die Länge weicht durchschnittlich 2.5cm vom Mittelwert 25cm ab.)]
 
 Beide Kennzahlen sind _nur Vergleichswerte_ und liefern nur Informationen über mehr/weniger Streuung.
 Sind empfindlich auf Ausreisser.
@@ -992,12 +997,12 @@ Sind empfindlich auf Ausreisser.
   columns: (1fr,) * 3,
   align: horizon,
   table.header([Normale Varianz-Berechnung], [Klassifizierte Häufigkeit-Varianz], [Standardabweichung]),
-  [$ sigma^2 = 1/n sum^v_(i=1) (x_i - #x-)^2 $],
-  [$ sigma^2 = 1/n sum^v_(i=1) (x_i - #x-)^2 dot h_i $],
-  [$ sigma = sqrt(sigma^2) $],
+  $ sigma^2 = 1/n sum^v_(i=1) (x_i - #x-)^2 $,
+  $ sigma^2 = 1/n sum^v_(i=1) (x_i - #x-)^2 dot h_i $,
+  $ sigma = sqrt(sigma^2) $,
 )
 
-*Beispiel ohne Klassen:* \
+*Beispiel ohne Klassen:*\
 Urliste: $x_i = (3.2, 3.1, 3.4, 3.1, 1.9, 2.0)$
 
 1. Arithmetisches Mittel berechnen
@@ -1006,7 +1011,7 @@ $ n = 6 quad #x- = 2.78 $
 2. Varianz berechnen
 $
   sigma^2 & = 1/6 dot ((3.2 - 2.78)^2 + (3.1 - 2.78)^2 + (3.4 - 2.78)^2 + (3.1 - 2.78)^2 + (1.9 - 2.78)^2 + (2.0 - 2.78)^2)\
-          & = 1/6 dot 2.1484 = underline(0.358)
+  & = 1/6 dot 2.1484 = underline(0.358)
 $
 
 3. Standardabweichung berechnen\
@@ -1019,7 +1024,9 @@ Daten siehe Beispiel-Tabelle in @klassifizierte-häufigkeit
 $ #x- = 47.023 $
 
 2. Für jede Klasse $(acute(x_i) - #x-)^2$ berechnen
-$ (acute(x_i) - #x-)^2 => {(10 - 47.023)^2 = 1'370, (30-47.023)^2 = 289, (50-47.023)^2 = 8.86, (70-47.023)^2 = 528} $
+$
+  (acute(x_i) - #x-)^2 => {(10 - 47.023)^2 = 1'370, (30 - 47.023)^2 = 289, (50 - 47.023)^2 = 8.86, (70 - 47.023)^2 = 528}
+$
 
 3. Für jede Klasse $(acute(x_i) - #x-)^2 dot h_i$ berechnen
 $
@@ -1037,26 +1044,28 @@ _Misst die relative Streuung in Relation zur Lage der Häufigkeitsverteilung._ W
 dem arithmetischem Mittel berechnet. Dient aufgrund dessen ebenfalls nur als _Vergleichswert_.
 Kann zum Vergleich unterschiedlicher Mittelwerte und Dimensionen verwendet werden.
 
-#definition[
-  #grid(
+#definition(
+  grid(
     columns: (1fr, 1.2fr),
     align: horizon,
-    [$ "VK" = sigma/#x- dot 100 $],
+    $ "VK" = sigma/#x- dot 100 $,
     [
       _*$sigma$*:_ Standardabweichung\
       _$bold(#x-)$:_ arithmetisches Mittel der Merkmalswerte
     ],
-  )
+  ),
+)
+
+#example-block[
+  *Beispiel:*\
+  _Ist im Laden $A$ oder Laden $B$ die Streuung der Preise für ein Produkt geringer?_\
+  *Gegeben:*
+  $dash(x)_A = 7 "CHF", quad sigma_A = 2.80 "CHF", quad dash(x)_B = 750 "CHF", quad sigma_B = 20.40 "CHF"$
+
+  $ "VK"_A = 2.80/7 dot 100 = 40%, quad "VK"_B = 20.40/750 dot 100 = 2.72 % $
+  *Schlussfolgerung:*
+  Die Streuung der Preise für B ist relativ geringer als für A.
 ]
-
-*Beispiel:*\
-In welchem Laden ist die Streuung der Preise für ein Produkt geringer?\
-*Gegeben:*
-$dash(x)_A = 7 "CHF", quad sigma_A = 2.80 "CHF", quad dash(x)_B = 750 "CHF", quad sigma_B = 20.40 "CHF"$
-
-$ "VK"_A = 2.80/7 dot 100 = 40%, quad "VK"_B = 20.40/750 dot 100 = 2.72 % & $
-*Schlussfolgerung:*
-Die Streuung der Preise für B ist relativ geringer als für A.
 
 == Übersicht Lageparameter & Streumasse
 #table(
@@ -1105,39 +1114,40 @@ Um zu verhindern, dass besondere Ereignisse einen grundlegenden Verlauf verschle
 Mit dem _gleitenden Mittelwert_ wird aus einer bestimmten Anzahl Vergangenheitswerten sowie dem Gegenwartswert ein
 Mittelwert gebildet. Dieser dient als Prognose bzw. Trenderkennung für die kommende Periode.
 
-#definition[
-  #grid(
+#definition(
+  grid(
     columns: (55%, 45%),
     align: horizon,
-    [$ M_t = 1/t dot (sum^(t-1)_(T=0) x_T) + x_t $],
+    $ M_t = 1/t dot (sum^(t-1)_(T=0) x_T) + x_t $,
     [
       _*$t$*:_ Fenstergrösse\
       _*$x_T$*:_ Vergangenheitswerte\
       _*$x_t$*:_ Gegenwartswert\
     ],
-  )
+  ),
+)
+
+#example-block[
+  *Beispiel zur Glättung:*\
+  _Glätte die Urliste $y_i = (851, 863, 878, 792, 589, 851, 863)$ mit einer Fenstergrösse von $t = 3$._
+
+  $ M_3 = 1/3 dot (851 + 863 + 878) = 864 quad M_4 = 1/3 dot (863 + 878 + 792) = 844 quad ... $
+  $ y_"geglättet" = (864, 844, 753, 744, 768) $
+
+  *Beispiel zur Prognose:*\
+  _Eine Firma hat in den letzten 6 Jahren diese Anzahl Maschinen verkauft. Welcher Absatz ist für 2024 zu erwarten?_
 ]
 
-*Beispiel zur Glättung:*\
-Mit einer Fenstergrösse von $t = 3$ wird $y_i = (851, 863, 878, 792, 589, 851, 863)$ geglättet:
-$ M_3 = 1/3 dot (851 + 863 + 878) = 864 quad M_4 = 1/3 dot (863 + 878 + 792) = 844 quad ... $
-$ y_"geglättet" = (864, 844, 753, 744, 768) $
-
-*Beispiel zur Prognose:* \
-Eine Firma hat in den letzten 6 Jahren diese Anzahl Maschinen verkauft. Welcher Absatz ist für 2024 zu erwarten?
-
-#columns(2)[
-  #table(
+#grid(
+  table(
     columns: (auto,) * 7,
+    align: (_, y) => if y == 1 { right } else { auto },
     [2018], [2019], [2020], [2021], [2022], [2023], [2024],
     [3], [7], [14], [8], [3], [1], [?],
-  )
-
-  #colbreak()
-
-  $M_7 & = 1/6 dot sum^(5)_(T=1) x_T + x_6\
-       & = 1/6 dot (3 + 7 + 14 + 8 + 3 + 1) = 36/6 = underline(6)$
-]
+  ),
+  $M_7 & = 1/6 dot sum^(5)_(T=1) x_T + x_6 \
+  & = 1/6 dot (3 + 7 + 14 + 8 + 3 + 1) = 36/6 = underline(6)$,
+)
 
 Hier zeigt sich die Schwachstelle des gleitenden Mittelwerts zur Prognose: Obgleich fallender Verkaufszahlen liegt
 der prognostizierte Wert darüber. Darum verwendet man in solchen Fällen besser die Regression.
@@ -1161,6 +1171,7 @@ der prognostizierte Wert darüber. Darum verwendet man in solchen Fällen besser
 
 === Regressfunktion
 Je nach Abhängigkeit der Parameter voneinander wird für die Regression eine andere _Regressfunktion_ verwendet.
+
 #definition[
   Bei _einseitiger_ Beeinflussung #hinweis[($y$ wird nur durch Parameter $x$ bestimmt)] gilt diese Regressfunktion:
   $
@@ -1176,7 +1187,7 @@ Je nach Abhängigkeit der Parameter voneinander wird für die Regression eine an
 ]
 
 #table(
-  columns: (25%, 75%),
+  columns: (auto, 1fr),
   table.header([Regressvariable], [Definition]),
   [Regressionsgerade $hat(y)$],
   [
@@ -1207,45 +1218,43 @@ Gegeben sind $x_i$ und $y_i$, die restlichen Tabellenwerte müssen berechnet wer
     + $y_i$, $x_i dot y_i$ und $x_i^2$ ausrechnen #hinweis[(siehe Tabelle)]
 
     + Arithmetisches Mittel für $x$ und $y$ berechnen.
-    $
-      n = 7, quad
-      #x- = (#fxcolor("grün", $sum^n_1 x_i$))/n = #fxcolor("grün", "28")/7 = 4, quad
-      #y- = (#fxcolor("orange", $sum^n_1 y_i$))/n = #fxcolor("orange", "60.9")/7 = 8.7
-    $
+      $
+        n = 7, quad
+        #x- = (#fxcolor("grün", $sum^n_1 x_i$))/n = #fxcolor("grün", "28")/7 = 4, quad
+        #y- = (#fxcolor("orange", $sum^n_1 y_i$))/n = #fxcolor("orange", "60.9")/7 = 8.7
+      $
 
-    3. $a$ und $b$ berechnen\
-    $
-      b & = (#fxcolor("rot", $sum^n_(i=1) x_i dot y_i$) - n dot #x- dot #y-)
-          / (#fxcolor("dunkelblau", $sum^n_(i=1) x_i^2$) - n dot #x-^2)
-          = (#fxcolor("rot", "290.6") - 7 dot 4 dot 8.7)/(#fxcolor("dunkelblau", "140") - 7 dot 4^2) = 1.68 \
-      a & = #y- - b dot #x- = 8.7 - 1.68 dot 4 = 1.98
-    $
+    + $a$ und $b$ berechnen\
+      $
+        b & = (#fxcolor("rot", $sum^n_(i=1) x_i dot y_i$) - n dot #x- dot #y-)
+            / (#fxcolor("dunkelblau", $sum^n_(i=1) x_i^2$) - n dot #x-^2)
+            = (#fxcolor("rot", "290.6") - 7 dot 4 dot 8.7)/(#fxcolor("dunkelblau", "140") - 7 dot 4^2) = 1.68 \
+        a & = #y- - b dot #x- = 8.7 - 1.68 dot 4 = 1.98
+      $
 
-    4. $a$ und $b$ in lineare Regressionsformel eintragen\
-    $ f(x) = a + b dot x = underline(1.98 + 16.8 dot x) $
+    + $a$ und $b$ in lineare Regressionsformel eintragen\
+      $ f(x) = a + b dot x = underline(1.98 + 1.68 dot x) $
   ],
-  [
-    #table(
-      rows: 2.0em,
-      columns: (1fr,) * 4,
-      align: horizon + right,
-      table.header([*$x_i$*], [*$y_i$*], [*$x_i dot y_i$*], [*$x_i^2$*]),
-      [1], [3.2], [3.2], [1],
-      [2], [4.2], [8.4], [4],
-      [3], [9], [27], [9],
-      [4], [8], [32], [16],
-      [5], [12], [60], [25],
-      [6], [11.5], [69], [36],
-      [7], [13], [91], [49],
-      table.hline(stroke: 1.5pt + black),
-      table.footer(
-        [$bold(Sigma) space #fxcolor("grün", "28")$],
-        [$#fxcolor("orange", "60.9")$],
-        [$#fxcolor("rot", "290.6")$],
-        [$#fxcolor("dunkelblau", "140")$],
-      ),
-    )
-  ],
+  table(
+    rows: 2.0em,
+    columns: (1fr,) * 4,
+    align: horizon + right,
+    table.header([*$x_i$*], [*$y_i$*], [*$x_i dot y_i$*], [*$x_i^2$*]),
+    [1], [3.2], [3.2], [1],
+    [2], [4.2], [8.4], [4],
+    [3], [9], [27], [9],
+    [4], [8], [32], [16],
+    [5], [12], [60], [25],
+    [6], [11.5], [69], [36],
+    [7], [13], [91], [49],
+    table.hline(stroke: 1.5pt + black),
+    table.footer(
+      $bold(Sigma) space #fxcolor("grün", "28")$,
+      $#fxcolor("orange", "60.9")$,
+      $#fxcolor("rot", "290.6")$,
+      $#fxcolor("dunkelblau", "140")$,
+    ),
+  ),
 )
 
 #pagebreak()
@@ -1267,39 +1276,37 @@ $
     + $y'_i = ln(y_i)$, $x_i dot y'_i$ und $x_i^2$ ausrechnen #hinweis[(siehe Tabelle)]
 
     + Arithmetisches Mittel von $x$ und $y'$ ausrechnen.
-    $
-      n = 7, quad
-      #x- = (sum^n_1 x_i)/n = 28/7 = 4, quad
-      #y-' = (sum^n_1 y_i)/n = 2.46/7 = 0.35
-    $
+      $
+        n = 7, quad
+        #x- = (sum^n_1 x_i)/n = 28/7 = 4, quad
+        #y-' = (sum^n_1 y_i)/n = 2.46/7 = 0.35
+      $
 
-    3. $a$ und $b$ mit linearer Regressionsformel berechnen
-    $
-      b & = (sum^n_(i=1) x_i dot y'_i - n dot #x- dot #y-') / (sum^n_(i=1) x_i^2 - n dot #x-^2)
-          = (27.91 - 7 dot 4 dot 0.35)/(140 - 7 dot 4^2) = 0.65 \
-      a & = #y-' - b dot #x- = 0.35 - 0.65 dot 4 = -2.25
-    $
+    + $a$ und $b$ mit linearer Regressionsformel berechnen
+      $
+        b & = (sum^n_(i=1) x_i dot y'_i - n dot #x- dot #y-') / (sum^n_(i=1) x_i^2 - n dot #x-^2)
+            = (27.91 - 7 dot 4 dot 0.35)/(140 - 7 dot 4^2) = 0.65 \
+        a & = #y-' - b dot #x- = 0.35 - 0.65 dot 4 = -2.25
+      $
 
-    4. $a$ und $b$ in die exponentielle Polynomformel einsetzen
-    $ f(x) = e^(a+b dot x) = underline(e^(-2.25 + 0.65 dot x)) $
+    + $a$ und $b$ in die exponentielle Polynomformel einsetzen
+      $ f(x) = e^(a+b dot x) = underline(e^(-2.25 + 0.65 dot x)) $
   ],
-  [
-    #table(
-      rows: 2.0em,
-      columns: (auto,) * 5,
-      align: horizon + right,
-      table.header([*$x_i$*], [*$y_i$*], [*$y'_i$*], [*$x_i dot y'_i$*], [*$x_i^2$*]),
-      [1], [0.20], [-1.61], [-1.61], [1],
-      [2], [0.40], [-0.92], [-1.84], [4],
-      [3], [0.80], [-0.22], [-0.66], [9],
-      [4], [1.44], [0.36], [1.44], [16],
-      [5], [2.40], [0.88], [4.40], [25],
-      [6], [5.00], [1.16], [9.66], [36],
-      [7], [10.60], [2.36], [16.52], [49],
-      table.hline(stroke: 1.5pt + black),
-      table.footer([$bold(Sigma) space 28$], [$20.84$], [$2.46$], [$27.91$], [$140$]),
-    )
-  ],
+  table(
+    rows: 2.0em,
+    columns: (auto,) * 5,
+    align: horizon + right,
+    table.header([*$x_i$*], [*$y_i$*], [*$y'_i$*], [*$x_i dot y'_i$*], [*$x_i^2$*]),
+    [1], [0.20], [-1.61], [-1.61], [1],
+    [2], [0.40], [-0.92], [-1.84], [4],
+    [3], [0.80], [-0.22], [-0.66], [9],
+    [4], [1.44], [0.36], [1.44], [16],
+    [5], [2.40], [0.88], [4.40], [25],
+    [6], [5.00], [1.16], [9.66], [36],
+    [7], [10.60], [2.36], [16.52], [49],
+    table.hline(stroke: 1.5pt + black),
+    table.footer([$bold(Sigma) space 28$], [$20.84$], [$2.46$], [$27.91$], [$140$]),
+  ),
 )
 
 ==== Logarhitmische Regression
@@ -1331,38 +1338,34 @@ $
 *Beispiel:*\
 + Alle notwendigen $D_(i,...,i-n)$ berechnen
 #table(
-  columns: (auto,) * 6,
+  columns: (0.7cm,) + (auto,) * 5,
   align: right,
   table.header([*$x_i$*], [*$y_i$*], [*$D_(i,i-1)$*], [*$D_(i,...,i-2)$*], [*$D_(i,...,i-3)$*], [*$D_(i,...,i-4)$*]),
-  [$1$], [$52.5$], [---], [---], [---], [---],
+  $1$, $52.5$, [---], [---], [---], [---],
 
-  [$2$], [$34.0$], [$D_(2,1) = (34 - 52.5) / (2 - 1) = -18.5$], [---], [---], [---],
+  $2$, $34.0$, $D_(2,1) = (34 - 52.5) / (2 - 1) = -18.5$, [---], [---], [---],
 
-  [$3$],
-  [$13.5$],
-  [$D_(3,2) = (13.5 - 34) / (3 - 2) = -20.5$],
-  [$D_(3,2,1) = (-20.5 - (-18.5)) / (3-1) = -1$],
-  [---],
-  [---],
+  $3$, $13.5$, $D_(3,2) = (13.5 - 34) / (3 - 2) = -20.5$, $D_(3,2,1) = (-20.5 - (-18.5)) / (3-1) = -1$, [---], [---],
 
-  [$4$],
-  [$0$],
-  [$D_(4,3) = (0 - 13.5)/(4 - 3) = -13.5$],
-  [$D_(4,3,2) = (-13.5 -(-20.5))/(4-2) = 3.5$],
-  [$D_(4,3,2,1) = (3.5 - (-1)) / (4-1) = 1.5$],
+  $4$,
+  $0$,
+  $D_(4,3) = (0 - 13.5)/(4 - 3) = -13.5$,
+  $D_(4,3,2) = (-13.5 -(-20.5))/(4-2) = 3.5$,
+  $D_(4,3,2,1) = (3.5 - (-1)) / (4-1) = 1.5$,
   [---],
 
-  [$5$],
-  [$2.5$],
-  [$D_(5,4) = (2.5 - 0) / (5 - 4) = 2.5$],
-  [$D_(5,4,3) = (2.5 - (-13.5)) / (5-3) = 8$],
-  [$D_(5,4,3,2) = (8 - 3.5) / (5-2) = 1.5$],
-  [$D_(5,4,3,2,1) = 0$],
+  $5$,
+  $2.5$,
+  $D_(5,4) = (2.5 - 0) / (5 - 4) = 2.5$,
+  $D_(5,4,3) = (2.5 - (-13.5)) / (5-3) = 8$,
+  $D_(5,4,3,2) = (8 - 3.5) / (5-2) = 1.5$,
+  $D_(5,4,3,2,1) = 0$,
 
-  [$6$], [$30$], [$D_(6,5) = 27.5$], [$D_(6,5,4) = 12.5$], [$D_(6,5,4,3) = 1.5$], [$D_(6,5,4,3,2) = 0$],
+  $6$, $30$, $D_(6,5) = 27.5$, $D_(6,5,4) = 12.5$, $D_(6,5,4,3) = 1.5$, $D_(6,5,4,3,2) = 0$,
 
-  [$7$], [$91.5$], [$D_(7,6) = 61.5$], [$D_(7,6,5) = 17$], [$D_(7,6,5,4) = 1.5$], [$D_(7,6,5,4,3) = 0$],
+  $7$, $91.5$, $D_(7,6) = 61.5$, $D_(7,6,5) = 17$, $D_(7,6,5,4) = 1.5$, $D_(7,6,5,4,3) = 0$,
 )
+
 #hinweis[($D_(i,...,i-5)$ und $D_(i,...,i-6)$ wurden aus Platzgründen weggelassen, haben aber alle den Wert 0.)]
 
 2. Die hintersten $D_(i,...,i-n)$ in einer Zeile als $a_i$ einsetzen.
@@ -1372,13 +1375,13 @@ $
   $
 
 + Die $a$'s in die Polynomformel einsetzen\
-  $ f(x) = 53.5 - 18.5(x-1) - 1(x-1)(x-2) + 1.5(x-1)(x-2)(x-3) $
+  $ f(x) = 53.5 - 18.5 dot (x-1) - 1 dot (x-1)(x-2) + 1.5 dot (x-1)(x-2)(x-3) $
 
 + Das Polynom ausmultiplizieren
   $ underline(f(x) = 1.5x^3 - 10x^2 + x + 60) $
 
 #hinweis[(Die Werte sind hier ab $a_4$ alle 0, daher ist das Polynom vom Grad 3. Die Werte sind in diesem Fall exakt 0,
-da sie direkt von einem Polynom 3. Grades stammen)]
+  da sie direkt von einem Polynom 3. Grades stammen)]
 
 #pagebreak()
 
@@ -1388,7 +1391,7 @@ da sie direkt von einem Polynom 3. Grades stammen)]
   align: horizon,
   [
     Die Logistische Regression unterscheidet sich von den bisherigen Typen, da sie prüft, ob eine _Abhängigkeit_ zwischen
-    einer binären Variable und einer oder mehreren unabhängigen Variablen besteht. D.h. Sie _beantwortet `true/false`-Fragen_.
+    einer binären Variable und einer oder mehreren unabhängigen Variablen besteht. Sie _beantwortet `true/false`-Fragen_.
 
     Die Output-Werte liegen immer _zwischen 0 und 1_. Dazwischen muss ein Wert für die _Entscheidungsschwelle_ festgelegt werden, also die Grenze, bei der zwischen `true/false` gewechselt wird.
 
@@ -1402,12 +1405,10 @@ da sie direkt von einem Polynom 3. Grades stammen)]
   columns: (1fr,) * 2,
   align: horizon,
   table.header([Logistische Regressionsformel], [Sigmoid-Funktion]),
-  [
-    $
-      P(Y_k = 1) = (exp(beta_0 + sum^n_(i=1) beta_i dot X_(k dot i))) / (1 + exp(beta_0 + sum^n_(i=1) beta_i dot X_(k dot i)))
-    $
-  ],
-  [$ f(x) = 1/(1+e^(-(x))) $],
+  $
+    P(Y_k = 1) = (exp(beta_0 + sum^n_(i=1) beta_i dot X_(k dot i))) / (1 + exp(beta_0 + sum^n_(i=1) beta_i dot X_(k dot i)))
+  $,
+  $ f(x) = 1/(1+e^(-(x))) $,
 )
 
 == Korrelation
@@ -1417,18 +1418,18 @@ oder es besteht eine stochastische, also vom Zufall beeinflusste Beziehung zwisc
 für einen kausalen Zusammenhang. Um dies festzustellen, ist die Zusammenarbeit mit Fachkundigen nötig.
 
 Die _Autokorrelation_ ist die Korrelation eines Merkmals mit sich selbst zu einem früheren Zeitpunkt #hinweis[(anstatt mit
-einem anderen Merkmal)]. Damit können Vergleiche zwischen aktuellen und vergangenen Daten aufgestellt werden.
+  einem anderen Merkmal)]. Damit können Vergleiche zwischen aktuellen und vergangenen Daten aufgestellt werden.
 
 Die _Korrelationsanalyse_ hat die Aufgabe, die Intensität des rechnerischen #hinweis[(nicht des kausalen)] Zusammenhangs
 festzustellen und aufzuzeigen, wie gross der Einfluss des einen Merkmals auf das andere ist.
 Dafür werden _Kenngrössen_ benötigt. Welches Verfahren im speziellen Fall eingesetzt werden darf, hängt von der
 _Skalierung_ der Merkmale ab. Da wir aber immer davon ausgehen, dass beide Merkmale mindestens intervallskaliert sind,
-wird in ExEv immer der Korrelationskoeffizient von Bravais Pearson (siehe @pearson) angewendet.
+wird in Ex&Ev immer der Korrelationskoeffizient von Bravais Pearson angewendet #hinweis[(siehe @pearson)].
 
 === Zusammenhang
 Zwei Merkmale sind _statistisch unabhängig_, wenn der Wert des einen Merkmals nicht vom Wert des anderen Merkmals abhängt.
 Zu unterscheiden sind eine _formale Abhängigkeit_ #hinweis[(eine zahlenmässig begründete Abhängigkeit zwischen den Merkmalen)]
-und _Sachliche Abhängigkeit_ #hinweis[(verursacht der Wert des einen Merkmals den Wert des anderen $->$ Kausalität)].
+und _sachliche Abhängigkeit_ #hinweis[(verursacht der Wert des einen Merkmals den Wert des anderen? $->$ Kausalität)].
 
 #pagebreak()
 
@@ -1447,18 +1448,16 @@ Die Kovarianz wird dann auf den Wertebereich $[-1, 1]$ normiert; so entsteht der
   columns: (40%, 60%),
   align: horizon,
   table.header([Kovarianz], [Korrelationskoeffizient]),
-  [$ sigma_(X Y) = 1/n sum^n_(i=1) (x_i - #x-) dot (y_i - #y-) $],
-  [
-    $
-      r = (sigma_(X Y))/(sigma_X dot sigma_Y)
-      = (sum^n_(i=1) (x_i - #x-) dot (y_i - #y-)) / (sqrt((sum^n_(i=1) (x_i - #x-)^2) dot (sum^n_(i=1) (y_i - #y-)^2)))
-    $
-  ],
+  $ sigma_(X Y) = 1/n sum^n_(i=1) (x_i - #x-) dot (y_i - #y-) $,
+  $
+    r = (sigma_(X Y))/(sigma_X dot sigma_Y)
+    = (sum^n_(i=1) (x_i - #x-) dot (y_i - #y-)) / (sqrt((sum^n_(i=1) (x_i - #x-)^2) dot (sum^n_(i=1) (y_i - #y-)^2)))
+  $,
 )
 
 *Beispiel:* Werte aus 1. Aufgabe von @lin-reg
-#small[
-  #table(
+#small(
+  table(
     columns: (1fr,) * 6 + (auto,),
     align: right,
     table.header(
@@ -1470,23 +1469,24 @@ Die Kovarianz wird dann auf den Wertebereich $[-1, 1]$ normiert; so entsteht der
       [*$(y_i-#y-)^2$*],
       [*$(x_i-#x-) dot (y_i-#y-)$*],
     ),
-    [$1$], [$3.2$], [$3.2$], [$1$], [$9$], [$30.25$], [$16.5$],
-    [$2$], [$4.2$], [$8.4$], [$4$], [$4$], [$20.25$], [$9$],
-    [$3$], [$9$], [$27$], [$9$], [$1$], [$0.09$], [$-0.3$],
-    [$4$], [$8$], [$32$], [$16$], [$0$], [$0.49$], [$0$],
-    [$5$], [$12$], [$60$], [$25$], [$1$], [$10.89$], [$3.3$],
-    [$6$], [$11.5$], [$69$], [$36$], [$4$], [$7.84$], [$5.6$],
-    [$7$], [$13$], [$91$], [$49$], [$9$], [$18.49$], [$12.9$],
+    $1$, $3.2$, $3.2$, $1$, $9$, $30.25$, $16.5$,
+    $2$, $4.2$, $8.4$, $4$, $4$, $20.25$, $9$,
+    $3$, $9$, $27$, $9$, $1$, $0.09$, $-0.3$,
+    $4$, $8$, $32$, $16$, $0$, $0.49$, $0$,
+    $5$, $12$, $60$, $25$, $1$, $10.89$, $3.3$,
+    $6$, $11.5$, $69$, $36$, $4$, $7.84$, $5.6$,
+    $7$, $13$, $91$, $49$, $9$, $18.49$, $12.9$,
     table.hline(stroke: 1.5pt + black),
-    table.footer([$bold(Sigma) space 28$], [$60.9$], [$290.6$], [$140$], [$28$], [$88.3$], [$47$]),
-  )
-]
+    table.footer($bold(Sigma) space 28$, $60.9$, $290.6$, $140$, $28$, $88.3$, $47$),
+  ),
+)
+
 + $(x_i-#x-)^2$, $(y_i-#y-)^2$ und $(x_i -#x-) dot (y_i-#y-)$ ausrechnen (siehe Tabelle)
 
 + Kovarianz berechnen
 $
   sigma_(x y) & = 1/n sum^n_(i=1) (x_i - #x-) dot (y_i - #y-) \
-              & = 47/7 = 6.71
+              & = 1/7 dot 47 = 6.71
 $
 
 3. Standardabweichungen $sigma_x$ und $sigma_y$ berechnen\
@@ -1499,7 +1499,10 @@ $
 $ r = sigma_(x y)/(sigma_x dot sigma_y) = 6.71/(2 dot 3.55) = underline(0.95) $
 $=>$ starker positiver Zusammenhang
 
-#hinweis[*Achtung:* Wird das wrstat TR Skript "linreg" verwendet, werden beim Schritt drei nicht die Standardabweichungen, sondern die Varianzen angegeben (also ohne $sqrt(.)$)]
+#hinweis[
+  *Achtung:* Wird das wrstat TR Skript "linreg" verwendet, werden beim Schritt 3 nicht die Standardabweichungen,
+  sondern die Varianzen angegeben (also ohne $sqrt(.)$)
+]
 
 #pagebreak()
 
@@ -1518,17 +1521,16 @@ Aufgabe der Wahrscheinlichkeitsrechnung ist es, die Wahrscheinlichkeit für den 
   gekennzeichnet. #hinweis[(z.B Würfeln einer geraden Augenzahl $A = {2,4,6}$)]
 - _Elementarereignis ${omega}$:_ Ein Ereignis, welches nur ein Ergebnis beinhaltet. Teilmenge von $Omega$.
 - _Ergebnismenge $Omega$_: Alle möglichen Ergebnisse eines Zufallsexperiments. Sie kann endlich #hinweis[(Werfen eines Würfels
-  $Omega = {1,...,6}$)], unendlich #hinweis[(Lebensdauer eines Geräts $Omega = {omega in RR | omega >= 0}$)] oder binär sein
+    $Omega = {1,...,6}$)], unendlich #hinweis[(Lebensdauer eines Geräts $Omega = {omega in RR | omega >= 0}$)] oder binär sein
   #hinweis[(Gerät funktionstüchtig $Omega = {0, 1}$)].
 
 == Wahrscheinlichkeitsraum
 Ein _Wahrscheinlichkeitsraum (*$Omega, cal(A), Rho$*)_ wird zur mathematischen Beschreibung von Zufallsexperimenten verwendet.
 Ein Wahrscheinlichkeitsraum wird mittels drei Elementen beschrieben:
-- Der _Ergebnismenge_ $Omega$ mit allen möglichen Ergebnissen des Zufallsexperiments.
-- Dem _System der Ereignisse_ $cal(A)$, eine Menge von Teilmengen von $Omega$.
-- Dem _Wahrscheinlichkeitsmass_ $Rho : cal(A) -> [0, 1]$, welchem jedem Ereignis eine Wahrscheinlichkeit
+- Der _Ergebnismenge $Omega$_ mit allen möglichen Ergebnissen des Zufallsexperiments.
+- Dem _System der Ereignisse $cal(A)$_, eine Menge von Teilmengen von $Omega$.
+- Dem _Wahrscheinlichkeitsmass $Rho : cal(A) -> [0, 1]$_, welchem jedem Ereignis eine Wahrscheinlichkeit
   zwischen 0 und 1 zuordnet.
-
 
 === System der Ereignisse
 Alle Ereignisse eines Vorgangs zusammengefasst bilden ein _System der Ereignisse_, bezeichnet mit kalligrafischen
@@ -1540,15 +1542,15 @@ Jedes System der Ereignisse enthält folgende Ereigniskombinationen:
 - _Komplementärereignis $bold(dash(A))$/$bold(A^complement)$_: Das Gegenereignis tritt auf #hinweis[("nicht $A$")]
 - _Sicheres Ereignis:_ Die Ergebnismenge $Omega$ #hinweis[(alle Ergebnisse zusammen)] tritt immer ein
 - _Unmögliches Ereignis $bold(emptyset)$:_ Ereignis tritt nie ein, beschrieben durch die leere Menge.
-  Immer in $Omega$ enthalten. #hinweis[(0 würfeln)]
+  Immer in $Omega$ enthalten #hinweis[(0 würfeln)].
 - _Unvereinbares/Disjunktes Ereignis:_ Ereignisvereinigung kann nie gleichzeitig eintreten:\
   $A inter B = emptyset$ #hinweis[(1 Würfel zeigt nie 3 und 5 gleichzeitig)]
 
 === Wahrscheinlichkeitsmass
 Das _Wahrscheinlichkeitsmass $bold(Rho)$_ ordnet jedem Ereignis $A$ eine Wahrscheinlichkeit $Rho(A)$ zwischen 0 und 1 zu.
 Die Summe aller Wahrscheinlichkeiten in einem Wahrscheinlichkeitsraum (also $Rho(Omega)$) ist immer $1$.
-#small[
-  #table(
+#small(
+  table(
     columns: (auto, 1fr),
     table.header([Rechenregel], [Formel]),
     [Gegenwahrscheinlichkeit], [$Rho(A^complement) = 1 - Rho(A)$],
@@ -1559,15 +1561,15 @@ Die Summe aller Wahrscheinlichkeiten in einem Wahrscheinlichkeitsraum (also $Rho
     [$A subset B => Rho(A) <= Rho(B)$ #hinweis[(wenn $A$ in B enthalten, muss B mind. gleich gross wie A sein)]],
 
     [Additionssatz #hinweis[(mit Überlappung)]],
-    [$Rho(A union B) = Rho(A) + Rho(B) - Rho(A inter B)$ #hinweis[(Schnittmenge entfernen, sonst doppelt)]],
+    [$Rho(A union B) = Rho(A) + Rho(B) - Rho(A inter B)$ #hinweis[(Schnittmenge subtrahieren, sonst doppelt)]],
 
     [Additionssatz #hinweis[(ohne Überlappung)]], [$Rho(A union B) = Rho(A) + Rho(B)$],
 
     [Multiplikationssatz #hinweis[(ohne Bedingung)]], [$Rho(A inter B) = Rho(A) dot Rho(B)$],
 
     [Multiplikationssatz #hinweis[(mit Bedingung)]], [$Rho(A inter B) = Rho(A) dot Rho(B|A) = Rho(B) dot Rho(A|B)$],
-  )
-]
+  ),
+)
 
 #pagebreak()
 
@@ -1580,8 +1582,7 @@ gibt und diese alle die _gleiche Wahrscheinlichkeit_ haben. Dazu muss die Ergebn
   columns: (1fr,) * 2,
   align: horizon,
   table.header([Wahrscheinlichkeit eines Elementarereignisses], [Wahrscheinlichkeit eines beliebigen Ereignis]),
-  [$ Rho({omega_i}) = 1/n $],
-  [$ Rho(A) = abs(A)/abs(Omega) = "Anz. Ereignisse für A"/"Anz. aller Elementarereignisse" $],
+  $ Rho({omega_i}) = 1/n $, $ Rho(A) = abs(A)/abs(Omega) = "Anz. Ereignisse für A"/"Anz. aller Elementarereignisse" $,
 )
 
 *Beispiel:*\
@@ -1600,19 +1601,18 @@ $ Rho("was wir wissen wollen"|"was wir wissen") = Rho(A|B) = Rho(A inter B)/Rho(
 Sie tritt vor allem bei mehrstufigen Experimenten auf, wenn nach einer Stufe jeweils andere Ereignisse eintreffen können
 #hinweis[(z.B. mehrere Münzwürfe hintereinander stellen einen Kopf/Zahl Binary Tree auf)].
 Aus der Formel oben schliesst sich die _bedingte Pfadregel_:
-#definition[
-  #grid(
+
+#definition(
+  grid(
     columns: (2.5fr, 1fr),
     align: horizon,
-    [
-      $
-        Rho(A inter B) = Rho(B) dot Rho(A|B) \
-        Rho(B) -> Rho(A|B) -> Rho(A inter B)
-      $
-    ],
+    $
+      Rho(A inter B) = Rho(B) dot Rho(A|B) \
+      Rho(B) -> Rho(A|B) -> Rho(A inter B)
+    $,
     image("img/ExEv_01.png"),
-  )
-]
+  ),
+)
 
 Aus dieser lässt sich der _Satz von Bayes_ schliessen. Damit kann die "Bedingung" umgekehrt werden:
 Wissen wir $Rho(A|B)$, können wir auch $Rho(B|A)$ ausrechnen.
@@ -1625,9 +1625,10 @@ Wissen wir $Rho(A|B)$, können wir auch $Rho(B|A)$ ausrechnen.
 
 #pagebreak()
 
-*Beispiel*
+*Beispiel: Erkrankung an Grippe mit/ohne Impfung*
 #table(
   columns: (1fr,) * 4,
+  align: (x, y) => if x > 0 and y > 0 { right } else { auto },
   table.header(
     [],
     [Erkrankt ($bold(B)$)],
@@ -1635,10 +1636,10 @@ Wissen wir $Rho(A|B)$, können wir auch $Rho(B|A)$ ausrechnen.
     table.vline(stroke: 1.5pt + black),
     [Summe $bold(Sigma)$],
   ),
-  [_Geimpft ($bold(A)$)_], [$117$], [$389$], [$506$],
-  [_Nicht Geimpft ($bold(dash(A))$)_], [$289$], [$165$], [$454$],
+  [_Geimpft ($bold(A)$)_], $117$, $389$, $506$,
+  [_Nicht Geimpft ($bold(dash(A))$)_], $289$, $165$, $454$,
   table.hline(stroke: 1.5pt + black),
-  [_Summe $bold(Sigma)$_], [$406$], [$554$], [$960$],
+  [_Summe $bold(Sigma)$_], $406$, $554$, $960$,
 )
 
 Wahrscheinlichkeit, an Grippe zu erkranken:
@@ -1676,14 +1677,16 @@ Wahrscheinlichkeit 0 hat. Nur dann ist $Rho(A) dot Rho(B) = 0 = Rho(emptyset) = 
 === Totale/Vollständige Wahrscheinlichkeit
 #definition[
   Hat man für ein Ereignis $A$ mehrere Bedingungen $B_i$ #hinweis[(z.B. mehrere Fälle oder Ursachen für $A$)],
-  kann man die Wahrscheinlichkeit für $A$ berechnen, wenn man die bedingten Wahrscheinlichkeiten für $B_i$ zusammenzählt
+  kann man die Wahrscheinlichkeit für $A$ berechnen, wenn man die bedingten Wahrscheinlichkeiten für $B_i$ zusammenzählt\
   #hinweis[(Aus Einzelfällen lässt sich die Gesamtsituation zusammenstellen)].
 
   $ Rho(A) = sum_(i=1)^n Rho(A|B_i) dot Rho(B_i) $
 ]
 
-*Beispiel*:\
-Wie gross ist die Wahrscheinlichkeit $Rho(T)$, auf der Enterprise umzukommen?
+#example-block[
+  *Beispiel*:\
+  _Wie gross ist die Wahrscheinlichkeit $Rho(T)$, auf der Enterprise umzukommen?_
+]
 
 #v(-0.3em)
 #grid(
@@ -1693,28 +1696,28 @@ Wie gross ist die Wahrscheinlichkeit $Rho(T)$, auf der Enterprise umzukommen?
     Aus den bedingten Wahrscheinlichkeiten die Bedingung herausrechnen, um die Totale Wahrscheinlichkeit zu erhalten.
 
     $
-        &Rho(T inter G) &= Rho(T|G) dot Rho(G)\
-      + &Rho(T inter B) &= Rho(T|B) dot Rho(B)\
-      + &Rho(T inter R) &= Rho(T|R) dot Rho(R)\
-        #place(line(length: 4.5cm, stroke: 0.075em), dy: -3.4mm)
-        &Rho(T)
+                                                               & Rho(T inter G) & = Rho(T|G) dot Rho(G) \
+                                                             + & Rho(T inter B) & = Rho(T|B) dot Rho(B) \
+                                                             + & Rho(T inter R) & = Rho(T|R) dot Rho(R) \
+      #place(line(length: 4.5cm, stroke: 0.075em), dy: -3.4mm) & Rho(T)
     $
   ],
   image("img/ExEv_05.png"),
 )
 
-*Beispiel:*\
-Aus einem Jasskartenset (36 Karten) werden 2 Karten gezogen.
-Wie gross ist die Wahrscheinlichkeit, beim zweiten Zug ein Ass zu ziehen?
+#example-block[
+  *Beispiel:*\
+  _Aus einem Jasskartenset (36 Karten) werden 2 Karten gezogen.
+  Wie gross ist die Wahrscheinlichkeit, beim zweiten Zug ein Ass zu ziehen?_
+]
 
 #grid(
   align: horizon,
-  [
-    $
-      Rho(A) & = Rho(A|B_1) dot P(B_1) + Rho(A|B_2) dot Rho(B_2) \
-             & = 4/35 dot 32/36 + 3/35 dot 4/36 = underline(1/9)
-    $
-  ],
+
+  $
+    Rho(A) & = Rho(A|B_1) dot P(B_1) + Rho(A|B_2) dot Rho(B_2) \
+           & = 4/35 dot 32/36 + 3/35 dot 4/36 = underline(1/9)
+  $,
   [
     $Rho(A|B_i)$: Ass im zweiten Zug (nur noch 35 Karten)\
     $Rho(B_1)$: Kein Ass im ersten Zug $= 32\/36$\
@@ -1722,19 +1725,19 @@ Wie gross ist die Wahrscheinlichkeit, beim zweiten Zug ein Ass zu ziehen?
   ],
 )
 
-*Beispiel:*\
-In einem Behälter liegen 3 Arten von Batterien im Verhältnis 20:30:50. $B_1$ hält zu $70%$ länger als 100 Stunden,
-$B_2$ zu $40%$ und $B_3$ zu $30%$. Wie hoch ist die Wahrscheinlichkeit, dass eine zufällig gewählte Batterie länger
-als $100$ Stunden hält?
+#example-block[
+  *Beispiel:*\
+  _  In einem Behälter liegen 3 Arten von Batterien im Verhältnis 20:30:50. $B_1$ hält zu $70%$ länger als 100 Stunden,
+  $B_2$ zu $40%$ und $B_3$ zu $30%$. Wie hoch ist die Wahrscheinlichkeit, dass eine zufällig gewählte Batterie länger
+  als $100$ Stunden hält?_
+]
 
 #grid(
   align: horizon,
-  [
-    $
-      Rho(A) & = sum^3_(i=1) Rho(A|B_i) dot Rho(B_i) \
-             & = 0.7 dot 0.2 + 0.4 dot 0.3 + 0.3 dot 0.5 = underline(0.41)
-    $
-  ],
+  $
+    Rho(A) & = sum^3_(i=1) Rho(A|B_i) dot Rho(B_i) \
+           & = 0.7 dot 0.2 + 0.4 dot 0.3 + 0.3 dot 0.5 = underline(0.41)
+  $,
   [
     $n$: Anzahl Arten von Batterien\
     $Rho(A)$: Gewählte Batterie hält länger als 100h\
@@ -1758,7 +1761,7 @@ Man unterscheidet zwei Arten der Auswahlverfahren einer Reihenfolge:
 - _Ohne Wiederholung/Zurücklegen:_ Die Elemente sind alle einzigartig und dürfen nicht mehrmals vorkommen.
   #hinweis[(z.B. Personen an Tisch, Lotto-Zahlen)]
 
-Es gibt drei verschiedene Techniken, um Elemente anzuordnen:
+Es gibt drei verschiedene Techniken, um Elemente anzuordnen: _Permutation, Kombination und Variation_
 
 == Permutation <permutation>
 _"Auf wie viele Arten lassen sich $n$ verschiedene Objekte anordnen?"_\
@@ -1768,7 +1771,7 @@ Bei der Permutation wird die ganze Menge angeordnet, jedes Element der Menge wir
   columns: (1fr,) * 2,
   align: (_, y) => if (y == 1) { horizon } else { auto },
   table.header([ohne Wiederholung], [mit Wiederholung]),
-  [$ P(n) = n! $], [$ P_(n_1,...,n_k)(n) = n!/(n_1 ! dot n_2 ! dot ... dot n_k !) $],
+  $ P(n) = n! $, $ P_(n_1,...,n_k)(n) = n!/(n_1 ! dot n_2 ! dot ... dot n_k !) $,
   [
     Für das erste Objekt stehen $n$ Plätze zur Verfügung. Für das zweite Objekt muss einer der $n-1$ verbleibenden Plätze
     gewählt werden. Bisher sind nun $n dot (n-1)$ Möglichkeiten gefunden. Führt man diese Reihenfolge fort, ergeben
@@ -1780,11 +1783,12 @@ Bei der Permutation wird die ganze Menge angeordnet, jedes Element der Menge wir
   ],
 )
 
-*Beispiel:*\
-Eine Maschine muss vier Aufträge nacheinander abarbeiten. Wie viele Anordnungen sind möglich?\
-$ Rho(n) = 4! = underline(24) $
-
 #example-block[
+  *Beispiel:*\
+  _Eine Maschine muss vier Aufträge nacheinander abarbeiten. Wie viele Anordnungen sind möglich?_\
+  $ Rho(n) = 4! = underline(24) $
+
+
   *Beispiel:*\
   + _Ein Zahlenschloss hat eine Kombination mit den Ziffern "$1, 1, 4, 4, 4, 8$". Wie viele Codes gibt es?_
   $
@@ -1792,10 +1796,10 @@ $ Rho(n) = 4! = underline(24) $
     Rho_(2, 3, 1) = 6!/(2! dot 3! dot 1!) = 720/12 = underline(60)
   $
 
-  2. _Wie viele Kombinationen beginnen mit $4$?\
-    Da der erste Platz nun fix mit einer $4$ besetzt ist, haben wir eine neue Fragestellung mit den Ziffern "$1, 1, 4, 4, 8$":_
+  2. _Wie viele Kombinationen beginnen mit $4$?_\
+    Da der erste Platz nun fix mit einer $4$ besetzt ist, haben wir eine neue Fragestellung mit den Ziffern "$1, 1, 4, 4, 8$":
   $
-    n_1(1) = 2, space n_2(4) = 2, n_3(8) = 1 quad => quad n = 2 + 2 + 1 = 5\
+    n_1(1) = 2, space n_2(4) = 2, space n_3(8) = 1 quad => quad n = 2 + 2 + 1 = 5\
     Rho_(2, 2, 1) = 5!/(2! dot 2! dot 1!) = 120/4 = underline(30)
   $
 ]
@@ -1809,8 +1813,8 @@ auch von einer _ungeordneten (Stich-)probe_. Die Permutation ist ein Spezialfall
   columns: (1fr,) * 2,
   align: (_, y) => if (y == 1) { horizon } else { auto },
   table.header([ohne Wiederholung], [mit  Wiederholung]),
-  [$ K_k (n) = (product^(n-k+1)_n n)/k! = n!/(k! dot (n-k)!) = binom(n, k) $],
-  [$ K^W_k (n) = (n+k-1)!/(k! dot (n-k)!) = binom(n + k - 1, k) $],
+  $ K_k (n) = (product^(n-k+1)_n n)/k! = n!/(k! dot (n-k)!) = binom(n, k) $,
+  $ K^W_k (n) = (n+k-1)!/(k! dot (n-k)!) = binom(n + k - 1, k) $,
 
   [
     Es ist zuerst $k$ mal eine Auswahl zu treffen. Für die erste Auswahl stehen $n$ Objekte zur Verfügung.
@@ -1829,28 +1833,30 @@ auch von einer _ungeordneten (Stich-)probe_. Die Permutation ist ein Spezialfall
   TR: Menü $->$ 5: Wahrscheinlichkeit $->$ 3: Kombinationen $-> "nCr"("obere Zahl", "untere Zahl")$
 ]
 
-*Beispiel:*\
-Bei einem Pokémon-Turnier soll jeder der 25 Teilnehmer einmal gegen jeden spielen. Wie viele Spiele werden ausgetragen?
-$ K_2(25) = (25 dot 24)/2! = 25!/(2! dot (25-2)!) = binom(25, 2) = underline(300) $
+#example-block[
+  *Beispiel:*\
+  _Bei einem Pokémon-Turnier soll jeder der 25 Teilnehmer einmal gegen jeden spielen. Wie viele Spiele werden ausgetragen?_
+  $ K_2(25) = (25 dot 24)/2! = 25!/(2! dot (25-2)!) = binom(25, 2) = underline(300) $
 
-*Beispiel:*\
-Im Nationalrat werden 3 Sitze neu vergeben. Es stellen sich 6 Parteien dafür auf.
-Eine Partei kann mehr als einen Sitz erhalten. Die Reihenfolge ist irrelevant, da es keinen Unterschied macht,
-ob $"ABC"$ oder $"CBA"$ #hinweis[(egal ob Partei A 1. oder 3. wird, sie erhalten auf beide Arten 1 Sitz)].
-Wie viele Kombinationen sind möglich?
-$ K^W_3(6) = binom(6+3-1, 3) = binom(8, 3) = (8 dot 7 dot 6)/3! = 8!/(3! dot (8-3)!) = underline(56) $
+  *Beispiel:*\
+  _Im Nationalrat werden 3 Sitze neu vergeben. Es stellen sich 6 Parteien dafür auf.
+  Eine Partei kann mehr als einen Sitz erhalten. Die Reihenfolge ist irrelevant, da es keinen Unterschied macht,
+  ob $"ABC"$ oder $"CBA"$ #hinweis[(egal ob Partei A 1. oder 3. wird, sie erhalten auf beide Arten 1 Sitz)].
+  Wie viele Kombinationen sind möglich?_
+  $ K^W_3(6) = (8 dot 7 dot 6)/3! = 8!/(3! dot (8 - 3)!) = binom(6 + 3 - 1, 3) = binom(8, 3) = underline(56) $
 
-*Beispiel:*\
-Aus 50 Glühbirnen wird eine Stichprobe von 5 entnommen. Wie gross ist die Wahrscheinlichkeit, dass aus
-diesen 5 genau 2 defekt sind, wenn total 10 defekt sind?
+  *Beispiel:*\
+  _Aus 50 Glühbirnen wird eine Stichprobe von 5 entnommen. Wie gross ist die Wahrscheinlichkeit, dass aus
+  diesen 5 genau 2 defekt sind, wenn total 10 defekt sind?_
 
-Das gewünschte Ergebnis kann in einem Laplace-Experiment mit zwei Fällen dargestellt werden:
-- $2$ defekte Glühbirnen aus total $10$ defekten ziehen
-- $(5 - 2) = 8$ funktionsfähige Glühbirnen aus total $(50 - 10) = 40$ Funktionsfähigen ziehen
-$
-  Rho{3 "Defekte"} = (mat(10; 2) dot mat(50-10; 5-2))/mat(50; 5)
-  = ((10 dot 9)\/2 dot (40 dot 39 dot 38)\/(2 dot 3))/(2'118'760) = underline(0.21)
-$
+  Das gewünschte Ergebnis kann in einem Laplace-Experiment mit zwei Fällen dargestellt werden:
+  - $2$ defekte Glühbirnen aus total $10$ defekten ziehen
+  - $(5 - 2) = 8$ funktionsfähige Glühbirnen aus total $(50 - 10) = 40$ Funktionsfähigen ziehen
+  $
+    Rho{2 "Defekte"} = (mat(10; 2) dot mat(50-10; 5-2))/mat(50; 5)
+    = ((10 dot 9)\/2 dot (40 dot 39 dot 38)\/(2 dot 3))/(2'118'760) = underline(0.21)
+  $
+]
 
 == Variation <variation>
 _"Auf wie viele Arten kann man $bold(k)$ mal unter $bold(n)$ verschiedenen Objekten auswählen?"_\
@@ -1861,24 +1867,26 @@ Diese Teilmenge wird als _geordnete (Stich-)probe_ bezeichnet.
   columns: (1fr,) * 2,
   align: horizon,
   table.header([ohne Wiederholung], [mit Wiederholung]),
-  [$ V_k (n) = n!/(n-k)! = product^(n-k+1)_n n $], [$ V^W_k (n) = n^k $],
+  $ V_k (n) = n!/(n-k)! = product^(n-k+1)_n n $, $ V^W_k (n) = n^k $,
 )
 
-*Beispiel:*\
-Auf wie viele Arten kann man eine Perlenkette der Länge $k = 10$ aus $n = 4$ Farben von Perlen herstellen?\
-$ V_10 (4) = 4^10 = underline(1'048'576 "Möglichkeiten") $
+#example-block[
+  *Beispiel:*\
+  _Auf wie viele Arten kann man eine Perlenkette der Länge $k = 10$ aus $n = 4$ Farben von Perlen herstellen?_\
+  $ V_10 (4) = 4^10 = underline(1'048'576 "Möglichkeiten") $
 
-*Beispiel:*\
-Wie viele Kombinationen gibt es bei einem 5-stelligen Zahlenschloss mit jeweils $10$ Ziffern pro Stelle?\
-$ 10^5 = underline(100'000 "Kombinationen") $
+  *Beispiel:*\
+  _Wie viele Kombinationen gibt es bei einem 5-stelligen Zahlenschloss mit jeweils $10$ Ziffern pro Stelle?_\
+  $ 10^5 = underline(100'000 "Kombinationen") $
 
-*Beispiel:*\
-Aus $18$ Teilnehmer eines Rennens müssen die ersten 3 in der richtigen Reihenfolge getippt werden.
-Wie viele Möglichkeiten gibt es?
-$
-  k = 3, quad quad n = 18\
-  V^W_3 (18) = product^(18-3+1)_18 n = product^16_18 n = 18 dot 17 dot 16 = underline(4'896)
-$
+  *Beispiel:*\
+  _Aus $18$ Teilnehmer eines Rennens müssen die ersten 3 in der richtigen Reihenfolge getippt werden.
+  Wie viele Möglichkeiten gibt es?_
+  $
+    k = 3, quad quad n = 18\
+    V^W_3 (18) = product^(18-3+1)_18 n = product^16_18 n = 18 dot 17 dot 16 = underline(4'896)
+  $
+]
 
 #pagebreak()
 
@@ -1911,15 +1919,18 @@ $
 Mit Hilfe einer Wahrscheinlichkeitsverteilung lassen sich zufallsbehaftete Ereignisse oder Variablen
 #hinweis[(sogenannte Zufallsvariablen)] modellieren. _Diskrete Verteilungen_ stellen die Ergebnisse von Experimenten dar,
 welche eine feste Anzahl von Ereignissen haben #hinweis[(z.B. 6 Ereignisse eines Würfels, Anzahl Studenten
-mit einer bestimmten Note)]
+  mit einer bestimmten Note)]
 
 == Zufallsvariable
 Eine Zufallsvariable $X(omega)$ ist eine Funktion, welche jedem möglichen Ergebnis $omega$ eines Zufallsexperiments
 _eine reelle Zahl $x$ zuordnet_. Dabei steht in der Fallunterscheidung links die Realisierung der Zufallsvariable
 #hinweis[(konkreter Wert)] und rechts das Ereignis #hinweis[($omega in {...}$)].
 
-*Beispiel:*
-Beim Roulette auf erstes Dutzend ($1-12$) setzen. Ergebnisse $omega$: $2$ Fr. Gewinn, $1$ Fr. Verlust (des Einsatzes)
+#example-block[
+  *Beispiel:*
+  _Beim Roulette auf erstes Dutzend ($1-12$) setzen. Ergebnisse $omega$: $2$ Fr. Gewinn, $1$ Fr. Verlust (des Einsatzes)_
+]
+
 $
   X: {0,1,...,36} -> RR, quad
   X(omega) = cases(
@@ -1949,8 +1960,6 @@ $
   image("img/ExEv_06.png"),
 )
 
-
-
 - _Verteilung der Zufallsvariable:_ Die Gesamtheit der Tupel der Wahrscheinlichkeitsfunktion.
   Wird normalerweise als Graph dargestellt.
 - _Realisation:_ Wert, den die Zufallsvariable in einem konkreten Experimentdurchlauf annimmt.
@@ -1970,25 +1979,27 @@ Die Konzepte der Zufallsvariable lassen sich auf diese der _beschreibenden Stati
   [Erwartungswert], [arithmetisches Mittel],
 )
 
-*Beispiel:*\
-Bestimme die Wahrscheinlichkeiten der Zahlen der Urliste
+#example-block[
+  *Beispiel:*\
+  _Bestimme die Wahrscheinlichkeiten der Zahlen der Urliste_
+]
+
 $ x_i = {1,4,2,2,4,3,1,2,2,2,3,4,5,1,1,2,3,4,5,5}, quad n = 20 $
 #grid(
   gutter: 1em,
-  [
-    #table(
-      columns: (1fr,) * 7,
-      align: (x, y) => { if (x > 0 and y > 0) { right } else { auto } },
-      table.header([*$i$*], [*$x_i$*], [*$h_i$*], [*$f_i$*], [*$F_i$*], [*$x_i f_i$*], [*$x_i^2f_i$*]),
-      [1], [1], [4], [0.20], [0.20], [0.20], [0.20],
-      [2], [2], [6], [0.30], [0.50], [0.60], [1.20],
-      [3], [3], [3], [0.15], [0.65], [0.45], [1.35],
-      [4], [4], [4], [0.20], [0.85], [0.80], [3.20],
-      [5], [5], [3], [0.15], [1.00], [0.75], [3.75],
-      table.hline(stroke: 1.5pt),
-      [$Sigma$], [], [20], [], [], [2.80], [9.70],
-    )
-  ],
+
+  table(
+    columns: (1fr,) * 7,
+    align: (x, y) => { if (x > 0 and y > 0) { right } else { auto } },
+    table.header([*$i$*], [*$x_i$*], [*$h_i$*], [*$f_i$*], [*$F_i$*], [*$x_i f_i$*], [*$x_i^2f_i$*]),
+    [1], [1], [4], [0.20], [0.20], [0.20], [0.20],
+    [2], [2], [6], [0.30], [0.50], [0.60], [1.20],
+    [3], [3], [3], [0.15], [0.65], [0.45], [1.35],
+    [4], [4], [4], [0.20], [0.85], [0.80], [3.20],
+    [5], [5], [3], [0.15], [1.00], [0.75], [3.75],
+    table.hline(stroke: 1.5pt),
+    table.footer([$Sigma$], [], [20], [], [], [2.80], [9.70]),
+  ),
   [
     + Tabelle mit abs. & relat. Häufigkeiten $h_i$, $f_i$ erstellen
     + Wahrscheinlichkeitsfunktion mit $f_i$ erstellen
@@ -2013,8 +2024,11 @@ Viele Verteilungsfunktionen haben eigene _Verteilungsparameter_, welche die gena
 Während ein _Skalenparameter_ die Streuung und somit die Breite einer Verteilung bestimmt, beeinflusst ein _Formparameter_
 die Form einer Verteilungsfunktion; er bewirkt mehr als nur eine Skalierung oder Verschiebung.
 
-*Beispiel:*\
-Bestimme die Verteilungsfunktion der Urliste vom Beispiel der Diskreten Wahrscheinlichkeitsfunktion
+#example-block[
+  *Beispiel:*\
+  _Bestimme die Verteilungsfunktion der Urliste vom Beispiel der Diskreten Wahrscheinlichkeitsfunktion._
+]
+
 + Tabelle mit relativen kumulierten Häufigkeit $F_i$ erstellen #hinweis[(siehe oben)]
 + Verteilungsfunktion mit $F_i$ erstellen. _Die Fälle ausserhalb des Wertebereichs nicht vergessen!_
   $
@@ -2032,11 +2046,11 @@ Bestimme die Verteilungsfunktion der Urliste vom Beispiel der Diskreten Wahrsche
 Die empirische Verteilungsfunktion zeigt die Wahrscheinlichkeit an, dass ein Messwert _höchstens eine bestimmte Grösse_ hat.
 Sie wird angewendet, wenn konkrete Messwerte vorliegen, also beispielsweise berechnet sie, in welchem Anteil
 bei 20 Würfen mit 2 Würfeln höchstens eine 5 gefallen ist.
-#definition[
-  #grid(
+#definition(
+  grid(
     columns: (1fr, 1fr),
     align: horizon,
-    [$ F(x_i) = sum^i_(j=1) f(x_j) = sum^i_(j=1) = n_j/n $],
+    $ F(x_i) = sum^i_(j=1) f(x_j) = sum^i_(j=1) = n_j/n $,
     [
       _*$F(x_i)$*:_ Verteilungswert des Messwerts $x_i$\
       _*$sum^i_(i=1)$*:_ Summiere für alle Werte bis zum Messwert $x_i$\
@@ -2044,8 +2058,8 @@ bei 20 Würfen mit 2 Würfeln höchstens eine 5 gefallen ist.
       _*$n_j$*:_ Absolute Häufigkeit des Messwerts $j$\
       _*$n$*:_ Gesamtanzahl der Messwerte der Stichprobe\
     ],
-  )
-]
+  ),
+)
 
 #table(
   columns: (1fr,) * 2,
@@ -2060,8 +2074,11 @@ bei 20 Würfen mit 2 Würfeln höchstens eine 5 gefallen ist.
   ],
 )
 
-*Beispiel:*\
-Bestimme Erwartungswert & Varianz der Urliste vom Beispiel der Diskreten Wahrscheinlichkeitsfunktion @diskret-wkeit-urliste.
+#example-block[
+  *Beispiel:*\
+  _Bestimme Erwartungswert und Varianz der Urliste vom Beispiel der Diskreten Wahrscheinlichkeitsfunktion
+  #hinweis[(@diskret-wkeit-urliste)]._
+]
 
 + Tabelle mit relativer Häufigkeit $f_i$ und Erwartungswert $x_i dot n_j\/n$ erstellen #hinweis[(siehe Beispiel oben)]
 + Summe bilden, um Gesamt-Erwartungswert zu erhalten
@@ -2071,20 +2088,23 @@ $ E(x) = sum_i x_i dot f(x_i) = underline(2.8) $
 + Varianz berechnen mit der Summe der neuen Spalte
 $ "var"(x) = E(x^2) - (E(x))^2 = sum^v_(i=1) x_i^2 dot f(x_i) - (E(x))^2 = 9.7 - 2.8^2 = underline(1.86) $
 
-*Beispiel:*\
-An der letzten Ex&Ev-Prüfung hatten die 20 Studierenden folgenden Notenspiegel.
-Wie wahrscheinlich ist es, dass eine Person eine 4 oder besser erreicht hat?
-#{
-  show emph: set text(fill: black, weight: "regular", style: "oblique")
-  table(
-    columns: (1fr,) * 7,
-    [*Note*], [6], [5], [4], [3], [2], [1],
-    [*Häufigkeit*], [4], [5], [7], [2], [1], [1],
-  )
-}
-$
-  Rho(x_i <= 4 <= x_20) = sum^20_(j=i) f(x_j) = sum^20_(j=i) n_j/20 = 4/20 + 5/20 + 7/20 = 16/20 = 0.8 = underline(80%)
-$
+#example-block[
+  *Beispiel:*\
+  _An der letzten Ex&Ev-Prüfung hatten die 20 Studierenden folgenden Notenspiegel.
+  Wie wahrscheinlich ist es, dass eine Person eine 4 oder besser erreicht hat?_
+
+  #{
+    show emph: set text(fill: black, weight: "regular", style: "oblique")
+    table(
+      columns: (1fr,) * 7,
+      [*Note*], [6], [5], [4], [3], [2], [1],
+      [*Häufigkeit*], [4], [5], [7], [2], [1], [1],
+    )
+  }
+  $
+    Rho(x_i <= 4 <= x_20) = sum^20_(j=i) f(x_j) = sum^20_(j=i) n_j/20 = 4/20 + 5/20 + 7/20 = 16/20 = 0.8 = underline(80%)
+  $
+]
 
 #pagebreak()
 
@@ -2108,26 +2128,28 @@ $
   columns: (1fr,) * 2,
   align: horizon,
   table.header([Erwartungswert], [Varianz]),
-  [$ E(X) = p $], [$ "var"(X) = p dot q $],
+  $ E(X) = p $, $ "var"(X) = p dot q $,
 )
 
-*Beispiel:*\
-In einem Experiment mit Bernoulli-Verteilung auf ${0, 1}$ ist das Ereignis $1$ viermal so wahrscheinlich
-wie das\ Ereignis $0$. Bestimme Wahrscheinlichkeitsfunktion, Verteilungsfunktion, Erwartungswert & Varianz.
+#example-block[
+  *Beispiel:*\
+  _In einem Experiment mit Bernoulli-Verteilung auf ${0, 1}$ ist das Ereignis $1$ viermal so wahrscheinlich
+  wie das\ Ereignis $0$. Bestimme Wahrscheinlichkeitsfunktion, Verteilungsfunktion, Erwartungswert & Varianz._
 
-Die Summe der Wahrscheinlichkeit ist 1, also folgt:
-$1 = p + (1 - p) quad => quad p + 4p = 5p -> p = 0.2$
+  Die Summe der Wahrscheinlichkeit ist 1, also folgt:
+  $ 1 = p + (1 - p) quad => quad p + 4p = 5p quad => quad p = 0.2 $
 
-Daraus lassen sich alle Werte bilden:
+  Daraus lassen sich alle Werte bilden:
+]
 
 #table(
   columns: (1fr,) * 4,
   align: horizon,
   table.header([Wahrscheinlichk.funktion], [Verteilungsfunktion], [Erwartungswert], [Varianz]),
-  [$ f(x) = cases(0.2 quad &x = 0, 0.8 &x = 1, 0 &"sonst") $],
-  [$ F(X) = cases(0 &x < 0, 0.2 quad &x = 0, 1 &x >= 1) $],
-  [$ E(x) = p = 0.2 $],
-  [$ sigma^2 = p dot (1 - p) = 0.16 $],
+  $ f(x) = cases(0.2 quad &x = 0, 0.8 &x = 1, 0 &"sonst") $,
+  $ F(X) = cases(0 &x < 0, 0.2 quad &x = 0, 1 &x >= 1) $,
+  $ E(x) = p = 0.2 $,
+  $ sigma^2 = p dot (1 - p) = 0.16 $,
 )
 
 #pagebreak()
@@ -2148,7 +2170,7 @@ Daraus lassen sich alle Werte bilden:
   Die Wahrscheinlichkeitsfunktion der Binomialverteilung ist:
   #grid(
     align: horizon,
-    [$ f(x) = Rho(X = x) = binom(n, x) dot p^x dot (1-p)^(n-x) $],
+    $ f(x) = Rho(X = x) = binom(n, x) dot p^x dot (1-p)^(n-x) $,
     [
       _*$x$*:_ Anzahl Ereignisse\
       _*$n$*:_ Anzahl Realisationen, in denen Ereignis eintritt\
@@ -2161,24 +2183,26 @@ Daraus lassen sich alle Werte bilden:
   columns: (1fr,) * 2,
   align: horizon,
   table.header([Erwartungswert], [Varianz]),
-  [$ E(X) = n dot p $], [$ "var"(X) = n dot p dot q = n dot p dot (1 - p) $],
+  $ E(X) = n dot p $, $ "var"(X) = n dot p dot q = n dot p dot (1 - p) $,
 )
 
-*Beispiel*:\
-Auf eine Reise sind $10$ Personen angemeldet. Die Wahrscheinlichkeit einer Absage ist $5%$.
-Wie hoch ist die Chance, dass genau $2$ Personen absagen?
-$
-  Rho(X = 2) = binom(n, k) dot p^k dot (1-p)^(n-k)
-  = binom(10, 2) dot 0.05^2 dot (1 - 0.05)^(10-2)
-  = binom(10, 2) dot 0.05^2 dot 0.95^8 = underline(0.075)
-$
+#example-block[
+  *Beispiel*:\
+  _Auf eine Reise sind $10$ Personen angemeldet. Die Wahrscheinlichkeit einer Absage ist $5%$.
+  Wie hoch ist die Chance, dass genau $2$ Personen absagen?_
+  $
+    Rho(X = 2) & = binom(n, k) dot p^k dot (1-p)^(n-k) \
+               & = binom(10, 2) dot 0.05^2 dot (1 - 0.05)^(10-2) \
+               & = binom(10, 2) dot 0.05^2 dot 0.95^8 = underline(0.075)
+  $
 
-Wie hoch ist die Wahrscheinlichkeit, dass mindestens $3$ Gäste absagen? Dazu muss $1$ minus die Wahrscheinlichkeit
-von $0$ bis $2$ Absagen gerechnet werden.
-$
-  Rho = 1 - Rho(X <= x = 2) = 1 - sum^x_(i=0) mat(n; x_i) dot p^(x_i) dot (1 - p)^(n-x_i) =
-  = 1 - sum^2_(i=0) mat(10; i) dot 0.05^(i) dot 0.95^(10-i) = underline(0.011)
-$
+  _Wie hoch ist die Wahrscheinlichkeit, dass mindestens $3$ Gäste absagen? Dazu muss $1$ minus die Wahrscheinlichkeit
+  von $0$ bis $2$ Absagen gerechnet werden._
+  $
+    Rho = 1 - Rho(X <= x = 2) & = 1 - sum^x_(i=0) mat(n; x_i) dot p^(x_i) dot (1 - p)^(n-x_i) \
+                              & = 1 - sum^2_(i=0) mat(10; i) dot 0.05^(i) dot 0.95^(10-i) = underline(0.011)
+  $
+]
 
 #pagebreak()
 
@@ -2197,7 +2221,7 @@ $
   Die Wahrscheinlichkeitsfunktion der Poisson-Verteilung ist:
   #grid(
     columns: (1fr, 1.1fr),
-    [$ f(x) = Rho(X = x) = mu^x/x! dot e^(-mu) $],
+    $ f(x) = Rho(X = x) = mu^x/x! dot e^(-mu) $,
     [
       _*$x$ oder $lambda$*:_ Anzahl Ereignisse\
       _*$mu$*:_ Durchschnittliches Auftreten des Ereignis im Intervall
@@ -2210,23 +2234,25 @@ $
   columns: (1fr,) * 2,
   align: horizon,
   table.header([Erwartungswert], [Varianz]),
-  [$ E(X) = mu $], [$ "var"(X) = mu $],
+  $ E(X) = mu $, $ "var"(X) = mu $,
 )
 
-*Beispiel:*\
-An einer Hotline rufen in einer Stunde durchschnittlich $5$ Kunden an. Sie kann $9$ Anrufe gleichzeitig bearbeiten.\
-#hinweis[(Nicht dieselbe Aufgabe wie bei der Exponential-Verteilung, es hängt von der Fragestellung ab!)]
+#example-block[
+  *Beispiel:*\
+  _An einer Hotline rufen in einer Stunde durchschnittlich $5$ Kunden an. Sie kann $9$ Anrufe gleichzeitig bearbeiten._\
+  #hinweis[(Nicht dieselbe Aufgabe wie bei der Exponential-Verteilung, es hängt von der Fragestellung ab!)]
 
-Wie gross ist die Wahrscheinlichkeit, dass genau $3$ Kunden anrufen?
-$ Rho(3) = mu^x/x! dot e^(-mu) = 5^3/(3!) dot e^(-5) = underline(0.14) $
+  + _Wie gross ist die Wahrscheinlichkeit, dass genau $3$ Kunden anrufen?_
+    $ Rho(3) = mu^x/x! dot e^(-mu) = 5^3/(3!) dot e^(-5) = underline(0.14) $
 
-Wie gross ist die Wahrscheinlichkeit, dass die Hotline mit mehr als 9 Anrufen gleichzeitig zu kämpfen hat und
-somit überlastet ist?\
-Dazu muss $1$ minus die Wahrscheinlichkeit von $0$ bis $9$ Anrufen gerechnet werden.
-$
-  Rho = 1 - Rho(X <= x = 9) = 1 - sum^x_(i=0) mu^x/x! dot e^(-mu)
-  = 1 - sum^9_(i=0) 5^i/i! dot e^(-5) = 1 - 0.9682 = underline(0.0318)
-$
+  + _Wie gross ist die Wahrscheinlichkeit, dass die Hotline mit mehr als $9$ Anrufen gleichzeitig zu kämpfen hat und
+    somit überlastet ist?_\
+    Dazu muss $1$ minus die Wahrscheinlichkeit von $0$ bis $9$ Anrufen gerechnet werden.
+    $
+      Rho = 1 - Rho(X <= x = 9) & = 1 - sum^x_(i=0) mu^x/x! dot e^(-mu) \
+                                & = 1 - sum^9_(i=0) 5^i/i! dot e^(-5) = 1 - 0.9682 = underline(0.0318)
+    $
+]
 
 === Approximation der Binomialverteilung
 Mit der Poissonverteilung kann die Binomialverteilung approximiert werden, wenn die Datengrundlage genügend klein ist
@@ -2238,7 +2264,7 @@ Die Rechnung funktioniert dann ganz normal wie bei der Poisson-Verteilung.
 Häufig arbeitet man nicht mit Werten, die exakt gleich sind #hinweis[(Würfelaugen, Anzahl Personen in Schlange, Ausfallzeit)],
 sondern nur annähernd gleich #hinweis[(Länge von 2 Gegenständen, Füllstand von 2 Behältern)] oder mit Systemen, bei denen
 sich der Zustand über die Zeit kontinuierlich ändert #hinweis[(Wartezeit in Schlange, Stromverbrauch eines Gebäude,
-Alterungsprozesse)]. Solche Prozesse können durch _stetige Zufallsvariablen_ beschrieben werden.
+  Alterungsprozesse)]. Solche Prozesse können durch _stetige Zufallsvariablen_ beschrieben werden.
 
 #pagebreak()
 
@@ -2246,9 +2272,9 @@ Alterungsprozesse)]. Solche Prozesse können durch _stetige Zufallsvariablen_ be
 Anstatt der Wahrscheinlichkeitsfunktion bei den diskreten Verteilungen gibt es bei den stetigen Verteilungen
 die _Wahrscheinlichkeitsdichte_ bzw. _Dichtefunktion $bold(f(x))$_ .
 
-#definition[
-  $ f(x) = Rho(a <= X <= b) = integral^b_a f(x) dif x $
-]
+#definition(
+  $ f(x) = Rho(a <= X <= b) = integral^b_a f(x) dif x $,
+)
 
 Mithilfe der Dichtefunktion kann die _Wahrscheinlichkeit_ ermittelt werden, dass ein Wert _realisiert_ wird,
 der _innerhalb_ eines vorab definierten _Intervalls_ liegt. Im Gegensatz zu Wahrscheinlichkeiten können
@@ -2268,8 +2294,8 @@ Sie wird beispielsweise angenommen, wenn Fehler- oder Temperaturgrenzen angegebe
   Die _Dichte- und Verteilungsfunktion_ der Rechteck-Verteilung sind:
   #grid(
     align: horizon,
-    [$ f(x|a;b) = 1/(b-a) $],
-    [$ F(x|a;b) = (x-a)/(b-a) $],
+    $ f(x|a;b) = 1/(b-a) $,
+    $ F(x|a;b) = (x-a)/(b-a) $,
   )
 ]
 
@@ -2277,12 +2303,12 @@ Sie wird beispielsweise angenommen, wenn Fehler- oder Temperaturgrenzen angegebe
   columns: (1fr,) * 2,
   align: horizon,
   table.header([Erwartungswert], [Varianz]),
-  [$ E(X) = (a + b)/2 $], [$ "var"(X) = 1/12 dot (b-a)^2 $],
+  $ E(X) = (a + b)/2 $, $ "var"(X) = 1/12 dot (b-a)^2 $,
 )
 
 *Beispiel:*\
 #example-block[
-  _Eine Person trifft zu einer zufälligen Zeit an einer Bushaltestelle ein, bei der alle 10min ein Bus fährt._
+  _Eine Person trifft zu einer zufälligen Zeit an einer Bushaltestelle ein, bei der alle 10 Minuten ein Bus fährt._
 
   + Wie gross ist die Wahrscheinlichkeit, dass sie 3 Minuten auf den Bus warten muss?
 
@@ -2313,27 +2339,24 @@ zu schätzen. Sind Werte wie Min, Max und Modus bekannt, nimmt man oft die Dreie
 
 #definition[
   Die _Dichte- und Verteilungsfunktion_ der Dreieck-Verteilung sind:
+
   #show math.cases: set text(size: 1.2em)
   #grid(
     align: horizon,
-    [
-      $
-        f(x) = cases(
-          (2 dot (x-a))/((b-a) dot (c-a))"," quad & a <= x <= c,
-          2/(b-a)"," & x = c,
-          (2 dot (b-x))/((b-a) dot (b-c))"," & c < x <= b
-        )
-      $
-    ],
-    [
-      $
-        F(x) = cases(
-          (x-a)^2/((b-a) dot (c-a))"," & a <= x <= c,
-          (c-a)/(b-a)"," & x = c,
-          1 - (b-x)^2/((b-a) dot (b-c))"," quad & c < x <= b
-        )
-      $
-    ],
+    $
+      f(x) = cases(
+        (2 dot (x - a))/((b - a) dot (c - a))"," quad & a <= x <= c,
+        2/(b - a)"," & x = c,
+        (2 dot (b - x))/((b - a) dot (b - c))"," & c < x <= b
+      )
+    $,
+    $
+      F(x) = cases(
+        (x - a)^2/((b - a) dot (c - a))"," & a <= x <= c,
+        (c - a)/(b - a)"," & x = c,
+        1 - (b - x)^2/((b - a) dot (b - c))"," quad & c < x <= b
+      )
+    $,
   )
 ]
 
@@ -2341,37 +2364,34 @@ zu schätzen. Sind Werte wie Min, Max und Modus bekannt, nimmt man oft die Dreie
   columns: (1fr,) * 2,
   align: horizon,
   table.header([Erwartungswert], [Varianz]),
-  [$ E(X) = (a+b+c)/3 $], [$ "var"(X) = ((a-b)^2 + (b-c)^2 + (a-c)^2)/36 $],
+  $ E(X) = (a+b+c)/3 $, $ "var"(X) = ((a-b)^2 + (b-c)^2 + (a-c)^2)/36 $,
 )
 
 == Exponential-Verteilung
-Die Exponential-Verteilung ist der _Kehrwert_ der _Poisson-Verteilung_. Sie hat den Parameter $lambda$, der die
+Die Exponential-Verteilung ist der _Kehrwert_ der _Poisson-Verteilung_. Sie hat den _Parameter $lambda$_, der die
 _Zahl eines erwarteten Ereignis $bold(A)$ pro Einheitsintervall_ festlegt. Damit wird die Wahrscheinlichkeit berechnet,
-dass der Abstand zwischen zwei aufeinanderfolgenden Ereignissen $A$ höchstens das $x$-Fache der gegebenen Zeit
+dass der Abstand zwischen zwei aufeinander folgenden Ereignissen $A$ _höchstens das $x$-Fache_ der gegebenen Zeit
 oder Strecke beträgt.\
 Ein häufiger Einsatzzweck ist die _Berechnung der Länge von zufälligen Zeitintervallen_ #hinweis[(z.B. Zeit zwischen 2 Anrufen,
-Lebensdauer von Atomen beim radioaktiven Zerfall, Lebensdauer von Maschinen ohne Berücksichtigung von Verschleiss).]
+  Lebensdauer von Atomen beim radioaktiven Zerfall, Lebensdauer von Maschinen ohne Berücksichtigung von Verschleiss).]
 
 #definition[
   Die _Dichte- und Verteilungsfunktion_ der Exponential-Verteilung sind:
+
   #grid(
     align: horizon,
-    [
-      $
-        f(t) = cases(
-          lambda dot e^(-lambda dot x) space & ", für" x >= 0,
-          0 & ", sonst"
-        )
-      $
-    ],
-    [
-      $
-        F(x) = cases(
-          1 - e^(-lambda dot x) space & ", für" x >= 0,
-          0 & ", für" x < 0
-        )
-      $
-    ],
+    $
+      f(t) = cases(
+        lambda dot e^(-lambda dot x) space & ", für" x >= 0,
+        0 & ", sonst"
+      )
+    $,
+    $
+      F(x) = cases(
+        1 - e^(-lambda dot x) space & ", für" x >= 0,
+        0 & ", für" x < 0
+      )
+    $,
   )
 ]
 
@@ -2379,7 +2399,7 @@ Lebensdauer von Atomen beim radioaktiven Zerfall, Lebensdauer von Maschinen ohne
   columns: (1fr,) * 3,
   align: horizon,
   table.header([Erwartungswert], [Varianz], [Median]),
-  [$ E(X) = 1/lambda $], [$ "var"(X) = 1/lambda^2 $], [$ "Me" = ln(2)/lambda $],
+  $ E(X) = 1/lambda $, $ "var"(X) = 1/lambda^2 $, $ "Me" = ln(2)/lambda $,
 )
 
 *Beispiel:*\
@@ -2416,43 +2436,40 @@ Empirische Untersuchungen zeigen nämlich bei vielen Anlagen:
 + Mit zunehmendem Alter in der_ dritten Phase_ altersbedingt eine ansteigende Ausfallrate.
 
 _Die Verteilung hat zwei Parameter:_ Den _Skalenparameter $bold(lambda)$_ und den _Formparameter $bold(k)$_.
-
-_*$lambda$*_ gibt die mittlere Ausfallwahrscheinlichkeit pro Intervall an.
-
-Beim Formparameter _*$k$*_ der Weibull-Verteilung können wir verschiedene Interpretationen ablesen:
-- _$bold(k < 1)$_: Ausfallrate nimmt mit der Zeit ab #hinweis[(Ausfälle finden frühzeitig statt)]
-- _$bold(k = 0)$_: Ausfallrate ist konstant #hinweis[(zufällige äussere Einflüsse verursachen Ausfall)]
-- _$bold(k > 1)$_: Ausfallrate nimmt mit der Zeit zu #hinweis[(Alterungsprozesse verursachen Ausfälle)]
+- _*$lambda$*_ gibt die mittlere Ausfallwahrscheinlichkeit pro Intervall an.
+- Beim Formparameter _*$k$*_ der Weibull-Verteilung können wir verschiedene Interpretationen ablesen:
+  - _$bold(k < 1)$_: Ausfallrate nimmt mit der Zeit ab #hinweis[(Ausfälle finden frühzeitig statt)]
+  - _$bold(k = 0)$_: Ausfallrate ist konstant #hinweis[(zufällige äussere Einflüsse verursachen Ausfall)]
+  - _$bold(k > 1)$_: Ausfallrate nimmt mit der Zeit zu #hinweis[(Alterungsprozesse verursachen Ausfälle)]
 
 Da die Verteilung bei $k = 0$ wie die Exponentialverteilung auch eine _konstante Ausfallrate_ annimmt,
 stellt diese also einen Spezialfall der Weibull-Verteilung dar.
 
 #definition[
   Die _Dichte- und Verteilungsfunktion_ der Weibull-Verteilung sind:
+
   #grid(
-    [
-      $
-        f(t) = cases(
-          lambda dot k dot t^(k-1) dot e^(-lambda dot t^k) space & "für" t >= 0,
-          0 & "sonst"
-        )
-      $
-    ],
-    [
-      $
-        F(x) = cases(
-          1 - e^(-lambda dot x^k) space & "für" x >= 0,
-          0 & "für" x < 0
-        )
-      $
-    ],
+
+    $
+      f(t) = cases(
+        lambda dot k dot t^(k-1) dot e^(-lambda dot t^k) space & "für" t >= 0,
+        0 & "sonst"
+      )
+    $,
+    $
+      F(x) = cases(
+        1 - e^(-lambda dot x^k) space & "für" x >= 0,
+        0 & "für" x < 0
+      )
+    $,
   )
 ]
+
 #table(
   columns: (1fr,) * 2,
   table.header([Erwartungswert], [Varianz]),
-  [$ E(X) = 1/lambda dot Gamma(1 + 1/k) quad => quad 1/lambda dot (1 + 1/k)! $],
-  [$ "var"(X) = 1/lambda^2 dot (Gamma(1+2/k) - Gamma^2(1+1/k)) $],
+  $ E(X) = 1/lambda dot Gamma(1 + 1/k) quad => quad 1/lambda dot (1 + 1/k)! $,
+  $ "var"(X) = 1/lambda^2 dot (Gamma(1+2/k) - Gamma^2(1+1/k)) $,
 )
 
 === Gammafunktion $Gamma()$ <gamma-func>
@@ -2482,17 +2499,17 @@ Für $k = 1$ erhält man die _Exponentialverteilung._
 #table(
   columns: (1fr,) * 2,
   table.header([Erwartungswert], [Varianz]),
-  [$ E(X) = k dot theta $], [$ "var"(X) = k dot theta^2 $],
+  $ E(X) = k dot theta $, $ "var"(X) = k dot theta^2 $,
 )
 
 == Normalverteilung <normalvert>
-Die _Normalverteilung $bold(cal(N)(mu, sigma^2))$_ ist eine der wichtigsten Verteilungen, sie bildet eine _Gauss-Glockenkurve_.
+Die _Normalverteilung $bold(cal(N)(mu, sigma^2))$_ ist eine der wichtigsten Verteilungen. Sie bildet eine _Gauss-Glockenkurve_:
 Die Werte sammeln sich symmetrisch um den _höchsten Punkt $bold(mu)$_ der Glockenkurve an.
 Die Wendepunkte der Kurven sind _*$plus.minus sigma$*_ Einheiten von $mu$ entfernt. Die _Varianz *$sigma^2$*_ bestimmt,
 wie eng die Werte um $mu$ liegen, bei einer hohen Varianz ist die Kurve entsprechend breiter.
 
 Der _zentrale Grenzwertsatz besagt_, dass sich der Mittelwert und die Summe unabhängig und identisch verteilter
-Zufallsvariablen bei einer beliebigen Verteilung mit zunehmenden Stichprobenumfang der Normalverteilung annähern.\
+Zufallsvariablen bei einer beliebigen Verteilung mit zunehmenden Stichprobenumfang der Normalverteilung annähern.
 *Oder anders gesagt:* Viele kleine unabhängige Zufallseffekte summieren sich ungefähr zu einer Normalverteilung.
 Dadurch sind z.B. Mittelwerte von Stichproben normalverteilt.
 
@@ -2504,19 +2521,17 @@ Dazu sollte aber eine _Stichprobe $bold(n > 30)$_ vorliegen, wenn nicht, sollte 
   #grid(
     row-gutter: 1em,
     align: horizon,
-    [$ f(x) = 1/(sigma dot sqrt(2 dot pi)) dot e^(-1/2 dot ((t - mu)/sigma)) $],
+    $ f(x) = 1/(sigma dot sqrt(2 dot pi)) dot e^(-1/2 dot ((t - mu)/sigma)) $,
     [
       _*$mu$*:_ Erwartungswert #hinweis[(Mittelwert)]\
       _*$sigma$*:_ Standardabweichung
     ],
-    [
-      $
-        F(x) = integral^x_(-infinity) (1/(sigma dot sqrt(2 dot pi)) dot e^(-1/2 dot ((t - mu)/sigma))) dif t, sigma > 0
-      $
-    ],
+    $
+      F(x) = integral^x_(-infinity) (1/(sigma dot sqrt(2 dot pi)) dot e^(-1/2 dot ((t - mu)/sigma))) dif t, sigma > 0
+    $,
     [
       #hinweis[Da dieses Integral nicht integrierbar ist, müssen die Verteilungswerte aus der
-      Standardnormalverteilungstabelle abgelesen werden $->$ Standardisierung erforderlich!]
+        Standardnormalverteilungstabelle abgelesen werden $->$ Standardisierung erforderlich!]
     ],
   )
 ]
@@ -2543,23 +2558,21 @@ _Achtung:_ Ist $Z < 0$, muss 1 minus $Phi$ vom positiven Wert gerechnet werden!
   #grid(
     columns: (1fr, 1.5fr),
     align: horizon,
-    [
-      $
-             Z & = (X - mu)/sigma quad => quad Phi(Z) \
-        Phi(Z) & = cases(Phi(Z) &"," Z >= 0, 1 - Phi(abs(Z)) space &"," Z < 0)
-      $
-    ],
+    $
+           Z & = (X - mu)/sigma quad => quad Phi(Z) \
+      Phi(Z) & = cases(Phi(Z) &"," Z >= 0, 1 - Phi(abs(Z)) space &"," Z < 0)
+    $,
     [
       _*$Z$*:_ standardnormalverteilte Zufallsvariable\
       _*$X$*:_ nicht-standardisierte normalverteilte Zufallsvariable\
-      _*$mu, sigma^2$*:_ Parameter der nicht-standardisierten Normalverteilung \
+      _*$mu, sigma^2$*:_ Parameter der nicht-standardisierten Normalverteilung\
       _*$Phi$*:_ Verteilungsfunktion, Wert aus Tabelle ablesen
     ],
   )
   #hinweis[Taschenrechner: Menü-5-5-2 $"normCdf"(-#sym.infinity, x, 0, 1)$]
 ]
 
-Ebenfalls gibt es eine Umkehrfunktion um von der Wahrscheinlichkeit $q$ das $q$-Quantil $z_q$ zu erhalten.
+Ebenfalls gibt es eine Umkehrfunktion, um von der Wahrscheinlichkeit $q$ das $q$-Quantil $z_q$ zu erhalten.
 Dazu schlägt man in der Quantile der Standartnormalverteilungstabelle nach.
 $ Phi(Z_q) = q "(aus Quantil-Tabelle oder TR normCdf)" $
 
@@ -2567,14 +2580,14 @@ $ Phi(Z_q) = q "(aus Quantil-Tabelle oder TR normCdf)" $
 #example-block[
   _Bier wird in Dosen mit einer durchschnittlichen Füllmenge von $753 "ml"$ mit einer Standardabweichung von $2"ml"$ abgefüllt._
 
-  + Wie gross ist die Wahrscheinlichkeit, dass die Sollfüllmenge von $750"ml"$ unterschritten wird?
+  + _Wie gross ist die Wahrscheinlichkeit, dass die Sollfüllmenge von $750"ml"$ unterschritten wird?_
     + Transformieren zu Standardnormalverteilung
-    $ Z = (x - mu)/sigma = (750 - 753)/2 = -1.5 $
+      $ Z = (x - mu)/sigma = (750 - 753)/2 = -1.5 $
 
-    2. Wert von $Z$ in Standardnormalverteilungstabelle nachschlagen\
-  $ Rho(Z <= -1.5) = Phi(Z) = 1 - Phi(abs(Z)) = 1 - Phi(1.5) = 1 - 0.9332 = 0.0668 = underline(6.68%) $
+    + Wert von $+Z$ in Standardnormalverteilungstabelle nachschlagen und $1 - Phi(Z)$ rechnen, weil $Z$ negativ ist\
+      $ Rho(Z <= -1.5) = Phi(Z) = 1 - Phi(abs(Z)) = 1 - Phi(1.5) = 1 - 0.9332 = 0.0668 = underline(6.68%) $
 
-  2. Wie gross ist die Wahrscheinlichkeit, dass in einer Dose mindestens 757ml enthalten sind?
+  2. _Wie gross ist die Wahrscheinlichkeit, dass in einer Dose mindestens 757ml enthalten sind?_
     1. Transformieren zu Standardnormalverteilung
     $ Z = (x - mu)/sigma = (757 - 753)/2 = 2 $
 
@@ -2582,7 +2595,7 @@ $ Phi(Z_q) = q "(aus Quantil-Tabelle oder TR normCdf)" $
   $ Rho(Z > 2) = 1 - Rho(Z < 2) = 1 - Phi(Z) = 1 - Phi(2) = 1 - 0.9773 = 0.0227 = underline(2.28%) $
 ]
 
-Bei zwei Grenzen ($x$ zwischen $y$ und $z$), müssen die Wahrscheinlichkeiten einfach voneinander subtrahiert werden.
+Bei zwei Grenzen ($x$ zwischen $y$ und $z$), müssen die Wahrscheinlichkeiten voneinander subtrahiert werden.\
 Um aus der Wahrscheinlichkeit die Anzahl zu erhalten, Gesamtanzahl mal Wahrscheinlichkeit rechnen.
 
 == Überblick stetige Verteilungen
@@ -2620,12 +2633,12 @@ Um Simulationsexperimente durchzuführen, müssen Zufallszahlen erzeugt werden.
 deshalb verwendet man _Pseudo-Zufallszahlen_.
 
 Ein _Random Number Generator (RNG)_ kann gleichverteilte Pseudo-Zufallszahlen z.B. durch _linear congruential generators_
-realisieren. Diese haben einen Initialwert, den _Seed_, welcher immer die gleiche Folge an Pseudo-Zufallszahlen generiert.
+realisieren. Diese haben einen Initialwert, den _Seed *$x_0$*_, welcher immer die gleiche Folge an Pseudo-Zufallszahlen generiert.
 Ein Durchlauf dauert so lange, bis wieder der Seed ausgegeben wird. Es ist nicht garantiert, dass jeder Wert im
 Intervall $[0, m]$ ausgegeben wird. Je nach Parameter kann ein Durchlauf eine sehr kurze/lange Zyklenlänge haben.
 
-#definition[
-  #grid(
+#definition(
+  grid(
     columns: (1fr, 2fr),
     align: horizon,
     [$ X_(n+1) = (a dot X_n + c) mod(m) $],
@@ -2635,8 +2648,8 @@ Intervall $[0, m]$ ausgegeben wird. Je nach Parameter kann ein Durchlauf eine se
       _*$c$*:_ Increment, die Multiplikation wird um diesen Wert verschoben\
       _*$x_0$*:_ Seed, Initialwert
     ],
-  )
-]
+  ),
+)
 
 *Beispiel mit $m = 9$, $a = 2$, $c = 0$, $x_0 = 1$*\
 $
@@ -2660,18 +2673,18 @@ andere Verteilungsfunktion generiert werden.
   _Gegeben sind die zwischen $[0, 1]$ gleichverteilten Zufallszzahlen:_
   $ "Intervall" = [0,1], quad u_i = (0.71, 0.11, 0.98, 0.64) $
 
-  + Transformiere die Zahlen so, dass sie einer Gleichverteilung mit $a = 2, b = 7$ folgen.
+  + _Transformiere die Zahlen so, dass sie einer Gleichverteilung mit $a = 2, b = 7$ folgen._
     + Verteilungsfunktion der Gleichverteilung aufschreiben und mit $u$ gleichsetzen
-    $ F(x) = u = (x-a)/(b-a) $
+      $ F(x) = u = (x-a)/(b-a) $
 
-    2. Verteilungsfunktion invertieren (nach $x$ auflösen) und Werte von $u_i$ in Formel einfügen
-  $ F^(-1)(u) = x = u dot (b-a) + a = u_i dot (7 - 2) + 2 quad => quad underline(x_i = (5.55, 2.55, 6.90, 5.20)) $
+    + Verteilungsfunktion invertieren (nach $x$ auflösen) und Werte von $u_i$ in Formel einfügen
+      $ F^(-1)(u) = x = u dot (b-a) + a = u_i dot (7 - 2) + 2 quad => quad underline(x_i = (5.55, 2.55, 6.90, 5.20)) $
 
-  2. Transformiere die Zahlen so, dass sie einer Exponentialverteilung mit $lambda = 0.5$ folgen.\
-  $
-    F(x) = u = 1 - e^(-lambda dot x) quad => quad F^(-1)(u) = x = 1/lambda dot ln(1-r) quad => quad
-    underline(x_i = (2.48, 0.23, 7.82, 2.04))
-  $
+  + Transformiere die Zahlen so, dass sie einer Exponentialverteilung mit $lambda = 0.5$ folgen.\
+    $
+      F(x) = u = 1 - e^(-lambda dot x) quad => quad F^(-1)(u) = x = 1/lambda dot ln(1-r) quad => quad
+      underline(x_i = (2.48, 0.23, 7.82, 2.04))
+    $
 ]
 
 
@@ -2703,25 +2716,25 @@ Beliebte Konfidenzniveaus sind 90%, 95%, 99% #hinweis[(verwendet als 0.9, 0.95, 
 
 Der Konfidenzintervall ist selbst wieder eine Zufallsvariable und streut um den Mittelwert der Grundgesamtheit.
 
-#definition[
-  #grid(
+#definition(
+  grid(
     align: horizon,
-    [$ Rho(#x- _u <= dash(X) <= #x- _o) = 1 - alpha $],
+    $ Rho(#x- _u <= dash(X) <= #x- _o) = 1 - alpha $,
     [
       _$bold(#x- _u), bold(#x- _o)$:_ Untere/Obere Grenze des Konfidenzintervalls\
       _$bold(dash(X))$:_ Wert der Realisation\
       _*$alpha$*:_ Konfidenzniveau als Kommazahl in $[0, 1]$
     ],
-  )
-]
+  ),
+)
 
 ==== Satz 1: Wenn der Stichprobenmittelwert dieselbe Verteilung wie $X$ hat, gilt
 - Die Summe der Zufallsvariablen #hinweis[(einzelne Mittelwerte)] ist wieder eine Zufallsvariable
 - Der Erwartungswert der Stichprobe ist gleich dem Erwartungswert der Grundgesamtheit\
-$ dash(X) = mu_#x- = 1/n sum^n_(i=1) X_i = mu $
+  $ dash(X) = mu_#x- = 1/n sum^n_(i=1) X_i = mu $
 - Die Varianz der Stichprobe wird immer kleiner, je grösser der Stichprobenumfang $n$ wird
   #hinweis[(die gemessenen Mittelwerte nähern sich dem tatsächlichen Mittelwert)].
-$ sigma^2_dash(X) = sigma^2/n $
+  $ sigma^2_dash(X) = sigma^2/n $
 
 #grid(
   columns: (2fr, 1fr),
@@ -2732,33 +2745,33 @@ $ sigma^2_dash(X) = sigma^2/n $
   image("img/ExEv_10.png"),
 )
 
-#small[
-  #table(
+#small(
+  table(
     columns: (1fr,) * 4,
     table.header([], [1\. Wurf], [2\. Wurf], [3\. Wurf]),
-    [*Mittelwert $mu$*], [$3.5$], [$3.5$], [$3.5$],
-    [*Varianz $sigma^2$*], [$2.29$], [$2.29\/2 = 1.46$], [$2.29\/3 = 0.97$],
-    [*Standardabweichung $sigma$*], [$1.71$], [$1.21$], [$0.89$],
-  )
-]
+    [*Mittelwert $mu$*], $3.5$, $3.5$, $3.5$,
+    [*Varianz $sigma^2$*], $2.29$, $2.29\/2 = 1.46$, $2.29\/3 = 0.97$,
+    [*Standardabweichung $sigma$*], $1.71$, $1.21$, $0.89$,
+  ),
+)
 
 ==== Satz 2: Ist die Zufallsvariable $X$ zusätzlich noch normalverteilt, ist auch der Stichprobenmittelwert normalverteilt
-#definition[
-  #grid(
+#definition(
+  grid(
     columns: (1fr, 1.2fr),
     align: horizon,
-    [$ dash(X) => N(mu; sigma/sqrt(n)) $],
+    $ dash(X) => N(mu; sigma/sqrt(n)) $,
     [
       _*$sigma, mu$*:_ Standardabweichung & Mittelwert der Grundmenge\
       _*$N$*:_ Verteilungsfunktion der Normalverteilung\
       _*$n$*:_ Anzahl Stichproben\
       _$bold(dash(X))$:_ Zufallsvariable der Stichprobe
     ],
-  )
-]
+  ),
+)
 
 == Testverfahren der Normalverteilung <test-normal>
-Viele Ergebnisse sind annähernd normalverteilt, je grösser die Anzahl Stichproben wird.\ #hinweis[(siehe @normalvert)]\
+Viele Ergebnisse sind annähernd normalverteilt, je grösser die Anzahl Stichproben wird #hinweis[(siehe @normalvert)].\
 _Faustregel:_ Ab $n >= 30$ ist die Normalverteilung unabhängig von der tatsächlichen Verteilung als Approximation geeignet.
 
 #definition[
@@ -2774,61 +2787,68 @@ _Faustregel:_ Ab $n >= 30$ ist die Normalverteilung unabhängig von der tatsäch
   )
 ]
 
-*Beispiel mit unterer Schranke:*\
-Eine Maschine produziert im normalverteilten Mittel $10$ Stück pro Sekunde mit einer Standardabweichung von $1.5$ pro Sekunde.
-Es werden $50$ Messungen durchgeführt.
+#example-block[
+  *Beispiel mit unterer Schranke:*\
+  _Eine Maschine produziert im normalverteilten Mittel $10$ Stück pro Sekunde mit einer Standardabweichung von $1.5$ pro Sekunde.
+  Es werden $50$ Messungen durchgeführt._
 
-Mit welcher Wahrscheinlichkeit liegt die mittlere Produktion unter $9.5$ Stück?
+  _Mit welcher Wahrscheinlichkeit liegt die mittlere Produktion unter $9.5$ Stück?_
+]
+
 + Variablen aus dem Text bestimmen\
-$ n = 50, quad mu = 10, quad X = 9.5, quad sigma = 1.5 $
+  $ n = 50, quad mu = 10, quad X = 9.5, quad sigma = 1.5 $
 
-2. Werte in Formel einsetzen
-$ Z = (9.5 - 10)/(1.5 \/ sqrt(50)) = -2.36 $
++ Werte in Formel einsetzen
+  $ Z = (9.5 - 10)/(1.5 \/ sqrt(50)) = -2.36 $
 
-3. Berechneten Wert in die Tabelle der Standardnormalverteilung einsetzen\
-$ Phi(Z) = Phi(-2.36) = 0.0091 $
++ Berechneten Wert in die Tabelle der Standardnormalverteilung einsetzen\
+  $ Phi(Z) = Phi(-2.36) = 0.0091 $
 
 $arrow.double$ Der Mittelwert liegt mit einer Wahrscheinlichkeit von $0.91%$ im Intervall $[-infinity, 5]$
 
-*Beispiel: mit Konfidenzintervall (erlaubte Toleranz) die Wahrscheinlichkeit berechnen*\
-Eine Maschine produziert im normalverteilten Mittel $10$ Stück pro Sekunde mit einer Standardabweichung von $1$ pro Sekunde.
-Es werden $25$ Messungen durchgeführt. Mit welcher Wahrscheinlichkeit liegt die mittlere Produktion
-zwischen $9.8$ und $10.2$ Stück pro Sekunde?
+#example-block[
+  *Beispiel: mit Konfidenzintervall (erlaubte Toleranz) die Wahrscheinlichkeit berechnen*\
+  _Eine Maschine produziert im normalverteilten Mittel $10$ Stück pro Sekunde mit einer Standardabweichung von $1$ pro Sekunde.
+  Es werden $25$ Messungen durchgeführt. Mit welcher Wahrscheinlichkeit liegt die mittlere Produktion
+  zwischen $9.8$ und $10.2$ Stück pro Sekunde?_
+
+]
 
 + Wahrscheinlichkeitsformel aufstellen
-$ Rho(9.8 <= #x- <= 10.2) = 1 - alpha $
+  $ Rho(9.8 <= #x- <= 10.2) = 1 - alpha $
 
-2. Die Konfidenzintervallschranken standardisieren #hinweis[(in standardisierte Zufallsvariable konvertieren)]
++ Die Konfidenzintervallschranken standardisieren #hinweis[(in standardisierte Zufallsvariable konvertieren)]
+  $
+    Rho((9.8-10)/(1\/sqrt(25)) <= dash(Z) <= (10.2-10)/(1\/sqrt(25)))
+    = Rho(-0.2/0.2 <= dash(Z) <= 0.2/0.2) = Rho(-1 <= dash(Z) <= 1)
+  $
 
-$
-  Rho((9.8-10)/(1\/sqrt(25)) <= dash(Z) <= (10.2-10)/(1\/sqrt(25)))
-  = Rho(-0.2/0.2 <= dash(Z) <= 0.2/0.2) = Rho(-1 <= dash(Z) <= 1)
-$
-
-3. Mit den Schranken die Wahrscheinlichkeit in der Standardnormalverteilungstabelle ablesen
-$
-  Phi(1) = underbracket("normCdf"(-infinity, 1,0,1), 5-5-2 "im TR") = 0.8413, quad Phi(-1) = 1 - Phi(1)
-  = 1 - 0.8413 = 0.1587
-$
++ Mit den Schranken die Wahrscheinlichkeit in der Standardnormalverteilungstabelle ablesen
+  $
+    Phi(1) = underbracket("normCdf"(-infinity, 1,0,1), 5-5-2 "im TR") = 0.8413, quad Phi(-1) = 1 - Phi(1)
+    = 1 - 0.8413 = 0.1587
+  $
 
 4. Die Differenz der Wahrscheinlichkeit der Schranken berechnen\
 $ 0.8413 - 0.1587 = 0.6843 = underline(68.43%) $
 
 #pagebreak()
 
-*Beispiel: mit Wahrscheinlichkeit das Konfidenzintervall berechnen*\
-In welchem Konfidenzintervall liegt der Mittelwert bei der obenstehenden Aufgabe, wenn das Konfidenzniveau
-#hinweis[(vorgegebene Wahrscheinlichkeit)] $95%$ ist?
+#example-block[
+  *Beispiel: mit Wahrscheinlichkeit das Konfidenzintervall berechnen*\
+  _In welchem Konfidenzintervall liegt der Mittelwert bei der obenstehenden Aufgabe, wenn das Konfidenzniveau
+  #hinweis[(vorgegebene Wahrscheinlichkeit)] $95%$ ist?_
+]
 
-1. Variablen aus dem Text bestimmen\
-$ n = 50, quad alpha = 0.95, quad sigma = 1.5 $
++ Variablen aus dem Text bestimmen\
+  $ n = 50, quad alpha = 0.95, quad sigma = 1.5 $
 
-2. $Z$-Wert aus der Standardnormalverteilungs-Quantiltabelle auslesen\
++ $Z$-Wert aus der Standardnormalverteilungs-Quantiltabelle auslesen\
   #hinweis[(Da die Abweichung beidseitig sein kann, muss der Wert 0.975 anstelle von 0.95 verwendet werden.)]\
-$ Phi^(-1)(Z_q) = Phi(0.975) = underbracket("invNorm"(0.975,0,1), 5-5-3 "im TR") = underline(1.96) $
+  $ Phi^(-1)(Z_q) = Phi(0.975) = underbracket("invNorm"(0.975,0,1), 5-5-3 "im TR") = underline(1.96) $
 
 == Studentische t-Verteilung
-Ist die Anzahl Stichproben $< 30$, ist die _$t$-Verteilung_ oft besser geeignet als die Normalverteilung.
+Ist die Anzahl Stichproben $< 30$, ist die _*$t$*-Verteilung_ oft besser geeignet als die Normalverteilung.
 Sie flacht an den Enden weniger stark ab als die Normalverteilung, ist aber dafür um den Mittelwert weniger hoch.
 Auch wird bei der $t$-Verteilung die _Standardabweichung nicht benötigt_.
 Der Vertrauensfaktor $t$ wird aus der $t$-Verteilungstabelle abgelesen und ist von der Anzahl Freiheitsgrade abhängig.
@@ -2867,7 +2887,7 @@ der Summe $7$ ergeben. Die Anzahl Freiheitsgrade ist also $4$.
   columns: (1fr,) * 2,
   align: horizon,
   table.header([Erwartungswert], [Varianz]),
-  [$ E(X) = 0, "für" r > 1 $], [$ "var"(X) = r/(r-2), "für" r > 2 $],
+  $ E(X) = 0, "für" r > 1 $, $ "var"(X) = r/(r-2), "für" r > 2 $,
 )
 
 #pagebreak()
@@ -2876,7 +2896,7 @@ der Summe $7$ ergeben. Die Anzahl Freiheitsgrade ist also $4$.
 #example-block[
   _Eine Zufallsvariable $X$ ist $t$-verteilt mit $nu = 10$ Freiheitsgraden._
 
-  + Wie hoch ist die Wahrscheinlichkeit, dass $x$ zwischen $-1.4$ und $1.8$ liegt?
+  + _Wie hoch ist die Wahrscheinlichkeit, dass $x$ zwischen $-1.4$ und $1.8$ liegt?_
     + Vertrauensfaktoren aus der $t$-Verteilungstabelle bei entsprechendem $k$ ablesen.
       Dabei sollten die Werte in der Tabelle die oben genannten Grenzwerte vollständig umfassen\
       $ F(x < 1.4) approx 0.9, quad F(x < 1.8) approx 0.95 $
@@ -2886,9 +2906,9 @@ der Summe $7$ ergeben. Die Anzahl Freiheitsgrade ist also $4$.
         Rho(-1.4 < x < 1.8) & = F(x < 1.8) - F(x < -1.4) \
                             & = F(x < 1.8) - (1 - F(x < 1.4)) = 0.95 - (1-0.9) = underline(0.85)
       $
-    #hinweis[Einfacher geht es mit dem Taschenrechner: Menü-5-5-5 $"tCdf"(x_u, x_o, r) arrow "tCdf"(-1.4, 1.8, 10) = 0.853091$]
+    #hinweis[TR: Menü-5-5-5 #sym.arrow $"tCdf"(x_u, x_o, r)$ #sym.arrow $"tCdf"(-1.4, 1.8, 10) = 0.853091$]
 
-  + In welchem mittlerem Bereich liegen die Realisationen mit einer Wahrscheinlichkeit von $99%$?\
+  + _In welchem mittlerem Bereich liegen die Realisationen mit einer Wahrscheinlichkeit von $99%$?_\
     1. Wert aus $t$-Verteilungstabelle bei entsprechendem $k$ ablesen\
     $ 0.995 = Rho(x > 3.1693) $
 
@@ -2899,7 +2919,7 @@ der Summe $7$ ergeben. Die Anzahl Freiheitsgrade ist also $4$.
 == Chi-Quadrat-Verteilung
 Hat man Zufallsvariablen, die _unabhängig_ und _standardnormalverteilt_ sind, ist die Chi-Quadratverteilung $chi^2$
 die Verteilung der Summe der quadrierten Zufallsvariablen. Solche Summen quadrierter Zufallsvariablen treten auf bei:
-_Varianz $bold(sigma^2)$ einer Stichprobe_, _Hypothesentest über die Verteilungsform_, _Unabhängigkeitstest_.
+_Varianz $bold(sigma^2)$ einer Stichprobe_, _Hypothesentest über die Verteilungsform_, _Unabhängigkeitstest_.\
 Wie die $t$-Verteilung hat sie die _Anzahl Freiheitsgrade_ als Parameter. Nähert sich mit zunehmender Anzahl Freiheitsgrade
 der Normalverteilung an.
 
@@ -2932,20 +2952,20 @@ der Normalverteilung an.
   [$ E(X) = r $], [$ "var"(X) = 2 dot r $],
 )
 
-*Beispiel:*
+*Beispiel:*\
 #example-block[
-  _Eine Zufallsvariable $X$ ist $chi^2$-verteilt mit $nu = 10$ Freiheitsgraden._
+  _Eine Zufallsvariable $X$ ist $chi^2$-verteilt mit $nu = 10$ Freiheitsgraden.
+  Wie hoch ist die Wahrscheinlichkeit, dass $x$ zwischen $15$ und $20$ liegt?_
+]
 
-  Wie hoch ist die Wahrscheinlichkeit, dass $x$ zwischen $15$ und $20$ liegt?
-  + Werte aus der $chi^2$-Verteilungstabelle ablesen #hinweis[(ungenaue Werte!)]
++ Werte aus der $chi^2$-Verteilungstabelle ablesen #hinweis[(ungenaue Werte!)]
   $ F(x < 15) approx 0.9, quad F(x < 20) approx 0.975 $
 
-  2. Wahrscheinlichkeit ausrechnen
++ Wahrscheinlichkeit ausrechnen
   $ Rho(15 < x < 20) = F(x < 20) - F(x < 15) = 0.975 - 0.9 = underline(0.075) $
 
-  Einfacher geht es mit dem Taschenrechner: Menü-5-5-8 $-> chi^2"norm"(x_u, x_o, r)$
-  $ chi^2"norm"(15, 20, 10) = 0.102809 "(genauer als mit der Tabelle)" $
-]
+Einfacher geht es mit dem Taschenrechner: Menü-5-5-8 $-> chi^2"norm"(x_u, x_o, r)$
+$ chi^2"norm"(15, 20, 10) = 0.102809 "(genauer als mit der Tabelle)" $
 
 
 = Schätzverfahren
@@ -2971,7 +2991,7 @@ Ist $E(hat(T) - T) = 0$, ist die Schätzung _erwartungstreu_, hat also keine Abw
   columns: (1fr,) * 2,
   align: horizon,
   table.header([Mittelwert-Schätzfunktion], [Varianz-Schätzfunktion]),
-  [$ mu = #x- = 1/n sum^n_(i = 1) x_i $], [$ sigma^2 = s^2 = 1/(n-1) sum^n_(i=1) (x_i - dash(X))^2 $],
+  $ mu = #x- = 1/n sum^n_(i = 1) x_i $, $ sigma^2 = s^2 = 1/(n-1) sum^n_(i=1) (x_i - dash(X))^2 $,
 )
 Die durch obenstehende Schätzfunktionen erzeugten Parameter sind normalverteilt ($mu$) bzw. Chi-Quadrat-verteilt ($sigma$)
 
@@ -2982,7 +3002,7 @@ Häufige Konfidenzintervalle sind $90%$, $95%$ und $99%$.
 
 Es gibt _5 Schritte zur Erstellung eines Konfidenzintervalls_ für den Mittelwert $dash(X)$ der Stichprobe $X$:
 
-*1.  Feststellung der Verteilungsform*\
+*1. Feststellung der Verteilungsform*\
 Zuerst muss festgestellt werden, welche Verteilung das Stichprobenmittel $dash(X)$ besitzt:
 #table(
   columns: (27%, 0.39fr, 1fr),
@@ -3007,21 +3027,22 @@ Als zweites wird die _Varianz_ für das Stichprobenmittel _bestimmt_, wobei gilt
 $ N = "Grösse der Grundmenge", quad n = "Grösse der Stichprobe", quad s^2 = "Varianz-Schätzfunktion" $
 
 Für die Bestimmung von mit/ohne Zurücklegen/Wiederholung siehe Kapitel @kombinator-checklist.
+
 #table(
   columns: (1fr,) * 3,
   align: horizon,
   table.header([Stichprobenart], [Varianz $sigma^2$ bekannt], [Varianz $sigma^2$ unbekannt]),
   [*Mit Zurücklegen*\ #hinweis[(unendliche Grundgesamtheit)]],
-  [$ sigma^2_dash(X) = sigma^2/n $],
-  [$ hat(sigma)^2_dash(X) = s^2/n $],
+  $ sigma^2_dash(X) = sigma^2/n $,
+  $ hat(sigma)^2_dash(X) = s^2/n $,
 
   [*Ohne Zurücklegen und $display(n/N < 0.05)$*],
-  [$ sigma^2_dash(X) approx sigma^2/n $],
-  [$ hat(sigma)^2_dash(X) approx s^2/n $],
+  $ sigma^2_dash(X) approx sigma^2/n $,
+  $ hat(sigma)^2_dash(X) approx s^2/n $,
 
   [*Ohne Zurücklegen und $display(n/N >= 0.05)$*],
-  [$ sigma^2_dash(X) = sigma^2/n dot (N-n)/(N-1) $],
-  [$ sigma^2_dash(X) = s^2/n dot (N-n)/N $],
+  $ sigma^2_dash(X) = sigma^2/n dot (N-n)/(N-1) $,
+  $ sigma^2_dash(X) = s^2/n dot (N-n)/N $,
 )
 
 *3. Bestimmen des Quantilwerts $Z$*\
@@ -3053,8 +3074,8 @@ Für die Bestimmung von mit/ohne Zurücklegen/Wiederholung siehe Kapitel @kombin
   table.cell(colspan: 2)[$ hat(sigma)^2_P approx (P dot (1-P))/n $],
 
   [*Ohne Zurücklegen und $display(n/N >= 0.05)$*],
-  [$ hat(sigma)^2_dash(X) = (P dot (1-P))/n dot (N-n)/(N-1) $],
-  [$ hat(sigma)^2_dash(X) = (P dot (1-P))/n dot (N-n)/N $],
+  $ hat(sigma)^2_dash(X) = (P dot (1-P))/n dot (N-n)/(N-1) $,
+  $ hat(sigma)^2_dash(X) = (P dot (1-P))/n dot (N-n)/N $,
 )
 
 *3. Bestimmen des Quantilwerts $Z$*\
@@ -3070,11 +3091,11 @@ Die Konfidenzgrenzen ergeben sich durch Addition/Subtraktion des max. Schätzfeh
 
 == Stichprobenumfangberechnung
 Für die Intervallschätzung muss manchmal die _Stichprobengrösse_ bestimmt werden, also wie viele Proben mindestens
-in der Stichprobe enthalten sein müssen, um eine bestimmte _Genauigkeit $alpha$_ erreichen zu können.
+in der Stichprobe enthalten sein müssen, um eine bestimmte _Genauigkeit *$alpha$*_ erreichen zu können.
 Für die Bestimmung des $Z$-Wertes aus der Standardnormalverteilung muss die Wahrscheinlichkeit $1-alpha$ angewendet werden.
 
-#definition[
-  #grid(
+#definition(
+  grid(
     align: horizon,
     row-gutter: 1em,
     [
@@ -3089,44 +3110,43 @@ Für die Bestimmung des $Z$-Wertes aus der Standardnormalverteilung muss die Wah
       _*$e$*:_ Absolute Abweichung bzw. Fehler vom Mittelwert\
       _*$Z$*:_ standardnormalverteilte Zufallsvariable\ #hinweis[(siehe @std::normalverteilung)]
     ],
-  )
-]
+  ),
+)
 
 *Beispiel ohne Zurücklegen*\
 #example-block[
   _Eine Lieferung von $1'000$ Paketen Zucker ist mit einer $95%$ Konfidenz zu untersuchen, ob der garantierte
-  Mittelwert eingehalten wird. Der Fehler $e = 0.2$g und die Standardabweichung $sigma = 1.2$g sind bekannt._
+  Gewichts-Mittelwert eingehalten wird. Der Fehler $e = 0.2"g"$ und die Standardabweichung $sigma = 1.2"g"$ sind bekannt._
 
   + Wie viele Pakete müssen mindestens entnommen werden?
 
-    1. $Z$ aus Quantil-Standardnormalverteilungstabelle $Phi(Z_q)$ bestimmen\
+    + $Z$ aus Quantil-Standardnormalverteilungstabelle $Phi(Z_q)$ bestimmen\
       $ 95% => 2.5% "links & rechts der Normalverteilung" = 0.975 quad => quad Z = Phi(0.975) = 1.96 $
 
-    2. Werte in Formel einsetzen\
+    + Werte in Formel einsetzen\
       $
         n >= (1.96^2 dot 1'000 dot 1.2^2)/(0.2^2 dot (1'000-1) + 1.96^2 dot 1.2^2) = 121.6 quad => quad underline(n > 122)
       $
 ]
 
 == Intervallschätzung der Varianz
-#definition[
-  #grid(
+#definition(
+  grid(
+    columns: (1fr, auto),
     align: horizon,
-    [
-      $
-        Rho(
-          ((n-1) dot s^2)/(y_(1-alpha/2; r=n-1)) <= sigma^2
-          <= ((n-1) dot s^2)/(y_(alpha/2; r=n-1))
-        )
-      $
-    ],
+    $
+      Rho(
+        ((n-1) dot s^2)/(y_(1-alpha\/2; r=n-1)) <= sigma^2
+        <= ((n-1) dot s^2)/(y_(alpha\/2; r=n-1))
+      )
+    $,
     [
       _*$r$*:_ Anzahl Freiheitsgrade\
       _*$s$*:_ Varianzschätzfunktion\
       _*$y$*:_ Verteilungsfunktion für neue, $chi^2$-verteilte Zufallsvariable
     ],
-  )
-]
+  ),
+)
 
 
 = Testverfahren
@@ -3182,10 +3202,10 @@ Bevor ein Parametertest durchgeführt werden kann, müssen zunächst verschieden
   den gewünschten Effekt. Sie ist immer die Negation #hinweis[(das Gegenteil)] der Nullhypothese
   #hinweis[(vgl. indirekter Beweis in der Mathematik)]
 - _Signifikanzzahl $bold(alpha)$:_ Die Irrtumswahrscheinlichkeit der Nullhypothese, also um wie viel Prozent die Messung
-  abweichen darf, ohne dass sie verworfen wird. Häufig auch in der Form $1-alpha$ angegeben.
+  abweichen darf, ohne dass sie verworfen wird. Häufig auch in der Form $1 - alpha$ angegeben.
 - _Kritischer Wert:_ Wird dieser Wert mit Wahrscheinlichkeit $alpha$ überschritten, ist die Nullhypothese widerlegt.
 - _Annahmebereich:_ Befindet sich das Parametertest-Resultat innerhalb des Annahmebereichs, ist die Nullhypothese angenommen.
-  Analog wird beim _Ablehnungsbereich_ die Nullhypothese verworfen. Krit. Wert ist die Grenze.
+  Analog wird beim _Ablehnungsbereich_ die Nullhypothese verworfen. Kritischer Wert ist die Grenze.
 
 Das _Ziel eines Parametertests_ ist es, aufzuzeigen, ob die Messung den kritischen Wert über-/unterschreitet und damit
 die Nullhypothese widerlegt. Tut sie das, hat das Experiment ein _signifikantes Ergebnis_.
@@ -3206,21 +3226,21 @@ _Fragestellung_: Hilft das neue Medikament dem Patienten, schneller gesund zu we
   Man behauptet, mit einem neuen Verfahren die Zugstärke erhöhen zu können. Ein Test wird mit $60$ Rasenmähern durchgeführt und
   ergibt eine mittlere Zugstärke von $1550 N$._
 
-  + Kann man an dieser Behauptung mit einer Irrtumswahrscheinlichkeit von $0.05$ festhalten?
+  + _Kann man an dieser Behauptung mit einer Irrtumswahrscheinlichkeit von $0.05$ festhalten?_
     + Werte aus Text herausschreiben
-    $ X = 1550, quad "Mittelwert" mu = 1500, quad "Standardabweichung" sigma = 50, quad n = 60, quad alpha = 0.05 $
+      $ X = 1550, quad "Mittelwert" mu = 1500, quad "Standardabweichung" sigma = 50, quad n = 60, quad alpha = 0.05 $
 
-    2. Hypothesen definieren:
+    + Hypothesen definieren:
       - $H_0$: Das neue Verfahren hat keine Veränderung der Zugstärke ergeben, $mu = 1500 N$
       - $H_1$: Es hat eine Verbesserung der Zugstärke gegeben, $mu > 1500 N$
 
     + $p$-Wert und kritischer $Z$-Wert ausrechnen:
-    $ p = 1 - alpha = 0.95, quad z = "invNorm"(0.95,0,1) = 1.645 $
+      $ p = 1 - alpha = 0.95, quad z = "invNorm"(0.95,0,1) = 1.645 $
 
-    3. Effektiver $Z$-Wert ausrechnen #hinweis[(Formel siehe @test-normal)]:
-    $ Z = (X - mu)/(sigma \/ sqrt(n)) = (1550 - 1500) / (50\/sqrt(60)) = 7.74 $
+    + Effektiver $Z$-Wert ausrechnen #hinweis[(Formel siehe @test-normal)]:
+      $ Z = (X - mu)/(sigma \/ sqrt(n)) = (1550 - 1500) / (50\/sqrt(60)) = 7.74 $
 
-    4. Effektiver $Z$-Wert mit $Z$-krit vergleichen. Ist $Z > Z$-krit: Nullhypothese verwerfen.\
+    + Effektiver $Z$-Wert mit $Z$-krit vergleichen. Ist $Z > Z$-krit: Nullhypothese verwerfen.\
       $7.74 > 1.645$, das heisst, die Null-Hypothese muss verworfen und die Alternativ-Hypothese angenommen werden.
 ]
 
@@ -3235,8 +3255,8 @@ Vergleich Lohn im Alter von $30$ Jahren vs. $50$ Jahren: Befragt man $30$- und $
 Stichprobe _unabhängig_. Befragt man $50$-jährige nach ihrem derzeitigen Lohn und ihrem Lohn als sie $30$ Jahre alt waren,
 ist die Stichprobe _abhängig_.
 
-#definition[
-  #grid(
+#definition(
+  grid(
     align: horizon,
     [
       _Annahmebereich für unabhängige Stichproben_
@@ -3247,8 +3267,8 @@ ist die Stichprobe _abhängig_.
       _*$sigma_1^2, sigma_2^2$*:_ Varianz der Stichproben 1 und 2\
       _*$n_1, n_2$*:_ Gesamt-Anzahlen der Stichproben 1 und 2 \
     ],
-  )
-]
+  ),
+)
 
 === Abhängige Stichproben
 1. Bilden der Nullhypothese $H_0$: $mu_1 = mu_2$ #hinweis[(Trifft sie ein, müsste die Differenz gegen 0 gehen)]
@@ -3274,30 +3294,30 @@ Test, ob ein Würfel eine Gleichverteilung produziert und damit fair ist.
 Ein Würfel wurde 60-mal geworfen mit folgenden Häufigkeiten:
 $
   h^e = {\u{2680} arrow.bar 7, space \u{2681} arrow.bar 8, space \u{2682} arrow.bar 13, space \u{2683} arrow.bar 8, space
-         \u{2684} arrow.bar 9, space \u{2685} arrow.bar 15}
+    \u{2684} arrow.bar 9, space \u{2685} arrow.bar 15}
 $
 
-1. Werte aus Text herausschreiben
-$ n = 6, quad p = 1/6, quad h^"th" = n dot p = 10, quad "Annahme:" alpha = 0.05 $
++ Werte aus Text herausschreiben
+  $ n = 6, quad p = 1/6, quad h^"th" = n dot p = 10, quad "Annahme:" alpha = 0.05 $
 
-2. Hypothesen definieren \
++ Hypothesen definieren \
   - $H_0$: Die Würfel produzieren eine Gleichverteilung, sind also fair
   - $H_1$: Die Würfel produzieren keine Gleichverteilung, sind also nicht fair
 
-3. Differenz zwischen der empirischen $h^e$ und theoretischen $h^"th"$ Verteilung bilden\
-$
-  h^e - h^"th" = {\u{2680} arrow.bar 7 - 10 = -3, space \u{2681} arrow.bar -2, space \u{2682} arrow.bar 3, space
-                  \u{2683} arrow.bar -2, space \u{2684} arrow.bar 1, space \u{2685} arrow.bar 5}
-$
++ Differenz zwischen der empirischen $h^e$ und theoretischen $h^"th"$ Verteilung bilden\
+  $
+    h^e - h^"th" = {\u{2680} arrow.bar 7 - 10 = -3, space \u{2681} arrow.bar -2, space \u{2682} arrow.bar 3, space
+      \u{2683} arrow.bar -2, space \u{2684} arrow.bar 1, space \u{2685} arrow.bar 5}
+  $
 
-4. Normieren, um negative Werte zu entfernen\
-$
-  (h^e_i - h^"th"_i)^2/h^"th"_i space => space {1 arrow.bar (7-10)^2/10 = 0.9, 2 arrow.bar (8-10)^2/10 = 0.4,
-    3 arrow.bar 0.9, 4 arrow.bar 0.4, 5 arrow.bar 0.1, 6 arrow.bar 2.5}
-$
++ Normieren, um negative Werte zu entfernen\
+  $
+    (h^e_i - h^"th"_i)^2/h^"th"_i space => space {1 arrow.bar (7-10)^2/10 = 0.9, 2 arrow.bar (8-10)^2/10 = 0.4,
+      3 arrow.bar 0.9, 4 arrow.bar 0.4, 5 arrow.bar 0.1, 6 arrow.bar 2.5}
+  $
 
-5. Summe der normierten Werte bilden, um $D$ zu erhalten
-$ D = 0.9 + 0.4 + 0.9 + 0.4 + 0.1 + 2.5 = underline(5.2) $
++ Summe der normierten Werte bilden, um $D$ zu erhalten
+  $ D = 0.9 + 0.4 + 0.9 + 0.4 + 0.1 + 2.5 = underline(5.2) $
 
-6. $D_"krit"$ aus $chi^2$-Tabelle ablesen oder von TR und mit $D$ vergleichen. Ist $D > D_"krit"$: Nullhypothese verwerfen.\
++ $D_"krit"$ aus $chi^2$-Tabelle ablesen oder von TR und mit $D$ vergleichen. Ist $D > D_"krit"$: Nullhypothese verwerfen.\
   $5.2 < 11.0705$, das heisst, die Null-Hypothese kann nicht verworfen werden.
