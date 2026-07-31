@@ -1,4 +1,3 @@
-
 // Compiled with Typst 0.15.1
 #import "../template_zusammenf.typ": *
 #import "@preview/chronos:0.3.0"
@@ -99,7 +98,8 @@ anderer Objekte zugreifen, sondern nur mit den unmittelbaren Nachbarn interagier
 *Ziel:*
 Reduzierung der Abhängigkeiten zwischen Klassen und Verbesserung der Kapselung.
 *Vorgehen:*
-Verkettete Methodenaufrufe vermeiden #hinweis[(z.B. `car.getMotor().start()`)]. Jede Klasse sollte nur Methoden von Objekten aufrufen, die sie direkt kennt #hinweis[(z.B. Wrapper-Methode `car.start()`, welche `motor.start()` callt)].
+Verkettete Methodenaufrufe vermeiden #hinweis[(z.B. `car.getMotor().start()`)]. Jede Klasse sollte nur Methoden von
+Objekten aufrufen, die sie direkt kennt #hinweis[(z.B. Wrapper-Methode `car.start()`, welche `motor.start()` callt)].
 
 == Komposition vor Vererbung
 Vererbungen kreieren _statische Abhängigkeiten_: Die Child-Klasse ist komplett abhängig vom Parent, sie kann ohne sie
