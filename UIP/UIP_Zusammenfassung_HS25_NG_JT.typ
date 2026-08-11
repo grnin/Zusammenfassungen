@@ -603,7 +603,7 @@ _LINQ_ Expressions, _dynamische_ Kompilierung, _dynamische_ Erstellung von Lambd
 Ist ein _Service Provider_ mit einem "intelligenten" _Service Builder_, der Abhängigkeiten selbst auflöst. Dies wird
 meist mit _Reflection_ gelöst. Die _manuelle Konfiguration_ mit dem Service Builder wird dadurch _minimiert_.\
 *Weitere Fähigkeiten:*
-_Ressourcenverwaltung_ #hinweis[(Post-Construct, Pre-Destroy)], _Fehlerbehanldung_, Behandlung _zirkulärer_ Referenzen,
+_Ressourcenverwaltung_ #hinweis[(Post-Construct, Pre-Destroy)], _Fehlerbehandlung_, Behandlung _zirkulärer_ Referenzen,
 komplexe Scopes, Container Hierarchien, Configuration-/Parameterinjection, Lazy Injection,
 Interception/Middleware, Multiinjection #hinweis[(Collections von Objekten als Konstruktionsparameter)].
 
@@ -1553,7 +1553,7 @@ _Use-Cases:_ E-Commerce, Financial, SaaS.
 Server rendert Component Tree, Client lädt JS Bundle, erstellt identischen Component Tree, und vereint JS mit DOM
 $->$ Verursacht Performance Impact durch doppelte Arbeit.\
 *Resumability:*
-Server rendert HTML & serialisiert State. Client lädt nur einen Loader #hinweis[(z.B. QwikLoader)],deserialisiert State
+Server rendert HTML & serialisiert State. Client lädt nur einen Loader #hinweis[(z.B. QwikLoader)], deserialisiert State
 aus HTML und ist sofort interaktiv. _23x schnellere Time to Interactive, 200x kleineres Bundle._\
 _Qwik_ hat zum Ziel: 0ms to interactive, _Instant Loading_, Serializable Applications, Dev Experience wie React.
 Setzt auf _globalen Event Listener_. Der Optimizer _transformiert Event Handler in URLs_
