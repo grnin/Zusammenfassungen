@@ -1,5 +1,8 @@
 
-### Fazit nach Prüfung
+## SVG Grafiken
+- mit Affinity Designer bearbeiten. Die meisten Grafiken wurden aus dem PDF extrahiert (mit Inkscape).
+
+## Fazit nach Prüfung
 - Spick war wichtig
 - ergänze Befehle z.B. `ar` und Ctrl+C Signal = SIGINT
 - FCFS gut verstehen (bei scheduling und threads)

@@ -60,7 +60,6 @@ int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
 #include "_binary-hex-table.typ"
 
 = Betriebssystem API - Zusammenspiel OS und Programm
-// / Ein Programm kann über Systemaufrufe auf Dienste des OS zugreifen: Intel 64 Prozessoren haben dafür den Befehl syscall -> Dieser wechselt in den Kernel Mode des Prozessors -> Argumente werden in vom OS definierten Registern übergeben -> Ein Argument bestimmt die Nummer des tatsächlichen Systemaufrufs -> Anzahl und Art der Argumente hängen vom jeweiligen Systemaufruf ab
 / Ein Programm kann über Systemaufrufe auf Dienste des OS zugreifen: syscall -> Kernel Mode des Prozessors -> Argumente Registern übergeben -> Argument für Nummer des Systemaufrufs
 / OS Mechanismen um Programme zu konfigurieren: Programmargumente (explizit), Umgebungsv. (implizit), Dateien oder Windows Registry (KVP).
 // -----
@@ -470,7 +469,6 @@ $s dot T = T_s$. Dadurch erhält man $f$ unabhängig von der Zeit:
 Bringe $s$ und $../n$ auf den gleichen Nenner.
 
 #wrap-content(
-    // image("img/bsys_26.png"),
     image("img/amdahl.svg"),
     align: top + right,
     columns: (61%, 39%),
@@ -637,7 +635,6 @@ int main (int argc, char * argv[]) {
 
 = Scheduling
 #wrap-content(
-    // image("img/bsys_27.png"),
     image("img/scheduler.svg"),
     align: top + right,
     columns: (60%, 40%),
@@ -650,7 +647,6 @@ int main (int argc, char * argv[]) {
     _Übergänge_ von einem Status zum anderen werden _immer vom OS_ vorgenommen.  Dieser Teil vom OS heisst _Scheduler_.
 ]
 #wrap-content(
-    // image("img/bsys_28.png"),
     image("img/bsys_28.svg"),
     align: top + right,
     columns: (40%, 60%),
@@ -681,7 +677,6 @@ _Quasiparallel_ #hinweis[($n$ Threads auf $<n$ Prozessoren abwechselnd)],
 _Nebenläufig_ #hinweis[(Überbegriff für parallel oder quasiparallel)]
 
 #wrap-content(
-    // image("img/bsys_29.png"),
     image("img/scheduling-1.svg"),
     align: top + right,
     columns: (37%, 63%),
@@ -736,7 +731,6 @@ bis seine _Zeitscheibe erschöpft_ ist, dann wird der in der _Queue hinten angeh
 Notiere: die Ready Queue pro Zeitscheibe, laufender Thread landet (wenn direkt Ready) ganz hinten in nächster Ready-Queue. Am besten pro Zeit die R.Q. notieren.
 Bei Wechsel zu `waiting` beginnt nächster Prozess früher, aber erhält keine zusätzliche Zeit.
 
-// #image("img/bsys_33.png", width: 80%)
 #image("img/scheduling-5.svg", width: 100%)
 
 *Multi-Level Scheduling mit Feedback:*
@@ -744,7 +738,6 @@ Erschöpft ein Thread seine Zeitscheibe, wird seine Priorität um 1 verringert.
 Typischerweise werden die Zeitscheiben mit _niedrigerer Priorität grösser_ und Threads mit
 _kurzen Prozessor-Bursts bevorzugt_. Threads in tiefen Queues dürfen zum Ausgleich länger am
 Stück laufen.
-// #image("img/bsys_34.png", width: 80%)
 
 *Prioritäten-basiert:*
 Jeder Thread erhält _eine Nummer_, seine _Priorität_. Threads mit höherer Priorität werden
@@ -1206,7 +1199,6 @@ void * address = mmap( // maps shared memory into virt. address space of process
 Hat _128 definierte Zeichen_ #hinweis[(erste Hexzahl = Zeile #sym.arrow.b , zweite Hexzahl = Spalte #sym.arrow.r,
     d.h. #hex("41") = `A`)].
 #v(-0.5em)
-// #image("img/bsys_40.png")
 #image("img/ascii.svg")
 #v(-0.5em)
 
@@ -1230,14 +1222,12 @@ Ende die Folge anfängt: \
 *Big-Endian*: B3 B2 B1 B0  #hinweis[CP aus Unicode-Tabelle], \ *Little-Endian*: B0 B1 B2 B3
 //  werden $P_0$ bis $P_7$ in $B_3$ kopiert usw.
 
-// #image("img/bsys_43.png")
-
 == UTF-8
 Jede CU umfasst 8 Bit, ein CP benötigt 1 bis 4 CUs.
 // Encoding muss Endianness _nicht_ berücksichtigen.
 Standard für Webpages. Echte Erweiterung von ASCII. Jedes B (Byte) = U (Code-Unit). Maximal 4 Bytes.
 
-// weiss ich auswendig:
+// auswendig:
 // *Lesen*: kleiner als 7Fh > ASCII, sonst von rechts nach links, wenn linker Teil `10` ist, dann geht es weiter und sonst sollte es die `vergangenen Anzahl Bytes=Units + 0` sein.\
 // *Schreiben*: von rechts nach links, wenn zu gross: noch ein Byte mit `10` signalisieren, sonst `Anzahl Bytes+0` aufschreiben (oder ASCII).
 #v(-0.5em)
@@ -1253,7 +1243,6 @@ Standard für Webpages. Echte Erweiterung von ASCII. Jedes B (Byte) = U (Code-Un
             [#hex("800") - #hex("FFFF")], [], [#bits("1110 xxxx")], [#nextCU], [#nextCU], [16 bits],
             [#hex("10000") - #hex("10FFFF")], [#bits("1111 0xxx")], [#nextCU], [#nextCU], [#nextCU], [21 bits],
         )
-        // #image("img/bsys_44.png")
     ],
 )
 
@@ -1304,7 +1293,6 @@ Bei _4 Bytes_ sind #hex("D800") bis #hex("DFFF") #hinweis[(Bits 17-21)] wegen de
         *BE*: U1 U0 = B3 B2 B1 B0,\ *LE*: U1 U0 = B2 B3 B0 B1
     ],
 )
-// #image("img/bsys_45.png")
 #image("img/bsys2-utf16.svg")
 #v(-4pt)
 
@@ -1585,7 +1573,6 @@ _Sektor_ #hinweis[(Kleinste logische Untereinheit eines Volumes.
 
 == Inodes
 #wrap-content(
-    // image("img/bsys_42.png"),
     [
         #v(-1.2em)
         #image("img/inodes.svg", height: 1.5cm)
