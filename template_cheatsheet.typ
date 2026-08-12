@@ -8,5 +8,3 @@
 // Additional formatting templates
 #import "template--additional-formatting-templates.typ": *
 
-
-//
