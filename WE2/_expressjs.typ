@@ -103,9 +103,6 @@ app.listen(3000, function () {
     sticky: true,
     [
 
-
-        // #image("/WE2/assets/jwt.png", height: 2cm)
-
         // +-----------+                                  +-----------+
         // |  Browser  |                                  |  Server   |
         // +-----------+                                  +-----------+

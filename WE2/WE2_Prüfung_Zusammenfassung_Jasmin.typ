@@ -15,24 +15,12 @@
 
 #import "./helpers.typ": *
 
-// TODO es überschreibt meine ascii-art
-// #show "->": sym.arrow.r;
-
 #set terms(
-    // separator: [#h(2pt)],
     separator: [: ],
     hanging-indent: 0.6em,
     tight: true,
-    // tight: false,
     spacing: 0.6em,
 )
-
-// weggelassen:
-// CSS infos
-// js das ich logisch finde
-// custom react hooks und bisschen react code weggekürzt
-// /WE2/assets/image.png URL Beschreibung
-
 
 #include "/WE2/_react.typ"
 #include "/WE2/_context-zustand.typ"
