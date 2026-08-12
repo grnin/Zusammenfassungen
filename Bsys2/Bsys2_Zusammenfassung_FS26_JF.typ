@@ -1,7 +1,6 @@
 
 // Compiled with Typst 0.13.1
 #import "../template_cheatsheet.typ": *
-// #import "../template_zusammenf.typ": *
 
 #import "@preview/wrap-it:0.1.1": wrap-content
 
