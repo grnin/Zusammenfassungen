@@ -67,7 +67,6 @@ int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
 / Privilege Levels: _Kernel-Mode_ #hinweis[(darf alles ausführen, Ring 0)], _User-Mode_ #hinweis[(darf nur beschränkte Menge an Instruktionen ausführen, Ring 3)]
 / Kernels: _Microkernel_ #hinweis[(nur kritische Teile laufen im Kernel-Mode)], _Monolithisch_ #hinweis[(meiste OS, weniger Wechsel, weniger Schutz)], _Unikernel_ #hinweis[(Kernel ist nur ein Programm)]
 / `syscall`: Befehl um auf OS-Dienste zuzugreifen, wechselt in Kernel Mode von Prozessor. Argumente in Register gemäss OS #hinweis[(Ein Argument ist die Syscall Nummer/Code pro OS-Kernel-Funktion. z.B. `exit`=60, `exec*`.)]. C-API sollte nicht Syscall aufrufen, sondern C-Wrapper-Funktionen.
-// veranlasst den Prozessor, in den Kernel Mode zu schalten. Jede OS-Kernel-Funktion hat einen Code, der einem Register übergeben werden muss. #hinweis[(`exit` hat den Code 60)]
 / ABI: Application Binary Interface, Abstrakte Schnittstelle mit platformunabhängigen Aspekten
 / API: Application Programming Interface, Konkrete Schnittstellen, Calling Convention, Abbildung von Datenstrukturen. _Linux-Kernels_ sind API-, aber nicht ABI-kompatibel. #hinweis[(C-Wrapper-Funktionen)]
 / POSIX: Portable Operating System Interface. Sammlung von IEEE Standards, welche die Kompatibilität zwischen OS gewährleistet. Windows ist nicht POSIX-konform.
@@ -81,22 +80,16 @@ int y = *px;  // *px = Wert einer int-Adresse, y = 5, * = Dereferenzoperator
 - Zusätzlich legt das OS ein Array `argv` an, dessen Elemente jeweils auf das erste Zeichen eines Arguments zeigen.
 - Der Pointer auf dieses Array und die Anzahl der Elemente wird dem Programm an einer vom OS definierten Stelle zur Verfügung gestellt, z.B. in Registern oder auf dem Stack.
 - ```c int main(int argc, char * argv[]) { ... } // argv[0] = program path```
-// Die Art und Weise, wie das gehandhabt wird, ist die Calling Convention.
 
 == Umgebungsvariablen
 Umgebungsv.: Strings, die mindestens ein `Key=Value` enthalten #hinweis[`OPTER=1`, `PATH=/home/ost/bin`].
 Unter POSIX verwaltet das OS die Umgebungsvariablen innerhalb
 jedes laufenden Prozesses. Werden initial festgelegt. Das OS legt die Variablen als ein null-terminiertes Array von Pointern auf null-terminierte Strings ab.\ Unter C zeigt die Variable ```c extern char **environ``` darauf. Case sensitive (keys).
-// Sollte nur über untenstehende Funktionen manipuliert werden.
 
 / ```c char *value = getenv("PATH")```: Abfragen einer Umgebungsv. #hinweis[returns Adresse von 1. Zeichen oder 0 wenn nicht vorhanden]
 / ```c int ret = setenv("HOME", "/usr/home", 1) / setenv(*key, *value, overwrite)```: Umgebungsv. setzen #hinweis[Mit oder ohne überschreiben]
 / ```c int ret = putenv("HOME=/usr/home") / putenv(char * string)```: #hinweis[löscht vorhandenen key, string als Variable mitgeben ist im nachhinein modifizierbar  (gefährlich Pointer auf `NULL`)]
 / ```c int ret = unsetenv("HOME")```: Umgebungsv. entfernen
-
-// Der Key muss einzigartig sein. (ist logisch)
-// \ Werden implizit bereitgestellt, nützlich für Informationen, die bei jedem Aufruf gleich sind.
-// _Grössere Konfigurationsinformationen_ sollten über _Dateien_ übermittelt werden.
 
 = Dateisystem API
 / Datei: Daten (Bytes) und Metadaten (Sammlung von Attributen) #hinweis[Dateiname, Verzeichnis, Ablageort ]
@@ -104,35 +97,23 @@ jedes laufenden Prozesses. Werden initial festgelegt. Das OS legt die Variablen 
 / Links: _Hard-Link_: gleicher Inode, verschiedene Pfade, _Symbolischer Link_: wie eine Datei die Pfad auf andere Datei enthält. 0-1 Block alloziert.
 
 / Zugriffsrechte: Je 3 Permission-Bits für Owner, Gruppe und andere Benutzer. \ `r=4, w=2, x=1` #hinweis[Zahlen so addieren, Beispiel: `0741` = `rwx r-- --x`]
-// #hinweis[(Owner hat alle Rechte, Gruppe kann lesen, andere haben keine Rechte)]. _`r`_ead, _`w`_rite, e_`x`_ecute
-// ---
+
 #v(-0.5em)
 / Arbeitsverzeichnis: Bezugspunkt für relative Pfade, jeder Prozess hat eines #hinweis[(`getcwd()`, `chdir()`: nimmt String, `fchdir()`: nimmt File Deskriptor)]. z.B. `/home/bsys2` \
 / Pfade: Absolut #hinweis[(beginnt mit /)], Relativ #hinweis[(beginnt nicht mit /)], Kanonisch #hinweis[(Absolut, ohne "`.`" und "`..`", `realpath()`)] \ Längster erlaubter Pfadname `NAME_MAX` #hinweis[Maximale Länge eines Dateinamens (exklusive terminierender Null)] je nach System unterschiedlich, aber gemäss `_POSIX_NAME_MAX` mindestens 14 #hinweis[`limits.h`]
 / Datentyp: Applikationen müssen Daten validieren und auf Grenzverletzung überprüfen.
 
-
-
-// // TODO bei message passing oder shared memory:
-// / POSIX (mode für shm_open, mq_open): _`S_IRWXU`_ `= 0700`, _`S_IWUSR`_ `= 0200`, _`S_IRGRP`_ `= 0040`, _`S_IXOTH`_ `= 0001`. Werden mit | verknüpft.
-
 / POSIX-API: für direkten Zugriff, alle Dateien sind rohe Binärdaten. Nutzt File-Deskriptoren. Blockorientiert, liest Bytes. `open/close, read/write, lseek, pwrite/pread`
-// / POSIX FILE API: für direkten, unformatierten Zugriff auf Inhalt der Datei. Nur für Binärdaten verwenden.
 / C-API: für direkten Zugriff auf Streams, Stream-orientiert (möglicherweise gepuffert) liest characters (Zeilenumbruch automatisch auf OS formatiert), OS-unabhängig. `fopen/fclose, fgetc/fputc/funputc, fseek/ftell`
 / File-Deskriptor: Index in die File-Descriptor-Table vom aktuellen Prozess.
 / File-Descriptor-Table (FDT): hat jeder Prozess, Einträge enthalten u.a. aktuellen Offset + Zeiger in Global File Table. Nutze Indizes in diese Tabelle als Argument für Filesystem-API-Funktionen.
 / stdin, stdout, stderr: vordefinierte Streams in jedem FDT von 0-1, wenn geschlossen können diese nicht mehr einfach geöffnet werden (im Prozess).
 / `errno`: Makro oder globale Variable vom typ `int`. Nach Auftreten eines Fehlers abfragen.
 
-// if (chdir("docs") < 0) { if (errno == EACCESS) { printf("Error: Denied"); }}
-// `strerror`
-// gibt die Adresse eines Strings zurück, der den Fehlercode `code` textuell beschreibt.
-// `perror`: schreibt `text` gefolgt von einem Doppelpunkt und vom Ergebnis von `strerror(errno)` auf den Errorstream.
 == File-Descriptor (FD)
 
 #block(
     sticky: true,
-    // code kombiniert:
     ```c
     #define N 32
     int main (int argc, char * argv[]) {
@@ -167,27 +148,16 @@ jedes laufenden Prozesses. Werden initial festgelegt. Das OS legt die Variablen 
     ```,
 );
 Files werden in der POSIX-API über FD's repräsentiert.
-// Gilt nur _innerhalb eines Prozesses_.
 Returnt _Index in Tabelle_ aller geöffneter Dateien im Prozess #sym.arrow
 Enthält _Index in systemweite Tabelle_ #sym.arrow Enthält Daten zur Identifikation der Datei.
 #hinweis[_`STDIN_FILENO = 0`:_ standard input, _`STDOUT_FILENO = 1`:_ standard output, _`STDERR_FILENO = 2`:_ standard error ]
 / ```c int open (char *path, int flags, ...)```: erzeugt FD auf Datei an `path`. `flags` = wie die Datei geöffnet werden soll: _`O_RDONLY`_, _`O_RDWR`_, _`O_CREAT`_(wenn nicht existiert), _`O_APPEND`_ (Setze Offset ans Ende der Datei vor jedem Schreibzugriff), _`O_TRUNC`_ (Setze Länge der Datei auf 0)
-// die meisten sind ja lesbar:
-// - _`O_RDONLY`:_ nur lesen,
-// - _`O_RDWR`:_ lesen und schreiben,
-// - _`O_CREAT`:_ Erzeuge Datei, wenn sie nicht existiert,
-// - _`O_APPEND`:_ Setze Offset ans Ende der Datei vor jedem Schreibzugriff,
-// - _`O_TRUNC`:_ Setze Länge der Datei auf 0
 
 / ```c int close (int fd)```: schliesst Datei = dealloziert den FD. FD kann von `open` für andere Dateien verwendet werden. Returned 0 oder -1. #hinweis[Wenn mehrere FDs die gleiche Datei öffnen, können sie sich gegenseitig Daten überschreiben.]
-// Wenn FD's nicht geschlossen werden, kann das FD-Limit erreicht werden, dann können keine weiteren Dateien mehr geöffnet werden.
 / ```c ssize_t read(int fd, void * buffer, size_t n)```: Versucht die nächsten $n$ Bytes am aktuellen Offset von fd in den Buffer zu kopieren, erhöht FD offset, blockierend. returned: Anzahl gel. Bytes.
 / ```c ssize_t write(int fd, void * buffer, size_t n)```: Versucht die nächsten n Byte vom buffer an aktuellen Offset von fd zu kopieren, erhöht FD offset, blockierend
-// \ kopiert die nächsten $n$ Byte vom `buffer` an den aktuellen Offset von `fd`
 / ```c off_t lseek(int fd, off_t offset, int origin)```: Setzt offset auf `offset` und gibt neuen Offset zurück. *`origin`* = wozu Offset relativ ist: _`SEEK_SET`:_ Beginn der Datei, _`SEEK_CUR`:_ Aktueller Offset, _`SEEK_END`:_ Dateieende. \ *Beispiele*: _`lseek(fd, 0, SEEK_CUR)`_ aktueller Offset, _`lseek(fd, 0, SEEK_END)`:_ Grösse der Datei. `lseek (fd, n, SEEK_END)` hängt, bei nachfolgendem write, n Nullen an Datei.
 / ```c ssize_t pread/pwrite(int fd, void * buffer, size_t n, off_t offset)```: Wie `read`/`write`. Statt Offsets von `fd` wird zusätzlicher Parameter `offset` verwendet. fd offset nicht verändert.
-
-
 
 === Unterschiede Windows und POSIX
 In Windows werden Pfad-Bestandteile durch Backslash (`\`) getrennt + es gibt ein Wurzelverzeichnis pro Datenträger/Partition + andere File-Handling-Funktionen. (z.B. open <-> CreateFile)
@@ -198,12 +168,6 @@ Unabhängig vom Betriebssystem (POSIX/Windows), Stream-basiert = zeichen-orienti
 / Streams: `FILE *` enthält _Informationen über einen Stream_. Soll nicht direkt verwendet oder kopiert werden, sondern nur über von C-API erzeugte Pointer.\
 / FILE: Stream-infos, nur über C-API nutzen und nicht kopieren, die 3 Standard streams stdin-stderr.\
 / ```c FILE * fopen(char const *path, char const *mode)```: _Öffnen eine Datei._ Erzeugt `FILE`-Objekt für Datei an `path`.  Flags für `mode`: *r*, *w* #hinweis-normal-gross[in neue/bestehende geleerte Datei schreiben], *a* #hinweis-normal-gross[in neue/bestehende Datei anfügen], *r+* #hinweis-normal-gross[bestehende Datei lesen und schreiben], *w+* #hinweis-normal-gross[neue/geleerte bestehende Datei lesen und schreiben], *a+* #hinweis-normal-gross[neue/bestehende Datei lesen und anfügen] \ Gibt Pointer auf erzeugtes `FILE`-Objekt zurück oder 0 bei Fehler.
-// _`"r"`_ #hinweis[(Datei lesen)],
-// _`"w"`_ #hinweis[(in neue oder bestehende geleerte Datei schreiben)],
-// _`"a"`:_ #hinweis[(in neue oder bestehende Datei anfügen)],
-// _`"r+`:_ #hinweis[(Datei lesen & schreiben)],
-// _`"w+"`_ #hinweis[(neue oder geleerte bestehende Datei lesen & überschreiben)],
-// _`"a+"`_ #hinweis[(neue oder bestehende Datei lesen & an Datei anfügen)].
 / ```c FILE * fdopen(int fd, char const * mode)```: ist gleich, aber statt Pfad wird direkt der FD übergeben.
 / ```c int fileno (FILE *stream)```: gibt FD zurück von Stream (nicht mit POSIX mischen).
 / ```c int fclose(FILE *file)```: _Schliesst eine Datei._ Ruft ```c fflush()``` #hinweis[(schreibt Inhalt aus Speicher in die Datei)] auf, schliesst den Stream, entfernt `file` aus Speicher und gibt 0 zurück wenn OK, andernfalls `EOF`.
@@ -228,17 +192,9 @@ Unabhängig vom Betriebssystem (POSIX/Windows), Stream-basiert = zeichen-orienti
     / Programm: Ein Programm kann mehrfach ausgeführt werden: verschiedene, voneinander unabhängige Prozesse. Prozess kann mehrere Programme nacheinander ausführen.
     / Prozesse: sind die _Verwaltungseinheit_ des OS für Programme. Jedem Prozess ist ein _virtueller Adressraum_ zugeordnet (MMU). _ Ein Prozess umfasst_: das _Abbild eines Programms_ im Hauptspeicher #hinweis[(text section)], die _globalen Variablen des Programms_ #hinweis[(data section)], Speicher für _Heap_ und Speicher für _Stack_.
     / Process Control Block (PCB): IDs, Kontext, Scheduling-Infos #hinweis[Priorität], Sync-Daten, offene Dateien...
-    // / Process Control Block (PCB): Diverse IDs, Speicher für Zustand, Scheduling-Informationen, Daten zur Synchronisation, Security-Informationen etc.
-    // Das Betriebssystem hält Daten über jeden Prozess in jeweils einem _PCB_ vor. Speicher für
-    // alle Daten, die das OS benötigt, um die Ausführung des Prozesses ins Gesamtsystem zu
-    // integrieren,
     / Kontext: Register, Flags, Instruction Pointer, MMU-Konfiguration (Page-Table-Pointer)
     / Kontextwechsel: Interrupt -> context save #hinweis[von Prozess in PCB] -> _Interrupt-Handler_ #hinweis[kann Kontext überschreiben] -> context restore. Ermöglicht quasi-parallele Ausführung.
-    //     Kontext-Wechsel ermöglichen quasi-parallele Ausführung von Prozessen auf einem Prozessor
-    // • OS sichert Kontext von Prozess A während Timer-Interrupt in PCB A
-    // • OS stellt Kontext aus PCB B wieder her ⇒ Nach Rücksprung aus Timer-Interrupt läuft Prozess B
     / Prozess-Erstellung: OS erzeugt Prozess und lädt das Programm in den Prozess. `fork exec`
-    // Unter POSIX getrennt, unter Windows eine einzige Funktion.
     / Prozess-Hierarchie: Baumstruktur, startet bei Prozess 1.
 ]
 
@@ -286,7 +242,6 @@ Programmargumente müssen spezifiziert werden. #hinweis[(`..l` als Liste, `..v` 
 )
 
 === Zombie- & Orphan-Prozesse
-// $C$ ist zwischen seinem Ende und dem Aufruf von #wait durch $P$ ein Zombie-Prozess.
 _Dauerhafter Zombie-Prozess:_ $P$ ruft wegen Fehler #wait nie auf.
 _Orphan-Prozess:_ $P$ wird vor $C$ beendet. $P$ kann somit nicht mehr auf $C$ warten, was
 bei Beendung von $C$ in einem dauerhaften Zombie resultiert. Wenn $P$ beendet wird, werden
@@ -319,10 +274,6 @@ Besteht aus _Header_,
 #tcolor("grün", "Sektionen") // #hinweis[(linking view)]
 und enthält auch Strings (z.B. Namen von Symbolen + Sektionen..) und Symboltabelle (für Bibliotheken und object files).
 
-// #tcolor("orange", "Segmente")=Loader und #tcolor("grün", "Sektionen")=Linker=Compiler sind eine andere Einteilung (Views)
-// für die gleichen Speicherbereiche.
-// View des #tcolor("orange", "Loaders") sind die
-// #tcolor("orange", "Segmente"), view des #tcolor("grün", "Compilers") die #tcolor("grün", "Sektionen").
 *Header:*
 Beschreibt den _Aufbau_ der Datei: Typ, 32/64-bit, Encoding, Maschinenarchitektur,
 Entrypoint, Infos zu den Einträgen in PHT und SHT.\
@@ -366,7 +317,6 @@ Werden vom _Linker_ verwendet: Verschmilzt Sektionen und erzeugt ausführbares E
     - _Linker-Name:_ `lib + Bibliotheksname + .so` #hinweis[(z.B. libmylib.so)],
     - _SO-Name:_ `Linker-Name + . + Versionsnummer` #hinweis[(z.B. libmylib.so.2)],
     - _Real-Name:_ `SO-name + . + Unterversionsnummer` #hinweis[(z.B. libmylib.so.2.1)]
-// #v(-0.5em)
 / Shared Objects:
     Nahezu alle Executables benötigen _zwei Shared Objects_:
     _`libc.so`:_ Standard C library,
@@ -400,7 +350,6 @@ schliesst das durch `handle` bezeichnete, zuvor geöffnete Objekt.\
 *```c char * dlerror()```:*
 gibt Fehlermeldung als null-terminierten String zurück.
 
-// == Shared Memory
 / Mit Shared Memory: jedes Programm hat eine _eigene virtuelle Page_ für den Code. Diese werden auf denselben Frame im RAM gemappt. _Problem_: dyn. Bibliothek muss verschiebbar sein, schwierig mit absoluten Adressen, Adressen mappen an welchen Prozess?
 / Position-Independent Code (PIC): Code hängt nicht von Adresse ab, Adresse relativ zum Instruction Pointer. Prozesssor muss _relative Moves_ anbieten: können über relative Calls mit GOT emuliert werden . _Vorteile_ Dynamische Bibliotheken können Code zwischen Programmen teilen. Code wird nicht mehrfach im Speicher abgelegt.
 / Relative Moves via Relative Calls + GOT: Mittels Hilfsfunktion wird Rücksprungadresse in Register abgelegt, somit kann relativ dazu gearbeitet werden.
@@ -473,7 +422,6 @@ Bringe $s$ und $../n$ auf den gleichen Nenner.
     align: top + right,
     columns: (61%, 39%),
 )[
-    // === Bedeutung
     - Amd. Regel = Abschätzung einer _oberen Schranke_ für den maximalen Geschwindigkeitsgewinn
     - Nur wenn _alles_ parallelisierbar, ist Speedup _proportional_ und _maximal_
         #hinweis[100% parallel: $f(0,n) = n$ und rein seriell: $f(1,n)$]
@@ -647,7 +595,7 @@ int main (int argc, char * argv[]) {
     _Übergänge_ von einem Status zum anderen werden _immer vom OS_ vorgenommen.  Dieser Teil vom OS heisst _Scheduler_.
 ]
 #wrap-content(
-    image("img/bsys_28.svg"),
+    image("img/scheduler-states.svg"),
     align: top + right,
     columns: (40%, 60%),
 )[
@@ -690,9 +638,8 @@ _Nebenläufig_ #hinweis[(Überbegriff für parallel oder quasiparallel)]
 == Scheduling-Strategien
 // Durchlaufzeit = throughput time = 1 Thread
 // Durchsatz = throughput
-// Bandbraeite = bandwidth = wieviele Threads/Arbeit möglich sind in einer gewissen Zeit
+// Bandbreite = bandwidth = wieviele Threads/Arbeit möglich sind in einer gewissen Zeit
 
-// Anforderungen an einen Scheduler können vielfältig sein.
 _Anforderungen Geschlossene Systeme_ #hinweis[(Hersteller kennt Anwendungen und ihre Beziehungen)] vs.
 _Anford. Offene Systeme_ #hinweis[(Hersteller muss von typischen Anwendungen ausgehen)]
 *Anwendungssicht, Minimierung von:*
@@ -727,7 +674,6 @@ Wartezeit_, kann jedoch nur _korrekt implementiert_ werden, wenn die Länge der 
 _Zeitscheibe_ von etwa 10 bis 100ms. _FCFS_, aber ein Thread kann nur solange laufen,
 bis seine _Zeitscheibe erschöpft_ ist, dann wird der in der _Queue hinten angehängt_.
 
-// ? Round-Robin schliesst Runde ab, bevor neue Threads hinzugenommen werden und startet immer beim gleichen Thread. Nutzt eine "Ready-Queue".
 Notiere: die Ready Queue pro Zeitscheibe, laufender Thread landet (wenn direkt Ready) ganz hinten in nächster Ready-Queue. Am besten pro Zeit die R.Q. notieren.
 Bei Wechsel zu `waiting` beginnt nächster Prozess früher, aber erhält keine zusätzliche Zeit.
 
@@ -767,14 +713,6 @@ setzt den Nice-Wert.
 - _`which`:_ `PRIO_PROCESS`, `PRIO_PGRP` oder `PRIO_USER`
 - _`who`:_ ID des Prozesses, der Gruppe oder des Users)
 
-// / Nice-Wert: Jeder Prozess hat einen Nice-Wert von $-20$ #hinweis[(soll bevorzugt werden)] bis $+19$ #hinweis[(nicht bevorzugt)]
-// / ```sh nice [-n increment] utility [argument...]```: Nice-Wert beim Start erhöhen oder verringern
-// / ```c int nice (int i)```: Nice-Wert im Prozess erhöhen oder verringern. #hinweis[(Addiert `i` zum Wert dazu.)]
-// / ```c int getpriority (int which, id_t who)```: gibt den Nice-Wert von $p$ zurück
-// / ```c int setpriority (int which, id_t who, int prio)```: setzt den Nice-Wert.
-// - _`which`:_ `PRIO_PROCESS`, `PRIO_PGRP` oder `PRIO_USER`
-// - _`who`:_ ID des Prozesses, der Gruppe oder des Users)
-
 ==== Priorität bei Thread-Erzeugung setzen
 Funktionen ohne `attr` bevor Thread gestartet wird #hinweis[Funktionen geben POSIX int zurück]:\
 ```c pthread_getschedparam(pthread_t thread, int* policy, struct sched_param* param)```\
@@ -789,8 +727,6 @@ pthread_create ( &id, &a, thread_function, argument );
 pthread_attr_destroy ( &a ); // destroy attributes
 ```
 
-// #pagebreak() // platzverschwendung
-
 = Mutexe und Semaphore
 Jeder Thread hat seinen _eigenen_ Instruction-Pointer und Stack-Pointer. Wenn Ergebnisse von
 der _Ausführungsreihenfolge_ einzelner Instruktionen abhängen, spricht man von einer _Race
@@ -800,10 +736,6 @@ Condition_. Threads müssen _synchronisiert_ werden, damit keine _Race Condition
 / Atomare Instruktionen: Eine atomare Instruktion kann vom Prozessor _unterbrechungsfrei_ ausgeführt werden. #hinweis[*Achtung:* Selbst einzelne Assembly-Instruktionen nicht immer atomar!]\
 
 // */
-
-// #colbreak()
-// #colbreak()
-// #colbreak()
 // /* 1. Hälfte PDF Druck
 
 === Anforderungen an Synchronisations-Mechanismen:
@@ -828,17 +760,6 @@ _`Wait(v)`_ zugegriffen #hinweis[(Wait: Wenn $z > 0$, verringert $z$ um $1$ und 
 #indent(
     [
         _Initialisiert_ Semaphor vom Typ sem_t #hinweis[sem_t möglich als globale Variable oder member von struct], pshared=0 nur auf einem Prozessor. value=Startwert von Semaphor.
-        // `pshared = 1`: oder als Parameter für den Thread #hinweis[(Speicher auf dem Stack oder Heap)]:
-        // ```c
-        // struct T { sem_t *sem; ... };
-        // int main (int argc, char **argv)
-        // {
-        // sem_t sem;
-        // sem_init (&sem, 0, 4);
-        // struct T t = { &sem , ... };
-        // return 0;
-        // }
-        // ```
         \ Verwendung globaler Semaphor über mehrere Prozesse: #v(-0.5em)
         ```c sem_t sem; /*global*/
         int main (..) { sem_init (&sem, 0, 4); /* pshared=0, Semaphor Wert =4 */ }
@@ -937,7 +858,6 @@ freigegeben wird.
 
 #v(-0.25em)
 ==== Umleiten des Ausgabestreams
-// Umleiten des Ausgabestreams:
 ```c
 int fd = open("log.txt", ...);   int pid = fork();
 if (pid == 0) { // child
@@ -1060,7 +980,6 @@ send (fd, buf, len, 0); // Aufruf Beispiel
 === Senden und Empfangen von Daten
 Erweitern `read()` bzw. `write()` um Socket-Funktionalitäten
 durch den `flags`-Parameter. Puffern der Daten ist Aufgabe des Netzwerkstacks.\
-// flags einfach `0` setzen.
 
 / `int close (int socket)`: Schliesst Socket für den aufrufenden Prozess. Hat anderer Prozess den Socket geöffnet, bleibt Verbindung bestehen. Gegenseite wird nicht benachrichtigt. Gegenseite erhält bei einem read kein EOF und verlässt die Lese-Schleife nicht.
 / `int shutdown (int socket, int mode)`: Schliesst  Socket für alle Prozesse und baut die entsprechende Verbindung ab. `mode`: _`SHUT_RD`_ #hinweis[(Keine Lese-Zugriffe mehr)], _`SHUT_WR`_ #hinweis[(Keine Schreib-Zugriffe mehr)], _`SHUT_RDWR`_ #hinweis[(Keine Lese- oder Schreib-Zugriffe mehr)]
@@ -1069,7 +988,6 @@ durch den `flags`-Parameter. Puffern der Daten ist Aufgabe des Netzwerkstacks.\
 = Message Passing und Shared Memory und Pipes
 Prozesse sind voneinander isoliert, müssen jedoch trotzdem miteinander interagieren.
 
-// ==== Vergleich Message-Passing und Shared Memory
 _Shared Memory_ ist schneller zu realisieren, aber schwer wartbar.
 _Message-Passing_ erfordert mehr Engineering-Aufwand, schlussendlich aber in Mehr-Prozessor-Systemen bald performanter.
 
@@ -1133,7 +1051,6 @@ Nutzt OS-Message-Queues mit _variabler Länge_, haben mind. 32 Prioritäten und 
 / ```c int mq_send (mqd_t queue, const char *msg, size_t length, unsigned int priority)```: _Sendet_ die Nachricht, die an Adresse `msg` beginnt und `length` Bytes lang ist, in die `queue`.
 / ```c int mq_receive (mqd_t queue, const char *msg, size_t length, unsigned int *priority)```: _Kopiert_ die nächste Nachricht aus der Queue in den Puffer, der an Adresse `msg` beginnt und `length` Bytes lang ist. _Blockiert_, wenn die Queue _leer_ ist.
 
-// ==== Vergleich Message-Queues und Pipes
 #v(-0.5em)
 #table(
     columns: (auto, 1fr),
@@ -1156,9 +1073,6 @@ Nutzt OS-Message-Queues mit _variabler Länge_, haben mind. 32 Prioritäten und 
 
 
 // */
-// #colbreak()
-// #colbreak()
-// #colbreak()
 // /* 2. Hälfte PDF Druck
 
 == Shared Memory
@@ -1167,15 +1081,12 @@ gemacht. In $P_1$ wird Page $V_1$ auf einen Frame $F$ abgebildet. In $P_2$ wird 
 auf _denselben_ Frame $F$ abgebildet. Beide Prozesse können _beliebig_ auf dieselben Daten
 zugreifen. Im Shared Memory müssen _relative Adressen_ verwendet werden.
 
-// #colbreak()
-
 ==== POSIX API
 Das OS benötigt eine "Datei" _$bold(S)$_, das Informationen über den gemeinsamen Speicher
 verwaltet und eine _Mapping Table_ je Prozess.
 
 / POSIX (mode für shm_open, mq_open): _`S_IRWXU`_ `= 0700`, _`S_IWUSR`_ `= 0200`, _`S_IRGRP`_ `= 0040`, _`S_IXOTH`_ `= 0001`. Werden mit | verknüpft.
 / ```c int fd = shm_open ("/mysharedmemory", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR)```: Erzeugt (falls nötig) und öffnet Shared Memory `/mysharedmemory` zum Lesen und Schreiben.
-// TODO bei message passing oder shared memory:
 / ```c int ftruncate (int fd, offset_t length)```: _Setzt_ Grösse der "Datei". Muss _zwingend_ nach SM-Erstellung gesetzt werden, um entsprechend viele Frames zu allozieren. \ Wird für Shared Memory mit ganzzahligen Vielfachen der Page-/Framegrösse verwendet.
 / ```c int close (int fd)```: _Schliesst_ "Datei". Shared Memory _bleibt aber im System_.
 / ```c int shm_unlink (const char * name)```: _Löscht_ das Shared Memory mit dem `name`. #hinweis[(bleibt vorhanden, solange noch von Prozess geöffnet)]\
@@ -1220,11 +1131,9 @@ Jede CU ist die ganze  _32 Bit_ gross, jeder CP ist eine CU.
 Wird häufig intern in Programmen verwendet. Obere 11 Bits oft "zweckentfremdet". Endianness gibt an, mit welchem
 Ende die Folge anfängt: \
 *Big-Endian*: B3 B2 B1 B0  #hinweis[CP aus Unicode-Tabelle], \ *Little-Endian*: B0 B1 B2 B3
-//  werden $P_0$ bis $P_7$ in $B_3$ kopiert usw.
 
 == UTF-8
 Jede CU umfasst 8 Bit, ein CP benötigt 1 bis 4 CUs.
-// Encoding muss Endianness _nicht_ berücksichtigen.
 Standard für Webpages. Echte Erweiterung von ASCII. Jedes B (Byte) = U (Code-Unit). Maximal 4 Bytes.
 
 // auswendig:
@@ -1258,32 +1167,12 @@ _ä_: $P = hex("E4") =$ \
     )) #bits("10 0100", suffix: false)
 3. am Schluss zurück in Hex umwandeln: #hex("C3 A4", suffix: false)
 
-// fxcolor("gelb", bits("10 0110"))$\
-// $=> P_10 ... P_6 = fxcolor("grün", bits("00011")) = fxcolor("rot", hex("03")), quad
-// P_5 ... P_0 = fxcolor("gelb", bits("100100")) = fxcolor("orange", hex("24"))$\
-// $=> U_1 = hex("C0") (= bits("11000000")) + fxcolor("rot", hex("03")) = hex("C3"), quad
-// U_0 = hex("80") (= bits("10000000")) + fxcolor("orange", hex("24")) = hex("A4")$\
-// $=> ä = underline(hex("C3 A4"))$
-
-// - _ặ_: $P = hex("1EB7") = fxcolor("grün", #bits("0001", suffix: false)) thin
-//     fxcolor("gelb", #bits("111010", suffix: false)) thin fxcolor("hellblau", bits("110111"))$\
-//     $=> P_15 ... P_12 = fxcolor("grün", hex("01")), quad
-//     P_11 ... P_6 = fxcolor("gelb", hex("3A")), quad
-//     P_5 ... P_0 = fxcolor("hellblau", hex("37"))$\
-//     $=> U_2 = hex("E0") (= #bits("11100000")) + fxcolor("grün", hex("01")) = hex("E1"), quad
-//     U_1 = hex("80") + fxcolor("gelb", hex("3A")) = hex("BA"), space
-//     U_0 = hex("80") + fxcolor("hellblau", hex("37")) = hex("B7")$\
-//     $=> ặ = underline(hex("E1 BA B7"))$
-
 == UTF-16
 Jede CU umfasst 16 Bit, ein CP benötigt 1 oder 2 CUs.
-//  Encoding muss Endianness berücksichtigen.
 Die 2 CUs werden _Surrogate Pair_ genannt, $U_0$: high surrogate,
 $U_1$: low surrogate. Bei _2 Bytes_ #hinweis[(1 CU)] wird direkt gemappt und vorne mit
 Nullen aufgefüllt, #hinweis[CP in [0 - FFFF] ohne [D800 - DFFF]].
 Bei _4 Bytes_ sind #hex("D800") bis #hex("DFFF") #hinweis[(Bits 17-21)] wegen dem Separator _ungültig_ und müssen "umgerechnet" werden.
-// \
-// *Endianness* (umgedreht innerhalb von CU):
 #grid(
     columns: (1fr, 1fr),
     [
@@ -1306,29 +1195,16 @@ Bei _4 Bytes_ sind #hex("D800") bis #hex("DFFF") #hinweis[(Bits 17-21)] wegen de
 ==== Vorgehen UTF-16
 *kleiner als FFFF*: ist BE, Bytes anschreiben (1 Byte = 2 Hex. Zeichen)\
 *grösser als FFFF*: #example-block([Beispiel: Encoding von U+10'437 = #hex("10'437") = (\u{10437}) ])
-// TODO mit grid lösen?
-// #grid(
-//     columns: (auto, auto),
-//      gutter: 0em,
-//     [
 
-//     ],
-//     [
-
-//     ],
-// )
 #v(-.5em)
 1. minus #hex("1 0000") rechnen (die 0 behalten!)
     #example-block([#hex("00'437")])
 + in Binär umwandeln
     #example-block([
-        // #bits("0000 0000 01|00 0011 0111") ich würde gerne so | Trennzeichen schreiben, aber dann sind die 4 bits nicht mehr schön nebeneinander.. vielleicht von Hand einzeichnen wenn ausgedruckt
         #bits("0000 0000 0100 0011 0111")
     ])
 + untere (rechts) 10 Bits nehmen und rechts schreiben
     #example-block([
-        // #bits("0000 0000 01") #fxcolor("rot", bits("00 0011 0111", suffix: false))
-        // #bits("0000 0000 01") #fxcolor("rot", bits("00 0011 0111", suffix: false))
         #sym.arrow.r #fxcolor("rot", bits(
             "00 0011 0111",
             suffix: false,
@@ -1336,14 +1212,6 @@ Bei _4 Bytes_ sind #hex("D800") bis #hex("DFFF") #hinweis[(Bits 17-21)] wegen de
     ])
 + Surrogat #fxcolor("grün", [$110111$])  links von den 10 Bits
     #example-block([
-        // #bits("0000 0000 01|..", suffix: false) #sym.arrow.r #fxcolor("grün", [
-        //     #bits(
-        //         "110111",
-        //         suffix: false,
-        //     )
-        //     #fxcolor("rot", bits("00 0011 0111", suffix: false))
-        // ])
-        //
         #sym.arrow.r
         #fxcolor("grün", bits(
             "110111",
@@ -1355,15 +1223,6 @@ Bei _4 Bytes_ sind #hex("D800") bis #hex("DFFF") #hinweis[(Bits 17-21)] wegen de
         )
     ])
 + restliche (linker Teil) Bits links vom Surrogat schreiben
-    // \
-    // #fxcolor("grün", [
-    //     #bits("0000 0000 01", suffix: false)
-    //         #fxcolor("rot", bits(
-    //             "110111",
-    //             suffix: false,
-    //         ))
-    //         #bits("00 0011 0111", suffix: false)
-    //     ])
     #example-block([
         (diese: #fxcolor("rot", [ #bits("0000 0000 01", suffix: false)]))
         \
@@ -1378,12 +1237,6 @@ Bei _4 Bytes_ sind #hex("D800") bis #hex("DFFF") #hinweis[(Bits 17-21)] wegen de
             "110110",
             suffix: false,
         ))
-        // #fxcolor("rot", bits("0000 0000 01", suffix: false))
-        // #fxcolor("grün", bits(
-        //     "110111",
-        //     suffix: false,
-        // ))
-        // #fxcolor("rot", bits("00 0011 0111", suffix: false))
         #bits("00 0000 0001 1101 1100 0011 0111", suffix: false)
     ])
 + zurück zu Hex umwandeln\
@@ -1405,36 +1258,6 @@ Bei _4 Bytes_ sind #hex("D800") bis #hex("DFFF") #hinweis[(Bits 17-21)] wegen de
         fxcolor("hellblau", hex("37DC"))
     )$
 
-/*
-// original beispiel
-==== Beispiel UTF-16
-// Hinweis: korrekt ist D801DC37 nicht D801DD37 (getestet bei https://www.branah.com/unicode-converter mit 0x10437 UTF-32) habe ich korrigiert!
-
-Encoding von U+10'437 (\u{10437})
-#hinweis[#fxcolor("grün", bits("00 0100 0001", suffix: false))
-    #fxcolor("gelb", bits("00 0011 0111"))]:
-
-+ Q = Code-Point $P$ minus #hex("10000") rechnen, dann in Binär umwandeln\
-    $P = hex("10437"), quad Q = hex("10437") - hex("10000") = hex("0437")
-    = fxcolor("grün", #bits("00 0000 0001", suffix: false)) fxcolor("gelb", bits("00 0011 0111"))$
-+ Obere & untere 10 Bits in Hex umwandeln\
-    $fxcolor("grün", #hex("0001", suffix: false)) fxcolor("gelb", hex("0137"))$\
-+ Oberer Wert mit #hex("D800") und unterer Wert mit #hex("DC00") addieren, um Code-Units zu erhalten\
-    $U_1 = fxcolor("grün", hex("0001")) + hex("D800") = fxcolor("orange", hex("D801")), quad
-    U_2 = fxcolor("gelb", hex("0137")) + hex("DC00") = fxcolor("hellblau", hex("DC37"))$\
-+ Zu BE/LE zusammensetzen\
-// ==== Beispiel UTF-16 BE/LE
-$"BE" = underline(
-    fxcolor("orange", #hex("D801", suffix: false)) thin
-    fxcolor("hellblau", hex("DC37"))
-), quad
-"LE" = underline(
-    fxcolor("orange", #hex("01D8", suffix: false)) thin
-    fxcolor("hellblau", hex("37DC"))
-)$
-// */
-
-// #colbreak()
 == Encoding-Beispiele
 #{
     set text(size: 0.94em)
@@ -1501,13 +1324,11 @@ $"BE" = underline(
         [
             - Dateien durch Inodes beschrieben
             - Kein Link von Datei zurück zum Verzeichnis
-            // - Hard-Links möglich
         ],
         [
             - Dateien durch File-Records beschrieben
             - Verzeichnis = Namen und Link auf Datei
             - Link zum Verzeichnis und Name sind in Attribut
-            // - Hard-Links möglich
         ],
     )
 }
@@ -1550,7 +1371,6 @@ _Symbolische Links_ #hinweis[(Wie eine Datei, Datei enthält Pfad anderer Datei)
 
 == Block
 Ein Block besteht aus _mehreren aufeinanderfolgenden Sektoren_.
-// #hinweis[(1 KB, 2 KB oder 4 KB (normal) in ext2, bis 64 KB in Ext4]
 Das gesamte Volume ist in _Blöcke aufgeteilt_ und Speicher wird _nur in
 Form von Blöcken_ alloziert. Ein Block enthält nur Daten einer _einzigen Datei_. Es gibt
 _Logische Blocknummern_ (Blocknummer vom Anfang der Datei aus gesehen, wenn Datei
@@ -1581,7 +1401,6 @@ _Sektor_ #hinweis[(Kleinste logische Untereinheit eines Volumes.
     columns: (60%, 40%),
 )[
     Enthält _alle Metadaten_ über die Datei, _ausser Namen oder Pfad_ (Grösse, Anzahl der verwendeten Blöcke, Erzeugungs-, Zugriffs-, Modifikations- und Löschzeit, Owner-ID, Group-ID, Flags, Permission Bits). \
-    // Inodes: _fixe Grösse_ je Volume: Zweierpotenz, mind. 128 B #hinweis[in ext4 256 Byte], max. 1 Block.
     Inode _verweist auf die Blöcke_, die _Daten für eine Datei_ enthalten.
     Enthält ein Array _`i_block`_ (Blockliste) mit 15 Einträgen zu je 32 Bit.
 ]
@@ -1604,11 +1423,8 @@ _2 Byte_ Magic Number #hex4("F30A"), _2B_ Anz. Einträge, die direkt auf den Hea
 #v(-0.25em)
 
 == Index-Blöcke (ext4) _Index-Node / Extent_
-//  = `i_block[0..14]` nein ich glaube i_block gibts bei ext2 / Blocklisten?
 - Jeder Index-Block ist Teil vom Baum, haben Grösse von einem Blöck #hinweis[ausser Inode]
 - Enthält Referenzen auf Index Nodes #hinweis[Block mit Index-Nodes] oder Extents #hinweis[Index-Node]
-// - _Grössen_ Inode fix je Volume #hinweis[256B], Index-Block (Extent/Index-Node) Grösse eines Blockes #hinweis[4KB]
-
 
 ===== Inode = Wurzel des Extent Baums
 - Tiefe im Extent Tree Header bis 5 möglich #hinweis[deshalb Maximal $2^32$ = 4G Blöcke pro Datei].
@@ -1626,11 +1442,8 @@ _2 Byte_ Magic Number #hex4("F30A"), _2B_ Anz. Einträge, die direkt auf den Hea
     kleinste logische Blocknummer der Kindknoten, Nummer des physischen Index-Blocks
 // bessere Formulierung als die in der Folie "Besteht aus Index-Eintrag (12 Bytes) und Index-Block", es ist nämlich ein Index-Block und hat Index-Einträge
 
-// - *Extent-Eintrag 12B*: _4B_ Kleinste logische Blocknummer aller Kind-Extents, _6B_ Physische Blocknummer des Blocks, auf den der Index-Node verweist, _2B_ Unbenutzt.
-
 ===== Extent _Tiefe == 0_ Blattknoten
 - Der Block enthält am Anfang einen Header (wie im Inode, aber _Tiefe = 0_) danach die Extent-Einträge (max. 340 bei 4 KB Blockgrösse)
-// - *Extent-Eintrag 12B*:
 - *Extent-Einträge* beschreiben  _Intervall physisch konsekutiver Blöcke_, *12 Byte*: _4B_ erste logische Blocknummer, _6B_ erste physische Blocknummer, _2B signed_ Anzahl Blöcke
 
 
@@ -1638,43 +1451,6 @@ _2 Byte_ Magic Number #hex4("F30A"), _2B_ Anz. Einträge, die direkt auf den Hea
 // = ext2 + ext4 Formeln, Zahlen und Beispiel
 
 == Beispiel ext2 + ext4
-/*
-// ist eine Übungsaufgabe, nicht erlaubt!
-==== Beispiel (kompakt): 4MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex("1000")
-_(In-)direkte Block-Adressierung_\
-4 MB = $2^22$B, #math.quad 4 KB = $2^12$B, #math.quad $2^(22-12) = 2^10 = #fxcolor("rot", hex("400"))$
-Blöcke von #fxcolor("grün", hex("1000")) bis #fxcolor("orange", hex("13FF"))\
-$0 arrow.bar #fxcolor("grün", hex("1000")), quad
-1 arrow.bar #hex("1002"), space ..., space
-#hex("B") arrow.bar #hex("100B"), quad
-#hex("C") arrow.bar #hex("1400")$ #hinweis[(indirekter Block, #fxcolor("rot", hex("400")) nach Startblock)]\
-$#hex("1400").#hex("0") arrow.bar #hex("100C"), quad
-#hex("1400").#hex("1") arrow.bar #hex("100D"), space
-..., space
-#hex("1400").#hex("3F3") arrow.bar #fxcolor("orange", hex("13FF"))$
-
-_Extent Trees_\
-*Header:* $0 arrow.bar (1,0)$ #h(1em)
-*Extent:* $1 arrow.bar (0, #fxcolor("grün", hex("1000")), #fxcolor("rot", hex("400")))$
-// */
-/* Vorlesungsvariante, ist leider dreifach indirekt
-==== Beispiel (kompakt): 128MB grosse, konsekutiv gespeicherte Datei, 4KB Blöcke ab Block #hex4("2000")
-_(In-)direkte Block-Adressierung (ext2)_\
-#hinweis[Erster Referenzen-Block (Metadaten) #hex4(800), danach fortlaufend, sonst wäre es nach letzter Adresse: #hex4(10000) ]\
-128 MB = $2^27$B, #math.quad 4 KB = $2^12$B, #math.quad $2^(27-12) = 2^15 = #fxcolor("rot", hex4("8000"))$
-Blöcke von #fxcolor("grün", hex4("2000")) bis #fxcolor("orange", hex4("9FFF")) #h(1em) #hinweis[ $#hex4("A000")-1$]\
-$0 arrow.bar #fxcolor("grün", hex4("2000")), quad
-1 arrow.bar #hex4("2002"), space ..., space
-#hex4("B") arrow.bar #hex4("200B"), quad
-#hex4("C") arrow.bar #hex4("800")$ #hinweis[(indirekter Block)]\
-$#hex4("800", suffix: false).#hex4("0") arrow.bar #hex4("200C"), quad
-#hex4("800", suffix: false).#hex4("1") arrow.bar #hex4("200D"), space
-..., space
-#hex4("800", suffix: false).#hex4("3F3") arrow.bar #fxcolor("orange", hex4("9FFF"))$
-.......
-// hier gibt es doppelt indirekte Blöcke.. ist mir zu mühsam, ich hoffe das kommt nicht so an der Prüfung :(
-*/
-// #v(-1em)
 // ist aus der Vorlesung aber auf 3MB gekürzt, im Stil von Ninas kompakter Zusammenfassung und nicht meine zu umständlichen Formeln unten
 // nur einmal indirekte Variante
 #block(
@@ -1700,21 +1476,6 @@ $#hex4("800", suffix: false).#hex4("0") arrow.bar #hex4("200C"), quad
         )$
     ],
 )
-/*
-zu kompliziert:
-==== Beispiel ext2 128 MB #hinweis[Datengrösse = 128MB] grosse, konsekutiv gespeicherte Datei, \
-bei ext2 mit 4 KB grossen Blöcken #hinweis[Blockgrösse = 4KB] ab Block #hex4(2000) #hinweis[Startindex = #hex4(2000)]
-
-/ Anzahl Bytes in Hex (Datengrösse): 128 MB = #hex4("800 0000")
-/ Anzahl Bytes je Block in hex (Blockgrösse): 4KB = #hex4(1000)
-/ Anzahl Blöcke: Datengrösse/Blockgrösse = $2^27/2^12 = 2^15 = 2^(12+3)$ = _#hex4("8000")_
-$log_2("Blockgrösse")$ bei 4KB = 2^12 Byte = 12 Bit
-// */
-
-// #v(-0.25em)
-// #line(length: 100%, stroke: 0.1pt + colors.dunkelblau)
-// #v(-0.25em)
-
 #v(-0.5em)
 #image("img/extent-tree.svg", height: 2cm)
 #v(-0.5em)
@@ -1767,14 +1528,8 @@ $log_2("Blockgrösse")$ bei 4KB = 2^12 Byte = 12 Bit
     [#hex("1")],
 )
 #v(-3pt)
-// #grid(
-//     columns: (auto, auto),
-//     [
+
 Dezimal zu Hex: _1K_ $= 2^10 = #bits("100 0000 0000") = #hex4(400)$, _4K_ $= 2^12 = #bits("1 0000 0000 0000")$ = #hex4("1000"), // Exponent = Anzahl Nullen, die durch vier Teilen für Anzahl Nullen in der Hex Zahl : 12/4 = 3 // 2^8 = 256 = #hex4("100") \
-// 1M = $2^20$ = #hex4("100000"), 128M = $2^20 dot 128$ = #hex4("800 0000")\
-// ],
-// [
-// kann jetzt auch gut von Hand berechnet werden, aber vielleicht brauche ich ja gerade einer dieser Zahlen und würde einen Flüchtigkeitsfehler machen:
 _1G_ = $2^30$ = #hex4("40000000"), _12 Byte_ = 100 Bit,
 24 Bit=3 Byte, 32 Bit=4 Byte, 40 Bit=5 Byte
 //     ],
@@ -1804,8 +1559,6 @@ _1G_ = $2^30$ = #hex4("40000000"), _12 Byte_ = 100 Bit,
 ])
 
 == Journaling (ext3, ext4)
-// Wenn Dateisystem beim _Erweitern_ einer Datei _unterbrochen_ wird, kann es zu
-// _Inkonsistenzen_ kommen.
 _Journaling_ verringert Zeit für Überprüfung von Inkonsistenzen #hinweis[z.B. Stromausfall/Crash].
 / Dateierweiterung Änderungen:
     neue Blöcke, Inode, Block-Usage-Bitmaps, Counter freier/benutzter Blöcke, Daten in Datei.
@@ -1908,14 +1661,13 @@ Von X Standard definierte Anzahl an Protokollen, die der Window Manager verstehe
 Ein Client kann sich für Protokolle _registrieren_ #hinweis[z.B. WM_DELETE_WINDOW]. \
 *`WM_DELETE_WINDOW`:*
 Wird beim Drücken des "x" vom Window Manager an den Client geschickt.
-// Das Protokoll dann als Atom registrieren und das Atom abschicken:
 #v(-0.5em)
 ```c
 Atom atom = XInternAtom (display, "WM_DELETE_WINDOW", /* only_if_exists: */ False);
 XSetWMProtocols (display, window, &atom, 1);
 ```
 
-// meltdown ist nicht prüfungsrelevant:
+// Meltdown ist nicht prüfungsrelevant:
 /*
 == Performance-Optimierungen
 Mapping des Speichers in jeden virtuellen Adressraum, Out-of-Order Execution (03E),
@@ -1930,7 +1682,4 @@ Verschiedene CPUs #hinweis[(Intel, einige ARMs, keine AMDs)] und verschiedene OS
 #hinweis[(Linux, Windows 10)] sind betroffen.
 _Geschwindigkeit_ bis zu 500 KB pro Sekunde bei 0.02% Fehlerrate.\
 */
-
-
-
 // */
