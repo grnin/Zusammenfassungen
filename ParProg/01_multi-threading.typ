@@ -2,7 +2,8 @@
 
 #import "@preview/wrap-it:0.1.1": wrap-content
 
-// /*
+/*
+// zum separat exportieren oder als Vorschau
 // Compiled with Typst 0.13.1
 #import "../template_cheatsheet.typ": *
 
@@ -18,33 +19,7 @@
 )
 // */
 
-#let terms-spacing(spacing, body) = [
-    #show terms: set terms(spacing: spacing)
-    #body
-]
-
-#let hinweis(body) = [
-    #set text(
-        style: "italic",
-    )
-    #body
-]
-
-
-#let hinweis2(body) = [
-    #set text(
-        style: "italic",
-    )
-    #body
-]
-
-
-#let print-image(body, replacement) = [
-    // global variable: print-images and then show body or replacement
-    // #replacement
-    #body
-]
-
+#import "./helpers.typ": *
 
 
 = Concepts of Concurrency
@@ -59,16 +34,13 @@
 
 == Thread Scheduling
 #grid(
-    // align: top + right,
     align: top + left,
-    // columns: (65%, 35%),
     columns: (63%, 37%),
     [
 
         / core sharing: Run more threads than cores, On waiting: Release core for other ready threads. (Oversubscription)
         / scheduler: "threads are on mercy of scheduler"
 
-        // // *Multi-threads:* Changes made by 1 thread to shared resources will be _seen_ by other threads.\
         / Context switch: _Synchronous_ Thread waiting for condition queues itself and gives core free voluntary \ _Asynchronous_ context switch  due to an external event (hardware or timer interrupt / time-slice, higher-priority thread), prevents thread from permanently occupying.
 
 
@@ -84,7 +56,6 @@
 / Time-Sliced Scheduling (preemptive): Each thread has the processor for maximum time interval
 
 == JVM Thread Model
-// / Java: single process system
 / Java Virtual Machine (JVM): is a process, Java = single process system
 / threads: main thread which calls the main function, programmer can start more threads, Subsystems / Runtime System also start their own threads (e.g. RMI, AWT, Garbage Collector)
 / Termination: after all (not daemon) threads are finished or System.exit/Runtime.exit
@@ -149,9 +120,6 @@
 / ```java t.interrupted() t.isInterrupted()```: check interrupted flag
 
 / ```java Thread.currentThread()```: static method that returns `Thread`, reference to current executing thread instance
-// _`getId()`/`getName()`_ #hinweis[(Get thread ID/Name)],
-// _`isAlive()`_ #hinweis[(Tests if thread is alive)],
-// _`getState()`_ #hinweis[(Get thread state)]
 
 *Java Thread States:*\
 _`Blocked`_ #hinweis[(blocked and waiting for a monitor lock)],
@@ -162,12 +130,6 @@ _`Timed_Waiting`_ #hinweis[(waiting with a specified waiting time
     ```java Thread.sleep(ms)```/```java Thread.join(ms)```)],
 _`Waiting`_ #hinweis[]\
 
-
-
-// typst compiler ist zu langsam :( */
-
-
-// = Correctness and dangers of multithreading
 = Monitor Synchronization
 
 #wrap-content(
@@ -188,34 +150,24 @@ _`Waiting`_ #hinweis[]\
     columns: (58%, 42%),
 )[
     / Non-determinism: threads run interleaved or parallel //, JVM did not specify that `println` allows concurrency.
-    // Threads run arbitrarily.
     / _Synchronization_ (=Restriction of concurrency): for deterministic behavior.
     / Communication between threads: Sharing access to fields and the objects they refer to. Efficient, but problems: _Thread interference_ and _memory consistency errors_.
-    // *Critical Section*: code must be executed by only 1 thread at a time. Implementation with _mutual exclusion_.
     / Critical Section: code must be executed by only 1 thread at a time. Implementation with _mutual exclusion_.
 ]
 #v(-1.25em)
 / happens-before relationship: result is same as if executed synchronously (visibility + threadsafe)
 
 ==== Java synchronized (Monitor)
-// *```java synchronized```:*
-// ```java synchronized``` keyword for critical section.
 Guarantees _memory consistency_, _happens-before relationship_ and _reentrancy_.
-// Impossible for two invocations of a synchronized method on the same object to interleave.
-// Other threads _blocked_ until current thread is done with the (synchronized) object.
 Every object has a _Lock_ #hinweis[(Monitor-Lock)]. Maximum 1 thread can acquire it.
 Entry of `synchronized` method acquires lock of the object, exit releases it.
 ```java public synchronized void deposit(int amount) { this.balance += amount; }```
 synchronized can be used within method, specify object to lock.
 ```java synchronized(this) { this.balance++; }``` (unhandled exceptions exit sync. block)\
-// *Exit synchronized block:*
-// End of the block, `return`, unhandled exceptions
 
 === Monitor Lock
 Monitor for _internal mutual exclusion_. Only one thread operates at a time in
 Monitor,
-// All non-private methods are synchronized.
-// Threads can _wait in Monitor_ for condition to be fulfilled. Can be _inefficient_ with different waiting conditions,
 has _fairness-problems_ and _no shared locks_.\
 
 
@@ -223,16 +175,12 @@ has _fairness-problems_ and _no shared locks_.\
     / Recursive Lock: thread can acquire same lock through recursive calls, free by last release
     / Busy Wait:
         is repeatedly checking a condition without giving CPU free
-    // ```java while (locked) { }``` (does not work)
-    // `yield` or `sleep` in a loop, inefficient, not releasing lock. _`wait()`_: Temporarily release Monitor-Lock.
-    // solution: wrap in while loop to check if wake up condition has been met.
     / Wakeup signal: Signalling a thread in Monitor (inner waiting room). `notify()` and `notiyAll`
     / _`notify()`_: signals any waiting thread. Turnstile
     / One-In/One-Out: change applies to only one thread, Only a single waiting thread can continue
     / Uniform Waiters: Only 1 semantic condition for every thread, condition interests every waiting Thread
 
     / _`notifyAll()`_: wakes up all threads (from inner waiting room to outer waiting room to wait for entry in monitor)
-    // #hinweis[(i.e. one deposit can satisfy multiple withdraws, does not guarantee fairness)]. If a thread is woken up, it goes from the _inner waiting room_ #hinweis[(waiting on a condition)] into the _outer waiting room_ #hinweis[(Thread has not started yet)] where it waits for entry to the Monitor. There is no shortcut.
 
     / signal and continue: signaling (notifying) thread releases only after leaving synchronized, awakened thread comes to outer waiting room.
     / ```java IllegalMonitorStateException```: thrown if `notify/notifyAll/wait` used outside synchronized.
@@ -296,7 +244,6 @@ _No RC + DR_ = Program works correctly, but formally incorrect, _No RC + No DR_ 
 / Race Conditions (safety):
     _Insufficiently synchronized access to shared resources._ The _order of events_ affects the
     _correctness_ of the program. Leads to _non-deterministic behavior_.
-// Can occur without data race, but data race is often the cause.
 / Race Condition without data race:
     critical section is not protected. Data Race is eliminated using synchronization, but there
     is no synchronization over larger blocks, so race conditions are still possible
@@ -316,7 +263,6 @@ _No RC + DR_ = Program works correctly, but formally incorrect, _No RC + No DR_ 
     _Object Confinement_ #hinweis[(Object is encapsulated in other synchronized objects)]\
 / Thread safe:
     A data type or method behaves correctly, when same behaviour when used from multiple threads as if running in a single thread
-// ??? #hinweis[(Java concurrent collections)].\
 / Thread Safety:
     Avoidance of Data Races (and for parallelism correctness also no deadlock). _No sharing intended_: give each threada  private copy of the
     data. _Sharing is important_: provide explicit synchronization.
@@ -406,14 +352,6 @@ Thread never gets chance to access a resource.
 _Avoidance:_ Use fair synchronization constructs. #hinweis[(Aging, Enable fairness in previous
     synchronization constructs. Monitor and Thread priorities have a fairness problem.)]
 
-// == Parallelism Correctness Criteria
-// _Safety:_ No race conditions and no deadlocks, _Liveness:_ No starvation
-
-
-
-
-
-
 
 = Memory Models
 / Lock-Free Programming:
@@ -455,10 +393,6 @@ _`final` fields_.\
     Writes before Unlock #sym.arrow reads after lock, `volatile` write #sym.arrow `volatile` read,
     Partial Order. Synchronization operations are never reordered.
     #hinweis[(Lock/Unlock, volatile-accesses, Thread-Start/Join.)].
-
-
-// *Read after write dependency*.
-// TODO
 
 == Synchronization in Memory Model (Lock-Free, Atomic)
 / Rendez-Vous:
@@ -604,7 +538,6 @@ _Additional:_ `ReadWriteLockSlim` for Upgradeable Read/Write, Semaphores can als
 OS level, Mutex. Collections are _not_ Thread-safe.
 
 
-// TODO check:
 #block[
     == Semaphore
     Allocation of a limited number of free resources. Is in essence a _counter_.
@@ -768,36 +701,27 @@ Thread costs: performance + memory (stack per thread) #sym.arrow.r recycle threa
 / Tasks: potentially parallel work packages. Passive objects describing the functionality.\
 / Thread Pool: Tasks queues. Smaller number of _working threads_ grab tasks from queue and execute them.
     A task must run to completion before worker thread can grab a new one #hinweis[except nested tasks/sub-tasks].\
-// Any task must _complete execution_ before its worker thread is free to grab another task.
-// Exception: nested tasks. \
 / Scalable Performance:
     #hinweis[(Rule of thumb: \# of Worker Threads = \# processors + 1 (Pending I/O Calls))]\
     Programs with tasks run _faster on parallel machines_ #sym.arrow.r allows exploitation of
     parallelism _without thread costs_. Number of threads can be _adapted_ to the system.
 / Advantages:
-     // _Limited number of threads_ #hinweis[(Too many threads slow down the system or exceed available memory)],
     _Thread recycling_ #hinweis[(save thread creation and release)],
     _Higher level of abstraction_ #hinweis[(Disconnect task description from execution)],
     _Number of threads configurable_ on a per-system basis.\
 / Limitations:
     Task must not wait for each other #hinweis[(except sub-tasks)] would result in deadlock in Queue.
-// #hinweis[(if one task $T_1$ is waiting for something the task $T_2$ behind him in the Queue
-//     should provide, but $T_2$ waits for $T_1$ to finish, a deadlock occurs)]
 / LIFO Queue: per worker thread and stealing is *FIFO*, Automatic degree of parallelism #hinweis[(Default: As much worker threads as Processors)], Optimized for recursive.
 / Fire-and-forget:
     Tasks may not finish (tasks are started without retrieving results). Async: `submit()` without `get()` oder CompletableFuture without `join()`.  Task is run, but Exception will not get caught.
-// / Fire and Forget: Task are started _without retrieving results_ later (`submit()` without `get()`).  Task is run, but Exceptions will not get caught.
 
 == Java ForkJoinPool Thread Pool
 / ForkJoinPool: Thread Pool for recursive Tasks (Divide and Conquer), work stealing, Subclass of ExecutorService
 / `ForkJoinPool.commonPool()`: static global Pool, singleton, used by `CompletableFuture`
-// - ForkJoinPool does not always use all processors :(
 
-/ Work Stealing: Jobs get submitted into the _global queue_, which distributes the jobs to the _local queues_ of each worker thread. If one thread has no work left, it can _"steal" work from another threads_ local queue instead of the global queue. This _distributes_ the scheduling work over idle processors.
-    Worker threads run as daemon threads (in TPL .NET too). // in java kann für einen eigenen "expliziten" ForkJoinPool auch eingestellt werden, dass die Threads nicht daemon threads sind. Aber das haben wir nicht angeschaut. Bei uns sind threads im ForkJoinPool immer daemon threads.
+/ Work Stealing: Jobs get submitted into the _global queue_, which distributes the jobs to the _local queues_ of each worker thread. If one thread has no work left, it can _"steal" work from another threads_ local queue instead of the global queue. This _distributes_ the scheduling work over idle processors. Worker threads run as daemon threads (in TPL .NET too).
 
 == Java ForkJoinPool
-// tODO: kürzen?
 / _`invoke(task)`_: blocking
 / _`invokeAll(task1, task2)`_: blocking, creates fork and starts task
 / _`submit(task)`_: returns Future
@@ -826,9 +750,6 @@ int result = left.get() + right.get();
 ==== Parallel Counting Example
 / What is a good choice for number of submitted tasks and why?: the number of available processor cores, because we want to be able to achieve maximum performance, but also not to create unnecessarily many tasks, which would also degrade performance
 #v(-0.5em)
-// Demo Woche 4
-// System.out.println("Start");
-// long startTime = System.currentTimeMillis();
 ```java
 public class FlatParallelCount { // parallel counting
 public static void main(String[] args) throws Exception {
@@ -838,10 +759,6 @@ public static void main(String[] args) throws Exception {
     int result = left.get() + right.get();
 } }
 ```
-// long endTime = System.currentTimeMillis();
-// System.out.println("Result: " + result + " primes");
-// System.out.println("Time: " + (endTime - startTime) + " ms");
-
 
 ==== Recursive Action/Task
 ```java
@@ -882,33 +799,6 @@ class CountTask extends RecursiveTask<Integer> { // RecursiveAction: void functi
 / Create explicit thread pool + invoke: ```java var threadPool = new ForkJoinPool();``` \
     #v(-0.8em) ```java int result = threadPool.invoke(new CountTask(2, N));``` \
     ```java int result = new CountTask(2, N).invoke(); // invokeAll() to start multiple tasks ```
-/*
-=== Pairwise sum (recursive)
-```java
-class PairwiseSum extends RecursiveAction {
-  private final int[] array;
-  private final int lower, upper;
-  private static final int THRESHOLD = 1; // configurable
-  public PairwiseSum(int[] array, int lower, int upper) {
-    this.array = array; this.lower = lower; this.upper = upper;
-  }
-  protected void compute() {
-    if (upper - lower > THRESHOLD) {
-      int middle = (lower + upper) / 2;
-      // ohne return Wert:
-      invokeAll(
-        new PairwiseSum(array, lower, middle),
-        new PairwiseSum(array, middle, upper)
-      );
-    } else {
-      for (int i = lower; i < upper; i++) {
-        array[2*i] += array[2*i+1]; array[2*i+1] = 0;
-}}}}
-```
-// #v(-0.5em)
-
-// */
-
 
 == Thread Pool | `Parallel For` (.NET)
 #v(-1em)
@@ -920,7 +810,6 @@ _Efficient default thread pool_ #hinweis[(tasks are queued to the ThreadPool, su
 layers_ #hinweis[(Task Parallelization: use tasks explicitly, Data Parallelization: use
     parallel statements and queries using tasks implicitly)], Asynchronous Programming and PLINQ.
 
-// === C\# Thread Pool Code
 === Parallel Statements in C\#
 #grid(
     gutter: 1em,
@@ -958,13 +847,6 @@ layers_ #hinweis[(Task Parallelization: use tasks explicitly, Data Parallelizati
 *Parallel Loop Partitioning:*
 Loop with lots of quickly executing bodies, inefficient to execute each iteration as parallel task #sym.arrow.r TPL _automatically groups multiple bodies_ into a single task.
 
-
-// // TODO
-// Split according to available worker threads:
-// - Range Partitioner with indexing (Parallel.For)
-// - Chunk Partitioner with iteration (Parallel.ForEach)
-
-
 === PLINQ (and Java Stream API)
 *LINQ:*
 Set of technologies based on the integration of SQL-like query capabilities directly into C\#.\
@@ -995,7 +877,6 @@ We should keep _parallel tasks short_ to better profit from this automatic perfo
 Wovon hängt die Anzahl Tasks bei beiden Verfahren ab?
 / .NET Parallel For: Anzahl freier Worker Threads
 / Java ForkJoinPool: Array-Länge und Threshold (bei RecursiveAction)
-// / Java Threshold: vermeide Überparallelisierung (over-parallelizing) > siehe code
 = Asynchronous programming
 / Unnecessary Synchrony:
     Blocking method calls are often used without need #hinweis[(Long running calculations, I/O calls, database or file accesses)]. With an _asynchronous call_, other work can continue while
@@ -1003,62 +884,30 @@ Wovon hängt die Anzahl Tasks bei beiden Verfahren ab?
 / Kinds of Asynchronisms:
     _Caller-centric_ #hinweis2[("pull", caller waits for the task end and gets the result, blocking call)],
     _Callee-Centric_ #hinweis2[("push", Task hands over the result directly to successor / follower task)]
+/ Task Continuations: `Task.Run(task1) .ContinueWith(task2) .ContinueWith(task3) .Wait();`
 
-/ Task Continuations: C\#: ```cs Task .Run(task1) .ContinueWith(task2) .ContinueWith(task3) .Wait(); ```
-// Define task whose start is linked to the end of the predecessor task.
-// #v(-0.5em)
-// #grid(
-//     columns: (auto, auto),
-//     [
-//         ```cs
-//         // C# .NET
-//         Task
-//           .Run(task1)
-//           .ContinueWith(task2)
-//           .ContinueWith(task3)
-//           .Wait();// exception
-//         ```
-//     ],
-//     [
-//         ```java
-//         // Java (there can be multiple Apply/AcceptAsync calls)
-//         var future = CompletableFuture // tasks im commonPool
-//           .supplyAsync(() -> longOP) // returns CompletableFut.
-//           .thenApplyAsync(v -> 2 * v) // returns value
-//           .thenAcceptAsync(v -> ...println(v)); // prints value
-//         try { future.get(); } catch (ExecutionException e) {..}
-//         ```
-//     ],
-// )
 === C\# Async Task
 ```cs
 var task = Task.Run(LongOperation); /* other work */ int result = task.Result;
 ```
 #v(-0.5em)
 / Multi-Continuation:
-     // Continue when _all_ tasks are finished:\
     ```cs Task.WhenAll(task1, task2).ContinueWith(continuation);```\
-    // Continue when _any_ of the tasks are finished
     ```cs Task.WhenAny(task1, task2).ContinueWith(continuation);```\
     (other threads get lost after first thread is done),
     Exceptions in fire&forget task get ignored
-// i.e. ```cs Task.Run(() => { ...; throw e; }```\
 / Exception Handling:
-     // Synchronously _`Wait()`_ for the _whole task-chain_ at the end.
     _`Wait()`_ or _`TaskScheduler.UnobservedTaskException`_ (Registers for unobserved exceptions).
     #hinweis[(Receives unhandled exceptions from fire&forget tasks)].
     Should be executed as soon as task object is dead #hinweis[(Garbage Collector)].
 
 === Java Modern Async `CompletableFuture`
-// Java (there can be multiple Apply/AcceptAsync calls)
 ```java
 var future = CompletableFuture // tasks im commonPool
     .supplyAsync(() -> longOP) /* returns CompletableFut. */
     .thenApplyAsync(v -> 2 * v).thenAcceptAsync(v -> ...println(v));
 try { future.get(); } catch (ExecutionException e) {..}
 ```
-// / Java `CompletableFuture`:
-// _Modern asynchronous_ programming in Java. Also has _Multi-Continuation_ with
 / Async: ```java runAsync()``` void Operation #hinweis[(can be nested)] ```java supplyAsync()``` returns value,\
 / Continuation: \ ```java thenAccept()/``` ```java thenAcceptAsync()``` void Op., ```java thenApply()/``` ```java thenApplyAsync()``` returns value,\
 / Multi-Continuation: \
@@ -1073,12 +922,8 @@ try { future.get(); } catch (ExecutionException e) {..}
 
 ==== Future\<T\> (implemented by CompletableFuture)
 Represents _future result_ #hinweis[(asynchronous)], Proxy for result.
-//that may be not available yet because task has not finished.
 #v(-0.5em)
 _`.submit()`_ submit task into pool + launch task, _`.get()`_ waits for computation to complete and then retrieves result (throws `InterruptedException`, `ExecutionException`), _`.cancel(boolean mayInterruptIfRunning)`_ Attempts to cancel task, but fails if already completed, cancelled or if running and argument false. Removes task from queue. `ExecutionException`
-// Attempts to cancel execution of task, removes it from queue,
-// Task ends when unhandled exception occurs. Is included in the `ExecutionException` thrown by `get()`.
-// #v(-0.5em)
 
 == Non-Blocking GUI's
 *Use case:*
@@ -1138,7 +983,6 @@ Only _single-threading_ #hinweis[(Only a special UI-thread is allowed to access
 
 == C\# Async/Await
 // More _readable_ than the "spaghetti code" in the chapter before.
-// This is the same code as before.
 #grid(
     columns: (2fr, 4fr),
     gutter: 1em,
@@ -1191,13 +1035,3 @@ _`await` for tasks_: "Non-blocking wait" on task-end / result.\
       }); }
     ```
 
-
-
-
-
-
-
-
-
-
-// #pagebreak()

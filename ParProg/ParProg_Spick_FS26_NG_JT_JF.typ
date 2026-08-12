@@ -3,7 +3,7 @@
 #import "@preview/wrap-it:0.1.1": wrap-content
 
 #show: project.with(
-    authors: ("Jasmin Fässler", "Nina Grässli", "Jannis Tschan"),
+    authors: ("Jasmin Fässler", "Nina Grässli", "Jannis Tschan"), // Version von Nina und Jannis genommen und für mich (Jasmin) angepasst
     fach: "ParProg",
     fach-long: "Parallel Programming",
     semester: "FS26",

@@ -3,9 +3,9 @@
 #import "../template--additional-formatting-templates.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 
-// #import "./helpers.typ": *
 
-// /*
+/*
+// zum separat exportieren oder als Vorschau
 // Compiled with Typst 0.13.1
 #import "../template_cheatsheet.typ": *
 
@@ -21,60 +21,9 @@
 )
 // */
 
-#import "../helpers.typ"
 
-#let terms-spacing(spacing, body) = [
-    #show terms: set terms(spacing: spacing)
-    #body
-]
+#import "./helpers.typ": *
 
-#let gekuerzt(body) = [
-    // nicht anzeigen
-]
-
-#let print-image(body, replacement) = [
-    // global variable: print-images and then show body or replacement
-    // #replacement
-    #body
-]
-
-#let hinweis(body) = [
-    #set text(
-        style: "italic",
-    )
-    #body
-]
-
-#let hinweis2(body) = [
-    #set text(
-        style: "italic",
-    )
-    #body
-]
-
-#let grid2(body1, body2) = [
-    #grid(
-        columns: (auto, auto),
-        [
-            #body1
-        ],
-        [
-            #body2
-        ],
-    )
-]
-
-#let mt() = [
-    #v(-0.5em)
-]
-#let mt1() = [
-    #v(-1em)
-]
-
-
-
-
-// = Massive Parallelism
 
 = GPU (Graphics Processing Unit)
 / End of Moores Law:
@@ -129,7 +78,6 @@
     What is the _throughput_ (pipelined)? Every #tcolor("orange", "60ms") an operation is finished.\
     Throughput = $1\/60$ operations/ms.
 
-// == CPU vs GPU
 #table(
     columns: (39%, auto),
     table.header[CPUs][GPUs],
@@ -196,51 +144,6 @@ void CudaVectorAdd(float* h_A, float* h_B, float* h_C, int N) {
 }
 ```
 
-/* jetzt in Code integriert
-==== Example: Array addition
-#grid2(
-    // columns: (auto, auto),
-    [
-        ```cpp
-        // kernel definition on GPU
-        __global__
-        void VectorAddKernel(float *A, float *B, float *C) {
-          int i = threadIdx.x; C[i] = A[i] + B[i];
-        }
-        ```
-    ],
-    [
-        ```cpp
-        for (int i = 0; i < N; i++) {
-          C[i] = A[i] + B[i];
-        } // sequential
-        ```
-        ```
-
-        // kernel invocation on CPU
-        // N is amount of threads
-        VectorAddKernel<<<1, N>>>(A, B, C);
-        ```
-    ],
-)
-*/
-
-/* jetzt im code integriert, anstatt doppelt
-==== CUDA Execution steps
-#grid(
-    columns: (auto, 1fr),
-    gutter: 3pt,
-    [
-        + _`cudaMalloc`:_ GPU memory allocate
-        + _`cudaMemcpy`:_ Data transfer to GPU #hinweis[(HostToDevice)]
-        + _`Kernel<<<1, N>>>`:_ Kernel execution
-    ],
-    [
-        4. _`cudaMemcpy`:_ Transfer results from GPU to CPU #hinweis[(DeviceToHost)]
-        + _`cudaFree`:_ Deallocate GPU memory
-    ],
-)
-*/
 #let bound-content = {
     [
         #v(-8em)
@@ -301,7 +204,6 @@ arithmetic intensity. x and y need to be fetched from memory and the result z is
     )
 #v(-0.5em)
 / Maximum Threads = 1024: `VectorAddKernel<<<1, numElements>>>(d_A, d_B, d_C);`.
-// #mt1()
 === Roofline model
 #v(-1em)
 #image("img/roofline-model.svg", height: 65pt)
@@ -313,7 +215,6 @@ _Peak performance_ is derived from benchmarking FLOPS or GFLOPS #hinweis[(Giga-F
     FLOPS)]. The _peak bandwidth_ from manuals of the memory subsystem. The _ridge point_ is where
 the horizontal and diagonal lines meet = minimum Ar.Int. required to achieve the peak performance.
 
-// #colbreak()
 = GPU Architecture
 Because there are so _many cores_ on GPUs, it is possible to run many threads in parallel
 _without context switches_. This allows better parallelism without a performance penalty.
@@ -381,10 +282,7 @@ _Number of threads in a block:_ ```cpp dimBlock.x * dimBlock.y * dimBlock.z```\
     ```cpp dim3 gridS(3,3); dim3 blockS(3,3); VectorAddKernel<<<gridS, blockS>>>```\
 / 3D Grid:
     ```cpp dim3 gridS(3,2,1); dim3 blockS(4,3,1); VectorAddKernel<<<gridS, blockS>>>```\
-    // ist gleich wie (3,2) und (4,3)
-    // #v(-0.8em)
     #image("img/3d-thread-hierarchy.svg", height: 32pt)
-// #v(37pt) // Bildersatz
 
 / Device Limits:
     _Max threads per block:_ 1024,
@@ -516,16 +414,6 @@ No explicit Memory Copy (cudaMemCpy) needed, but other new rules. Error handling
         ```
     ],
 )
-// ```cpp
-// cudaMallocManaged(&A, size); // ... same for &B and &C ...
-// A[0] = 8; ... // initialize A and B assuming they reside on the host
-// // A and B are automatically transferred to the device
-// VectorAddKernel<<<..,..>>>(A,B,C,N);
-// cudaDeviceSynchronize(); // wait for the GPU to finish
-// // C is transferred automatically to the host and can be read directly
-// std::cout << C[0]; ...
-// cudaFree(A); cudaFree(B); cudaFree(C);
-// ```
 
 = GPU Performance Optimizations
 *Hardware:*
@@ -587,11 +475,6 @@ shared memory for _all warps_ of the new block.\
 / Warps are split: sequentially by threadIdx.x/y/z in 32 steps
 / Divergence:
     Different branches in same warp. #hinweis[if/switch/while/do/for]. Performance problem, because SM can execute only instruction of one branch and the other threads have to wait.
-    // _Not_ all threads of a warp may _branch the same way_.
-    // The branches do _not run simultaneously_, so the other threads need to _wait_ until one branch
-    // is finished. So branches within one warp should be _avoided_ because of _performance problems_
-    // #hinweis[(Branches are born at `if` / `switch` / ...)] \
-    // Abzweigungen vermeiden, "same instruction multiple threads"
 
     #v(-0.5em)
     #grid(
@@ -615,21 +498,14 @@ shared memory for _all warps_ of the new block.\
     _Global memory of a CUDA device_ is implemented with DRAMs. If a GPU kernel accesses data from _consecutive locations_, the DRAMs can supply the data at a much _higher rate_ than if a random sequence of locations were accessed.
 / Memory Coalescing:
     Improve performance by using Cache of DRAM. If threads in warp _simultaneously_ access _consecutive memory locations_  (32 byte areas), their reads can be combined into a single access _(burst)_.
-// Thread _access patterns_ are critical for performance.
-// If threads in a *warp* _simultaneously_ access _consecutive memory locations_, their reads can be combined into a single access _(burst)_.
-// Otherwise there are _expensive individual accesses_.
 / Coalesced Accesses:
     All threads should Read/Write from same burst section in warp, but doesn't matter if only individual elements of burst or swapped access in burst.
-// Read/Write the burst in one transaction per warp burst section, swapped read/write within the same burst, only individual elements in the burst accessed.
-// // coalesced, solange die Daten im gleichen burst vom warp sind.
 / Not Coalesced Accesses (strided):
     Avoid inperformant read/write action over different warp bursts.
-// Read/Write in different warp bursts, one action that spans multiple bursts. _Inperformant, avoid!_
 / Use Coalescing access as follows:
     _`data[(Expression without threadIdx.x) + threadIdx.x]`_
 / Coalescing with Matrices:
     Matrices get linearized to a 1D array. The row of the matrix should be the longer side so that there are as many coalescing accesses as possible.
-// #v(-1em)
 
 #print-image(
     [
@@ -649,7 +525,6 @@ Each thread has _private local memory_ #hinweis[(in device memory, high latency 
     _Shared Memory_ #hinweis[(per SM, fast, shared between threads in 1 block, a few KB, `__shared__ float x`)],
     _Global Memory_ #hinweis[("Main Memory" in GPU Device, slow, accessible to all threads, in GB, `cudaMalloc()`)]
     _Registers_ #hinweis[(private to a thread, fastest but very limited storage)]\
-// / Global Memory: is slow (approx. 600 cycles), DRAM accesses consecutive locations, _increase efficiency with Cache_
 / Constant memory:
     Constant variables are stored in the _global memory_ but are _cached_.\
 / Shared Memory Declaration:
@@ -812,29 +687,6 @@ Cluster programming is the _highest possible parallel acceleration_ #hinweis[(Fa
     Gather together multiple values from different processors.\
     ```c MPI_Gather(&input_value, 1, MPI_INT, &output_array, 1, MPI_INT, 0, MPI_COMM_WORLD)```
 
-/*
-    Hoffentlich im Anhang vorhanden:
-    The reduction operations defined by MPI include
-    MPI_MAX - Returns the maximum element.
-    MPI_MIN - Returns the minimum element.
-    MPI_SUM - Sums the elements.
-    MPI_PROD - Multiplies all elements.
-    MPI_LAND - Performs a logical and across the elements.
-    MPI_LOR - Performs a logical or across the elements.
-    MPI_BAND - Performs a bitwise and across the bits of the elements.
-MPI_BOR - Performs a bitwise or across the bits of the elements.
-MPI_MAXLOC - Returns the maximum value and the rank of the process
-that owns it.
-MPI_MINLOC - Returns the minimum value and the rank of the process
-that owns it.
-*/
-
-// #grid(
-//     columns: (auto, auto),
-//     [
-//
-//
-
 == MPI Boilerplate Code
 ```c
 int main(int argc, char * argv[]) {
@@ -891,17 +743,14 @@ int main(int argc, char * argv[]) {
       if (world_rank == 0) { printf("average = %f\n", avg); }
 
       MPI_Finalize();
-      // free??
     }
     ```
+    // free weggelassen
 ]
 
 == Approximation of $bold(pi)$ via Monte Carlo Simulation <pi-approx>
 Draw a circle inside of a square and randomly place dots in the square. The ratio of dots
 inside the circle to the total number of dots will approximately equal $pi \/ 4$.
-// ],
-// [
-
 
 #v(-0.5em)
 #grid(
@@ -1123,7 +972,6 @@ int sum = 0;
   #pragma omp atomic // reduction is protected with atomic
     final_sum += intermediate_sum; }
 ```
-
 
 ==== Hybrid: OpenMP + MPI
 ```c
