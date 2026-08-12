@@ -20,17 +20,10 @@
 #import "@preview/cheq:0.3.1": checklist
 #show: checklist
 
-#let terms-spacing(spacing, body) = [
-    #show terms: set terms(spacing: spacing)
-    #body
-]
-
-
+#import "/WE2/helpers.typ": *
 
 = JavaScript
 #v(.2em)
-// === JS + Functions + Expressions
-
 
 / Function Declaration:
      // Schlüsselwort `function`,
@@ -67,29 +60,13 @@
 / Imperatives UI: beschreiben wie es geändert wird, *Deklaratives UI*: beschreiben wie es Aussehen soll
 / Pure Components: bei gleichen Props und gleichem State immer gleiche Resultate. React geht davon aus, dass Komponenten Pure sind.
 
-// #show terms: set par(justify: false) // verhindere Blocksatz -> sobald das nötig ist, lohnt es sich keine terms-list zu nutzen sondern normalen Text!
 / Inline Style: ```js <div style={{ backgroundColor: "red" }}>Text</div>```
 
-/* ```js
-9 // 9
-"under the bridge" // "under the bridge"
-(5 + 6) * 10 // 110
-const height = 180 // keine Expression, sondern ein Statement
-height * 10 // 1800
-`you are ${height} cm tall` //'you are 180 cm tall'
-"Red" + " " + "Roses" // 'Red Roses'
-const isPacked = false // keine Expression, sondern ein Statement
-isPacked && "Du hast das gepackt" // false
-isPacked ? "Du hast das gepackt" : "Das fehlt noch" // 'Das fehlt noch'
-const people = ['tom', 'betty', 'van gogh'] // keine Expression
-people.length // 3
-``` */
 / JSX: ist die Syntax, die wir für React Komponenten verwenden. Dabei wird JS und HTML miteinander verflochten. Syntax für React Komponente. Wird übersetzt in JS, JavaScript XML
 
 ==== Rendering
 / Rendering: wenn sich state, props oder context von Komponente ändern.
 / sicheres State Update: weil in Eventhandler und Funktion wartet React bis ausgeführt worden, bevor State Updates verarbeitet werden. ```js setCount(prev => prev + 1); ```
-// / useState: Beispiel mit hochzählen, mehrmals nacheinander in einer Funktion `setCount(count+1)` erhöht count erst nach Render und deshalb nur um 1.
 
 #v(-0.5em)
 React rendering Fehler:
@@ -123,9 +100,6 @@ API gleich wie bei localStorage (`getItem, removeItem, setItem, clear`)
 ==== Cookies (siehe Security)
 kleine Datenstücke, die es ermöglichen, Daten zu speichern und zwischen Server und Client
 mitzugeben. \
-// Cookies werden bei jedem HTTP Request an den Server mitgeschickt
-// Datenschutz und Security sind wichtige Themen
-// Wurden früher als Universal-Datenspeicher verwendet (weil es nichts anderes gab), heute nicht mehr dafür empfohlen
 nur kleine Datenmenge, können Ablaufdatum haben, können serverseitig gelesen werden. _Anwendung_: Login Sessions, Tracking/Analytics
 ==== IndexedDB
 In jedem Browser eingebaute NoSQL DB. Für grössere und strukturierte Datenmengen geeignet.\
@@ -142,45 +116,15 @@ _Vorteile_: Daten für viele User speicherbar, Mehr Logik und Datenverarbeitung 
 / (3.) Search Params/Query String: für Filter, Pagination, Suchanfragen. `https://www.google.com/search?client=firefox-b-d&channel=entpr&q=indexed+collections`. _Plaintext_ auch über HTTPS, nur ASCII, begrenzte Länge (nicht standardisiert)
 / Clean URLs: keine Informationen über die Interna der Server (z.B. Dateitypen) #hinweis[nutzerfreundlicher, SEO, Links bleiben bei Änderung der Implementation]. _Nicht clean_: `http://example.com/user.php?id=1`, _clean_: `http://example.com/user/1`
 #v(-0.75em)
-// #image("assets/url.svg")
 #image("assets/url.png")
 #v(-0.2em)
-/*
-=== Async Promise
-// code MovieSearch für Prüfungsvorbereitung enthält Promise.resolve(), aber wir müssen es nur lesen können.
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve
-```js
-function mockSearch(query: string): Promise<string[]> {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            if (query.trim() === '') {
-                resolve(MOVIES);
-                return;
-            }
-            const filtered = MOVIES.filter((item) => item.toLowerCase().includes(query.toLowerCase()),
-            );
-            resolve(filtered);
-        }, 300);
-    });
-}
-```
-// */
-
 
 ==== JS Array map und filter + list und conditional rendering
 
 / List Rendering:
     Eine Anzahl gleicher Komponenten darstellen, aber mit unterschiedlichen Inhalten ```tsx { arr2.map(x => <li key={x}>x</li>); }  ```
-// ```tsx
-// {list.map((item) => (
-//     <PacklistItem key={item} item={item} />
-// ))}
-// ```
 / Conditional Rendering: Das Layout anpassen `.filter()`, ```js {isInStock ? 'ja' : 'nä'}``` \ ```js {isInStock && 'ja'} ```
-// #v(-0.75em)
 
-// / Arrays im State ändern:
-//     _add_ `[...arr]`, _remove_ `filter` `slice`, _replacing_ `map`, _sorting_ `toReversed` `toSorted`
 / List Filtering:
     #v(-0.75em)
     ```tsx const people = [
@@ -188,15 +132,6 @@ function mockSearch(query: string): Promise<string[]> {
     const chemists = people.filter(person => person.prof === 'chemist');
     ```
 / Sorting: arr.toSorted() / arr.toReversed()
-
-// mehr Codebeispiele:
-// ```js
-// arr2.filter(x => x == 'a');
-// const arr = [ 'a', 'b', 'c' ];
-// arr.push("d"); //['a','b','c','d']
-// arr.forEach((e, i) => console.log(i +":"+e));
-// arr.sort((a,b)=>a-b).map(e=>`<li>e</li>`).join('');
-// ```
 
 == Komponenten, JSX, Props
 #v(-1em)
@@ -211,21 +146,11 @@ Props sind Eingabewerte für Komponenten (Tatsächlich ist das Props Objekt der 
 
 == useState, Eventhandler
 #v(-1em)
-// // Code zu unwichtig / auswendig
-// ```js
-// const [count, setCount] = useState(0);
-// ```
-//
 === Eventhandler
 Funktionen, die Interaktionen im UI mit dem State verbinden.
 ```html <button onClick={() => setCounter(counter+1)}>Click Me</button>```
 Native HTML Elemente haben in React spezielle Attribute/Props, die Eventhandler aufnehmen.
 Einige der häufig verwendeten: `onClick` für Buttons, `onChange` für Inputfelder, `onFocus`/`onBlur`.
-// Diesen Attributen können wir Eventhandler-Funktionen übergeben.
-// Eventhandler-Funktionen bekommen ein Eventobjekt `e` , das analog zum Event in JS
-// funktioniert und Informationen zum Event enthält
-
-// Es gibt verschiedene Möglichkeiten, Eventhandler zu platzieren:
 ```tsx
 // separat -> für längere Handler, oder mehrfach verwendete (Demo 1)
 const clickHandler = () => { alert('submitted') }
@@ -233,12 +158,6 @@ return ( <button onClick={clickHandler}>Click Me</button> )
 // inline -> für kurze Handler, Function nicht aufrufen bei Übergabe
 return ( <button onClick={() => alert("submitted")}>Click Me</button> )
 ```
-// Stolperfalle: Funktionen, die an Eventhandler Attribute übergeben werden, dürfen nicht
-// aufgerufen werden. Der Eventhandler ruft die Funktion auf. Beispiel, wie nicht:
-// ```tsx
-// // Falsch, Aufruf im onClick mit ()
-// return ( <button onClick={clickHandler()}>Click Me</button> )
-// ```
 
 ==== Eventhandlers als Props übergeben
 Häufig, wie in der Demo, übergeben wir Eventhandler als Props an Komponenten, um State in
@@ -246,13 +165,9 @@ höhergelegenen Komponenten zu aktualisieren.
 #v(-0.5em)
 ```tsx <SearchInput value={searchTxt} onChange={(e) => setSearchTxt(e.target.value)} />
 ```
-// Üblicherweise werden diese Props analog der nativen Eventhandler-Props mit onThingThatHappens benannt, wie onUpdateSearchText oder onCloseDialog
-
-
 === useState
 
 #grid(
-    // columns: (auto, auto),
     columns: (42%, auto),
     gutter: 0em,
     [
@@ -286,20 +201,6 @@ höhergelegenen Komponenten zu aktualisieren.
 ==== weitere Hooks
 *useRef*: um DOM-Nodes zu tracken und damit zum Beispiel _Fokus-Management_ zu betreiben. Änderung von Wert triggered nicht rerender.
 
-/*  unwichtig TODO löschen wenn zuwenig Platz
-```js
-const UseRefDemo = () => {
-    const inputRef = useRef<HTMLInputElement>(null);
-    const focusInput = () => {
-    if (inputRef.current) { inputRef.current.focus() }
-};
-return <>
-        <input ref={inputRef} type="text" placeholder="Click the button to focus me" />
-        <button onClick={focusInput}>Focus Input</button>
-    </>
-};
-```
-// */
 ==== useReducer
 useReducer z.B. für Tennismatch-Scoring, komplexe Zustandslogik.
 // Demo vl9
@@ -331,18 +232,6 @@ export const Counter = () => {
     </div>);
 };
 ```
-// ```tsx
-// export const StaticCounter = () => {
-//   const actions: Record<'type', ReducerActionTypes>[] = [
-//     { type: 'increment' }, { type: 'increment' }, { type: 'increment' }, { type: 'decrement' },
-//   ];
-//   // static use of the reducer
-//   const finalState = actions.reduce(reducer, { count: 0 });
-//   return <p>static reducer result: {finalState.count}</p>;
-// };
-// ```
-
-
 == Controlled Forms
 
 #grid(
@@ -385,7 +274,6 @@ const handleChange: React.SubmitEventHandler<HTMLFormElement> = (e) => {..}
 == TypeScript
 Typisierung von Objekten, Props, Funktionen.
 / typeof: für Type narrowing ```js (typeof val === "string") ``` (und Typ Inferenz von Typescript), _mögliche Typen_: `string`, `number`, `bigint`, `boolean`, `symbol`, `undefined`, `object`, `function`. (Achtung: `typeof` `null` und `array` ist `object`)
-// enum ist kompliziert, es existiert zur Laufzeit nicht mehr und kann deshalb nicht mit typeof geprüftwerden. Es ist nach kompilieren ein Objekt.
 / Array: ```js Array.isArray(data) ```,
 / Discriminated Union: ```js switch (shape.kind) { case "circle": ... } ```
 / weitere Typprüfungen: ```js instanceof(HttpError) ```, ```js if (var == null)```
@@ -417,17 +305,6 @@ const [name, setName] = useState<string | null>('alice');
 const names: string[] = []; // Kurzschreibweise
 const names: Array<string> = []; // Langschreibweise
 ```
-// ```js
-// console.log(createPair('hellow', 'mellow')); // ["hellow", "mellow"]
-// console.log(createPair(3, 4)); // [3, 4]
-// console.log(createPair('hellow', 4)); // Argument of type 'number'
-// // is not assignable to parameter of type 'string'.
-// let [a, b] = [6, 8]
-// console.log(createPair<number>(a, b))
-// // in den <> kann man den Typ definieren, den die Funktion haben soll
-// ```
-//
-
 
 // /* // auskommentieren wenn kein Platz
 *? (Optionales Property/Parameter)* ist implizit "… | undefined"
@@ -445,12 +322,6 @@ sphere = ball; ball = sphere; // korrekt
 ```
 
 *Any* deaktiviert Typ-Checking
-// TODO:  wegkürzen, weiss ich schon auswendig:
-// ```ts
-// const user: any = { name: "John", age: 30 };
-// user.roles.push("admin");
-// // Runtime error! But TS won't complain
-// ```
 
 *Unknown*
 Kann alles sein und muss überprüft werden (mit typeof oder parse, etc).
@@ -560,38 +431,6 @@ an sich nichts schlechtes.
 styles/base.css (resets, typography),
 variables.css (tokens, colors),
 layout.css (top-level page layout). _Cascades_ vermeiden #sym.arrow.r _Composition_ nutzen. Z.B. via classname (anstatt ```css.button--primary``` #sym.arrow.r ```css.button .primary```)
-/*
-#v(-0.5em)
-```css
-:root { --color-primary: #0070f3; } /* Definition in der variables.css */
-/* Nutzung in einer anderen Datei: */
-.button { background-color: var(--color-primary); /* Hier wird der Wert #0070f3 eingesetzt */}
-```
-#grid(
-    columns: (auto, auto),
-    gutter: 0em,
-    [
-        Composition via classname
-        #v(-0.5em)
-        ```css
-        .btn { padding: 10px; border-radius: 4px; } .btn-primary { background: var(--color-primary); } .btn-danger { background: red; }
-        /* HTML Composition: */ <button class="btn btn-primary">Speichern</button> <button class="btn btn-danger">Löschen</button>
-        ```
-    ],
-    [
-        ```css
-        .button {
-        /* Basis-Styles */
-        &.primary {
-        /* Styles für Primär-Button */ }
-        &.large {
-        /* Styles für große Buttons */ } }
-        <button class="button primary large">
-        ```
-    ],
-)
-#v(-1em)
-// */
 / CSS Nesting: Verschachtelung ist ok, muss aber "flach" gehalten werden (maximal 3 Ebenen tief).
 / Einheiten: Verwende konsequent rem anstelle von px, für Barrierefreiheit (Skalierbarkeit)
 / Gruppierung: Deklarationen innerhalb einer Regel sollten in einer logischen Reihenfolge stehen (z. B.erst Positionierung, dann Box-Modell wie Display/Padding, dann Farben/Text).

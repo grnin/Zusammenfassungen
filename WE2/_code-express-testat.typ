@@ -1,18 +1,6 @@
 
 #import "/WE2/helpers.typ": *
 
-
-
-// ```
-// #code-block[
-//     ==== filename.type
-//     ```ts
-
-//     ```
-// ]
-// ```ts
-
-
 = Express Testat Code
 ==== index.js
 // import dotenv from 'dotenv';

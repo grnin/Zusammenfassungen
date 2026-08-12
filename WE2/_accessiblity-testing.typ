@@ -15,6 +15,7 @@
 
 // */
 
+#import "/WE2/helpers.typ": *
 
 #import "../template--additional-formatting-templates.typ": *
 
@@ -65,10 +66,6 @@
       <button class="submit-btn" onclick="submit()">Absenden</button>
     </form> …
 ```
-//   <p class="status-row" aria-live="polite">
-//     <span class="dot red" aria-hidden="true"></span>
-//     <span>Status: offen</span>
-//   </p>
 
 
 
@@ -96,23 +93,7 @@
 
 === Arten von Checks
 / tsconfig.json mit "Compiler Regeln": ```json "compilerOptions": { "strict": true,..}```: strengere Typprüfung (NullChecks, kein implizites `any` oder `this`), ungenutzte Variablen erkennen, `use strict` überall, unknown und null unterscheiden
-/*
-```js
-// https://www.devbolt.dev/tools/tsconfig-builder/tsconfig-strict-mode
-"compilerOptions": {
-    "strict": true,
-    // Equivalent to enabling ALL of these:
-    // "strictNullChecks": true,       — null/undefined are distinct types
-    // "strictFunctionTypes": true,    — stricter function type checking
-    // "strictBindCallApply": true,    — type-check bind/call/apply
-    // "strictPropertyInitialization": true, — class properties must init
-    // "noImplicitAny": true,          — error on implicit any
-    // "noImplicitThis": true,         — error on implicit this
-    // "alwaysStrict": true,           — emit "use strict"
-    // "useUnknownInCatchVariables": true — catch(e) → e is unknown
-  }
-```
-*/
+
 / eslint.config.js mit `rules: { "no-unused-vars": "error", "jsx-a11y/alt-text": "warn"..`: Coding Standards, Accessibility-Regeln, Qualitätsregeln für React
 / "Typenkorrektheit": Typescript
 / Static Checks (Qualität): erkennen potenzielle Probleme, prüfen Typen, prüfen Regeln, prüfen Accessibility, helfen Fehler vermeiden. _Erkennen: falschen Typ, unbenutzter Code, fehlendes Label, fehlendes Accessibility-label, falsche HTML Struktur, ungültige Props_. TypeScript #hinweis[Typen und Schnittstellen], ESLint #hinweis[Code-Regeln und problematische Patterns], Accessibility-Linting #hinweis[semantische UI-Probleme]
@@ -159,28 +140,7 @@ test("user can log in", async ({ page }) => { // page von playwright
 // - Label
 // Test Selektoren sollen sich an Bedeutung und zugängliche Namen orientieren und nicht an Styling
 
-// Frage: Wenn die Selektoren von E2E Tests mit Playwright sich an die Namen vom Inhalt orientieren, ist die Idee für mehrsprachige Webseiten die Tests zu übersetzen?
-
 ==== Unit + API Test mit Vitest und request von Supertest
-// ```js
-// describe("accounts API", () => {
-//     test("GET /accounts/1 returns an account", async () => {
-//     const res = await request(app).get("/accounts/1");
-//     // request(app).post("/accounts/1/deposit").send({ amount: -50 });
-//     expect(res.status).toBe(200);
-//     expect(res.body).toMatchObject({ id: 1, owner: "Ada" });// Object({error: ""}
-//     expect(typeof res.body.balance).toBe("number");
-// }); });
-// ```
-// ```js
-// describe("some tests", () => {
-//   test("calculates ...", () => {
-//     const getCurrentHour = () => 10; // Arrange
-//     expect(calc(1000, getCurrentHour)).toBe(10); // Act and Assert
-//     expect(() => calc(0, false)).toThrow();
-// }); }); // gruppieren mit describe
-// ```
-
 ```js
 describe('AccountService, calculations, ..', () => {
   let ownerToken: string; // global variable
@@ -206,29 +166,3 @@ describe('AccountService, calculations, ..', () => {
 
 ===== Was testen wenn Backend/DB noch nicht existiert
 Endpunkte, Methoden, Request-Body, Response-Body, Statuscodes, Fehlerformate
-
-/*
-// entfernen wenn kein Platz
-#strong[Unit Tests:] Getestet werden einzelne \"Units\" wie Klassen,
-Module (meist ein File). Automation ist relativ einfach. Herausforderung
-ist die Isolation der Units, asynchrone Operationen,
-Testdatengenerierung (z.B. Fuzzing)
-
-#strong[Integrationstests:] Getestet wird das Zusammenspiel 2 oder mehr
-\"Units\". Automation meist möglich. Herausforderungen ist die Isolation
-der Units, asynchrone Operationen, Simulation Browser &
-Benutzerinteraktion, Test mit Datenbank, Testdatengenerierung (z.B.
-Fuzzing)
-
-#strong[Funktionstests:] Getestet wird ob sich das System entsprechend
-spezifizierte funktionale Anforderungen (Use-Cases, User Stories, ...)
-verhält. Automation möglich mit speziellen Tools
-
-#strong[(Visuelle) Regressionstests:] Getestet wird ob Veränderungen im
-Code zu (unerwarteten) Änderungen im Verhalten (oder UI) führen.
-Automation möglich mit speziellen Tools
-
-#strong[Funktionale Systemtests:] Getestet wird das Zusammenspiel aller
-Systemkomponenten in der Zielumgebung Automation meist nur in Teilen
-möglich. Herausforderungen: Realistische aber vorhersagbare Umgebung
-// */

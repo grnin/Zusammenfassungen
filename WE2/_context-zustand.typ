@@ -16,16 +16,7 @@
 )
 // */
 
-
-// #import "@preview/cheq:0.3.1": checklist
-// #show: checklist
-
-#let terms-spacing(spacing, body) = [
-    #show terms: set terms(spacing: spacing)
-    #body
-]
-
-
+#import "/WE2/helpers.typ": *
 
 = Context API
 
@@ -46,12 +37,8 @@
         ```
     ],
     [
-        // #v(-8.25em)
         #v(-4em)
-        // #align(right, [
-        // #image("/WE2/assets/we2-1.png", height: 2cm)
         #image("/WE2/assets/themeprovider.svg")
-        // ])
         #v(-4em)
     ],
 )
@@ -86,36 +73,7 @@ export const ThemeProvider = ( { children }: { children: ReactNode } ) => {
 };
 ```
 
-
-/*
-```tsx
-// Erstellen des Context
-const UserContext = createContext<ThemeContextValue | undefined>(initialValue);
-// Bereitstellen des Kontexts im Komponenten-Tree
-// Der Value kann zum Beispiel von einem Prop oder State kommen
-<UserContext.Provider value={user}>
-...
-</UserContext.Provider>
-// Verwenden des Kontexts
-const context = useContext(UserContext);
-const ThemeButton =()=>{
-  const { theme, toggleTheme } = useTheme();
-..}
-```
-
-Setup:
-#v(-0.5em)
-// };
-
-
-Implementation Context
-
-*/
-
 / Warum die Unterteilung in zwei Files (ThemeContext, ThemeProvider)?:
-     // Fast refresh only works when a file only
-    // exports components. Use a new file to share
-    // constants or functions between components. \
     `eslint(react-refresh/only-export-components)`
     Der Grund ist, dass das Hot Module Reloading "fast refresh" von Vite kaputtgeht, wenn man man in Komponentenfiles (.tsx) Funktionen exportiert.
 
@@ -156,8 +114,6 @@ authActions.updateProfile({ displayName: 'Jasmin :)' })
 / Welchen Ansatz würden Sie in einem Projekt verwenden? Und warum?:
     Zustand, skalierbarer. Context nur, wenn es sich ergibt mit prop passing
 / Welcher Ansatz ist performanter? Und warum?:
-     // Context, weil bereits eingebaut und keine zusätzliche Library?
-    // Zustand ist ein Hook und hat vielleicht performance Verbesserungen eingebaut?
     Bei Zustand werden nur die Komponenten neu gerendert, die den geänderten State nutzen.
 / Welcher Ansatz ist einfacher zu testen? Und warum?:
     _Zustand_, ist global und deshalb immer zugreifbar. Bei context muss es einen Context Provider haben.
@@ -174,17 +130,7 @@ authActions.updateProfile({ displayName: 'Jasmin :)' })
 / Welchen Ansatz würden Sie in einem Projekt verwenden? Und warum?:
     Zustand, skalierbarer. Context nur, wenn es sich ergibt mit prop passing
 / Welcher Ansatz ist performanter? Und warum?:
-     // Context, weil bereits eingebaut und keine zusätzliche Library?
-    // Zustand ist ein Hook und hat vielleicht performance Verbesserungen eingebaut?
     Bei Zustand werden nur die Komponenten neu gerendert, die den geänderten "State" nutzen.
 / Welcher Ansatz ist einfacher zu testen? Und warum?:
     _Zustand_, ist global und deshalb immer zugreifbar. Bei _Context_ ist Provider Wrapper nötigt.
     "Der Store ist unabhängig von React-Komponenten."
-
-
-// / Context API: Transportmechanismus für Daten
-//     _Vorteile:_ vorinstalliert,
-//     _Nachteile:_ Boilerplate Code
-// / State Management (Zustand):
-//     _Vorteile:_ Wartbarkeit, Struktur, Performance \
-// // _Nachteile:_

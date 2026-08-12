@@ -16,14 +16,7 @@
 )
 // */
 
-
-// #import "@preview/cheq:0.3.1": checklist
-// #show: checklist
-
-#let terms-spacing(spacing, body) = [
-    #show terms: set terms(spacing: spacing)
-    #body
-]
+#import "/WE2/helpers.typ": *
 
 = PWA (für progressive enhancement)
 Progressive web apps use modern web APIs along with traditional progressive enhancement strategy to create _cross-platform web applications_. These apps work everywhere and provide several features that give them the same user experience advantages as _native apps_.
@@ -33,8 +26,6 @@ Progressive web apps use modern web APIs along with traditional progressive enha
 / Nachteile: Nicht jeder möchte eine App installieren, App ersetzt keine schlechte Website
 
 == PWA Vorteile / Eigenschaften
-// PWAs should be discoverable, installable, linkable, network independent, progressive, re-engageable, responsive, and safe.
-
 / Safe:
     Die neuen Features wie Push-API sind nur über HTTPS möglich.
 / Responsive:
@@ -54,12 +45,10 @@ Progressive web apps use modern web APIs along with traditional progressive enha
     Es soll möglich sein das die Verbindung zum Benutzer der Seite wieder aufgenommen werden, obwohl der Benutzer die Seite nicht geöffnet hat. _Service Workers, Push-API_.\
     Permissions sind nötig, nur eine Chance.\
     _Flussdiagramm Elemente_: User (add item to list) > React App > Firestore > Cloud Function (fcmSend) > Firebase Cloud Messaging > Service Worker > OS > (Push Benachrichtigung an) User
-// #image("/WE2/assets/pwa-1.png") // Seite 688
 
 == PWA Infos und Begriffe
 / Service Worker:
     Proxy (wie Middleware) zwischen User und Website, läuft auf Browser von User und hat Seite im Cache. Führt fetch aus zur aktuellen Website, wenn der User online ist.
-//   #image("/WE2/assets/pwa-2.png")
 / Web App Manifest: definiert die Meta-Informationen der PWA. App-Name & Kurzname, Icons, Anzeige-Modus (z. B. fullscreen, standalone). ```html <link rel="manifest" href="/manifest.webmanifest">```
 / Installation: _JS-API_: Android/Edge/Chrome, _komplex, Anleitung nötig_: iOS/Safari
 / VitePWA: definiert Manifest mit `vite.config.ts`, cached automatisch alles, konfiguriert Offline-Modus `services/index.ts`, ermöglicht re-engageable `user-notification.tsx` und `fcmSend`
@@ -74,8 +63,6 @@ if ('serviceWorker' in navigator) {
 ```
 #v(-0.5em)
 // /*
-// kein Platz:
-// ==== Manifest.json Beispiel
 #grid(
     columns: (auto, auto),
     gutter: 0em,

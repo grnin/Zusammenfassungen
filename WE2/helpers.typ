@@ -1,16 +1,6 @@
 
-// // TODO: überall hinweis von additional-formatting nehmen
-// #let hinweis(style: "italic", t) = {
-//     set text(style: style, size: 0.8em)
-//     show raw: set text(font: code-font, size: 1.05em)
-//     t
-// }
-
-
-
 #let code-block(body) = {
     block(
-        // jetzt ohne transparenz und als cmyk, vielleicht Druckerproblem (unscharf) deswegen
         fill: rgb("#f9fbff"),
         stroke: (paint: rgb("#a8a1d1"), thickness: 0.5pt),
         inset: 5pt,
@@ -23,4 +13,19 @@
 
 #set heading(
     numbering: none,
+);
+
+#let terms-spacing(spacing, body) = [
+    #show terms: set terms(spacing: spacing)
+    #body
+]
+
+#let ascii-art(body) = text(
+    font: ("Fira Code", "Fira Mono", "Comic Sans MS", "JetBrains Mono", "JetBrains Mono NL"),
+    ligatures: true,
+    size: 3.7pt,
+    par(
+        justify: false,
+        body,
+    ),
 );

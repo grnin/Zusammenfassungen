@@ -16,25 +16,14 @@
 )
 // */
 
-#let ascii-art(body) = text(
-    font: ("Fira Code", "Fira Mono", "Comic Sans MS", "JetBrains Mono", "JetBrains Mono NL"),
-    ligatures: true,
-    size: 3.7pt,
-    par(
-        justify: false,
-        body,
-    ),
-);
+#import "/WE2/helpers.typ": *
 
 = ExpressJS
-// #include "/WE2/_code-express-demo-todo.typ"
 
 == Express Architektur und Grundlagen
-// • Erklären Sie in eigenen Worten die Patterns von Express.js: MVC, Front-Controller und Middleware
 / MVC Pattern: Model (DB) View (hbs) und Controller (index.js, app.js) getrennt
 / Front-Controller Pattern:
      // https://martinfowler.com/eaaCatalog/frontController.html
-    // #image("/assets/image-3.png", height: 1.25cm, width: auto)
     Bild: Request -> Front Controller -> Controller (können verschiedene Controller sein) -> controller zu Model für Daten, zu View für Rendering und Response.
 #v(-0.5em)
 #image("/WE2/assets/front-controller.svg", width: 100%)
@@ -58,7 +47,6 @@
 == Cookies und ExpressJS Session
 - Um nach dem Login die Session auf der Website "abzusichern"
 
-// #image("/WE2/assets/express-js-1.png", height: 2cm)
 #ascii-art(
     "Client                                             Server
  |  POST /login                                       |
@@ -234,17 +222,7 @@ export class OrdersController {
 router.get("/", ordersController.showIndex); // html string an Nutzer gesendet
 router.post("/orders", ordersController.createPizza);
 ```
-/*
-===== eigener Helper
-```js
-//Usage: {{? hasError 'error' 'ok'}}
-Handlebars.registerHelper('?', function(exp, value1, value2, options) {
-    if(exp) { return value1; }
-    return value2;
-});
-{{? hasError 'FEHLER' 'OK' }}
-```
-*/
+
 == Middlewares
 #v(-1.25em)
 === Routing
@@ -268,7 +246,6 @@ Wird aufgerufen, falls die jeweilige HTTP-Methode verwendet wurde\
 router.METHOD(path, [callback, ...] callback)
 router.get('/', function(req, res){ res.send('hello world'); });
 ```
-// − Express.js verwendet path-to-regexp
 
 Es können mehrere Callbacks als Chain übergeben werden
 #v(-0.5em)
@@ -287,7 +264,6 @@ app.use(express.static('public'))
 === Custom-Middleware
 ==== 3 Parameter (request, response, next)
 - `next` zeigt auf die nächste Middleware im Stack, kann aufgerufen werden, um die nächste Middleware aufzurufen.
-// • Dies kann auch unterlassen werden. In diesem Falle sollte die Anfrage beantwortet werden.
 #v(-0.5em)
 ```js
 function myDummyLoggerMiddleware(options = {}) {
