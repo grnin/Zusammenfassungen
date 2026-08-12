@@ -177,11 +177,11 @@ Unabhängig vom Betriebssystem (POSIX/Windows), Stream-basiert = zeichen-orienti
 / ```c int fputc(int c, FILE *stream)```: schreibt `int c` als unsigned char in Stream.
 / ```c int fputs(char *s, FILE *stream)```: schreibt die Zeichen vom String `s` bis zur terminierenden 0 in `stream`.
 
-==== Dateiende und Fehler:
+==== Dateiende und Fehler
 ```c int feof(FILE *stream)``` gibt 0 zurück, wenn Dateiende _noch nicht_ erreicht wurde\
 ```c int ferror(FILE * stream)``` gibt 0 zurück, wenn _kein_ Fehler auftrat.
 
-==== Manipulation des File-Position-Indicator (FPI):
+==== Manipulation des File-Position-Indicator (FPI)
 ```c long ftell(FILE *stream)``` gibt den gegenwärtigen FPI zurück,
 ```c int fseek (FILE *stream, long offset, int origin)``` setzt den FPI, analog zu `lseek`,
 ```c int rewind (FILE *stream)``` setzt den Stream zurück.
@@ -738,7 +738,7 @@ Condition_. Threads müssen _synchronisiert_ werden, damit keine _Race Condition
 // */
 // /* 1. Hälfte PDF Druck
 
-=== Anforderungen an Synchronisations-Mechanismen:
+=== Anforderungen an Synchronisations-Mechanismen
 _Gegenseitiger Ausschluss_ #hinweis[(Nur ein Thread darf in Critical Section sein)],
 _Fortschritt_ #hinweis[(Entscheidung, wer in die Critical Section darf, muss in endlicher Zeit getroffen werden)],
 _Begrenztes Warten_ #hinweis[(Thread wird nur $n$ mal übergangen, bevor er in die Critical Section darf)].\
