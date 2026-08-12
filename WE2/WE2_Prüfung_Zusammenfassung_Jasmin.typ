@@ -27,12 +27,6 @@
     spacing: 0.6em,
 )
 
-
-
-// TODO:
-//  expressjs prüfen ob alles von _code-exp..todo vorhanden, sonst von dort noch Inhalt übernehmen
-//  express middleware konzept genug erklärt?
-
 // weggelassen:
 // CSS infos
 // js das ich logisch finde
