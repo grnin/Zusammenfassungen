@@ -8,14 +8,20 @@ Credits: Nina Grässli und Jannis Tschan und Jasmin Fässler (je nach Modul)
 
 ### Zusammenfassungen erstellt/bearbeitet von mir (Jasmin)
 
-- [ ] ergänze 4. Semester Zusammenfassungen
+4. Semester
+
+- [Web Engineering 2](WE2) neu erstellt
+- [Betriebssysteme 2](Bsys2) komplett überarbeitet, und neu mit Vektorgrafiken
+- [Parallele Programmierung](ParProg) komplett überarbeitet, und neu mit Vektorgrafiken
+- [Business und Recht 2](BuRe2) Zusammenfassungen zu den einzelnen Themen, nicht vollständig
 
 3. Semester
 
-- [WE1](WE1) neu erstellt
+- [Web Engineering 1](WE1) neu erstellt
 - [MsTe / .NET Technologien](MsTe) beachte auch zusätzliche PDFs zum ausdrucken
 - [AlgDat / Algorithmen und Datenstrukturen](AlgDat) Grafiken angepasst, Rechtschreibkorrektur, Inhalt geändert (für mich angepasst)
 - [Bsys1 / Betriebssysteme 1](Bsys1) neu strukturiert, Inhalt wenig geändert, bisschen ergänzt
+  - [bsys.jasmin-faessler.ch/](https://bsys.jasmin-faessler.ch/) Online Zusammenfassung zum benutzen bei den Übungen
 - [WrStat / Wahrscheinlichkeitsrechnung und Statistik](WrStat) kleine Anpassungen/Verbesserungen. Die andere Version für [HP-Prime](WrStat/WrStat-Jasmin-HP-Prime) ist nicht vollständig.
 - [CPl / C++](CPl) minimal angepasst
 
@@ -48,7 +54,7 @@ Weitere
 - [CN1 / Computernetze 1](CN1)
 - [CySec / Cyber Security Foundations](CySec)
 - [Dbs1 / Datenbanksysteme 1](DBS1)
-- [DigCod / Digitale Codierungen](DigCod)
+- [DigCod / Digitale Codierungen](MsTe/DigCod)
 - [DMI / Diskrete Mathematik für Informatik](DMI)
 - [OOP1 / Objektorientierte Programmierung 1](OOP1)
 - [OOP2 / Objektorientierte Programmierung 2](OOP2)
@@ -122,7 +128,7 @@ Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer:
 - [CPlA / C++ Advanced](CPlA)
 - [CySec / Cyber Security Foundations](CySec)
 - [Dbs1 / Datenbanksysteme 1](DBS1)
-- [DigCod / Digitale Codierungen](DigCod)
+- [DigCod / Digitale Codierungen](MsTe/DigCod)
 - [DMI / Diskrete Mathematik für Informatik](DMI)
 - [Dsy / Distributed Systems](Dsy)
 - [ExEv / Experimentieren und Evaluieren](ExEv)
