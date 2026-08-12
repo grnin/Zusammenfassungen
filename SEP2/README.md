@@ -1,7 +1,6 @@
 ## SE Practices 2
 
-András Tarlós, Jasmin Fässler |
-FS 2026
+András Tarlós, Jasmin Fässler | FS 2026
 
 ## TODOs
 - Kanban Bild bei 12-agile.. wirft Fehler beim Export, eventuell ist die Datei zu gross?
