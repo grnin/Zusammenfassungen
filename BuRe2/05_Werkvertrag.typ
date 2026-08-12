@@ -1,5 +1,5 @@
 // /*
-#import "../../template_zusammenf.typ": *
+#import "../template_zusammenf.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 #show: project.with(
     authors: ("Jasmin Fässler",),
@@ -49,32 +49,32 @@
 // #set page("a4", flipped: false)
 
 = Werkvertrag
-#image("assets/image.png")
+#image("werkvertrag-bilder/image.png")
 #notiz[
     _Erfolg geschuldet_ :     Wie ist nicht relevant.
     Dagegen im Arbeitsvertrag geht es um die sorgfältige Arbeit.
     // In Prüfung Verträge unterscheiden können (Werkvertrag, Auftrag).
 ]
-// #image("assets/image-1.png")
-#image("assets/image-19.png")
-#image("assets/image-2.png")
-#image("assets/image-3.png")
-#image("assets/image-4.png")
-#image("assets/image-5.png")
-#image("assets/image-6.png")
-#image("assets/image-7.png")
-#image("assets/image-8.png")
-#image("assets/image-9.png")
-#image("assets/image-10.png")
-#image("assets/image-11.png")
-#image("assets/image-12.png")
+// #image("werkvertrag-bilder/image-1.png")
+#image("werkvertrag-bilder/image-19.png")
+#image("werkvertrag-bilder/image-2.png")
+#image("werkvertrag-bilder/image-3.png")
+#image("werkvertrag-bilder/image-4.png")
+#image("werkvertrag-bilder/image-5.png")
+#image("werkvertrag-bilder/image-6.png")
+#image("werkvertrag-bilder/image-7.png")
+#image("werkvertrag-bilder/image-8.png")
+#image("werkvertrag-bilder/image-9.png")
+#image("werkvertrag-bilder/image-10.png")
+#image("werkvertrag-bilder/image-11.png")
+#image("werkvertrag-bilder/image-12.png")
 #pagebreak()
 = Auftrag
-#image("assets/image-13.png")
-#image("assets/image-14.png")
-#image("assets/image-15.png")
+#image("werkvertrag-bilder/image-13.png")
+#image("werkvertrag-bilder/image-14.png")
+#image("werkvertrag-bilder/image-15.png")
 
-#image("assets/image-16.png")
+#image("werkvertrag-bilder/image-16.png")
 Schneider,Anwalt.. erhält Auftrag, wenn er nicht antwortet hat er Auftrag angenommen und muss sonst absagen.
 Er muss reagieren!
 \
@@ -85,7 +85,7 @@ Er muss reagieren!
 
     Anwalt darf Fristen nicht verpassen, Anwalt kann auch sagen im voraus, wenn er etwas nicht machen kann
 ]
-#image("assets/image-17.png")
+#image("werkvertrag-bilder/image-17.png")
 
 #notiz[
     _Treuepflicht_ gehört auch zur sorgfaltspflicht rein.

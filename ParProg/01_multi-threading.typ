@@ -880,8 +880,8 @@ class CountTask extends RecursiveTask<Integer> { // RecursiveAction: void functi
 ```
 #v(-1em)
 / Create explicit thread pool + invoke: ```java var threadPool = new ForkJoinPool();``` \
-    #v(-0.8em) ```java int result = threadPool.invoke(new CountTask(2, N));``` ```java int result = new CountTask(2, N).invoke(); // invokeAll() to start multiple tasks ```
-
+    #v(-0.8em) ```java int result = threadPool.invoke(new CountTask(2, N));``` \
+    ```java int result = new CountTask(2, N).invoke(); // invokeAll() to start multiple tasks ```
 /*
 === Pairwise sum (recursive)
 ```java

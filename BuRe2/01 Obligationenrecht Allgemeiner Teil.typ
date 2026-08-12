@@ -8,7 +8,7 @@
 #show: project.with(
     authors: ("Jasmin Fässler",),
     fach: "BuRe2",
-    fach-long: "OR Allgemeiner Teil",
+    fach-long: "OR Allgemeiner Teil mit Übungen",
     semester: "FS26",
     language: "de",
     font-size: 10pt,
@@ -212,7 +212,7 @@ Ob ein Vertrag aber tatsächlich gültig ist, hängt von verschiedenen Vorausset
 )
 
 == Theorie: OR AT & BT
-#image("./assets/image-5.png", height: 8cm)
+#image("./assets/theorie-or-at-bt.png", height: 8cm)
 
 #v(3em)
 == Formvorschriften
@@ -649,7 +649,7 @@ Grundlagenirrtum oder Erklärungsirrtum
     columns: (auto, auto),
     [
         // #image("./assets/image-22.png", height: 7cm)
-        #image("/assets/image-4.png", height: 8cm)
+        #image("./assets/erloeschen-obligation.png", height: 8cm)
     ],
     [
         \

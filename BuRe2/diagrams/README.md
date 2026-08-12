@@ -1,1 +1,0 @@
-plantuml funktioniert nicht so richtig wenn das Git projekt sich nicht in einem wsl Pfad befindet.

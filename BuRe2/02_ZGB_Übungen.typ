@@ -1,5 +1,5 @@
 // /*
-#import "../../template_zusammenf.typ": *
+#import "../template_zusammenf.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 #show: project.with(
     authors: ("Jasmin Fässler",),

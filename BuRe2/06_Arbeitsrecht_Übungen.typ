@@ -1,5 +1,5 @@
 // /*
-#import "../../template_zusammenf.typ": *
+#import "../template_zusammenf.typ": *
 #import "@preview/wrap-it:0.1.1": wrap-content
 #show: project.with(
     authors: ("Jasmin Fässler",),
@@ -136,7 +136,7 @@
     Klara Kleiner vorgenommen wurden. Wie kann Klara Kleiner gegen die fristlose Kündigung vorgehen?\
     #notiz[
         #or-block[
-            #image("../assets/arbeitsrecht-1.png")
+            #image("assets/arbeitsrecht-1.png")
         ]
     ]
 8.

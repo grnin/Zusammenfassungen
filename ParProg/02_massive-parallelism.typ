@@ -633,7 +633,7 @@ shared memory for _all warps_ of the new block.\
 
 #print-image(
     [
-        #image("/assets/image-9.png")
+        #image("img/image-9.png")
     ],
     v(40pt),
 )
