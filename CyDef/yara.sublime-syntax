@@ -1,0 +1,81 @@
+%YAML 1.2
+---
+# See https://www.sublimetext.com/docs/syntax.html
+# Syntax file under the GPLv3, from https://github.com/nyx0/YaraSyntax
+name: YARA
+file_extensions: [yar, yara]
+scope: source.yara
+first_line_match: ^(?:(?<!global\s)\bglobal\b\s|(?<!private\s)\bprivate\b\s){0,2}\brule\b\s(?![0-9])[_a-zA-Z0-9]{1,128}(?:\s:(?:\s(?![0-9])[_a-zA-Z0-9]{1,128}){1,128})?
+
+contexts:
+  main:
+    - match: '"'
+      scope: punctuation.definition.string.begin.yara
+      push: double_quoted_string
+
+    - match: '//'
+      scope: punctuation.definition.comment.yara
+      push: line_comment
+
+    - match: '/\*'
+      scope: punctuation.definition.block.comment.begin.yara
+      push: block_comment
+
+    - match: '\b(import|include)\b'
+      scope: keyword.control.import.yara
+
+    - match: '\b(int8|int16|int32|int8be|int16be|int32be|uint8|uint16|uint32|uint8be|uint16be|uint32be)\b'
+      scope: keyword.declaration.type.yara
+
+    - match: '\b(rule|meta|strings|condition)\b'
+      scope: support.function.builtin.yara
+
+    - match: '\b(global|private|ascii|base64|base64wide|nocase|wide|xor|fullword)\b'
+      scope: support.type.yara
+
+    - match: '\b(all|any|at|contains|defined|endswith|entrypoint|false|filesize|for|icontains|iendswith|iequals|in|istartswith|matches|of|startswith|them|true)\b'
+      scope: entity.name.yara
+
+    - match: '\b(and|or|not)\b'
+      scope: keyword.control.conditional.yara
+
+    - match: '=\s*{'
+      scope: definition.constant.numeric.begin.yara
+      push: constant
+
+    - match: '=\s*/'
+      scope: punctuation.definition.regex.begin.yara
+      push: regex
+
+  double_quoted_string:
+    - meta_content_scope: string.quoted.double.yara
+    - match: '\\.'
+      scope: constant.character.escape.yara
+    - match: '"($|\s*)'
+      scope: punctuation.definition.string.end.yara
+      pop: true
+
+  line_comment:
+    - meta_scope: comment.line.yara
+    - match: $
+      pop: true
+
+  block_comment:
+    - meta_scope: comment.block.yara
+    - match: '\*/'
+      scope: punctuation.definition.block.comment.end.yara
+      pop: true
+
+  constant:
+    - meta_content_scope: constant.numeric.yara
+    - match: '(\(|\)|\|)'
+      scope: constant.numeric.escape.yara
+    - match: '}'
+      scope: definition.constant.numeric.end.yara
+      pop: true
+
+  regex:
+    - meta_content_scope: variable.parameter.yara
+    - match: '/'
+      scope: punctuation.definition.regex.end.yara
+      pop: true
