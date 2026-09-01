@@ -273,7 +273,6 @@
   ),
 ))
 
-
 // Plus/minus signs
 #let plus-green = text(fill: colors.grün, weight: "bold", sym.plus)
 #let minus-red = text(fill: colors.rot, weight: "bold", sym.minus)
