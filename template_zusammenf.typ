@@ -256,13 +256,23 @@
 }
 
 // Set a text color from the color dict for regular text
-#let tcolor(subcolor, x) = {
-  text(fill: colors.at(subcolor), style: "italic", strong(x))
+#let tcolor(subcolor, x, style: "italic") = {
+  text(fill: colors.at(subcolor), style: style, strong(x))
 }
 
-// Table cells with a cross/checkmark
+// Table cells with a checkmark, cross and tilde
 #let cell-check = table.cell(align: center, text(fill: colors.grün, weight: "bold", sym.checkmark))
 #let cell-cross = table.cell(align: center, text(fill: colors.rot, weight: "bold", sym.crossmark))
+#let cell-tilde = place(center, table.cell(
+  text(
+    fill: color.yellow,
+    weight: "bold",
+    size: 1.5em,
+    baseline: 0.1em,
+    sym.tilde.basic,
+  ),
+))
+
 
 // Plus/minus signs
 #let plus-green = text(fill: colors.grün, weight: "bold", sym.plus)
