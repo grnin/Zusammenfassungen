@@ -41,6 +41,7 @@ Dieses Repo beinhaltet Zusammenfassungen für folgende Fächer:
 - [ComGra / Computer Grafik](ComGra)
 - [CPl / C++](CPl)
 - [CPlA / C++ Advanced](CPlA)
+- [CyDef / Cyber Defense](CyDef)
 - [CySec / Cyber Security Foundations](CySec)
 - [Dbs1 / Datenbanksysteme 1](DBS1)
 - [DigCod / Digitale Codierungen](DigCod)
