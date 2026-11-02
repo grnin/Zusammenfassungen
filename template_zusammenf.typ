@@ -141,18 +141,22 @@
   }
 
   // Reference, show heading name & page number
-  show ref: ref => if ref.element.func() != heading {
-    ref
-  } else {
-    let label = ref.target
-    let header = ref.element
-    if heading-page-number-in-ref {
-      // "Heading Name" (Page X)
-      link(label, ["#header.body" (#languages.at(language).page #header.location().page())])
+  show ref: ref => {
+    if ref.element == none { panic("Label '" + str(ref.target) + "' not found!") }
+    
+    if ref.element.func() != heading {
+      ref
     } else {
-      // Chapter 1.1.1 "Heading Name"
-      let chapter-numbering = counter(heading).at(header.label)
-      link(label, [#header.supplement #numbering(header.numbering, ..chapter-numbering) "#header.body"])
+      let label = ref.target
+      let header = ref.element
+      if heading-page-number-in-ref {
+        // "Heading Name" (Page X)
+        link(label, ["#header.body" (#languages.at(language).page #header.location().page())])
+      } else {
+        // Chapter 1.1.1 "Heading Name"
+        let chapter-numbering = counter(heading).at(header.label)
+        link(label, [#header.supplement #numbering(header.numbering, ..chapter-numbering) "#header.body"])
+      }
     }
   }
 
